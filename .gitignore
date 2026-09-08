@@ -12,3 +12,14 @@ scripts/preflight/smoke/public/
 
 # Preserve provenance in assets/source-manifest/, but not the large upstream CAD.
 assets/source-originals/
+
+# Local-only derived CAD, reference imagery, and visual evidence (release gated).
+assets/generated/
+artifacts/cad/
+artifacts/analysis/
+artifacts/browser/
+explorer/public/models/
+explorer/public/reference/
+
+*.tsbuildinfo
+artifacts/mechanics/

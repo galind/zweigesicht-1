@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "coordinateSpace": "source-world-mm",
+  "reviewStatus": "source-names-and-geometry; expert-review-open",
+  "movementRoot": "p_0_1_1_1__0_1_1_1_4",
+  "directChildPrefix": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_",
+  "groups": [
+    {
+      "id": "regulation",
+      "name": "The heartbeat",
+      "technical": "Balance & escapement",
+      "caption": "The balance sets the rhythm. The lever releases the escape wheel one beat at a time.",
+      "members": [
+        7,
+        13,
+        62
+      ],
+      "context": [
+        16,
+        59,
+        6,
+        54
+      ],
+      "obstructions": [
+        59,
+        16,
+        6,
+        8,
+        32,
+        34,
+        35
+      ],
+      "target": [
+        0,
+        -8,
+        -2.8
+      ],
+      "distance": 31,
+      "side": -1,
+      "color": "#e5b775",
+      "motion": "illustrative"
+    },
+    {
+      "id": "energy",
+      "name": "Stored energy",
+      "technical": "Twin barrels",
+      "caption": "Two mainspring barrels store energy and deliver it through the movement in series.",
+      "members": [
+        1,
+        2
+      ],
+      "context": [
+        60,
+        54,
+        14,
+        15
+      ],
+      "obstructions": [
+        60,
+        49,
+        50,
+        37,
+        40,
+        58
+      ],
+      "target": [
+        0,
+        8.1,
+        -2.8
+      ],
+      "distance": 46,
+      "side": -1,
+      "color": "#d9b967",
+      "motion": "unverified"
+    },
+    {
+      "id": "transmission",
+      "name": "The going train",
+      "technical": "Wheels & pinions",
+      "caption": "Four connected shafts carry the rhythm through the train. Tooth counts determine their relative speeds.",
+      "members": [
+        3,
+        4,
+        63,
+        65,
+        62
+      ],
+      "context": [
+        6,
+        61,
+        54
+      ],
+      "obstructions": [
+        6,
+        61,
+        8,
+        9,
+        20,
+        26
+      ],
+      "target": [
+        0,
+        -2.5,
+        -3
+      ],
+      "distance": 35,
+      "side": -1,
+      "color": "#83bfcd",
+      "motion": "illustrative"
+    },
+    {
+      "id": "display",
+      "name": "Two faces",
+      "technical": "Time display",
+      "caption": "A connected set of wheels carries the time to the displays on both faces.",
+      "members": [
+        20,
+        26,
+        37,
+        40,
+        55,
+        56,
+        57
+      ],
+      "context": [
+        58,
+        54
+      ],
+      "obstructions": [
+        58,
+        6,
+        60
+      ],
+      "target": [
+        0,
+        4,
+        -3
+      ],
+      "distance": 43,
+      "side": 1,
+      "color": "#a9b9e5",
+      "motion": "unverified"
+    },
+    {
+      "id": "winding",
+      "name": "Winding & setting",
+      "technical": "Crown controls",
+      "caption": "The stem and sliding coupling select winding or hand setting. These parts move only when operated.",
+      "members": [
+        5,
+        27,
+        28,
+        30,
+        31,
+        32,
+        47,
+        69,
+        70,
+        74,
+        76,
+        80,
+        14,
+        15
+      ],
+      "context": [
+        64,
+        54,
+        75,
+        53,
+        66
+      ],
+      "obstructions": [
+        64,
+        6
+      ],
+      "target": [
+        11,
+        -3,
+        -2
+      ],
+      "distance": 37,
+      "side": 1,
+      "color": "#b3c895",
+      "motion": "conditional-unverified"
+    },
+    {
+      "id": "shock",
+      "name": "A trace of impact",
+      "technical": "Shock indicator",
+      "caption": "This optional mechanism records an impact. Its reset and response need separate mechanical validation.",
+      "members": [
+        29
+      ],
+      "context": [
+        54
+      ],
+      "obstructions": [
+        60,
+        6,
+        59
+      ],
+      "target": [
+        -11.9,
+        -0.8,
+        -4.1
+      ],
+      "distance": 38,
+      "side": -1,
+      "color": "#d69dba",
+      "motion": "conditional-unverified"
+    }
+  ],
+  "limitations": [
+    "Reveal paths explain construction; they are not service instructions.",
+    "Material finishes are authored interpretations of CAD, not measured finishes.",
+    "Contact phase, spring dynamics, winding, setting and shock response await mechanical review."
+  ]
+}

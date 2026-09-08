@@ -1,0 +1,9 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import {MovementViewer} from '@/src/viewer/MovementViewer';
+export default function Home(){
+ const host=useRef<HTMLDivElement>(null), viewer=useRef<MovementViewer|null>(null);
+ const [status,setStatus]=useState('Preparing the movement…'), [side,setSide]=useState('back');
+ useEffect(()=>{if(!host.current)return;const v=new MovementViewer(host.current,setStatus);viewer.current=v;return()=>v.dispose()},[]);
+ return <main className="explorer"><header className="topbar"><div className="brand">MARCO LANG<small>INDEPENDENT WATCHMAKING · DRESDEN</small></div><span className="edition">ml–01 / Movement study</span></header><section className="workspace" aria-label="Movement explorer"><div className="intro"><span className="eyebrow">Two faces. One movement.</span><h1>Zweigesicht</h1><p>Explore the construction of the ml–01.</p></div><div className="stage" ref={host} aria-label="Interactive CAD movement" />{status&&<div className="status" role="status">{status}</div>}<div className="caption">Original Marco Lang CAD · local study</div><div className="view-tools"><button className="tool" aria-label="Zoom in" onClick={()=>viewer.current?.zoom(.8)}>＋</button><button className="tool" aria-label="Zoom out" onClick={()=>viewer.current?.zoom(1.25)}>−</button><button className="tool" onClick={()=>viewer.current?.reset()}>Reset view</button></div></section><footer className="bottom-bar"><div className="side-buttons"><button className="tool" aria-pressed={side==='back'} onClick={()=>{setSide('back');viewer.current?.setSide('back')}}>Movement</button><button className="tool" aria-pressed={side==='front'} onClick={()=>{setSide('front');viewer.current?.setSide('front')}}>Dial</button></div><span className="hint">Drag to orbit · Scroll or pinch to explore</span><span className="eyebrow">ASSEMBLED</span></footer></main>
+}
