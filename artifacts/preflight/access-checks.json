@@ -1,0 +1,40 @@
+{
+  "verified_at": "2026-09-09T00:12:00+02:00",
+  "shell_network": {
+    "status": "PASS",
+    "note": "External DNS/downloads work through normal narrowly scoped approval; restricted sandbox network fails closed."
+  },
+  "web_browsing": { "status": "PASS" },
+  "browser_automation": { "status": "PASS" },
+  "loopback_server": {
+    "status": "PASS",
+    "bind": "127.0.0.1:4173",
+    "requires_reviewed_outside_sandbox_path": true
+  },
+  "github_ssh": {
+    "status": "PASS",
+    "non_mutating_probe": true,
+    "known_hosts_written": false
+  },
+  "github_connector": {
+    "status": "PASS",
+    "check": "authenticated profile read"
+  },
+  "sites_connector": {
+    "status": "PASS",
+    "check": "list one accessible Site",
+    "site_created_or_changed": false
+  },
+  "local_git_repository": {
+    "status": "BLOCKED",
+    "reason": "The project directory is not a Git repository and has no configured remote."
+  },
+  "chatgpt_sleep_assertion": {
+    "status": "PASS",
+    "evidence": "pmset reported a ChatGPT NoIdleSleepAssertion during the run"
+  },
+  "chatgpt_persistent_sleep_toggle": {
+    "status": "NOT TESTED",
+    "reason": "Computer Use is prohibited from controlling the ChatGPT app."
+  }
+}

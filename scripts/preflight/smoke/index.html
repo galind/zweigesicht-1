@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marco CAD preflight smoke test</title>
+    <style>
+      :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; overflow: hidden; background: #080a0d; color: #f2eadb; }
+      canvas { display: block; width: 100vw; height: 100vh; }
+      .panel { position: fixed; z-index: 2; left: 20px; top: 20px; width: min(360px, calc(100vw - 40px)); padding: 16px; border: 1px solid #564e42; border-radius: 14px; background: rgb(10 12 15 / 88%); backdrop-filter: blur(12px); }
+      h1 { margin: 0 0 6px; font: 600 18px/1.2 ui-serif, Georgia, serif; }
+      p { margin: 6px 0 12px; color: #bdb5a7; font-size: 13px; line-height: 1.4; }
+      button { border: 1px solid #ae8d51; border-radius: 999px; padding: 8px 13px; color: #fff4dc; background: #3b2d16; cursor: pointer; }
+      output { display: block; margin-top: 10px; color: #d8bd83; font: 12px/1.3 ui-monospace, monospace; }
+    </style>
+    <script type="importmap">
+      {"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}
+    </script>
+  </head>
+  <body>
+    <div class="panel">
+      <h1>Real CAD geometry smoke test</h1>
+      <p>Converted from the manufacturer’s STEP screw. Drag to orbit, scroll to zoom, or toggle automatic rotation.</p>
+      <button id="toggle" type="button">Pause rotation</button>
+      <output id="status">Loading real-component.glb…</output>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

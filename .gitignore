@@ -1,0 +1,14 @@
+.DS_Store
+.cache/
+.preflight/
+.venv*/
+__pycache__/
+node_modules/
+dist/
+.env*
+!.env.example
+*.log
+scripts/preflight/smoke/public/
+
+# Preserve provenance in assets/source-manifest/, but not the large upstream CAD.
+assets/source-originals/

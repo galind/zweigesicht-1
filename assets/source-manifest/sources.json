@@ -1,0 +1,34 @@
+{
+  "retrieved_at": "2026-09-08T23:54:16+02:00",
+  "catalog_url": "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/",
+  "files": [
+    {
+      "role": "complete_assembly",
+      "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+      "path": "assets/source-originals/ml01-zweigesicht.stp",
+      "bytes": 43720596,
+      "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "format": "STEP ISO-10303-21"
+    },
+    {
+      "role": "representative_component_screw",
+      "page_url": "https://www.marcolangwatches.com/cad/010-linsenk-s60x105-k90x25/",
+      "download_url": "https://www.marcolangwatches.com/cad/010-linsenk-s60x105-k90x25/?wpdmdl=2005&ind=1690623053116",
+      "path": "assets/source-originals/010-linsenk-s60x105-k90x25.stp",
+      "bytes": 17484,
+      "sha256": "a9049e784f8e50a44fb08f72b4583b35ff7eb712f10848bb160dfa0c2b9160cc",
+      "format": "STEP ISO-10303-21"
+    },
+    {
+      "role": "representative_component_jewel",
+      "page_url": "https://www.marcolangwatches.com/cad/030-g_160x240x30/",
+      "download_url": "https://www.marcolangwatches.com/cad/030-g_160x240x30/?wpdmdl=2041&ind=1690630751858",
+      "path": "assets/source-originals/030-g_160x240x30.stp",
+      "bytes": 9766,
+      "sha256": "229023546dab56d8befe214573d762627692acb12d97af3eff9085f63d019b78",
+      "format": "STEP ISO-10303-21"
+    }
+  ],
+  "redistribution_note": "Public download access was verified. Explicit redistribution terms were not established during preflight; resolve before publishing source or derived assets."
+}
