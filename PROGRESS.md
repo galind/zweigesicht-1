@@ -1,6 +1,6 @@
 # Zweigesicht — current execution state
 
-Updated 9 September 2026. Active goal: finish the local movement explorer for engineering review. **No Site has been registered, saved, uploaded or deployed.**
+Updated 9 September 2026. **Local implementation ready for engineering review.** **No Site has been registered, saved, uploaded or deployed.**
 
 ## Completed
 
@@ -25,11 +25,11 @@ Source exceptions remain: one empty diamond, invalid eccentric with three missin
 
 - Preview: **http://127.0.0.1:4173/**; Vinext dev server session 76266, bound to loopback. Restart with `cd explorer && npm run dev`.
 - `?inspect=1` offers regression, 60-second/five-minute performance and failure-recovery controls. `?no3d=1` and `?text=200` are explicit test modes.
-- Private SSH remote: `git@github.com:galind/zweigesicht.git`. First coherent milestone `00fb905` committed and pushed. Final implementation/evidence checkpoint prepared; commit and SSH push next. No `gh` used.
+- Private SSH remote: `git@github.com:galind/zweigesicht.git`. First coherent milestone `00fb905` committed and pushed. Final implementation/evidence checkpoint `ed04e13` committed and pushed successfully. No `gh` used.
 - Source/derived CAD and source imagery excluded from Git and pushes. Code, documentation and provenance only are authorized.
 
-## Next actions
+## Review handoff and follow-up
 
-1. Final post-cleanup browser suite (all six checks), production build, types and authored lint passed. Ready to commit.
-2. Inspect final staged files/diff, commit coherent local-review checkpoint, push code/docs/provenance over existing SSH remote.
-3. Leave the working local preview and review reports available. Public release, external expert/device/human qualification remain separate follow-up work.
+The final post-cleanup browser suite (all six checks), 12 runtime regressions, seven state/motion tests, production build, TypeScript and authored lint passed. The local preview remains running, and reports/evidence are available. No required local engineering check remains pending for this review handoff.
+
+Next review: inspect the six reveals, source catalog and clearly labeled timing study at the loopback preview. Further fidelity work needs reviewed pallet/roller contacts, spring deformation, variant choices and source-repair decisions. Qualify physical devices, cold networking and visitor comprehension before release. Publication and CAD redistribution remain deferred until explicitly approved.
