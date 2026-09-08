@@ -2,6 +2,8 @@
 
 Prepared 8 September 2026. Status: implementation proposal; CAD inspection and performance measurements remain outstanding.
 
+Execution update, 9 September 2026: source download, XCAF hierarchy extraction, and a single-component GLB/browser smoke test are complete. The full geometry audit, full-assembly rendering, and performance measurements remain outstanding. Follow PROGRESS.md and GOAL_PROMPT.md for the current starting point. The upcoming run is local-only; deployment and redistribution are deferred until the corresponding release gates are cleared.
+
 **1. Product objective and working assumptions**
 
 Build a visually exceptional, interactive explanation of the Zweigesicht-1 movement. Visitors should be able to appreciate the complete object, uncover its construction, inspect individual components, and understand selected mechanisms through motion with very little text.
@@ -326,7 +328,7 @@ For repository publishing, use git over the configured SSH remote for local oper
 
 **20. First execution backlog**
 
-The next work session should start with A01, not the surrounding website shell.
+The backlog below records the original sequence. Source retrieval and the initial hierarchy probe have since passed preflight; resume with the assembled reference views and full audit described in PROGRESS.md.
 
 | ID | Task | Completion evidence |
 |---|---|---|

@@ -6,7 +6,7 @@ Updated 9 September 2026 (Europe/Madrid). Scope: preparation and access verifica
 
 **Ready for the first CAD/prototype build stage: YES.** The real assembly is downloaded and verified, an isolated Open Cascade toolchain can recover assembly instances and placements, a real catalog component converts to GLB, Blender is installed and can import it, and the real mesh rendered and responded to orbit/rotation controls in the in-app browser.
 
-Later publishing and release gates remain separate. GitHub publishing is blocked until this directory is intentionally initialized as a repository and given a real SSH remote. Public distribution of source or derived CAD is also blocked until the applicable reuse terms are established. Site creation/deployment was deliberately not tested because preflight was required to remain read-only for hosting.
+Later publishing and release gates remain separate. The directory is now a Git repository with private SSH remote `git@github.com:galind/zweigesicht.git`; the lead task reverified SSH read access and GitHub connector access on 9 September. This supersedes the original repository-setup blocker. Public distribution of source or derived CAD remains gated by the project instructions and recorded reuse-term findings. Site creation/deployment has not been tested or authorized by this readiness check.
 
 ## Capability matrix
 
@@ -29,7 +29,7 @@ Later publishing and release gates remain separate. GitHub publishing is blocked
 | Browser interaction | PASS | Automatic rotation pause/resume changed state and a pointer drag changed the camera view. Visual screenshots were captured in the preparation task transcript. |
 | Long-running process | PASS | The smoke server remained listening on `127.0.0.1:4173` across browser and dependency checks. It was stopped after verification. |
 | Git executable | PASS | `/opt/homebrew/bin/git`, version 2.55.0. |
-| Local Git repository/remote | BLOCKED | `git status`, `git remote -v`, and `git rev-parse --show-toplevel` report that this directory is not a Git repository. This does not block local CAD/prototype work. |
+| Local Git repository/remote | PASS | Initialized after the original preflight. Lead-task check: clean working tree at start, configured SSH origin, and successful `git ls-remote origin HEAD`. |
 | GitHub SSH authentication | PASS | Non-mutating `ssh -T` authenticated as the existing GitHub account; no known-hosts file was written. GitHub returns exit 1 by design because it offers no shell. |
 | GitHub app/connector | PASS | Read-only authenticated-profile call succeeded. No `gh` command was used. |
 | Sites tools/account | PASS | Read-only `list_sites(limit: 1)` succeeded, establishing connector availability and account access. |
@@ -42,6 +42,14 @@ Later publishing and release gates remain separate. GitHub publishing is blocked
 | Release/device/mechanical validation | NOT TESTED | Mobile devices, sustained performance, human comprehension, and expert mechanical review belong to later gates. |
 
 Machine-readable summaries are in `artifacts/preflight/browser-smoke.json` and `artifacts/preflight/access-checks.json`.
+
+### Independent lead-task recheck — 9 September 2026
+
+All three source byte/hash/envelope checks passed again. A fresh CAD probe wrote outputs to `/tmp/zweigesicht-readiness/`, leaving original preflight artifacts intact. Its complete assembly inventory exactly matches the recorded inventory, and the component GLB is valid and 25,736 bytes. The known non-fatal FixShape diagnostic remains present and requires attention during the full geometry audit.
+
+The lead task restarted the existing loopback smoke server and inspected the real component in its own browser session. Rendering, pause, pointer orbit and zoom worked. Initial sample framing was imperfect and the material/tessellation are only a capability proof; this does not establish the production visual-quality gate. The temporary server was stopped after verification.
+
+The GitHub connector reports the configured repository as private with push permission. SSH read access succeeds; this readiness check performed no push. An active ChatGPT no-idle-sleep assertion was rechecked. Goal status is still inactive. Model routing has not been applied; use GOAL_PROMPT.md when launching.
 
 ## Tool locations and versions
 
@@ -165,7 +173,7 @@ For a run you intend to leave unattended:
 2. Keep ChatGPT running and this project volume mounted; do not log out, restart, or quit the app.
 3. Leave the confirmed sleep-prevention configuration enabled while the Goal runs.
 4. Enable completion/input notifications if you want to notice an approval or blocker; do not assume a Goal broadens sandbox or approval access.
-5. Start the future Goal only after deciding the Git/release path. This preflight did not activate it.
+5. Start the future Goal as local-only work using GOAL_PROMPT.md. Repository setup is complete; publication remains a later gate. This preflight did not activate a Goal.
 
 ## Remaining actions, in priority order
 
@@ -175,9 +183,9 @@ No technical setup action remains. Leave power, network, the app, and the confir
 
 ### Required only before later GitHub publishing
 
-1. Decide whether this directory should become a repository.
-2. Provide or choose the real GitHub repository/SSH remote; do not invent one.
-3. Resolve CAD/source redistribution terms before committing or publishing originals or derived models.
+1. Use the existing private repository and configured SSH remote; no repository setup remains.
+2. Obtain authorization for checkpoint pushes from the active task.
+3. Keep original CAD out of Git and gated derived CAD out of pushed checkpoints. Clear the corresponding release gates before redistribution.
 
 SSH identity and the connected GitHub app are already ready. No `gh` fallback is needed or permitted.
 

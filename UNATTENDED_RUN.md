@@ -1,12 +1,14 @@
 **Marco Lang — unattended execution brief**
 
-Prepared 8 September 2026. Companion to IMPLEMENTATION_PLAN.md. This document prepares a future run; it does not start Goal mode, configure models, enable a schedule, or grant permissions.
+Prepared 8 September 2026; readiness reconciled 9 September 2026. Companion to IMPLEMENTATION_PLAN.md. This document prepares a future run; it does not start Goal mode, configure models, enable a schedule, or grant permissions. Use GOAL_PROMPT.md for the current launch instruction and PROGRESS.md/PREFLIGHT_REPORT.md for verified state.
 
 **Outcome**
 
 Implement the planned movement explorer with the actual CAD, emphasizing clear views, excellent interactions, and minimal text. Reach a useful real-model preview early, then extend it through the planned scope. Keep missing geometry and unverified mechanics explicit.
 
 The first milestone is the assembled movement in a browser with working camera controls and identifiable components. The next is one dense mechanism revealed in context, with reviewed motion, pause/slow controls, and a reliable return to the assembled view. These milestones do not replace the full implementation objective.
+
+Current execution scope is a local implementation ready for review. Do not register, save, upload, or deploy a Site, or redistribute CAD assets, while the documented publication gate remains uncleared. The implementation plan's deployment phase is deferred. Continue independent engineering while human, physical-device, or external mechanical review is pending; keep those acceptance gates explicitly open.
 
 **Model policy — recommendation, not an applied setting**
 
@@ -43,8 +45,8 @@ The lead continues independent implementation while workers run. Wait only for r
 
 **Dependency sequence**
 
-1. Retrieve and verify source files; establish a working STEP importer.
-2. Recover IDs, hierarchy, units, transforms, and reference renders.
+1. Reuse the verified source downloads and working STEP importer. Run a brief integrity check rather than repeat setup.
+2. Reuse the instance inventory; audit units, full geometry, assembled reference views, and transform correctness.
 3. Agree on the asset/manifest contract before dependent UI and animation work.
 4. Import real geometry into the viewer and measure initial rendering behavior.
 5. Author one difficult reveal and its mechanical motion.
@@ -57,15 +59,15 @@ Mechanical research can accompany source preparation. Accessibility controls and
 | Check | Proof required | Current result |
 |---|---|---|
 | Project instructions and implementation scope | Read implementation plan and GitHub publishing policy | Prepared |
-| Code runtime | Executable Node/package manager/Python | Found on PATH; application install/build not tested |
-| Source connectivity | Successful download of actual STEP bytes | Public assembly page returned HTTP 200 through reviewed network access; binary download still unverified |
-| CAD conversion | Load STEP, extract separate instances, export a small runtime sample | No working importer verified |
-| Graphics authoring | Working required authoring tool or a documented viable alternative | Blender/FreeCAD not found on PATH or at standard /Applications paths |
-| First browser render | Actual converted part or assembly visible and interactive | Not started |
-| Work preservation | Progress file and reproducible asset source records | Progress file prepared; source records pending |
-| Long-running host availability | Mac powered, online, app running; prevent-sleep setting enabled | Requires host/user check; not changed |
+| Code runtime | Executable Node/package manager/Python | Isolated Python 3.12 CAD environment and pinned Three.js smoke dependencies verified |
+| Source connectivity | Successful download of actual STEP bytes | Assembly and two components downloaded; all three hashes independently reverified |
+| CAD conversion | Load STEP, extract separate instances, export a small runtime sample | Fresh probe reproduces 426 instances, 255 definitions, 388 non-identity placements and a valid component GLB |
+| Graphics authoring | Working required authoring tool or a documented viable alternative | Preflight verified Blender; FreeCAD remains optional with the working OCP path |
+| First browser render | Actual converted part or assembly visible and interactive | Real screw render, pause, orbit and zoom independently rechecked in the lead task; full assembly rendering remains implementation work |
+| Work preservation | Progress file and reproducible asset source records | Git repository, provenance manifest, progress file and reproducible probes present |
+| Long-running host availability | Mac powered, online, app running; prevent-sleep setting enabled | User confirmed persistent settings in preflight; lead task rechecked active ChatGPT no-idle-sleep assertion |
 
-The tooling check was narrow: a tool absent from these paths may be installed elsewhere. Default Python did not expose OCP, OCC, or trimesh; numpy was present. Do not describe this as proof that all available runtimes lack CAD support.
+Use `.venv-cad/bin/python` for CAD work. The original default-Python tooling inventory is historical and does not describe the provisioned environment. Exact versions and rerun commands are in PREFLIGHT_REPORT.md.
 
 Resolve CAD support through a suitable isolated environment or an available application. Keep installation reproducible and scoped where practical. Do not assume CAD packages support the current default Python version. A lightweight STEP-to-mesh conversion may be enough for the first render; Blender need not block that if another route works.
 
@@ -93,7 +95,7 @@ If one task is blocked, continue tasks that do not require its result. If nothin
 
 **Boundaries and reporting**
 
-Preserve user changes and use the GitHub policy: local git operations over the configured SSH remote; connected GitHub app for PR/API work; no gh fallback. No repository or remote has been configured during preparation.
+Preserve user changes and use the GitHub policy: local git operations over the configured SSH remote; connected GitHub app for PR/API work; no gh fallback. The configured remote is `git@github.com:galind/zweigesicht.git`; the lead task verified SSH read access and connector access to this private repository. Follow AGENTS.md for milestone commits. Push only when the active task authorizes it, and keep gated CAD assets out of pushed checkpoints.
 
 Do not contact Marco or other people, purchase services, or redeem usage-reset credits without explicit authorization. Preserve applicable publication rules and the implementation plan’s source-fidelity requirements.
 
@@ -101,6 +103,4 @@ Report concrete milestones, failures that need action, and completion. Keep prog
 
 **Suggested launch instruction**
 
-Use the following with Goal mode when ready. The model selections become instructions only when the user actually adopts them:
-
-> Implement the Marco Lang explorer described in IMPLEMENTATION_PLAN.md, following UNATTENDED_RUN.md. Use Astra High for the lead, complex CAD/mechanical work, and substantive review; use Sol Medium for bounded asset inventories, source extraction, and routine validation reports. Delegate independent work with clear ownership and integrate results in this task. Start by proving source download and STEP conversion, then obtain a real-model browser preview and work through the remaining milestones. Make routine implementation decisions autonomously, preserve progress in PROGRESS.md, and inspect the actual rendered experience. Continue independent work when blocked. Never invent missing mechanical evidence or claim human/device validation that has not occurred. Complete and verify the planned scope; report exact blockers when no useful work can continue. Do not purchase services, contact people, or redeem usage-reset credits.
+Use GOAL_PROMPT.md with Goal mode when ready. It incorporates the completed preflight, model assignments, milestone commit policy, and current local-only scope. Its model selections become instructions only when the user actually adopts them.

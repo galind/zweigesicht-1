@@ -26,15 +26,17 @@
     "site_created_or_changed": false
   },
   "local_git_repository": {
-    "status": "BLOCKED",
-    "reason": "The project directory is not a Git repository and has no configured remote."
+    "status": "PASS",
+    "rechecked_on": "2026-09-09",
+    "remote": "git@github.com:galind/zweigesicht.git",
+    "evidence": "Lead task verified git status, configured SSH origin, and git ls-remote origin HEAD. Connector confirms private repository and push permission; no push was performed during readiness recheck."
   },
   "chatgpt_sleep_assertion": {
     "status": "PASS",
     "evidence": "pmset reported a ChatGPT NoIdleSleepAssertion during the run"
   },
   "chatgpt_persistent_sleep_toggle": {
-    "status": "NOT TESTED",
-    "reason": "Computer Use is prohibited from controlling the ChatGPT app."
+    "status": "USER CONFIRMED",
+    "reason": "User confirmed configuration on 9 September 2026 during preflight. Lead task independently rechecked active no-idle-sleep assertion, not the persistent UI toggle."
   }
 }

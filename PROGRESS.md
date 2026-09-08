@@ -15,6 +15,8 @@ Updated 9 September 2026. Phase: preflight complete; ready for the first CAD/pro
 - Verified Sites tool/account availability with a read-only list call. No Site registration, save, or deployment was attempted.
 - Verified one bounded read-only subagent could access the instructions and report its runtime. Its concrete model/reasoning ID was not exposed.
 - Verified the Mac mini is on AC power and ChatGPT held an active no-idle-sleep assertion during preparation.
+- Independently rechecked readiness in the lead task: all three source hashes pass; a fresh CAD probe exactly reproduces the inventory and exports a valid GLB; browser rendering, pause, orbit and zoom work; configured SSH remote read and private GitHub repository connector access succeed; active app sleep assertion confirmed.
+- Reconciled stale repository/tooling statements in the unattended brief and preflight report. GOAL_PROMPT.md now provides the launch instruction with completed setup, model assignments, milestone commits, and local-only implementation scope.
 
 **Known blockers and deferred gates**
 
@@ -26,7 +28,7 @@ Updated 9 September 2026. Phase: preflight complete; ready for the first CAD/pro
 
 **Next executable action**
 
-Start the future CAD/prototype Goal with A01 source retrieval already satisfied. Re-run `scripts/preflight/verify_sources.py` and `scripts/preflight/run_cad_probe.sh`, then proceed to A03 assembled reference views and the full component/geometry audit. Use `PREFLIGHT_REPORT.md` for exact rerun commands, permissions, and publishing prerequisites.
+Start the future Goal using GOAL_PROMPT.md, with A01 source retrieval and the A02 hierarchy probe already satisfied. Reuse the existing isolated environment and source inventory, then proceed to A03 assembled reference views and the full component/geometry audit. Recheck source integrity on resume as needed; repeat conversion/setup only if inputs or environment change. Use PREFLIGHT_REPORT.md for exact rerun commands and permissions. Full-assembly mesh conversion, geometry fidelity and runtime performance remain to be established. The non-fatal source-healing diagnostic remains an audit item.
 
 **Running services**
 
