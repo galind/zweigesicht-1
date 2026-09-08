@@ -19,8 +19,8 @@ Updated 9 September 2026. Phase: preflight complete; ready for the first CAD/pro
 **Known blockers and deferred gates**
 
 - The private GitHub repository is configured as the SSH remote `git@github.com:galind/zweigesicht.git`. Public release remains a separate decision.
-- CAD/source redistribution terms remain unresolved and block public source/derived-asset publication until reviewed.
-- The persistent ChatGPT **Prevent sleep while running** toggle could not be inspected directly because Computer Use is prohibited from controlling the ChatGPT app. The current process assertion was verified; the user should visually confirm the toggle before an unattended Goal.
+- The CAD page describes the constructions as open source and shared openly/free of charge, but it names no license; the site-wide imprint limits downloads/copies to private, non-commercial use and requires consent for processing/distribution. Obtain a specific license or written permission before publicly serving converted meshes or source imagery. This does not block private development.
+- The persistent Mac/app sleep configuration was confirmed correct by the user on 9 September 2026; the active process assertion was also verified during preflight.
 - FreeCAD is not installed; the proven OCP path makes it optional unless the full audit identifies a GUI inspection need.
 - Real-device performance, sustained thermal behavior, human comprehension, and expert mechanical review remain future implementation/release gates.
 

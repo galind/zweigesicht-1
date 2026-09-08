@@ -38,7 +38,7 @@ Later publishing and release gates remain separate. GitHub publishing is blocked
 | Subagent model/reasoning ID | NOT TESTED | The concrete runtime model and effort were not exposed to the subagent. No value was inferred. |
 | Host power source | PASS | Mac mini (M4, 24 GB) is on AC power. |
 | Current sleep prevention | PASS | `pmset -g assertions` showed an active `ChatGPT` `NoIdleSleepAssertion` during this run. |
-| Persistent app sleep setting | NOT TESTED | Computer Use is prohibited from inspecting the ChatGPT app itself. The settings UI value could not be read directly. See user checklist. |
+| Persistent app sleep setting | PASS | Computer Use could not inspect the ChatGPT settings UI directly; the user confirmed the Mac/app configuration is correct on 9 September 2026. |
 | Release/device/mechanical validation | NOT TESTED | Mobile devices, sustained performance, human comprehension, and expert mechanical review belong to later gates. |
 
 Machine-readable summaries are in `artifacts/preflight/browser-smoke.json` and `artifacts/preflight/access-checks.json`.
@@ -157,13 +157,13 @@ Non-shell checks used the in-app browser to open the smoke URL, pause/resume rot
 
 Current official OpenAI guidance says to enable **Prevent sleep while running** for local work and keep the workspace available. In ChatGPT, open **Settings** with Cmd+, and verify **General → Prevent sleep while running** is on: <https://learn.chatgpt.com/docs/long-running-work> and <https://learn.chatgpt.com/docs/reference/settings>.
 
-The current process already owns a `NoIdleSleepAssertion`, but the settings UI itself could not be inspected by Computer Use. The Mac's base `pmset` policy still has automatic sleep enabled, so do not rely on base power settings alone. Apple documents the optional system-level setting under **System Settings → Energy** on a desktop Mac: enable **Prevent automatic sleeping when the display is off** if you want a second layer of protection: <https://support.apple.com/en-gb/guide/mac-help/-mchle41a6ccd/mac>.
+The current process already owns a `NoIdleSleepAssertion`. Computer Use could not inspect the settings UI itself, but the user confirmed the Mac/app configuration is correct on 9 September 2026. Apple documents the optional system-level setting under **System Settings → Energy** on a desktop Mac: enable **Prevent automatic sleeping when the display is off** if you want a second layer of protection: <https://support.apple.com/en-gb/guide/mac-help/-mchle41a6ccd/mac>.
 
 For a run you intend to leave unattended:
 
 1. Keep this Mac mini connected to power and a stable network.
 2. Keep ChatGPT running and this project volume mounted; do not log out, restart, or quit the app.
-3. Verify **Settings → General → Prevent sleep while running** immediately before starting the Goal.
+3. Leave the confirmed sleep-prevention configuration enabled while the Goal runs.
 4. Enable completion/input notifications if you want to notice an approval or blocker; do not assume a Goal broadens sandbox or approval access.
 5. Start the future Goal only after deciding the Git/release path. This preflight did not activate it.
 
@@ -171,7 +171,7 @@ For a run you intend to leave unattended:
 
 ### Required before the first CAD/prototype Goal
 
-No technical setup action remains. Immediately before leaving the Mac, personally verify the ChatGPT sleep toggle and leave power/network/app available.
+No technical setup action remains. Leave power, network, the app, and the confirmed sleep-prevention configuration available during unattended work.
 
 ### Required only before later GitHub publishing
 
