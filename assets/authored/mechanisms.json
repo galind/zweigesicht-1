@@ -71,7 +71,11 @@
       "distance": 46,
       "side": -1,
       "color": "#d9b967",
-      "motion": "unverified"
+      "motion": "unverified",
+      "partObstructions": [
+        "1__0_1_1_84_2",
+        "2__0_1_1_89_1"
+      ]
     },
     {
       "id": "transmission",
@@ -129,7 +133,8 @@
       "obstructions": [
         58,
         6,
-        60
+        60,
+        54
       ],
       "target": [
         0,
@@ -207,7 +212,12 @@
       "distance": 38,
       "side": -1,
       "color": "#d69dba",
-      "motion": "conditional-unverified"
+      "motion": "conditional-unverified",
+      "partObstructions": [
+        "29__0_1_1_145_7",
+        "29__0_1_1_145_11",
+        "29__0_1_1_145_9"
+      ]
     }
   ],
   "limitations": [

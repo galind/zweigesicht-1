@@ -13,3 +13,13 @@ The source has 426 hierarchy instances (365 leaf components, 61 assembly nodes).
 ## Validation scope
 
 A browser render proves runtime geometry and interaction, not finished-watch fidelity or mechanical correctness. Expert mechanical review, representative visitor studies, real mobile GPU/thermal benchmarks and publication/license approval remain independent gates. Browser viewport emulation is recorded as emulation.
+
+## Local runtime structure
+
+`MovementViewer` owns immutable source matrices, evaluated mechanical poses, presentation offsets, cameras, shared geometries and resource lifetime. React receives periodic snapshots and sends discrete intent; it does not own per-frame mesh transforms. Source geometry remains millimetres throughout the offline and browser pipeline. The camera uses source negative Y as up for the default negative Z maker-reference view.
+
+`assets/authored/mechanisms.json` owns groups, source membership, obstructions, focus and presentation parameters; `motion-evidence.json` records source/evidence and authored timing bounds separately. `evaluatePose(time)` drives four train shafts and the illustrative balance. `Source inspection` removes every mechanical delta, whereas Pause retains its current explanatory phase.
+
+`scripts/prepare_local_assets.py` writes a compact source manifest and content-hashed overview/catalog URLs. The loopback-only Vite middleware serves prepared gzip bodies; GLTFLoader uses the bundled Meshopt decoder, with no remote decoder dependency. The catalog coalesces optional loads, retains existing movement mesh identity, and frees discarded catalog geometry. Renderer context restoration recreates the PMREM environment in addition to normal geometry restoration.
+
+`?inspect=1` exposes local QA tools. The optional WebMCP interface calls the same visible controller actions, validates input before mutation and unregisters on unmount. `?no3d=1` and `?text=200` are explicit controlled test modes. No server database, account registration, publishing or Site cloud lifecycle is required.

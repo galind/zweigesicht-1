@@ -1,41 +1,35 @@
-**Zweigesicht — current execution state**
+# Zweigesicht — current execution state
 
-Updated 9 September 2026. Active Goal: implement the local movement explorer for review. Local-only scope; no Site has been registered, saved, uploaded, or deployed.
+Updated 9 September 2026. Active goal: finish the local movement explorer for engineering review. **No Site has been registered, saved, uploaded or deployed.**
 
-**Completed and reused**
+## Completed
 
-- Read AGENTS.md, implementation plan, preflight report and unattended brief. Original three STEP files pass byte counts, SHA-256 and STEP envelopes again.
-- Reused `.venv-cad`, original source files, Blender and 426-instance inventory. No CAD installation or source acquisition repeated.
-- Delegated CAD conversion/difficult geometry analysis to Astra High; bounded source inventory to Sol Medium; independent mechanical analysis to Astra High. Lead owns application integration.
-- Initialized prescribed Sites 0.3.0 local scaffold with Shadcn under `explorer/`; application uses React/TypeScript and Three.js. Cloud/account plugins are excluded from local server configuration. No Site registration.
-- First studio-view source slice implemented with actual GLB loader, orbit/zoom and front/back cameras; HTTP 200 compilation confirmed. Full-geometry asset pending, so browser quality is not yet claimed.
-- Added ignored boundaries for all derived CAD and visual evidence. Source/derived CAD and imagery must remain out of commits and SSH pushes.
+- Reused verified original STEP files/provenance, `.venv-cad`, Blender, the 426-instance inventory and smoke tooling. No CAD installation or source reacquisition repeated.
+- Astra High handled lead integration, difficult CAD/mechanical analysis and substantive independent runtime review. Sol Medium handled bounded source inventory/reference/provenance reports. Lead retained all application edits.
+- Reproducible cached XCAF pipeline exports immutable source placements and shared geometry. Full source: 426 instances (365 leaves, 61 subassemblies); movement: 223 source leaves / 222 rendered. Eight assembled reference renders and maker-image comparison are recorded locally.
+- Actual full movement preview, six mechanism reveals, both treatments/sides, orbit/zoom, two-scale separation, complete source catalog, isolation and contextual return implemented in `explorer/`.
+- Regulation/going-train timing study uses geometry-corroborated tooth counts and maker 3 Hz rate. Deterministic pause/play/speed/seek/step controls work; unsafe contact/spring parts are explicitly omitted during illustrative motion and restored for source inspection.
+- Lossless Meshopt + prepared gzip: movement body 4,751,211 B, catalog 9,501,474 B, exact decoded geometry/ID/matrix preservation. Real browser delivery and optional load retry verified. Full geometry retained; no LOD/decimation claimed.
+- Responsive portrait panels, accessible DOM controls, keyboard seeking/playback, actual-CAD static fallback, WebGL context restoration including reflection regeneration, render-on-demand, quality hysteresis and local WebMCP controls implemented.
+- 7 pure state/motion checks pass; 12 independent actual-controller regression checks pass (including explicitly stubbed PMREM lifecycle). Real browser six-check suite passes, including 20 interrupted reveals, exact reassembly, stable GPU counts and zero paused redraws. Screenshots cover all groups, components, context recovery and phone-sized layouts.
+- Final TypeScript and production build pass; npm audit is zero. Authored-code lint passes; generated Shadcn scaffold lint conflicts are excluded explicitly, with TypeScript/build coverage retained.
+- Desktop 60-second sequence on Mac mini M4/24 GB, Chromium152, 1440×900/DPR1: 16.667 ms mean, p95 17.0–17.3 ms across assembled orbit, timing and separation. Five-minute sequence completed with 18,000 intervals, p95 17.6–17.7 ms and maximum 18.8 ms; GPU counts stable at 137 geometries/2 textures. Real-device/thermal claims remain open.
 
-**Audit findings / unresolved**
+## Evidence and limitations
 
-- 426 source hierarchy instances comprise 365 leaf parts and 61 assembly instances. Full source includes case, crystals, overlapping dial/hand/strap alternatives and regulation support. Default viewer must frame movement root `p_0_1_1_1__0_1_1_1_4`; catalog will preserve all source addressing.
-- Full geometry conversion and assembled reference renders in progress. Source healing warning remains an audit item.
-- 3 Hz maker balance rate confirmed; source pivot/axis and spring/contact analysis in progress. No connected mechanical fidelity is established yet.
-- Prescribed scaffold dependency audit reports 11 advisories (8 high, 2 moderate, 1 low); follow-up remediation/triage required before final review.
-- Public redistribution terms remain unresolved. Human comprehension, expert mechanical review, real devices/thermal performance and publication remain external gates; continue independent local engineering.
+Read `docs/LOCAL_REVIEW.md` for scope coverage, QA matrix, measured budgets and the limitations list; `docs/CAD_AUDIT.md`, `MECHANICAL_REVIEW.md`, `ASSET_REPORT.md`, `REFERENCE_COMPARISON.md` and `IMPLEMENTATION_REVIEW.md` contain detailed audits. Numeric/browser screenshots are in ignored `artifacts/browser/`; original/reference/CAD binaries remain ignored.
 
-**Running services**
+Source exceptions remain: one empty diamond, invalid eccentric with three missing tessellation faces in four instances, other invalid-BRep/tiny-triangle exceptions recorded by audit. Setting-spring and dial/hand variants need review. Material finishes, balance amplitude/direction/release window and reveal paths are authored interpretations. No expert mechanical contact approval, hairspring deformation, full faithful running watch, visitor study, physical phone/thermal or production network qualification is claimed. Deferred publication does not block local engineering.
 
-- Local Vinext development server: http://127.0.0.1:4173/ (`cd explorer && npm run dev`), retained process session 76266.
-- CAD conversion worker running; source coordinate millimetres retained, stable source-path IDs.
+## Services and checkpoints
 
-**Next actions**
+- Preview: **http://127.0.0.1:4173/**; Vinext dev server session 76266, bound to loopback. Restart with `cd explorer && npm run dev`.
+- `?inspect=1` offers regression, 60-second/five-minute performance and failure-recovery controls. `?no3d=1` and `?text=200` are explicit test modes.
+- Private SSH remote: `git@github.com:galind/zweigesicht.git`. First coherent milestone `00fb905` committed and pushed. Final implementation/evidence checkpoint prepared; commit and SSH push next. No `gh` used.
+- Source/derived CAD and source imagery excluded from Git and pushes. Code, documentation and provenance only are authorized.
 
-1. Integrate generated full-movement GLB and manifest; inspect real assembled front/back/oblique/side views, record evidence and commit verified first milestone.
-2. Finish difficult regulation reveal, deterministic bounded motion, pause/slow/seek/selection and return behavior.
-3. Extend audited groups, two-scale separation, full catalog, responsive/accessibility/failure recovery and automated/browser validation.
-4. Record exact local limitations and external gates, verified checkpoints and authorized code/documentation-only SSH pushes.
+## Next actions
 
-**First full-movement milestone — 00:56 local**
-
-- Complete movement rendered and visually inspected in the in-app browser: both sides, pointer orbit and zoom/reset controls. Screenshots: ignored `artifacts/browser/01-assembled-movement.png`, `02-dial-side.png`. Initial all-silver materials are intentionally a geometry inspection baseline; finish/readability refinement comes next.
-- Final conversion available: 222 rendered movement leaves (223 source leaves, one empty diamond), 138 shared geometries, 748,422 triangles; uncompressed movement GLB 21,142,992 bytes. Full source: 364 rendered leaves/365 source leaves, 427 nodes including root, 201 shared geometries, 37,633,344 bytes.
-- Binary audit: GLB world transforms match manifest; proper rotations; maximum float32 bounds error <0.000001 mm. Exceptions: empty diamond and invalid balance eccentric with 3 untriangulated faces repeated four times. Exact exceptions remain open, not reconstructed.
-- Mechanical analysis corroborates eleven gear tooth counts including 20 escape teeth; signed going-train ratios and pivots documented. Timing study will hide pallet, impulse jewel, double roller and hairspring to avoid representing unvalidated contacts/deformation. Source inspection restores all mechanical offsets.
-- Seven pure clock/ratio/state/reassembly/interruption tests pass. TypeScript check passed for the first slice. Updated scaffold dependencies plus patched sharp override: npm audit reports zero vulnerabilities.
-- Next: materials + difficult reveal, then complete group/camera/catalog/separation interactions, compressed delivery and broader browser QA.
+1. Final post-cleanup browser suite (all six checks), production build, types and authored lint passed. Ready to commit.
+2. Inspect final staged files/diff, commit coherent local-review checkpoint, push code/docs/provenance over existing SSH remote.
+3. Leave the working local preview and review reports available. Public release, external expert/device/human qualification remain separate follow-up work.

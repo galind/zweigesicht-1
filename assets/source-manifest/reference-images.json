@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "retrieved_at": "2026-09-09",
+  "distribution_status": "local-reference-only; publication and redistribution permission unresolved",
+  "references": [
+    {
+      "local_filename": "Front_2_Werk.png",
+      "page_url": "https://www.marcolangwatches.com/en/watches/",
+      "image_url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/Front_2_Werk.png",
+      "bytes": 661250,
+      "sha256": "88b047d6c7517144defa11926931b8d33c967a505a806ca2fdca0d53c6f16efe"
+    },
+    {
+      "local_filename": "shockindication5.png",
+      "page_url": "https://www.marcolangwatches.com/en/watches/",
+      "image_url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/shockindication5.png",
+      "bytes": 218234,
+      "sha256": "faef640bfc4ec481faf69eadc95bdc4e1a10c6f340f944b9d62443dc8c2ae341"
+    },
+    {
+      "local_filename": "assembly-front1.jpg",
+      "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "image_url": "https://www.marcolangwatches.com/wp-content/uploads/wpdm-cache/1690458927wpdm_ml01%20zweigesicht%20Front1-500x0.jpg",
+      "bytes": 12757,
+      "sha256": "e9dac3c0d275224dc21067713d61cd0d3e9844d3dcfe542ae50177d09c382636"
+    }
+  ]
+}

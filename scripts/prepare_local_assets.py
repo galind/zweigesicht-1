@@ -1,14 +1,29 @@
 #!/usr/bin/env python3
-"""Copy generated, release-gated CAD into the ignored loopback application asset folder."""
+"""Prepare content-addressed, local-only CAD payloads. Never uploads assets."""
 from pathlib import Path
-import shutil
-import json
+import gzip, hashlib, json, shutil
 root=Path(__file__).resolve().parents[1]
 source=root/'assets/generated'
 target=root/'explorer/public/models'
 target.mkdir(parents=True,exist_ok=True)
-for name in ('zweigesicht.glb','assembly-manifest.json'):
-    if not (source/name).is_file():
-        raise SystemExit(f'Missing generated asset: {source/name}. Run scripts/cad exporter first; do not reacquire sources.')
-    shutil.copy2(source/name,target/name)
-print(json.dumps({'local_only':True,'files':[str(target/n) for n in ('zweigesicht.glb','assembly-manifest.json')]}))
+paths={}
+for role in ('overview','catalog'):
+    path=source/'optimized'/f'{role}.glb'
+    if not path.is_file():
+        raise SystemExit(f'Missing {path}. Run scripts/cad/run_pipeline.sh then scripts/assets/optimize.mjs; no source reacquisition needed.')
+    data=path.read_bytes();digest=hashlib.sha256(data).hexdigest()[:12]
+    name=f'{role}-{digest}.glb';(target/name).write_bytes(data)
+    (target/(name+'.gz')).write_bytes(gzip.compress(data,compresslevel=9,mtime=0))
+    paths[role]='/models/'+name
+manifest=json.loads((source/'assembly-manifest.json').read_text())
+# Retain complete component identity; analytic audit details remain in local generated manifest.
+runtime={k:manifest[k] for k in ('schemaVersion','source','coordinateSystem','summary','instances','exceptions')}
+raw=json.dumps(runtime,separators=(',',':')).encode()
+(target/'assembly-manifest.json').write_bytes(raw)
+(target/'assembly-manifest.json.gz').write_bytes(gzip.compress(raw,compresslevel=9,mtime=0))
+(target/'asset-paths.tmp').write_text(json.dumps(paths,separators=(',',':')))
+(target/'asset-paths.tmp').replace(target/'asset-paths.json')
+reference=root/'artifacts/cad/reference-renders/movement-back.png'
+if reference.is_file():
+    out=root/'explorer/public/reference';out.mkdir(parents=True,exist_ok=True);shutil.copy2(reference,out/'movement-back.png')
+print(json.dumps({'localOnly':True,'paths':paths,'manifestBytes':len(raw),'manifestGzipBytes':(target/'assembly-manifest.json.gz').stat().st_size},indent=2))
