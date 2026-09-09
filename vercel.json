@@ -1,6 +1,6 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "cd explorer && npm ci",
-  "buildCommand": "cd explorer && npm run build:vercel",
-  "outputDirectory": "explorer/.vercel/output"
+  "buildCommand": "cd explorer && npm run build:vercel && cd .. && rm -rf .vercel/output && mkdir -p .vercel/output && cp -R explorer/.vercel/output/. .vercel/output/"
 }
