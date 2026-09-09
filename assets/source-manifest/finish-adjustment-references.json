@@ -36,6 +36,15 @@
       "bytes": 2112553,
       "kind": "Barrel snailing CAD-render reference",
       "usage": "Local review only; image not copied into public assets"
+    },
+    {
+      "id": "USER-FINISH-2026-09-09-05",
+      "file": "codex-clipboard-0ea2904e-db2b-4777-8438-0590d3c17d18.png",
+      "source": "User attachment in this task; no external URL supplied",
+      "sha256": "240a929573ba61ef792c5be40793e6ea51623f7bc75c6ba8cdd00b4202c7f59a",
+      "bytes": 1905771,
+      "kind": "Shock-indicator CAD render showing neutral screws and retained central blue mounting screw",
+      "usage": "Local review only; image not copied into public assets"
     }
   ],
   "terminology": {

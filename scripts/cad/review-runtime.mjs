@@ -315,14 +315,15 @@ for(const definition of [67,225,155]){
 const backdrop=(rgb,alpha)=>rgb.map((c,i)=>Math.max(c-Math.min(1,Math.max(0,(1-alpha)*2)),0)+[.012,.019,.024][i]*Math.min(1,Math.max(0,(1-alpha)*2)));
 assert.deepEqual(backdrop([.3,.6,.9],1),[.3,.6,.9]);assert.deepEqual(backdrop([1,1,1],.5),[.012,.019,.024]);
 results.push({check:'clear optics match installed transmission-buffer contract, preserve opaque samples, isolate program cache, and restore after Function; ruby unchanged',status:'pass',scope:'shader hook and renderer contract; actual pixels reviewed in browser'});
-for(const suffix of [33,43,44,45,77,78,81,82]){
+for(const suffix of [33,43,44,45,77,78,81,82,...[9,20,21,24,27,32,33].map(n=>'29__0_1_1_145_'+n)]){
  const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
  const assigned=finishFor(p.source.name,p.source.definitionId,p.source.id);
  assert.equal(assigned.assignment,'source-instance');assert.equal(assigned.family,'steel');assert.equal(p.material.name,'steel');
 }
 const sharedBlue=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_181'&&p.material.name==='blue');
 assert.ok(sharedBlue,'Instance overrides must preserve shared screw definition blue elsewhere');
-results.push({check:'eight reviewed fasteners use instance steel overrides while shared screw definition stays blue elsewhere',status:'pass'});
+assert.equal(v.renderParts.get(PREFIX+'29__0_1_1_145_30').material.name,'blue');
+results.push({check:'fifteen reviewed fasteners use instance steel overrides while shared screw definitions and the central shock mounting screw stay blue',status:'pass'});
 let blueScrews=0,steelScrews=0,blueShankVertices=0,neutralHandSeats=0;
 const blueScrewDefinitions=new Set();
 for(const p of v.renderParts.values()){
@@ -346,9 +347,9 @@ for(const p of v.renderParts.values()){
   for(let i=0;i<roles.count;i++)if(roles.getX(i)===2)neutralHandSeats++;
  }
 }
-assert.equal(blueScrewDefinitions.size,11);assert.ok(steelScrews>=22);
+assert.equal(blueScrewDefinitions.size,8);assert.ok(steelScrews>=29);
 assert.ok(blueShankVertices>0&&neutralHandSeats>0);
-// Nine screw definitions currently occur only at steel-override locations;
+// Twelve screw definitions currently occur only at steel-override locations;
 // their default finish must still cover the whole screw at any blue placement.
 for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255]){
  const material=createMaterial('010-screw',`d_0_1_1_${n}`);
@@ -357,7 +358,7 @@ for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,20
  assert.equal(shader.uniforms.finishWholeBlue.value,1);
  material.dispose();
 }
-results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while twenty-two steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
+results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while twenty-nine steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
 const physicalDefaults=new THREE.MeshPhysicalMaterial();
 for(const p of v.renderParts.values()){
  assert.ok(p.material instanceof THREE.MeshPhysicalMaterial);

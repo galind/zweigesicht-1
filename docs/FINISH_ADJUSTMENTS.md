@@ -1,3 +1,11 @@
+# Shock-indicator screw correction
+
+9 September 2026. User reference `USER-FINISH-2026-09-09-05` shows neutral screws around the shock-indicator mechanism, with the central mounting screw blue. Exact source prefix `p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_`: suffixes 9 (d123), 20/21 (d166), 24/27 (d168), and 32/33 (d170) now use steel throughout. Suffix30 (d169) stays blue. Shared definitions keep their default assignments elsewhere.
+
+The attachment hash is recorded in the source manifest without copying the image into public assets. The full ledger is refreshed. All 50 source/asset CPU checks, TypeScript, targeted material lint and production build pass. A live before/after shock-indicator comparison shows the corrected steel screws and retained blue centre screw, with no browser errors. No broader browser interaction suite or device benchmark was rerun for this assignment-only change. Evidence: `artifacts/browser/shock-screw-steel/`. Local-only checkpoint pending user review.
+
+---
+
 # Matching snailing and steel attachment corrections
 
 9 September 2026, following the user's review of the previous checkpoint.

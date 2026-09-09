@@ -16,7 +16,7 @@
       "6": "source plate inscription floor",
       "7": "source red gauge inlay"
     },
-    "materialSourceSha256": "47c5d659d43a43a7ba34c4fcfb846f443d547bf062371ada403206a75d0f789d",
+    "materialSourceSha256": "ce6f2796fc987d8771491f9e414bcfc5057fc02384f8aceb320a3e0cecf1f07b",
     "packagerSourceSha256": "e760417aad47eb2f43a41158f3058a905e074bf1ebe11665794ddcbc551571d2"
   },
   "coverage": {
@@ -25,11 +25,11 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 71,
-      "inferred": 273,
+      "verified": 78,
+      "inferred": 266,
       "unresolved": 21
     },
-    "changedFamilyInstances": 75,
+    "changedFamilyInstances": 82,
     "annotatedDefinitions": 58
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -53994,11 +53994,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -54008,15 +54008,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -54797,11 +54797,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -54811,15 +54811,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -54870,11 +54870,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -54884,15 +54884,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -55089,11 +55089,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55103,15 +55103,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -55308,11 +55308,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55322,15 +55322,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -55673,11 +55673,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55687,15 +55687,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -55746,11 +55746,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "USER-FINISH-2026-09-09-05 user-supplied shock-indicator CAD render and explicit neutral screw correction",
+      "surfaceReview": "Neutral steel shock-indicator screw, across all modeled surfaces. Exact-instance assignment; central mounting screw P29/145:30 remains blue as shown in the reference.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55760,15 +55760,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {

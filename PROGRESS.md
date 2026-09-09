@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Shock-indicator steel screws — 9 September 2026
+
+Matched the user's additional CAD-render reference: seven screws in the shock-indicator assembly now use whole-screw steel through exact-instance overrides (P29/145 suffixes 9, 20, 21, 24, 27, 32, 33). The central mounting screw, suffix30, stays blue as shown. Recorded the reference hash and refreshed the complete appearance ledger.
+
+**Verification:** all 50 source/asset CPU checks, TypeScript, targeted material lint and production build pass. Existing exact-instance checks cover the seven corrections and retained central blue screw. The local shock-indicator before/after view was reviewed with no browser errors. Geometry remains byte-exact in the CPU suite. This small assignment correction did not rerun the broader browser interaction suite or device benchmarks.
+
+Evidence: `artifacts/browser/shock-screw-steel/`. Next action: user review at **http://127.0.0.1:4173/**. Local checkpoint on `codex/watch-polish-finishes`; no push or merge. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Matching snailing and steel attachments — 9 September 2026
 
 Both barrel/lid pairs now share the accepted left snailing direction, compensating for their opposite source-local XY orientation in both grain and reflections. Eleven back-fitted screws, the horizontal hairspring-stud screw and both d117 stud/holder occurrences now use neutral steel. Exact screw-instance overrides preserve shared-definition assignments elsewhere. The complete appearance ledger resolves the prior stud-color uncertainty and records all corrected identities.
