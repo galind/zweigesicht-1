@@ -2,11 +2,12 @@ import tailwindcss from '@tailwindcss/postcss';
 import vinext from 'vinext';
 import { nitro } from 'nitro/vite';
 import { defineConfig, type Plugin } from 'vite';
-import { existsSync, createReadStream } from 'node:fs';
+import { existsSync, createReadStream, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 // Serve prepared, content-addressed CAD on loopback with real gzip transfer.
 // This plugin has no remote storage, account, upload or publishing capability.
 function localCad(): Plugin {
+  const failedCases = new Set<string>();
   return {
     name: 'local-cad',
     configureServer(server) {
@@ -19,10 +20,27 @@ function localCad(): Plugin {
         )
           return next();
         const path = resolve('public', '.' + pathname),
+          referrer = new URL(req.headers.referer || '/', 'http://localhost'),
+          delivery = referrer.searchParams.has('inspect')
+            ? referrer.searchParams.get('delivery')
+            : null,
           compressed =
+            delivery !== 'slow' &&
             String(req.headers['accept-encoding']).includes('gzip') &&
             existsSync(path + '.gz');
         if (!existsSync(path)) return next();
+        if (
+          (delivery === 'failure' && pathname.includes('overview-')) ||
+          (delivery === 'catalog-failure' && pathname.includes('catalog-'))
+        ) {
+          const key = referrer.search;
+          if (!failedCases.has(key)) {
+            failedCases.add(key);
+            res.statusCode = 503;
+            res.end('Local inspection: first movement request fails');
+            return;
+          }
+        }
         res.setHeader(
           'Content-Type',
           pathname.endsWith('.glb')
@@ -34,12 +52,43 @@ function localCad(): Plugin {
         res.setHeader('Vary', 'Accept-Encoding');
         res.setHeader(
           'Cache-Control',
-          !pathname.endsWith('.json')
-            ? 'private, max-age=31536000, immutable'
-            : 'no-cache',
+          delivery
+            ? 'no-store'
+            : !pathname.endsWith('.json')
+              ? 'private, max-age=31536000, immutable'
+              : 'no-cache',
         );
         if (compressed) res.setHeader('Content-Encoding', 'gzip');
-        createReadStream(path + (compressed ? '.gz' : '')).pipe(res);
+        // Opt-in loopback QA fixtures. Production requests keep the existing delivery.
+        if (delivery === 'slow' && pathname.includes('overview-'))
+          res.setHeader('Content-Length', statSync(path).size);
+        const begin = () => {
+          if (res.destroyed) return;
+          const stream = createReadStream(path + (compressed ? '.gz' : ''), {
+            highWaterMark: compressed ? 65536 : 131072,
+          });
+          let timer: ReturnType<typeof setTimeout>;
+          res.on('close', () => {
+            clearTimeout(timer);
+            stream.destroy();
+          });
+          stream.on('error', () => res.destroy());
+          if (
+            ['slow', 'unknown'].includes(delivery ?? '') &&
+            pathname.includes('overview-')
+          ) {
+            stream.on('data', (chunk) => {
+              stream.pause();
+              res.write(chunk);
+              timer = setTimeout(() => stream.resume(), 180);
+            });
+            stream.on('end', () => res.end());
+          } else stream.pipe(res);
+        };
+        if (delivery === 'prepare' && pathname.endsWith('.bin')) {
+          const timer = setTimeout(begin, 6000);
+          res.on('close', () => clearTimeout(timer));
+        } else begin();
       });
     },
   };

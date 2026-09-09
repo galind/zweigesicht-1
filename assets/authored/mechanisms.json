@@ -145,8 +145,8 @@
     {
       "id": "winding",
       "name": "Winding & setting",
-      "technical": "Crown controls",
-      "caption": "The stem and sliding coupling select winding or hand setting. These parts move only when operated.",
+      "technical": "Winding & setting",
+      "caption": "The winding stem and sliding coupling connect the crown to the winding and hand-setting parts.",
       "members": [
         5,
         27,

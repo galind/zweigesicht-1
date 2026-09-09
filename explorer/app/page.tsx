@@ -1,18 +1,31 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ArrowLeft,
+  ChevronDown,
+  ChevronRight,
+  ExternalLink,
+  FlipHorizontal2,
+  Plus,
+  RotateCcw,
+} from 'lucide-react';
+import { Select as SelectPrimitive } from '@base-ui/react/select';
+import { loadingMessage } from '@/src/experience/loading';
 import {
   MovementViewer,
   type ViewerSnapshot,
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { runBrowserChecks, startBenchmark } from '@/src/viewer/validation';
+import { captureMotion, type MotionCase } from '@/src/viewer/capture';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
   ROOT,
-  belongs,
   inMembers,
   partLabel,
+  buildPartIndex,
+  matchesPart,
   category,
   type Part,
 } from '@/src/experience/catalog';
@@ -44,7 +57,6 @@ import {
 } from '@/components/ui/sheet';
 import {
   Select,
-  SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
@@ -52,8 +64,11 @@ import {
 const empty: ViewerSnapshot = {
   ...initialState,
   ready: false,
+  loadStage: 'movement',
+  transfer: null,
+  catalogLoading: false,
   spreadFocus: null,
-  status: 'Preparing the movement…',
+  status: '',
   error: '',
   detailError: '',
   parts: [],
@@ -77,6 +92,14 @@ export default function Home() {
     [details, setDetails] = useState(false),
     [inspect, setInspect] = useState(false),
     [qa, setQa] = useState<unknown>(null);
+  const [motion, setMotion] = useState<unknown>(null);
+  const [catalogQuery, setCatalogQuery] = useState('');
+  const partIndex = useMemo(() => buildPartIndex(s.parts), [s.parts]);
+  const catalogParts = useMemo(
+    () => s.parts.filter((p) => p.id !== 'p_0_1_1_1'),
+    [s.parts],
+  );
+  const available = s.ready && !s.error && s.loadStage === 'ready';
   useEffect(() => {
     if (!host.current) return;
     const flags = new URLSearchParams(location.search);
@@ -92,7 +115,8 @@ export default function Home() {
         set((prev) => ({
           ...prev,
           error:
-            'Interactive 3D is unavailable. Explore the mechanism descriptions and reference view.',
+            'Explore the section descriptions, or retry the interactive view.',
+          loadStage: 'error',
           status: '',
         })),
       );
@@ -107,7 +131,8 @@ export default function Home() {
         set((prev) => ({
           ...prev,
           error:
-            'Interactive 3D is unavailable. You can still explore the mechanism descriptions and reference view.',
+            'Explore the section descriptions, or retry the interactive view.',
+          loadStage: 'error',
           status: '',
         })),
       );
@@ -165,7 +190,7 @@ export default function Home() {
           </SheetTrigger>
           <SheetContent className="about-sheet">
             <SheetHeader>
-              <SheetTitle>Make yourself comfortable</SheetTitle>
+              <SheetTitle>View options</SheetTitle>
               <SheetDescription>
                 View controls, appearance and sources.
               </SheetDescription>
@@ -175,34 +200,39 @@ export default function Home() {
                 Drag to orbit. Pinch or scroll to zoom. Tap a component to
                 inspect it. In All parts, drag to pan.
               </p>
-              <div
+              <fieldset
                 className="alternative-controls"
                 aria-label="Camera controls"
+                disabled={!available}
               >
-                <button
-                  className="tool"
-                  onClick={() => viewer.current?.orbit(-0.25, 0)}
-                >
-                  Orbit left
-                </button>
-                <button
-                  className="tool"
-                  onClick={() => viewer.current?.orbit(0.25, 0)}
-                >
-                  Orbit right
-                </button>
-                <button
-                  className="tool"
-                  onClick={() => viewer.current?.orbit(0, -0.2)}
-                >
-                  Tilt up
-                </button>
-                <button
-                  className="tool"
-                  onClick={() => viewer.current?.orbit(0, 0.2)}
-                >
-                  Tilt down
-                </button>
+                {s.layout !== 'spread' && (
+                  <>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.orbit(-0.25, 0)}
+                    >
+                      Orbit left
+                    </button>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.orbit(0.25, 0)}
+                    >
+                      Orbit right
+                    </button>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.orbit(0, -0.2)}
+                    >
+                      Tilt up
+                    </button>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.orbit(0, 0.2)}
+                    >
+                      Tilt down
+                    </button>
+                  </>
+                )}
                 <button
                   className="tool"
                   onClick={() => viewer.current?.zoom(0.8)}
@@ -243,7 +273,7 @@ export default function Home() {
                     </button>
                   </>
                 )}
-              </div>
+              </fieldset>
               <p className="secondary">
                 On the movement: arrow keys orbit (pan in All parts), + / −
                 zoom, Home resets. All components are also available in the
@@ -251,23 +281,32 @@ export default function Home() {
               </p>
               <ToggleGroup
                 value={[s.treatment]}
-                aria-label="Visual treatment"
+                aria-label="Appearance"
+                disabled={!available}
                 onValueChange={(v) => {
                   if (v[0]) patch({ treatment: v[0] as 'finish' | 'function' });
                 }}
               >
-                <ToggleGroupItem value="finish">Finish</ToggleGroupItem>
-                <ToggleGroupItem value="function">Function</ToggleGroupItem>
+                <ToggleGroupItem value="finish">Materials</ToggleGroupItem>
+                <ToggleGroupItem value="function">
+                  Mechanism colors
+                </ToggleGroupItem>
               </ToggleGroup>
+              <p className="secondary appearance-help">
+                Natural finishes or colors that distinguish the selected
+                section’s components.
+              </p>
               <div className="quality-control">
                 <label htmlFor="render-quality">Rendering quality</label>
                 <Select
                   value={s.quality}
+                  disabled={!available}
                   onValueChange={(v) =>
                     patch({ quality: v as 'auto' | 'high' | 'low' })
                   }
                 >
-                  <SelectTrigger
+                  <SelectPrimitive.Trigger
+                    className="tool quality-trigger"
                     id="render-quality"
                     aria-label="Rendering quality"
                   >
@@ -278,7 +317,8 @@ export default function Home() {
                           ? 'High'
                           : 'Lightweight'}
                     </SelectValue>
-                  </SelectTrigger>
+                    <ChevronDown aria-hidden="true" />
+                  </SelectPrimitive.Trigger>
                   <SelectContent>
                     <SelectItem value="auto">Automatic</SelectItem>
                     <SelectItem value="high">High</SelectItem>
@@ -293,14 +333,14 @@ export default function Home() {
                 onClick={() => setCatalog(true)}
                 disabled={!s.parts.length}
               >
-                Source catalog <span>↗</span>
+                Source catalog <ChevronRight aria-hidden="true" />
               </button>
               <button
                 ref={aboutButton}
                 className="menu-link"
                 onClick={() => setAbout(true)}
               >
-                About & sources <span>↗</span>
+                About & sources <ChevronRight aria-hidden="true" />
               </button>
             </div>
           </SheetContent>
@@ -311,32 +351,58 @@ export default function Home() {
           className="stage"
           ref={host}
           aria-label="Interactive CAD movement"
+          aria-busy={!available}
+          inert={!available}
+          style={{ visibility: available ? 'visible' : 'hidden' }}
         />
-        {(!s.ready || s.error) && (
+        <output className="sr-only" aria-live="polite" aria-atomic="true">
+          {loadingMessage(s.loadStage)}
+        </output>
+        {!available && (
           <div className="fallback">
-            {/* oxlint-disable-next-line next/no-img-element */}
-            <img
-              src="/reference/movement-back.png"
-              alt="Assembled movement from original Marco Lang CAD"
-              onError={(e) => {
-                e.currentTarget.style.visibility = 'hidden';
-              }}
-            />
-            <output className="load-message">
-              {s.error || s.status}
-              {s.error && (
+            <div className="load-message">
+              <p>{loadingMessage(s.loadStage)}</p>
+              {s.error ? (
+                <p className="secondary">{s.error}</p>
+              ) : (
+                <>
+                  <progress
+                    aria-label={
+                      s.loadStage === 'movement'
+                        ? 'Movement file transfer'
+                        : loadingMessage(s.loadStage)
+                    }
+                    max={100}
+                    value={
+                      s.loadStage === 'movement' && s.transfer !== null
+                        ? s.transfer
+                        : undefined
+                    }
+                  />
+                  {s.loadStage === 'movement' && s.transfer !== null && (
+                    <span className="transfer-scope" aria-hidden="true">
+                      Movement file · {s.transfer}%
+                    </span>
+                  )}
+                </>
+              )}
+              {(s.error || s.loadStage === 'recovering') && (
                 <button
                   className="tool"
                   onClick={() => {
                     if (viewer.current && !viewer.current.contextLost)
                       void viewer.current.load();
-                    else location.reload();
+                    else {
+                      const url = new URL(location.href);
+                      url.searchParams.delete('no3d');
+                      location.assign(url.href);
+                    }
                   }}
                 >
-                  Retry 3D
+                  {s.loadStage === 'recovering' ? 'Reload 3D' : 'Retry 3D'}
                 </button>
               )}
-            </output>
+            </div>
           </div>
         )}
         {s.ready && s.status && (
@@ -347,7 +413,10 @@ export default function Home() {
             {s.detailError}
             <button
               className="tool"
-              onClick={() => void viewer.current?.loadCatalog().catch(() => {})}
+              disabled={s.catalogLoading || !available}
+              onClick={() =>
+                void viewer.current?.retryCatalog().catch(() => {})
+              }
             >
               Retry catalog
             </button>
@@ -356,7 +425,7 @@ export default function Home() {
         {s.layout !== 'spread' && (
           <button
             className="side-switch text-button"
-            disabled={!s.ready}
+            disabled={!available}
             onClick={() =>
               viewer.current?.setSide(s.side === 'back' ? 'front' : 'back')
             }
@@ -364,7 +433,10 @@ export default function Home() {
               s.side === 'back' ? 'Show dial side' : 'Show movement side'
             }
           >
-            ↻ <span>{s.side === 'back' ? 'Dial side' : 'Movement side'}</span>
+            <FlipHorizontal2 aria-hidden="true" />{' '}
+            <span>
+              {s.side === 'back' ? 'Show dial side' : 'Show movement side'}
+            </span>
           </button>
         )}
       </section>
@@ -388,16 +460,18 @@ export default function Home() {
               {s.canBack && (
                 <button
                   className="text-button"
+                  disabled={!available}
                   onClick={() => {
                     viewer.current?.back();
                     host.current?.querySelector('canvas')?.focus();
                   }}
                 >
-                  ← Back
+                  <ArrowLeft aria-hidden="true" /> Back
                 </button>
               )}
               <button
                 className="text-button"
+                disabled={s.loadStage === 'recovering'}
                 onClick={() => {
                   chooseGroup(null);
                   host.current?.querySelector('canvas')?.focus();
@@ -418,10 +492,17 @@ export default function Home() {
           </div>
           {selected ? (
             <div className="selected-summary">
-              <p>{partDetail(selected)}</p>
+              <p>
+                {partDetail(selected)}
+                <small className="selection-identity">
+                  {partIndex.get(selected.id)?.context} ·{' '}
+                  {partIndex.get(selected.id)?.reference}
+                </small>
+              </p>
               <button
                 className="text-button"
                 aria-pressed={s.isolated}
+                disabled={!available}
                 onClick={() => patch({ isolated: !s.isolated })}
               >
                 {s.isolated ? 'Show context' : 'Isolate part'}
@@ -442,8 +523,11 @@ export default function Home() {
       )}
       <footer className="control-deck">
         <Popover open={explore} onOpenChange={setExplore}>
-          <PopoverTrigger className="explore-button">
-            Explore <span>＋</span>
+          <PopoverTrigger
+            className="explore-button"
+            disabled={s.loadStage === 'recovering'}
+          >
+            Explore <Plus aria-hidden="true" />
           </PopoverTrigger>
           <PopoverContent
             className="explore-menu"
@@ -462,7 +546,7 @@ export default function Home() {
                   <small>0{i + 1}</small>
                   {g.technical}
                 </span>
-                <span>↗</span>
+                <ChevronRight aria-hidden="true" />
               </button>
             ))}
           </PopoverContent>
@@ -472,12 +556,13 @@ export default function Home() {
             <>
               <button
                 className="text-button overview-button"
+                disabled={!available}
                 onClick={() => viewer.current?.frameSpread()}
               >
                 Fit all parts
               </button>
               <Popover open={spreadGroups} onOpenChange={setSpreadGroups}>
-                <PopoverTrigger className="text-button">
+                <PopoverTrigger className="text-button" disabled={!available}>
                   Look closer
                 </PopoverTrigger>
                 <PopoverContent className="explore-menu" side="top">
@@ -492,7 +577,7 @@ export default function Home() {
                       }}
                     >
                       {name}
-                      <span>↗</span>
+                      <ChevronRight aria-hidden="true" />
                     </button>
                   ))}
                 </PopoverContent>
@@ -504,7 +589,7 @@ export default function Home() {
                 {group ? 'Separate section' : 'Separate'}
               </span>
               <Slider
-                disabled={!s.ready || !!s.error}
+                disabled={!available}
                 aria-labelledby="separation-label"
                 value={[group ? s.partSpread : s.separation]}
                 min={0}
@@ -512,30 +597,36 @@ export default function Home() {
                 step={0.01}
                 onValueChange={(v) => {
                   const value = Array.isArray(v) ? v[0] : v;
-                  patch(group ? { partSpread: value } : { separation: value });
+                  viewer.current?.scrub(
+                    group ? { partSpread: value } : { separation: value },
+                  );
                 }}
               />
               <button
                 className="text-button reassemble"
                 aria-label="Reassemble"
                 title="Reassemble"
-                disabled={!(s.separation || s.partSpread)}
+                disabled={
+                  !available || !(s.separation || s.partSpread || s.reveal)
+                }
                 style={{
                   visibility:
-                    s.separation || s.partSpread ? 'visible' : 'hidden',
+                    s.separation || s.partSpread || s.reveal
+                      ? 'visible'
+                      : 'hidden',
                 }}
                 onClick={() =>
                   patch({ separation: 0, partSpread: 0, reveal: 0 })
                 }
               >
-                ↩
+                <RotateCcw aria-hidden="true" />
               </button>
             </>
           )}
         </div>
         <button
           className="text-button all-parts-button"
-          disabled={!s.ready || !!s.error}
+          disabled={!available}
           aria-pressed={s.layout === 'spread'}
           onClick={() =>
             s.layout === 'spread'
@@ -547,26 +638,37 @@ export default function Home() {
         </button>
         <button
           className="text-button reset-button"
+          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+          title="Restore the opening view and options"
           onClick={() => {
             setExplore(false);
             setSpreadGroups(false);
             setDetails(false);
             if (viewer.current) viewer.current.reset();
-            else set({ ...empty, error: s.error });
+            else set({ ...empty, loadStage: 'error', error: s.error });
           }}
         >
           Reset
         </button>
       </footer>
       <Sheet open={details} onOpenChange={setDetails}>
-        <SheetContent className="about-sheet" finalFocus={detailButton}>
+        <SheetContent
+          className="about-sheet"
+          finalFocus={() =>
+            detailButton.current ??
+            host.current?.querySelector('canvas') ??
+            false
+          }
+        >
           <SheetHeader>
             <SheetTitle>
               {selected ? partLabel(selected) : group?.technical}
             </SheetTitle>
-            <SheetDescription>
-              {selected ? partDetail(selected) : group?.caption}
-            </SheetDescription>
+            {(!selected || partDetail(selected)) && (
+              <SheetDescription>
+                {selected ? partDetail(selected) : group?.caption}
+              </SheetDescription>
+            )}
           </SheetHeader>
           <div className="about-copy">
             {selected ? (
@@ -575,6 +677,12 @@ export default function Home() {
                 <p>{selected.name}</p>
                 <p className="source-id">{selected.sourceInstanceId}</p>
                 <p>{category(selected)}</p>
+                {selected.definitionId === 'd_0_1_1_256' && (
+                  <p>
+                    The support’s role and intended visibility remain
+                    unresolved.
+                  </p>
+                )}
               </>
             ) : (
               group && (
@@ -584,28 +692,45 @@ export default function Home() {
                       <li key={f.text}>
                         {f.text}{' '}
                         <a href={f.url} target="_blank" rel="noreferrer">
-                          {f.attribution} ↗
+                          {f.attribution} <ExternalLink aria-hidden="true" />
                         </a>
                       </li>
                     ))}
                   </ul>
                   <span id="reveal-label">Uncover section</span>
                   <Slider
-                    disabled={!s.ready}
+                    disabled={!available}
                     aria-labelledby="reveal-label"
                     value={[s.reveal]}
                     min={0}
                     max={1}
                     step={0.01}
                     onValueChange={(v) =>
-                      patch({ reveal: Array.isArray(v) ? v[0] : v })
+                      viewer.current?.scrub({
+                        reveal: Array.isArray(v) ? v[0] : v,
+                      })
                     }
                   />
+                  <p className="secondary">
+                    Moves covering parts aside. Separate section spaces the
+                    section’s own components.
+                  </p>
                   <h3>Components</h3>
                   <div className="catalog-index">
                     {members.map((p) => (
-                      <button key={p.id} onClick={() => selectPart(p.id)}>
-                        {partLabel(p)} <span>↗</span>
+                      <button
+                        key={p.id}
+                        disabled={!available}
+                        onClick={() => selectPart(p.id)}
+                      >
+                        <span>
+                          {partLabel(p)}
+                          <small>
+                            {partIndex.get(p.id)?.context} ·{' '}
+                            {partIndex.get(p.id)?.reference}
+                          </small>
+                        </span>{' '}
+                        <ChevronRight aria-hidden="true" />
                       </button>
                     ))}
                   </div>
@@ -616,19 +741,30 @@ export default function Home() {
         </SheetContent>
       </Sheet>
       <Sheet open={catalog} onOpenChange={setCatalog}>
-        <SheetContent className="catalog-sheet" finalFocus={catalogButton}>
+        <SheetContent
+          className="catalog-sheet"
+          finalFocus={() =>
+            options
+              ? catalogButton.current
+              : (host.current?.querySelector('canvas') ?? false)
+          }
+        >
           <SheetHeader>
-            <SheetTitle>Every source component</SheetTitle>
+            <SheetTitle>Source catalog</SheetTitle>
             <SheetDescription>
-              365 parts and 61 subassemblies. Alternatives and empty geometry
-              remain documented.
+              365 parts and 61 subassemblies, including case parts, alternatives
+              and entries with no geometry. Additional geometry loads when
+              selected.
             </SheetDescription>
           </SheetHeader>
           <div className="catalog-search">
             <Combobox
-              items={s.parts.filter((p) => p.id !== 'p_0_1_1_1')}
-              itemToStringLabel={(p: Part) =>
-                `${p.name} · ${p.sourceInstanceId.split('/').at(-1)}`
+              items={catalogParts}
+              inputValue={catalogQuery}
+              onInputValueChange={setCatalogQuery}
+              itemToStringLabel={(p: Part) => partLabel(p)}
+              filter={(p: Part, query: string) =>
+                matchesPart(partIndex.get(p.id)?.search ?? '', query)
               }
               onValueChange={(p: Part | null) => {
                 if (p) selectPart(p.id);
@@ -637,22 +773,22 @@ export default function Home() {
               <ComboboxInput
                 placeholder="Find a part or assembly…"
                 aria-label="Search all source parts"
+                showTrigger={false}
               />
               <ComboboxContent>
-                <ComboboxEmpty>No matching parts.</ComboboxEmpty>
+                <ComboboxEmpty>
+                  No matching parts. Try an English name, source name or ID.
+                </ComboboxEmpty>
                 <ComboboxList>
                   {(p: Part) => (
-                    <ComboboxItem key={p.id} value={p}>
+                    <ComboboxItem key={p.id} value={p} disabled={!available}>
                       <span>
-                        {p.name}
+                        {partLabel(p)}
                         <small>
-                          {p.isAssembly
-                            ? 'Assembly'
-                            : belongs(p.id, ROOT)
-                              ? 'Movement'
-                              : 'Variant / case'}{' '}
-                          · {p.sourceInstanceId.split('/').at(-1)}
+                          {partIndex.get(p.id)?.context} ·{' '}
+                          {partIndex.get(p.id)?.reference}
                         </small>
+                        <small lang="de">{p.name}</small>
                       </span>
                     </ComboboxItem>
                   )}
@@ -664,9 +800,17 @@ export default function Home() {
             {s.parts
               .filter((p) => p.parentId === ROOT || p.parentId === 'p_0_1_1_1')
               .map((p) => (
-                <button key={p.id} onClick={() => selectPart(p.id)}>
-                  <span>{p.name.replace(/^ml01 /, '')}</span>
-                  <small>{p.isAssembly ? 'Assembly' : 'Part'} ↗</small>
+                <button
+                  key={p.id}
+                  disabled={!available}
+                  onClick={() => selectPart(p.id)}
+                >
+                  <span>
+                    {partLabel(p)}
+                    <small>{partIndex.get(p.id)?.reference}</small>
+                    <small lang="de">{p.name}</small>
+                  </span>
+                  <ChevronRight aria-hidden="true" />
                 </button>
               ))}
           </div>
@@ -715,7 +859,7 @@ export default function Home() {
               target="_blank"
               rel="noreferrer"
             >
-              Marco Lang · Original CAD ↗
+              Marco Lang · Original CAD <ExternalLink aria-hidden="true" />
             </a>
             <p>
               Drag to orbit; pinch or scroll to zoom. All mechanisms, components
@@ -730,6 +874,21 @@ export default function Home() {
       {inspect && (
         <details className="inspection">
           <summary>Inspection tools</summary>
+          {(['scrub', 'spread', 'interrupt'] as MotionCase[]).map((kind) => (
+            <button
+              key={kind}
+              onClick={async () => {
+                if (!viewer.current) return;
+                setMotion({ running: true });
+                setMotion(await captureMotion(viewer.current, kind));
+              }}
+            >
+              Record {kind}
+            </button>
+          ))}
+          <pre id="motion-report" hidden>
+            {JSON.stringify(motion)}
+          </pre>
           <div>
             <button onClick={() => viewer.current?.view('front')}>
               Front reference

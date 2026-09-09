@@ -1,4 +1,5 @@
 import authored from '../../../assets/authored/mechanisms.json';
+import readable from '../../../assets/authored/component-labels.json';
 export const ROOT = authored.movementRoot;
 export const PREFIX = authored.directChildPrefix;
 export const GROUPS = authored.groups;
@@ -118,11 +119,73 @@ const sourceLabels: [RegExp, string][] = [
   [/incabloc/, 'Shock-protection component'],
 ];
 export function partLabel(p: Part) {
-  return (
+  const exact = (readable.definitions as Record<string, string>)[
+    p.definitionId.replace('d_0_1_1_', '')
+  ];
+  const label =
+    exact ||
     labels[p.definitionId] ||
     sourceLabels.find(([pattern]) => pattern.test(p.name))?.[1] ||
-    (p.isAssembly ? 'Source assembly' : 'Source component')
+    (p.isAssembly ? 'Source assembly' : 'Source component');
+  return p.isAssembly && !/assembly|assemblies/i.test(label)
+    ? `${label} assembly`
+    : label;
+}
+
+const normalizeSearch = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[–—-]/g, ' ');
+export function buildPartIndex(parts: Part[]) {
+  const byId = new Map(parts.map((p) => [p.id, p]));
+  return new Map(
+    parts.map((p) => {
+      const ancestry: Part[] = [];
+      let parent = p.parentId ? byId.get(p.parentId) : undefined;
+      while (parent && !ancestry.includes(parent)) {
+        ancestry.push(parent);
+        parent = parent.parentId ? byId.get(parent.parentId) : undefined;
+      }
+      const segments = p.sourceInstanceId.split('/');
+      let length = 1;
+      while (
+        length < segments.length &&
+        parts.some(
+          (other) =>
+            other.id !== p.id &&
+            other.sourceInstanceId.split('/').slice(-length).join('/') ===
+              segments.slice(-length).join('/'),
+        )
+      )
+        length++;
+      const reference = segments.slice(-length).join('/');
+      return [
+        p.id,
+        {
+          reference,
+          context: ancestry[0] ? partLabel(ancestry[0]) : 'Complete source',
+          search: normalizeSearch(
+            [
+              partLabel(p),
+              p.name,
+              p.id,
+              p.sourceInstanceId,
+              p.definitionId,
+              ...ancestry.flatMap((a) => [partLabel(a), a.name]),
+            ].join(' '),
+          ),
+        },
+      ] as const;
+    }),
   );
+}
+export function matchesPart(search: string, query: string) {
+  return normalizeSearch(query)
+    .trim()
+    .split(/\s+/)
+    .every((term) => search.includes(term));
 }
 export function category(p: Part) {
   if (p.id === PREFIX + '66')

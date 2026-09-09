@@ -30,7 +30,7 @@ export const SPREAD_GROUPS = [
 ];
 /** Layout is evaluated from actual immutable geometry in source millimetres.
  * Pack whole projected bounding boxes; never use manifest triangle/size filters. */
-export function makeSpread(parts: Iterable<SpreadInput>) {
+export function makeSpread(parts: Iterable<SpreadInput>, aspect = 2) {
   const entries = [...parts]
     .filter((p) => spreadMember(p.source))
     .sort((a, b) => a.source.id.localeCompare(b.source.id));
@@ -119,20 +119,41 @@ export function makeSpread(parts: Iterable<SpreadInput>) {
     }
     return { w: used, h: y + row };
   });
-  const columnWidths = [0, 1, 2].map((c) =>
-    Math.max(...dimensions.filter((_, i) => i % 3 === c).map((d) => d.w)),
-  );
-  const rowHeights = [0, 1, 2].map((r) =>
-    Math.max(
-      ...dimensions.filter((_, i) => Math.floor(i / 3) === r).map((d) => d.h),
-    ),
-  );
-  const totalW = columnWidths.reduce((a, b) => a + b, 0) + 12,
-    totalH = rowHeights.reduce((a, b) => a + b, 0) + 12;
+  const candidates = (aspect < 1 ? [1, 2, 3] : [3]).map((columns) => {
+    const columnWidths = Array.from({ length: columns }, (_, c) =>
+      Math.max(
+        ...dimensions.filter((_, i) => i % columns === c).map((d) => d.w),
+      ),
+    );
+    const rowHeights = Array.from(
+      { length: Math.ceil(blocks.length / columns) },
+      (_, r) =>
+        Math.max(
+          ...dimensions
+            .filter((_, i) => Math.floor(i / columns) === r)
+            .map((d) => d.h),
+        ),
+    );
+    const totalW = columnWidths.reduce((a, b) => a + b, 0) + (columns - 1) * 6;
+    const totalH =
+      rowHeights.reduce((a, b) => a + b, 0) + (rowHeights.length - 1) * 6;
+    return {
+      columns,
+      columnWidths,
+      rowHeights,
+      totalW,
+      totalH,
+      fit: Math.min(aspect / totalW, 1 / totalH),
+    };
+  });
+  // Preserve the desktop grouping; on portrait screens choose the arrangement
+  // that gives every source-scale component the largest shared inspection scale.
+  candidates.sort((a, b) => b.fit - a.fit || a.columns - b.columns);
+  const { columns, columnWidths, rowHeights, totalW, totalH } = candidates[0];
   const placements = new Map<string, SpreadPlacement>();
   blocks.forEach((block, i) => {
-    const col = i % 3,
-      row = Math.floor(i / 3),
+    const col = i % columns,
+      row = Math.floor(i / columns),
       x =
         columnWidths.slice(0, col).reduce((a, b) => a + b + 6, 0) - totalW / 2,
       y = rowHeights.slice(0, row).reduce((a, b) => a + b + 6, 0) - totalH / 2;

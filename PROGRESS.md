@@ -1,5 +1,17 @@
 # Zweigesicht — current execution state
 
+## Interface polish — implementation checkpoint, 9 September 2026
+
+The active polish goal is **still in progress**. Implemented staged, text-led loading with scoped transfer progress and readiness after the first complete rendered frame; distinct graphics recovery and catalog retry; accurate control availability; readable/searchable English component labels with original source identities; consistent SVG navigation icons; clearer options and mechanism copy; and focused control/search styling.
+
+Reviewed original motion in a temporary baseline at `a806295`. Replaced the fast initial movement and long convergence tail with coordinated 850 ms part/camera transitions, a 75 ms slider response, safe camera arcs across sides, retargeting from displayed poses, and explicit terminal-frame rendering. Portrait All parts chooses a deterministic column arrangement for a larger shared inspection scale. Desktop grouping, 216-member membership, immutable geometry/scale/assembly matrices, materials, lighting, all 58 annotations and the recovered diamond are preserved.
+
+Verification so far: **42 actual-source/asset CPU checks, four state tests, and 12 real-browser checks pass**, including 24 mixed interrupted explosion/reveal/spread/select/isolate/Back/Reset sequences, exact assembly restoration, 216 visible spread members, zero settled projected overlap/clipping, stable GPU resources and idle rendering. TypeScript and authored lint pass. Slow measured delivery, absent totals, delayed preparation and two initial failure/retry cycles were exercised in the browser; both retries restored all annotations and the diamond. A read-only review caught terminal-frame painting, failure Reset, recovery navigation and resize-during-travel issues; these are corrected with focused checks.
+
+Local evidence: `artifacts/browser/polish/`; current copy table, decisions and open acceptance work: `docs/WEBSITE_POLISH_REVIEW.md`. Remaining work includes final responsive/keyboard/focus/200%-text/reduced-motion review, current catalog failure/retry and graphics recovery checks, final matched desktop/phone motion review, equivalent loading/performance measurements, the evidence gallery and requirement-by-requirement completion audit. No full visual-completion claim is made at this checkpoint.
+
+Preview runs on **http://127.0.0.1:4173/** (`cd explorer`, then `npm run dev -- --host 127.0.0.1 --port 4173`). Temporary baseline runs on port 4174 from `/private/tmp/zweigesicht-polish-baseline/explorer`. In-app browser access works while the Mac is locked; native desktop access was unavailable. This checkpoint is local-only: no push, deployment, Site registration/save/upload or additional redistribution. User-owned `FINISHING_GOAL.md` remains untouched.
+
 ## Interface polish brief — 9 September 2026
 
 Follow-up: the user also requested attention to explosion, the arranged parts layout, and especially their transitions. Extended the brief with a dedicated motion/composition pass: continuous slider response, related-part grouping, camera/part coordination, entry from existing exploration states, interruption/reversal, responsive layout, and motion evidence. Presentation layout and timing may now be refined; the 216-member membership, source scale/geometry/placements, accepted appearance, and exact reassembly remain protected. This extension inspected source behavior only and makes no new live motion-quality claim.

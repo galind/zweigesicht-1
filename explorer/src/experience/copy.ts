@@ -17,7 +17,7 @@ const facts: Record<string, string[]> = {
     'Face I · hours, minutes, central seconds',
     'Face II · hours and minutes',
   ],
-  winding: ['Movement function · seconds stop', 'Stem & sliding coupling'],
+  winding: ['Seconds-stop function', 'Winding stem & sliding coupling'],
   shock: [
     'Four directions · X/Y',
     'Resettable indication',
@@ -48,12 +48,13 @@ const roles: Record<string, string> = {
   '238': 'The third wheel in the going train.',
   '94': 'The center wheel in the going train.',
   '225': 'Diamond endstone in the balance setting.',
+  '84': 'One of the movement’s two series-connected mainspring barrels.',
+  '89': 'One of the movement’s two series-connected mainspring barrels.',
+  '145':
+    'The optional assembly records impacts in four directions and can be reset.',
+  '202':
+    'Balance shock protection, separate from the optional impact indicator.',
 };
 export function partDetail(p: Part) {
-  return (
-    roles[p.definitionId.replace('d_0_1_1_', '')] ||
-    (p.isAssembly
-      ? 'A group of related source components.'
-      : 'An individual component of the source construction.')
-  );
+  return roles[p.definitionId.replace('d_0_1_1_', '')] || null;
 }

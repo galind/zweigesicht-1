@@ -36,6 +36,9 @@ export async function runBrowserChecks(v: MovementViewer) {
     'shock',
   ];
   for (let i = 0; i < 24; i++) {
+    v.scrub({ separation: (i % 5) / 5 });
+    if (i % 4 === 0) v.setSide('front');
+    if (i % 4 === 1) v.view('oblique');
     v.allParts();
     await sleep(30);
     v.group(ids[i % ids.length]);
@@ -50,6 +53,42 @@ export async function runBrowserChecks(v: MovementViewer) {
     v.back();
     if (i % 3 === 0) v.reset();
   }
+  v.reset();
+  await settle(v);
+  v.group('energy');
+  await settle(v);
+  v.scrub({ partSpread: 0.35 });
+  await settle(v);
+  const prior = {
+    state: { ...v.state },
+    position: v.camera.position.clone(),
+    target: v.controls.target.clone(),
+  };
+  v.allParts();
+  await sleep(150);
+  v.back();
+  await settle(v);
+  checks.push({
+    name: 'Back restores prior section, separation and camera after interrupted entry',
+    pass:
+      v.state.group === prior.state.group &&
+      v.state.partSpread === prior.state.partSpread &&
+      v.camera.position.distanceTo(prior.position) < 1e-6 &&
+      v.controls.target.distanceTo(prior.target) < 1e-6,
+  });
+  v.allParts();
+  await sleep(120);
+  v.pan(0.1, 0);
+  const manualPosition = v.camera.position.clone(),
+    manualTarget = v.controls.target.clone();
+  await settle(v);
+  checks.push({
+    name: 'Manual input cancels camera travel without a later snap',
+    pass:
+      !v.travel &&
+      v.camera.position.distanceTo(manualPosition) < 1e-6 &&
+      v.controls.target.distanceTo(manualTarget) < 1e-6,
+  });
   v.reset();
   await settle(v);
   checks.push({

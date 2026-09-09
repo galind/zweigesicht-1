@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { assetRequestUrl } from '../experience/loading';
 
 export type SourceSurfaces = Map<string, Float32Array>;
 
@@ -21,7 +22,7 @@ export async function loadSourceSurfaces(
     !/^\/models\/finish-surfaces-[a-f0-9]+\.bin$/.test(manifest.file)
   )
     throw new Error('Source surface annotations do not match this geometry');
-  const data = await fetch(manifest.file);
+  const data = await fetch(assetRequestUrl(manifest.file));
   if (!data.ok) throw new Error('Source surface buffer unavailable');
   const buffer = await data.arrayBuffer();
   const digest = Array.from(

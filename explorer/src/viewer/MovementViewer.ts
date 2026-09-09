@@ -25,7 +25,6 @@ import {
   initialState,
   resolveState,
   layerOffset,
-  damp,
   type ExperienceState,
 } from '../experience/state';
 import {
@@ -34,8 +33,19 @@ import {
   type SpreadPlacement,
 } from '../experience/spread';
 import { createMaterial, finishFor, setFinishEnabled } from './materials';
+import {
+  transferProgress,
+  assetRequestUrl,
+  type LoadStage,
+} from '../experience/loading';
 
 type RenderPart = {
+  motion?: {
+    offset: THREE.Vector3;
+    rotation: THREE.Quaternion;
+    elapsed: number;
+    duration: number;
+  };
   source: Part;
   mesh: THREE.Mesh;
   assembled: THREE.Matrix4;
@@ -57,6 +67,9 @@ type Saved = {
 export interface ViewerSnapshot extends ExperienceState {
   spreadFocus: string | null;
   ready: boolean;
+  loadStage: LoadStage;
+  transfer: number | null;
+  catalogLoading: boolean;
   status: string;
   error: string;
   detailError: string;
@@ -67,6 +80,7 @@ export interface ViewerSnapshot extends ExperienceState {
   stats: Record<string, unknown>;
 }
 export class MovementViewer {
+  inspectionFrame?: (now: number, rendered: boolean) => void;
   benchmark: Benchmark | null = null;
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
@@ -84,7 +98,11 @@ export class MovementViewer {
   frame = 0;
   dead = false;
   ready = false;
-  status = 'Loading original movement…';
+  loadStage: LoadStage = 'movement';
+  transfer: number | null = null;
+  awaitingFirstFrame = false;
+  contentPrepared = false;
+  status = '';
   error = '';
   detailError = '';
   state = { ...initialState };
@@ -96,7 +114,15 @@ export class MovementViewer {
   spread = new Map<string, SpreadPlacement>();
   spreadFocus: string | null = null;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  travel: { position: THREE.Vector3; target: THREE.Vector3 } | null = null;
+  travel: {
+    position: THREE.Vector3;
+    target: THREE.Vector3;
+    fromPosition?: THREE.Vector3;
+    fromTarget?: THREE.Vector3;
+    elapsed?: number;
+    duration?: number;
+  } | null = null;
+  poseDuration = 0.85;
   needsRender = true;
   lastFrame = 0;
   lastNotify = 0;
@@ -110,6 +136,8 @@ export class MovementViewer {
   catalogLoaded = false;
   catalogPending: Promise<void> | null = null;
   loadGeneration = 0;
+  selectionGeneration = 0;
+  catalogRetry?: { id: string; request: number };
   contextLosses = 0;
   contextLost = false;
   selectionBox = new THREE.Box3Helper(new THREE.Box3(), 0xffdaa0);
@@ -183,6 +211,9 @@ export class MovementViewer {
     return {
       ...this.state,
       ready: this.ready,
+      loadStage: this.loadStage,
+      transfer: this.transfer,
+      catalogLoading: !!this.catalogPending,
       spreadFocus: this.spreadFocus,
       status: this.status,
       error: this.error,
@@ -325,6 +356,7 @@ export class MovementViewer {
     this.needsRender = true;
   };
   manual = () => {
+    this.selectionGeneration++;
     this.restoringCamera = null;
     this.cameraUserOwned = true;
     this.travel = null;
@@ -338,7 +370,10 @@ export class MovementViewer {
     e.preventDefault();
     this.contextLost = true;
     this.contextLosses++;
-    this.error = '3D interrupted. Restoring…';
+    this.ready = false;
+    this.loadStage = 'recovering';
+    this.controls.enabled = false;
+    this.error = '';
     this.emit();
   };
   onContextRestored = () => {
@@ -351,13 +386,23 @@ export class MovementViewer {
     pmrem.dispose();
     this.contextLost = false;
     this.error = '';
+    this.awaitingFirstFrame = this.contentPrepared;
+    if (!this.contentPrepared) this.loadStage = 'preparing';
     this.needsRender = true;
     this.emit();
   };
   async load() {
     const generation = ++this.loadGeneration;
+    this.selectionGeneration++;
+    this.ready = false;
+    this.awaitingFirstFrame = false;
+    this.contentPrepared = false;
+    this.loadStart = performance.now();
+    this.loadStage = 'movement';
+    this.transfer = null;
+    if (this.controls) this.controls.enabled = false;
     this.error = '';
-    this.status = 'Loading original movement…';
+    this.status = '';
     this.emit();
     try {
       const response = await fetch('/models/assembly-manifest.json');
@@ -392,12 +437,21 @@ export class MovementViewer {
       });
       const gltf = await new GLTFLoader()
         .setMeshoptDecoder(MeshoptDecoder)
-        .loadAsync(this.paths.overview, (p) => {
-          if (!this.dead && generation === this.loadGeneration && p.total) {
-            this.status = `Loading movement · ${Math.round((100 * p.loaded) / p.total)}%`;
+        .loadAsync(assetRequestUrl(this.paths.overview), (p) => {
+          if (!this.dead && generation === this.loadGeneration) {
+            this.transfer = transferProgress(p.loaded, p.total);
+            if (this.transfer === 100) {
+              this.loadStage = 'preparing';
+              this.transfer = null;
+            }
             this.emit();
           }
         });
+      if (!this.dead && generation === this.loadGeneration) {
+        this.loadStage = 'preparing';
+        this.transfer = null;
+        this.emit();
+      }
       const sourceSurfaces = await surfaces;
       if (this.dead || generation !== this.loadGeneration) {
         this.disposeObject(gltf.scene);
@@ -419,17 +473,19 @@ export class MovementViewer {
       }
       if (this.dead || generation !== this.loadGeneration) return;
       this.spread = makeSpread(this.renderParts.values());
-      this.ready = true;
+      this.contentPrepared = true;
+      this.awaitingFirstFrame = true;
       this.state = { ...initialState, phase: 'whole' };
       this.status = '';
-      this.loadMs = performance.now() - this.loadStart;
       this.homeCamera(true);
       this.retarget();
       this.emit();
     } catch (error) {
       if (this.dead || generation !== this.loadGeneration) return;
       this.error =
-        'The movement could not load. The reference view remains available.';
+        'The movement could not load. Retry, or explore the section descriptions.';
+      this.loadStage = 'error';
+      this.transfer = null;
       this.status = '';
       this.emit();
       console.error('Movement load', error);
@@ -550,7 +606,7 @@ export class MovementViewer {
       try {
         const gltf = await new GLTFLoader()
           .setMeshoptDecoder(MeshoptDecoder)
-          .loadAsync(this.paths.catalog);
+          .loadAsync(assetRequestUrl(this.paths.catalog));
         if (this.dead) {
           this.disposeObject(gltf.scene);
           return;
@@ -568,11 +624,14 @@ export class MovementViewer {
         throw e;
       } finally {
         this.catalogPending = null;
+        this.emit();
       }
     })();
+    this.emit();
     return this.catalogPending;
   }
   patch(patch: Partial<ExperienceState>) {
+    this.selectionGeneration++;
     this.state = resolveState(this.state, patch);
     this.retarget();
     if (
@@ -582,6 +641,11 @@ export class MovementViewer {
     )
       this.fitPresentation();
     this.emit();
+  }
+  scrub(patch: Partial<ExperienceState>) {
+    this.poseDuration = 0.075;
+    this.patch(patch);
+    this.poseDuration = 0.85;
   }
   targetBounds(include: (p: RenderPart) => boolean) {
     const bounds = new THREE.Box3();
@@ -610,6 +674,7 @@ export class MovementViewer {
     return bounds;
   }
   fitPresentation() {
+    if (this.cameraUserOwned) return;
     const group = GROUPS.find((g) => g.id === this.state.group);
     const bounds = this.targetBounds((p) =>
       this.state.part
@@ -690,6 +755,7 @@ export class MovementViewer {
     else this.homeCamera();
   }
   back() {
+    this.selectionGeneration++;
     const previous = this.history.pop();
     if (!previous) {
       this.reset();
@@ -707,6 +773,7 @@ export class MovementViewer {
     this.emit();
   }
   reset() {
+    this.selectionGeneration++;
     this.restoringCamera = null;
     this.cameraUserOwned = false;
     this.history = [];
@@ -743,7 +810,7 @@ export class MovementViewer {
       this.controls.target.copy(target);
       this.controls.update();
       this.travel = null;
-    } else this.travel = { position, target };
+    } else this.travel = { position, target, duration: this.poseDuration };
     this.needsRender = true;
   }
   frameGroup(g: Mechanism) {
@@ -762,7 +829,7 @@ export class MovementViewer {
     this.save();
     this.restoringCamera = null;
     this.cameraUserOwned = false;
-    this.spread = makeSpread(this.renderParts.values());
+    this.spread = makeSpread(this.renderParts.values(), this.camera.aspect);
     this.patch({
       layout: 'spread',
       group: null,
@@ -874,8 +941,23 @@ export class MovementViewer {
     this.invalidate();
   }
   async select(id: string) {
+    if (!this.ready) return;
     const part = this.parts.find((p) => p.id === id);
     if (!part) return;
+    const request = ++this.selectionGeneration;
+    this.catalogRetry = undefined;
+    // Keep the displayed inspection intact until optional geometry is available.
+    if (!belongs(id, ROOT) && !this.catalogLoaded) {
+      try {
+        await this.loadCatalog();
+      } catch {
+        if (!this.dead && request === this.selectionGeneration)
+          this.catalogRetry = { id, request };
+        return;
+      }
+      if (this.dead || request !== this.selectionGeneration || !this.ready)
+        return;
+    }
     const prior = this.state.part;
     if (prior !== id) this.save();
     if (this.state.layout === 'spread' && !spreadMember(part))
@@ -885,14 +967,6 @@ export class MovementViewer {
       isolated: false,
       phase: 'part',
     });
-    if (!belongs(id, ROOT) && !this.catalogLoaded) {
-      try {
-        await this.loadCatalog();
-      } catch {
-        return;
-      }
-      if (this.state.part !== id) return;
-    }
     const bounds = this.targetBounds((p) => belongs(p.source.id, id));
     if (!bounds.isEmpty()) {
       const center = bounds.getCenter(new THREE.Vector3()),
@@ -905,6 +979,12 @@ export class MovementViewer {
     }
     this.retarget();
     this.emit();
+  }
+  async retryCatalog() {
+    const retry = this.catalogRetry;
+    await this.loadCatalog();
+    if (retry && retry.request === this.selectionGeneration && this.ready)
+      await this.select(retry.id);
   }
   retarget() {
     if (this.controls) {
@@ -929,6 +1009,8 @@ export class MovementViewer {
     const group = GROUPS.find((g) => g.id === this.state.group),
       selection = this.state.part;
     for (const p of this.renderParts.values()) {
+      const previousTarget = p.target.clone(),
+        previousRotation = p.targetRotation.clone();
       const id = p.source.id,
         selected = !!selection && belongs(id, selection),
         member = !!group && inMembers(id, group.members),
@@ -1013,6 +1095,17 @@ export class MovementViewer {
         p.material.color.set('#f5cf88');
         p.material.emissive.set('#493014');
       }
+      if (
+        !previousTarget.equals(p.target) ||
+        !previousRotation.equals(p.targetRotation)
+      ) {
+        p.motion = {
+          offset: p.offset.clone(),
+          rotation: p.rotation.clone(),
+          elapsed: 0,
+          duration: this.poseDuration ?? 0.85,
+        };
+      }
     }
     this.needsRender = true;
   }
@@ -1020,20 +1113,19 @@ export class MovementViewer {
     let moving = false;
     const temp = new THREE.Matrix4();
     for (const p of this.renderParts.values()) {
-      p.offset.set(
-        damp(p.offset.x, p.target.x, dt, this.reduced),
-        damp(p.offset.y, p.target.y, dt, this.reduced),
-        damp(p.offset.z, p.target.z, dt, this.reduced),
-      );
-      if (p.offset.distanceToSquared(p.target) < 1e-8) p.offset.copy(p.target);
-      else moving = true;
-      p.rotation.slerp(
-        p.targetRotation,
-        this.reduced ? 1 : 1 - Math.exp(-Math.max(0, dt) * 7),
-      );
-      if (p.rotation.angleTo(p.targetRotation) < 1e-6)
+      if (p.motion && !this.reduced) {
+        p.motion.elapsed += Math.max(0, dt);
+        const t = Math.min(1, p.motion.elapsed / p.motion.duration);
+        const eased = t * t * (3 - 2 * t);
+        p.offset.lerpVectors(p.motion.offset, p.target, eased);
+        p.rotation.slerpQuaternions(p.motion.rotation, p.targetRotation, eased);
+        if (t < 1) moving = true;
+        else p.motion = undefined;
+      } else p.motion = undefined;
+      if (!p.motion) {
+        p.offset.copy(p.target);
         p.rotation.copy(p.targetRotation);
-      else moving = true;
+      }
       p.mesh.matrix.copy(p.assembled);
       if (p.rotation.angleTo(new THREE.Quaternion()) > 0) {
         temp.makeTranslation(-p.center.x, -p.center.y, -p.center.z);
@@ -1058,6 +1150,7 @@ export class MovementViewer {
     return moving;
   }
   keyDown = (e: KeyboardEvent) => {
+    if (!this.ready) return;
     const moves: Record<string, [number, number]> = {
       ArrowLeft: [-0.2, 0],
       ArrowRight: [0.2, 0],
@@ -1131,6 +1224,14 @@ export class MovementViewer {
     this.surfaceOcclusion?.resize(w, h);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    if (
+      this.ready &&
+      this.state.layout === 'spread' &&
+      Math.abs(old - this.camera.aspect) > 0.01
+    ) {
+      this.spread = makeSpread(this.renderParts.values(), this.camera.aspect);
+      this.retarget();
+    }
     if (this.restoringCamera && Math.abs(old - this.camera.aspect) > 0.01) {
       const saved = this.restoringCamera;
       const factor =
@@ -1168,6 +1269,15 @@ export class MovementViewer {
           .sub(this.travel.target)
           .multiplyScalar(factor)
           .add(this.travel.target);
+      if (this.travel) {
+        this.travel.duration = Math.max(
+          0.075,
+          (this.travel.duration ?? 0.85) - (this.travel.elapsed ?? 0),
+        );
+        this.travel.fromPosition = this.camera.position.clone();
+        this.travel.fromTarget = this.controls.target.clone();
+        this.travel.elapsed = 0;
+      }
     }
     this.ensureFramingRange();
     this.invalidate();
@@ -1198,19 +1308,35 @@ export class MovementViewer {
     this.lastFrame = now;
     if (this.benchmark) benchmarkFrame(this, this.benchmark, now, interval);
     let moving = false;
+    const poseWasMoving = this.presentationMoving,
+      cameraWasMoving = !!this.travel;
     if (this.needsRender || this.presentationMoving) {
       moving = this.applyPose(dt);
       this.presentationMoving = moving;
       this.retargetVisibility();
     }
     if (this.travel) {
-      const a = this.reduced ? 1 : 1 - Math.exp(-dt * 6);
-      this.camera.position.lerp(this.travel.position, a);
-      this.controls.target.lerp(this.travel.target, a);
-      if (
-        this.camera.position.distanceTo(this.travel.position) < 0.005 &&
-        this.controls.target.distanceTo(this.travel.target) < 0.005
-      ) {
+      const travel = this.travel;
+      travel.fromPosition ??= this.camera.position.clone();
+      travel.fromTarget ??= this.controls.target.clone();
+      travel.elapsed = (travel.elapsed ?? 0) + dt;
+      const t = this.reduced
+        ? 1
+        : Math.min(1, travel.elapsed / (travel.duration ?? 0.85));
+      const a = t * t * (3 - 2 * t);
+      const from = travel.fromPosition.clone().sub(travel.fromTarget),
+        to = travel.position.clone().sub(travel.target);
+      const distance = THREE.MathUtils.lerp(from.length(), to.length(), a);
+      const rotation = new THREE.Quaternion().setFromUnitVectors(
+        from.normalize(),
+        to.normalize(),
+      );
+      from.applyQuaternion(new THREE.Quaternion().slerp(rotation, a));
+      this.controls.target.lerpVectors(travel.fromTarget, travel.target, a);
+      this.camera.position
+        .copy(this.controls.target)
+        .add(from.multiplyScalar(distance));
+      if (t === 1) {
         this.camera.position.copy(this.travel.position);
         this.controls.target.copy(this.travel.target);
         this.travel = null;
@@ -1219,7 +1345,13 @@ export class MovementViewer {
     }
     this.ensureFramingRange();
     const controlsChanged = this.controls.update();
-    if (this.needsRender || moving || controlsChanged) {
+    const rendered =
+      this.needsRender ||
+      moving ||
+      poseWasMoving ||
+      cameraWasMoving ||
+      controlsChanged;
+    if (rendered) {
       this.renderer.render(this.scene, this.camera);
       this.beautyTriangles = this.renderer.info.render.triangles;
       this.beautyDrawCalls = this.renderer.info.render.calls;
@@ -1231,7 +1363,17 @@ export class MovementViewer {
         if (this.frameIntervals.length > 20000) this.frameIntervals.shift();
       }
       this.needsRender = false;
+      if (this.awaitingFirstFrame) {
+        this.awaitingFirstFrame = false;
+        this.ready = true;
+        const recovering = this.loadStage === 'recovering';
+        this.loadStage = 'ready';
+        this.controls.enabled = true;
+        if (!recovering) this.loadMs = performance.now() - this.loadStart;
+        this.emit();
+      }
     }
+    this.inspectionFrame?.(now, !!rendered);
     if (!moving && ['revealing', 'recovering'].includes(this.state.phase)) {
       this.state.phase = this.state.part
         ? 'part'

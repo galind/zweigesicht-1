@@ -322,13 +322,13 @@ results.push({check:'actual six-card studio has HDR emission colors and disposes
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}
 const loadRace=sourceModules({loader:DeferredLoader,fetchImpl:async()=>({ok:true,json:async()=>({instances:[]})})});const {MovementViewer:RaceViewer}=loadRace('explorer/src/viewer/MovementViewer.ts');const race=Object.create(RaceViewer.prototype);
 Object.assign(race,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
-const obsolete=race.load();while(pending.length<1)await Promise.resolve();const current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
+const obsolete=race.load();while(pending.length<1)await Promise.resolve();const current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,false);assert.equal(race.awaitingFirstFrame,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
 results.push({check:'obsolete load progress/failure cannot overwrite newer successful load',status:'pass'});
 const disposedStale=[];race.disposeObject=scene=>disposedStale.push(scene);
 const staleSuccess=race.load();while(pending.length<3)await Promise.resolve();const newerSuccess=race.load();while(pending.length<4)await Promise.resolve();
 pending[3].resolve({scene:{id:'current-scene'}});await newerSuccess;
 const staleScene={id:'stale-scene'};pending[2].resolve({scene:staleScene});await staleSuccess;
-assert.deepEqual(disposedStale,[staleScene]);assert.equal(race.ready,true);assert.equal(race.error,'');
+assert.deepEqual(disposedStale,[staleScene]);assert.equal(race.ready,false);assert.equal(race.awaitingFirstFrame,true);assert.equal(race.error,'');
 results.push({check:'obsolete successful geometry is disposed after newer load succeeds',status:'pass'});
 const metadataPending=[];let immediateLoads=0;
 class ImmediateLoader{setMeshoptDecoder(){return this}async loadAsync(){immediateLoads++;return {scene:{}}}}
@@ -343,7 +343,7 @@ Object.assign(metadataRace,{renderParts:new Map(),loadGeneration:0,dead:false,er
 const oldMetadata=metadataRace.load(),newMetadata=metadataRace.load();
 assert.equal(metadataPending.length,2);
 const latestParts=[{id:'latest'}];metadataPending[1]({ok:true,json:async()=>({instances:latestParts})});
-await newMetadata;assert.equal(metadataRace.ready,true);assert.equal(metadataRace.parts,latestParts);
+await newMetadata;assert.equal(metadataRace.ready,false);assert.equal(metadataRace.awaitingFirstFrame,true);assert.equal(metadataRace.parts,latestParts);
 metadataPending[0]({ok:true,json:async()=>({instances:[{id:'obsolete'}]})});await oldMetadata;
 assert.equal(metadataRace.parts,latestParts);assert.equal(immediateLoads,1,'Obsolete metadata must not launch geometry');
 assert.equal(metadataRace.paths.overview,'latest.glb');
@@ -377,6 +377,73 @@ Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',erro
 const snapshot=snapshotFixture.snapshot();assert.equal(snapshot.catalogLoaded,true);assert.equal(snapshot.benchmarkResult,benchmarkResult);
 snapshotFixture.benchmark=null;assert.equal(snapshotFixture.snapshot().benchmarkResult,undefined);
 results.push({check:'snapshot exposes catalog/benchmark values without requiring render-time refs',status:'pass'});
+const {transferProgress}=load('explorer/src/experience/loading.ts');
+assert.equal(transferProgress(50,100),50);assert.equal(transferProgress(150,100),100);
+for(const total of [0,NaN,Infinity,-1])assert.equal(transferProgress(50,total),null);
+assert.equal(transferProgress(NaN,100),null);
+results.push({check:'unknown or invalid transfer totals remain indeterminate; measurable transfer is bounded',status:'pass'});
+
+const tickField=viewerClass.members.find(n=>ts.isPropertyDeclaration(n)&&n.name.getText(viewerSource)==='tick');
+const tickModule={exports:{}};
+const tickCode=ts.transpileModule('module.exports=function(){return '+tickField.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+vm.runInNewContext(tickCode,{module:tickModule,THREE,performance,requestAnimationFrame:()=>1,document:{hidden:false}});
+const renderOrder=[];
+const frameFixture={dead:false,contextLost:false,lastFrame:0,lastNotify:1e9,benchmark:null,needsRender:true,presentationMoving:false,travel:null,ready:false,awaitingFirstFrame:true,loadStart:performance.now(),frameIntervals:[],renderCount:0,
+ state:{...initialState,phase:'whole'},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
+ renderer:{render(){renderOrder.push('beauty')},info:{render:{triangles:1,calls:1}}},surfaceOcclusion:{render(){renderOrder.push('surface')}},
+ applyPose:()=>false,retargetVisibility(){},ensureFramingRange(){},emit(){renderOrder.push(this.ready?'ready':'pending')}};
+const tick=tickModule.exports.call(frameFixture);
+assert.equal(frameFixture.ready,false);tick(100);
+assert.deepEqual(renderOrder,['beauty','surface','ready']);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
+frameFixture.needsRender=false;frameFixture.presentationMoving=true;renderOrder.length=0;tick(108);
+assert.deepEqual(renderOrder,['beauty','surface'],'The terminal pose sample must be painted even when moving becomes false');
+renderOrder.length=0;tick(112);assert.equal(renderOrder.length,0,'After the terminal sample the viewer must be idle');
+frameFixture.ready=false;frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.renderer.render=()=>{throw Error('No valid frame')};
+assert.throws(()=>tick(116),/No valid frame/);assert.equal(frameFixture.ready,false);
+frameFixture.renderer.render=()=>{};frameFixture.awaitingFirstFrame=false;frameFixture.ready=true;
+frameFixture.camera.position.set(0,0,70);frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3()};
+for(let i=1;i<=12;i++){tick(116+i*100);assert.ok(frameFixture.camera.position.distanceTo(frameFixture.controls.target)>69.999,'Side reversal must not cut through the movement');}
+assert.equal(frameFixture.travel,null);assert.ok(frameFixture.camera.position.equals(new THREE.Vector3(0,0,-70)));
+results.push({check:'readiness follows complete beauty/contact frame; failed rendering stays unavailable; camera side reversal keeps safe radius and settles exactly',status:'pass',scope:'actual frame callback with CPU renderer facade'});
+
+const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
+Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
+const preserved=JSON.stringify(catalogFixture.state);
+let idx=pending.length;const failedSelection=catalogFixture.select(externalParts[1].id);
+assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalogFixture.saves,0);
+pending[idx].reject(Error('Optional catalog unavailable'));await failedSelection;
+assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalogFixture.catalogPending,null);assert.ok(catalogFixture.detailError);
+idx=pending.length;const obsoleteSelection=catalogFixture.select(externalParts[1].id);
+catalogFixture.patch({treatment:'function'});pending[idx].resolve({scene:{}});await obsoleteSelection;
+assert.equal(catalogFixture.state.part,null);assert.equal(catalogFixture.state.treatment,'function');assert.equal(catalogFixture.saves,0);assert.equal(catalogFixture.catalogLoaded,true);
+results.push({check:'optional catalog failure preserves pose/state/history; retry succeeds and intervening navigation cancels obsolete selection',status:'pass'});
+catalogFixture.catalogLoaded=false;idx=pending.length;const secondFailure=catalogFixture.select(externalParts[2].id);
+pending[idx].reject(Error('Retry fixture'));await secondFailure;
+idx=pending.length;const targetedRetry=catalogFixture.retryCatalog();pending[idx].resolve({scene:{}});await targetedRetry;
+assert.equal(catalogFixture.state.part,externalParts[2].id);assert.equal(catalogFixture.saves,1);
+catalogFixture.catalogLoaded=false;idx=pending.length;const disposedCatalog=catalogFixture.loadCatalog();catalogFixture.dead=true;
+const disposedCatalogScenes=[];catalogFixture.disposeObject=o=>disposedCatalogScenes.push(o);const disposedScene={id:'disposed-catalog'};
+pending[idx].resolve({scene:disposedScene});await disposedCatalog;assert.deepEqual(disposedCatalogScenes,[disposedScene]);
+results.push({check:'catalog retry completes the original requested selection; a disposed viewer releases late catalog geometry',status:'pass'});
+
+frameFixture.ready=true;frameFixture.state.part='fixture';frameFixture.cameraUserOwned=true;frameFixture.host={clientWidth:500,clientHeight:1000};
+frameFixture.camera.aspect=2;frameFixture.camera.position.set(20,10,60);frameFixture.controls.target.set(0,0,0);
+frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3(),fromPosition:new THREE.Vector3(0,0,70),fromTarget:new THREE.Vector3(),elapsed:.3,duration:.85};
+frameFixture.renderer.setSize=()=>{};frameFixture.surfaceOcclusion.resize=()=>{};frameFixture.invalidate=()=>{frameFixture.needsRender=true};
+Viewer.prototype.resize.call(frameFixture);const resizedPosition=frameFixture.camera.position.clone();
+tick(frameFixture.lastFrame);assert.ok(frameFixture.camera.position.distanceTo(resizedPosition)<1e-10);
+assert.ok(frameFixture.travel.fromPosition.equals(resizedPosition));assert.equal(frameFixture.travel.elapsed,0);
+results.push({check:'resize during selected-part camera travel rebases from the resized displayed pose without a following-frame snap',status:'pass'});
+
+const {partLabel,buildPartIndex,matchesPart}=load('explorer/src/experience/catalog.ts');
+const searchIndex=buildPartIndex(parts);
+assert.equal(new Set([...searchIndex.values()].map(p=>p.reference)).size,parts.length);
+for(const p of parts){const entry=searchIndex.get(p.id);for(const query of [partLabel(p),p.name,p.id,p.sourceInstanceId,p.definitionId,entry.reference])assert.ok(matchesPart(entry.search,query),p.id+' must remain findable by '+query);}
+for(const [definition,label]of [['142','Hour-wheel hub 1'],['188','Hour-wheel hub 2'],['184','Cannon-pinion arbor 2'],['152','Indicator fork underplate · Y'],['153','Indicator fork underplate · X'],['71','Crown guard']])assert.equal(partLabel(parts.find(p=>p.definitionId==='d_0_1_1_'+definition)),label);
+assert.ok(parts.filter(p=>/Source component|Source assembly/.test(partLabel(p))).length===0);
+const umlaut=parts.find(p=>p.name.includes('brücke'));assert.ok(matchesPart(searchIndex.get(umlaut.id).search,'brucke'));
+assert.ok(![...searchIndex.values()].some(p=>matchesPart(p.search,'unmatched_xyz_789')));
+results.push({check:'all source instances searchable by readable/source names and every stable ID; repeated instances have unique references; substring label collisions corrected',status:'pass',instances:parts.length});
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Material creation, ingest, reveal and timing must preserve all decoded geometry bytes');
 results.push({check:'surface materials and controller operations preserve decoded attributes and indices byte for byte',status:'pass',decodedGeometryObjects:geometryBefore.size});
 
@@ -467,6 +534,10 @@ for(const p of v.renderParts.values()) {
 // Verify perspective projection from the actual spread overview method at all requested aspect ratios.
 const corners=box=>[0,1,2,3,4,5,6,7].map(i=>new THREE.Vector3(i&1?box.max.x:box.min.x,i&2?box.max.y:box.min.y,i&4?box.max.z:box.min.z));
 for(const aspect of [1280/480,1600/740,390/500,320/390,600/220]){
+ v.spread=makeSpread(v.renderParts.values(),aspect);v.retarget();v.applyPose(0);v.root.updateMatrixWorld(true);
+ const repeated=makeSpread([...v.renderParts.values()].reverse(),aspect);
+ for(const [id,p]of v.spread)assert.ok(p.offset.equals(repeated.get(id).offset));
+ const spreadBoxes=[...v.renderParts.values()].filter(p=>spreadMember(p.source)).map(p=>({id:p.source.id,box:new THREE.Box3().setFromObject(p.mesh)}));
  v.camera.aspect=aspect;v.frameSpread();v.camera.updateProjectionMatrix();v.camera.updateMatrixWorld(true);
  const projected=spreadBoxes.map(p=>({id:p.id,box:new THREE.Box3().setFromPoints(corners(p.box).map(c=>c.project(v.camera)))}));
  for(const {box,id}of projected)assert.ok(box.min.x>=-1&&box.max.x<=1&&box.min.y>=-1&&box.max.y<=1,'Spread clipped: '+id);
@@ -493,6 +564,14 @@ for(let i=0;i<24;i++) {
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
 results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
+v.reset();v.applyPose(1);v.cameraUserOwned=true;v.travel=null;
+v.scrub({separation:.8});const probe=[...v.renderParts.values()].find(p=>p.target.length()>1);
+const displayed=probe.offset.clone();v.applyPose(0);assert.ok(probe.offset.equals(displayed));
+v.applyPose(.03);const reversed=probe.offset.clone();v.scrub({separation:.1});v.applyPose(0);assert.ok(probe.offset.equals(reversed));
+v.applyPose(.075);assert.ok(probe.offset.equals(probe.target));assert.equal(v.travel,null,'Scrubbing cannot retake a manually owned camera');
+v.allParts();v.applyPose(.3);const poseBefore=probe.mesh.matrix.clone();v.group('regulation');v.applyPose(0);assert.ok(Math.max(...probe.mesh.matrix.elements.map((n,i)=>Math.abs(n-poseBefore.elements[i])))<1e-10,'Retarget must start at displayed matrix');
+v.reset();v.applyPose(.85);assert.equal(v.assemblyError(),0);assert.ok([...v.renderParts.values()].every(p=>!p.motion));
+results.push({check:'direct slider reversal starts from displayed pose and settles in 75 ms; camera ownership survives; interrupted layout returns exactly within bounded 850 ms',status:'pass'});
 // Source field handlers are extracted because CPU tests intentionally do not construct WebGL/DOM.
 const handlers={};
 for(const name of ['pointerDown','pointerMove','pointerCancel','pointerUp']){
