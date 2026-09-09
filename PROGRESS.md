@@ -1,5 +1,9 @@
 # Zweigesicht — current execution state
 
+## UX/UI polish goal prepared — 9 September 2026
+
+Created `UX_UI_POLISH_GOAL.md` for a separate executing agent, per the user's clarification. It requires a real-browser audit across modes, stable control placement and simplified actions, materials as the only appearance, and safe empty-space deselection that preserves context/camera and rejects drag/pinch/UI clicks. It specifies protected finishes, dials/10:10, complete separation, inventory behavior, regression/visual verification and local-only milestones. This preparation changes documentation only; no website implementation was performed. Next action: launch the document with the executing agent. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Complete simultaneous separation — verified correction, 9 September 2026
 
 User review rejects the grouped/staged explosion and all style alternatives. Replaced whole-movement Separate with one continuous, complete expansion covering **all 223 movement leaves**. Removed the comparison panel and prototype evaluators. Every non-reference leaf moves with the same progress; the main plate stays fixed. Source body-depth measurements correct long-shaft ordering, reviewed screw/seat precedence corrects recessed heads, and full extents provide **1 mm clearance across 1,875 overlapping-footprint pairs** at the complete endpoint. Three horizontal screws retain seat-relative outward withdrawal. Focused mechanisms, accepted finishes, exclusive dials, all six 10:10 poses and 216-member All parts packing are preserved.
