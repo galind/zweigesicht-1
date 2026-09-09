@@ -396,7 +396,7 @@ results.push({check:'actual six-card studio has HDR emission colors and disposes
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}
 const preparedFetch=async url=>url==='/models/assembly-manifest.json'?{ok:true,json:async()=>({instances:parts})}:url==='/models/asset-paths.json'?{ok:true,json:async()=>assetPaths}:modelFetch(url);
 const loadRace=sourceModules({loader:DeferredLoader,fetchImpl:preparedFetch});const {MovementViewer:RaceViewer}=loadRace('explorer/src/viewer/MovementViewer.ts');const race=Object.create(RaceViewer.prototype);
-Object.assign(race,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
+Object.assign(race,{camera:new THREE.PerspectiveCamera(),renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
 const obsolete=race.load();while(pending.length<1)await Promise.resolve();const current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,false);assert.equal(race.awaitingFirstFrame,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
 results.push({check:'obsolete load progress/failure cannot overwrite newer successful load',status:'pass'});
 const disposedStale=[];race.disposeObject=scene=>disposedStale.push(scene);
@@ -414,7 +414,7 @@ const metadataModules=sourceModules({loader:ImmediateLoader,fetchImpl:async url=
 }});
 const {MovementViewer:MetadataViewer}=metadataModules('explorer/src/viewer/MovementViewer.ts');
 const metadataRace=Object.create(MetadataViewer.prototype);
-Object.assign(metadataRace,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
+Object.assign(metadataRace,{camera:new THREE.PerspectiveCamera(),renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
 const oldMetadata=metadataRace.load(),newMetadata=metadataRace.load();
 assert.equal(metadataPending.length,2);
 const latestParts=[...parts];metadataPending[1]({ok:true,json:async()=>({instances:latestParts})});
@@ -437,7 +437,7 @@ for(const failingAsset of ['annotations','diamond']){
  }});
  const {MovementViewer:PreparedViewer}=preparedModules('explorer/src/viewer/MovementViewer.ts');
  const prepared=Object.create(PreparedViewer.prototype);
- Object.assign(prepared,{renderParts:new Map(),loadGeneration:0,selectionGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{...assetPaths},controls:{enabled:false},emit(){},ingest(scene){ingestedScenes.push(scene)},homeCamera(){},retarget(){},disposeObject(scene){releasedScenes.push(scene);Viewer.prototype.disposeObject.call(this,scene)}});
+ Object.assign(prepared,{camera:new THREE.PerspectiveCamera(),renderParts:new Map(),loadGeneration:0,selectionGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{...assetPaths},controls:{enabled:false},emit(){},ingest(scene){ingestedScenes.push(scene)},homeCamera(){},retarget(){},disposeObject(scene){releasedScenes.push(scene);Viewer.prototype.disposeObject.call(this,scene)}});
  await prepared.load();
  assert.equal(prepared.loadStage,'error',failingAsset+' failure needs a retry state');assert.equal(prepared.ready,false);assert.equal(prepared.awaitingFirstFrame,false);assert.equal(prepared.contentPrepared,false);assert.equal(prepared.controls.enabled,false);assert.ok(prepared.error);
  assert.equal(ingestedScenes.length,0,'Do not ingest a partial scene after '+failingAsset+' failure');assert.equal(prepared.renderParts.size,0);
@@ -462,7 +462,7 @@ const diamondRaceModules=sourceModules({loader:DiamondRaceLoader,fetchImpl:async
 }});
 const {MovementViewer:DiamondRaceViewer}=diamondRaceModules('explorer/src/viewer/MovementViewer.ts');
 const diamondRace=Object.create(DiamondRaceViewer.prototype);
-Object.assign(diamondRace,{renderParts:new Map(),loadGeneration:0,selectionGeneration:0,dead:false,error:'',ready:false,paths:{...assetPaths},emit(){},ingest(scene){diamondRaceIngested.push(scene)},homeCamera(){},retarget(){},disposeObject(scene){diamondRaceReleased.push(scene);Viewer.prototype.disposeObject.call(this,scene)}});
+Object.assign(diamondRace,{camera:new THREE.PerspectiveCamera(),renderParts:new Map(),loadGeneration:0,selectionGeneration:0,dead:false,error:'',ready:false,paths:{...assetPaths},emit(){},ingest(scene){diamondRaceIngested.push(scene)},homeCamera(){},retarget(){},disposeObject(scene){diamondRaceReleased.push(scene);Viewer.prototype.disposeObject.call(this,scene)}});
 const oldDiamondLoad=diamondRace.load();
 while(!delayedDiamondResponse)await new Promise(setImmediate);
 await diamondRace.load();const preparedAnnotations=diamondRace.sourceSurfaces;
@@ -729,4 +729,6 @@ for(const sequence of sequences){for(const [name,e]of sequence)gesture[name](e);
 gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(selections,1);
 results.push({check:'out-and-back drags, pinch release orders, cancellation, right/middle clicks reject selection; deliberate tap selects exactly once',status:'pass',scope:'actual event handlers with CPU raycast fixture; browser/touch-emulation checked separately'});
 
+const {reviewDials}=await import('./review-dials.mjs');
+await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

@@ -1,4 +1,32 @@
 {
+  "configurationPresentations": [
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_28",
+      "material": "enamel-blue",
+      "scope": "fitted-dials",
+      "sourceInterpretation": "Original d21 remains explicitly red in the raw catalog. Blue fitted enamel follows maker dial-II prose and REF-MAKER-01.",
+      "depthBiasReason": "Source carrier d14 and enamel d21 share outward Z=-5.7 mm and overlap by 3.477922 mm3. Use fitted-instance material depth bias, preserving all geometry and transforms.",
+      "sourceAssignment": {
+        "color": 7086129,
+        "metalness": 0,
+        "roughness": 0.12,
+        "pattern": 0,
+        "family": "enamel",
+        "assignment": "source-definition"
+      },
+      "presentation": {
+        "color": "#143a69",
+        "transmission": 0.3,
+        "ior": 1.5,
+        "thicknessMm": 0.1,
+        "polygonOffset": {
+          "factor": -1,
+          "units": -1
+        }
+      },
+      "notes": "Fitted two-display preset only; raw catalog, source colors, geometry and occurrence placement remain unchanged. Numerical response authored, not measured enamel optics."
+    }
+  ],
   "schemaVersion": 1,
   "date": "2026-09-09",
   "baseline": "00ae9d3f3e441c1a7d2559e5b500b99ac4f5567b",

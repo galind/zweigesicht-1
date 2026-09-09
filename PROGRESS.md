@@ -1,5 +1,12 @@
 # Zweigesicht — current execution state
 
+## Dial controls and recovery — verified desktop milestone, 9 September 2026
+
+Integrated the reviewed two-sided configurations into the accepted viewer: compact responsive controls, independent hand preferences, shared visibility policy, upright central framing, synchronized pointer-orbit basis, Back/Reset, and atomic style switching. The cached catalog now serves fitted displays and raw inspection with latest-intent loading/retry. Both graphics restoration and preparation retry preserve the current display. Only the chosen fitted enamel receives the blue/coating-depth interpretation; all 365 raw appearance/geometry/matrix records and 202 definitions remain unchanged.
+
+Verification at this checkpoint: 53 actual-asset/controller CPU checks, six state checks, TypeScript, targeted lint and production build pass. Final desktop browser run passes 20 dial checks and 12 established movement checks. All five styles and both-side direct pointer/oblique views were inspected, including retained reverse display. Remaining work: finish portrait, 320px, visible delayed-load/retry and final evidence review. Preview remains **http://127.0.0.1:4173/**; local only, no push/merge/deploy; `FINISHING_GOAL.md` untouched.
+
+
 ## Dial configuration review — verified locally, 9 September 2026
 
 Completed the original-STEP review for `DIAL_AND_HANDS_PLAN.md`: 50 analytic checks pass, with exact blade/bushing bores, depths, marker pins and fixing axes recorded. Reviewed unchanged-geometry contact sheet in `artifacts/dial-cad/source-contact.png`. The authored manifest supports central Fine/Open lance and small Lance/Broad lance/Pear, with 43 external leaves fitted across both faces. Central Lance has a seconds bore displaced 14.301839 mm; duplicate loose blades and ring alternatives with marker/fixing mismatches are excluded from fitting and retained in the catalog.

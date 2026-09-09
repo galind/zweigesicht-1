@@ -831,3 +831,102 @@ h2 {
     right: 0;
   }
 }
+
+.dial-trigger {
+  white-space: nowrap;
+  gap: 7px;
+}
+.control-deck {
+  width: min(930px, 100%);
+  gap: 16px;
+}
+.dial-popover {
+  width: min(360px, calc(100vw - 32px)) !important;
+  padding: 20px !important;
+  background: #222 !important;
+}
+.dial-options {
+  min-width: 0;
+}
+.dial-options [data-slot='toggle-group'] {
+  width: 100%;
+  gap: 6px;
+  justify-content: flex-start;
+}
+.dial-options [data-slot='toggle-group-item'] {
+  border: 1px solid #ffffff20;
+  border-radius: 6px !important;
+  padding: 8px 11px;
+  font-size: 0.875rem;
+  flex: 1;
+}
+.dial-options [data-slot='toggle-group-item'][data-pressed] {
+  background: #deddd8;
+  color: #171717;
+}
+.dial-label {
+  margin: 22px 0 10px;
+  font-size: 0.875rem;
+}
+.dial-label span {
+  float: right;
+  color: #aaa8a4;
+}
+.dial-help {
+  margin: 16px 0 0;
+  color: #aaa8a4;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.dial-status {
+  font-size: 0.875rem;
+  color: #cbc9c5;
+}
+.dial-status:not(:empty) {
+  margin-top: 16px;
+}
+.dial-back {
+  margin: 8px 0 -8px;
+  padding-left: 0;
+}
+.dial-sheet {
+  background: #222 !important;
+  max-height: 85dvh;
+  overflow: auto;
+  border-radius: 16px 16px 0 0;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+.dial-sheet .dial-options {
+  padding: 0 24px;
+}
+.dial-sheet [data-slot='sheet-header'] {
+  padding: 24px 24px 0 !important;
+}
+.dial-sheet [data-slot='sheet-description'] {
+  font-size: 0.875rem;
+}
+@media (max-width: 700px) {
+  .control-deck {
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 6px;
+  }
+  .explore-button {
+    max-width: none;
+  }
+  .dial-trigger {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 8px 4px;
+  }
+  .all-parts-button {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .reset-button {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .separation-control {
+    grid-row: 3;
+  }
+}

@@ -1,3 +1,9 @@
+import {
+  DIALS,
+  fittedLeaves,
+  type DialView,
+  type DialFace,
+} from '../experience/dials';
 import { benchmarkFrame, type Benchmark } from './validation';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -57,6 +63,7 @@ type RenderPart = {
   center: THREE.Vector3;
 };
 type Saved = {
+  up: THREE.Vector3;
   aspect: number;
   cameraUserOwned: boolean;
   spreadFocus: string | null;
@@ -70,6 +77,12 @@ export interface ViewerSnapshot extends ExperienceState {
   loadStage: LoadStage;
   transfer: number | null;
   catalogLoading: boolean;
+  dialRequest: {
+    view: DialView;
+    centralStyle: string;
+    smallStyle: string;
+  } | null;
+  dialError: string;
   status: string;
   error: string;
   detailError: string;
@@ -102,6 +115,7 @@ export class MovementViewer {
   transfer: number | null = null;
   awaitingFirstFrame = false;
   contentPrepared = false;
+  reloadState: ExperienceState | null = null;
   status = '';
   error = '';
   detailError = '';
@@ -117,6 +131,8 @@ export class MovementViewer {
   travel: {
     position: THREE.Vector3;
     target: THREE.Vector3;
+    up?: THREE.Vector3;
+    fromUp?: THREE.Vector3;
     fromPosition?: THREE.Vector3;
     fromTarget?: THREE.Vector3;
     elapsed?: number;
@@ -132,7 +148,12 @@ export class MovementViewer {
   loadStart = performance.now();
   loadMs = 0;
   presentationMoving = true;
+  cameraGeneration = 0;
   cameraUserOwned = false;
+  dialRequest: ViewerSnapshot['dialRequest'] = null;
+  dialError = '';
+  dialGeneration = 0;
+  fitted = new Set<string>();
   catalogLoaded = false;
   catalogPending: Promise<void> | null = null;
   loadGeneration = 0;
@@ -214,6 +235,8 @@ export class MovementViewer {
       loadStage: this.loadStage,
       transfer: this.transfer,
       catalogLoading: !!this.catalogPending,
+      dialRequest: this.dialRequest,
+      dialError: this.dialError,
       spreadFocus: this.spreadFocus,
       status: this.status,
       error: this.error,
@@ -260,6 +283,7 @@ export class MovementViewer {
         (p) => p.mesh.userData.sourceRecovery === 'maker-component-stl',
       ),
       camera: this.camera.position.toArray(),
+      cameraUp: this.camera.up.toArray(),
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
       spreadMembers: this.spread?.size ?? 0,
@@ -356,6 +380,7 @@ export class MovementViewer {
     this.needsRender = true;
   };
   manual = () => {
+    this.cameraGeneration = (this.cameraGeneration ?? 0) + 1;
     this.selectionGeneration++;
     this.restoringCamera = null;
     this.cameraUserOwned = true;
@@ -392,6 +417,8 @@ export class MovementViewer {
     this.emit();
   };
   async load() {
+    if (this.contentPrepared) this.reloadState = { ...this.state };
+    this.cancelDialRequest();
     let preparedScene: THREE.Object3D | undefined,
       recoveredScene: THREE.Object3D | undefined;
     const generation = ++this.loadGeneration;
@@ -478,12 +505,13 @@ export class MovementViewer {
       preparedScene = undefined;
       this.ingest(recoveredScene);
       recoveredScene = undefined;
-      this.spread = makeSpread(this.renderParts.values());
+      this.spread = makeSpread(this.renderParts.values(), this.camera.aspect);
       this.contentPrepared = true;
       this.awaitingFirstFrame = true;
-      this.state = { ...initialState, phase: 'whole' };
+      this.state = resolveState(this.reloadState ?? initialState, { phase: 'whole' });
       this.status = '';
-      this.homeCamera(true);
+      if (!this.reloadState) this.homeCamera(true);
+      this.reloadState = null;
       this.retarget();
       this.emit();
     } catch (error) {
@@ -609,8 +637,9 @@ export class MovementViewer {
   async loadCatalog() {
     if (this.catalogLoaded) return;
     if (this.catalogPending) return this.catalogPending;
+    const forDials = !!this.dialRequest;
     this.detailError = '';
-    this.status = 'Loading source catalog…';
+    this.status = this.dialRequest ? '' : 'Loading source catalog…';
     this.emit();
     this.catalogPending = (async () => {
       try {
@@ -628,8 +657,9 @@ export class MovementViewer {
         this.emit();
       } catch (e) {
         this.status = '';
-        this.detailError =
-          'Catalog geometry could not load. The movement is still available.';
+        if (!this.dead && !forDials)
+          this.detailError =
+            'Catalog geometry could not load. The movement is still available.';
         this.emit();
         throw e;
       } finally {
@@ -640,8 +670,133 @@ export class MovementViewer {
     this.emit();
     return this.catalogPending;
   }
-  patch(patch: Partial<ExperienceState>) {
+  cancelDialRequest() {
+    this.dialGeneration = (this.dialGeneration ?? 0) + 1;
+    this.dialRequest = null;
+    this.dialError = '';
+  }
+  async showDial(view: DialView, face?: DialFace, style?: string) {
+    if (!this.ready) return;
+    if (view === 'movement') {
+      this.cancelDialRequest();
+      this.save();
+      this.patch({
+        presentation: 'movement',
+        layout: 'assembly',
+        part: null,
+        group: null,
+        separation: 0,
+        partSpread: 0,
+        reveal: 0,
+        phase: 'recovering',
+      });
+      return;
+    }
+    const intended = resolveState(this.state, {
+      centralStyle: this.dialRequest?.centralStyle ?? this.state.centralStyle,
+      smallStyle: this.dialRequest?.smallStyle ?? this.state.smallStyle,
+      ...(face && style
+        ? { [face === 'central' ? 'centralStyle' : 'smallStyle']: style }
+        : {}),
+    });
+    const cameraGeneration = this.cameraGeneration;
+    const request = (this.dialGeneration = (this.dialGeneration ?? 0) + 1);
     this.selectionGeneration++;
+    this.catalogRetry = undefined;
+    this.detailError = '';
+    this.dialError = '';
+    this.dialRequest = {
+      view,
+      centralStyle: intended.centralStyle,
+      smallStyle: intended.smallStyle,
+    };
+    this.emit();
+    try {
+      await this.loadCatalog();
+    } catch {
+      if (!this.dead && request === this.dialGeneration) {
+        this.dialError = 'Dials could not load. Try again.';
+        this.detailError = '';
+        this.emit();
+      }
+      return;
+    }
+    if (this.dead || request !== this.dialGeneration) return;
+    // Readiness and both complete displays commit together, never a partial preset.
+    const next = resolveState(this.state, {
+      presentation: 'dials',
+      side: view === 'central' ? 'front' : 'back',
+      centralStyle: intended.centralStyle,
+      smallStyle: intended.smallStyle,
+      layout: 'assembly',
+      group: null,
+      part: null,
+      isolated: false,
+      separation: 0,
+      partSpread: 0,
+      reveal: 0,
+      phase: 'recovering',
+    });
+    if ([...fittedLeaves(next)].some((id) => !this.renderParts.has(id))) {
+      this.dialError = 'This display is unavailable. Try again.';
+      this.emit();
+      return;
+    }
+    const frame =
+      this.state.presentation !== 'dials' ||
+      this.state.side !== next.side ||
+      !!this.state.part;
+    this.save();
+    this.dialRequest = null;
+    this.state = next;
+    this.retarget();
+    if (frame && cameraGeneration === this.cameraGeneration) {
+      this.cameraUserOwned = false;
+      this.restoringCamera = null;
+      this.frameDials();
+    }
+    this.emit();
+  }
+  async retryDials() {
+    const request = this.dialRequest;
+    if (request) await this.showDial(request.view);
+  }
+  frameDials() {
+    const bounds = this.targetBounds(
+      (p) => belongs(p.source.id, ROOT) || this.fitted.has(p.source.id),
+    );
+    this.frameBounds(
+      bounds,
+      new THREE.Vector3(
+        0.04,
+        0.06,
+        this.state.side === 'front' ? 1 : -1,
+      ).normalize(),
+    );
+  }
+  patch(patch: Partial<ExperienceState>) {
+    if (
+      [
+        'presentation',
+        'layout',
+        'group',
+        'part',
+        'side',
+        'separation',
+        'partSpread',
+        'reveal',
+        'isolated',
+      ].some((key) => key in patch)
+    )
+      this.cancelDialRequest();
+    this.selectionGeneration++;
+    if (
+      this.state.presentation === 'dials' &&
+      !('group' in patch) &&
+      !('layout' in patch) &&
+      ('separation' in patch || 'partSpread' in patch)
+    )
+      this.save();
     this.state = resolveState(this.state, patch);
     this.retarget();
     if (
@@ -691,7 +846,8 @@ export class MovementViewer {
         ? belongs(p.source.id, this.state.part)
         : group
           ? inMembers(p.source.id, group.members)
-          : belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66',
+          : (belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66') ||
+            this.fitted.has(p.source.id),
     );
     if (bounds.isEmpty()) return;
     const direction = this.cameraUserOwned
@@ -732,6 +888,7 @@ export class MovementViewer {
   save() {
     this.history.push({
       state: { ...this.state },
+      up: this.camera.up.clone(),
       aspect: this.camera.aspect,
       cameraUserOwned: this.cameraUserOwned,
       spreadFocus: this.spreadFocus,
@@ -751,6 +908,7 @@ export class MovementViewer {
     this.restoringCamera = null;
     const group = GROUPS.find((g) => g.id === id);
     this.patch({
+      presentation: 'movement',
       layout: 'assembly',
       group: id,
       part: null,
@@ -765,6 +923,7 @@ export class MovementViewer {
     else this.homeCamera();
   }
   back() {
+    this.cancelDialRequest();
     this.selectionGeneration++;
     const previous = this.history.pop();
     if (!previous) {
@@ -777,12 +936,17 @@ export class MovementViewer {
     this.state = resolveState(previous.state, {
       phase: 'recovering',
     });
-    this.travel = { position: previous.position, target: previous.target };
+    this.travel = {
+      position: previous.position,
+      target: previous.target,
+      up: previous.up,
+    };
     this.ensureFramingRange();
     this.retarget();
     this.emit();
   }
   reset() {
+    this.cancelDialRequest();
     this.selectionGeneration++;
     this.restoringCamera = null;
     this.cameraUserOwned = false;
@@ -802,6 +966,21 @@ export class MovementViewer {
       immediate,
     );
   }
+  syncOrbitUp() {
+    // Three r186 caches its orbit basis at construction. Keep that basis aligned
+    // with our continuous dial camera roll, without recreating its event handlers.
+    const controls = this.controls as OrbitControls & {
+      _quat?: THREE.Quaternion;
+      _quatInverse?: THREE.Quaternion;
+    };
+    if (controls._quat && controls._quatInverse) {
+      controls._quat.setFromUnitVectors(
+        this.camera.up,
+        new THREE.Vector3(0, 1, 0),
+      );
+      controls._quatInverse.copy(controls._quat).invert();
+    }
+  }
   frameTo(
     target: THREE.Vector3,
     distance: number,
@@ -815,12 +994,21 @@ export class MovementViewer {
     this.controls.maxDistance = Math.max(200, distance * scale * 1.5);
     this.camera.far = Math.max(1000, this.controls.maxDistance * 2);
     this.camera.updateProjectionMatrix();
+    const up = new THREE.Vector3(
+      0,
+      this.state.presentation === 'dials' && this.state.side === 'front'
+        ? 1
+        : -1,
+      0,
+    );
     if (immediate || this.reduced) {
+      this.camera.up.copy(up);
+      this.syncOrbitUp();
       this.camera.position.copy(position);
       this.controls.target.copy(target);
       this.controls.update();
       this.travel = null;
-    } else this.travel = { position, target, duration: this.poseDuration };
+    } else this.travel = { position, target, up, duration: this.poseDuration };
     this.needsRender = true;
   }
   frameGroup(g: Mechanism) {
@@ -886,6 +1074,10 @@ export class MovementViewer {
     this.invalidate();
   }
   setSide(side: 'back' | 'front') {
+    if (this.state.presentation === 'dials' || this.dialRequest) {
+      void this.showDial(side === 'front' ? 'central' : 'small');
+      return;
+    }
     if (this.state.layout === 'spread') return;
     this.patch({ side });
     const distance = this.camera.position.distanceTo(this.controls.target);
@@ -954,6 +1146,7 @@ export class MovementViewer {
     if (!this.ready) return;
     const part = this.parts.find((p) => p.id === id);
     if (!part) return;
+    this.cancelDialRequest();
     const request = ++this.selectionGeneration;
     this.catalogRetry = undefined;
     // Keep the displayed inspection intact until optional geometry is available.
@@ -961,8 +1154,12 @@ export class MovementViewer {
       try {
         await this.loadCatalog();
       } catch {
-        if (!this.dead && request === this.selectionGeneration)
+        if (!this.dead && request === this.selectionGeneration) {
           this.catalogRetry = { id, request };
+          this.detailError =
+            'Catalog geometry could not load. The movement is still available.';
+          this.emit();
+        }
         return;
       }
       if (this.dead || request !== this.selectionGeneration || !this.ready)
@@ -997,6 +1194,7 @@ export class MovementViewer {
       await this.select(retry.id);
   }
   retarget() {
+    this.fitted = fittedLeaves(this.state);
     if (this.controls) {
       const spread = this.state.layout === 'spread';
       this.renderer?.domElement?.setAttribute(
@@ -1042,33 +1240,14 @@ export class MovementViewer {
         p.target.y +=
           (p.center.y - group.target[1]) * this.state.partSpread * 0.35;
       }
-      const external = !belongs(id, ROOT);
-      let visible = !external || selected;
-      if (this.state.isolated) visible = selected;
-      if (id === PREFIX + '66' && !selected) visible = false;
-      if (id === PREFIX + '53' && this.state.part === PREFIX + '66')
-        visible = false;
-      if (
-        group &&
-        this.state.reveal > 0.5 &&
-        !selected &&
-        !this.state.isolated &&
-        !member &&
-        !context &&
-        !obstruction
-      )
-        visible = false;
-      if (group && obstruction && Math.abs(p.offset.z) > 24 && !selected)
-        visible = false;
       if (this.state.layout === 'spread') {
         const placement = this.spread.get(id);
-        visible = !!placement && (!this.state.isolated || selected);
         if (placement) {
           p.target.copy(placement.offset);
           p.targetRotation.copy(placement.rotation);
         }
       }
-      p.mesh.visible = visible;
+      p.mesh.visible = this.partVisible(p);
       const finish = finishFor(
         p.source.name,
         p.source.definitionId,
@@ -1078,6 +1257,24 @@ export class MovementViewer {
       p.material.metalness = finish.metalness;
       p.material.roughness = finish.roughness;
       p.material.emissive.setHex(0);
+      if (
+        DIALS.presentationOverrides.some((override) => override.leafId === id)
+      ) {
+        const enamel = p.material as THREE.MeshPhysicalMaterial;
+        const fitted =
+          this.state.treatment === 'finish' &&
+          this.fitted.has(id) &&
+          !(selection && !belongs(selection, ROOT));
+        enamel.color.setHex(fitted ? 0x143a69 : finish.color);
+        enamel.transmission = fitted ? 0.3 : 0;
+        enamel.ior = 1.5;
+        enamel.thickness = 0.1;
+        // The supplied carrier and enamel share coplanar outward faces.
+        // Depth bias resolves their source overlap without moving either mesh.
+        enamel.polygonOffset = fitted;
+        enamel.polygonOffsetFactor = -1;
+        enamel.polygonOffsetUnits = -1;
+      }
       setFinishEnabled(
         p.material,
         this.state.treatment === 'finish' && (!group || member || selected),
@@ -1248,6 +1445,7 @@ export class MovementViewer {
         Math.min(1, saved.aspect ?? this.camera.aspect) /
         Math.min(1, this.camera.aspect);
       this.travel = {
+        up: saved.up?.clone(),
         target: saved.target.clone(),
         position: saved.position
           .clone()
@@ -1267,6 +1465,7 @@ export class MovementViewer {
         this.fitPresentation();
       else if (this.state.group)
         this.frameGroup(GROUPS.find((g) => g.id === this.state.group)!);
+      else if (this.state.presentation === 'dials') this.frameDials();
       else this.homeCamera();
     } else if (this.ready && Math.abs(old - this.camera.aspect) > 0.01) {
       const factor = Math.min(1, old) / Math.min(1, this.camera.aspect);
@@ -1334,6 +1533,17 @@ export class MovementViewer {
         ? 1
         : Math.min(1, travel.elapsed / (travel.duration ?? 0.85));
       const a = t * t * (3 - 2 * t);
+      if (travel.up) {
+        travel.fromUp ??= this.camera.up.clone();
+        const roll = new THREE.Quaternion().setFromUnitVectors(
+          travel.fromUp,
+          travel.up,
+        );
+        this.camera.up
+          .copy(travel.fromUp)
+          .applyQuaternion(new THREE.Quaternion().slerp(roll, a));
+        this.syncOrbitUp();
+      }
       const from = travel.fromPosition.clone().sub(travel.fromTarget),
         to = travel.position.clone().sub(travel.target);
       const distance = THREE.MathUtils.lerp(from.length(), to.length(), a);
@@ -1347,6 +1557,7 @@ export class MovementViewer {
         .copy(this.controls.target)
         .add(from.multiplyScalar(distance));
       if (t === 1) {
+        if (travel.up) { this.camera.up.copy(travel.up); this.syncOrbitUp(); }
         this.camera.position.copy(this.travel.position);
         this.controls.target.copy(this.travel.target);
         this.travel = null;
@@ -1413,38 +1624,42 @@ export class MovementViewer {
       this.emit();
     }
   };
-  retargetVisibility() {
+  partVisible(p: RenderPart) {
+    const id = p.source.id,
+      selection = this.state.part;
+    const selected = !!selection && belongs(id, selection);
+    if (this.state.layout === 'spread')
+      return this.spread.has(id) && (!this.state.isolated || selected);
+    if (this.state.isolated) return selected;
+    // A raw external selection replaces fitted display overlays until Back.
+    const raw = !!selection && !belongs(selection, ROOT);
+    let visible =
+      belongs(id, ROOT) || selected || (!raw && !!this.fitted?.has(id));
+    if (id === PREFIX + '66' && !selected) visible = false;
+    if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
     const group = GROUPS.find((g) => g.id === this.state.group);
-    for (const p of this.renderParts.values()) {
-      const id = p.source.id,
-        selected = !!this.state.part && belongs(id, this.state.part),
-        member = !!group && inMembers(id, group.members),
-        context = !!group && inMembers(id, group.context),
-        obstruction =
-          !!group &&
-          (inMembers(id, group.obstructions) ||
-            group.partObstructions?.some((suffix) =>
-              belongs(id, PREFIX + suffix),
-            ));
-      let visible = belongs(id, ROOT) || selected;
-      if (this.state.isolated) visible = selected;
-      if (id === PREFIX + '66' && !selected) visible = false;
-      if (id === PREFIX + '53' && this.state.part === PREFIX + '66')
-        visible = false;
+    if (group) {
+      const member = inMembers(id, group.members),
+        context = inMembers(id, group.context);
+      const obstruction =
+        inMembers(id, group.obstructions) ||
+        group.partObstructions?.some((suffix) => belongs(id, PREFIX + suffix));
       if (
-        group &&
         this.state.reveal > 0.5 &&
         !selected &&
-        !this.state.isolated &&
         !member &&
         !context &&
         !obstruction
       )
         visible = false;
-      if (group && obstruction && Math.abs(p.offset.z) > 24 && !selected)
+      if (obstruction && Math.abs(p.offset.z) > 24 && !selected)
         visible = false;
-      if (this.state.layout === 'spread')
-        visible = this.spread.has(id) && (!this.state.isolated || selected);
+    }
+    return visible;
+  }
+  retargetVisibility() {
+    for (const p of this.renderParts.values()) {
+      const visible = this.partVisible(p);
       if (p.mesh.visible !== visible) {
         p.mesh.visible = visible;
         this.needsRender = true;

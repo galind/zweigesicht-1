@@ -16,8 +16,10 @@ import {
   type ViewerSnapshot,
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
+import { runDialChecks } from '@/src/viewer/dialValidation';
 import { runBrowserChecks, startBenchmark } from '@/src/viewer/validation';
 import { captureMotion, type MotionCase } from '@/src/viewer/capture';
+import { DialControls } from '@/components/DialControls';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
@@ -67,6 +69,8 @@ const empty: ViewerSnapshot = {
   loadStage: 'movement',
   transfer: null,
   catalogLoading: false,
+  dialRequest: null,
+  dialError: '',
   spreadFocus: null,
   status: '',
   error: '',
@@ -190,6 +194,20 @@ export default function Home() {
         phase: id ? 'mechanism' : 'whole',
       }));
   };
+  const dialSide =
+    s.dialRequest && s.dialRequest.view !== 'movement'
+      ? s.dialRequest.view === 'central'
+        ? 'front'
+        : 'back'
+      : s.side;
+  const sideLabel =
+    s.presentation === 'dials' || s.dialRequest
+      ? dialSide === 'back'
+        ? 'Show central dial'
+        : 'Show small dial'
+      : s.side === 'back'
+        ? 'Show dial side'
+        : 'Show movement side';
   const patch = (v: Parameters<MovementViewer['patch']>[0]) =>
     viewer.current?.patch(v);
   return (
@@ -466,16 +484,11 @@ export default function Home() {
             className="side-switch text-button"
             disabled={!available}
             onClick={() =>
-              viewer.current?.setSide(s.side === 'back' ? 'front' : 'back')
+              viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
             }
-            aria-label={
-              s.side === 'back' ? 'Show dial side' : 'Show movement side'
-            }
+            aria-label={sideLabel}
           >
-            <FlipHorizontal2 aria-hidden="true" />{' '}
-            <span>
-              {s.side === 'back' ? 'Show dial side' : 'Show movement side'}
-            </span>
+            <FlipHorizontal2 aria-hidden="true" /> <span>{sideLabel}</span>
           </button>
         )}
       </section>
@@ -590,6 +603,11 @@ export default function Home() {
             ))}
           </PopoverContent>
         </Popover>
+        <DialControls
+          state={s}
+          viewer={() => viewer.current}
+          available={available}
+        />
         <div className="separation-control">
           {s.layout === 'spread' ? (
             <>
@@ -942,6 +960,16 @@ export default function Home() {
               Oblique reference
             </button>
           </div>
+          <button
+            onClick={async () => {
+              if (viewer.current) {
+                setQa({ running: true });
+                setQa(await runDialChecks(viewer.current));
+              }
+            }}
+          >
+            Run dial checks
+          </button>
           <button
             onClick={async () => {
               if (viewer.current) {

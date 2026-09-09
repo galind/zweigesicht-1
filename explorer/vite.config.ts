@@ -87,7 +87,10 @@ function localCad(): Plugin {
             stream.on('end', () => res.end());
           } else stream.pipe(res);
         };
-        if (delivery === 'prepare' && pathname.endsWith('.bin')) {
+        if (
+          (delivery === 'prepare' && pathname.endsWith('.bin')) ||
+          (delivery === 'dial-slow' && pathname.includes('catalog-'))
+        ) {
           const timer = setTimeout(begin, 6000);
           res.on('close', () => clearTimeout(timer));
         } else begin();

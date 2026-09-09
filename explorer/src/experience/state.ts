@@ -1,3 +1,4 @@
+import configurations from '../../../assets/authored/dial-configurations.json' with { type: 'json' };
 export type Treatment = 'finish' | 'function';
 export type Phase =
   | 'loading'
@@ -8,6 +9,9 @@ export type Phase =
   | 'recovering';
 export interface ExperienceState {
   phase: Phase;
+  presentation: 'movement' | 'dials';
+  centralStyle: string;
+  smallStyle: string;
   layout: 'assembly' | 'spread';
   group: string | null;
   part: string | null;
@@ -21,6 +25,9 @@ export interface ExperienceState {
 }
 export const initialState: ExperienceState = {
   phase: 'loading',
+  presentation: 'movement',
+  centralStyle: configurations.defaults.central,
+  smallStyle: configurations.defaults.small,
   layout: 'assembly',
   group: null,
   part: null,
@@ -43,6 +50,14 @@ export function resolveState(
   for (const key of Object.keys(next))
     if (!(key in initialState))
       delete (next as unknown as Record<string, unknown>)[key];
+  next.presentation = next.presentation === 'dials' ? 'dials' : 'movement';
+  for (const face of ['central', 'small'] as const) {
+    const key = face === 'central' ? 'centralStyle' : 'smallStyle';
+    if (
+      !configurations.faces[face].styles.some((style) => style.id === next[key])
+    )
+      next[key] = configurations.defaults[face];
+  }
   next.separation = clamp(next.separation);
   next.partSpread = clamp(next.partSpread);
   next.reveal = clamp(next.reveal);
@@ -52,6 +67,14 @@ export function resolveState(
     next.partSpread = 0;
     next.reveal = 0;
   }
+  if (
+    next.layout === 'spread' ||
+    next.group ||
+    next.separation > 0 ||
+    next.partSpread > 0 ||
+    next.reveal > 0
+  )
+    next.presentation = 'movement';
   if (!next.part) next.isolated = false;
   return next;
 }

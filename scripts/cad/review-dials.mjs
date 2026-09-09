@@ -1,0 +1,79 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+/** Invoked by review-runtime: actual decoded catalog meshes + controller source. */
+export async function reviewDials({v, Viewer, THREE, initialState, load, sourceModules, ROOT, parts, results}) {
+ const {DIALS,fittedLeaves}=load('explorer/src/experience/dials.ts');
+ const {ROOT:movement,belongs}=load('explorer/src/experience/catalog.ts');
+ const geometry = new Map([...v.renderParts].map(([id,p])=>[id,{geometry:p.mesh.geometry,matrix:p.assembled.clone()}]));
+ const make=(Class=Viewer)=>Object.assign(Object.create(Class.prototype),{
+   state:{...initialState,phase:'whole'},ready:true,dead:false,parts,renderParts:v.renderParts,
+   spread:v.spread,history:[],selectionBox:new THREE.Box3Helper(new THREE.Box3()),reduced:true,camera:new THREE.PerspectiveCamera(33,1.6,.05,2000),
+   controls:{target:new THREE.Vector3(),update(){},maxDistance:200,mouseButtons:{},touches:{}},
+   selectionGeneration:0,dialGeneration:0,cameraGeneration:0,catalogLoaded:true,catalogPending:null,
+   fitted:new Set(),emit(){},frameDials(){this.framings=(this.framings??0)+1},homeCamera(){},
+   frameTo(){},ensureFramingRange(){},paths:{catalog:'fixture-catalog.glb'},
+ });
+ const controller=make();
+ for(const central of DIALS.faces.central.styles) for(const small of DIALS.faces.small.styles){
+   await controller.showDial('central','central',central.id);
+   await controller.showDial('small','small',small.id);
+   controller.applyPose(0);controller.retargetVisibility();
+   const external=[...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement));
+   assert.equal(external.length,43);assert.equal(new Set(external.map(p=>p.source.id)).size,43);
+   assert.deepEqual(external.map(p=>p.source.id).sort(),[...fittedLeaves(controller.state)].sort());
+   assert.equal(external.filter(p=>/Sek_Zeiger/.test(p.source.name)).length,1,'Only central seconds');
+   for(const face of ['central','small']){
+     const selected=face==='central'?central:small;
+     for(const id of selected.supportLeafIds)assert.ok(external.some(p=>p.source.id===id));
+     assert.equal(Object.keys(selected.handLeafIds).length,face==='central'?3:2);
+   }
+   for(const p of controller.renderParts.values()){
+     assert.equal(p.mesh.geometry,geometry.get(p.source.id).geometry);
+     assert.ok(p.assembled.equals(geometry.get(p.source.id).matrix));
+     assert.ok(p.mesh.matrix.equals(p.assembled));
+   }
+ }
+ results.push({check:'six two-sided combinations: 43 unique reviewed display leaves, complete supports, one central seconds, unchanged decoded geometry and source matrices',status:'pass'});
+ const prior={...controller.state};const camera=controller.camera.position.clone();const frames=controller.framings;
+ await controller.showDial('small','small','lance');assert.equal(controller.framings,frames);assert.ok(camera.equals(controller.camera.position));
+ controller.back();assert.equal(controller.state.smallStyle,prior.smallStyle);assert.equal(controller.state.centralStyle,prior.centralStyle);
+ const historyCount=controller.history.length;controller.group('energy');assert.equal(controller.history.length,historyCount+1);assert.equal(controller.state.presentation,'movement');controller.back();assert.equal(controller.state.presentation,'dials');
+ controller.scrub({separation:.4});assert.equal(controller.state.presentation,'movement');controller.back();assert.equal(controller.state.presentation,'dials');
+ controller.allParts();assert.equal(controller.state.presentation,'movement');assert.equal(controller.spread.size,216);controller.back();assert.equal(controller.state.presentation,'dials');
+ const raw=DIALS.presentationOverrides[0].leafId;
+ await controller.select(raw);assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,1);
+ assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x6c2031);assert.equal(controller.renderParts.get(raw).material.transmission,0);
+ controller.patch({isolated:true});assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,1);
+ controller.back();assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,43);
+ assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x143a69);assert.equal(controller.renderParts.get(raw).material.transmission,.3);
+ controller.reset();assert.equal(controller.state.presentation,'movement');assert.equal(controller.state.centralStyle,'fine');assert.equal(controller.state.smallStyle,'lance');
+ controller.controls._quat=new THREE.Quaternion();controller.controls._quatInverse=new THREE.Quaternion();
+ for(const up of [new THREE.Vector3(0,1,0),new THREE.Vector3(1,0,0),new THREE.Vector3(0,-1,0)]){
+   controller.camera.up.copy(up);controller.syncOrbitUp();
+   assert.ok(up.clone().applyQuaternion(controller.controls._quat).distanceTo(new THREE.Vector3(0,1,0))<1e-12);
+   assert.ok(new THREE.Vector3(0,1,0).applyQuaternion(controller.controls._quatInverse).distanceTo(up)<1e-12);
+ }
+ results.push({check:'style changes retain camera; Back restores dials after section/separation/spread/raw isolation; exact blue override reverts to raw red; Reset defaults',status:'pass'});
+ let pending=[],loads=0,disposed=0;
+ class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
+ const {MovementViewer:Race}=sourceModules({loader:Loader})('explorer/src/viewer/MovementViewer.ts');
+ const makeRace=()=>Object.assign(make(Race),{catalogLoaded:false,ingest(){},disposeObject(){disposed++}});
+ let r=makeRace();let a=r.showDial('central');let b=r.showDial('small','small','pear');
+ assert.equal(r.state.presentation,'movement');assert.equal(loads,1);pending.shift().resolve({scene:{}});await Promise.all([a,b]);
+ assert.equal(r.state.presentation,'dials');assert.equal(r.state.side,'back');assert.equal(r.state.smallStyle,'pear');
+ r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'movement');assert.equal(r.dialRequest,null);
+ r=makeRace();a=r.showDial('central');await r.showDial('movement');pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
+ r=makeRace();a=r.showDial('central');pending.shift().reject(Error('offline'));await a;assert.equal(r.state.presentation,'movement');assert.ok(r.dialError);assert.equal(r.dialRequest.view,'central');
+ a=r.showDial('small','small','broad-lance');pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'back');assert.equal(r.state.smallStyle,'broad-lance');assert.equal(r.dialError,'');
+ r=makeRace();a=r.showDial('central');pending.shift().reject(Error('offline'));await a;b=r.retryDials();pending.shift().resolve({scene:{}});await b;assert.equal(r.state.side,'front');assert.equal(r.dialError,'');
+ r=makeRace();a=r.showDial('central');r.patch({quality:'low',treatment:'function'});pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.quality,'low');assert.equal(r.state.treatment,'function');
+ r=makeRace();a=r.showDial('central');r.cameraGeneration++;pending.shift().resolve({scene:{}});await a;assert.equal(r.framings,undefined,'Manual camera input during load owns camera');
+ r=makeRace();a=r.showDial('central');r.dead=true;pending.shift().resolve({scene:{}});await a;assert.equal(disposed,1);assert.equal(r.state.presentation,'movement');
+ r=makeRace();a=r.showDial('central');b=r.select(raw);pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.part,raw);assert.equal(r.state.presentation,'movement');
+ r=makeRace();a=r.select(raw);b=r.showDial('small');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.part,null);assert.equal(r.state.presentation,'dials');
+ results.push({check:'actual async controller: shared single catalog request, latest face/style wins, reset/movement cancellation, failure/retry/new intent, manual takeover, disposal, competing raw selection',status:'pass'});
+ // Verify XCAF-derived checks came from the exact protected STEP.
+ const fit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-cad/source-fit.json'));
+ assert.equal(fit.sourceSha256,DIALS.source.sha256);
+ assert.equal(Object.values(fit.checks).length,50);assert.ok(Object.values(fit.checks).every(Boolean));
+}

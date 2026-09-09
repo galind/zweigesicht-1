@@ -15,3 +15,17 @@ test('interrupted reveal starts from current state and converges',()=>{
 test('invalid states are normalized and isolation needs a selected part',()=>{
  const s=resolveState(initialState,{separation:Infinity,reveal:4,isolated:true});assert.equal(s.separation,0);assert.equal(s.reveal,1);assert.equal(s.isolated,false);
 });
+test('dial defaults and independent preferences normalize unknown style IDs',()=>{
+ const s=resolveState(initialState,{presentation:'dials',phase:'whole',side:'front',centralStyle:'open-lance',smallStyle:'pear'});
+ assert.equal(s.presentation,'dials');assert.equal(s.centralStyle,'open-lance');assert.equal(s.smallStyle,'pear');
+ const small=resolveState(s,{side:'back',smallStyle:'broad-lance'});assert.equal(small.centralStyle,'open-lance');
+ const invalid=resolveState(small,{centralStyle:'lance',smallStyle:'obsolete'});assert.equal(invalid.centralStyle,'fine');assert.equal(invalid.smallStyle,'lance');
+});
+test('movement inspection temporarily hides dials and retains preferences',()=>{
+ const s=resolveState(initialState,{presentation:'dials',centralStyle:'open-lance',smallStyle:'pear'});
+ for(const patch of [{layout:'spread'},{group:'energy'},{separation:.1},{partSpread:.1},{reveal:.3}]){
+ const next=resolveState(s,patch);assert.equal(next.presentation,'movement');assert.equal(next.centralStyle,'open-lance');assert.equal(next.smallStyle,'pear');
+ }
+ assert.equal(resolveState(s,{part:'catalog-part',isolated:true}).presentation,'dials');
+ assert.equal(initialState.presentation,'movement');assert.equal(initialState.centralStyle,'fine');assert.equal(initialState.smallStyle,'lance');
+});
