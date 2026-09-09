@@ -4,7 +4,7 @@ Implement this brief in `/Users/guillemgalindo/projects/marco-lang` when the use
 
 ## Outcome
 
-The user is very happy with the current website. Refine its loading experience, wording, labels, icons, and small interaction details while preserving the accepted composition and model. Keep the single-screen experience, neutral charcoal background, restrained typography, prominent movement, compact controls, and optional exploration. The user hates emojis: use none anywhere in the visitor interface.
+The user is very happy with the current website. Refine its loading experience, wording, labels, icons, and interaction details while preserving the accepted composition and model. Give explosion, the All parts arrangement, and especially their transitions a dedicated review and refinement pass. Keep the single-screen experience, neutral charcoal background, restrained typography, prominent movement, compact controls, and optional exploration. The user hates emojis: use none anywhere in the visitor interface.
 
 Complete and verify the local implementation. Make routine design decisions autonomously within this direction. Avoid expanding this task into another redesign or a new feature programme.
 
@@ -20,7 +20,9 @@ Reviewed on 9 September 2026: the local 1280×720 opening, Options, source catal
 - The interface mixes text arrows, a circular arrow, a full-width plus, a return-arrow glyph, and existing SVG controls. Several internal actions use the same outward arrow as external source links. Most observed symbols are text glyphs rather than colorful emoji, but they still need consistent rendering and meaning.
 - Generic part descriptions such as “An individual component of the source construction” add little. Some specification fragments, for example “Movement function · seconds stop”, need more natural phrasing.
 
-Starting points: `explorer/app/page.tsx`, `explorer/app/globals.css`, `explorer/src/experience/catalog.ts`, `explorer/src/experience/copy.ts`, `explorer/src/viewer/MovementViewer.ts`, and authored mechanism copy in `assets/authored/mechanisms.json`.
+Follow-up source inspection: All parts currently packs rotated geometry bounds into mechanism/structural/hardware blocks on a fixed three-column arrangement. Entry retargets component positions and orientations while the camera moves toward the final spread framing. Whole-movement explosion uses layer offsets; section separation adds depth and radial offsets. These are starting mechanisms to evaluate in motion, not newly verified visual defects. Existing endpoint and interruption regressions do not establish whether the journey feels coherent or beautiful.
+
+Starting points: `explorer/app/page.tsx`, `explorer/app/globals.css`, `explorer/src/experience/catalog.ts`, `explorer/src/experience/copy.ts`, `explorer/src/experience/spread.ts`, `explorer/src/viewer/MovementViewer.ts`, and authored mechanism copy in `assets/authored/mechanisms.json`.
 
 ## 1. Loading and recovery
 
@@ -67,9 +69,25 @@ Polish spacing, text wrapping, control alignment, hover/pressed/disabled states,
 
 Check Options-to-catalog/About nesting, Escape, close actions, and focus restoration. Ensure source search has clear results and empty states. Inspect long component names and repeated hardware. Make labels accurate in assembled, separated, section, selected, isolated, and All parts states. Preserve direct manipulation and accessible alternatives. Make only local layout adjustments needed to support the polish.
 
+## 5. Explosion, All parts composition, and transitions
+
+Treat this as a central part of the polish. Review how the movement comes apart, how individual pieces arrive in their arranged positions, and how the assembly comes back together. Inspect the entire journey in the live browser before deciding what to change. Preserve effective behavior and improve concrete weaknesses in clarity, responsiveness, and visual rhythm.
+
+For continuous explosion, examine whole-movement layers and each section's separation from several camera angles and both sides. Check slow scrubbing, fast dragging, immediate reversal, and intermediate positions. Assess whether the slider feels directly connected to the movement, whether related pieces remain visually connected, and whether spacing exposes useful construction detail. Refine offsets, framing, and interpolation where needed. Avoid lagging motion, unnecessary travel, sudden visibility changes, or a camera that keeps readjusting against user input.
+
+For the All parts composition, assess group hierarchy, spacing, orientations, balance between major components and tiny hardware, and the usefulness of overview and close-up views. Investigate whether the fixed three-column arrangement serves narrow portrait and landscape screens. Layout changes are allowed when they demonstrably improve inspection. Preserve all 216 eligible physical leaves, original relative scale, reliable identity, deterministic placement, and no unintended settled overlap. Never enlarge tiny parts independently or omit awkward pieces to improve the composition.
+
+For entry and return, evaluate timing, easing, translation, rotation, and camera travel together. Visitors should be able to follow representative pieces from their assembled position to their place in the spread and back. Watch for crossing trajectories that become visually chaotic, excessive spins, abrupt zoom-outs, clipping during travel, and an overly long easing tail. Consider restrained staging by related groups or coordinated camera/part timing only if it improves the observed result; do not require a cinematic sequence or impose delays on direct manipulation. These are authored presentation paths, not validated physical disassembly or collision-free service procedures.
+
+Start every retarget from the current displayed pose. Exercise All parts from a partially exploded movement, an oblique camera, either side, a focused section, and selected/isolated states. Reverse or change destination midway. Back must restore its prior context, Reassemble its defined assembled state, and Reset the complete default. Switching between orbit and pan must feel predictable. Manual camera input must immediately take control without a later snap to an obsolete destination. Keep selection, visibility, and labels synchronized with the visible transition.
+
+Keep one owner of presentation transforms so explosion, reveal, and arranged layout never compete. Preserve immutable source placements and exact restoration after repeated interruption. Respect reduced motion with a clear immediate or minimal-motion state change. Do not introduce mechanical playback, elastic bouncing, gratuitous staggering, or extra 3D effects.
+
+Record matched before/after short clips when supported, or timestamped frame sequences, for explosion scrubbing and reversal, assembly-to-All-parts-and-back, and interrupted transitions. Include representative large components, long shafts, and tiny fittings. Compare candidate motion at normal viewing speed as well as intermediate frames; endpoint screenshots alone are insufficient. Record concrete reasons for the accepted timing/layout choices.
+
 ## Protected baseline and scope
 
-Preserve source geometry, scale, IDs, immutable assembly matrices, accepted materials and lighting, all surface annotations, the recovered diamond, provenance, and the verified 216-member All parts layout. Keep the watch mechanically static. Preserve all six mechanisms, both sides, continuous separation, reveal, selection/isolation, Back, Reset, optional catalog, and exact reassembly. Reuse the current architecture and validation tools.
+Preserve source geometry, scale, IDs, immutable assembly matrices, accepted materials and lighting, all surface annotations, the recovered diamond, provenance, and verified 216-member All parts membership. Presentation offsets, arranged positions/orientations, camera paths, and transition timing may be refined under section 5, with regression evidence. Keep the watch mechanically static. Preserve all six mechanisms, both sides, continuous separation, reveal, selection/isolation, Back, Reset, optional catalog, and exact reassembly. Reuse the current architecture and validation tools.
 
 No CAD re-export, retessellation, appearance re-audit, new mechanism simulation, or unrelated dependency migration. Keep the user-owned `FINISHING_GOAL.md` untouched.
 
@@ -83,4 +101,6 @@ Verify cold and cached entry, slow delivery, absent transfer totals, initial ass
 
 Run the existing applicable state, actual-asset/runtime, and browser regression checks plus TypeScript, authored lint, and production build. Add focused regression coverage for substantive loading/state or label-search failures introduced or fixed here; avoid tests that merely mirror literal copy. Confirm exact reassembly, stable resource counts, and idle rendering after any lifecycle change. Record whether loading bytes and time changed under equivalent conditions.
 
-Finish with the working local preview, a concise account of improvements, the before/after copy table, visual evidence, verification results, and honest remaining limitations. Complete the polish rather than stopping at an audit. Do not create another goal, task, or schedule automatically.
+For changed layouts or motion, extend the existing actual-asset and browser checks to cover at least 20 mixed interrupted explosion/reveal/All parts/selection/Back/Reset sequences. Confirm exact restoration, membership, scale, settled projected overlap/clipping, stable resources, and zero idle rendering. Compare responsiveness and frame timing under equivalent conditions. Inspect transition continuity separately from numeric endpoint checks, including phone viewports and reduced motion.
+
+Finish with the working local preview, a concise account of improvements, the before/after copy table, motion/layout decisions and evidence, visual evidence, verification results, and honest remaining limitations. Complete the polish rather than stopping at an audit. Do not create another goal, task, or schedule automatically.

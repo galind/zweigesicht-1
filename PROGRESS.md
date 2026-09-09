@@ -2,6 +2,8 @@
 
 ## Interface polish brief — 9 September 2026
 
+Follow-up: the user also requested attention to explosion, the arranged parts layout, and especially their transitions. Extended the brief with a dedicated motion/composition pass: continuous slider response, related-part grouping, camera/part coordination, entry from existing exploration states, interruption/reversal, responsive layout, and motion evidence. Presentation layout and timing may now be refined; the 216-member membership, source scale/geometry/placements, accepted appearance, and exact reassembly remain protected. This extension inspected source behavior only and makes no new live motion-quality claim.
+
 The user is happy with the current website and requested evaluation plus a prompt for a future goal. Prepared `WEBSITE_POLISH_PROMPT.md` covering a matching loading/fallback presentation, honest loading stages, clearer control and component labels, searchable readable catalog names, no emojis and consistent SVG icons, and focused interaction/accessibility polish. The accepted composition, model, materials, lighting, static behavior, and All parts layout are protected.
 
 Preparation reviewed the live local opening, Options, source catalog, and forced no-3D fallback at 1280×720, observed loading status during navigation, and inspected related source. The fallback visibly uses an older gray render on a contrasting rectangular background; progress currently measures only the overview transfer. Mobile, throttled networking, recovery, performance, and the full regression suite were not re-run for this documentation-only task. No application or asset changes, goal creation, push, or deployment occurred. The user-owned `FINISHING_GOAL.md` remains untouched.
