@@ -47,6 +47,14 @@ import {
 } from '../experience/loading';
 
 type RenderPart = {
+  dialFade?: {
+    from: number;
+    to: number;
+    elapsed: number;
+    opacity: number;
+    transparent: boolean;
+    depthWrite: boolean;
+  };
   motion?: {
     offset: THREE.Vector3;
     rotation: THREE.Quaternion;
@@ -1275,6 +1283,7 @@ export class MovementViewer {
       await this.select(retry.id);
   }
   retarget() {
+    const previousFitted = this.fitted;
     this.fitted = fittedLeaves(this.state);
     if (this.controls) {
       const spread = this.state.layout === 'spread';
@@ -1333,8 +1342,19 @@ export class MovementViewer {
         selected = !!selection && belongs(id, selection),
         member = !!group && inMembers(id, group.members),
         context = !!group && inMembers(id, group.context);
+      this.retargetDialFade(
+        p,
+        !!previousFitted?.has(id),
+        this.fitted.has(id),
+        !this.reduced &&
+          this.state.presentation === 'dials' &&
+          this.state.layout === 'assembly' &&
+          !selection &&
+          !group,
+      );
       p.displayMatrix =
-        this.fitted.has(id) && !(selection && !belongs(selection, ROOT))
+        (this.fitted.has(id) || !!p.dialFade) &&
+        !(selection && !belongs(selection, ROOT))
           ? handDisplayMatrix(id, p.assembled)
           : undefined;
       p.targetRotation.identity();
@@ -1361,7 +1381,8 @@ export class MovementViewer {
       ) {
         const enamel = p.material as THREE.MeshPhysicalMaterial;
         const fitted =
-          this.fitted.has(id) && !(selection && !belongs(selection, ROOT));
+          (this.fitted.has(id) || !!p.dialFade) &&
+          !(selection && !belongs(selection, ROOT));
         enamel.color.setHex(fitted ? 0x143a69 : finish.color);
         enamel.transmission = fitted ? 0.3 : 0;
         enamel.ior = 1.5;
@@ -1392,6 +1413,57 @@ export class MovementViewer {
     }
     this.needsRender = true;
   }
+  restoreDialOpacity(p: RenderPart) {
+    const fade = p.dialFade;
+    if (!fade) return;
+    p.material.opacity = fade.opacity;
+    p.material.transparent = fade.transparent;
+    p.material.depthWrite = fade.depthWrite;
+    p.material.needsUpdate = true;
+    p.mesh.userData.dialFading = false;
+    p.dialFade = undefined;
+  }
+  retargetDialFade(
+    p: RenderPart,
+    wasFitted: boolean,
+    fitted: boolean,
+    animate: boolean,
+  ) {
+    if (!animate) {
+      this.restoreDialOpacity(p);
+      return;
+    }
+    if (wasFitted === fitted) return;
+    if (!fitted && !p.mesh.visible && !p.dialFade) return;
+    const previous = p.dialFade;
+    const opacity = previous?.opacity ?? p.material.opacity;
+    p.dialFade = {
+      from: previous ? p.material.opacity / opacity : wasFitted ? 1 : 0,
+      to: fitted ? 1 : 0,
+      elapsed: 0,
+      opacity,
+      transparent: previous?.transparent ?? p.material.transparent,
+      depthWrite: previous?.depthWrite ?? p.material.depthWrite,
+    };
+    p.material.opacity = opacity * p.dialFade.from;
+    p.material.transparent = true;
+    p.material.depthWrite = false;
+    p.material.needsUpdate = true;
+    p.mesh.userData.dialFading = true;
+  }
+  applyDialFade(p: RenderPart, dt: number) {
+    const fade = p.dialFade;
+    if (!fade) return false;
+    fade.elapsed += Math.max(0, dt);
+    const t = this.reduced ? 1 : Math.min(1, fade.elapsed / 0.42);
+    const eased = t * t * (3 - 2 * t);
+    p.material.opacity =
+      fade.opacity * THREE.MathUtils.lerp(fade.from, fade.to, eased);
+    if (t < 1) return true;
+    if (!fade.to) p.displayMatrix = undefined;
+    this.restoreDialOpacity(p);
+    return false;
+  }
   applyPose(dt: number) {
     let moving = false;
     const temp = new THREE.Matrix4();
@@ -1413,6 +1485,7 @@ export class MovementViewer {
       if (!moving) this.explosionTravel = undefined;
     }
     for (const p of this.renderParts.values()) {
+      moving = this.applyDialFade(p, dt) || moving;
       if (staged) {
         p.motion = undefined;
         p.offset.fromArray(staged.get(p.source.id) ?? [0, 0, 0]);
@@ -1528,7 +1601,7 @@ export class MovementViewer {
     );
     const hits = this.raycaster.intersectObjects(
       [...this.renderParts.values()]
-        .filter((p) => p.mesh.visible)
+        .filter((p) => p.mesh.visible && p.dialFade?.to !== 0)
         .map((p) => p.mesh),
       false,
     );
@@ -1757,7 +1830,9 @@ export class MovementViewer {
     // A raw external selection replaces fitted display overlays until Back.
     const raw = !!selection && !belongs(selection, ROOT);
     let visible =
-      belongs(id, ROOT) || selected || (!raw && !!this.fitted?.has(id));
+      belongs(id, ROOT) ||
+      selected ||
+      (!raw && (!!this.fitted?.has(id) || !!p.dialFade));
     if (id === PREFIX + '66' && !selected) visible = false;
     if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
     const group = GROUPS.find((g) => g.id === this.state.group);

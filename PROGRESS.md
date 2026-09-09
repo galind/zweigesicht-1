@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Dial crossfade — verified locally, 10 September 2026
+
+Added the requested **420 ms eased fade** to dial and hand-style changes. Outgoing displays retain their fitted 10:10 pose and materials while fading; incoming leaves fade in. Reversals continue from current opacity. The fade finishes independently of camera gestures, skips under reduced motion, and clears for raw inspection, mechanisms, All parts or Reset. Settled displays remain exclusive. Outgoing leaves cannot be picked, and fading meshes cannot cast opaque contact-depth silhouettes. Original material opacity/transparency/depth behavior returns at completion; accepted finishes, geometry, hand poses and the calmer turnover are preserved.
+
+**63 CPU/source checks**, **seven state tests**, TypeScript, authored lint and production build pass. Actual browser captures and **25 cold desktop / 24 warm portrait dial checks** at **1280×720 / 390×844** verify both fade directions, every hand style, recovery, camera ownership, exact material restoration, resource reuse and idle behavior. CPU evidence also covers continuous reversal, outgoing hand matrices, reduced motion, inventory cleanup and contact-pass failure restoration.
+
+All **eight portrait separation browser checks** also pass. Review: `docs/DIAL_AND_HANDS_REVIEW.md`. Ignored recordings/results: `artifacts/browser/dial-fade/`. Next action: user review of the softer dial transition at **http://127.0.0.1:4173/**. Preview remains running. Local milestone only; no push, merge or deployment. `FINISHING_GOAL.md` remains untouched and untracked.
+
 ## Calmer dial turnover — verified locally, 10 September 2026
 
 Responded to user feedback about the excessive dial-switch animation. The camera now rotates its complete viewing frame together when changing up direction, giving Dial A ↔ Dial B one level turnover instead of competing direction/roll arcs. Dial travel is eased over **1.05 seconds**; framing endpoints, safe radius, continuous interruption, resize rebasing and reduced motion are preserved. Accepted materials, exclusive faces, six 10:10 poses, complete separation and All parts remain intact.

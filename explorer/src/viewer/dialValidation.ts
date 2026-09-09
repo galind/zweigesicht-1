@@ -72,6 +72,9 @@ export async function runDialChecks(v: MovementViewer) {
       );
     }
   for (const face of ['central', 'small'] as const) {
+    const outgoing = new Set(v.fitted);
+    let outgoingFadeFrames = 0,
+      incomingFadeFrames = 0;
     const initialRight = new THREE.Vector3(1, 0, 0).applyQuaternion(
       v.camera.quaternion,
     );
@@ -83,6 +86,16 @@ export async function runDialChecks(v: MovementViewer) {
     v.inspectionFrame = (_now, rendered) => {
       if (!rendered) return;
       frames++;
+      for (const p of v.renderParts.values()) {
+        if (
+          p.mesh.visible &&
+          p.material.opacity > 0 &&
+          p.material.opacity < 1
+        ) {
+          if (outgoing.has(p.source.id)) outgoingFadeFrames++;
+          else if (v.fitted.has(p.source.id)) incomingFadeFrames++;
+        }
+      }
       angularTravel += previous.angleTo(v.camera.quaternion);
       previous.copy(v.camera.quaternion);
       maxRightDrift = Math.max(
@@ -120,6 +133,22 @@ export async function runDialChecks(v: MovementViewer) {
         maxRightDrift < 0.1 &&
         maxNdc < 1,
       { frames, angularTravel, maxRightDrift, maxNdc },
+    );
+    check(
+      face +
+        ' fades both displays and restores opaque materials with no outgoing leaves',
+      outgoingFadeFrames > 0 &&
+        incomingFadeFrames > 0 &&
+        [...v.renderParts.values()].every(
+          (p) =>
+            !p.dialFade &&
+            !p.mesh.userData.dialFading &&
+            p.material.opacity === 1 &&
+            !p.material.transparent &&
+            p.material.depthWrite &&
+            (!outgoing.has(p.source.id) || !p.mesh.visible),
+        ),
+      { outgoingFadeFrames, incomingFadeFrames },
     );
   }
   const warmed = v.stats();

@@ -41,10 +41,18 @@ export class SurfaceOcclusion {
       override = this.pass.scene.overrideMaterial,
       visibility: [THREE.Object3D, boolean][] = [];
     this.pass.scene.traverse((object) => {
-      if (object instanceof THREE.Line || object instanceof THREE.Points)
+      if (
+        object instanceof THREE.Line ||
+        object instanceof THREE.Points ||
+        object.userData.dialFading
+      )
         visibility.push([object, object.visible]);
     });
     try {
+      // The override normal material cannot represent alpha. Exclude fading
+      // dials from contact depth so they cannot leave an opaque ghost silhouette.
+      for (const [object] of visibility)
+        if (object.userData.dialFading) object.visible = false;
       this.pass.render(
         renderer,
         this.pass.ssaoRenderTarget,
@@ -66,6 +74,8 @@ export class SurfaceOcclusion {
       renderer.autoClear = autoClear;
       renderer.setClearColor(clearColor, clearAlpha);
       throw error;
+    } finally {
+      for (const [object, visible] of visibility) object.visible = visible;
     }
   }
   dispose() {

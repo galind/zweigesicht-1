@@ -2,6 +2,16 @@
 
 9 September 2026. Local-only implementation of `DIAL_AND_HANDS_PLAN.md`, extending the accepted static explorer. Preview: **http://127.0.0.1:4173/**.
 
+## Dial crossfade — 10 September 2026
+
+Follow-up user feedback requested a fade instead of instantly hiding the unselected display. Dial and hand-style changes now ease opacity over **420 ms** during the existing turnover. Outgoing hands retain their reviewed 10:10 fitted matrices and enamel retains its fitted appearance until hidden. Incoming leaves fade in; unchanged leaves stay opaque. Rapid reversal begins at the current opacity, and the fade completes independently of interrupted camera travel. Reduced motion skips it. Raw selection, mechanisms, All parts and Reset cancel it and restore the original opacity, transparency and depth-writing properties.
+
+Both displays can briefly be visible during this transition; settled visibility remains exclusive. Outgoing leaves cannot be picked. Fading leaves are omitted from the contact-depth override so transparent dials cannot cast a solid ghost silhouette, and beauty visibility is restored even if that pass fails. No material profiles, source transforms or hand poses are edited. Actual rendered captures are under ignored `artifacts/browser/dial-fade/`, repeatable via `?inspect` → **Record dials**.
+
+Verified **63 CPU/source checks**, seven state tests, TypeScript, authored lint and production build. Browser suites pass **25 cold desktop / 24 warm portrait dial checks** at **1280×720 / 390×844**, including partial outgoing/incoming opacity on real rendered frames, exclusive settled leaves, exact material restoration, all six hand styles, Back/Reset, recovery, camera ownership, stable resources and zero idle redraws. CPU checks cover midpoint opacity, unchanged outgoing fitted matrices, rapid reversal continuity, camera-independent completion, All parts cancellation, reduced motion and contact-pass failure cleanup.
+
+All eight complete-separation browser checks also pass in the portrait viewport.
+
 ## Calmer dial turnover — 10 September 2026
 
 User feedback requested a calmer transition that still makes the reversed faces obvious. The camera now interpolates its viewing frame as one rotation when its up direction changes, replacing the independent view/up arcs that produced a sideways tumble. Dial framing takes 1.05 seconds with eased starts and stops; the two endpoints and their framing remain unchanged. The watch passes through a level edge-on view. Radius remains safe, interrupted turns start from the displayed orientation, resizing rebases the up vector too, and reduced motion still lands immediately. Ordinary travel with an unchanged up vector retains its existing path.

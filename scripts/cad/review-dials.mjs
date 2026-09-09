@@ -90,6 +90,27 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    assert.ok(new THREE.Vector3(0,1,0).applyQuaternion(controller.controls._quatInverse).distanceTo(up)<1e-12);
  }
  results.push({check:'style changes retain camera; Back restores dials after section/separation/spread/raw isolation; exact blue override reverts to raw red; Reset defaults',status:'pass'});
+ controller.reduced=false;
+ await controller.showDial('central');controller.applyPose(1);controller.retargetVisibility();
+ const outgoing=[...controller.fitted];
+ const fittedMatrices=new Map(outgoing.map(id=>[id,controller.renderParts.get(id).mesh.matrix.clone()]));
+ await controller.showDial('small');controller.applyPose(0);controller.retargetVisibility();
+ for(const id of outgoing){const p=controller.renderParts.get(id);assert.ok(p.mesh.visible);assert.equal(p.material.opacity,1);assert.ok(p.mesh.matrix.equals(fittedMatrices.get(id)),'Outgoing hands keep their 10:10 pose');}
+ controller.applyPose(.21);controller.retargetVisibility();
+ for(const id of outgoing)assert.ok(Math.abs(controller.renderParts.get(id).material.opacity-.5)<1e-12);
+ const halfOpacity=controller.renderParts.get(outgoing[0]).material.opacity;
+ await controller.showDial('central');controller.applyPose(0);
+ assert.equal(controller.renderParts.get(outgoing[0]).material.opacity,halfOpacity,'Rapid reversal continues from displayed opacity');
+ controller.travel=null;
+ controller.applyPose(1);controller.retargetVisibility();
+ assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite));
+ await controller.showDial('small');controller.applyPose(.1);controller.allParts();controller.applyPose(1);controller.retargetVisibility();
+ assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&!p.mesh.userData.dialFading&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite));
+ assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,216);
+ controller.reduced=true;await controller.showDial('central');controller.applyPose(0);controller.retargetVisibility();
+ assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade));
+ controller.reset();controller.applyPose(0);controller.retargetVisibility();
+ results.push({check:'dial fade keeps outgoing 10:10 matrices, interpolates opacity, reverses continuously, completes without camera travel and clears for inventory/reduced motion',status:'pass'});
  let pending=[],loads=0,disposed=0;
  class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
  const {MovementViewer:Race}=sourceModules({loader:Loader})('explorer/src/viewer/MovementViewer.ts');
