@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Separation style comparison — ready for user review, 9 September 2026
+
+Added an opt-in local comparison at **http://127.0.0.1:4173/?compare=explode**: Current, Axial layers, Assembly islands and Guided reveal. Open/Close controls compare full animations; the existing slider scrubs each study. Axial layers keeps mounting alignment with larger depth spacing and an oblique camera; islands parks coherent packets around the fixed plate; guided reveals those packets over seven sequential beats. Fasteners stay with hosts in the alternatives. Faster opening framing and delayed closing zoom prevent clipping. Current remains the standard URL default; no replacement direction has been selected.
+
+Verified **63 CPU/source checks**, **six state tests**, TypeScript, authored lint and production build. Actual opening/closing frames for all three alternatives pass at **1280×800** and **390×844**: maximum .847458 NDC, exact zero reassembly error. Existing **21 dial** and **12 movement** browser checks also pass. Source assets, accepted finishes, six 10:10 styles and All parts packing remain unchanged. Direct desktop and portrait visual review completed; portrait has no horizontal overflow. The new parking/spacing is a visual study, not an independently reviewed service path.
+
+Details: [EXPLOSION_STYLE_STUDIES.md](docs/EXPLOSION_STYLE_STUDIES.md). Evidence: ignored `artifacts/browser/explode-styles/`. Next action: user compares composition and pacing; provisional recommendation is Axial layers for Separate and Guided reveal for an explanatory sequence. Restored the loopback preview after the previous process stopped; it remains running on port 4173. Local checkpoint only; no push, merge or deployment. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Construction explosion — completed and verified locally, 9 September 2026
 
 Implemented `EXPLODE_GOAL.md` in local checkpoint **a8fbcc2**, followed by this final verification record. Separate now stages all 49 screw releases along original mounted axes, retains 21 coherent hosts covering all 223 source leaves, preserves pressed/delicate assemblies, and uses a verified winding release sequence. Whole/focused motion shares one immutable-source evaluator; direct reversal, framing, picking, isolation, camera ownership, All parts and fitted 10:10 displays remain intact.
