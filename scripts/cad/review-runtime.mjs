@@ -213,16 +213,13 @@ const anisotropicPart=[...v.renderParts.values()].find(p=>p.material.anisotropy>
 assert.ok(rubyPart&&anisotropicPart);
 assert.equal(rubyPart.material.transmission,.55);
 const anisotropicVersion=anisotropicPart.material.version;
-v.state={...initialState,treatment:'function'};v.retarget();
-for(const p of v.renderParts.values()){
- assert.equal(p.material.userData.finishEnabled.value,0);
- if(['ruby','shockMass'].includes(p.material.name))assert.equal(p.material.transmission,0);
-}
-assert.equal(anisotropicPart.material.version,anisotropicVersion,'Function anisotropy gating must not change shader program version');
-v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
+v.patch({treatment:'function'});
+assert.equal('treatment' in v.state,false);
+for(const p of v.renderParts.values()) assert.equal(p.material.userData.finishEnabled.value,1);
+assert.equal(anisotropicPart.material.version,anisotropicVersion,'Legacy appearance input must preserve shader programs');
 const rubyFinishColor=rubyPart.material.color.clone();
 v.state={...initialState,part:rubyPart.source.id,isolated:true};v.retarget();assert.equal(rubyPart.material.transmission,.55);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
-v.state={...initialState,treatment:'function',part:rubyPart.source.id};v.retarget();assert.equal(rubyPart.material.transmission,0);assert.ok(rubyPart.material.color.equals(new THREE.Color('#f5cf88')));
+v.patch({treatment:'function'});assert.equal(rubyPart.material.transmission,.55);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
 v.state={...initialState,group:'energy'};v.retarget();assert.equal(rubyPart.material.transmission,rubyPart.material.userData.finishEnabled.value ? .55 : 0);
 v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
 const {finishFor,createMaterial,setFinishEnabled}=load('explorer/src/viewer/materials.ts');
@@ -544,8 +541,20 @@ pending[idx].reject(Error('Optional catalog unavailable'));await failedSelection
 assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalogFixture.catalogPending,null);assert.ok(catalogFixture.detailError);
 idx=pending.length;const obsoleteSelection=catalogFixture.select(externalParts[1].id);
 catalogFixture.patch({treatment:'function'});pending[idx].resolve({scene:{}});await obsoleteSelection;
-assert.equal(catalogFixture.state.part,null);assert.equal(catalogFixture.state.treatment,'function');assert.equal(catalogFixture.saves,0);assert.equal(catalogFixture.catalogLoaded,true);
+assert.equal(catalogFixture.state.part,null);assert.equal('treatment' in catalogFixture.state,false);assert.equal(catalogFixture.saves,0);assert.equal(catalogFixture.catalogLoaded,true);
 results.push({check:'optional catalog failure preserves pose/state/history; retry succeeds and intervening navigation cancels obsolete selection',status:'pass'});
+// Background dismissal cancels successful, failing and retrying optional selections.
+for (const fails of [false,true]) {
+ catalogFixture.catalogLoaded=false;idx=pending.length;
+ const pendingSelection=catalogFixture.select(externalParts[1].id);
+ const stateBefore={...catalogFixture.state},savesBefore=catalogFixture.saves;
+ catalogFixture.deselect();
+ if(fails)pending[idx].reject(Error('Dismissed request'));else pending[idx].resolve({scene:{}});
+ await pendingSelection;
+ assert.equal(JSON.stringify(catalogFixture.state),JSON.stringify(stateBefore));assert.equal(catalogFixture.saves,savesBefore);
+ assert.equal(catalogFixture.catalogRetry,undefined);assert.equal(catalogFixture.detailError,'');
+}
+results.push({check:'empty-space dismissal invalidates pending selection success/failure without adding history or stale retry',status:'pass'});
 catalogFixture.catalogLoaded=false;idx=pending.length;const secondFailure=catalogFixture.select(externalParts[2].id);
 pending[idx].reject(Error('Retry fixture'));await secondFailure;
 idx=pending.length;const targetedRetry=catalogFixture.retryCatalog();pending[idx].resolve({scene:{}});await targetedRetry;
@@ -624,7 +633,7 @@ assert.ok(placed.assembled.equals(new THREE.Matrix4().set(...sourceGem.worldTran
 assert.ok(placed.center.distanceTo(new THREE.Vector3(0,-9.999833239,-5.220654917))<.01);
 v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(placed.mesh.visible,true);assert.equal(placed.material.transmission,.92);
 v.state={...initialState,part:recovery.DIAMOND_ID,isolated:true};v.retarget();assert.equal(placed.mesh.visible,true);
-v.state={...initialState,treatment:'function'};v.retarget();assert.equal(placed.material.transmission,0);
+v.patch({treatment:'function'});assert.equal(placed.material.transmission,.92);
 v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError(),0);
 await assert.rejects(()=>recovery.loadRecoveredDiamond([]),/empty source record/);
 const badRecovery=sourceModules({fetchImpl:async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(84)})})('explorer/src/viewer/RecoveredDiamond.ts');
@@ -695,7 +704,7 @@ for(let i=0;i<24;i++) {
  await v.select(recovery.DIAMOND_ID);v.patch({isolated:true});v.applyPose(.01);v.back();
  v.reset();for(let n=0;n<260;n++)v.applyPose(1/60);v.retargetVisibility();
  assert.equal(v.assemblyError(),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,222);
- assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,'back');assert.equal(v.state.treatment,'finish');assert.equal(v.history.length,0);assert.equal(v.state.part,null);
+ assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,'back');assert.equal('treatment' in v.state,false);assert.equal(v.history.length,0);assert.equal(v.state.part,null);
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
 results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
@@ -709,12 +718,12 @@ v.reset();v.applyPose(.85);assert.equal(v.assemblyError(),0);assert.ok([...v.ren
 results.push({check:'direct slider reversal starts from displayed pose and settles in 75 ms; camera ownership survives; interrupted layout returns exactly within bounded 850 ms',status:'pass'});
 // Source field handlers are extracted because CPU tests intentionally do not construct WebGL/DOM.
 const handlers={};
-for(const name of ['pointerDown','pointerMove','pointerCancel','pointerUp']){
+for(const name of ['pointerDown','pointerMove','pointerCancel','pointerUp','pointerWheel']){
  const field=viewerClass.members.find(m=>m.name?.getText(viewerSource)===name),module={exports:{}};
  const code=ts.transpileModule('module.exports=function(){return '+field.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
  vm.runInNewContext(code,{module,THREE});handlers[name]=module.exports;
 }
-let selections=0;const gesture={pointers:new Set(),pointer:{x:0,y:0,id:-1,cancelled:false},renderer:{domElement:{getBoundingClientRect(){return {left:0,top:0,width:100,height:100}}}},camera:v.camera,renderParts:new Map(),raycaster:{setFromCamera(){},intersectObjects(){return [{object:{userData:{partId:'fixture'}}}]}},select(){selections++}};
+let selections=0,dismissals=0;const gesture={pointers:new Set(),pointer:{x:0,y:0,id:-1,cancelled:false},renderer:{domElement:{getBoundingClientRect(){return {left:0,top:0,width:100,height:100}}}},camera:v.camera,renderParts:new Map(),raycaster:{setFromCamera(){},intersectObjects(){return [{object:{userData:{partId:'fixture'}}}]}},select(){selections++},deselect(){dismissals++}};
 for(const [name,handler]of Object.entries(handlers))gesture[name]=handler.call(gesture);
 const event=(id=1,x=10,y=10,extra={})=>({pointerId:id,clientX:x,clientY:y,button:0,isPrimary:id===1,...extra});
 const sequences=[
@@ -722,11 +731,16 @@ const sequences=[
  [['pointerDown',event()],['pointerDown',event(2)],['pointerUp',event()],['pointerUp',event(2)]],
  [['pointerDown',event()],['pointerDown',event(2)],['pointerUp',event(2)],['pointerUp',event()]],
  [['pointerDown',event()],['pointerCancel',event()],['pointerUp',event()]],
+ [['pointerDown',event()],['pointerWheel',{}],['pointerUp',event()]],
+ [['pointerDown',event(1,1,10)],['pointerUp',event(1,-1,10)]],
  [['pointerDown',event(1,10,10,{button:2})],['pointerUp',event(1,10,10,{button:2})]],
  [['pointerDown',event(1,10,10,{button:1})],['pointerUp',event(1,10,10,{button:1})]],
 ];
 for(const sequence of sequences){for(const [name,e]of sequence)gesture[name](e);assert.equal(selections,0);assert.equal(gesture.pointers.size,0);}
 gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(selections,1);
+gesture.raycaster.intersectObjects=()=>[];
+for(const sequence of sequences){for(const [name,e]of sequence)gesture[name](e);assert.equal(dismissals,0);}
+gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(dismissals,1);
 results.push({check:'out-and-back drags, pinch release orders, cancellation, right/middle clicks reject selection; deliberate tap selects exactly once',status:'pass',scope:'actual event handlers with CPU raycast fixture; browser/touch-emulation checked separately'});
 
 const {reviewExplosion}=await import('./review-explosion.mjs');

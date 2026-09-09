@@ -186,7 +186,7 @@ export class MovementViewer {
     host.appendChild(this.renderer.domElement);
     this.renderer.domElement.setAttribute(
       'aria-label',
-      'Movement; drag to orbit, pinch to zoom. Arrow keys move the view, plus and minus zoom, Home resets.',
+      'Movement; drag to orbit, pinch to zoom. Arrow keys move the view, plus and minus zoom, Home resets, Escape deselects.',
     );
     this.renderer.domElement.tabIndex = 0;
     this.renderer.domElement.addEventListener('keydown', this.keyDown);
@@ -221,6 +221,9 @@ export class MovementViewer {
     this.renderer.domElement.addEventListener('pointerdown', this.pointerDown);
     this.renderer.domElement.addEventListener('pointerup', this.pointerUp);
     this.renderer.domElement.addEventListener('pointermove', this.pointerMove);
+    this.renderer.domElement.addEventListener('wheel', this.pointerWheel, {
+      passive: true,
+    });
     this.renderer.domElement.addEventListener(
       'pointercancel',
       this.pointerCancel,
@@ -275,8 +278,7 @@ export class MovementViewer {
         .length,
       triangles: this.beautyTriangles ?? this.renderer.info.render.triangles,
       drawCalls: this.beautyDrawCalls ?? this.renderer.info.render.calls,
-      contactShading:
-        this.state.treatment === 'finish' && this.state.quality !== 'low',
+      contactShading: this.state.quality !== 'low',
       geometries: this.renderer.info.memory.geometries,
       textures: this.renderer.info.memory.textures,
       renderCount: this.renderCount,
@@ -656,6 +658,7 @@ export class MovementViewer {
     if (this.catalogLoaded) return;
     if (this.catalogPending) return this.catalogPending;
     const forDials = !!this.dialRequest;
+    const selectionRequest = this.selectionGeneration;
     this.detailError = '';
     this.status = this.dialRequest ? '' : 'Loading source catalog…';
     this.emit();
@@ -675,7 +678,11 @@ export class MovementViewer {
         this.emit();
       } catch (e) {
         this.status = '';
-        if (!this.dead && !forDials)
+        if (
+          !this.dead &&
+          !forDials &&
+          selectionRequest === this.selectionGeneration
+        )
           this.detailError =
             'Catalog geometry could not load. The movement is still available.';
         this.emit();
@@ -1237,6 +1244,29 @@ export class MovementViewer {
     this.retarget();
     this.emit();
   }
+  deselect() {
+    // Invalidate pending optional selections even when no part is displayed yet.
+    this.selectionGeneration++;
+    this.catalogRetry = undefined;
+    const hadError = !!this.detailError || !!this.status;
+    if (!this.dialRequest) this.status = '';
+    this.detailError = '';
+    if (!this.state.part) {
+      if (hadError) this.emit();
+      return;
+    }
+    // Freeze the displayed camera, including an interrupted selection close-up.
+    // This is not navigation: retain history, mode, reveal and inventory focus.
+    this.travel = null;
+    this.restoringCamera = null;
+    this.state = resolveState(this.state, {
+      part: null,
+      isolated: false,
+      phase: this.state.group ? 'mechanism' : 'whole',
+    });
+    this.retarget();
+    this.emit();
+  }
   async retryCatalog() {
     const retry = this.catalogRetry;
     await this.loadCatalog();
@@ -1250,8 +1280,8 @@ export class MovementViewer {
       this.renderer?.domElement?.setAttribute(
         'aria-label',
         spread
-          ? 'Parts spread; drag to pan, pinch to zoom. Arrow keys pan, plus and minus zoom, Home resets.'
-          : 'Movement; drag to orbit, pinch to zoom. Arrow keys orbit, plus and minus zoom, Home resets.',
+          ? 'Parts spread; drag to pan, pinch to zoom. Arrow keys pan, plus and minus zoom, Home resets, Escape deselects.'
+          : 'Movement; drag to orbit, pinch to zoom. Arrow keys orbit, plus and minus zoom, Home resets, Escape deselects.',
       );
       this.controls.enableRotate = !spread;
       this.controls.enablePan = spread;
@@ -1330,9 +1360,7 @@ export class MovementViewer {
       ) {
         const enamel = p.material as THREE.MeshPhysicalMaterial;
         const fitted =
-          this.state.treatment === 'finish' &&
-          this.fitted.has(id) &&
-          !(selection && !belongs(selection, ROOT));
+          this.fitted.has(id) && !(selection && !belongs(selection, ROOT));
         enamel.color.setHex(fitted ? 0x143a69 : finish.color);
         enamel.transmission = fitted ? 0.3 : 0;
         enamel.ior = 1.5;
@@ -1343,32 +1371,11 @@ export class MovementViewer {
         enamel.polygonOffsetFactor = -1;
         enamel.polygonOffsetUnits = -1;
       }
-      setFinishEnabled(
-        p.material,
-        this.state.treatment === 'finish' && (!group || member || selected),
-      );
-      if (this.state.treatment === 'function') {
-        p.material.metalness = 0.22;
-        p.material.roughness = 0.55;
-        p.material.color.set(
-          member
-            ? ['#deb776', '#8abfcf', '#bcaad9'][
-                Math.max(
-                  0,
-                  group!.members.findIndex((i) => belongs(id, PREFIX + i)),
-                ) % 3
-              ]
-            : '#6c808a',
-        );
-      }
+      setFinishEnabled(p.material, !group || member || selected);
       if (group && !member && !selected) {
         p.material.color.multiplyScalar(context ? 0.16 : 0.1);
         p.material.metalness = 0.05;
         p.material.roughness = 0.95;
-      }
-      if (selected && this.state.treatment === 'function') {
-        p.material.color.set('#f5cf88');
-        p.material.emissive.set('#493014');
       }
       if (
         !previousTarget.equals(p.target) ||
@@ -1454,7 +1461,11 @@ export class MovementViewer {
       ArrowUp: [0, -0.2],
       ArrowDown: [0, 0.2],
     };
-    if (moves[e.key]) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      this.deselect();
+    } else if (moves[e.key]) {
       e.preventDefault();
       this.orbit(...moves[e.key]);
     } else if (['+', '=', '-', 'Home'].includes(e.key)) {
@@ -1481,6 +1492,9 @@ export class MovementViewer {
     )
       this.pointer.cancelled = true;
   };
+  pointerWheel = () => {
+    this.pointer.cancelled = true;
+  };
   pointerCancel = (e: PointerEvent) => {
     this.pointers.delete(e.pointerId);
     this.pointer.cancelled = true;
@@ -1497,6 +1511,13 @@ export class MovementViewer {
       return;
     this.pointer.cancelled = true;
     const rect = this.renderer.domElement.getBoundingClientRect();
+    if (
+      e.clientX < rect.left ||
+      e.clientX > rect.left + rect.width ||
+      e.clientY < rect.top ||
+      e.clientY > rect.top + rect.height
+    )
+      return;
     this.raycaster.setFromCamera(
       new THREE.Vector2(
         ((e.clientX - rect.left) / rect.width) * 2 - 1,
@@ -1511,6 +1532,7 @@ export class MovementViewer {
       false,
     );
     if (hits[0]) void this.select(hits[0].object.userData.partId);
+    else this.deselect();
   };
   resize() {
     const w = this.host.clientWidth,
@@ -1670,7 +1692,7 @@ export class MovementViewer {
         this.renderer.render(this.scene, this.camera);
         this.beautyTriangles = this.renderer.info.render.triangles;
         this.beautyDrawCalls = this.renderer.info.render.calls;
-        if (this.state.treatment === 'finish' && this.state.quality !== 'low')
+        if (this.state.quality !== 'low')
           this.surfaceOcclusion?.render(this.renderer);
       } catch {
         this.ready = false;

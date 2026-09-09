@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## UX/UI polish — implementation milestone, 9 September 2026
+
+Implemented `UX_UI_POLISH_GOAL.md` on `codex/ux-ui-polish`: permanent Back/Reset/Options, fixed primary/view slots, compact contextual actions, consolidated Whole movement and Back routes, and no appearance selector or alternate-color state/renderer branches. Empty canvas clicks and Escape deselect and leave isolation without changing mode, camera, separation, dial preferences, inventory context or history. Gesture filters reject drag/pinch/cancel/non-primary buttons and wheel gestures; late optional-selection errors are also cancelled.
+
+60 CPU/source checks, seven state tests, TypeScript, authored lint and production build pass. Initial desktop browser pass: 27 UX, eight explosion, 20 warm-catalog dial and 12 movement checks pass. Direct 320px/200% text review caught and corrected label collisions; real empty-space click preserves camera/target exactly and focuses canvas. Desktop context now occupies the left margin to keep the watch prominent; phone controls remain anchored below the model. Final responsive and browser regression pass is ongoing after these visual refinements.
+
+Next action: finish 390px/320px/large-desktop/landscape, keyboard/overlay/loading checks; finalize `docs/UX_UI_POLISH_REVIEW.md` and local evidence under ignored `artifacts/browser/ux-ui-polish/`. Existing preview remains **http://127.0.0.1:4173/**. No push, merge, deployment or `FINISHING_GOAL.md` edit.
+
 ## UX/UI polish goal prepared — 9 September 2026
 
 Created `UX_UI_POLISH_GOAL.md` for a separate executing agent, per the user's clarification. It requires a real-browser audit across modes, stable control placement and simplified actions, materials as the only appearance, and safe empty-space deselection that preserves context/camera and rejects drag/pinch/UI clicks. It specifies protected finishes, dials/10:10, complete separation, inventory behavior, regression/visual verification and local-only milestones. This preparation changes documentation only; no website implementation was performed. Next action: launch the document with the executing agent. Unrelated `FINISHING_GOAL.md` remains untouched.

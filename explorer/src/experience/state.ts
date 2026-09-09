@@ -1,5 +1,4 @@
 import configurations from '../../../assets/authored/dial-configurations.json' with { type: 'json' };
-export type Treatment = 'finish' | 'function';
 export type Phase =
   | 'loading'
   | 'whole'
@@ -16,7 +15,6 @@ export interface ExperienceState {
   group: string | null;
   part: string | null;
   side: 'back' | 'front';
-  treatment: Treatment;
   separation: number;
   partSpread: number;
   reveal: number;
@@ -32,7 +30,6 @@ export const initialState: ExperienceState = {
   group: null,
   part: null,
   side: 'back',
-  treatment: 'finish',
   separation: 0,
   partSpread: 0,
   reveal: 0,

@@ -39,7 +39,6 @@ export function registerMovementTools(viewer: MovementViewer) {
       partSpread: s.partSpread,
       reveal: s.reveal,
       side: s.side,
-      treatment: s.treatment,
       error: s.error,
       stats: s.stats,
     };
@@ -123,7 +122,7 @@ export function registerMovementTools(viewer: MovementViewer) {
     {
       name: 'configure_movement',
       description:
-        'Select a mechanism, change reveal, separation, or treatment, or reset the local view. Updates the same visible explorer; no upload or publication.',
+        'Select a mechanism, change reveal or separation, dismiss selection, or reset the local view. Updates the same visible explorer; no upload or publication.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -139,7 +138,7 @@ export function registerMovementTools(viewer: MovementViewer) {
           separation: { type: 'number', minimum: 0, maximum: 1 },
           partSpread: { type: 'number', minimum: 0, maximum: 1 },
           side: { type: 'string', enum: ['front', 'back'] },
-          treatment: { type: 'string', enum: ['finish', 'function'] },
+          deselect: { type: 'boolean' },
         },
         additionalProperties: false,
       },
@@ -158,7 +157,7 @@ export function registerMovementTools(viewer: MovementViewer) {
           'separation',
           'partSpread',
           'side',
-          'treatment',
+          'deselect',
         ];
         for (const [key, value] of Object.entries(values)) {
           if (!allowed.includes(key)) throw new Error('Unknown setting');
@@ -171,7 +170,7 @@ export function registerMovementTools(viewer: MovementViewer) {
           )
             throw new Error('Invalid separation/reveal');
           if (
-            ['reset', 'back', 'isolated'].includes(key) &&
+            ['reset', 'back', 'isolated', 'deselect'].includes(key) &&
             typeof value !== 'boolean'
           )
             throw new Error('Expected boolean');
@@ -186,12 +185,6 @@ export function registerMovementTools(viewer: MovementViewer) {
           )
             throw new Error('Invalid side');
           if (
-            key === 'treatment' &&
-            (typeof value !== 'string' ||
-              !['finish', 'function'].includes(value))
-          )
-            throw new Error('Invalid treatment');
-          if (
             key === 'group' &&
             (typeof value !== 'string' ||
               !['whole', ...GROUPS.map((g) => g.id)].includes(value))
@@ -201,6 +194,7 @@ export function registerMovementTools(viewer: MovementViewer) {
         if (!viewer.ready) throw new Error('Movement is not ready');
         if (values.reset) viewer.reset();
         if (values.back) viewer.back();
+        if (values.deselect) viewer.deselect();
         if (values.layout === 'spread') viewer.allParts();
         if (values.layout === 'assembly') viewer.group(null);
         if (values.group !== undefined)
@@ -209,6 +203,7 @@ export function registerMovementTools(viewer: MovementViewer) {
           );
         if (values.side) viewer.setSide(values.side as 'front' | 'back');
         const {
+          deselect: _deselect,
           reset: _reset,
           back: _back,
           layout: _layout,

@@ -102,7 +102,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  r=makeRace();a=r.showDial('central');pending.shift().reject(Error('offline'));await a;assert.equal(r.state.presentation,'movement');assert.ok(r.dialError);assert.equal(r.dialRequest.view,'central');
  a=r.showDial('small','small','broad-lance');pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'back');assert.equal(r.state.smallStyle,'broad-lance');assert.equal(r.dialError,'');
  r=makeRace();a=r.showDial('central');pending.shift().reject(Error('offline'));await a;b=r.retryDials();pending.shift().resolve({scene:{}});await b;assert.equal(r.state.side,'front');assert.equal(r.dialError,'');
- r=makeRace();a=r.showDial('central');r.patch({quality:'low',treatment:'function'});pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.quality,'low');assert.equal(r.state.treatment,'function');
+ r=makeRace();a=r.showDial('central');r.patch({quality:'low',treatment:'function'});pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.quality,'low');assert.equal('treatment' in r.state,false);
  r=makeRace();a=r.showDial('central');r.cameraGeneration++;pending.shift().resolve({scene:{}});await a;assert.equal(r.framings,undefined,'Manual camera input during load owns camera');
  r=makeRace();a=r.showDial('central');r.dead=true;pending.shift().resolve({scene:{}});await a;assert.equal(disposed,1);assert.equal(r.state.presentation,'movement');
  r=makeRace();a=r.showDial('central');b=r.select(raw);pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.part,raw);assert.equal(r.state.presentation,'movement');

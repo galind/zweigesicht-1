@@ -26,13 +26,19 @@ export function DialControls({
   state,
   viewer,
   available,
+  onOpenChange,
 }: {
   state: ViewerSnapshot;
   viewer: () => MovementViewer | null;
   available: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false),
+  const [open, updateOpen] = useState(false),
     [narrow, setNarrow] = useState(false);
+  const setOpen = (value: boolean) => {
+    updateOpen(value);
+    onOpenChange(value);
+  };
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const media = matchMedia('(max-width: 700px)');
@@ -81,7 +87,6 @@ export function DialControls({
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
-          <p className="dial-help">Only the selected dial is shown.</p>
         </>
       )}
       <output aria-live="polite" className="dial-status">
@@ -94,15 +99,6 @@ export function DialControls({
           onClick={() => void viewer()?.retryDials()}
         >
           Retry dials
-        </button>
-      )}
-      {state.canBack && (
-        <button
-          className="text-button dial-back"
-          disabled={!available}
-          onClick={() => viewer()?.back()}
-        >
-          Back to previous view
         </button>
       )}
     </div>

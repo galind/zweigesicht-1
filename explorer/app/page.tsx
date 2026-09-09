@@ -1,4 +1,5 @@
 'use client';
+import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -7,7 +8,7 @@ import {
   ChevronRight,
   ExternalLink,
   FlipHorizontal2,
-  Plus,
+  X,
   RotateCcw,
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
@@ -41,7 +42,6 @@ import {
 import { SPREAD_GROUPS } from '@/src/experience/spread';
 import { factsFor, partDetail } from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
   Combobox,
   ComboboxInput,
@@ -88,6 +88,7 @@ export default function Home() {
     aboutButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const selectionFocus = useRef(false);
+  const deck = useRef<HTMLElement>(null);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
@@ -97,6 +98,7 @@ export default function Home() {
     [spreadGroups, setSpreadGroups] = useState(false),
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
+    [dialOpen, setDialOpen] = useState(false),
     [inspect, setInspect] = useState(false),
     [qa, setQa] = useState<unknown>(null);
   const [motion, setMotion] = useState<unknown>(null);
@@ -171,11 +173,53 @@ export default function Home() {
       viewer.current = null;
     };
   }, []);
+  useEffect(() => {
+    const footer = deck.current;
+    if (!footer) return;
+    const measure = () =>
+      footer.parentElement?.style.setProperty(
+        '--deck-height',
+        `${footer.getBoundingClientRect().height}px`,
+      );
+    const observer = new ResizeObserver(measure);
+    observer.observe(footer);
+    measure();
+    return () => observer.disconnect();
+  }, []);
   const group = GROUPS.find((g) => g.id === s.group),
     selected = s.parts.find((p) => p.id === s.part),
     members = s.parts.filter(
       (p) => !p.isAssembly && group && inMembers(p.id, group.members),
     );
+  useEffect(() => {
+    queueMicrotask(() => setDetails(false));
+  }, [s.part, s.group]);
+  const dismissSelection = () => {
+    setDetails(false);
+    viewer.current?.deselect();
+    host.current?.querySelector('canvas')?.focus();
+  };
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key !== 'Escape' ||
+        event.defaultPrevented ||
+        catalog ||
+        about ||
+        explore ||
+        spreadGroups ||
+        options ||
+        details ||
+        dialOpen
+      )
+        return;
+      event.preventDefault();
+      viewer.current?.deselect();
+      host.current?.querySelector('canvas')?.focus();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [catalog, about, explore, spreadGroups, options, details, dialOpen]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
     setCatalog(false);
@@ -225,183 +269,195 @@ export default function Home() {
             Marco Lang <i>·</i> Calibre ml–01
           </span>
         </div>
-        <Sheet
-          open={options}
-          onOpenChange={(open) => {
-            if (open) selectionFocus.current = false;
-            setOptions(open);
-          }}
-        >
-          <SheetTrigger
-            ref={optionsButton}
-            className="text-button options-trigger"
+        <nav className="global-actions" aria-label="View history and options">
+          <button
+            className="text-button back-button"
+            aria-label="Back"
+            title="Previous view"
+            disabled={!available || !s.canBack}
+            onClick={() => {
+              viewer.current?.back();
+              host.current?.querySelector('canvas')?.focus();
+            }}
           >
-            Options
-          </SheetTrigger>
-          <SheetContent
-            className="about-sheet"
-            finalFocus={() =>
-              selectionFocus.current
-                ? (host.current?.querySelector('canvas') ?? false)
-                : optionsButton.current
-            }
+            <ArrowLeft aria-hidden="true" />
+          </button>
+          <button
+            className="text-button reset-button"
+            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+            title="Restore the opening view and options"
+            onClick={() => {
+              setExplore(false);
+              setSpreadGroups(false);
+              setDetails(false);
+              if (viewer.current) viewer.current.reset();
+              else set({ ...empty, loadStage: 'error', error: s.error });
+            }}
           >
-            <SheetHeader>
-              <SheetTitle>View options</SheetTitle>
-              <SheetDescription>
-                View controls, appearance and sources.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="about-copy">
-              <p>
-                Drag to orbit. Pinch or scroll to zoom. Tap a component to
-                inspect it. In All parts, drag to pan.
-              </p>
-              <fieldset
-                className="alternative-controls"
-                aria-label="Camera controls"
-                disabled={!available}
-              >
-                {s.layout !== 'spread' && (
-                  <>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.orbit(-0.25, 0)}
-                    >
-                      Orbit left
-                    </button>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.orbit(0.25, 0)}
-                    >
-                      Orbit right
-                    </button>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.orbit(0, -0.2)}
-                    >
-                      Tilt up
-                    </button>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.orbit(0, 0.2)}
-                    >
-                      Tilt down
-                    </button>
-                  </>
-                )}
-                <button
-                  className="tool"
-                  onClick={() => viewer.current?.zoom(0.8)}
-                >
-                  Zoom in
-                </button>
-                <button
-                  className="tool"
-                  onClick={() => viewer.current?.zoom(1.25)}
-                >
-                  Zoom out
-                </button>
-                {s.layout === 'spread' && (
-                  <>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.pan(-0.15, 0)}
-                    >
-                      Pan left
-                    </button>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.pan(0.15, 0)}
-                    >
-                      Pan right
-                    </button>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.pan(0, -0.15)}
-                    >
-                      Pan up
-                    </button>
-                    <button
-                      className="tool"
-                      onClick={() => viewer.current?.pan(0, 0.15)}
-                    >
-                      Pan down
-                    </button>
-                  </>
-                )}
-              </fieldset>
-              <p className="secondary">
-                On the movement: arrow keys orbit (pan in All parts), + / −
-                zoom, Home resets. All components are also available in the
-                catalog.
-              </p>
-              <ToggleGroup
-                value={[s.treatment]}
-                aria-label="Appearance"
-                disabled={!available}
-                onValueChange={(v) => {
-                  if (v[0]) patch({ treatment: v[0] as 'finish' | 'function' });
-                }}
-              >
-                <ToggleGroupItem value="finish">Materials</ToggleGroupItem>
-                <ToggleGroupItem value="function">
-                  Mechanism colors
-                </ToggleGroupItem>
-              </ToggleGroup>
-              <p className="secondary appearance-help">
-                Natural finishes or colors that distinguish the selected
-                section’s components.
-              </p>
-              <div className="quality-control">
-                <label htmlFor="render-quality">Rendering quality</label>
-                <Select
-                  value={s.quality}
+            Reset
+          </button>
+          <Sheet
+            open={options}
+            onOpenChange={(open) => {
+              if (open) selectionFocus.current = false;
+              setOptions(open);
+            }}
+          >
+            <SheetTrigger
+              ref={optionsButton}
+              className="text-button options-trigger"
+            >
+              Options
+            </SheetTrigger>
+            <SheetContent
+              className="about-sheet"
+              finalFocus={() =>
+                selectionFocus.current
+                  ? (host.current?.querySelector('canvas') ?? false)
+                  : optionsButton.current
+              }
+            >
+              <SheetHeader>
+                <SheetTitle>View options</SheetTitle>
+                <SheetDescription>
+                  Camera, quality and sources.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="about-copy">
+                <p>
+                  Drag to orbit. Pinch or scroll to zoom. Tap a component to
+                  inspect it. Tap empty space to deselect. In All parts, drag to
+                  pan.
+                </p>
+                <fieldset
+                  className="alternative-controls"
+                  aria-label="Camera controls"
                   disabled={!available}
-                  onValueChange={(v) =>
-                    patch({ quality: v as 'auto' | 'high' | 'low' })
-                  }
                 >
-                  <SelectPrimitive.Trigger
-                    className="tool quality-trigger"
-                    id="render-quality"
-                    aria-label="Rendering quality"
+                  {s.layout !== 'spread' && (
+                    <>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.orbit(-0.25, 0)}
+                      >
+                        Orbit left
+                      </button>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.orbit(0.25, 0)}
+                      >
+                        Orbit right
+                      </button>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.orbit(0, -0.2)}
+                      >
+                        Tilt up
+                      </button>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.orbit(0, 0.2)}
+                      >
+                        Tilt down
+                      </button>
+                    </>
+                  )}
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.zoom(0.8)}
                   >
-                    <SelectValue>
-                      {s.quality === 'auto'
-                        ? 'Automatic'
-                        : s.quality === 'high'
-                          ? 'High'
-                          : 'Lightweight'}
-                    </SelectValue>
-                    <ChevronDown aria-hidden="true" />
-                  </SelectPrimitive.Trigger>
-                  <SelectContent>
-                    <SelectItem value="auto">Automatic</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="low">Lightweight</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                    Zoom in
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.zoom(1.25)}
+                  >
+                    Zoom out
+                  </button>
+                  {s.layout === 'spread' && (
+                    <>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.pan(-0.15, 0)}
+                      >
+                        Pan left
+                      </button>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.pan(0.15, 0)}
+                      >
+                        Pan right
+                      </button>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.pan(0, -0.15)}
+                      >
+                        Pan up
+                      </button>
+                      <button
+                        className="tool"
+                        onClick={() => viewer.current?.pan(0, 0.15)}
+                      >
+                        Pan down
+                      </button>
+                    </>
+                  )}
+                </fieldset>
+                <p className="secondary">
+                  On the movement: arrow keys orbit (pan in All parts), + / −
+                  zoom, Home resets, Escape deselects. All components are also
+                  available in the catalog.
+                </p>
+                <div className="quality-control">
+                  <label htmlFor="render-quality">Rendering quality</label>
+                  <Select
+                    value={s.quality}
+                    disabled={!available}
+                    onValueChange={(v) =>
+                      patch({ quality: v as 'auto' | 'high' | 'low' })
+                    }
+                  >
+                    <SelectPrimitive.Trigger
+                      className="tool quality-trigger"
+                      id="render-quality"
+                      aria-label="Rendering quality"
+                    >
+                      <SelectValue>
+                        {s.quality === 'auto'
+                          ? 'Automatic'
+                          : s.quality === 'high'
+                            ? 'High'
+                            : 'Lightweight'}
+                      </SelectValue>
+                      <ChevronDown aria-hidden="true" />
+                    </SelectPrimitive.Trigger>
+                    <SelectContent>
+                      <SelectItem value="auto">Automatic</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="low">Lightweight</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <button
-                ref={catalogButton}
-                className="menu-link"
-                onClick={() => setCatalog(true)}
-                disabled={!s.parts.length}
-              >
-                Source catalog <ChevronRight aria-hidden="true" />
-              </button>
-              <button
-                ref={aboutButton}
-                className="menu-link"
-                onClick={() => setAbout(true)}
-              >
-                About & sources <ChevronRight aria-hidden="true" />
-              </button>
-            </div>
-          </SheetContent>
-        </Sheet>
+                <button
+                  ref={catalogButton}
+                  className="menu-link"
+                  onClick={() => setCatalog(true)}
+                  disabled={!s.parts.length}
+                >
+                  Source catalog <ChevronRight aria-hidden="true" />
+                </button>
+                <button
+                  ref={aboutButton}
+                  className="menu-link"
+                  onClick={() => setAbout(true)}
+                >
+                  About & sources <ChevronRight aria-hidden="true" />
+                </button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </nav>
       </header>
       <section className="workspace" aria-label="Movement explorer">
         <div
@@ -480,18 +536,6 @@ export default function Home() {
             </button>
           </div>
         )}
-        {s.layout !== 'spread' && (
-          <button
-            className="side-switch text-button"
-            disabled={!available}
-            onClick={() =>
-              viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
-            }
-            aria-label={sideLabel}
-          >
-            <FlipHorizontal2 aria-hidden="true" /> <span>{sideLabel}</span>
-          </button>
-        )}
       </section>
       {(group || selected || s.layout === 'spread') && (
         <section
@@ -500,7 +544,7 @@ export default function Home() {
           aria-live="polite"
         >
           <div className="focus-title">
-            <h2>
+            <h2 title={selected ? partLabel(selected) : group?.technical}>
               {selected
                 ? partLabel(selected)
                 : group
@@ -510,28 +554,6 @@ export default function Home() {
                     : 'All parts'}
             </h2>
             <div className="focus-actions">
-              {s.canBack && (
-                <button
-                  className="text-button"
-                  disabled={!available}
-                  onClick={() => {
-                    viewer.current?.back();
-                    host.current?.querySelector('canvas')?.focus();
-                  }}
-                >
-                  <ArrowLeft aria-hidden="true" /> Back
-                </button>
-              )}
-              <button
-                className="text-button"
-                disabled={s.loadStage === 'recovering'}
-                onClick={() => {
-                  chooseGroup(null);
-                  host.current?.querySelector('canvas')?.focus();
-                }}
-              >
-                Whole movement
-              </button>
               {(group || selected) && (
                 <button
                   ref={detailButton}
@@ -541,19 +563,29 @@ export default function Home() {
                   Details
                 </button>
               )}
+              {selected && (
+                <button
+                  className="text-button dismiss-button"
+                  aria-label="Deselect part"
+                  title="Deselect part (Escape)"
+                  onClick={dismissSelection}
+                >
+                  <X aria-hidden="true" />
+                </button>
+              )}
             </div>
           </div>
-          {selected ? (
+          {selected && (
             <div className="selected-summary">
-              <p>
-                {partDetail(selected)}
-                <small className="selection-identity">
-                  {partIndex.get(selected.id)?.context} ·{' '}
-                  {partIndex.get(selected.id)?.reference}
-                </small>
-              </p>
+              <small
+                className="selection-identity"
+                title={partIndex.get(selected.id)?.reference}
+              >
+                {partIndex.get(selected.id)?.context} ·{' '}
+                {partIndex.get(selected.id)?.reference}
+              </small>
               <button
-                className="text-button"
+                className="text-button isolate-button"
                 aria-pressed={s.isolated}
                 disabled={!available}
                 onClick={() => patch({ isolated: !s.isolated })}
@@ -561,26 +593,16 @@ export default function Home() {
                 {s.isolated ? 'Show context' : 'Isolate part'}
               </button>
             </div>
-          ) : group ? (
-            <ul className="facts">
-              {factsFor(group.id).map((f) => (
-                <li key={f.text}>{f.text}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="spread-hint">
-              Drag to pan · Pinch or scroll to look closer
-            </p>
           )}
         </section>
       )}
-      <footer className="control-deck">
+      <footer ref={deck} className="control-deck">
         <Popover open={explore} onOpenChange={setExplore}>
           <PopoverTrigger
             className="explore-button"
             disabled={s.loadStage === 'recovering'}
           >
-            Explore <Plus aria-hidden="true" />
+            Explore <ChevronDown aria-hidden="true" />
           </PopoverTrigger>
           <PopoverContent
             className="explore-menu"
@@ -589,6 +611,9 @@ export default function Home() {
             sideOffset={12}
           >
             <PopoverTitle>Inside the movement</PopoverTitle>
+            <button className="menu-link" onClick={() => chooseGroup(null)}>
+              Whole movement <ChevronRight aria-hidden="true" />
+            </button>
             {GROUPS.map((g, i) => (
               <button
                 className="menu-link"
@@ -608,7 +633,23 @@ export default function Home() {
           state={s}
           viewer={() => viewer.current}
           available={available}
+          onOpenChange={setDialOpen}
         />
+        <div className="side-slot">
+          <button
+            className="side-switch text-button"
+            disabled={!available || s.layout === 'spread'}
+            style={{ visibility: s.layout === 'spread' ? 'hidden' : 'visible' }}
+            onClick={() =>
+              viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
+            }
+            aria-label={sideLabel}
+            title={sideLabel}
+          >
+            <FlipHorizontal2 aria-hidden="true" />
+            <span>{sideLabel}</span>
+          </button>
+        </div>
         <div className="separation-control">
           {s.layout === 'spread' ? (
             <>
@@ -644,7 +685,8 @@ export default function Home() {
           ) : (
             <>
               <span id="separation-label">
-                {group ? 'Separate section' : 'Separate'}
+                Separate
+                <span className="sr-only">{group ? ' section' : ''}</span>
               </span>
               <Slider
                 disabled={!available}
@@ -667,12 +709,6 @@ export default function Home() {
                 disabled={
                   !available || !(s.separation || s.partSpread || s.reveal)
                 }
-                style={{
-                  visibility:
-                    s.separation || s.partSpread || s.reveal
-                      ? 'visible'
-                      : 'hidden',
-                }}
                 onClick={() =>
                   patch({ separation: 0, partSpread: 0, reveal: 0 })
                 }
@@ -693,20 +729,6 @@ export default function Home() {
           }
         >
           All parts
-        </button>
-        <button
-          className="text-button reset-button"
-          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-          title="Restore the opening view and options"
-          onClick={() => {
-            setExplore(false);
-            setSpreadGroups(false);
-            setDetails(false);
-            if (viewer.current) viewer.current.reset();
-            else set({ ...empty, loadStage: 'error', error: s.error });
-          }}
-        >
-          Reset
         </button>
       </footer>
       <Sheet open={details} onOpenChange={setDetails}>
@@ -932,6 +954,16 @@ export default function Home() {
       {inspect && (
         <details className="inspection">
           <summary>Inspection tools</summary>
+          <button
+            onClick={async () => {
+              if (viewer.current) {
+                setQa({ running: true });
+                setQa(await runUxChecks(viewer.current));
+              }
+            }}
+          >
+            Run UX checks
+          </button>
           {(['scrub', 'spread', 'interrupt'] as MotionCase[]).map((kind) => (
             <button
               key={kind}

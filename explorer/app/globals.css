@@ -480,9 +480,6 @@ h2 {
   min-height: 48px;
   padding: 10px !important;
 }
-.appearance-help {
-  margin-top: 12px !important;
-}
 [data-slot='toggle-group'] {
   flex-wrap: wrap;
   height: auto;
@@ -766,71 +763,6 @@ h2 {
     scroll-behavior: auto !important;
   }
 }
-.text-enlarged .control-deck {
-  flex-wrap: wrap;
-  gap: 4px 10px;
-}
-.text-enlarged .separation-control {
-  min-width: 100%;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-}
-.text-enlarged .separation-control [data-slot='slider'] {
-  min-width: 80px;
-}
-.text-enlarged .topbar {
-  padding-top: 12px;
-}
-.text-enlarged .focus-title {
-  flex-wrap: wrap;
-}
-.text-enlarged .focus-actions {
-  flex-shrink: 1;
-  flex-wrap: wrap;
-}
-.text-enlarged .focus-strip {
-  max-height: 32dvh;
-  overflow: auto;
-}
-.text-enlarged .focus-actions .text-button {
-  font-size: 0.75rem;
-}
-.text-enlarged .stage {
-  inset: 0;
-}
-@media (max-width: 700px) {
-  .text-enlarged .identity h1 {
-    font-size: 1.2rem;
-  }
-  .text-enlarged .identity > span {
-    font-size: 0.6rem;
-  }
-  .text-enlarged .control-deck {
-    display: flex;
-    justify-content: space-between;
-  }
-  .text-enlarged .explore-button {
-    max-width: none;
-    gap: 8px;
-  }
-  .text-enlarged .separation-control {
-    order: 4;
-  }
-  .text-enlarged .focus-strip {
-    max-height: 28dvh;
-  }
-  .text-enlarged .topbar {
-    gap: 5px;
-  }
-  .text-enlarged .options-trigger {
-    padding: 2px;
-    font-size: 0.75rem;
-  }
-  .text-enlarged .side-switch {
-    bottom: 0;
-    right: 0;
-  }
-}
 
 .dial-trigger {
   white-space: nowrap;
@@ -872,12 +804,6 @@ h2 {
   float: right;
   color: #aaa8a4;
 }
-.dial-help {
-  margin: 16px 0 0;
-  color: #aaa8a4;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
 .dial-status {
   display: block;
   font-size: 0.875rem;
@@ -885,10 +811,6 @@ h2 {
 }
 .dial-status:not(:empty) {
   margin-top: 16px;
-}
-.dial-back {
-  margin: 8px 0 -8px;
-  padding-left: 0;
 }
 .dial-sheet {
   background: #222 !important;
@@ -929,5 +851,366 @@ h2 {
   }
   .separation-control {
     grid-row: 3;
+  }
+}
+
+/* Stable navigation, canvas and contextual action slots across modes. */
+.explorer,
+.explorer.has-focus {
+  position: relative;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  --deck-height: 104px;
+}
+.global-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.global-actions .text-button {
+  flex-shrink: 0;
+}
+.back-button {
+  width: 44px;
+  padding: 10px;
+}
+.stage,
+.has-focus .stage {
+  inset: 0 0 92px;
+}
+.has-focus .workspace {
+  margin: 0;
+}
+.control-deck {
+  display: grid;
+  grid-template-columns: 170px minmax(160px, 1fr) 130px;
+  grid-template-rows: 44px 44px;
+  gap: 0 16px;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 8px 12px;
+}
+.explore-button {
+  grid-area: 1 / 1;
+  gap: 12px;
+  max-width: none;
+}
+.dial-trigger {
+  grid-area: 1 / 2;
+}
+.all-parts-button {
+  grid-area: 1 / 3;
+}
+.side-slot {
+  grid-area: 2 / 1;
+  min-width: 0;
+}
+.side-switch {
+  position: static;
+  width: 100%;
+  padding: 10px 4px;
+  font-size: 0.875rem;
+}
+.separation-control {
+  grid-area: 2 / 2 / 3 / 4;
+  gap: 12px;
+  padding: 0;
+}
+.separation-control #separation-label {
+  width: 64px;
+  flex-shrink: 0;
+}
+.separation-control > .text-button:not(.reassemble) {
+  flex: 1;
+}
+.focus-strip {
+  position: absolute;
+  inset: auto max(24px, env(safe-area-inset-right))
+    calc(var(--deck-height) + max(24px, env(safe-area-inset-bottom)) + 8px)
+    max(24px, env(safe-area-inset-left));
+  width: min(736px, calc(100% - 48px));
+  height: 88px;
+  max-height: none;
+  margin: 0 auto;
+  padding: 0;
+  z-index: 2;
+}
+.focus-title {
+  height: 44px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.focus-title h2 {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.25rem;
+}
+.focus-actions {
+  margin: 0;
+  flex-shrink: 0;
+}
+.focus-actions .text-button {
+  min-height: 44px;
+}
+.selected-summary {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  gap: 8px;
+}
+.selection-identity {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.isolate-button {
+  min-width: 112px;
+}
+.dismiss-button {
+  width: 44px;
+}
+@media (max-width: 700px) {
+  .topbar {
+    gap: 4px;
+  }
+  .identity h1 {
+    font-size: 1.45rem;
+  }
+  .identity > span {
+    font-size: 0.75rem;
+    letter-spacing: 0;
+  }
+  .identity i {
+    padding: 0 2px;
+  }
+  .global-actions .text-button {
+    padding: 10px 7px;
+  }
+  .global-actions .back-button {
+    padding: 10px;
+  }
+  .control-deck {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 0.9fr);
+    gap: 0 4px;
+    padding: 8px;
+  }
+  .control-deck .text-button,
+  .explore-button {
+    padding: 8px 4px;
+    gap: 4px;
+  }
+  .dial-trigger {
+    white-space: normal;
+  }
+  .side-switch span {
+    display: none;
+  }
+  .side-slot {
+    width: 44px;
+    z-index: 1;
+  }
+  .separation-control {
+    grid-column: 1 / 4;
+    margin-left: 48px;
+    gap: 8px;
+  }
+  .focus-strip {
+    left: 16px;
+    right: 16px;
+    width: calc(100% - 32px);
+    bottom: calc(
+      var(--deck-height) + max(18px, env(safe-area-inset-bottom)) + 8px
+    );
+  }
+  .stage,
+  .has-focus .stage {
+    inset: 0 -10px 92px;
+  }
+  .focus-title {
+    gap: 4px;
+  }
+  .focus-title h2 {
+    font-size: 1.15rem;
+  }
+}
+@media (max-width: 360px) {
+  .identity > span {
+    max-width: 132px;
+    line-height: 1.3;
+    display: block;
+  }
+  .identity i {
+    display: none;
+  }
+  .global-actions {
+    gap: 0;
+  }
+  .global-actions .text-button {
+    padding: 10px 4px;
+  }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .stage,
+  .has-focus .stage {
+    inset: 0 220px 0 0;
+  }
+  .focus-strip {
+    inset: 65px 18px auto auto;
+    width: 210px;
+    height: auto;
+    padding: 0;
+  }
+  .focus-title {
+    height: auto;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .focus-title h2 {
+    white-space: normal;
+  }
+  .selected-summary {
+    height: auto;
+    flex-wrap: wrap;
+  }
+}
+.text-enlarged .control-deck {
+  display: grid;
+  gap: 0 8px;
+  grid-template-rows: auto auto;
+}
+.text-enlarged .separation-control {
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+.text-enlarged .focus-strip {
+  height: 88px;
+  max-height: none;
+}
+.text-enlarged .focus-title,
+.text-enlarged .focus-actions {
+  flex-wrap: nowrap;
+}
+.text-enlarged .focus-actions .text-button {
+  font-size: 0.875rem;
+}
+.text-enlarged .explorer {
+  --deck-height: 140px;
+}
+@media (max-width: 700px) {
+  .text-enlarged .identity > span {
+    display: none;
+  }
+  .text-enlarged .identity h1 {
+    font-size: 0.8rem;
+  }
+  .text-enlarged .global-actions .text-button {
+    font-size: 0.65rem;
+  }
+  .text-enlarged .back-button {
+    width: 32px;
+  }
+  .text-enlarged .separation-control {
+    gap: 4px;
+  }
+  .text-enlarged .separation-control #separation-label {
+    width: auto;
+  }
+  .text-enlarged .focus-strip {
+    overflow: auto;
+  }
+  .text-enlarged .selection-identity {
+    display: none;
+  }
+}
+@media (min-width: 1000px) and (min-height: 501px) {
+  .stage,
+  .has-focus .stage {
+    inset: 0 0 10px;
+  }
+  .focus-strip {
+    inset: 114px auto auto 32px;
+    width: min(300px, 24vw);
+    height: auto;
+  }
+  .focus-title {
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .focus-title h2 {
+    width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .selected-summary {
+    height: auto;
+    flex-wrap: wrap;
+  }
+  .selection-identity {
+    width: 100%;
+  }
+  .text-enlarged .focus-strip {
+    height: auto;
+  }
+  .text-enlarged .focus-title {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 700px) {
+  .text-enlarged .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-top: 12px;
+  }
+  .text-enlarged .identity h1 {
+    font-size: 1.2rem;
+  }
+  .text-enlarged .global-actions {
+    align-self: flex-end;
+  }
+  .text-enlarged .global-actions .text-button {
+    font-size: 0.875rem;
+  }
+  .text-enlarged .back-button {
+    width: 44px;
+  }
+  .text-enlarged .control-deck {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 44px 44px;
+    gap: 4px 8px;
+  }
+  .text-enlarged .explore-button {
+    grid-area: 1 / 1;
+  }
+  .text-enlarged .dial-trigger {
+    grid-area: 1 / 2;
+  }
+  .text-enlarged .all-parts-button {
+    grid-area: 2 / 1;
+  }
+  .text-enlarged .side-slot {
+    grid-area: 2 / 2;
+    justify-self: center;
+  }
+  .text-enlarged .separation-control {
+    grid-area: 3 / 1 / 4 / 3;
+    margin: 0;
+    gap: 8px;
+  }
+  .text-enlarged .separation-control [data-slot='slider'] {
+    min-width: 36px;
+  }
+  .text-enlarged .focus-title h2 {
+    font-size: 0.875rem;
+  }
+  .text-enlarged .focus-actions .text-button {
+    padding: 8px 4px;
+  }
+  .text-enlarged .focus-title {
+    height: 44px;
   }
 }

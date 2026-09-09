@@ -29,3 +29,10 @@ test('movement inspection temporarily hides dials and retains preferences',()=>{
  assert.equal(resolveState(s,{part:'catalog-part',isolated:true}).presentation,'dials');
  assert.equal(initialState.presentation,'movement');assert.equal(initialState.centralStyle,'fine');assert.equal(initialState.smallStyle,'lance');
 });
+
+test('obsolete appearance input is discarded from patches and historical state',()=>{
+ for(const treatment of ['function','finish','unexpected',null]) {
+  assert.equal('treatment' in resolveState(initialState,{treatment}),false);
+  assert.equal('treatment' in resolveState({...initialState,treatment},{}),false);
+ }
+});
