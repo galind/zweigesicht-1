@@ -1,5 +1,9 @@
 # Zweigesicht — current execution state
 
+## Explode improvement goal prepared — 9 September 2026
+
+Created `EXPLODE_GOAL.md` at the user's request as a prompt for a new implementation agent. It identifies the current world-Z/position-based heuristics and exact radial dial-screw occurrences, and requires mounting-axis review, coherent host assemblies, staged reversible separation, preserved dial/finish behavior and live regression evidence. Documentation only; no explosion implementation or new agent goal has been started. Next action: launch that goal from the current project state. Preview remains **http://127.0.0.1:4173/**. Local only; `FINISHING_GOAL.md` untouched.
+
 ## All hand styles at 10:10 — verified locally, 9 September 2026
 
 All six fitted hand styles now indicate **10:10:00**, with the hour hand correctly five degrees past 10 and central seconds at 12. Dial A supports Fine, **Lance**, Open lance; Dial B retains Lance, Broad lance, Pear. The formerly excluded central Lance seconds receives an exact XY-only fitted alignment of (-12.4254391598701, -7.08174217766239) mm after verifying its original bore/seat fit. Only the selected display is shown. Source geometry, immutable occurrence matrices, mounting heights, internal movement and accepted materials remain unchanged; raw catalog inspection restores original hand poses.
