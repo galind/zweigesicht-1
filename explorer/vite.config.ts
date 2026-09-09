@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/postcss';
 import vinext from 'vinext';
+import { nitro } from 'nitro/vite';
 import { defineConfig, type Plugin } from 'vite';
 import { existsSync, createReadStream } from 'node:fs';
 import { resolve } from 'node:path';
@@ -51,5 +52,9 @@ export default defineConfig({
     strictPort: true,
     watch: { useFsEvents: false, usePolling: true },
   },
-  plugins: [localCad(), vinext()],
+  plugins: [
+    localCad(),
+    vinext(),
+    ...(process.env.NITRO_PRESET ? [nitro()] : []),
+  ],
 });
