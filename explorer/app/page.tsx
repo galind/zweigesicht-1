@@ -964,18 +964,20 @@ export default function Home() {
           >
             Run UX checks
           </button>
-          {(['scrub', 'spread', 'interrupt'] as MotionCase[]).map((kind) => (
-            <button
-              key={kind}
-              onClick={async () => {
-                if (!viewer.current) return;
-                setMotion({ running: true });
-                setMotion(await captureMotion(viewer.current, kind));
-              }}
-            >
-              Record {kind}
-            </button>
-          ))}
+          {(['scrub', 'spread', 'interrupt', 'dials'] as MotionCase[]).map(
+            (kind) => (
+              <button
+                key={kind}
+                onClick={async () => {
+                  if (!viewer.current) return;
+                  setMotion({ running: true });
+                  setMotion(await captureMotion(viewer.current, kind));
+                }}
+              >
+                Record {kind}
+              </button>
+            ),
+          )}
           <pre id="motion-report" hidden>
             {JSON.stringify(motion)}
           </pre>

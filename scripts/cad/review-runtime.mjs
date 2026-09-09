@@ -532,6 +532,40 @@ for(let i=1;i<=12;i++){tick(116+i*100);assert.ok(frameFixture.camera.position.di
 assert.equal(frameFixture.travel,null);assert.ok(frameFixture.camera.position.equals(new THREE.Vector3(0,0,-70)));
 results.push({check:'readiness follows complete beauty/contact frame; beauty/contact failures expose a retry state and stop rendering until successful retry; camera side reversal keeps safe radius and settles exactly',status:'pass',scope:'actual frame callback with CPU renderer facade'});
 
+// Exercise the actual frame callback with real OrbitControls: opposite faces
+// must turn over without the sideways roll caused by independent up/view arcs.
+const facadeControls=frameFixture.controls;
+frameFixture.controls=new OrbitControls(frameFixture.camera,null);
+frameFixture.syncOrbitUp=()=>Viewer.prototype.syncOrbitUp.call(frameFixture);
+frameFixture.camera.position.set(.04,.06,1).normalize().multiplyScalar(70);
+frameFixture.camera.up.set(0,1,0);frameFixture.syncOrbitUp();frameFixture.controls.update();
+for(const sign of [-1,1]){
+ const position=new THREE.Vector3(.04,.06,sign).normalize().multiplyScalar(70);
+ const up=new THREE.Vector3(0,sign,0);
+ const right=new THREE.Vector3(1,0,0).applyQuaternion(frameFixture.camera.quaternion);
+ const previous=frameFixture.camera.quaternion.clone();let arc=0,maxRightDrift=0;
+ frameFixture.travel={position,target:new THREE.Vector3(),up,duration:1.05};
+ for(let i=0;i<110;i++){
+  tick(frameFixture.lastFrame+10);
+  arc+=previous.angleTo(frameFixture.camera.quaternion);previous.copy(frameFixture.camera.quaternion);
+  maxRightDrift=Math.max(maxRightDrift,right.angleTo(new THREE.Vector3(1,0,0).applyQuaternion(frameFixture.camera.quaternion)));
+  assert.ok(Math.abs(frameFixture.camera.position.length()-70)<1e-8,'Turnover must retain its radius');
+ }
+ assert.ok(arc>3&&arc<Math.PI+.01,'Turnover must have one half-turn of angular travel');
+ assert.ok(maxRightDrift<.1,'Turnover must not tumble sideways');
+ assert.equal(frameFixture.travel,null);assert.ok(frameFixture.camera.position.distanceTo(position)<1e-9);assert.ok(frameFixture.camera.up.equals(up));
+}
+frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3(),up:new THREE.Vector3(0,-1,0),duration:1.05};
+for(let i=0;i<40;i++)tick(frameFixture.lastFrame+10);
+const interruptedPosition=frameFixture.camera.position.clone(),interruptedOrientation=frameFixture.camera.quaternion.clone();
+frameFixture.travel={position:new THREE.Vector3(0,0,70),target:new THREE.Vector3(),up:new THREE.Vector3(0,1,0),duration:1.05};
+tick(frameFixture.lastFrame);
+assert.ok(frameFixture.camera.position.distanceTo(interruptedPosition)<1e-9);
+assert.ok(frameFixture.camera.quaternion.angleTo(interruptedOrientation)<1e-7,'Reversal must begin at the displayed orientation');
+frameFixture.reduced=true;tick(frameFixture.lastFrame+10);assert.equal(frameFixture.travel,null);assert.ok(frameFixture.camera.position.distanceTo(new THREE.Vector3(0,0,70))<1e-9);
+frameFixture.reduced=false;frameFixture.controls=facadeControls;
+results.push({check:'dial turnover keeps screen-right stable, follows one half-turn at safe radius, reverses continuously and respects reduced motion',status:'pass',scope:'actual frame callback and real OrbitControls'});
+
 const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
 Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
 const preserved=JSON.stringify(catalogFixture.state);
@@ -566,11 +600,12 @@ results.push({check:'catalog retry completes the original requested selection; a
 
 frameFixture.ready=true;frameFixture.state.part='fixture';frameFixture.cameraUserOwned=true;frameFixture.host={clientWidth:500,clientHeight:1000};
 frameFixture.camera.aspect=2;frameFixture.camera.position.set(20,10,60);frameFixture.controls.target.set(0,0,0);
-frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3(),fromPosition:new THREE.Vector3(0,0,70),fromTarget:new THREE.Vector3(),elapsed:.3,duration:.85};
+frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3(),fromPosition:new THREE.Vector3(0,0,70),fromTarget:new THREE.Vector3(),fromUp:new THREE.Vector3(1,0,0),up:frameFixture.camera.up.clone(),elapsed:.3,duration:.85};
 frameFixture.renderer.setSize=()=>{};frameFixture.surfaceOcclusion.resize=()=>{};frameFixture.invalidate=()=>{frameFixture.needsRender=true};
 Viewer.prototype.resize.call(frameFixture);const resizedPosition=frameFixture.camera.position.clone();
 tick(frameFixture.lastFrame);assert.ok(frameFixture.camera.position.distanceTo(resizedPosition)<1e-10);
 assert.ok(frameFixture.travel.fromPosition.equals(resizedPosition));assert.equal(frameFixture.travel.elapsed,0);
+assert.ok(frameFixture.travel.fromUp.equals(frameFixture.camera.up),'Resize must rebase the displayed up vector along with position');
 results.push({check:'resize during selected-part camera travel rebases from the resized displayed pose without a following-frame snap',status:'pass'});
 
 const {partLabel,buildPartIndex,matchesPart}=load('explorer/src/experience/catalog.ts');

@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Calmer dial turnover — verified locally, 10 September 2026
+
+Responded to user feedback about the excessive dial-switch animation. The camera now rotates its complete viewing frame together when changing up direction, giving Dial A ↔ Dial B one level turnover instead of competing direction/roll arcs. Dial travel is eased over **1.05 seconds**; framing endpoints, safe radius, continuous interruption, resize rebasing and reduced motion are preserved. Accepted materials, exclusive faces, six 10:10 poses, complete separation and All parts remain intact.
+
+**61 CPU/source checks**, **seven state tests**, TypeScript, authored lint and production build pass. Browser verification at **1280×720 / 390×844** passes **22 warm desktop / 23 cold portrait dial checks**, plus **eight desktop explosion** and **12 portrait movement checks**. Recorded every displayed turnover frame: angular travel **3.022 rad**, screen-right drift below **.080 rad**, maximum bounds **.821 / .914 NDC**. Direct phone-viewport drag during a flip takes over and retains the oblique view. A reproduced **6.30e-13 mm** recovery-roundoff failure is now covered by the existing **1e-9 mm** style-camera tolerance, with added target/up checks; original and passing repeat evidence are retained.
+
+Review: `docs/DIAL_AND_HANDS_REVIEW.md`. Ignored evidence: `artifacts/browser/dial-turnover/`; `?inspect` → **Record dials** captures both directions. Next action: user review of the calmer flip at **http://127.0.0.1:4173/**. Preview remains running. Local commit only; no push, merge or deployment. `FINISHING_GOAL.md` remains untouched and untracked.
+
 ## UX/UI polish — completed and verified locally, 9 September 2026
 
 Completed `UX_UI_POLISH_GOAL.md`, beginning with local milestone **2b8e19c**. Back/Reset/Options and primary model controls now occupy stable slots; contextual actions stay compact without resizing the canvas. Whole movement and Back routes are consolidated, inventory actions are **Fit all / Groups**, and enlarged-text layouts remain stable. Materials are the sole appearance end to end. Empty-space clicks and Escape clear selection/isolation while preserving context, camera and history; drag/pinch/cancel/wheel/non-primary input and stale optional loads cannot accidentally reselect or deselect.

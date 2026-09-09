@@ -798,6 +798,7 @@ export class MovementViewer {
         this.state.side === 'front' ? 1 : -1,
       ).normalize(),
     );
+    if (this.travel) this.travel.duration = 1.05;
   }
   patch(patch: Partial<ExperienceState>) {
     if (
@@ -1025,7 +1026,7 @@ export class MovementViewer {
   }
   syncOrbitUp() {
     // Three r186 caches its orbit basis at construction. Keep that basis aligned
-    // with our continuous dial camera roll, without recreating its event handlers.
+    // with the camera's continuous turnover, without recreating its event handlers.
     const controls = this.controls as OrbitControls & {
       _quat?: THREE.Quaternion;
       _quatInverse?: THREE.Quaternion;
@@ -1597,6 +1598,7 @@ export class MovementViewer {
         );
         this.travel.fromPosition = this.camera.position.clone();
         this.travel.fromTarget = this.controls.target.clone();
+        this.travel.fromUp = this.camera.up.clone();
         this.travel.elapsed = 0;
       }
     }
@@ -1645,25 +1647,31 @@ export class MovementViewer {
         ? 1
         : Math.min(1, travel.elapsed / (travel.duration ?? 0.85));
       const a = t * t * (3 - 2 * t);
-      if (travel.up) {
-        travel.fromUp ??= this.camera.up.clone();
-        const roll = new THREE.Quaternion().setFromUnitVectors(
-          travel.fromUp,
-          travel.up,
-        );
-        this.camera.up
-          .copy(travel.fromUp)
-          .applyQuaternion(new THREE.Quaternion().slerp(roll, a));
-        this.syncOrbitUp();
-      }
       const from = travel.fromPosition.clone().sub(travel.fromTarget),
         to = travel.position.clone().sub(travel.target);
       const distance = THREE.MathUtils.lerp(from.length(), to.length(), a);
-      const rotation = new THREE.Quaternion().setFromUnitVectors(
-        from.normalize(),
-        to.normalize(),
-      );
-      from.applyQuaternion(new THREE.Quaternion().slerp(rotation, a));
+      travel.fromUp ??= this.camera.up.clone();
+      if (travel.up && travel.fromUp.distanceToSquared(travel.up) > 1e-12) {
+        // Turn the entire viewing frame together. Independent direction/up arcs
+        // twist around different axes when the two dial faces are opposite.
+        const origin = new THREE.Vector3();
+        const orientation = new THREE.Quaternion().setFromRotationMatrix(
+          new THREE.Matrix4().lookAt(from, origin, travel.fromUp),
+        );
+        const destination = new THREE.Quaternion().setFromRotationMatrix(
+          new THREE.Matrix4().lookAt(to, origin, travel.up),
+        );
+        orientation.slerp(destination, a);
+        from.set(0, 0, 1).applyQuaternion(orientation);
+        this.camera.up.set(0, 1, 0).applyQuaternion(orientation);
+        this.syncOrbitUp();
+      } else {
+        const rotation = new THREE.Quaternion().setFromUnitVectors(
+          from.normalize(),
+          to.normalize(),
+        );
+        from.applyQuaternion(new THREE.Quaternion().slerp(rotation, a));
+      }
       this.controls.target.lerpVectors(travel.fromTarget, travel.target, a);
       this.camera.position
         .copy(this.controls.target)

@@ -2,6 +2,14 @@
 
 9 September 2026. Local-only implementation of `DIAL_AND_HANDS_PLAN.md`, extending the accepted static explorer. Preview: **http://127.0.0.1:4173/**.
 
+## Calmer dial turnover — 10 September 2026
+
+User feedback requested a calmer transition that still makes the reversed faces obvious. The camera now interpolates its viewing frame as one rotation when its up direction changes, replacing the independent view/up arcs that produced a sideways tumble. Dial framing takes 1.05 seconds with eased starts and stops; the two endpoints and their framing remain unchanged. The watch passes through a level edge-on view. Radius remains safe, interrupted turns start from the displayed orientation, resizing rebases the up vector too, and reduced motion still lands immediately. Ordinary travel with an unchanged up vector retains its existing path.
+
+Verified 61 CPU/source checks (including the actual frame callback with real OrbitControls), seven state tests, TypeScript, authored lint and production build. Browser dial suites pass **22 warm desktop / 23 cold portrait** checks at **1280×720 / 390×844**, including all six styles, Back/Reset, camera ownership, recovery and resources. Every rendered frame in each direction stays inside the viewport: maximum bounds **.821 desktop / .914 portrait** NDC. Each turn covers **3.022 radians**, with screen-right drift under **.080 radians**; the camera no longer tumbles sideways. Desktop's eight complete-separation checks pass. Local `?inspect` → **Record dials** records both directions for repeatable visual review; recordings and results are under ignored `artifacts/browser/dial-turnover/`.
+
+The portrait movement suite also passes all **12 interaction checks**. A real pointer drag during the flip interrupts camera travel and retains the visitor's oblique view. The previously intermittent preparation-retry assertion reproduced with only **6.30e-13 mm** Cartesian roundoff after OrbitControls recovery. Its camera tolerance now matches the existing style-change check (**1e-9 mm**), with additional target (**1e-9 mm**) and up-vector (**1e-12**) checks. The original failure and passing cold repeat are retained in the evidence directory. Accepted finishes, exclusive faces, all six 10:10 poses, source geometry, complete separation and All parts are unchanged. Local preview only; no push or deployment.
+
 ## Accepted hand-time correction
 
 All six fitted styles now show **10:10:00**. Dial A supports Fine, Lance and Open lance; Dial B supports Lance, Broad lance and Pear. Central Lance has been enabled after verifying bore/seat compatibility and correcting only its seconds-hand XY placement in the fitted view. Every original source occurrence and raw catalog pose remains intact. This supersedes historical statements below about unchanged fitted hand angles or excluded central Lance. See [HAND_TIME_REVIEW.md](HAND_TIME_REVIEW.md) for the exact adjustment and verification.

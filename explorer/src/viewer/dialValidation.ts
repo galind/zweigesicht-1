@@ -1,4 +1,5 @@
 import type { MovementViewer } from './MovementViewer';
+import * as THREE from 'three';
 import { DIALS, fittedLeaves } from '../experience/dials';
 import { ROOT, belongs } from '../experience/catalog';
 const pause = (ms: number) =>
@@ -70,6 +71,57 @@ export async function runDialChecks(v: MovementViewer) {
           v.assemblyError('presentation') === 0,
       );
     }
+  for (const face of ['central', 'small'] as const) {
+    const initialRight = new THREE.Vector3(1, 0, 0).applyQuaternion(
+      v.camera.quaternion,
+    );
+    const previous = v.camera.quaternion.clone();
+    let angularTravel = 0,
+      maxRightDrift = 0,
+      maxNdc = 0,
+      frames = 0;
+    v.inspectionFrame = (_now, rendered) => {
+      if (!rendered) return;
+      frames++;
+      angularTravel += previous.angleTo(v.camera.quaternion);
+      previous.copy(v.camera.quaternion);
+      maxRightDrift = Math.max(
+        maxRightDrift,
+        initialRight.angleTo(
+          new THREE.Vector3(1, 0, 0).applyQuaternion(v.camera.quaternion),
+        ),
+      );
+      for (const p of v.renderParts.values()) {
+        if (!p.mesh.visible) continue;
+        const b = p.mesh.geometry.boundingBox!;
+        for (let i = 0; i < 8; i++) {
+          const point = new THREE.Vector3(
+            i & 1 ? b.max.x : b.min.x,
+            i & 2 ? b.max.y : b.min.y,
+            i & 4 ? b.max.z : b.min.z,
+          )
+            .applyMatrix4(p.mesh.matrixWorld)
+            .project(v.camera);
+          maxNdc = Math.max(maxNdc, Math.abs(point.x), Math.abs(point.y));
+        }
+      }
+    };
+    try {
+      await v.showDial(face);
+      await settle(v);
+    } finally {
+      v.inspectionFrame = undefined;
+    }
+    check(
+      face +
+        ' turnover is one restrained half-turn with no sideways tumble or clipping',
+      frames > 2 &&
+        angularTravel < Math.PI + 0.01 &&
+        maxRightDrift < 0.1 &&
+        maxNdc < 1,
+      { frames, angularTravel, maxRightDrift, maxNdc },
+    );
+  }
   const warmed = v.stats();
   const transfers = performance
     .getEntriesByType('resource')
@@ -176,7 +228,9 @@ export async function runDialChecks(v: MovementViewer) {
     );
   } else check('Graphics recovery extension available', false);
   const reloaded = { ...v.state },
-    reloadCamera = v.camera.position.clone();
+    reloadCamera = v.camera.position.clone(),
+    reloadTarget = v.controls.target.clone(),
+    reloadUp = v.camera.up.clone();
   await v.load();
   const reloadStart = performance.now();
   while (!v.ready && performance.now() - reloadStart < 8000) await pause(30);
@@ -186,13 +240,19 @@ export async function runDialChecks(v: MovementViewer) {
     v.state.presentation === reloaded.presentation &&
       v.state.centralStyle === reloaded.centralStyle &&
       v.state.smallStyle === reloaded.smallStyle &&
-      reloadCamera.equals(v.camera.position),
+      // OrbitControls reconstructs Cartesian coordinates after recovery; allow
+      // numerical roundoff, using the same millimetre tolerance as style changes.
+      reloadCamera.distanceTo(v.camera.position) < 1e-9 &&
+      reloadTarget.distanceTo(v.controls.target) < 1e-9 &&
+      reloadUp.distanceTo(v.camera.up) < 1e-12,
     {
       before: reloaded,
       after: { ...v.state },
       beforeCamera: reloadCamera.toArray(),
       afterCamera: v.camera.position.toArray(),
       cameraError: reloadCamera.distanceTo(v.camera.position),
+      targetError: reloadTarget.distanceTo(v.controls.target),
+      upError: reloadUp.distanceTo(v.camera.up),
     },
   );
   // Restore the same style pair used for resource warm-up; first outline selection may add one geometry.
