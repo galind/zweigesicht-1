@@ -23,6 +23,10 @@ const profiles = {
   diamond: { color: 0xffffff, metalness: 0, roughness: 0.025, pattern: 0 },
 };
 type Finish = keyof typeof profiles;
+const screwDefinitions = [
+  9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
+  192, 201, 226, 253, 255,
+];
 // Exact definition identity wins over source-name fallbacks. No geometry is modified.
 // Full movement coverage by source definition. Unknown physical processes remain
 // authored; see docs/FINISHING_REFERENCES.md for confidence by surface family.
@@ -34,10 +38,7 @@ for (const [family, ids] of Object.entries({
   barrel: [85, 86, 90, 91],
   ratchet: [131],
   crown: [249, 251],
-  blue: [
-    9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
-    192, 201, 226, 253, 255,
-  ],
+  blue: screwDefinitions,
   steel: [
     53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 97, 103, 113, 121, 124, 126,
     127, 129, 130, 135, 143, 144, 148, 149, 150, 151, 154, 157, 158, 159, 160,
@@ -132,6 +133,7 @@ varying float vFinishRole;
 uniform float finishPattern;
 uniform float finishEnabled;
 uniform float finishEngraved;
+uniform float finishWholeBlue;
 `;
 const surface = /* glsl */ `
 float finishHash(vec2 p) {
@@ -178,6 +180,11 @@ export function createMaterial(
   instanceId?: string,
 ) {
   const finish = finishFor(name, definitionId, instanceId);
+  // Bluing covers the entire screw, including the slot, underside and shaft.
+  // Retain source face annotations as provenance, but override their CAD colors.
+  // Instance-level steel assignments and neutral hand seats remain independent.
+  const wholeBlue = finish.family === 'blue' &&
+    screwDefinitions.includes(Number(definitionId?.split('_').at(-1)));
   const material = new THREE.MeshPhysicalMaterial({
     color: finish.color,
     metalness: finish.metalness,
@@ -214,6 +221,7 @@ export function createMaterial(
       finishPattern: { value: finish.pattern },
       finishEnabled: enabled,
       finishEngraved: { value: etched ? 1 : 0 },
+      finishWholeBlue: { value: wholeBlue ? 1 : 0 },
     });
     shader.vertexShader =
       'varying vec3 vFinishPosition;\nvarying vec3 vFinishNormal;\nvarying vec3 vFinishX;\nvarying vec3 vFinishY;\nvarying float vFinishRole;\n#ifdef SOURCE_FINISH\nattribute vec3 sourceFinishNormal;\nattribute float sourceFinishRole;\n#endif\n' +
@@ -258,7 +266,7 @@ float finishBevel=smoothstep(.12,.4,finishFacing)*(1.0-smoothstep(.85,.98,finish
 float finishGrain=0.0;
 float finishHeight=0.0;
 // Only separately audited source regions may cross metal/dielectric families.
-if(finishEnabled>.5 && abs(vFinishRole-2.0)<.2) diffuseColor.rgb=vec3(.546,.584,.631);
+if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) diffuseColor.rgb=vec3(.546,.584,.631);
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) diffuseColor.rgb=vec3(.006);
 if(finishEnabled>.5 && abs(vFinishRole-4.0)<.2) diffuseColor.rgb=vec3(.018,.08,.24);
 if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.35,.005,.04);
@@ -297,7 +305,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
       '#include <roughnessmap_fragment>',
       /* glsl */ `
 #include <roughnessmap_fragment>
-if(finishEnabled>.5 && abs(vFinishRole-2.0)<.2) roughnessFactor=.2;
+if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) roughnessFactor=.2;
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
 if(finishEnabled>.5 && finishPattern>.5) {
  roughnessFactor=clamp(roughnessFactor+finishGrain*.14,.09,.85);
@@ -349,7 +357,7 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   };
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v3'
-      : 'ml01-source-surface-v3';
+      ? 'ml01-source-surface-clear-v4'
+      : 'ml01-source-surface-v4';
   return material;
 }

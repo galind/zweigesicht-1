@@ -79,18 +79,19 @@ for(const entry of sidecarReport.definitions){
  assert.deepEqual(roles,entry.roles);
 }
 // Independent spatial guard for the top-origin screw regression discovered in
-// the final macro. All vertices above the slot floor must retain blue head roles.
+// the final macro. Preserve original region identity independently of the
+// whole-screw bluing override in the material shader.
 for(const n of [9,107,122,180,181]){
  const id=`d_0_1_1_${n}`,raw=fs.readFileSync(path.join(ROOT,`artifacts/finishing-cad/sidecars/${id}.bin`)),data=v.sourceSurfaces.get(id);
  let head=0,shank=0;
  for(let i=0;i<data.length/4;i++){
   const z=raw.readFloatLE((i*10+2)*4),role=data[i*4+3];
   if(z>-.05){assert.notEqual(role,2,id+' blue top must not become steel');head++;}
-  if(z<(n===180?-2:-.5)){assert.equal(role,2,id+' source shank must stay steel');shank++;}
+  if(z<(n===180?-2:-.5)){assert.equal(role,2,id+' source shank annotation must remain intact');shank++;}
  }
  assert.ok(head>0&&shank>0);
 }
-results.push({check:'top-origin screw heads retain blue roles while their actual source shanks are steel, including both DPL screws',status:'pass'});
+results.push({check:'top-origin screw head/shank source annotations remain intact beneath the whole-screw finish override',status:'pass'});
 results.push({check:'actual hash-verified sidecars match packaged definition counts and recorded surface roles',status:'pass',bytes:sidecarReport.bytes,definitions:v.sourceSurfaces.size});
 for(const [label,alter]of [
  ['wrong overview',m=>({...m,overview:'/models/wrong.glb'})],
@@ -252,6 +253,41 @@ for(const suffix of [33,43,44,45,77,78,81,82]){
 const sharedBlue=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_181'&&p.material.name==='blue');
 assert.ok(sharedBlue,'Instance overrides must preserve shared screw definition blue elsewhere');
 results.push({check:'eight reviewed fasteners use instance steel overrides while shared screw definition stays blue elsewhere',status:'pass'});
+let blueScrews=0,steelScrews=0,blueShankVertices=0,neutralHandSeats=0;
+const blueScrewDefinitions=new Set();
+for(const p of v.renderParts.values()){
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+ p.material.onBeforeCompile(shader,{});
+ const screw=/^010-/.test(p.source.name),blue=screw&&p.material.name==='blue';
+ assert.equal(shader.uniforms.finishWholeBlue.value,blue?1:0,p.source.id);
+ // Both steel color and roughness overrides must respect the per-instance gate.
+ assert.equal((shader.fragmentShader.match(/finishWholeBlue<\.5 && abs\(vFinishRole-2\.0\)<\.2/g)||[]).length,2);
+ const roles=p.mesh.geometry.getAttribute('sourceFinishRole');
+ if(blue){
+  blueScrews++;blueScrewDefinitions.add(p.source.definitionId);
+  assert.ok(roles,'Every source screw carries its reviewed face annotation');
+  for(let i=0;i<roles.count;i++){
+   const role=roles.getX(i);
+   assert.ok([0,1,2].includes(role),'No other face color may override a blued screw');
+   if(role===2)blueShankVertices++;
+  }
+ }else if(screw&&p.material.name==='steel')steelScrews++;
+ else if(p.material.name==='blue'&&roles){
+  for(let i=0;i<roles.count;i++)if(roles.getX(i)===2)neutralHandSeats++;
+ }
+}
+assert.equal(blueScrewDefinitions.size,16);assert.ok(steelScrews>=8);
+assert.ok(blueShankVertices>0&&neutralHandSeats>0);
+// Four screw definitions currently occur only at steel-override locations;
+// their default finish must still cover the whole screw at any blue placement.
+for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255]){
+ const material=createMaterial('010-screw',`d_0_1_1_${n}`);
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+ material.onBeforeCompile(shader,{});
+ assert.equal(shader.uniforms.finishWholeBlue.value,1);
+ material.dispose();
+}
+results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while eight steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
 const physicalDefaults=new THREE.MeshPhysicalMaterial();
 for(const p of v.renderParts.values()){
  assert.ok(p.material instanceof THREE.MeshPhysicalMaterial);

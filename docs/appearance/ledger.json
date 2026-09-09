@@ -16,7 +16,7 @@
       "6": "source plate inscription floor",
       "7": "source red gauge inlay"
     },
-    "materialSourceSha256": "7a13cfa53b32afba8800d87d2090c033401cf3b6d2ed8a297dbe005ef7e9aacb",
+    "materialSourceSha256": "f8f5e9c7374fbf8dd33878bddf80fc2eafdb791ff6f12f480116ea2578b30f2e",
     "packagerSourceSha256": "e760417aad47eb2f43a41158f3058a905e074bf1ebe11665794ddcbc551571d2"
   },
   "coverage": {
@@ -556,7 +556,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -636,7 +636,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -718,7 +718,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -797,7 +797,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -876,7 +876,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -954,7 +954,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -1308,7 +1308,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -1700,7 +1700,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -1784,7 +1784,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -2044,7 +2044,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13255,7 +13255,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13334,7 +13334,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13434,7 +13434,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13515,7 +13515,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13594,7 +13594,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13676,7 +13676,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -13758,7 +13758,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -14021,7 +14021,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -14103,7 +14103,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -14214,7 +14214,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -14296,7 +14296,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
       "assignment": {
         "color": 2653112,
@@ -22528,7 +22528,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -23605,7 +23605,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -23668,7 +23668,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -24876,7 +24876,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -25082,7 +25082,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -25146,7 +25146,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -27711,7 +27711,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -27966,7 +27966,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -28049,7 +28049,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -28113,7 +28113,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -28955,7 +28955,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -29040,7 +29040,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -29702,7 +29702,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -29871,7 +29871,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -29954,7 +29954,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -31127,7 +31127,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -33412,7 +33412,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -37329,7 +37329,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -37519,7 +37519,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Blued steel appearance",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 2653112,
@@ -38011,7 +38011,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -38084,7 +38084,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -38522,7 +38522,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -38887,7 +38887,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -38960,7 +38960,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -39033,7 +39033,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -39106,7 +39106,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -39252,7 +39252,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -39325,7 +39325,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -39471,7 +39471,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -39544,7 +39544,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -39617,7 +39617,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -39690,7 +39690,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -39763,7 +39763,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -39836,7 +39836,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -40128,7 +40128,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -40420,7 +40420,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -40639,7 +40639,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -40712,7 +40712,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -41004,7 +41004,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -41296,7 +41296,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -41588,7 +41588,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -41661,7 +41661,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -41807,7 +41807,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -41880,7 +41880,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -41953,7 +41953,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -42026,7 +42026,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "Maker watch page: blued-steel hands; source blue/neutral face assignments",
-      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred.",
+      "surfaceReview": "Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.",
       "before": {
         "color": 1325673,
         "metalness": 0.12,
@@ -49691,7 +49691,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -49764,7 +49764,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -50932,7 +50932,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -51005,7 +51005,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52027,7 +52027,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52100,7 +52100,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52173,7 +52173,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52319,7 +52319,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52392,7 +52392,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52465,7 +52465,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52538,7 +52538,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52611,7 +52611,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -53998,7 +53998,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -54801,7 +54801,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -54874,7 +54874,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55093,7 +55093,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55312,7 +55312,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55531,7 +55531,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55677,7 +55677,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -55750,7 +55750,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -56407,7 +56407,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Unblued steel",
       "evidence": "REF-SJX-02 and FIN-SCREW-STEEL-01",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -56480,7 +56480,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -56553,7 +56553,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -56626,7 +56626,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57210,7 +57210,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57502,7 +57502,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57648,7 +57648,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57721,7 +57721,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57794,7 +57794,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57867,7 +57867,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57940,7 +57940,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -58816,7 +58816,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -58889,7 +58889,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -60922,7 +60922,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -60995,7 +60995,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -61068,7 +61068,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -62747,7 +62747,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -62820,7 +62820,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -63258,7 +63258,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -63331,7 +63331,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -63404,7 +63404,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -63842,7 +63842,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Unblued steel",
       "evidence": "REF-SJX-02 and FIN-SCREW-STEEL-01",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -63915,7 +63915,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Unblued steel",
       "evidence": "REF-SJX-02 and FIN-SCREW-STEEL-01",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -63988,7 +63988,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Blued steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -64134,7 +64134,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Unblued steel",
       "evidence": "REF-SJX-02 and FIN-SCREW-STEEL-01",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -64207,7 +64207,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Unblued steel",
       "evidence": "REF-SJX-02 and FIN-SCREW-STEEL-01",
-      "surfaceReview": "Reflective blue head/hand; neutral source-identified shank/seat regions where annotated. Unobserved locations remain inferred. Exact source shank/under-head faces are neutral steel; head/slot roles remain blue unless the instance has a steel override. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
       "before": {
         "color": 12831184,
         "metalness": 1,

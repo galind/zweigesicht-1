@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Whole-screw bluing correction — 9 September 2026
+
+User correction supersedes the prior audit's head-only blue / neutral-shank interpretation: blued screws now keep blue metal across the head, slot, underside, shaft and any modeled thread. The shader bypasses the source-neutral color and roughness annotation for blue screw instances across the twenty reviewed screw definitions. All 44 currently blued occurrences are covered. Exact-instance steel fasteners, other steel screws and neutral blue-hand seats retain their assignments. Source annotations, geometry and placements are unchanged; no thread geometry is fabricated. The appearance ledger and audit record this correction.
+
+Verification: all 30 actual-source/asset CPU regressions pass, including 13,386 annotated shaft/under-head vertices on the 44 blue screws, all twenty default screw definitions, eight explicit steel overrides and 934 neutral hand-seat vertices. Original decoded attributes/indices remain byte-exact across 339 geometry objects. TypeScript, targeted material lint and production build pass. No new browser/visual QA is claimed. This is a local material checkpoint for integration with the concurrent website redesign; no push or deployment. Next action: review exposed screws in the redesigned local explorer. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Website redesign brief — 9 September 2026
 
 User review established a single-screen immersive direction: the accepted watch model is the focal point, with a neutral near-black background, direct touch manipulation, minimal progressively revealed controls, continuous separation, a new arranged All parts view, and cleaner section views with verified specifications. The objective is appreciation of beauty and engineering rather than rapid instruction.
