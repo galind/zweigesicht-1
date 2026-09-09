@@ -912,12 +912,6 @@ h2 {
 .separation-control > .text-button:not(.reset-button) {
   flex: 1;
 }
-.separation-control .reset-button {
-  flex: 0 0 112px;
-  padding: 8px;
-  white-space: normal;
-  line-height: 1.1;
-}
 .focus-strip {
   position: absolute;
   inset: auto max(24px, env(safe-area-inset-right))
@@ -1012,12 +1006,6 @@ h2 {
     grid-column: 1 / 4;
     margin-left: 48px;
     gap: 8px;
-  }
-  .separation-control .reset-button {
-    flex-basis: 88px;
-  }
-  .separation-control .reset-button svg {
-    display: none;
   }
   .focus-strip {
     left: 16px;
@@ -1257,4 +1245,119 @@ h2 {
 }
 .text-enlarged .separation-control {
   align-self: stretch;
+}
+
+/* Balanced display choices and a separate row of view tools. */
+.control-deck,
+.text-enlarged .control-deck {
+  grid-template-columns: 136px minmax(0, 1fr) 136px;
+  grid-template-rows: auto 44px;
+  gap: 8px 16px;
+  padding: 12px;
+}
+.display-controls {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  grid-area: 1 / 1 / 2 / 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ffffff0d;
+}
+.display-controls .text-button {
+  grid-area: auto;
+  justify-content: center;
+  min-width: 0;
+  gap: 8px;
+  padding: 10px 8px;
+  color: #cbc9c5;
+  background: none;
+  box-shadow: none;
+  line-height: 1.35;
+}
+.display-controls .text-button[data-active='true'],
+.display-controls .text-button[aria-pressed='true'] {
+  color: #eeede7;
+  background: #ffffff0c;
+}
+.display-controls .text-button:hover:enabled {
+  color: white;
+  background: #ffffff12;
+}
+.control-deck .side-slot,
+.text-enlarged .side-slot {
+  grid-area: 2 / 1;
+  width: 100%;
+}
+.control-deck .side-switch span {
+  display: inline;
+}
+.control-deck .side-switch {
+  line-height: 1.35;
+}
+.control-deck .separation-control,
+.text-enlarged .separation-control {
+  grid-area: 2 / 2;
+  margin: 0;
+  gap: 12px;
+}
+.control-deck .separation-control > .text-button {
+  flex: 1;
+}
+.control-deck > .reset-button {
+  grid-area: 2 / 3;
+  padding: 8px;
+  white-space: normal;
+  line-height: 1.35;
+}
+.text-enlarged .control-deck {
+  grid-template-rows: auto 92px;
+}
+@media (max-width: 700px) {
+  .control-deck,
+  .text-enlarged .control-deck {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto 44px 44px;
+    gap: 4px 12px;
+    padding: 10px;
+  }
+  .display-controls {
+    grid-area: 1 / 1 / 2 / 3;
+    gap: 4px;
+    padding-bottom: 8px;
+  }
+  .display-controls .text-button {
+    gap: 4px;
+    padding: 8px 2px;
+    white-space: normal;
+  }
+  .control-deck > .reset-button {
+    grid-area: 2 / 2;
+  }
+  .control-deck .side-switch,
+  .control-deck > .reset-button {
+    gap: 6px;
+  }
+  .control-deck .separation-control,
+  .text-enlarged .separation-control {
+    grid-area: 3 / 1 / 4 / 3;
+    padding: 0 8px;
+  }
+  .text-enlarged .control-deck {
+    grid-template-rows: auto 92px 62px;
+  }
+  .text-enlarged .display-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .text-enlarged .all-parts-button {
+    grid-column: 1 / -1;
+  }
+  .text-enlarged .display-controls svg,
+  .text-enlarged .side-switch svg,
+  .text-enlarged .reset-button svg {
+    display: none;
+  }
 }

@@ -573,6 +573,7 @@ for(const aspect of [1280/504,374/560,304/456,1920/864]) {
  framing.camera.aspect=aspect;framing.state={...initialState};framing.homeCamera(true);
  const center=framing.controls.target.clone(),position=framing.camera.position.clone(),radius=position.distanceTo(center);
  assert.ok(Number.isFinite(radius)&&radius>40);
+ assert.ok(Math.abs(center.x)<1e-9 && Math.abs(center.y)<1e-9,'The central hand arbor is the movement framing anchor, independent of the stem');
  for(const side of ['front','back']) {
   framing.state={...initialState,presentation:'dials',side};framing.camera.up.set(.3,.4,.5).normalize();framing.frameDials();
   assert.ok(framing.controls.target.distanceTo(center)<1e-9,'All assembled presentations use the same center');

@@ -40,6 +40,11 @@ export async function runCameraChecks(v: MovementViewer) {
   v.reset();
   await settle(v);
   const opening = snapshot('Opening / Reset');
+  check(
+    'Opening framing is centered on the movement hand axis',
+    Math.abs(opening.target.x) < 1e-9 && Math.abs(opening.target.y) < 1e-9,
+    { target: opening.target },
+  );
   for (const face of ['central', 'small'] as const) {
     await v.showDial(face);
     await settle(v);

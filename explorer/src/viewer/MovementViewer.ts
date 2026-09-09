@@ -912,6 +912,7 @@ export class MovementViewer {
       const envelope = this.assemblyBounds();
       bounds.union(envelope);
       points.push(...this.boundsCorners(envelope));
+      this.centerOnMovementAxis(bounds);
     }
     this.frameBounds(bounds, direction, points);
   }
@@ -1083,7 +1084,25 @@ export class MovementViewer {
       bounds.expandByPoint(new THREE.Vector3(...p.boundsWorldMm[0]));
       bounds.expandByPoint(new THREE.Vector3(...p.boundsWorldMm[1]));
     }
-    return bounds.expandByScalar(0.75);
+    return this.centerOnMovementAxis(bounds.expandByScalar(0.75));
+  }
+  centerOnMovementAxis(bounds: THREE.Box3) {
+    // The stem affects the required space, never the orbit anchor. Keep the
+    // envelope symmetric about the authored central hand arbor in the XY plane.
+    const [x, y] = DIALS.faces.central.axleWorldXYMm;
+    const radiusX = Math.max(
+      Math.abs(bounds.min.x - x),
+      Math.abs(bounds.max.x - x),
+    );
+    const radiusY = Math.max(
+      Math.abs(bounds.min.y - y),
+      Math.abs(bounds.max.y - y),
+    );
+    bounds.min.x = x - radiusX;
+    bounds.max.x = x + radiusX;
+    bounds.min.y = y - radiusY;
+    bounds.max.y = y + radiusY;
+    return bounds;
   }
   syncOrbitUp() {
     // Three r186 caches its orbit basis at construction. Keep that basis aligned

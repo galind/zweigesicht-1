@@ -113,6 +113,7 @@ export function DialControls({
       <SheetTrigger
         ref={trigger}
         className="text-button dial-trigger"
+        data-active={state.layout === 'assembly' && view !== 'movement'}
         disabled={!available}
       >
         {label}
@@ -134,6 +135,7 @@ export function DialControls({
       <PopoverTrigger
         ref={trigger}
         className="text-button dial-trigger"
+        data-active={state.layout === 'assembly' && view !== 'movement'}
         disabled={!available}
       >
         {label}

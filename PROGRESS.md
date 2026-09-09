@@ -1,5 +1,15 @@
 # Zweigesicht — current execution state
 
+## Movement-axis centering and balanced menu — verified locally, 10 September 2026
+
+Centered the common framing envelope on the authored central hand axis, keeping the protruding stem within view without letting it offset the orbit target. Movement, both dials, Reset and reassembly share **[0, 0, -2.425] mm**; full separation retains XY **[0, 0]** while adapting depth. Dedicated mechanism/inventory framing and manual ownership remain intact.
+
+The bottom menu now gives Explore, Dial & hands and All parts equal-width choices with a shared quiet active treatment. A subtle divider separates view tools. Switch side and Reset keep visible labels on phones, with a full-width Separate slider beneath. Doubled text on narrow screens wraps the main choices into an extra row. Existing handlers, selection safeguards, finishes, six 10:10 hand poses, complete separation and All parts packing are preserved.
+
+**64 CPU/source checks**, **seven state tests**, TypeScript, authored lint and production build pass. All **18 camera checks** pass at **1280×720 and 390×844**, with complete separation within **.852 / .848 NDC**. All **27 UX checks** pass at **390×844 and 320×740 with 200% text**; **24 desktop dial checks** pass. Direct desktop measurements across six modes confirm **0 px control/canvas displacement**. Phone dial selection and normal/enlarged layouts were visually reviewed, with no enlarged-text horizontal overflow.
+
+Review: `docs/AXIS_AND_MENU_REVIEW.md`; ignored evidence: `artifacts/browser/axis-menu/`. Next action: user review at **http://127.0.0.1:4173/**, left running at the normal opening view. Local only; no push, merge, deployment or `FINISHING_GOAL.md` edit.
+
 ## Consistent side-toggle label — verified locally, 10 September 2026
 
 Renamed the side toggle to **Switch side** across bare Movement and both dials, including its tooltip and accessible name. Both faces are dial sides; the action no longer assigns a dial-versus-movement identity to them. Existing switching behavior and fixed control placement are preserved. Direct browser clicks verify the Movement front/back and Dial A-to-B routes with the same label; production build and diff checks pass. Preview remains running at **http://127.0.0.1:4173/** for user review. Local only; no push, merge, deployment or `FINISHING_GOAL.md` edit.

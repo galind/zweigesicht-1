@@ -576,45 +576,66 @@ export default function Home() {
           )}
         </section>
       )}
-      <footer ref={deck} className="control-deck">
-        <Popover open={explore} onOpenChange={setExplore}>
-          <PopoverTrigger
-            className="explore-button"
-            disabled={s.loadStage === 'recovering'}
-          >
-            Explore <ChevronDown aria-hidden="true" />
-          </PopoverTrigger>
-          <PopoverContent
-            className="explore-menu"
-            side="top"
-            align="start"
-            sideOffset={12}
-          >
-            <PopoverTitle>Inside the movement</PopoverTitle>
-            <button className="menu-link" onClick={() => chooseGroup(null)}>
-              Whole movement <ChevronRight aria-hidden="true" />
-            </button>
-            {GROUPS.map((g, i) => (
-              <button
-                className="menu-link"
-                key={g.id}
-                onClick={() => chooseGroup(g.id)}
-              >
-                <span>
-                  <small>0{i + 1}</small>
-                  {g.technical}
-                </span>
-                <ChevronRight aria-hidden="true" />
+      <footer
+        ref={deck}
+        className="control-deck"
+        aria-label="Movement controls"
+      >
+        <fieldset className="display-controls" aria-label="Explore the watch">
+          <Popover open={explore} onOpenChange={setExplore}>
+            <PopoverTrigger
+              className="explore-button text-button"
+              data-active={
+                s.layout === 'assembly' && s.presentation === 'movement'
+              }
+              disabled={s.loadStage === 'recovering'}
+            >
+              Explore <ChevronDown aria-hidden="true" />
+            </PopoverTrigger>
+            <PopoverContent
+              className="explore-menu"
+              side="top"
+              align="start"
+              sideOffset={12}
+            >
+              <PopoverTitle>Inside the movement</PopoverTitle>
+              <button className="menu-link" onClick={() => chooseGroup(null)}>
+                Whole movement <ChevronRight aria-hidden="true" />
               </button>
-            ))}
-          </PopoverContent>
-        </Popover>
-        <DialControls
-          state={s}
-          viewer={() => viewer.current}
-          available={available}
-          onOpenChange={setDialOpen}
-        />
+              {GROUPS.map((g, i) => (
+                <button
+                  className="menu-link"
+                  key={g.id}
+                  onClick={() => chooseGroup(g.id)}
+                >
+                  <span>
+                    <small>0{i + 1}</small>
+                    {g.technical}
+                  </span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
+          <DialControls
+            state={s}
+            viewer={() => viewer.current}
+            available={available}
+            onOpenChange={setDialOpen}
+          />
+          <button
+            className="text-button all-parts-button"
+            disabled={!available}
+            aria-pressed={s.layout === 'spread'}
+            onClick={() =>
+              s.layout === 'spread'
+                ? chooseGroup(null)
+                : viewer.current?.allParts()
+            }
+          >
+            All parts
+          </button>
+        </fieldset>
         <div className="side-slot">
           <button
             className="side-switch text-button"
@@ -684,34 +705,22 @@ export default function Home() {
               />
             </>
           )}
-          <button
-            className="text-button reset-button"
-            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-            title="Restore the opening view and options"
-            onClick={() => {
-              setExplore(false);
-              setSpreadGroups(false);
-              setDetails(false);
-              setDialOpen(false);
-              if (viewer.current) viewer.current.reset();
-              else set({ ...empty, loadStage: 'error', error: s.error });
-            }}
-          >
-            <RotateCcw aria-hidden="true" />
-            <span>Reset view</span>
-          </button>
         </div>
         <button
-          className="text-button all-parts-button"
-          disabled={!available}
-          aria-pressed={s.layout === 'spread'}
-          onClick={() =>
-            s.layout === 'spread'
-              ? chooseGroup(null)
-              : viewer.current?.allParts()
-          }
+          className="text-button reset-button"
+          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+          title="Restore the opening view and options"
+          onClick={() => {
+            setExplore(false);
+            setSpreadGroups(false);
+            setDetails(false);
+            setDialOpen(false);
+            if (viewer.current) viewer.current.reset();
+            else set({ ...empty, loadStage: 'error', error: s.error });
+          }}
         >
-          All parts
+          <RotateCcw aria-hidden="true" />
+          <span>Reset view</span>
         </button>
       </footer>
       <Sheet open={details} onOpenChange={setDetails}>
