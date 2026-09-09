@@ -24,3 +24,5 @@ explorer/public/reference/
 *.tsbuildinfo
 artifacts/mechanics/
 artifacts/assets/
+artifacts/finishing-cad/
+assets/reference/finishing/

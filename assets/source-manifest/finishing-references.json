@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "prepared_at": "2026-09-09",
+  "scope": "Local-only visual finishing evidence for the Marco Lang Zweigesicht-1 / calibre ml-01 explorer.",
+  "distribution_status": "Reference binaries are ignored and must not be committed or redistributed. Public access was verified; explicit republication licences were not found on the reviewed pages.",
+  "measurement_status": "Photographs and presentation media provide qualitative appearance evidence only. All numerical shader values remain authored.",
+  "references": [
+    {
+      "id": "REF-MAKER-01",
+      "title": "Zweigesicht-1 Front 2 Werk",
+      "publisher": "Marco Lang",
+      "page_url": "https://www.marcolangwatches.com/en/downloads-2/",
+      "download_record_url": "https://www.marcolangwatches.com/de/download/2806/",
+      "preview_url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/Front_2_Werk.jpg",
+      "media_class": "processed studio photograph",
+      "classification_basis": "The downloaded JPEG contains Phase One P65+ camera EXIF and Adobe Photoshop editing history; its optical reflections and depth also read as photography.",
+      "variant": "Press/prototype movement marked No. 00/18, shock indicator fitted, blue enamel movement-side dial.",
+      "resolution_px": [6000, 4496],
+      "local_path": "assets/reference/finishing/maker-Front_2_Werk-6000x4496.jpg",
+      "bytes": 4382115,
+      "sha256": "fdf5116acbdf0b6a1d44ba4ab804620478b2447e6925a8eca0c90b80393264a8",
+      "access": "Public maker download endpoint; fetched without bypass.",
+      "rights": "No explicit reuse licence found. Local reference and analysis only. Do not redistribute."
+    },
+    {
+      "id": "REF-MAKER-02",
+      "title": "Zweigesicht-1 Animation",
+      "publisher": "Marco Lang",
+      "page_url": "https://www.marcolangwatches.com/en/downloads-2/",
+      "download_record_url": "https://www.marcolangwatches.com/de/download/2792/",
+      "preview_url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/zweigesicht1_animation_vorschau.jpg",
+      "media_class": "maker animation/render",
+      "classification_basis": "The maker labels the file Animation and distributes an MP4 presentation asset. It is not treated as photographic finish evidence.",
+      "variant": "Maker presentation of the original Zweigesicht-1 configuration.",
+      "local_path": "assets/reference/finishing/maker-Zweigesicht-1-animation.mp4",
+      "bytes": 5569187,
+      "sha256": "4328559383cb5187e34364beb0bf1c04122cce1bb2fe0dfa5cac34e70914e55c",
+      "access": "Public maker download endpoint; fetched without bypass.",
+      "rights": "No explicit reuse licence found. Local reference and analysis only. Do not redistribute."
+    },
+    {
+      "id": "REF-MAKER-SHOCK-01",
+      "title": "shockindication5",
+      "publisher": "Marco Lang",
+      "page_url": "https://www.marcolangwatches.com/en/watches/",
+      "asset_url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/shockindication5.png",
+      "media_class": "maker exploded render/diagram",
+      "classification_basis": "Exploded, isolated component presentation; already classified as a maker reference in reference-images.json.",
+      "variant": "Optional shock-indicator module, exploded.",
+      "existing_local_path": "artifacts/analysis/source-references/shockindication5.png",
+      "bytes": 218234,
+      "sha256": "faef640bfc4ec481faf69eadc95bdc4e1a10c6f340f944b9d62443dc8c2ae341",
+      "access": "Public image URL previously fetched without bypass.",
+      "rights": "Explicit redistribution terms unresolved. Local reference only."
+    },
+    {
+      "id": "REF-SJX-00",
+      "title": "Zweigesicht-1 review 12",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-review-12.jpg",
+      "media_class": "editorial photograph",
+      "classification_basis": "Original SJX review photography of the finished watch, with real-world lighting, crystal reflections, depth of field and SJX watermark.",
+      "variant": "Finished watch, movement No. 00/18, shock indicator fitted.",
+      "resolution_px": [1600, 1067],
+      "local_path": "assets/reference/finishing/sjx-review-12.jpg",
+      "bytes": 471220,
+      "sha256": "1e105949e27f1af178bb153a037796437b4338350a88f2051416420a4b1b9463",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; no republication permission found. Local analysis only."
+    },
+    {
+      "id": "REF-SJX-01",
+      "title": "Movement detail 1",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-movement-detail-1.jpg",
+      "media_class": "editorial macro photograph",
+      "variant": "No. 00/18 movement; central bridge, ruby, chaton, crown-wheel and bridge-foot detail.",
+      "resolution_px": [1600, 1066],
+      "local_path": "assets/reference/finishing/sjx-movement-detail-1.jpg",
+      "bytes": 496857,
+      "sha256": "28556d8cdbdc75ea10697fad5292d921dbc3dea3a72f8d956fa9d82c44a99866",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; local analysis only."
+    },
+    {
+      "id": "REF-SJX-02",
+      "title": "Movement detail 2",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-movement-detail-2.jpg",
+      "media_class": "editorial macro photograph",
+      "variant": "No. 00/18 movement; crown wheel, click, plate, screws and lower bridge detail.",
+      "resolution_px": [1600, 1067],
+      "local_path": "assets/reference/finishing/sjx-movement-detail-2.jpg",
+      "bytes": 448544,
+      "sha256": "817d52c3b2189d946869e87b68dcd1b8ee56099fb1fe5ac6f13ca5689a83fcdc",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; local analysis only."
+    },
+    {
+      "id": "REF-SJX-03",
+      "title": "Movement detail 3",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-movement-detail-3.jpg",
+      "media_class": "editorial macro photograph",
+      "variant": "No. 00/18 movement; barrel bridge, barrels, display train and mixed screw finishes.",
+      "resolution_px": [1600, 1067],
+      "local_path": "assets/reference/finishing/sjx-movement-detail-3.jpg",
+      "bytes": 466173,
+      "sha256": "7edb67e5b03c826434fe527eff6e679c646cc42b24638280bd6f5eb531685ebf",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; local analysis only."
+    },
+    {
+      "id": "REF-SJX-04",
+      "title": "Movement detail 4",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-movement-detail-4.jpg",
+      "media_class": "editorial macro photograph",
+      "variant": "No. 00/18 movement; train bridge, engravings, jewel/chaton, wheel and hairspring detail.",
+      "resolution_px": [1600, 1066],
+      "local_path": "assets/reference/finishing/sjx-movement-detail-4.jpg",
+      "bytes": 517157,
+      "sha256": "619b9528569d3ea8ea1141dca9574db31e618ec477eac79f291db161077ac855",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; local analysis only."
+    },
+    {
+      "id": "REF-SJX-05",
+      "title": "Movement detail 5",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-movement-detail-5.jpg",
+      "media_class": "editorial macro photograph",
+      "variant": "No. 00/18 movement; balance bridge, diamond endstone, balance and gilt plate detail.",
+      "resolution_px": [1600, 1067],
+      "local_path": "assets/reference/finishing/sjx-movement-detail-5.jpg",
+      "bytes": 558282,
+      "sha256": "d171f76da5796be17d05c7e374ed27f5519b44dfabedc68fd1fced576632ac97",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; local analysis only."
+    },
+    {
+      "id": "REF-SJX-06",
+      "title": "Movement detail 6",
+      "publisher": "SJX Watches",
+      "page_url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "asset_url": "https://watchesbysjx.com/wp-content/uploads/2023/08/Marco-Lang-Zweigesicht-1-movement-detail-6.jpg",
+      "media_class": "editorial macro photograph",
+      "variant": "No. 00/18 movement; assembled shock indicator, plate, screws and polished pins.",
+      "resolution_px": [1600, 1066],
+      "local_path": "assets/reference/finishing/sjx-movement-detail-6.jpg",
+      "bytes": 453714,
+      "sha256": "316cc77e45a80a9466027874d3c89a1f2f0dfc64d1cf41d4b29644fa80d4d1de",
+      "access": "Public editorial image URL; fetched without bypass.",
+      "rights": "SJX editorial copyright; local analysis only."
+    }
+  ],
+  "context_sources": [
+    {
+      "id": "SRC-SJX-2020",
+      "url": "https://watchesbysjx.com/2020/12/marco-lang-zweigesicht-1.html",
+      "use": "Maker statements and early movement/variant context: flying bridges, Breguet overcoil, diamond endstone, optional shock recorder."
+    },
+    {
+      "id": "SRC-SJX-2023",
+      "url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "use": "Independent macro photography and finish descriptions: gilt frosted plate, straight-grained steel bridge tops, frosted bases, polished chamfers and pins, 14k rose-gold wheels, black-polished/flame-blued crown wheel."
+    },
+    {
+      "id": "SRC-QP-2021",
+      "url": "https://quillandpad.com/2021/05/29/marco-lang-zweigesicht-1-one-watch-two-faces-and-a-new-shock-tracking-indication/",
+      "use": "Variant warning: customer personalization can affect materials, engraving, dials and finishing; shock module is optional."
+    },
+    {
+      "id": "SRC-MAKER-CAD",
+      "url": "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/",
+      "use": "Maker CAD/catalog identity and downloadable assembly provenance."
+    }
+  ],
+  "variant_notes": [
+    "The photographed target is the No. 00/18 shock-indicator configuration.",
+    "A no-shock variant replaces the module with an engraved plate.",
+    "Case versions include steel, rose gold and platinum; case metal does not prove a movement finish change.",
+    "Published reporting says client personalization may change materials, engraving, dial and finish, so the evidence is example-specific.",
+    "The local CAD includes overlapping setting-spring alternatives; reference photography does not resolve that CAD-state choice."
+  ],
+  "observations": [
+    {
+      "id": "FIN-PLATE-01",
+      "category": "plate",
+      "definition_ids": ["d_0_1_1_195"],
+      "surface_region": "broad top field and engraved perimeter",
+      "observation": "Warm pink-gilt, fine irregular granular frosting; diffuse broad highlight with brighter engraving cut edges.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-02", "REF-SJX-05", "REF-SJX-06"],
+      "confidence": "high appearance; alloy, coating and scale unmeasured"
+    },
+    {
+      "id": "FIN-BRIDGE-TOP-01",
+      "category": "bridge_face",
+      "definition_ids": ["d_0_1_1_99", "d_0_1_1_133", "d_0_1_1_219", "d_0_1_1_222", "d_0_1_1_228", "d_0_1_1_230", "d_0_1_1_240", "d_0_1_1_251"],
+      "surface_region": "broad top panels",
+      "observation": "Fine parallel straight grain oriented with each bridge's long visual sweep.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-03", "REF-SJX-04", "REF-SJX-05"],
+      "confidence": "high"
+    },
+    {
+      "id": "FIN-BRIDGE-BASE-01",
+      "category": "bridge_base",
+      "definition_ids": ["d_0_1_1_99", "d_0_1_1_133", "d_0_1_1_147", "d_0_1_1_152", "d_0_1_1_153", "d_0_1_1_156", "d_0_1_1_165", "d_0_1_1_219", "d_0_1_1_222", "d_0_1_1_228", "d_0_1_1_230", "d_0_1_1_240", "d_0_1_1_251"],
+      "surface_region": "feet, recesses and underside/base surfaces",
+      "observation": "Matte/frosted steel contrasts with straight-grained top panels.",
+      "evidence_refs": ["REF-SJX-01", "REF-SJX-02", "REF-SJX-05", "REF-SJX-06", "SRC-SJX-2023"],
+      "confidence": "high primary bridges; medium smaller shock plates"
+    },
+    {
+      "id": "FIN-BEVEL-01",
+      "category": "bevel",
+      "definition_ids": ["d_0_1_1_99", "d_0_1_1_133", "d_0_1_1_219", "d_0_1_1_222", "d_0_1_1_228", "d_0_1_1_230", "d_0_1_1_240", "d_0_1_1_251"],
+      "surface_region": "modeled outer chamfers and countersink rims",
+      "observation": "Smooth mirror-bright bands with continuous white-to-dark reflections; substantially smoother than top fields.",
+      "evidence_refs": ["REF-SJX-01", "REF-SJX-02", "REF-SJX-03", "REF-SJX-04", "REF-SJX-05"],
+      "confidence": "high"
+    },
+    {
+      "id": "FIN-RECESS-01",
+      "category": "recess",
+      "definition_ids": ["d_0_1_1_99", "d_0_1_1_219", "d_0_1_1_222", "d_0_1_1_228"],
+      "surface_region": "narrow inset perimeter line inside bridge bevel",
+      "observation": "Glossy blue-black decorative border, described by SJX as heat blued; distinct from bevel and sidewall.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-04", "REF-SJX-05", "SRC-SJX-2023"],
+      "confidence": "high listed visible bridges; medium hidden/small bridges"
+    },
+    {
+      "id": "FIN-ENGRAVE-01",
+      "category": "engraving",
+      "definition_ids": ["d_0_1_1_195", "d_0_1_1_99"],
+      "surface_region": "plate lettering, serial cartouche and monogram cuts",
+      "observation": "Recessed cuts with dark interior/shadow and bright cut edges; bridge cuts interrupt the straight grain.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-04", "REF-SJX-05"],
+      "confidence": "high; preserve geometry where present and do not invent absent text"
+    },
+    {
+      "id": "FIN-BARREL-01",
+      "category": "barrel",
+      "definition_ids": ["d_0_1_1_85", "d_0_1_1_86", "d_0_1_1_90", "d_0_1_1_91"],
+      "surface_region": "lid/top, drum wall and toothed rim",
+      "observation": "Warm rose-gold broad faces with fine radial/circular satin; darker drum sides and brighter rim/tooth edges.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-02", "REF-SJX-03"],
+      "confidence": "high family/direction; medium exact lid-versus-drum split"
+    },
+    {
+      "id": "FIN-WHEEL-01",
+      "category": "wheel",
+      "definition_ids": ["d_0_1_1_94", "d_0_1_1_96", "d_0_1_1_137", "d_0_1_1_141", "d_0_1_1_183", "d_0_1_1_187", "d_0_1_1_210", "d_0_1_1_213", "d_0_1_1_216", "d_0_1_1_233", "d_0_1_1_235", "d_0_1_1_238", "d_0_1_1_243"],
+      "surface_region": "wheel plates, spokes, rims and teeth",
+      "observation": "Prominent train/display wheels are warm rose/yellow gold, with fine satin faces, linear spoke grain, and brighter rim/tooth tips. Small mixed/source-uncertain IDs need individual review.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-02", "REF-SJX-03", "REF-SJX-04", "SRC-SJX-2023"],
+      "confidence": "high prominent gold wheels; medium exhaustive listed assignment"
+    },
+    {
+      "id": "FIN-CROWN-01",
+      "category": "crown_wheel",
+      "definition_ids": ["d_0_1_1_249", "d_0_1_1_251"],
+      "surface_region": "Steel 249 annulus and 251 main cap; blue cone is 251 face 22, resolved by the subsequent CAD face audit",
+      "observation": "Two-tone black-polished steel wheel with saturated flame-blued ring.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-02", "SRC-SJX-2023"],
+      "confidence": "high; a single whole-definition ratchet material is incomplete"
+    },
+    {
+      "id": "FIN-RATCHET-01",
+      "category": "ratchet_wheel",
+      "definition_ids": ["d_0_1_1_131"],
+      "surface_region": "broad face and tooth edge",
+      "observation": "Cool steel with circular/radial satin and brighter tooth edges.",
+      "evidence_refs": ["REF-MAKER-01"],
+      "confidence": "medium"
+    },
+    {
+      "id": "FIN-PINION-01",
+      "category": "pinion_and_arbor",
+      "definition_ids": ["d_0_1_1_93", "d_0_1_1_113", "d_0_1_1_127", "d_0_1_1_143", "d_0_1_1_144", "d_0_1_1_184", "d_0_1_1_211", "d_0_1_1_214", "d_0_1_1_217", "d_0_1_1_234", "d_0_1_1_237", "d_0_1_1_242"],
+      "surface_region": "pinion leaves, arbors and exposed tips",
+      "observation": "Cool polished steel with bright tips and dark reflective flanks; no coarse visible grain.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-02", "REF-SJX-03", "REF-SJX-04"],
+      "confidence": "medium due to partial occlusion"
+    },
+    {
+      "id": "FIN-BALANCE-01",
+      "category": "balance",
+      "definition_ids": ["d_0_1_1_110", "d_0_1_1_111", "d_0_1_1_113"],
+      "surface_region": "rim/arms, eccentric masses and staff",
+      "observation": "Balance rim reads warm rose/copper in photos with bright beveled edges; eccentric masses read warmer yellow gold and polished.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-05"],
+      "confidence": "medium; reflected plate color may warm the rim, so recheck d_0_1_1_110 without asserting alloy"
+    },
+    {
+      "id": "FIN-SPRING-01",
+      "category": "balance_spring",
+      "definition_ids": ["d_0_1_1_116"],
+      "surface_region": "Breguet overcoil hairspring",
+      "observation": "Deep navy blued steel with narrow cyan/amber reflections and no visible coarse texture.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-04", "REF-SJX-05", "SRC-SJX-2020"],
+      "confidence": "high appearance; optical constants unmeasured"
+    },
+    {
+      "id": "FIN-SCREW-BLUE-01",
+      "category": "blue_screw",
+      "definition_ids": ["d_0_1_1_9", "d_0_1_1_107", "d_0_1_1_123", "d_0_1_1_136", "d_0_1_1_138", "d_0_1_1_139", "d_0_1_1_166", "d_0_1_1_168", "d_0_1_1_169", "d_0_1_1_170", "d_0_1_1_181", "d_0_1_1_189", "d_0_1_1_191", "d_0_1_1_192", "d_0_1_1_201", "d_0_1_1_226"],
+      "surface_region": "photographed movement placements of screw heads",
+      "observation": "Heat-blue heads with dark slots and narrow bright/cyan chamfer reflections; color varies strongly with angle.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-02", "REF-SJX-03", "REF-SJX-04", "REF-SJX-05", "REF-SJX-06"],
+      "confidence": "high visible placements; not universal per shared definition, especially d_0_1_1_9 and d_0_1_1_181"
+    },
+    {
+      "id": "FIN-SCREW-STEEL-01",
+      "category": "steel_screw",
+      "definition_ids": ["d_0_1_1_53", "d_0_1_1_57", "d_0_1_1_61", "d_0_1_1_180", "d_0_1_1_181", "d_0_1_1_253", "d_0_1_1_255"],
+      "instance_evidence": [
+        {
+          "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_77",
+          "definition_id": "d_0_1_1_253",
+          "bounds_center_world_mm": [10.0697874731, -0.7501341638, -3.635],
+          "identification": "upper/left of the two bright steel crown-wheel-cap screws in REF-SJX-02"
+        },
+        {
+          "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_82",
+          "definition_id": "d_0_1_1_253",
+          "bounds_center_world_mm": [10.0702356933, 0.75, -3.635],
+          "identification": "lower/right of the two bright steel crown-wheel-cap screws in REF-SJX-02"
+        },
+        {
+          "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_81",
+          "definition_id": "d_0_1_1_255",
+          "bounds_center_world_mm": [13.7368167881, -3.7000665975, -3.595],
+          "identification": "bright steel screw retaining the click in REF-SJX-02"
+        },
+        {
+          "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_78",
+          "definition_id": "d_0_1_1_181",
+          "bounds_center_world_mm": [14.3826720581, 2.5066998202, -3.4787863386],
+          "identification": "small bright steel right-side/click-plate fastener in REF-SJX-02; same definition has other placements"
+        },
+        {
+          "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_33",
+          "definition_id": "d_0_1_1_180",
+          "bounds_center_world_mm": [15.7499399265, 1.9501379906, -2.1838269784],
+          "identification": "outer polished steel fastener; medium-confidence photo correlation"
+        }
+      ],
+      "surface_region": "head top, slot and chamfer",
+      "observation": "Steel screws and fasteners are circularly finished or mirror/black polished with crisp slots; photographs disprove a universal blue-screw rule.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-02", "REF-SJX-03", "REF-SJX-06"],
+      "confidence": "high for instances 83_77, 83_82, 83_81 and 83_78; medium for 83_33 and exhaustive ID coverage"
+    },
+    {
+      "id": "FIN-PIN-01",
+      "category": "pins",
+      "definition_ids": ["d_0_1_1_72", "d_0_1_1_103", "d_0_1_1_118", "d_0_1_1_124", "d_0_1_1_135", "d_0_1_1_148", "d_0_1_1_149", "d_0_1_1_150", "d_0_1_1_157", "d_0_1_1_158", "d_0_1_1_162", "d_0_1_1_163", "d_0_1_1_173", "d_0_1_1_179", "d_0_1_1_200", "d_0_1_1_220"],
+      "surface_region": "exposed rounded pin/stud ends",
+      "observation": "Steel pins are neutral mirror-polished with compact white highlights; ms-marked pins are warm brass/gold in the maker shock render.",
+      "evidence_refs": ["REF-MAKER-01", "REF-MAKER-SHOCK-01", "REF-SJX-01", "REF-SJX-02", "REF-SJX-03", "REF-SJX-04", "REF-SJX-05", "REF-SJX-06"],
+      "confidence": "high family split"
+    },
+    {
+      "id": "FIN-JEWEL-01",
+      "category": "jewels",
+      "definition_ids": ["d_0_1_1_101", "d_0_1_1_102", "d_0_1_1_106", "d_0_1_1_112", "d_0_1_1_128", "d_0_1_1_134", "d_0_1_1_196", "d_0_1_1_197", "d_0_1_1_198", "d_0_1_1_199", "d_0_1_1_204", "d_0_1_1_205", "d_0_1_1_208", "d_0_1_1_231"],
+      "surface_region": "bearing stone body and pivot opening",
+      "observation": "Transparent/translucent magenta-red stones with bright curved reflections, dark internal depth and visible metal pivots.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-04", "REF-SJX-05"],
+      "confidence": "high; opaque magenta plastic is inconsistent with evidence"
+    },
+    {
+      "id": "FIN-CHATON-01",
+      "category": "chatons",
+      "definition_ids": ["d_0_1_1_100", "d_0_1_1_207", "d_0_1_1_224"],
+      "surface_region": "metal setting face and polished rim",
+      "observation": "Warm gold/rose-gold settings with smooth polished rims and strong highlights around transparent stones.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-01", "REF-SJX-04", "REF-SJX-05"],
+      "confidence": "high d_0_1_1_100 and d_0_1_1_224; medium d_0_1_1_207"
+    },
+    {
+      "id": "FIN-DIAMOND-01",
+      "category": "diamond_endstone",
+      "definition_ids": ["d_0_1_1_225"],
+      "assembly_definition_ids": ["d_0_1_1_223"],
+      "surface_region": "balance endstone",
+      "observation": "Clear brilliant-cut diamond with high-contrast faceted reflections in a polished warm-gold chaton.",
+      "evidence_refs": ["REF-MAKER-01", "REF-SJX-05", "SRC-SJX-2020"],
+      "confidence": "high visual evidence; local CAD definition is empty, so no source geometry can render it"
+    },
+    {
+      "id": "FIN-SHOCK-01",
+      "category": "shock_indicator",
+      "definition_ids": ["d_0_1_1_147", "d_0_1_1_151", "d_0_1_1_152", "d_0_1_1_153", "d_0_1_1_154", "d_0_1_1_155", "d_0_1_1_156", "d_0_1_1_159", "d_0_1_1_161", "d_0_1_1_164", "d_0_1_1_165"],
+      "surface_region": "assembled and hidden exploded module surfaces",
+      "observation": "Mixed straight-grained/polished steel, blue hands and springs, ruby-red gauge inlays, polished pins and cylindrical ruby mass.",
+      "evidence_refs": ["REF-MAKER-SHOCK-01", "REF-SJX-06", "SRC-SJX-2023"],
+      "confidence": "high visible families; medium hidden surface treatment"
+    }
+  ],
+  "implementation_constraints": [
+    "Assembly manifest definition IDs identify parts, not separately addressable faces.",
+    "Surface-region observations require topology/orientation evidence or reversible face-specific overrides.",
+    "Shared definitions can require instance-specific finishes; d_0_1_1_9 is the known screw example.",
+    "Do not infer alloy or process solely from photographic color.",
+    "Do not derive absolute color, roughness, anisotropy, bump strength or texture scale from these images.",
+    "Do not silently create geometry for the empty d_0_1_1_225 diamond definition."
+  ]
+}

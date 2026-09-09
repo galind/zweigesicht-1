@@ -27,3 +27,9 @@ reference=root/'artifacts/cad/reference-renders/movement-back.png'
 if reference.is_file():
     out=root/'explorer/public/reference';out.mkdir(parents=True,exist_ok=True);shutil.copy2(reference,out/'movement-back.png')
 print(json.dumps({'localOnly':True,'paths':paths,'manifestBytes':len(raw),'manifestGzipBytes':(target/'assembly-manifest.json.gz').stat().st_size},indent=2))
+
+# Source normals/face regions are a separate reversible local enhancement.
+# The audit must exist; never regenerate/import upstream CAD as a side effect.
+if (root/'artifacts/finishing-cad/sidecars').is_dir():
+    import subprocess
+    subprocess.run(['node', str(root/'scripts/assets/prepare-finishes.mjs')], cwd=root, check=True)

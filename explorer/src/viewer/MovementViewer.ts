@@ -2,7 +2,12 @@ import { benchmarkFrame, type Benchmark } from './validation';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { StudioEnvironment } from './StudioEnvironment';
+import {
+  attachSourceSurface,
+  loadSourceSurfaces,
+  type SourceSurfaces,
+} from './SourceSurfaces';
 import { SurfaceOcclusion } from './SurfaceOcclusion';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
@@ -58,6 +63,8 @@ export class MovementViewer {
   controls: OrbitControls;
   root = new THREE.Group();
   environment: THREE.WebGLRenderTarget;
+  sourceSurfaces?: SourceSurfaces;
+  sourceSurfaceError = '';
   surfaceOcclusion?: SurfaceOcclusion;
   beautyTriangles?: number;
   beautyDrawCalls?: number;
@@ -116,8 +123,8 @@ export class MovementViewer {
     this.controls.addEventListener('start', this.manual);
     this.controls.addEventListener('change', this.invalidate);
     const pmrem = new THREE.PMREMGenerator(this.renderer),
-      room = new RoomEnvironment();
-    this.environment = pmrem.fromScene(room, 0.04);
+      room = new StudioEnvironment();
+    this.environment = pmrem.fromScene(room, 0.015);
     this.scene.environment = this.environment.texture;
     this.scene.environmentIntensity = 0.9;
     room.dispose();
@@ -191,6 +198,8 @@ export class MovementViewer {
       pixelRatio: this.renderer.getPixelRatio(),
       loadMs: this.loadMs,
       contextLosses: this.contextLosses,
+      sourceSurfaceDefinitions: this.sourceSurfaces?.size ?? 0,
+      sourceSurfaceError: this.sourceSurfaceError,
       camera: this.camera.position.toArray(),
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
@@ -250,8 +259,8 @@ export class MovementViewer {
   onContextRestored = () => {
     this.environment.dispose();
     const pmrem = new THREE.PMREMGenerator(this.renderer),
-      room = new RoomEnvironment();
-    this.environment = pmrem.fromScene(room, 0.04);
+      room = new StudioEnvironment();
+    this.environment = pmrem.fromScene(room, 0.015);
     this.scene.environment = this.environment.texture;
     room.dispose();
     pmrem.dispose();
@@ -268,8 +277,8 @@ export class MovementViewer {
     try {
       const response = await fetch('/models/assembly-manifest.json');
       if (!response.ok) throw new Error('Manifest unavailable');
-      this.manifest = await response.json();
-      this.parts = this.manifest!.instances;
+      const manifest = (await response.json()) as Manifest;
+      if (this.dead || generation !== this.loadGeneration) return;
       const paths = await fetch('/models/asset-paths.json')
         .then((r) =>
           r.ok
@@ -277,12 +286,25 @@ export class MovementViewer {
             : null,
         )
         .catch(() => null);
+      if (this.dead || generation !== this.loadGeneration) return;
+      this.manifest = manifest;
+      this.parts = manifest.instances;
+      this.sourceSurfaceError = '';
       if (
         paths &&
         typeof paths.overview === 'string' &&
         typeof paths.catalog === 'string'
       )
         this.paths = { overview: paths.overview, catalog: paths.catalog };
+      const surfaces = (
+        new URLSearchParams(location.search).get('sourcefinish') === '0'
+          ? Promise.resolve(undefined)
+          : loadSourceSurfaces(this.paths.overview)
+      ).catch((error: Error) => {
+        if (!this.dead && generation === this.loadGeneration)
+          this.sourceSurfaceError = error.message;
+        return undefined;
+      });
       const gltf = await new GLTFLoader()
         .setMeshoptDecoder(MeshoptDecoder)
         .loadAsync(this.paths.overview, (p) => {
@@ -291,10 +313,12 @@ export class MovementViewer {
             this.emit();
           }
         });
+      const sourceSurfaces = await surfaces;
       if (this.dead || generation !== this.loadGeneration) {
         this.disposeObject(gltf.scene);
         return;
       }
+      this.sourceSurfaces = sourceSurfaces;
       this.ingest(gltf.scene);
       this.ready = true;
       this.state = { ...initialState, phase: 'whole' };
@@ -330,10 +354,19 @@ export class MovementViewer {
       }
       if (!record || this.renderParts.has(record.id)) return;
       const original = node.material;
+      try {
+        attachSourceSurface(
+          node.geometry,
+          this.sourceSurfaces?.get(record.definitionId),
+        );
+      } catch (error) {
+        this.sourceSurfaceError = `${record.definitionId}: ${String(error)}`;
+      }
       const material = createMaterial(
         record.name,
         record.definitionId,
         node.geometry,
+        record.id,
       );
       node.material = material;
       for (const m of Array.isArray(original) ? original : [original])
@@ -690,14 +723,18 @@ export class MovementViewer {
         id === PREFIX + '4';
       if (this.state.study && unsafe) visible = false;
       p.mesh.visible = visible;
-      const finish = finishFor(p.source.name, p.source.definitionId);
+      const finish = finishFor(
+        p.source.name,
+        p.source.definitionId,
+        p.source.id,
+      );
       p.material.color.setHex(finish.color);
       p.material.metalness = finish.metalness;
       p.material.roughness = finish.roughness;
       p.material.emissive.setHex(0);
       setFinishEnabled(
         p.material,
-        this.state.treatment === 'finish' && (!group || member) && !selected,
+        this.state.treatment === 'finish' && (!group || member || selected),
       );
       if (this.state.treatment === 'function') {
         p.material.metalness = 0.22;
@@ -718,7 +755,7 @@ export class MovementViewer {
         p.material.metalness = 0.05;
         p.material.roughness = 0.95;
       }
-      if (selected) {
+      if (selected && this.state.treatment === 'function') {
         p.material.color.set('#f5cf88');
         p.material.emissive.set('#493014');
       }

@@ -10,11 +10,11 @@ export class SurfaceOcclusion {
   ) {
     this.pass = new SSAOPass(scene, camera, 512, 512, 16);
     this.pass.renderToScreen = true;
-    this.pass.kernelRadius = 0.8; // Source world remains millimetres.
+    this.pass.kernelRadius = 0.4; // Source world remains millimetres.
     this.pass.ssaoMaterial.fragmentShader =
       this.pass.ssaoMaterial.fragmentShader.replace(
         'vec3( 1.0 - occlusion )',
-        'vec3( 1.0 - 0.48 * occlusion )',
+        'vec3( 1.0 - 0.24 * occlusion )',
       );
   }
   resize(width: number, height: number) {
@@ -33,7 +33,7 @@ export class SurfaceOcclusion {
     );
     const depthRange = this.camera.far - this.camera.near;
     this.pass.minDistance = 0.035 / depthRange;
-    this.pass.maxDistance = 1.4 / depthRange;
+    this.pass.maxDistance = 0.65 / depthRange;
     this.pass.render(
       renderer,
       this.pass.ssaoRenderTarget,

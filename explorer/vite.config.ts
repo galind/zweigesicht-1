@@ -12,7 +12,7 @@ function localCad(): Plugin {
       server.middlewares.use((req, res, next) => {
         const pathname = (req.url || '').split('?')[0];
         if (
-          !/^\/models\/(?:overview-[a-f0-9]{12}\.glb|catalog-[a-f0-9]{12}\.glb|assembly-manifest\.json)$/.test(
+          !/^\/models\/(?:overview-[a-f0-9]{12}\.glb|catalog-[a-f0-9]{12}\.glb|finish-surfaces-[a-f0-9]{12}\.bin|(?:assembly-manifest|finish-surfaces)\.json)$/.test(
             pathname,
           )
         )
@@ -24,12 +24,16 @@ function localCad(): Plugin {
         if (!existsSync(path)) return next();
         res.setHeader(
           'Content-Type',
-          pathname.endsWith('.glb') ? 'model/gltf-binary' : 'application/json',
+          pathname.endsWith('.glb')
+            ? 'model/gltf-binary'
+            : pathname.endsWith('.bin')
+              ? 'application/octet-stream'
+              : 'application/json',
         );
         res.setHeader('Vary', 'Accept-Encoding');
         res.setHeader(
           'Cache-Control',
-          pathname.endsWith('.glb')
+          !pathname.endsWith('.json')
             ? 'private, max-age=31536000, immutable'
             : 'no-cache',
         );

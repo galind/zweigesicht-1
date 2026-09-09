@@ -610,8 +610,13 @@ export default function Home() {
               hidden in the assembled view.
             </p>
             <p>
-              Materials and separation paths are authored interpretations. This
-              is a local study; redistribution and release approval remain open.
+              Finishes follow maker photography and macro references. Surface
+              response and lighting are authored, with separate CAD-derived
+              shading corrections; no missing geometry has been invented.
+            </p>
+            <p>
+              Separation paths are illustrative. This is a local study;
+              redistribution and release approval remain open.
             </p>
             <a
               href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"

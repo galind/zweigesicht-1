@@ -4,7 +4,7 @@
  * Does not create a browser, WebGL context, server, or generated output.
  */
 import assert from 'node:assert/strict';
-import {createHash} from 'node:crypto';
+import {createHash, webcrypto} from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -32,7 +32,7 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
    if(id.startsWith('.')){const p=path.resolve(path.dirname(file),id);return fs.existsSync(p+'.ts')?load(p+'.ts'):require(p)}
    return require(path.join(ROOT,'explorer/node_modules',id));
   };
-  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,fetch:fetchImpl},{filename:file});
+  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,Float32Array,Uint8Array,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
   cache.set(file,module.exports);return module.exports;
  };
 }
@@ -52,11 +52,60 @@ async function parse(name){
  return new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength),'');
 }
 const results=[];
+const modelsDir=path.join(ROOT,'explorer/public/models');
+const sidecarManifest=JSON.parse(fs.readFileSync(path.join(modelsDir,'finish-surfaces.json')));
+const sidecarReport=JSON.parse(fs.readFileSync(path.join(ROOT,'artifacts/finishing-cad/runtime-sidecar-report.json')));
+async function modelFetch(url){
+ assert.ok(/^\/models\/[^/]+$/.test(url),'Fixture must read only the prepared models directory');
+ const bytes=fs.readFileSync(path.join(modelsDir,path.basename(url)));
+ return {ok:true,json:async()=>JSON.parse(bytes),arrayBuffer:async()=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength)};
+}
+const surfaceModule=sourceModules({fetchImpl:modelFetch})('explorer/src/viewer/SourceSurfaces.ts');
+v.sourceSurfaces=await surfaceModule.loadSourceSurfaces(assetPaths.overview);
+assert.equal(v.sourceSurfaces.size,sidecarReport.definitions.length);
+assert.ok(v.sourceSurfaces.size>0);
+for(const entry of sidecarReport.definitions){
+ const data=v.sourceSurfaces.get(entry.definitionId);
+ assert.equal(data.length,entry.vertexCount*4);
+ const roles={};
+ for(let i=0;i<data.length;i+=4){
+  assert.ok(Number.isFinite(data[i])&&Number.isFinite(data[i+1])&&Number.isFinite(data[i+2]));
+  const len=Math.hypot(data[i],data[i+1],data[i+2]);
+  assert.ok(Math.abs(len-1)<1e-5,'Nonzero shading normal must be normalized');
+  assert.ok([0,1,3,4,6,7].includes(data[i+3]));
+  roles[data[i+3]]=(roles[data[i+3]]??0)+1;
+ }
+ assert.deepEqual(roles,entry.roles);
+}
+results.push({check:'actual hash-verified sidecars match packaged definition counts and recorded surface roles',status:'pass',bytes:sidecarReport.bytes,definitions:v.sourceSurfaces.size});
+for(const [label,alter]of [
+ ['wrong overview',m=>({...m,overview:'/models/wrong.glb'})],
+ ['wrong schema',m=>({...m,schemaVersion:2})],
+ ['external buffer path',m=>({...m,file:'https://example.com/surface.bin'})],
+ ['bad digest',m=>({...m,sha256:'0'.repeat(64)})],
+ ['out-of-bounds definition',m=>({...m,definitions:{d_0_1_1_99:{byteOffset:1e9,vertexCount:3}}})],
+]){
+ const tested=sourceModules({fetchImpl:async url=>url==='/models/finish-surfaces.json'?{ok:true,json:async()=>alter(sidecarManifest)}:modelFetch(url)})('explorer/src/viewer/SourceSurfaces.ts');
+ await assert.rejects(()=>tested.loadSourceSurfaces(assetPaths.overview),undefined,label);
+}
+const unavailable=sourceModules({fetchImpl:async()=>({ok:false})})('explorer/src/viewer/SourceSurfaces.ts');
+await assert.rejects(()=>unavailable.loadSourceSurfaces(assetPaths.overview),/unavailable/);
+results.push({check:'sidecar loader rejects mismatched asset/schema, external path, bad SHA, invalid range and unavailable response',status:'pass'});
+for(const [label,index,value]of [['nonfinite normal',0,NaN],['nonunit normal',0,999],['invalid role',3,99]]){
+ const bytes=fs.readFileSync(path.join(modelsDir,path.basename(sidecarManifest.file)));
+ bytes.writeFloatLE(value,index*4);
+ const changedManifest={...sidecarManifest,sha256:createHash('sha256').update(bytes).digest('hex')};
+ const tested=sourceModules({fetchImpl:async url=>url==='/models/finish-surfaces.json'?{ok:true,json:async()=>changedManifest}:{ok:true,arrayBuffer:async()=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength)}})('explorer/src/viewer/SourceSurfaces.ts');
+ await assert.rejects(()=>tested.loadSourceSurfaces(assetPaths.overview),/Invalid source surface normal or role/,label);
+}
+results.push({check:'sidecars with matching SHA still reject nonfinite/nonunit normals and unknown roles',status:'pass'});
+// Only these explicitly authored annotations may be excluded from source-byte checks.
+const allowedSurfaceAttributes=new Set(['sourceFinishNormal','sourceFinishRole']);
 // Hash decoded attribute/index bytes before material construction or controller edits.
 const geometryBefore=new Map();
 function geometryDigest(geometry){
  const hash=createHash('sha256');
- const attributes=[...Object.entries(geometry.attributes),['index',geometry.index],...Object.entries(geometry.morphAttributes).flatMap(([name,attrs])=>attrs.map((a,i)=>[`${name}:${i}`,a]))];
+ const attributes=[...Object.entries(geometry.attributes).filter(([name])=>!allowedSurfaceAttributes.has(name)),['index',geometry.index],...Object.entries(geometry.morphAttributes).flatMap(([name,attrs])=>attrs.map((a,i)=>[`${name}:${i}`,a]))];
  for(const [name,attribute]of attributes){
   if(!attribute)continue;
   const array=attribute.isInterleavedBufferAttribute?attribute.data.array:attribute.array;
@@ -71,6 +120,32 @@ v.ingest(overviewScene);v.retarget();v.applyPose(0);
 assert.equal(v.renderParts.size,222);
 assert.equal(new Set([...v.renderParts.values()].map(p=>p.mesh.geometry)).size,138);
 assert.equal(v.assemblyError(),0);
+let annotatedMeshes=0;
+for(const part of v.renderParts.values()){
+ const data=v.sourceSurfaces.get(part.source.definitionId),g=part.mesh.geometry;
+ if(!data)continue;
+ annotatedMeshes++;
+ const n=g.getAttribute('sourceFinishNormal'),role=g.getAttribute('sourceFinishRole');
+ assert.ok(n&&role&&n.isInterleavedBufferAttribute&&role.isInterleavedBufferAttribute);
+ assert.equal(n.data,role.data);assert.equal(n.data.array,data);
+ assert.equal(n.count,g.getAttribute('position').count);assert.equal(n.offset,0);assert.equal(role.offset,3);
+ assert.equal(part.material.defines.SOURCE_FINISH,1);
+ const originalBuffer=n.data;surfaceModule.attachSourceSurface(g,data);assert.equal(g.getAttribute('sourceFinishNormal').data,originalBuffer);
+}
+assert.equal(new Set([...v.renderParts.values()].filter(p=>p.mesh.geometry.hasAttribute('sourceFinishNormal')).map(p=>p.source.definitionId)).size,v.sourceSurfaces.size);
+const digestFixture=new THREE.BufferGeometry();digestFixture.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0],3));
+const cleanDigest=geometryDigest(digestFixture);
+surfaceModule.attachSourceSurface(digestFixture,new Float32Array([0,0,1,0]));assert.equal(geometryDigest(digestFixture),cleanDigest);
+digestFixture.setAttribute('unexpectedExtra',new THREE.Float32BufferAttribute([1],1));assert.notEqual(geometryDigest(digestFixture),cleanDigest,'Unexpected attributes must not bypass original-buffer verification');
+digestFixture.dispose();
+results.push({check:'actual ingest attaches reversible sidecars; only two known attributes are excluded from original hashes',status:'pass',annotatedMeshes});
+const fallback=Object.create(Viewer.prototype),badDefinition=v.sourceSurfaces.keys().next().value;
+Object.assign(fallback,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},clock:new PlaybackClock(),selectionBox:new THREE.Box3Helper(new THREE.Box3()),sourceSurfaces:new Map([[badDefinition,new Float32Array([0,0,1,0])]]),reduced:false,emit(){}});
+fallback.ingest((await parse('overview.glb')).scene);
+assert.equal(fallback.renderParts.size,222);assert.match(fallback.sourceSurfaceError,/vertex count changed/);
+for(const p of fallback.renderParts.values())if(p.source.definitionId===badDefinition)assert.equal(p.mesh.geometry.hasAttribute('sourceFinishNormal'),false);
+fallback.disposeObject(fallback.root);fallback.selectionBox.geometry.dispose();fallback.selectionBox.material.dispose();
+results.push({check:'invalid per-definition vertex counts fall back to source geometry while all movement leaves ingest',status:'pass'});
 results.push({check:'overview ingest preserves shared geometry and world placements',status:'pass',renderedParts:222,sharedGeometries:138,assemblyError:0});
 v.state.study=true;v.clock.time=.172;v.retarget();v.applyPose(1/60);
 assert.equal(v.renderParts.get(PREFIX+'4').mesh.visible,false,'Unanimated upstream meshing wheel must be omitted in timing study');
@@ -112,12 +187,98 @@ results.push({check:'portrait resize preserves reachable catalog framing',status
 v.ready=false;v.group('energy');assert.equal(v.state.group,'energy');v.emit();assert.equal(v.state.group,'energy');
 results.push({check:'metadata-only mechanism selection persists while viewer is not ready',status:'pass'});
 
+// Exercise actual controller material retargeting, including optical state restoration.
+v.state={...initialState};v.retarget();
+const rubyPart=[...v.renderParts.values()].find(p=>p.material.name==='ruby');
+const anisotropicPart=[...v.renderParts.values()].find(p=>p.material.anisotropy>0);
+assert.ok(rubyPart&&anisotropicPart);
+assert.equal(rubyPart.material.transmission,.55);
+const anisotropicVersion=anisotropicPart.material.version;
+v.state={...initialState,treatment:'function'};v.retarget();
+for(const p of v.renderParts.values()){
+ assert.equal(p.material.userData.finishEnabled.value,0);
+ if(['ruby','shockMass'].includes(p.material.name))assert.equal(p.material.transmission,0);
+}
+assert.equal(anisotropicPart.material.version,anisotropicVersion,'Function anisotropy gating must not change shader program version');
+v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
+const rubyFinishColor=rubyPart.material.color.clone();
+v.state={...initialState,part:rubyPart.source.id,isolated:true};v.retarget();assert.equal(rubyPart.material.transmission,.55);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
+v.state={...initialState,treatment:'function',part:rubyPart.source.id};v.retarget();assert.equal(rubyPart.material.transmission,0);assert.ok(rubyPart.material.color.equals(new THREE.Color('#f5cf88')));
+v.state={...initialState,group:'energy'};v.retarget();assert.equal(rubyPart.material.transmission,rubyPart.material.userData.finishEnabled.value ? .55 : 0);
+v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
+const {finishFor,createMaterial,setFinishEnabled}=load('explorer/src/viewer/materials.ts');
+assert.equal(finishFor('si HMzylinder','d_0_1_1_155').family,'shockMass');
+const shockMaterial=createMaterial('si HMzylinder','d_0_1_1_155');setFinishEnabled(shockMaterial,false);assert.equal(shockMaterial.transmission,0);setFinishEnabled(shockMaterial,true);assert.equal(shockMaterial.transmission,.55);shockMaterial.dispose();
+for(const suffix of [33,77,78,81,82]){
+ const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
+ const assigned=finishFor(p.source.name,p.source.definitionId,p.source.id);
+ assert.equal(assigned.assignment,'source-instance');assert.equal(assigned.family,'steel');assert.equal(p.material.name,'steel');
+}
+const sharedBlue=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_181'&&p.material.name==='blue');
+assert.ok(sharedBlue,'Instance overrides must preserve shared screw definition blue elsewhere');
+results.push({check:'five reviewed fasteners use instance steel overrides while shared screw definition stays blue elsewhere',status:'pass'});
+const physicalDefaults=new THREE.MeshPhysicalMaterial();
+for(const p of v.renderParts.values()){
+ assert.ok(p.material instanceof THREE.MeshPhysicalMaterial);
+ for(const [key,value]of Object.entries(physicalDefaults.defines)){
+  assert.ok(Object.hasOwn(p.material.defines,key),`Custom sidecar defines must retain physical define ${key}`);
+  assert.equal(p.material.defines[key],value);
+ }
+}
+physicalDefaults.dispose();
+results.push({check:'all physical materials retain installed STANDARD/PHYSICAL defaults when SOURCE_FINISH defines are added',status:'pass'});
+// Compile-hook smoke uses actual installed shader templates; real GLSL compilation remains browser-owned.
+for(const part of [rubyPart,anisotropicPart,...[...v.renderParts.values()].filter(p=>p.mesh.geometry.hasAttribute('sourceFinishNormal'))]){
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+ part.material.onBeforeCompile(shader,{});
+ assert.ok(shader.vertexShader.includes('vFinishPosition=position'));
+ assert.ok(shader.fragmentShader.includes('tbn=mat3(finishT'));
+ assert.ok(shader.fragmentShader.includes('material.alphaT=mix'));
+ assert.equal(shader.uniforms.finishEnabled,part.material.userData.finishEnabled);
+ assert.equal((shader.fragmentShader.match(/#include <lights_physical_fragment>/g)||[]).length,1);
+}
+results.push({check:'Function/context gate transmission, Finish isolation preserves optics, Function selection highlights, and anisotropy toggles reuse program',status:'pass',scope:'actual CPU controller/hook state; not GLSL compile proof'});
+const {StudioEnvironment}=load('explorer/src/viewer/StudioEnvironment.ts');
+const studio=new StudioEnvironment(),studioResources=[];
+studio.traverse(o=>{if(o instanceof THREE.Mesh){studioResources.push(o.geometry,o.material);assert.ok(o.material.color.r>1);assert.equal(o.material.side,THREE.DoubleSide)}});
+assert.equal(studioResources.length,12);
+const studioDisposals=new Map(studioResources.map(r=>[r,0]));
+for(const r of studioResources)r.addEventListener('dispose',()=>studioDisposals.set(r,studioDisposals.get(r)+1));
+studio.dispose();for(const count of studioDisposals.values())assert.equal(count,1);
+results.push({check:'actual six-card studio has HDR emission colors and disposes every temporary geometry/material once',status:'pass'});
+
 // No DOM was connected in this CPU harness, so OrbitControls has no DOM listeners to dispose.
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}
 const loadRace=sourceModules({loader:DeferredLoader,fetchImpl:async()=>({ok:true,json:async()=>({instances:[]})})});const {MovementViewer:RaceViewer}=loadRace('explorer/src/viewer/MovementViewer.ts');const race=Object.create(RaceViewer.prototype);
 Object.assign(race,{loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
-const obsolete=race.load(),current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
+const obsolete=race.load();while(pending.length<1)await Promise.resolve();const current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
 results.push({check:'obsolete load progress/failure cannot overwrite newer successful load',status:'pass'});
+const disposedStale=[];race.disposeObject=scene=>disposedStale.push(scene);
+const staleSuccess=race.load();while(pending.length<3)await Promise.resolve();const newerSuccess=race.load();while(pending.length<4)await Promise.resolve();
+pending[3].resolve({scene:{id:'current-scene'}});await newerSuccess;
+const staleScene={id:'stale-scene'};pending[2].resolve({scene:staleScene});await staleSuccess;
+assert.deepEqual(disposedStale,[staleScene]);assert.equal(race.ready,true);assert.equal(race.error,'');
+results.push({check:'obsolete successful geometry is disposed after newer load succeeds',status:'pass'});
+const metadataPending=[];let immediateLoads=0;
+class ImmediateLoader{setMeshoptDecoder(){return this}async loadAsync(){immediateLoads++;return {scene:{}}}}
+const metadataModules=sourceModules({loader:ImmediateLoader,fetchImpl:async url=>{
+ if(url==='/models/assembly-manifest.json')return new Promise(resolve=>metadataPending.push(resolve));
+ if(url==='/models/asset-paths.json')return {ok:true,json:async()=>({overview:'latest.glb',catalog:'latest-catalog.glb'})};
+ return {ok:false};
+}});
+const {MovementViewer:MetadataViewer}=metadataModules('explorer/src/viewer/MovementViewer.ts');
+const metadataRace=Object.create(MetadataViewer.prototype);
+Object.assign(metadataRace,{loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
+const oldMetadata=metadataRace.load(),newMetadata=metadataRace.load();
+assert.equal(metadataPending.length,2);
+const latestParts=[{id:'latest'}];metadataPending[1]({ok:true,json:async()=>({instances:latestParts})});
+await newMetadata;assert.equal(metadataRace.ready,true);assert.equal(metadataRace.parts,latestParts);
+metadataPending[0]({ok:true,json:async()=>({instances:[{id:'obsolete'}]})});await oldMetadata;
+assert.equal(metadataRace.parts,latestParts);assert.equal(immediateLoads,1,'Obsolete metadata must not launch geometry');
+assert.equal(metadataRace.paths.overview,'latest.glb');
+assert.match(metadataRace.sourceSurfaceError,/unavailable/);assert.equal(metadataRace.error,'','Optional sidecar failure must preserve movement loading');
+results.push({check:'late metadata cannot overwrite current parts/paths or launch geometry; unavailable annotations fall back without movement failure',status:'pass'});
+
 // Read the actual class-field handler through the TypeScript AST. This is resilient
 // to source formatting and does not construct the browser-bound viewer.
 const viewerSourcePath=path.join(ROOT,'explorer/src/viewer/MovementViewer.ts');
@@ -132,10 +293,10 @@ const oldTexture={id:'lost-context-texture'},replacementTexture={id:'restored-co
 class RoomStub{dispose(){roomDisposed++}}
 class PmremStub{
  constructor(renderer){assert.equal(renderer,rendererFixture)}
- fromScene(room,sigma){assert.ok(room instanceof RoomStub);assert.equal(sigma,.04);environmentCreated++;return {texture:replacementTexture,dispose(){}}}
+ fromScene(room,sigma){assert.ok(room instanceof RoomStub);assert.equal(sigma,.015);environmentCreated++;return {texture:replacementTexture,dispose(){}}}
  dispose(){generatorDisposed++}
 }
-vm.runInNewContext(restoreCode,{module:restoreModule,THREE:{PMREMGenerator:PmremStub},RoomEnvironment:RoomStub});
+vm.runInNewContext(restoreCode,{module:restoreModule,THREE:{PMREMGenerator:PmremStub},StudioEnvironment:RoomStub});
 const restoreFixture={renderer:rendererFixture,environment:{texture:oldTexture,dispose(){oldDisposed++}},scene:{environment:oldTexture,environmentIntensity:.8},contextLost:true,error:'Graphics interruption',needsRender:false,emit(){notifications++}};
 restoreModule.exports.call(restoreFixture)();
 assert.equal(oldDisposed,1);assert.equal(environmentCreated,1);assert.equal(restoreFixture.environment.texture,replacementTexture);assert.equal(restoreFixture.scene.environment,replacementTexture);assert.notEqual(restoreFixture.scene.environment,oldTexture);assert.equal(restoreFixture.scene.environmentIntensity,.8);assert.equal(roomDisposed,1);assert.equal(generatorDisposed,1);assert.equal(restoreFixture.contextLost,false);assert.equal(restoreFixture.error,'');assert.equal(restoreFixture.needsRender,true);assert.equal(notifications,1);
@@ -154,7 +315,8 @@ const {SurfaceOcclusion}=load('explorer/src/viewer/SurfaceOcclusion.ts');
 const aoScene=new THREE.Scene(),aoCamera=new THREE.PerspectiveCamera(33,1,.05,2000);
 const line=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial());aoScene.add(line);
 const ao=new SurfaceOcclusion(aoScene,aoCamera),pass=ao.pass;
-assert.ok(pass instanceof SSAOPass);assert.ok(pass.ssaoMaterial.fragmentShader.includes('1.0 - 0.48 * occlusion'));
+assert.ok(pass instanceof SSAOPass);assert.ok(pass.ssaoMaterial.fragmentShader.includes('1.0 - 0.24 * occlusion'));
+assert.equal(pass.kernelRadius,.4);
 ao.resize(640.4,479.6);assert.equal(pass.normalRenderTarget.width,640);assert.equal(pass.blurRenderTarget.height,480);
 aoCamera.far=700;aoCamera.aspect=.6;aoCamera.updateProjectionMatrix();
 let target=null,clearAlpha=.3,clearColor=new THREE.Color(0x123456),clears=0;
@@ -168,7 +330,7 @@ assert.deepEqual(draws.map(d=>d.target),[pass.normalRenderTarget,pass.ssaoRender
 assert.deepEqual(draws.map(d=>d.material),[pass.normalMaterial,pass.ssaoMaterial,pass.blurMaterial,pass.copyMaterial]);
 assert.equal(clears,1);assert.equal(target,null);assert.equal(renderer.autoClear,true);assert.equal(clearAlpha,.3);assert.ok(clearColor.equals(initialClear));assert.equal(line.visible,true);assert.equal(aoScene.overrideMaterial,null);
 assert.equal(pass.ssaoMaterial.uniforms.cameraFar.value,700);assert.equal(pass.ssaoMaterial.uniforms.cameraNear.value,.05);assert.ok(pass.ssaoMaterial.uniforms.cameraProjectionMatrix.value.equals(aoCamera.projectionMatrix));assert.ok(pass.ssaoMaterial.uniforms.cameraInverseProjectionMatrix.value.equals(aoCamera.projectionMatrixInverse));
-assert.equal(pass.ssaoMaterial.uniforms.minDistance.value,.035/(700-.05));assert.equal(pass.ssaoMaterial.uniforms.maxDistance.value,1.4/(700-.05));
+assert.equal(pass.ssaoMaterial.uniforms.minDistance.value,.035/(700-.05));assert.equal(pass.ssaoMaterial.uniforms.maxDistance.value,.65/(700-.05));
 assert.equal(pass.copyMaterial.uniforms.tDiffuse.value,pass.blurRenderTarget.texture);assert.equal(pass.copyMaterial.blending,THREE.CustomBlending);
 const resources=[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTarget,pass.normalMaterial,pass.blurMaterial,pass.copyMaterial,pass.depthRenderMaterial,pass.noiseTexture,pass.ssaoMaterial,pass._fsQuad._mesh.geometry];
 const disposals=new Map(resources.map(r=>[r,0]));for(const r of resources)r.addEventListener('dispose',()=>disposals.set(r,disposals.get(r)+1));
