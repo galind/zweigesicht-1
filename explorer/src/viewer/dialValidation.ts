@@ -61,11 +61,11 @@ export async function runDialChecks(v: MovementViewer) {
         face +
           ' ' +
           style.label +
-          ' has exactly the fitted leaves and unchanged matrices',
+          ' has only its fitted leaves at the reviewed display pose',
         visible.length === (face === 'central' ? 22 : 21) &&
           visible.every((p) => belongs(p.source.id, DIALS.faces[face].rootId)) &&
           visible.every((p) => expected.has(p.source.id)) &&
-          v.assemblyError() === 0,
+          v.assemblyError('presentation') === 0,
       );
     }
   const warmed = v.stats();

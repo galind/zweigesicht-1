@@ -19,7 +19,7 @@ test('dial defaults and independent preferences normalize unknown style IDs',()=
  const s=resolveState(initialState,{presentation:'dials',phase:'whole',side:'front',centralStyle:'open-lance',smallStyle:'pear'});
  assert.equal(s.presentation,'dials');assert.equal(s.centralStyle,'open-lance');assert.equal(s.smallStyle,'pear');
  const small=resolveState(s,{side:'back',smallStyle:'broad-lance'});assert.equal(small.centralStyle,'open-lance');
- const invalid=resolveState(small,{centralStyle:'lance',smallStyle:'obsolete'});assert.equal(invalid.centralStyle,'fine');assert.equal(invalid.smallStyle,'lance');
+ const invalid=resolveState(small,{centralStyle:'obsolete',smallStyle:'obsolete'});assert.equal(invalid.centralStyle,'fine');assert.equal(invalid.smallStyle,'lance');
 });
 test('movement inspection temporarily hides dials and retains preferences',()=>{
  const s=resolveState(initialState,{presentation:'dials',centralStyle:'open-lance',smallStyle:'pear'});

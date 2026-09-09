@@ -2,6 +2,10 @@
 
 9 September 2026. Local-only implementation of `DIAL_AND_HANDS_PLAN.md`, extending the accepted static explorer. Preview: **http://127.0.0.1:4173/**.
 
+## Accepted hand-time correction
+
+All six fitted styles now show **10:10:00**. Dial A supports Fine, Lance and Open lance; Dial B supports Lance, Broad lance and Pear. Central Lance has been enabled after verifying bore/seat compatibility and correcting only its seconds-hand XY placement in the fitted view. Every original source occurrence and raw catalog pose remains intact. This supersedes historical statements below about unchanged fitted hand angles or excluded central Lance. See [HAND_TIME_REVIEW.md](HAND_TIME_REVIEW.md) for the exact adjustment and verification.
+
 ## Accepted visibility correction
 
 After reviewing the implementation, the user requested **Movement, Dial A, Dial B** as mutually exclusive presentations. Dial A shows only the central dial and hands (22 external leaves); Dial B shows only the small dial and hands (21); Movement shows neither. Side switching swaps the displayed configuration. Orbiting around a chosen dial does not fit the opposite one. Independent hand preferences, source placements, accepted finishes, Back/Reset and recovery remain unchanged.

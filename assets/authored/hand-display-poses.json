@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "evidence": "docs/HAND_TIME_REVIEW.md",
+  "time": "10:10:00",
+  "clockAnglesDegrees": {
+    "hour": 305,
+    "minute": 60,
+    "seconds": 0
+  },
+  "scope": "Selected fitted dial only. Original geometry, source occurrences and raw catalog poses are unchanged. XY-only recentering for central Lance seconds.",
+  "hands": [
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+      "face": "central",
+      "role": "hour",
+      "boreLocalMm": [
+        4.1335207826009906e-16,
+        5.1698788481779456e-23,
+        0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -1.59377719355369e-14,
+        0.0599632742307175
+      ],
+      "boreRadiusMm": 0.9,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "supportSeatRadiusMm": 0.905
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+      "face": "central",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.800000000000125,
+        -3.545073320592567e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        13.9,
+        0.0,
+        -0.520207590811592
+      ],
+      "boreRadiusMm": 0.7,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "supportSeatRadiusMm": 0.705
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+      "face": "central",
+      "role": "seconds",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.092961170786472e-15,
+        15.6,
+        -0.6792930865007475
+      ],
+      "boreRadiusMm": 0.5,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "supportSeatRadiusMm": 0.505
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+      "face": "central",
+      "role": "hour",
+      "boreLocalMm": [
+        4.1335207826009857e-16,
+        5.169868731036836e-23,
+        0.20000000000000007
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -2.71050543121376e-16,
+        0.0989100773929625
+      ],
+      "boreRadiusMm": 0.9,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "supportSeatRadiusMm": 0.905
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+      "face": "central",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.879999999999999,
+        -2.2929061773065002e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        13.82,
+        2.71050543121376e-17,
+        -0.58258360731897
+      ],
+      "boreRadiusMm": 0.7,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "supportSeatRadiusMm": 0.705
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+      "face": "central",
+      "role": "seconds",
+      "boreLocalMm": [
+        -7.573064690121713e-29,
+        -1.0097419586828951e-28,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.09296117078647e-15,
+        15.59999999999995,
+        -0.6792930865007341
+      ],
+      "boreRadiusMm": 0.5,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "supportSeatRadiusMm": 0.505
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+      "face": "small",
+      "role": "hour",
+      "boreLocalMm": [
+        7.803706661347034e-17,
+        7.926878801015953e-17,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.0,
+        -2.05320786414442e-14,
+        0.075
+      ],
+      "boreRadiusMm": 0.495,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "supportSeatRadiusMm": 0.5
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+      "face": "small",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.5028571428571419,
+        3.7754066583194543e-16,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        8.000000000001325,
+        -1.898435873540726e-12,
+        -0.7454597403324354
+      ],
+      "boreRadiusMm": 0.345,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "supportSeatRadiusMm": 0.35
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+      "face": "small",
+      "role": "hour",
+      "boreLocalMm": [
+        -5.613629608853484e-16,
+        1.424372481491419e-13,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.1,
+        -2.03287907341032e-14,
+        0.09
+      ],
+      "boreRadiusMm": 0.495,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+      "supportSeatRadiusMm": 0.5
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+      "face": "small",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.4900000000000007,
+        -2.9879002550229324e-17,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        8.000000000001496,
+        -2.13455092710204e-12,
+        -0.745459740332473
+      ],
+      "boreRadiusMm": 0.345,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+      "supportSeatRadiusMm": 0.35
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+      "face": "small",
+      "role": "hour",
+      "boreLocalMm": [
+        3.436830123220337e-16,
+        3.5251725047287415e-16,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.02858828879521,
+        -1.35525271560688e-17,
+        0.075
+      ],
+      "boreRadiusMm": 0.495,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "supportSeatRadiusMm": 0.5
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+      "face": "small",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.4899999999999996,
+        1.4705716940123503e-16,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        7.98897646530028,
+        3.70351821982908e-12,
+        -0.7436705389678004
+      ],
+      "boreRadiusMm": 0.345,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "supportSeatRadiusMm": 0.35
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+      "face": "central",
+      "role": "hour",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -1.35525271560688e-17,
+        0.095
+      ],
+      "boreRadiusMm": 0.9,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "supportSeatRadiusMm": 0.905
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+      "face": "central",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.799999999999629,
+        3.851472193143742e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        14.00000000000015,
+        -2.632457276166345e-13,
+        -0.755201390450395
+      ],
+      "boreRadiusMm": 0.7,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "supportSeatRadiusMm": 0.705
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+      "face": "central",
+      "role": "seconds",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.09296117078647e-15,
+        15.59999999999995,
+        -0.6792930865007341
+      ],
+      "boreRadiusMm": 0.5,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "supportSeatRadiusMm": 0.505
+    }
+  ]
+}

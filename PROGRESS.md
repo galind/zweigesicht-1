@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## All hand styles at 10:10 — verified locally, 9 September 2026
+
+All six fitted hand styles now indicate **10:10:00**, with the hour hand correctly five degrees past 10 and central seconds at 12. Dial A supports Fine, **Lance**, Open lance; Dial B retains Lance, Broad lance, Pear. The formerly excluded central Lance seconds receives an exact XY-only fitted alignment of (-12.4254391598701, -7.08174217766239) mm after verifying its original bore/seat fit. Only the selected display is shown. Source geometry, immutable occurrence matrices, mounting heights, internal movement and accepted materials remain unchanged; raw catalog inspection restores original hand poses.
+
+Verification: the reproducible probe checks all 15 original analytic bores, tip landmarks, support overlaps, target directions and unchanged vertex world Z. **54 actual-asset/controller CPU checks, six state tests, 21 live dial checks and 12 established movement checks pass**, along with TypeScript, targeted authored lint and production build. Direct visual QA covers all six styles and oblique Lance layering; both source projection and real-renderer evidence confirm centered hands at 10:10. Back, Reset, source inspection, recovery, exclusive visibility and resource reuse remain verified. No physical-device, mechanical or collision certification is claimed.
+
+Details: [HAND_TIME_REVIEW.md](docs/HAND_TIME_REVIEW.md). Ignored evidence: `artifacts/dial-time/` and `artifacts/browser/hand-time/`. Next action: user review at **http://127.0.0.1:4173/**; the preview remains running with the restored Lance set visible. This verified milestone is local only; no push, merge or deployment. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Exclusive dial choice — verified correction, 9 September 2026
 
 User review supersedes simultaneous fitting: the choices are now **Movement, Dial A, Dial B**. Movement hides both displays; Dial A shows only the central dial and hands (22 external leaves), and Dial B shows only the small dial and hands (21). Side switching swaps the displayed configuration. The opposite dial stays hidden during orbit. Independent style memory, accepted finishes, source geometry/placements, Back/Reset and recovery are preserved.

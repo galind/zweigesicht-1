@@ -11,6 +11,7 @@ For compact source references below, **C** means `p_0_1_1_1__0_1_1_1_2__0_1_1_22
 | Face/style | Hour, minute, seconds blades | Supporting leaves | Total fitted leaves including structure |
 | --- | --- | --- | --- |
 | Central / Fine (default) | C6 d28, C2 d24, C10 d30 | C22/33:1 d34, C24/37:1 d38, C25/40:1 d41 | 22 |
+| Central / Lance | C14 d31, C18 d32, C9 d29 | Same three modeled bushings; C9 XY alignment in fitted view | 22 |
 | Central / Open lance | C22/33:2 d35, C24/37:2 d39, C25/40:2 d42 | Same three modeled bushings | 22 |
 | Small / Lance (default) | S16/10:1 d11, S5/6:1 d7; no seconds | S16/10:2 d12, S5/6:2 d8 | 21 |
 | Small / Broad lance | S26/20:1 d13, S20/15:1 d16; no seconds | S26/20:2 d12, S20/15:2 d8 | 21 |
@@ -20,11 +21,11 @@ The central structure consists of C1 transition ring, C4 outer dial, C5 inner di
 
 The small structure is S19/d14 four-segment carrier, S28/d21 enamel, all twelve d5 markers at S3/4/6/7/8/9/10/12/13/14/15/27 and all three d9 screws at S11/17/22. The twelve marker pin axes match the carrier's twelve mounting bores at radius 8.15 mm about (0, 7.4). Source pin radius is 0.105 mm and carrier bore radius is 0.100 mm, a modeled press-fit overlap. The three screw axes match the three 0.300 mm carrier bores at world XY (-4, 6.6), (4, 6.6), (0, 11.2) mm. Screws retain their distinct original source Z placements.
 
-Both displays stay fitted together. The central face points +Z (`side: front`), and the small face points -Z (`side: back`). All internal motion-work occurrences remain in the movement. Movement presentation merely hides these added external assemblies.
+User follow-up chooses only one display at a time (Movement, Dial A or Dial B). The central face points +Z (`side: front`), and the small face points -Z (`side: back`). All internal motion-work occurrences remain in the movement. Movement presentation merely hides these added external assemblies.
 
 ## Axles and supports
 
-All approved central blade bores and bushings lie on world XY (0, 0) mm; all approved small blade bores and bushings lie on (0, 7.4) mm, aligned with their respective existing motion-work arbors. Source hand poses differ between styles and remain unchanged.
+All approved central blade bores and bushings lie on world XY (0, 0) mm; all approved small blade bores and bushings lie on (0, 7.4) mm, aligned with their respective existing motion-work arbors. Raw source hand poses differ between styles and remain unchanged. Fitted hand poses now indicate 10:10:00; see [HAND_TIME_REVIEW.md](HAND_TIME_REVIEW.md).
 
 | Support fit | Blade bore radius | Bushing seat radius | Blade bore Z interval | Seat Z interval |
 | --- | --- | --- | --- | --- |
@@ -48,9 +49,9 @@ The existing high-resolution `REF-MAKER-01` local photo (`assets/reference/finis
 
 Only S28/d21 receives the blue presentation when fitted. Its original red name/source interpretation remains intact in the raw catalog. S2/d4 and unrelated enamel remain red. Numeric color/translucency settings are authored visual approximations, not measured enamel optics. The appearance ledger must record this scope separately from its raw source record.
 
-## Excluded alternatives
+## Alternative dispositions after user review
 
-- **Central Lance:** C9/d29 is actually displaced. The original analytic seconds-hand bore is at local XY (0, 0), transformed to world (12.425439, 7.081742) mm — **14.301839 mm from the central arbor**. It is not merely an off-axis source origin. There is no centered occurrence of this definition. C14 hour and C18 minute are centered, but there is no complete placeable Lance trio at the supplied transforms. No mixed-family replacement or recentering is invented.
+- **Central Lance — now enabled with a fitted-only correction:** C9/d29 is actually displaced. The original analytic seconds-hand bore is at local XY (0, 0), transformed to world (12.425439, 7.081742) mm — **14.301839 mm from the central arbor**. It is not merely an off-axis source origin. There is no centered occurrence of this definition. C14 hour and C18 minute are centered, but there is no complete placeable Lance trio at the supplied transforms. The subsequent user-requested pose review verifies all three bore/seat fits and enables the complete trio with XY-only translation of C9 to the arbor. No Z change or mixed-family replacement is used. See [HAND_TIME_REVIEW.md](HAND_TIME_REVIEW.md).
 - **Loose Broad lance blades S18 and S25:** duplicate shapes supplied inside the complete S26/S20 assemblies. Retain the complete assemblies' blade and bushing leaves once; exclude the loose copies from fitting.
 - **Curved ring S1/d3 plus S2/d4 enamel:** source center Y=7.5 mm, whereas the supplied hands and screws use Y=7.4 mm. Each fixing misses its source screw axis by 0.1 mm; its marker-hole radius is 8.25 mm rather than the placed markers' 8.15 mm. Do not translate the old ring or stack it over the selected one.
 - **Straight-spoke ring S21/d17:** centered on the movement axle and screw positions, but its marker bores still use radius 8.25 mm, and no complete matching enamel occurrence was established. It is a distinct alternative, not a structural layer of d14.

@@ -5,6 +5,7 @@ import {
   type DialFace,
 } from '../experience/dials';
 import { benchmarkFrame, type Benchmark } from './validation';
+import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -55,6 +56,7 @@ type RenderPart = {
   source: Part;
   mesh: THREE.Mesh;
   assembled: THREE.Matrix4;
+  displayMatrix?: THREE.Matrix4;
   offset: THREE.Vector3;
   target: THREE.Vector3;
   rotation: THREE.Quaternion;
@@ -286,6 +288,8 @@ export class MovementViewer {
       cameraUp: this.camera.up.toArray(),
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
+      maxDisplayPoseError: this.assemblyError('presentation'),
+      handTime: this.state.presentation === 'dials' ? HAND_TIME : null,
       spreadMembers: this.spread?.size ?? 0,
       assetTransfers: performance
         .getEntriesByType('resource')
@@ -359,7 +363,7 @@ export class MovementViewer {
         .map((p) => p.id),
     };
   }
-  assemblyError() {
+  assemblyError(reference: 'source' | 'presentation' = 'source') {
     if (
       this.state.layout === 'spread' ||
       this.state.reveal ||
@@ -368,12 +372,14 @@ export class MovementViewer {
     )
       return null;
     let error = 0;
-    for (const p of this.renderParts.values())
+    for (const p of this.renderParts.values()) {
+      const expected = reference === 'presentation' ? (p.displayMatrix ?? p.assembled) : p.assembled;
       for (let i = 0; i < 16; i++)
         error = Math.max(
           error,
-          Math.abs(p.mesh.matrix.elements[i] - p.assembled.elements[i]),
+          Math.abs(p.mesh.matrix.elements[i] - expected.elements[i]),
         );
+    }
     return error;
   }
   invalidate = () => {
@@ -832,7 +838,7 @@ export class MovementViewer {
               -p.center.z,
             ),
           )
-          .multiply(p.assembled);
+          .multiply(p.displayMatrix ?? p.assembled);
         p.mesh.geometry.computeBoundingBox();
         bounds.union(p.mesh.geometry.boundingBox!.clone().applyMatrix4(matrix));
       }
@@ -1229,6 +1235,9 @@ export class MovementViewer {
             group.partObstructions?.some((suffix) =>
               belongs(id, PREFIX + suffix),
             ));
+      p.displayMatrix = this.fitted.has(id) && !(selection && !belongs(selection, ROOT))
+        ? handDisplayMatrix(id, p.assembled)
+        : undefined;
       p.targetRotation.identity();
       p.target.set(0, 0, layerOffset(p.center.z, this.state.separation));
       if (group && obstruction)
@@ -1333,7 +1342,7 @@ export class MovementViewer {
         p.offset.copy(p.target);
         p.rotation.copy(p.targetRotation);
       }
-      p.mesh.matrix.copy(p.assembled);
+      p.mesh.matrix.copy(p.displayMatrix ?? p.assembled);
       if (p.rotation.angleTo(new THREE.Quaternion()) > 0) {
         temp.makeTranslation(-p.center.x, -p.center.y, -p.center.z);
         p.mesh.matrix.premultiply(temp);

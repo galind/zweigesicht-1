@@ -6,6 +6,8 @@ Prepared 9 September 2026. This is a plan for a separate implementation run. No 
 
 The user superseded simultaneous fitting after local review: the choices are **Movement**, **Dial A** (central) and **Dial B** (small). Show only the selected dial and its hands; Movement hides both. Independent style memory, Reset, history and recovery remain required. Requirements below for both displays to coexist or remain visible on reverse orbit are historical and superseded.
 
+The next user correction sets every fitted hand style to **10:10:00** using verified bore axes and actual tip landmarks. Central Lance is enabled with a documented XY-only seconds alignment. Earlier instructions to preserve fitted source angles or exclude Lance at its original offset are superseded; original assets and raw catalog poses stay intact.
+
 ## Goal and starting point
 
 Extend the accepted static Zweigesicht explorer so visitors can view the central dial or the small movement-side dial and choose a compatible hand style for each face. Deliver a polished local implementation with verified CAD membership, reliable transitions and browser evidence. Continue through implementation and verification, rather than stopping at another proposal.

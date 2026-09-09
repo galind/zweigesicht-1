@@ -4,6 +4,8 @@ import fs from 'node:fs';
 export async function reviewDials({v, Viewer, THREE, initialState, load, sourceModules, ROOT, parts, results}) {
  const {DIALS,fittedLeaves}=load('explorer/src/experience/dials.ts');
  const {ROOT:movement,belongs}=load('explorer/src/experience/catalog.ts');
+ const fit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-cad/source-fit.json'));
+ const poseAudit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-time/hand-pose-source-review.json'));
  const geometry = new Map([...v.renderParts].map(([id,p])=>[id,{geometry:p.mesh.geometry,matrix:p.assembled.clone()}]));
  const make=(Class=Viewer)=>Object.assign(Object.create(Class.prototype),{
    state:{...initialState,phase:'whole'},ready:true,dead:false,parts,renderParts:v.renderParts,
@@ -32,11 +34,32 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
      for(const p of controller.renderParts.values()){
        assert.equal(p.mesh.geometry,geometry.get(p.source.id).geometry);
        assert.ok(p.assembled.equals(geometry.get(p.source.id).matrix));
-       assert.ok(p.mesh.matrix.equals(p.assembled));
+       if (!p.displayMatrix) assert.ok(p.mesh.matrix.equals(p.assembled));
+       else {
+         const record=poseAudit.records.find(r=>r.leafId===p.source.id);
+         assert.ok(record && record.brepValid && record.maximumAxialSeatOverlapMm > .1);
+         const bore=fit.occurrences[p.source.id].cylinders.find(c=>Math.abs(c.radiusMm-record.boreRadiusMm)<1e-7);
+         const localBore=new THREE.Vector3().fromArray(bore.originWorldMm).applyMatrix4(p.assembled.clone().invert());
+         const presentedBore=localBore.clone().applyMatrix4(p.mesh.matrix);
+         const [x,y]=DIALS.faces[face].axleWorldXYMm;
+         assert.ok(Math.hypot(presentedBore.x-x,presentedBore.y-y)<1e-8, 'Rendered bore on correct arbor');
+         const vertices=p.mesh.geometry.getAttribute('position');let farthest=new THREE.Vector3(),radius=-1;
+         for(let i=0;i<vertices.count;i++){
+           const point=new THREE.Vector3().fromBufferAttribute(vertices,i);
+           const r=Math.hypot(point.x-localBore.x,point.y-localBore.y);
+           if(r>radius){radius=r;farthest=point;}
+         }
+         const tip=farthest.applyMatrix4(p.mesh.matrix).sub(presentedBore);
+         const angle=Math.atan2(tip.x,tip.y*(face==='central'?1:-1));
+         const target=THREE.MathUtils.degToRad({hour:305,minute:60,seconds:0}[record.role]);
+         assert.ok(Math.abs(Math.atan2(Math.sin(angle-target),Math.cos(angle-target)))<1e-4,'Actual decoded blade points to 10:10:00');
+         for(const i of [2,6,10,14])assert.equal(p.mesh.matrix.elements[i],p.assembled.elements[i],'No source Z change');
+         assert.ok(Math.abs(p.mesh.matrix.determinant()-p.assembled.determinant())<1e-12,'Rigid transform without scale');
+       }
      }
    }
  }
- results.push({check:'all six remembered style pairs on each face: exactly 22 central or 21 small leaves, no opposite dial, complete supports, source geometry and matrices unchanged',status:'pass'});
+ results.push({check:'all nine remembered style pairs on each face: exactly 22 central or 21 small leaves, no opposite dial, complete supports, source geometry and matrices unchanged',status:'pass'});
  const prior={...controller.state};const camera=controller.camera.position.clone();const frames=controller.framings;
  await controller.showDial('small','small','lance');assert.equal(controller.framings,frames);assert.ok(camera.equals(controller.camera.position));
  controller.back();assert.equal(controller.state.smallStyle,prior.smallStyle);assert.equal(controller.state.centralStyle,prior.centralStyle);
@@ -49,7 +72,17 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  controller.patch({isolated:true});assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,1);
  controller.back();assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,21);
  assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x143a69);assert.equal(controller.renderParts.get(raw).material.transmission,.3);
- controller.reset();assert.equal(controller.state.presentation,'movement');assert.equal(controller.state.centralStyle,'fine');assert.equal(controller.state.smallStyle,'lance');
+ await controller.showDial('central','central','lance');controller.applyPose(0);
+ const lanceSeconds=DIALS.faces.central.styles.find(s=>s.id==='lance').handLeafIds.seconds;
+ const sourceMatrix=controller.renderParts.get(lanceSeconds).assembled.clone();
+ assert.ok(!controller.renderParts.get(lanceSeconds).mesh.matrix.equals(sourceMatrix));
+ await controller.select(lanceSeconds);controller.applyPose(0);
+ assert.ok(controller.renderParts.get(lanceSeconds).mesh.matrix.equals(sourceMatrix),'Raw catalog restores original off-axis seconds');
+ controller.back();controller.applyPose(0);
+ assert.ok(!controller.renderParts.get(lanceSeconds).mesh.matrix.equals(sourceMatrix));
+ assert.equal(controller.assemblyError('presentation'),0);
+ results.push({check:'all 15 actual decoded hand tips indicate 10:10:00 around analytic bores; rigid XY correction only, original Z/supports intact; raw Lance seconds and Back restore exact respective poses',status:'pass'});
+ controller.reset();controller.applyPose(0);assert.equal(controller.assemblyError(),0);assert.equal(controller.state.presentation,'movement');assert.equal(controller.state.centralStyle,'fine');assert.equal(controller.state.smallStyle,'lance');
  controller.controls._quat=new THREE.Quaternion();controller.controls._quatInverse=new THREE.Quaternion();
  for(const up of [new THREE.Vector3(0,1,0),new THREE.Vector3(1,0,0),new THREE.Vector3(0,-1,0)]){
    controller.camera.up.copy(up);controller.syncOrbitUp();
@@ -76,7 +109,6 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  r=makeRace();a=r.select(raw);b=r.showDial('small');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.part,null);assert.equal(r.state.presentation,'dials');
  results.push({check:'actual async controller: shared single catalog request, latest face/style wins, reset/movement cancellation, failure/retry/new intent, manual takeover, disposal, competing raw selection',status:'pass'});
  // Verify XCAF-derived checks came from the exact protected STEP.
- const fit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-cad/source-fit.json'));
  assert.equal(fit.sourceSha256,DIALS.source.sha256);
  assert.equal(Object.values(fit.checks).length,50);assert.ok(Object.values(fit.checks).every(Boolean));
 }
