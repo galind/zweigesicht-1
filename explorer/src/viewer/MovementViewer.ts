@@ -28,6 +28,11 @@ import {
   damp,
   type ExperienceState,
 } from '../experience/state';
+import {
+  makeSpread,
+  spreadMember,
+  type SpreadPlacement,
+} from '../experience/spread';
 import { createMaterial, finishFor, setFinishEnabled } from './materials';
 
 type RenderPart = {
@@ -36,15 +41,21 @@ type RenderPart = {
   assembled: THREE.Matrix4;
   offset: THREE.Vector3;
   target: THREE.Vector3;
+  rotation: THREE.Quaternion;
+  targetRotation: THREE.Quaternion;
   material: THREE.MeshStandardMaterial;
   center: THREE.Vector3;
 };
 type Saved = {
+  aspect: number;
+  cameraUserOwned: boolean;
+  spreadFocus: string | null;
   state: ExperienceState;
   position: THREE.Vector3;
   target: THREE.Vector3;
 };
 export interface ViewerSnapshot extends ExperienceState {
+  spreadFocus: string | null;
   ready: boolean;
   status: string;
   error: string;
@@ -81,6 +92,9 @@ export class MovementViewer {
   parts: Part[] = [];
   renderParts = new Map<string, RenderPart>();
   history: Saved[] = [];
+  restoringCamera: Saved | null = null;
+  spread = new Map<string, SpreadPlacement>();
+  spreadFocus: string | null = null;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   travel: { position: THREE.Vector3; target: THREE.Vector3 } | null = null;
   needsRender = true;
@@ -92,6 +106,7 @@ export class MovementViewer {
   loadStart = performance.now();
   loadMs = 0;
   presentationMoving = true;
+  cameraUserOwned = false;
   catalogLoaded = false;
   catalogPending: Promise<void> | null = null;
   loadGeneration = 0;
@@ -99,7 +114,8 @@ export class MovementViewer {
   contextLost = false;
   selectionBox = new THREE.Box3Helper(new THREE.Box3(), 0xffdaa0);
   raycaster = new THREE.Raycaster();
-  pointer = { x: 0, y: 0, id: -1 };
+  pointer = { x: 0, y: 0, id: -1, cancelled: false };
+  pointers = new Set<number>();
   constructor(
     public host: HTMLElement,
     public notify: (s: ViewerSnapshot) => void,
@@ -112,8 +128,10 @@ export class MovementViewer {
     host.appendChild(this.renderer.domElement);
     this.renderer.domElement.setAttribute(
       'aria-label',
-      'Movement; drag to orbit or use the view buttons',
+      'Movement; drag to orbit, pinch to zoom. Arrow keys move the view, plus and minus zoom, Home resets.',
     );
+    this.renderer.domElement.tabIndex = 0;
+    this.renderer.domElement.addEventListener('keydown', this.keyDown);
     this.camera.up.set(0, -1, 0);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -144,6 +162,11 @@ export class MovementViewer {
     this.resize();
     this.renderer.domElement.addEventListener('pointerdown', this.pointerDown);
     this.renderer.domElement.addEventListener('pointerup', this.pointerUp);
+    this.renderer.domElement.addEventListener('pointermove', this.pointerMove);
+    this.renderer.domElement.addEventListener(
+      'pointercancel',
+      this.pointerCancel,
+    );
     this.renderer.domElement.addEventListener(
       'webglcontextlost',
       this.onContextLost,
@@ -160,6 +183,7 @@ export class MovementViewer {
     return {
       ...this.state,
       ready: this.ready,
+      spreadFocus: this.spreadFocus,
       status: this.status,
       error: this.error,
       detailError: this.detailError,
@@ -207,6 +231,7 @@ export class MovementViewer {
       camera: this.camera.position.toArray(),
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
+      spreadMembers: this.spread?.size ?? 0,
       assetTransfers: performance
         .getEntriesByType('resource')
         .filter((e) => e.name.includes('/models/'))
@@ -223,8 +248,69 @@ export class MovementViewer {
       userAgent: navigator.userAgent,
     };
   }
+  auditSpread() {
+    this.scene.updateMatrixWorld(true);
+    this.camera.updateMatrixWorld(true);
+    const projected: { id: string; box: THREE.Box3 }[] = [];
+    let maxScaleError = 0;
+    for (const p of this.renderParts.values())
+      if (spreadMember(p.source)) {
+        const box = new THREE.Box3().setFromObject(p.mesh);
+        const points = [];
+        for (let i = 0; i < 8; i++)
+          points.push(
+            new THREE.Vector3(
+              i & 1 ? box.max.x : box.min.x,
+              i & 2 ? box.max.y : box.min.y,
+              i & 4 ? box.max.z : box.min.z,
+            ).project(this.camera),
+          );
+        projected.push({
+          id: p.source.id,
+          box: new THREE.Box3().setFromPoints(points),
+        });
+        maxScaleError = Math.max(
+          maxScaleError,
+          Math.abs(p.mesh.matrix.determinant() - p.assembled.determinant()),
+        );
+      }
+    const overlaps: string[][] = [];
+    for (let i = 0; i < projected.length; i++)
+      for (let j = i + 1; j < projected.length; j++) {
+        const a = projected[i].box,
+          b = projected[j].box;
+        if (
+          a.max.x > b.min.x &&
+          b.max.x > a.min.x &&
+          a.max.y > b.min.y &&
+          b.max.y > a.min.y
+        )
+          overlaps.push([projected[i].id, projected[j].id]);
+      }
+    return {
+      members: projected.length,
+      visible: [...this.renderParts.values()].filter((p) => p.mesh.visible)
+        .length,
+      maxScaleError,
+      overlaps,
+      clipped: projected
+        .filter(
+          (p) =>
+            p.box.min.x < -1 ||
+            p.box.max.x > 1 ||
+            p.box.min.y < -1 ||
+            p.box.max.y > 1,
+        )
+        .map((p) => p.id),
+    };
+  }
   assemblyError() {
-    if (this.state.reveal || this.state.separation || this.state.partSpread)
+    if (
+      this.state.layout === 'spread' ||
+      this.state.reveal ||
+      this.state.separation ||
+      this.state.partSpread
+    )
       return null;
     let error = 0;
     for (const p of this.renderParts.values())
@@ -239,6 +325,8 @@ export class MovementViewer {
     this.needsRender = true;
   };
   manual = () => {
+    this.restoringCamera = null;
+    this.cameraUserOwned = true;
     this.travel = null;
     this.needsRender = true;
   };
@@ -330,6 +418,7 @@ export class MovementViewer {
           this.diamondRecoveryError = String(error);
       }
       if (this.dead || generation !== this.loadGeneration) return;
+      this.spread = makeSpread(this.renderParts.values());
       this.ready = true;
       this.state = { ...initialState, phase: 'whole' };
       this.status = '';
@@ -424,6 +513,8 @@ export class MovementViewer {
         source: record,
         mesh: node,
         assembled,
+        rotation: new THREE.Quaternion(),
+        targetRotation: new THREE.Quaternion(),
         offset: new THREE.Vector3(),
         target: new THREE.Vector3(),
         material,
@@ -484,11 +575,91 @@ export class MovementViewer {
   patch(patch: Partial<ExperienceState>) {
     this.state = resolveState(this.state, patch);
     this.retarget();
+    if (
+      this.ready &&
+      this.state.layout === 'assembly' &&
+      ('separation' in patch || 'partSpread' in patch)
+    )
+      this.fitPresentation();
     this.emit();
+  }
+  targetBounds(include: (p: RenderPart) => boolean) {
+    const bounds = new THREE.Box3();
+    for (const p of this.renderParts.values())
+      if (include(p)) {
+        const matrix = new THREE.Matrix4()
+          .makeTranslation(
+            p.center.x + p.target.x,
+            p.center.y + p.target.y,
+            p.center.z + p.target.z,
+          )
+          .multiply(
+            new THREE.Matrix4().makeRotationFromQuaternion(p.targetRotation),
+          )
+          .multiply(
+            new THREE.Matrix4().makeTranslation(
+              -p.center.x,
+              -p.center.y,
+              -p.center.z,
+            ),
+          )
+          .multiply(p.assembled);
+        p.mesh.geometry.computeBoundingBox();
+        bounds.union(p.mesh.geometry.boundingBox!.clone().applyMatrix4(matrix));
+      }
+    return bounds;
+  }
+  fitPresentation() {
+    const group = GROUPS.find((g) => g.id === this.state.group);
+    const bounds = this.targetBounds((p) =>
+      this.state.part
+        ? belongs(p.source.id, this.state.part)
+        : group
+          ? inMembers(p.source.id, group.members)
+          : belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66',
+    );
+    if (bounds.isEmpty()) return;
+    const direction = this.cameraUserOwned
+      ? this.camera.position.clone().sub(this.controls.target).normalize()
+      : new THREE.Vector3(
+          0.62,
+          0.38,
+          this.state.side === 'front' ? 1 : -1,
+        ).normalize();
+    this.frameBounds(bounds, direction);
+  }
+  frameBounds(bounds: THREE.Box3, direction: THREE.Vector3) {
+    const center = bounds.getCenter(new THREE.Vector3());
+    const right = new THREE.Vector3()
+      .crossVectors(this.camera.up, direction)
+      .normalize();
+    const up = new THREE.Vector3().crossVectors(direction, right).normalize();
+    const tangent = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+    let distance = 8;
+    for (let i = 0; i < 8; i++) {
+      const point = new THREE.Vector3(
+        i & 1 ? bounds.max.x : bounds.min.x,
+        i & 2 ? bounds.max.y : bounds.min.y,
+        i & 4 ? bounds.max.z : bounds.min.z,
+      ).sub(center);
+      distance = Math.max(
+        distance,
+        point.dot(direction) +
+          1.18 *
+            Math.max(
+              Math.abs(point.dot(right)) / (tangent * this.camera.aspect),
+              Math.abs(point.dot(up)) / tangent,
+            ),
+      );
+    }
+    this.frameTo(center, distance * Math.min(1, this.camera.aspect), direction);
   }
   save() {
     this.history.push({
       state: { ...this.state },
+      aspect: this.camera.aspect,
+      cameraUserOwned: this.cameraUserOwned,
+      spreadFocus: this.spreadFocus,
       position: this.camera.position.clone(),
       target: this.controls.target.clone(),
     });
@@ -501,8 +672,11 @@ export class MovementViewer {
       return;
     }
     this.save();
+    this.cameraUserOwned = false;
+    this.restoringCamera = null;
     const group = GROUPS.find((g) => g.id === id);
     this.patch({
+      layout: 'assembly',
       group: id,
       part: null,
       isolated: false,
@@ -521,6 +695,9 @@ export class MovementViewer {
       this.reset();
       return;
     }
+    this.restoringCamera = previous;
+    this.cameraUserOwned = previous.cameraUserOwned ?? true;
+    this.spreadFocus = previous.spreadFocus ?? null;
     this.state = resolveState(previous.state, {
       phase: 'recovering',
     });
@@ -530,7 +707,10 @@ export class MovementViewer {
     this.emit();
   }
   reset() {
+    this.restoringCamera = null;
+    this.cameraUserOwned = false;
     this.history = [];
+    this.spreadFocus = null;
     this.state = { ...initialState, phase: 'recovering' };
     this.detailError = '';
     this.homeCamera();
@@ -540,7 +720,7 @@ export class MovementViewer {
   homeCamera(immediate = false) {
     this.frameTo(
       new THREE.Vector3(1.8, 0, -2.8),
-      81,
+      this.camera.aspect < 1 ? 78 : 70,
       new THREE.Vector3(0.1, 0.17, -1),
       immediate,
     );
@@ -567,13 +747,69 @@ export class MovementViewer {
     this.needsRender = true;
   }
   frameGroup(g: Mechanism) {
+    const bounds = this.targetBounds(
+      (p) =>
+        inMembers(p.source.id, g.members) &&
+        !g.partObstructions?.some((suffix) =>
+          belongs(p.source.id, PREFIX + suffix),
+        ),
+    );
+    if (bounds.isEmpty()) return;
+    this.frameBounds(bounds, new THREE.Vector3(0.22, 0.24, g.side).normalize());
+  }
+  allParts() {
+    if (!this.ready) return;
+    this.save();
+    this.restoringCamera = null;
+    this.cameraUserOwned = false;
+    this.spread = makeSpread(this.renderParts.values());
+    this.patch({
+      layout: 'spread',
+      group: null,
+      part: null,
+      isolated: false,
+      phase: 'recovering',
+      side: 'back',
+    });
+    this.frameSpread();
+  }
+  frameSpread(group?: string) {
+    this.spreadFocus = group ?? null;
+    if (!this.spread.size) return;
+    const bounds = new THREE.Box3();
+    for (const p of this.spread.values())
+      if (!group || p.group === group) bounds.union(p.bounds);
+    const size = bounds.getSize(new THREE.Vector3());
+    const distance =
+      (Math.max(size.y, size.x / this.camera.aspect) /
+        (2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)))) *
+        1.14 +
+      size.z;
     this.frameTo(
-      new THREE.Vector3(...(g.target as [number, number, number])),
-      g.distance,
-      new THREE.Vector3(0.14, 0.18, g.side),
+      bounds.getCenter(new THREE.Vector3()),
+      distance * Math.min(1, this.camera.aspect),
+      new THREE.Vector3(0, 0, -1),
     );
   }
+  pan(dx: number, dy: number) {
+    this.manual();
+    this.travel = null;
+    const distance = this.camera.position.distanceTo(this.controls.target);
+    const right = new THREE.Vector3().setFromMatrixColumn(
+      this.camera.matrix,
+      0,
+    );
+    const up = new THREE.Vector3().setFromMatrixColumn(this.camera.matrix, 1);
+    const delta = right
+      .multiplyScalar(dx * distance * 0.3)
+      .add(up.multiplyScalar(-dy * distance * 0.3));
+    this.camera.position.add(delta);
+    this.controls.target.add(delta);
+    this.controls.update();
+    this.invalidate();
+  }
   setSide(side: 'back' | 'front') {
+    if (this.state.layout === 'spread') return;
     this.patch({ side });
     const distance = this.camera.position.distanceTo(this.controls.target);
     this.frameTo(
@@ -602,6 +838,7 @@ export class MovementViewer {
     this.setSide(kind);
   }
   zoom(factor: number) {
+    this.manual();
     this.travel = null;
     const offset = this.camera.position.clone().sub(this.controls.target);
     offset.setLength(
@@ -616,6 +853,11 @@ export class MovementViewer {
     this.invalidate();
   }
   orbit(dx: number, dy: number) {
+    this.manual();
+    if (this.state.layout === 'spread') {
+      this.pan(dx, dy);
+      return;
+    }
     this.travel = null;
     const offset = this.camera.position.clone().sub(this.controls.target),
       spherical = new THREE.Spherical().setFromVector3(offset);
@@ -636,6 +878,8 @@ export class MovementViewer {
     if (!part) return;
     const prior = this.state.part;
     if (prior !== id) this.save();
+    if (this.state.layout === 'spread' && !spreadMember(part))
+      this.patch({ layout: 'assembly', group: null, reveal: 0 });
     this.patch({
       part: id,
       isolated: false,
@@ -649,11 +893,7 @@ export class MovementViewer {
       }
       if (this.state.part !== id) return;
     }
-    const bounds = new THREE.Box3();
-    for (const p of this.renderParts.values())
-      if (belongs(p.source.id, id)) {
-        bounds.union(new THREE.Box3().setFromObject(p.mesh));
-      }
+    const bounds = this.targetBounds((p) => belongs(p.source.id, id));
     if (!bounds.isEmpty()) {
       const center = bounds.getCenter(new THREE.Vector3()),
         size = bounds.getSize(new THREE.Vector3()).length();
@@ -667,6 +907,25 @@ export class MovementViewer {
     this.emit();
   }
   retarget() {
+    if (this.controls) {
+      const spread = this.state.layout === 'spread';
+      this.renderer?.domElement?.setAttribute(
+        'aria-label',
+        spread
+          ? 'Parts spread; drag to pan, pinch to zoom. Arrow keys pan, plus and minus zoom, Home resets.'
+          : 'Movement; drag to orbit, pinch to zoom. Arrow keys orbit, plus and minus zoom, Home resets.',
+      );
+      this.controls.enableRotate = !spread;
+      this.controls.enablePan = spread;
+      this.controls.screenSpacePanning = true;
+      this.controls.mouseButtons.LEFT = spread
+        ? THREE.MOUSE.PAN
+        : THREE.MOUSE.ROTATE;
+      this.controls.touches.ONE = spread ? THREE.TOUCH.PAN : THREE.TOUCH.ROTATE;
+      this.controls.touches.TWO = spread
+        ? THREE.TOUCH.DOLLY_PAN
+        : THREE.TOUCH.DOLLY_ROTATE;
+    }
     const group = GROUPS.find((g) => g.id === this.state.group),
       selection = this.state.part;
     for (const p of this.renderParts.values()) {
@@ -680,6 +939,7 @@ export class MovementViewer {
             group.partObstructions?.some((suffix) =>
               belongs(id, PREFIX + suffix),
             ));
+      p.targetRotation.identity();
       p.target.set(0, 0, layerOffset(p.center.z, this.state.separation));
       if (group && obstruction)
         p.target.z += group.side * 26 * this.state.reveal;
@@ -708,6 +968,14 @@ export class MovementViewer {
         visible = false;
       if (group && obstruction && Math.abs(p.offset.z) > 24 && !selected)
         visible = false;
+      if (this.state.layout === 'spread') {
+        const placement = this.spread.get(id);
+        visible = !!placement && (!this.state.isolated || selected);
+        if (placement) {
+          p.target.copy(placement.offset);
+          p.targetRotation.copy(placement.rotation);
+        }
+      }
       p.mesh.visible = visible;
       const finish = finishFor(
         p.source.name,
@@ -759,7 +1027,22 @@ export class MovementViewer {
       );
       if (p.offset.distanceToSquared(p.target) < 1e-8) p.offset.copy(p.target);
       else moving = true;
+      p.rotation.slerp(
+        p.targetRotation,
+        this.reduced ? 1 : 1 - Math.exp(-Math.max(0, dt) * 7),
+      );
+      if (p.rotation.angleTo(p.targetRotation) < 1e-6)
+        p.rotation.copy(p.targetRotation);
+      else moving = true;
       p.mesh.matrix.copy(p.assembled);
+      if (p.rotation.angleTo(new THREE.Quaternion()) > 0) {
+        temp.makeTranslation(-p.center.x, -p.center.y, -p.center.z);
+        p.mesh.matrix.premultiply(temp);
+        temp.makeRotationFromQuaternion(p.rotation);
+        p.mesh.matrix.premultiply(temp);
+        temp.makeTranslation(p.center.x, p.center.y, p.center.z);
+        p.mesh.matrix.premultiply(temp);
+      }
       temp.makeTranslation(p.offset.x, p.offset.y, p.offset.z);
       p.mesh.matrix.premultiply(temp);
       p.mesh.matrixWorldNeedsUpdate = true;
@@ -774,16 +1057,55 @@ export class MovementViewer {
     } else this.selectionBox.visible = false;
     return moving;
   }
-  pointerDown = (e: PointerEvent) => {
-    this.pointer = { x: e.clientX, y: e.clientY, id: e.pointerId };
-    if (!e.isPrimary) this.pointer.id = -1;
+  keyDown = (e: KeyboardEvent) => {
+    const moves: Record<string, [number, number]> = {
+      ArrowLeft: [-0.2, 0],
+      ArrowRight: [0.2, 0],
+      ArrowUp: [0, -0.2],
+      ArrowDown: [0, 0.2],
+    };
+    if (moves[e.key]) {
+      e.preventDefault();
+      this.orbit(...moves[e.key]);
+    } else if (['+', '=', '-', 'Home'].includes(e.key)) {
+      e.preventDefault();
+      if (e.key === 'Home') this.reset();
+      else this.zoom(e.key === '-' ? 1.2 : 0.83);
+    }
   };
-  pointerUp = (e: PointerEvent) => {
+  pointerDown = (e: PointerEvent) => {
+    this.pointers.add(e.pointerId);
+    if (this.pointers.size === 1)
+      this.pointer = {
+        x: e.clientX,
+        y: e.clientY,
+        id: e.pointerId,
+        cancelled: !e.isPrimary || e.button !== 0,
+      };
+    else this.pointer.cancelled = true;
+  };
+  pointerMove = (e: PointerEvent) => {
     if (
-      this.pointer.id !== e.pointerId ||
+      e.pointerId === this.pointer.id &&
       Math.hypot(e.clientX - this.pointer.x, e.clientY - this.pointer.y) > 6
     )
+      this.pointer.cancelled = true;
+  };
+  pointerCancel = (e: PointerEvent) => {
+    this.pointers.delete(e.pointerId);
+    this.pointer.cancelled = true;
+  };
+  pointerUp = (e: PointerEvent) => {
+    this.pointers.delete(e.pointerId);
+    this.pointerMove(e);
+    if (
+      this.pointer.cancelled ||
+      this.pointers.size ||
+      this.pointer.id !== e.pointerId ||
+      e.button !== 0
+    )
       return;
+    this.pointer.cancelled = true;
     const rect = this.renderer.domElement.getBoundingClientRect();
     this.raycaster.setFromCamera(
       new THREE.Vector2(
@@ -809,7 +1131,33 @@ export class MovementViewer {
     this.surfaceOcclusion?.resize(w, h);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
-    if (this.ready && Math.abs(old - this.camera.aspect) > 0.15) {
+    if (this.restoringCamera && Math.abs(old - this.camera.aspect) > 0.01) {
+      const saved = this.restoringCamera;
+      const factor =
+        Math.min(1, saved.aspect ?? this.camera.aspect) /
+        Math.min(1, this.camera.aspect);
+      this.travel = {
+        target: saved.target.clone(),
+        position: saved.position
+          .clone()
+          .sub(saved.target)
+          .multiplyScalar(factor)
+          .add(saved.target),
+      };
+    } else if (
+      this.ready &&
+      Math.abs(old - this.camera.aspect) > 0.01 &&
+      !this.cameraUserOwned &&
+      !this.state.part
+    ) {
+      if (this.state.layout === 'spread')
+        this.frameSpread(this.spreadFocus ?? undefined);
+      else if (this.state.separation || this.state.partSpread)
+        this.fitPresentation();
+      else if (this.state.group)
+        this.frameGroup(GROUPS.find((g) => g.id === this.state.group)!);
+      else this.homeCamera();
+    } else if (this.ready && Math.abs(old - this.camera.aspect) > 0.01) {
       const factor = Math.min(1, old) / Math.min(1, this.camera.aspect);
       this.camera.position
         .sub(this.controls.target)
@@ -866,6 +1214,7 @@ export class MovementViewer {
         this.camera.position.copy(this.travel.position);
         this.controls.target.copy(this.travel.target);
         this.travel = null;
+        this.restoringCamera = null;
       } else moving = true;
     }
     this.ensureFramingRange();
@@ -928,6 +1277,8 @@ export class MovementViewer {
         visible = false;
       if (group && obstruction && Math.abs(p.offset.z) > 24 && !selected)
         visible = false;
+      if (this.state.layout === 'spread')
+        visible = this.spread.has(id) && (!this.state.isolated || selected);
       if (p.mesh.visible !== visible) {
         p.mesh.visible = visible;
         this.needsRender = true;

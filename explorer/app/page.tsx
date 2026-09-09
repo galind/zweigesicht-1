@@ -10,13 +10,20 @@ import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
   ROOT,
-  PREFIX,
   belongs,
   inMembers,
   partLabel,
   category,
   type Part,
 } from '@/src/experience/catalog';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverTitle,
+} from '@/components/ui/popover';
+import { SPREAD_GROUPS } from '@/src/experience/spread';
+import { factsFor, partDetail } from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
@@ -29,6 +36,7 @@ import {
 } from '@/components/ui/combobox';
 import {
   Sheet,
+  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -44,6 +52,7 @@ import {
 const empty: ViewerSnapshot = {
   ...initialState,
   ready: false,
+  spreadFocus: null,
   status: 'Preparing the movement…',
   error: '',
   detailError: '',
@@ -54,12 +63,18 @@ const empty: ViewerSnapshot = {
   stats: {},
 };
 export default function Home() {
+  const catalogButton = useRef<HTMLButtonElement>(null),
+    aboutButton = useRef<HTMLButtonElement>(null),
+    detailButton = useRef<HTMLButtonElement>(null);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
     [catalog, setCatalog] = useState(false),
     [about, setAbout] = useState(false),
-    [collapsed, setCollapsed] = useState(false),
+    [explore, setExplore] = useState(false),
+    [spreadGroups, setSpreadGroups] = useState(false),
+    [options, setOptions] = useState(false),
+    [details, setDetails] = useState(false),
     [inspect, setInspect] = useState(false),
     [qa, setQa] = useState<unknown>(null);
   useEffect(() => {
@@ -112,9 +127,13 @@ export default function Home() {
     );
   const selectPart = (id: string) => {
     setCatalog(false);
+    setOptions(false);
+    setDetails(false);
     void viewer.current?.select(id);
   };
   const chooseGroup = (id: string | null) => {
+    setExplore(false);
+    setDetails(false);
     if (viewer.current) viewer.current.group(id);
     else
       set((prev) => ({
@@ -127,82 +146,174 @@ export default function Home() {
   const patch = (v: Parameters<MovementViewer['patch']>[0]) =>
     viewer.current?.patch(v);
   return (
-    <main className="explorer">
+    <main
+      className={
+        'explorer' +
+        (group || selected || s.layout === 'spread' ? ' has-focus' : '')
+      }
+    >
       <header className="topbar">
-        <div className="brand">
-          MARCO LANG<small>INDEPENDENT WATCHMAKING · DRESDEN</small>
+        <div className="identity">
+          <h1>Zweigesicht</h1>
+          <span>
+            Marco Lang <i>·</i> Calibre ml–01
+          </span>
         </div>
-        <div className="header-actions">
-          <span className="edition">ml–01 / Movement study</span>
-          <button className="text-button" onClick={() => setAbout(true)}>
-            About this study
-          </button>
-        </div>
+        <Sheet open={options} onOpenChange={setOptions}>
+          <SheetTrigger className="text-button options-trigger">
+            Options
+          </SheetTrigger>
+          <SheetContent className="about-sheet">
+            <SheetHeader>
+              <SheetTitle>Make yourself comfortable</SheetTitle>
+              <SheetDescription>
+                View controls, appearance and sources.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="about-copy">
+              <p>
+                Drag to orbit. Pinch or scroll to zoom. Tap a component to
+                inspect it. In All parts, drag to pan.
+              </p>
+              <div
+                className="alternative-controls"
+                aria-label="Camera controls"
+              >
+                <button
+                  className="tool"
+                  onClick={() => viewer.current?.orbit(-0.25, 0)}
+                >
+                  Orbit left
+                </button>
+                <button
+                  className="tool"
+                  onClick={() => viewer.current?.orbit(0.25, 0)}
+                >
+                  Orbit right
+                </button>
+                <button
+                  className="tool"
+                  onClick={() => viewer.current?.orbit(0, -0.2)}
+                >
+                  Tilt up
+                </button>
+                <button
+                  className="tool"
+                  onClick={() => viewer.current?.orbit(0, 0.2)}
+                >
+                  Tilt down
+                </button>
+                <button
+                  className="tool"
+                  onClick={() => viewer.current?.zoom(0.8)}
+                >
+                  Zoom in
+                </button>
+                <button
+                  className="tool"
+                  onClick={() => viewer.current?.zoom(1.25)}
+                >
+                  Zoom out
+                </button>
+                {s.layout === 'spread' && (
+                  <>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.pan(-0.15, 0)}
+                    >
+                      Pan left
+                    </button>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.pan(0.15, 0)}
+                    >
+                      Pan right
+                    </button>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.pan(0, -0.15)}
+                    >
+                      Pan up
+                    </button>
+                    <button
+                      className="tool"
+                      onClick={() => viewer.current?.pan(0, 0.15)}
+                    >
+                      Pan down
+                    </button>
+                  </>
+                )}
+              </div>
+              <p className="secondary">
+                On the movement: arrow keys orbit (pan in All parts), + / −
+                zoom, Home resets. All components are also available in the
+                catalog.
+              </p>
+              <ToggleGroup
+                value={[s.treatment]}
+                aria-label="Visual treatment"
+                onValueChange={(v) => {
+                  if (v[0]) patch({ treatment: v[0] as 'finish' | 'function' });
+                }}
+              >
+                <ToggleGroupItem value="finish">Finish</ToggleGroupItem>
+                <ToggleGroupItem value="function">Function</ToggleGroupItem>
+              </ToggleGroup>
+              <div className="quality-control">
+                <label htmlFor="render-quality">Rendering quality</label>
+                <Select
+                  value={s.quality}
+                  onValueChange={(v) =>
+                    patch({ quality: v as 'auto' | 'high' | 'low' })
+                  }
+                >
+                  <SelectTrigger
+                    id="render-quality"
+                    aria-label="Rendering quality"
+                  >
+                    <SelectValue>
+                      {s.quality === 'auto'
+                        ? 'Automatic'
+                        : s.quality === 'high'
+                          ? 'High'
+                          : 'Lightweight'}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="auto">Automatic</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="low">Lightweight</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <button
+                ref={catalogButton}
+                className="menu-link"
+                onClick={() => setCatalog(true)}
+                disabled={!s.parts.length}
+              >
+                Source catalog <span>↗</span>
+              </button>
+              <button
+                ref={aboutButton}
+                className="menu-link"
+                onClick={() => setAbout(true)}
+              >
+                About & sources <span>↗</span>
+              </button>
+            </div>
+          </SheetContent>
+        </Sheet>
       </header>
       <section className="workspace" aria-label="Movement explorer">
-        <aside className={'intro ' + (collapsed ? 'collapsed' : '')}>
-          <div className="title-row">
-            <div>
-              <span className="eyebrow">Calibre ml–01</span>
-              <h1>Zweigesicht</h1>
-            </div>
-            <button
-              className="tool collapse-button"
-              aria-expanded={!collapsed}
-              aria-label={
-                collapsed ? 'Expand mechanisms' : 'Collapse mechanisms'
-              }
-              onClick={() => setCollapsed(!collapsed)}
-            >
-              {collapsed ? '＋' : '−'}
-            </button>
-          </div>
-          <div className="mechanism-panel">
-            <p className="section-label">EXPLORE THE MOVEMENT</p>
-            <ToggleGroup
-              className="mechanism-list"
-              orientation="vertical"
-              value={s.group ? [s.group] : ['whole']}
-              onValueChange={(values) => {
-                const id = values[0];
-                if (id) chooseGroup(id === 'whole' ? null : id);
-              }}
-              aria-label="Choose a mechanism"
-            >
-              <ToggleGroupItem className="mechanism-choice" value="whole">
-                <span className="mechanism-number">00</span>
-                <span>The whole movement</span>
-              </ToggleGroupItem>
-              {GROUPS.map((g, i) => (
-                <ToggleGroupItem
-                  key={g.id}
-                  className="mechanism-choice"
-                  value={g.id}
-                >
-                  <span className="mechanism-number">0{i + 1}</span>
-                  <span>{g.name}</span>
-                  <span className="choice-arrow">↗</span>
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-            <button
-              className="catalog-button"
-              onClick={() => setCatalog(true)}
-              disabled={!s.parts.length}
-            >
-              Browse all parts{' '}
-              <span>{s.parts.length ? s.parts.length - 1 : '—'} →</span>
-            </button>
-          </div>
-        </aside>
         <div
-          className={'stage ' + (collapsed ? 'panel-collapsed' : '')}
+          className="stage"
           ref={host}
           aria-label="Interactive CAD movement"
         />
         {(!s.ready || s.error) && (
           <div className="fallback">
-            {/* Prepared local CAD still; deliberately no server image-transform dependency. */}
             {/* oxlint-disable-next-line next/no-img-element */}
             <img
               src="/reference/movement-back.png"
@@ -215,7 +326,7 @@ export default function Home() {
               {s.error || s.status}
               {s.error && (
                 <button
-                  className="primary"
+                  className="tool"
                   onClick={() => {
                     if (viewer.current && !viewer.current.contextLost)
                       void viewer.current.load();
@@ -242,73 +353,243 @@ export default function Home() {
             </button>
           </div>
         )}
-        {(group || selected) && (
-          <article className="focus-card" aria-live="polite">
-            <div className="focus-heading">
-              <span className="eyebrow">
-                {selected ? 'Selected component' : group?.technical}
-              </span>
+        {s.layout !== 'spread' && (
+          <button
+            className="side-switch text-button"
+            disabled={!s.ready}
+            onClick={() =>
+              viewer.current?.setSide(s.side === 'back' ? 'front' : 'back')
+            }
+            aria-label={
+              s.side === 'back' ? 'Show dial side' : 'Show movement side'
+            }
+          >
+            ↻ <span>{s.side === 'back' ? 'Dial side' : 'Movement side'}</span>
+          </button>
+        )}
+      </section>
+      {(group || selected || s.layout === 'spread') && (
+        <section
+          className="focus-strip"
+          aria-label="Current view"
+          aria-live="polite"
+        >
+          <div className="focus-title">
+            <h2>
+              {selected
+                ? partLabel(selected)
+                : group
+                  ? group.technical
+                  : s.spreadFocus
+                    ? `All parts · ${s.spreadFocus}`
+                    : 'All parts'}
+            </h2>
+            <div className="focus-actions">
+              {s.canBack && (
+                <button
+                  className="text-button"
+                  onClick={() => {
+                    viewer.current?.back();
+                    host.current?.querySelector('canvas')?.focus();
+                  }}
+                >
+                  ← Back
+                </button>
+              )}
               <button
                 className="text-button"
                 onClick={() => {
-                  if (viewer.current) viewer.current.back();
-                  else chooseGroup(null);
+                  chooseGroup(null);
+                  host.current?.querySelector('canvas')?.focus();
                 }}
-                aria-label="Back to previous view"
               >
-                ← Back
+                Whole movement
+              </button>
+              {(group || selected) && (
+                <button
+                  ref={detailButton}
+                  className="text-button"
+                  onClick={() => setDetails(true)}
+                >
+                  Details
+                </button>
+              )}
+            </div>
+          </div>
+          {selected ? (
+            <div className="selected-summary">
+              <p>{partDetail(selected)}</p>
+              <button
+                className="text-button"
+                aria-pressed={s.isolated}
+                onClick={() => patch({ isolated: !s.isolated })}
+              >
+                {s.isolated ? 'Show context' : 'Isolate part'}
               </button>
             </div>
-            <h2>{selected ? partLabel(selected) : group?.name}</h2>
-            <p>{selected ? category(selected) : group?.caption}</p>
+          ) : group ? (
+            <ul className="facts">
+              {factsFor(group.id).map((f) => (
+                <li key={f.text}>{f.text}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="spread-hint">
+              Drag to pan · Pinch or scroll to look closer
+            </p>
+          )}
+        </section>
+      )}
+      <footer className="control-deck">
+        <Popover open={explore} onOpenChange={setExplore}>
+          <PopoverTrigger className="explore-button">
+            Explore <span>＋</span>
+          </PopoverTrigger>
+          <PopoverContent
+            className="explore-menu"
+            side="top"
+            align="start"
+            sideOffset={12}
+          >
+            <PopoverTitle>Inside the movement</PopoverTitle>
+            {GROUPS.map((g, i) => (
+              <button
+                className="menu-link"
+                key={g.id}
+                onClick={() => chooseGroup(g.id)}
+              >
+                <span>
+                  <small>0{i + 1}</small>
+                  {g.technical}
+                </span>
+                <span>↗</span>
+              </button>
+            ))}
+          </PopoverContent>
+        </Popover>
+        <div className="separation-control">
+          {s.layout === 'spread' ? (
+            <>
+              <button
+                className="text-button overview-button"
+                onClick={() => viewer.current?.frameSpread()}
+              >
+                Fit all parts
+              </button>
+              <Popover open={spreadGroups} onOpenChange={setSpreadGroups}>
+                <PopoverTrigger className="text-button">
+                  Look closer
+                </PopoverTrigger>
+                <PopoverContent className="explore-menu" side="top">
+                  <PopoverTitle>Groups in the spread</PopoverTitle>
+                  {SPREAD_GROUPS.map((name) => (
+                    <button
+                      className="menu-link"
+                      key={name}
+                      onClick={() => {
+                        setSpreadGroups(false);
+                        viewer.current?.frameSpread(name);
+                      }}
+                    >
+                      {name}
+                      <span>↗</span>
+                    </button>
+                  ))}
+                </PopoverContent>
+              </Popover>
+            </>
+          ) : (
+            <>
+              <span id="separation-label">
+                {group ? 'Separate section' : 'Separate'}
+              </span>
+              <Slider
+                disabled={!s.ready || !!s.error}
+                aria-labelledby="separation-label"
+                value={[group ? s.partSpread : s.separation]}
+                min={0}
+                max={1}
+                step={0.01}
+                onValueChange={(v) => {
+                  const value = Array.isArray(v) ? v[0] : v;
+                  patch(group ? { partSpread: value } : { separation: value });
+                }}
+              />
+              <button
+                className="text-button reassemble"
+                aria-label="Reassemble"
+                title="Reassemble"
+                disabled={!(s.separation || s.partSpread)}
+                style={{
+                  visibility:
+                    s.separation || s.partSpread ? 'visible' : 'hidden',
+                }}
+                onClick={() =>
+                  patch({ separation: 0, partSpread: 0, reveal: 0 })
+                }
+              >
+                ↩
+              </button>
+            </>
+          )}
+        </div>
+        <button
+          className="text-button all-parts-button"
+          disabled={!s.ready || !!s.error}
+          aria-pressed={s.layout === 'spread'}
+          onClick={() =>
+            s.layout === 'spread'
+              ? chooseGroup(null)
+              : viewer.current?.allParts()
+          }
+        >
+          All parts
+        </button>
+        <button
+          className="text-button reset-button"
+          onClick={() => {
+            setExplore(false);
+            setSpreadGroups(false);
+            setDetails(false);
+            if (viewer.current) viewer.current.reset();
+            else set({ ...empty, error: s.error });
+          }}
+        >
+          Reset
+        </button>
+      </footer>
+      <Sheet open={details} onOpenChange={setDetails}>
+        <SheetContent className="about-sheet" finalFocus={detailButton}>
+          <SheetHeader>
+            <SheetTitle>
+              {selected ? partLabel(selected) : group?.technical}
+            </SheetTitle>
+            <SheetDescription>
+              {selected ? partDetail(selected) : group?.caption}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="about-copy">
             {selected ? (
               <>
-                <div className="part-actions">
-                  <button
-                    className="tool"
-                    aria-pressed={s.isolated}
-                    onClick={() => patch({ isolated: !s.isolated })}
-                  >
-                    {s.isolated ? 'Show context' : 'Isolate part'}
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => {
-                      patch({
-                        part: null,
-                        isolated: false,
-                        phase: group ? 'mechanism' : 'whole',
-                      });
-                      if (group) viewer.current?.frameGroup(group);
-                      else viewer.current?.homeCamera();
-                    }}
-                  >
-                    Done
-                  </button>
-                </div>
-                <details>
-                  <summary>Source identity</summary>
-                  <p>{selected.name}</p>
-                  <p className="source-id">{selected.sourceInstanceId}</p>
-                  <p>{selected.triangles ?? 0} source triangles</p>
-                  {selected.id === PREFIX + '66' && (
-                    <p>
-                      Alternative to the standard setting spring. Configuration
-                      remains unreviewed.
-                    </p>
-                  )}
-                  {selected.definitionId === 'd_0_1_1_111' && (
-                    <p>
-                      Source eccentric has three faces that could not be
-                      tessellated.
-                    </p>
-                  )}
-                </details>
+                <h3>Source identity</h3>
+                <p>{selected.name}</p>
+                <p className="source-id">{selected.sourceInstanceId}</p>
+                <p>{category(selected)}</p>
               </>
             ) : (
-              <>
-                <div className="reveal-control">
-                  <span id="reveal-label">Uncover</span>
+              group && (
+                <>
+                  <ul className="detail-facts">
+                    {factsFor(group.id).map((f) => (
+                      <li key={f.text}>
+                        {f.text}{' '}
+                        <a href={f.url} target="_blank" rel="noreferrer">
+                          {f.attribution} ↗
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <span id="reveal-label">Uncover section</span>
                   <Slider
                     disabled={!s.ready}
                     aria-labelledby="reveal-label"
@@ -320,138 +601,22 @@ export default function Home() {
                       patch({ reveal: Array.isArray(v) ? v[0] : v })
                     }
                   />
-                </div>
-                {members.length > 0 && (
-                  <details className="member-list">
-                    <summary>Inspect {members.length} components</summary>
-                    <div>
-                      {members.map((p) => (
-                        <button key={p.id} onClick={() => selectPart(p.id)}>
-                          {partLabel(p)}
-                          <span>↗</span>
-                        </button>
-                      ))}
-                    </div>
-                  </details>
-                )}
-              </>
+                  <h3>Components</h3>
+                  <div className="catalog-index">
+                    {members.map((p) => (
+                      <button key={p.id} onClick={() => selectPart(p.id)}>
+                        {partLabel(p)} <span>↗</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )
             )}
-          </article>
-        )}
-        <div className="view-tools">
-          <button
-            className="tool icon-button"
-            aria-label="Zoom in"
-            onClick={() => viewer.current?.zoom(0.8)}
-          >
-            ＋
-          </button>
-          <button
-            className="tool icon-button"
-            aria-label="Zoom out"
-            onClick={() => viewer.current?.zoom(1.25)}
-          >
-            −
-          </button>
-          <button
-            className="tool reset-button"
-            onClick={() => {
-              if (viewer.current) viewer.current.reset();
-              else chooseGroup(null);
-            }}
-          >
-            Reset
-          </button>
-        </div>
-        <div className="orientation-tools" aria-label="Orbit alternatives">
-          <button
-            className="text-button"
-            aria-label="Orbit left"
-            onClick={() => viewer.current?.orbit(-0.25, 0)}
-          >
-            ↶
-          </button>
-          <button
-            className="text-button"
-            aria-label="Tilt up"
-            onClick={() => viewer.current?.orbit(0, -0.2)}
-          >
-            ↑
-          </button>
-          <button
-            className="text-button"
-            aria-label="Orbit right"
-            onClick={() => viewer.current?.orbit(0.25, 0)}
-          >
-            ↷
-          </button>
-        </div>
-        <div className="caption">
-          {s.separation || s.partSpread
-            ? 'CONSTRUCTION STUDY · NOT A SERVICE SEQUENCE'
-            : 'Original Marco Lang CAD'}
-        </div>
-      </section>
-      <footer
-        className="control-deck"
-        inert={!s.ready || !!s.error}
-        aria-disabled={!s.ready || !!s.error}
-      >
-        <div className="primary-controls">
-          <div className="treatment">
-            <ToggleGroup
-              value={[s.treatment]}
-              aria-label="Visual treatment"
-              onValueChange={(v) => {
-                if (v[0]) patch({ treatment: v[0] as 'finish' | 'function' });
-              }}
-            >
-              <ToggleGroupItem value="finish">Finish</ToggleGroupItem>
-              <ToggleGroupItem value="function">Function</ToggleGroupItem>
-            </ToggleGroup>
           </div>
-          <div className="separation-control">
-            <span id="separation-label">
-              {s.group ? 'Separate components' : 'Separate layers'}
-            </span>
-            <Slider
-              aria-labelledby="separation-label"
-              value={[s.group ? s.partSpread : s.separation]}
-              min={0}
-              max={1}
-              step={0.01}
-              onValueChange={(v) => {
-                const value = Array.isArray(v) ? v[0] : v;
-                patch(s.group ? { partSpread: value } : { separation: value });
-              }}
-            />
-            <button
-              className="text-button"
-              onClick={() => patch({ separation: 0, partSpread: 0 })}
-            >
-              Reassemble
-            </button>
-          </div>
-          <div className="side-buttons">
-            <button
-              className="tool"
-              aria-pressed={s.side === 'back'}
-              onClick={() => viewer.current?.setSide('back')}
-            >
-              Movement
-            </button>
-            <button
-              className="tool"
-              aria-pressed={s.side === 'front'}
-              onClick={() => viewer.current?.setSide('front')}
-            >
-              Dial side
-            </button>
-          </div>
-        </div>
-      </footer>
+        </SheetContent>
+      </Sheet>
       <Sheet open={catalog} onOpenChange={setCatalog}>
-        <SheetContent className="catalog-sheet">
+        <SheetContent className="catalog-sheet" finalFocus={catalogButton}>
           <SheetHeader>
             <SheetTitle>Every source component</SheetTitle>
             <SheetDescription>
@@ -500,7 +665,7 @@ export default function Home() {
               .filter((p) => p.parentId === ROOT || p.parentId === 'p_0_1_1_1')
               .map((p) => (
                 <button key={p.id} onClick={() => selectPart(p.id)}>
-                  <span>{partLabel(p)}</span>
+                  <span>{p.name.replace(/^ml01 /, '')}</span>
                   <small>{p.isAssembly ? 'Assembly' : 'Part'} ↗</small>
                 </button>
               ))}
@@ -508,7 +673,7 @@ export default function Home() {
         </SheetContent>
       </Sheet>
       <Sheet open={about} onOpenChange={setAbout}>
-        <SheetContent className="about-sheet">
+        <SheetContent className="about-sheet" finalFocus={aboutButton}>
           <SheetHeader>
             <SheetTitle>A study of the ml–01</SheetTitle>
             <SheetDescription>
@@ -540,8 +705,10 @@ export default function Home() {
               shading corrections; no missing geometry has been invented.
             </p>
             <p>
-              Separation paths are illustrative. This is a local study;
-              redistribution and release approval remain open.
+              Separation and All parts travel are authored presentations, not
+              service procedures. All parts contains the active movement’s
+              physical components at their original relative scale; case parts
+              and incompatible alternatives remain in the source catalog.
             </p>
             <a
               href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"
@@ -550,27 +717,6 @@ export default function Home() {
             >
               Marco Lang · Original CAD ↗
             </a>
-            <div className="quality-control">
-              <label htmlFor="render-quality">Rendering quality</label>
-              <Select
-                value={s.quality}
-                onValueChange={(v) =>
-                  patch({ quality: v as 'auto' | 'high' | 'low' })
-                }
-              >
-                <SelectTrigger
-                  id="render-quality"
-                  aria-label="Rendering quality"
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="auto">Automatic</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="low">Lightweight</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
             <p>
               Drag to orbit; pinch or scroll to zoom. All mechanisms, components
               and view controls are also available through keyboard navigation.

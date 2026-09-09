@@ -8,6 +8,7 @@ export type Phase =
   | 'recovering';
 export interface ExperienceState {
   phase: Phase;
+  layout: 'assembly' | 'spread';
   group: string | null;
   part: string | null;
   side: 'back' | 'front';
@@ -20,6 +21,7 @@ export interface ExperienceState {
 }
 export const initialState: ExperienceState = {
   phase: 'loading',
+  layout: 'assembly',
   group: null,
   part: null,
   side: 'back',
@@ -44,6 +46,12 @@ export function resolveState(
   next.separation = clamp(next.separation);
   next.partSpread = clamp(next.partSpread);
   next.reveal = clamp(next.reveal);
+  if (next.layout === 'spread') {
+    next.group = null;
+    next.separation = 0;
+    next.partSpread = 0;
+    next.reveal = 0;
+  }
   if (!next.part) next.isolated = false;
   return next;
 }

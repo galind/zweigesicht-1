@@ -24,6 +24,9 @@ export function registerMovementTools(viewer: MovementViewer) {
     const s = viewer.snapshot();
     return {
       ready: s.ready,
+      layout: s.layout,
+      isolated: s.isolated,
+      canBack: s.canBack,
       group: s.group,
       part: s.part,
       separation: s.separation,
@@ -42,8 +45,11 @@ export function registerMovementTools(viewer: MovementViewer) {
         if (
           viewer.dead ||
           lifetime.signal.aborted ||
-          (!viewer.travel && frames > 3) ||
-          frames > 180
+          (!viewer.travel &&
+            !viewer.presentationMoving &&
+            !viewer.needsRender &&
+            frames > 3) ||
+          frames > 300
         ) {
           resolve();
           return;
@@ -80,6 +86,9 @@ export function registerMovementTools(viewer: MovementViewer) {
             enum: ['whole', ...GROUPS.map((g) => g.id)],
           },
           reset: { type: 'boolean' },
+          back: { type: 'boolean' },
+          isolated: { type: 'boolean' },
+          layout: { type: 'string', enum: ['assembly', 'spread'] },
           reveal: { type: 'number', minimum: 0, maximum: 1 },
           separation: { type: 'number', minimum: 0, maximum: 1 },
           partSpread: { type: 'number', minimum: 0, maximum: 1 },
@@ -96,6 +105,9 @@ export function registerMovementTools(viewer: MovementViewer) {
         const allowed = [
           'group',
           'reset',
+          'back',
+          'isolated',
+          'layout',
           'reveal',
           'separation',
           'partSpread',
@@ -112,8 +124,16 @@ export function registerMovementTools(viewer: MovementViewer) {
               value > 1)
           )
             throw new Error('Invalid separation/reveal');
-          if (key === 'reset' && typeof value !== 'boolean')
+          if (
+            ['reset', 'back', 'isolated'].includes(key) &&
+            typeof value !== 'boolean'
+          )
             throw new Error('Expected boolean');
+          if (
+            key === 'layout' &&
+            !['assembly', 'spread'].includes(value as string)
+          )
+            throw new Error('Invalid layout');
           if (
             key === 'side' &&
             (typeof value !== 'string' || !['front', 'back'].includes(value))
@@ -134,12 +154,22 @@ export function registerMovementTools(viewer: MovementViewer) {
         }
         if (!viewer.ready) throw new Error('Movement is not ready');
         if (values.reset) viewer.reset();
+        if (values.back) viewer.back();
+        if (values.layout === 'spread') viewer.allParts();
+        if (values.layout === 'assembly') viewer.group(null);
         if (values.group !== undefined)
           viewer.group(
             values.group === 'whole' ? null : (values.group as string),
           );
         if (values.side) viewer.setSide(values.side as 'front' | 'back');
-        const { reset: _reset, group: _group, side: _side, ...patch } = values;
+        const {
+          reset: _reset,
+          back: _back,
+          layout: _layout,
+          group: _group,
+          side: _side,
+          ...patch
+        } = values;
         viewer.patch(patch);
         return settle();
       },

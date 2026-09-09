@@ -321,7 +321,7 @@ results.push({check:'actual six-card studio has HDR emission colors and disposes
 // No DOM was connected in this CPU harness, so OrbitControls has no DOM listeners to dispose.
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}
 const loadRace=sourceModules({loader:DeferredLoader,fetchImpl:async()=>({ok:true,json:async()=>({instances:[]})})});const {MovementViewer:RaceViewer}=loadRace('explorer/src/viewer/MovementViewer.ts');const race=Object.create(RaceViewer.prototype);
-Object.assign(race,{loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
+Object.assign(race,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
 const obsolete=race.load();while(pending.length<1)await Promise.resolve();const current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
 results.push({check:'obsolete load progress/failure cannot overwrite newer successful load',status:'pass'});
 const disposedStale=[];race.disposeObject=scene=>disposedStale.push(scene);
@@ -339,7 +339,7 @@ const metadataModules=sourceModules({loader:ImmediateLoader,fetchImpl:async url=
 }});
 const {MovementViewer:MetadataViewer}=metadataModules('explorer/src/viewer/MovementViewer.ts');
 const metadataRace=Object.create(MetadataViewer.prototype);
-Object.assign(metadataRace,{loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
+Object.assign(metadataRace,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
 const oldMetadata=metadataRace.load(),newMetadata=metadataRace.load();
 assert.equal(metadataPending.length,2);
 const latestParts=[{id:'latest'}];metadataPending[1]({ok:true,json:async()=>({instances:latestParts})});
@@ -440,4 +440,79 @@ for(const n of [105,120])assert.equal(finishFor('cap',`d_0_1_1_${n}`).family,'wa
 const leafDefs=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/generated/assembly-manifest.json'))).definitions.filter(d=>!d.isAssembly);
 for(const d of leafDefs)assert.equal(finishFor(d.name,d.id).assignment,'source-definition',d.id+' must not use fallback');
 results.push({check:'all 202 leaf definitions explicit; three steel screw axes coincide with clamp holes; shared definition remains blue; both warm cap identities fixed',status:'pass'});
+// Redesign: exercise the actual source controller on all decoded assets, including recovered diamond.
+const {makeSpread,spreadMember,SPREAD_EXCLUSIONS}=load('explorer/src/experience/spread.ts');
+v.spread=makeSpread(v.renderParts.values());
+const expectedSpread=parts.filter(p=>!p.isAssembly&&belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT)&&![38,39,41,43,44,45,66].map(n=>PREFIX+n).includes(p.id));
+assert.equal(expectedSpread.length,216);assert.equal(v.spread.size,216);
+assert.deepEqual([...v.spread.keys()].sort(),expectedSpread.map(p=>p.id).sort());
+assert.ok(v.spread.has(recovery.DIAMOND_ID));
+for(const id of SPREAD_EXCLUSIONS)assert.ok(parts.some(p=>p.id===id)&&!v.spread.has(id));
+const reverse=makeSpread([...v.renderParts.values()].reverse());
+for(const [id,placement]of v.spread){
+ assert.ok(reverse.get(id).offset.equals(placement.offset));assert.ok(reverse.get(id).rotation.equals(placement.rotation));
+ assert.ok(Math.abs(placement.rotation.length()-1)<1e-12);
+}
+results.push({check:'216 unique active physical leaves, explicit seven exclusions, recovered diamond, deterministic layout independent of traversal/catalog order',status:'pass'});
+v.state={...initialState,layout:'spread'};v.retarget();v.reduced=true;v.applyPose(0);v.root.updateMatrixWorld(true);
+const spreadBoxes=[...v.renderParts.values()].filter(p=>spreadMember(p.source)).map(p=>({id:p.source.id,box:new THREE.Box3().setFromObject(p.mesh)}));
+for(let i=0;i<spreadBoxes.length;i++)for(let j=i+1;j<spreadBoxes.length;j++){
+ const a=spreadBoxes[i].box,b=spreadBoxes[j].box;
+ assert.ok(a.max.x<=b.min.x || b.max.x<=a.min.x || a.max.y<=b.min.y || b.max.y<=a.min.y,`Spread bounds overlap: ${spreadBoxes[i].id}, ${spreadBoxes[j].id}`);
+}
+for(const p of v.renderParts.values()) {
+ assert.ok(p.assembled.equals(new THREE.Matrix4().set(...p.source.worldTransform.flat())));
+ assert.ok(Math.abs(p.mesh.matrix.determinant()-p.assembled.determinant())<1e-9);
+}
+// Verify perspective projection from the actual spread overview method at all requested aspect ratios.
+const corners=box=>[0,1,2,3,4,5,6,7].map(i=>new THREE.Vector3(i&1?box.max.x:box.min.x,i&2?box.max.y:box.min.y,i&4?box.max.z:box.min.z));
+for(const aspect of [1280/480,1600/740,390/500,320/390,600/220]){
+ v.camera.aspect=aspect;v.frameSpread();v.camera.updateProjectionMatrix();v.camera.updateMatrixWorld(true);
+ const projected=spreadBoxes.map(p=>({id:p.id,box:new THREE.Box3().setFromPoints(corners(p.box).map(c=>c.project(v.camera)))}));
+ for(const {box,id}of projected)assert.ok(box.min.x>=-1&&box.max.x<=1&&box.min.y>=-1&&box.max.y<=1,'Spread clipped: '+id);
+ for(let i=0;i<projected.length;i++)for(let j=i+1;j<projected.length;j++){
+  const a=projected[i].box,b=projected[j].box;
+  assert.ok(a.max.x<=b.min.x || b.max.x<=a.min.x || a.max.y<=b.min.y || b.max.y<=a.min.y,'Projected overlap: '+projected[i].id+' / '+projected[j].id);
+ }
+}
+results.push({check:'all settled physical and projected bounding boxes are disjoint at five overview aspect ratios; rigid transforms preserve source scale/matrices',status:'pass'});
+v.patch({separation:.9,partSpread:.7,reveal:1,group:'regulation'});
+assert.equal(v.state.separation,0);assert.equal(v.state.partSpread,0);assert.equal(v.state.reveal,0);assert.equal(v.state.group,null);
+const beforeSpreadMatrices=new Map([...v.renderParts].map(([id,p])=>[id,p.mesh.matrix.clone()]));v.applyPose(0);
+for(const [id,m]of beforeSpreadMatrices)assert.ok(v.renderParts.get(id).mesh.matrix.equals(m));
+results.push({check:'spread exclusively owns transforms and rejects competing reveal/separation/group patches',status:'pass'});
+v.reduced=false;v.ready=true;v.history=[];
+const groupIds=load('explorer/src/experience/catalog.ts').GROUPS.map(g=>g.id);
+for(let i=0;i<24;i++) {
+ v.allParts();v.applyPose(.05);v.group(groupIds[i%6]);v.applyPose(.04);
+ v.patch({partSpread:.6,reveal:.6});v.applyPose(.03);v.allParts();v.applyPose(.02);
+ await v.select(recovery.DIAMOND_ID);v.patch({isolated:true});v.applyPose(.01);v.back();
+ v.reset();for(let n=0;n<260;n++)v.applyPose(1/60);v.retargetVisibility();
+ assert.equal(v.assemblyError(),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,222);
+ assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,'back');assert.equal(v.state.treatment,'finish');assert.equal(v.history.length,0);assert.equal(v.state.part,null);
+}
+for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
+results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
+// Source field handlers are extracted because CPU tests intentionally do not construct WebGL/DOM.
+const handlers={};
+for(const name of ['pointerDown','pointerMove','pointerCancel','pointerUp']){
+ const field=viewerClass.members.find(m=>m.name?.getText(viewerSource)===name),module={exports:{}};
+ const code=ts.transpileModule('module.exports=function(){return '+field.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+ vm.runInNewContext(code,{module,THREE});handlers[name]=module.exports;
+}
+let selections=0;const gesture={pointers:new Set(),pointer:{x:0,y:0,id:-1,cancelled:false},renderer:{domElement:{getBoundingClientRect(){return {left:0,top:0,width:100,height:100}}}},camera:v.camera,renderParts:new Map(),raycaster:{setFromCamera(){},intersectObjects(){return [{object:{userData:{partId:'fixture'}}}]}},select(){selections++}};
+for(const [name,handler]of Object.entries(handlers))gesture[name]=handler.call(gesture);
+const event=(id=1,x=10,y=10,extra={})=>({pointerId:id,clientX:x,clientY:y,button:0,isPrimary:id===1,...extra});
+const sequences=[
+ [['pointerDown',event()],['pointerMove',event(1,40)],['pointerMove',event()],['pointerUp',event()]],
+ [['pointerDown',event()],['pointerDown',event(2)],['pointerUp',event()],['pointerUp',event(2)]],
+ [['pointerDown',event()],['pointerDown',event(2)],['pointerUp',event(2)],['pointerUp',event()]],
+ [['pointerDown',event()],['pointerCancel',event()],['pointerUp',event()]],
+ [['pointerDown',event(1,10,10,{button:2})],['pointerUp',event(1,10,10,{button:2})]],
+ [['pointerDown',event(1,10,10,{button:1})],['pointerUp',event(1,10,10,{button:1})]],
+];
+for(const sequence of sequences){for(const [name,e]of sequence)gesture[name](e);assert.equal(selections,0);assert.equal(gesture.pointers.size,0);}
+gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(selections,1);
+results.push({check:'out-and-back drags, pinch release orders, cancellation, right/middle clicks reject selection; deliberate tap selects exactly once',status:'pass',scope:'actual event handlers with CPU raycast fixture; browser/touch-emulation checked separately'});
+
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

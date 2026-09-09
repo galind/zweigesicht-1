@@ -1,11 +1,31 @@
 import type { MovementViewer } from './MovementViewer';
 const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
+async function settle(v: MovementViewer) {
+  const start = performance.now();
+  do {
+    await sleep(50);
+  } while (
+    (v.travel || v.presentationMoving || v.needsRender) &&
+    performance.now() - start < 8000
+  );
+  if (v.travel || v.presentationMoving)
+    throw new Error('Presentation did not settle');
+}
 export async function runBrowserChecks(v: MovementViewer) {
   if (!v.ready) throw new Error('Movement not ready');
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   v.reset();
-  await sleep(1800);
+  await settle(v);
+  // First selection uploads the one persistent outline geometry. Warm it before
+  // comparing repeated interactions, then verify no subsequent growth.
+  const sample = [...v.spread.keys()].find(
+    (id) => v.renderParts.get(id)?.source.definitionId === 'd_0_1_1_225',
+  )!;
+  await v.select(sample);
+  await settle(v);
+  v.reset();
+  await settle(v);
   const before = v.stats();
   const ids = [
     'regulation',
@@ -15,30 +35,79 @@ export async function runBrowserChecks(v: MovementViewer) {
     'winding',
     'shock',
   ];
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 24; i++) {
+    v.allParts();
+    await sleep(30);
     v.group(ids[i % ids.length]);
-    await sleep(90);
+    await sleep(30);
+    v.patch({ reveal: 0.7, partSpread: 0.45 });
+    await sleep(30);
+    v.allParts();
+    await sleep(30);
+    await v.select(sample);
+    v.patch({ isolated: true });
+    await sleep(30);
+    v.back();
+    if (i % 3 === 0) v.reset();
   }
   v.reset();
-  await sleep(1900);
+  await settle(v);
   checks.push({
-    name: '20 interrupted reveals return to exact assembly',
+    name: '24 interrupted spread, section, reveal, selection, isolation and Reset sequences return exactly',
     pass: v.assemblyError() === 0,
     details: v.assemblyError(),
   });
+  v.allParts();
+  await settle(v);
+  const spreadAudit = v.auditSpread();
+  checks.push({
+    name: 'Spread membership, source scale and projected bounds are correct in the real renderer',
+    pass:
+      spreadAudit.members === 216 &&
+      spreadAudit.visible === 216 &&
+      spreadAudit.overlaps.length === 0 &&
+      spreadAudit.clipped.length === 0 &&
+      spreadAudit.maxScaleError < 1e-9,
+    details: spreadAudit,
+  });
+  v.patch({ separation: 1, reveal: 1, partSpread: 1 });
+  await settle(v);
+  checks.push({
+    name: 'Spread rejects competing separation/reveal ownership',
+    pass:
+      v.state.separation === 0 &&
+      v.state.reveal === 0 &&
+      v.state.partSpread === 0,
+  });
+  const preferredMotion = v.reduced;
+  v.reduced = true;
+  v.allParts();
+  v.applyPose(0);
+  const reducedSpread = v.auditSpread();
+  v.reset();
+  v.applyPose(0);
+  checks.push({
+    name: 'Reduced-motion destinations and exact return apply without interpolating',
+    pass:
+      !v.travel &&
+      v.assemblyError() === 0 &&
+      reducedSpread.visible === 216 &&
+      reducedSpread.overlaps.length === 0,
+  });
+  v.reduced = preferredMotion;
   v.group('regulation');
-  await sleep(1800);
+  await settle(v);
   v.patch({ reveal: 0 });
-  await sleep(1900);
+  await settle(v);
   checks.push({
     name: 'Uncover reversal restores all default movement visibility',
     pass:
       [...v.renderParts.values()].filter((p) => p.mesh.visible).length === 222,
   });
   v.patch({ separation: 0.65, partSpread: 0.3 });
-  await sleep(1800);
+  await settle(v);
   v.patch({ separation: 0, partSpread: 0, reveal: 0 });
-  await sleep(1900);
+  await settle(v);
   checks.push({
     name: 'Layer and component separation restore exact source matrices',
     pass: v.assemblyError() === 0,
@@ -58,8 +127,35 @@ export async function runBrowserChecks(v: MovementViewer) {
     })),
   });
   v.reset();
-  await sleep(1900);
+  await settle(v);
   const after = v.stats();
+  const startCamera = v.camera.position.clone(),
+    startPart = v.state.part;
+  const e = (id = 1, x = 20, extra = {}) =>
+    ({
+      pointerId: id,
+      clientX: x,
+      clientY: 20,
+      isPrimary: id === 1,
+      button: 0,
+      ...extra,
+    }) as PointerEvent;
+  v.pointerDown(e());
+  v.pointerMove(e(1, 60));
+  v.pointerMove(e());
+  v.pointerUp(e());
+  v.pointerDown(e());
+  v.pointerDown(e(2));
+  v.pointerUp(e());
+  v.pointerUp(e(2));
+  v.pointerDown(e());
+  v.pointerCancel(e());
+  v.pointerUp(e());
+  checks.push({
+    name: 'Browser handler emulation rejects out-and-back drag, pinch and cancelled selection',
+    pass: v.state.part === startPart && v.camera.position.equals(startCamera),
+    details: { scope: 'Handler emulation, not physical touch hardware' },
+  });
   checks.push({
     name: 'No GPU resource growth across switches',
     pass:
