@@ -22,6 +22,20 @@ artifacts/browser/
 explorer/public/models/
 explorer/public/reference/
 
+# Reviewed derived CAD payload authorized for the private Vercel deployment.
+!explorer/public/models/
+explorer/public/models/*
+!explorer/public/models/assembly-manifest.json
+!explorer/public/models/asset-paths.json
+!explorer/public/models/catalog-0d8f8da54d0b.glb
+!explorer/public/models/catalog-0d8f8da54d0b.glb.gz
+!explorer/public/models/diamond-c74ee2731a1f.stl
+!explorer/public/models/finish-surfaces.json
+!explorer/public/models/finish-surfaces-4d11dd3bb5bd.bin
+!explorer/public/models/finish-surfaces-4d11dd3bb5bd.bin.gz
+!explorer/public/models/overview-2337df2dca58.glb
+!explorer/public/models/overview-2337df2dca58.glb.gz
+
 *.tsbuildinfo
 artifacts/mechanics/
 artifacts/assets/
