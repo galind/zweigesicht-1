@@ -1214,3 +1214,45 @@ h2 {
     height: 44px;
   }
 }
+
+@media (max-width: 360px) {
+  .identity .calibre {
+    display: block;
+  }
+}
+.text-enlarged .separation-control #separation-label {
+  width: auto;
+}
+@media (min-width: 1000px) and (min-height: 501px) {
+  .text-enlarged .focus-strip {
+    top: 180px;
+    max-height: calc(100dvh - var(--deck-height) - 212px);
+    overflow: auto;
+  }
+}
+@media (min-width: 1000px) and (min-height: 501px) {
+  .text-enlarged .focus-title h2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+}
+
+/* Enlarged text uses equal-height action slots, including the inventory row. */
+.text-enlarged .side-switch span {
+  display: none;
+}
+@media (min-width: 701px) {
+  .text-enlarged .control-deck {
+    grid-template-rows: 62px 62px;
+  }
+}
+@media (max-width: 700px) {
+  .text-enlarged .control-deck {
+    grid-template-rows: auto 62px 62px;
+  }
+}
+.text-enlarged .separation-control {
+  align-self: stretch;
+}

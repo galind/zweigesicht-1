@@ -266,7 +266,7 @@ export default function Home() {
         <div className="identity">
           <h1>Zweigesicht</h1>
           <span>
-            Marco Lang <i>·</i> Calibre ml–01
+            Marco Lang <i>·</i> <span className="calibre">Calibre ml–01</span>
           </span>
         </div>
         <nav className="global-actions" aria-label="View history and options">
@@ -658,11 +658,11 @@ export default function Home() {
                 disabled={!available}
                 onClick={() => viewer.current?.frameSpread()}
               >
-                Fit all parts
+                Fit all
               </button>
               <Popover open={spreadGroups} onOpenChange={setSpreadGroups}>
                 <PopoverTrigger className="text-button" disabled={!available}>
-                  Look closer
+                  Groups
                 </PopoverTrigger>
                 <PopoverContent className="explore-menu" side="top">
                   <PopoverTitle>Groups in the spread</PopoverTitle>

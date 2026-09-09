@@ -1,5 +1,15 @@
 # Zweigesicht — current execution state
 
+## UX/UI polish — completed and verified locally, 9 September 2026
+
+Completed `UX_UI_POLISH_GOAL.md`, beginning with local milestone **2b8e19c**. Back/Reset/Options and primary model controls now occupy stable slots; contextual actions stay compact without resizing the canvas. Whole movement and Back routes are consolidated, inventory actions are **Fit all / Groups**, and enlarged-text layouts remain stable. Materials are the sole appearance end to end. Empty-space clicks and Escape clear selection/isolation while preserving context, camera and history; drag/pinch/cancel/wheel/non-primary input and stale optional loads cannot accidentally reselect or deselect.
+
+**60 CPU/source checks**, **seven state tests**, TypeScript, authored lint and production build pass. Desktop and portrait each pass **27 UX**, **eight explosion** and **12 movement** browser checks; dial suites pass **20 desktop warm / 21 portrait cold**, with a passing portrait warm repeat. All six 10:10 styles were visually reviewed. Accepted finishes, complete 223-leaf separation, exact assembly, 216-member All parts packing, recovery, manual camera ownership, stable resources and zero idle redraws remain protected.
+
+Measured **0 px control/canvas movement** across representative modes at 1280×720, 1920×1080, 390×844, 320×740 and 844×390; enlarged 200% text at desktop and 320px also preserves slots without horizontal overflow. Direct browser checks cover long names, focus, overlay/Escape precedence, keyboard catalog selection, visible failure/retry and delayed optional delivery. One initial strict retry-camera assertion did not reproduce in instrumented cold/warm repeats (zero error); its unchanged assertion and diagnostic evidence remain documented.
+
+Review: `docs/UX_UI_POLISH_REVIEW.md`. Ignored evidence/gallery: `artifacts/browser/ux-ui-polish/`. Next action: user review at **http://127.0.0.1:4173/**; the normal preview and server remain running. No physical-device, screen-reader, human or mechanical certification is claimed. Local commits only; no push, merge, registration, upload or deployment. `FINISHING_GOAL.md` remains untouched and untracked.
+
 ## UX/UI polish — implementation milestone, 9 September 2026
 
 Implemented `UX_UI_POLISH_GOAL.md` on `codex/ux-ui-polish`: permanent Back/Reset/Options, fixed primary/view slots, compact contextual actions, consolidated Whole movement and Back routes, and no appearance selector or alternate-color state/renderer branches. Empty canvas clicks and Escape deselect and leave isolation without changing mode, camera, separation, dial preferences, inventory context or history. Gesture filters reject drag/pinch/cancel/non-primary buttons and wheel gestures; late optional-selection errors are also cancelled.

@@ -63,7 +63,9 @@ export async function runDialChecks(v: MovementViewer) {
           style.label +
           ' has only its fitted leaves at the reviewed display pose',
         visible.length === (face === 'central' ? 22 : 21) &&
-          visible.every((p) => belongs(p.source.id, DIALS.faces[face].rootId)) &&
+          visible.every((p) =>
+            belongs(p.source.id, DIALS.faces[face].rootId),
+          ) &&
           visible.every((p) => expected.has(p.source.id)) &&
           v.assemblyError('presentation') === 0,
       );
@@ -95,7 +97,11 @@ export async function runDialChecks(v: MovementViewer) {
     position.distanceTo(v.camera.position) < 1e-9 &&
       target.distanceTo(v.controls.target) < 1e-9 &&
       up.distanceTo(v.camera.up) < 1e-12,
-    { positionErrorMm: position.distanceTo(v.camera.position), targetErrorMm: target.distanceTo(v.controls.target), upError: up.distanceTo(v.camera.up) },
+    {
+      positionErrorMm: position.distanceTo(v.camera.position),
+      targetErrorMm: target.distanceTo(v.controls.target),
+      upError: up.distanceTo(v.camera.up),
+    },
   );
   await v.showDial('small', 'small', 'pear');
   await settle(v);
@@ -169,12 +175,26 @@ export async function runDialChecks(v: MovementViewer) {
         v.stats().recoveredDiamond === true,
     );
   } else check('Graphics recovery extension available', false);
-  const reloaded = { ...v.state }, reloadCamera = v.camera.position.clone();
+  const reloaded = { ...v.state },
+    reloadCamera = v.camera.position.clone();
   await v.load();
   const reloadStart = performance.now();
   while (!v.ready && performance.now() - reloadStart < 8000) await pause(30);
   await settle(v);
-  check('Retry preparation preserves an existing dial inspection and camera', v.state.presentation === reloaded.presentation && v.state.centralStyle === reloaded.centralStyle && v.state.smallStyle === reloaded.smallStyle && reloadCamera.equals(v.camera.position));
+  check(
+    'Retry preparation preserves an existing dial inspection and camera',
+    v.state.presentation === reloaded.presentation &&
+      v.state.centralStyle === reloaded.centralStyle &&
+      v.state.smallStyle === reloaded.smallStyle &&
+      reloadCamera.equals(v.camera.position),
+    {
+      before: reloaded,
+      after: { ...v.state },
+      beforeCamera: reloadCamera.toArray(),
+      afterCamera: v.camera.position.toArray(),
+      cameraError: reloadCamera.distanceTo(v.camera.position),
+    },
+  );
   // Restore the same style pair used for resource warm-up; first outline selection may add one geometry.
   await v.showDial('small', 'small', 'pear');
   await settle(v);
