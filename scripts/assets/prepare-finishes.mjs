@@ -11,11 +11,15 @@ const modelDir=path.join(root,'explorer/public/models');
 const paths=JSON.parse(fs.readFileSync(path.join(modelDir,'asset-paths.json')));
 const bytes=fs.readFileSync(path.join(root,'explorer/public',paths.overview));
 const {scene}=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'');
+const catalogBytes=fs.readFileSync(path.join(root,'explorer/public',paths.catalog));
+const catalog=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(catalogBytes.buffer.slice(catalogBytes.byteOffset,catalogBytes.byteOffset+catalogBytes.byteLength),'');
+scene.add(catalog.scene);
 const geometries=new Map();
 scene.traverse(o=>{if(o.isMesh)geometries.set(o.userData.definitionId??o.geometry.name,o.geometry)});
 // Exporter preserves definition identity in the owning node's extras.
 scene.traverse(o=>{if(o.isMesh){let p=o;while(p&&!p.userData.definitionId)p=p.parent;if(p)geometries.set(p.userData.definitionId,o.geometry)}});
 const sha=b=>createHash('sha256').update(b).digest('hex');
+const screwSteelFaces={9:[6,7],107:[6,7],122:[1,13],123:[4,5,6],136:[4,5,6],138:[4,5,6],139:[4,5,6],166:[4,5,6],168:[4,5,6],169:[4,5,6],170:[4,5,6],180:[4,5,6,7,8,9,10,14,15,16],181:[6,7],189:[4,5,6],191:[4,5,6],192:[4,5,14,15,16],201:[1,2,3,4],226:[3,5,8],253:[13,14,15],255:[4,5,14,15,16]};
 const definitions={},blocks=[],reports=[];let byteOffset=0;
 const ids=fs.readdirSync(path.join(root,'artifacts/finishing-cad/sidecars')).filter(f=>/^d_0_1_1_\d+\.json$/.test(f)).map(f=>Number(f.match(/_(\d+)\.json$/)[1])).sort((a,b)=>a-b);
 for(const id of ids) {
@@ -35,6 +39,14 @@ for(const id of ids) {
   if(id!==195&&flat&&Math.abs(z)<.001)role=1;
   if([99,222,228,230].includes(id)&&flat&&(Math.abs(z+.1)<.001||(id===99&&Math.abs(z+.07)<.001)))role=3;
   const color=f.directColors.surface??f.directColors.generic;
+  // Catalog hands/bushings retain source steel seats. Source-dark dial markings
+  // are distinct from pale carriers and separately modeled enamel inserts.
+  if([8,12,24,28,34,38,41].includes(id)&&color&&Math.abs(color[0]-.36724645)<.001)role=2;
+  // Exact source shank/under-head faces. Origins differ: d9/d107/d122/d180/
+  // d181 place the head top near Z=0, unlike the shoulder-origin screws.
+  // Never infer a head boundary from a shared zero-plane convention.
+  if(screwSteelFaces[id]?.includes(f.index))role=2;
+  if([3,17,26,27].includes(id)&&color&&color[0]<.01&&color[1]<.01&&color[2]<.01)role=5;
   if([99,222,228,230].includes(id)&&color&&color[2]>.45&&color[0]<.03&&color[1]===0)role=3;
   if(id===156&&color&&color[0]>.3&&color[1]===0&&color[2]===0)role=7;
   if((id===251&&f.index===22)||(id===159&&f.index>=1&&f.index<=4))role=4;
@@ -54,7 +66,7 @@ for(const id of ids) {
 }
 const packed=Buffer.concat(blocks),digest=sha(packed),file=`finish-surfaces-${digest.slice(0,12)}.bin`;
 fs.writeFileSync(path.join(modelDir,file),packed);fs.writeFileSync(path.join(modelDir,file+'.gz'),gzipSync(packed,{level:9,mtime:0}));
-const manifest={schemaVersion:1,sourceStepSha256:'f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b',overview:paths.overview,file:'/models/'+file,sha256:digest,definitions,roles:{0:'normal-based conservative surface',1:'source main plane',3:'source decorative groove and engraving',4:'source blue crown cone or shock spring field',6:'source plate inscription floor',7:'source red gauge inlay'}};
+const manifest={schemaVersion:1,sourceStepSha256:'f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b',overview:paths.overview,file:'/models/'+file,sha256:digest,definitions,roles:{0:'normal-based conservative surface',1:'source main plane',2:'source steel hand seat or screw shank/under-head',5:'source dark dial marking',3:'source decorative groove and engraving',4:'source blue crown cone or shock spring field',6:'source plate inscription floor',7:'source red gauge inlay'}};
 fs.writeFileSync(path.join(modelDir,'finish-surfaces.json'),JSON.stringify(manifest));
 fs.writeFileSync(path.join(root,'artifacts/finishing-cad/runtime-sidecar-report.json'),JSON.stringify({bytes:packed.length,gzipBytes:gzipSync(packed,{level:9,mtime:0}).length,definitions:reports},null,2)+'\n');
 console.log(JSON.stringify({bytes:packed.length,definitions:reports},null,2));

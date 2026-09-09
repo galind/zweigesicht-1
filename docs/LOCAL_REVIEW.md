@@ -1,5 +1,7 @@
 # Local engineering review — 9 September 2026
 
+> Appearance update, 9 September 2026: [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md) records the complete later audit and authentic maker STL diamond recovery. Original assembly STEP emptiness remains a source fact; statements below about missing viewer diamond geometry and prior material coverage are historical. Running/timing remains disabled.
+
 > Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
 
 **Working preview: http://127.0.0.1:4173/**. The local implementation is a real-CAD movement explorer with six authored reveals, complete source addressing and a bounded timing study. Public release and faithful running-watch animation are separate, open gates.

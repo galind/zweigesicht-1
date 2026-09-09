@@ -55,7 +55,7 @@ export async function loadSourceSurfaces(
       if (
         !Number.isFinite(length) ||
         Math.abs(length - 1) > 0.01 ||
-        ![0, 1, 3, 4, 6, 7].includes(values[i + 3])
+        ![0, 1, 2, 3, 4, 5, 6, 7].includes(values[i + 3])
       )
         throw new Error('Invalid source surface normal or role');
     }

@@ -9,6 +9,7 @@ import {
   type SourceSurfaces,
 } from './SourceSurfaces';
 import { SurfaceOcclusion } from './SurfaceOcclusion';
+import { loadRecoveredDiamond } from './RecoveredDiamond';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
   ROOT,
@@ -64,6 +65,7 @@ export class MovementViewer {
   environment: THREE.WebGLRenderTarget;
   sourceSurfaces?: SourceSurfaces;
   sourceSurfaceError = '';
+  diamondRecoveryError = '';
   surfaceOcclusion?: SurfaceOcclusion;
   beautyTriangles?: number;
   beautyDrawCalls?: number;
@@ -198,6 +200,10 @@ export class MovementViewer {
       contextLosses: this.contextLosses,
       sourceSurfaceDefinitions: this.sourceSurfaces?.size ?? 0,
       sourceSurfaceError: this.sourceSurfaceError,
+      diamondRecoveryError: this.diamondRecoveryError,
+      recoveredDiamond: [...this.renderParts.values()].some(
+        (p) => p.mesh.userData.sourceRecovery === 'maker-component-stl',
+      ),
       camera: this.camera.position.toArray(),
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
@@ -311,6 +317,19 @@ export class MovementViewer {
       }
       this.sourceSurfaces = sourceSurfaces;
       this.ingest(gltf.scene);
+      this.diamondRecoveryError = '';
+      try {
+        const recovered = await loadRecoveredDiamond(this.parts);
+        if (this.dead || generation !== this.loadGeneration) {
+          this.disposeObject(recovered);
+          return;
+        }
+        this.ingest(recovered);
+      } catch (error) {
+        if (!this.dead && generation === this.loadGeneration)
+          this.diamondRecoveryError = String(error);
+      }
+      if (this.dead || generation !== this.loadGeneration) return;
       this.ready = true;
       this.state = { ...initialState, phase: 'whole' };
       this.status = '';
@@ -386,12 +405,21 @@ export class MovementViewer {
       node.matrix.copy(assembled);
       node.userData.partId = record.id;
       const b = record.boundsWorldMm;
-      const center = b
-        ? new THREE.Vector3()
-            .fromArray(b[0])
-            .add(new THREE.Vector3().fromArray(b[1]))
-            .multiplyScalar(0.5)
-        : new THREE.Vector3().setFromMatrixPosition(assembled);
+      const recoveredBounds = node.userData.sourceRecovery
+        ? new THREE.Box3()
+            .setFromBufferAttribute(
+              node.geometry.getAttribute('position') as THREE.BufferAttribute,
+            )
+            .applyMatrix4(assembled)
+        : null;
+      const center = recoveredBounds
+        ? recoveredBounds.getCenter(new THREE.Vector3())
+        : b
+          ? new THREE.Vector3()
+              .fromArray(b[0])
+              .add(new THREE.Vector3().fromArray(b[1]))
+              .multiplyScalar(0.5)
+          : new THREE.Vector3().setFromMatrixPosition(assembled);
       accepted.push({
         source: record,
         mesh: node,

@@ -44,7 +44,7 @@ const labels: Record<string, string> = {
   d_0_1_1_238: 'Third wheel',
   d_0_1_1_93: 'Minute pinion',
   d_0_1_1_94: 'Minute wheel',
-  d_0_1_1_225: 'Diamond (empty source)',
+  d_0_1_1_225: 'Diamond',
 };
 export function partLabel(p: Part) {
   return (
@@ -61,7 +61,7 @@ export function category(p: Part) {
   if (p.id === PREFIX + '66')
     return 'Alternate setting spring · hidden in assembled view';
   if (p.definitionId === 'd_0_1_1_225')
-    return 'Empty source geometry · no mesh';
+    return 'Maker component STL · assembly STEP is empty';
   if (!belongs(p.id, ROOT))
     return 'Case, display variant or source support · loaded on demand';
   return p.isAssembly ? 'Source subassembly' : 'Movement component';

@@ -1,5 +1,7 @@
 # Animation decision — retain the static explorer
 
+> Appearance update, 9 September 2026: [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md) records the complete later audit and authentic maker STL diamond recovery. Original assembly STEP emptiness remains a source fact; statements below about missing viewer diamond geometry and prior material coverage are historical. Running/timing remains disabled.
+
 9 September 2026. **Running/timing is removed.** The local experience preserves the original movement at rest, the refined materials, both sides, orbit/zoom, selection/isolation, full source catalog and explanatory reveal/separation transitions. This satisfies the explicitly authorized static-explorer outcome. Nothing was published, deployed, uploaded or pushed.
 
 The inspected baseline is commit `215be75c3a6fcdb29acaa1af2952b716d25ee7c7` with a clean tracked working tree. The unrelated user-owned `FINISHING_GOAL.md` was left untouched. Earlier progress entries and reviews describe historical milestones; their acceptance of a bounded timing illustration does not satisfy this review's whole-watch criterion.

@@ -1,0 +1,139 @@
+{
+  "accessed": "2026-09-09",
+  "downloads": [
+    {
+      "role": "diamond",
+      "path": "assets/reference/finishing/appearance-audit/030-Brilliant_200.jpg",
+      "url": "https://www.marcolangwatches.com/cad/030-brilliant_200/?wpdmdl=2027&ind=1690623575385",
+      "resolved_url": "https://www.marcolangwatches.com/cad/030-brilliant_200/?wpdmdl=2027&ind=1690623575385",
+      "bytes": 377392,
+      "sha256": "812edcef0b17d442df4fbe3887ee2372d4b8621a8f642bd5672829e6fcd9dc01",
+      "content_type": "image/jpeg",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "maker CAD component render; not a photograph",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    },
+    {
+      "role": "diamond",
+      "path": "assets/source-originals/appearance-audit/030-Brilliant_200.stp",
+      "url": "https://www.marcolangwatches.com/cad/030-brilliant_200/?wpdmdl=2027&ind=1690623577672",
+      "resolved_url": "https://www.marcolangwatches.com/cad/030-brilliant_200/?wpdmdl=2027&ind=1690623577672",
+      "bytes": 2509,
+      "sha256": "aeb6b3d18530e88bbd2fadb40ad1e9ced2de447771187b0bebf7c7d2e16b3176",
+      "content_type": "text/plain;charset=UTF-8",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "original maker component CAD",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    },
+    {
+      "role": "diamond",
+      "path": "assets/source-originals/appearance-audit/030-Brilliant_200.stl",
+      "url": "https://www.marcolangwatches.com/cad/030-brilliant_200/?wpdmdl=2027&ind=1690623576592",
+      "resolved_url": "https://www.marcolangwatches.com/cad/030-brilliant_200/?wpdmdl=2027&ind=1690623576592",
+      "bytes": 82084,
+      "sha256": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+      "content_type": "application/octet-stream",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "original maker component CAD",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    },
+    {
+      "role": "dpl",
+      "path": "assets/reference/finishing/appearance-audit/ml01 DPL RBR.jpg",
+      "url": "https://www.marcolangwatches.com/cad/ml01-dpl-rbr/?wpdmdl=2081&ind=1690631772022",
+      "resolved_url": "https://www.marcolangwatches.com/cad/ml01-dpl-rbr/?wpdmdl=2081&ind=1690631772022",
+      "bytes": 755592,
+      "sha256": "606dfc744e10deb3d8b3653dc629fb5d52e277bda9295d86a0c786bbdcd71104",
+      "content_type": "image/jpeg",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "maker CAD component render; not a photograph",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    },
+    {
+      "role": "lug",
+      "path": "assets/reference/finishing/appearance-audit/ml01 Werkhaltelasche.jpg",
+      "url": "https://www.marcolangwatches.com/cad/ml01-werkhaltelasche/?wpdmdl=2246&ind=1690896674962",
+      "resolved_url": "https://www.marcolangwatches.com/cad/ml01-werkhaltelasche/?wpdmdl=2246&ind=1690896674962",
+      "bytes": 542877,
+      "sha256": "9f9944066ced28cd10f1c3158140f59f15aa708c8f6c25d4c0e06d1aee218b72",
+      "content_type": "image/jpeg",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "maker CAD component render; not a photograph",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    },
+    {
+      "role": "screw",
+      "path": "assets/reference/finishing/appearance-audit/010-zyl s80x140 k160x40.jpg",
+      "url": "https://www.marcolangwatches.com/cad/010-zyl-s80x140-k160x40/?wpdmdl=2019&ind=1690623377995",
+      "resolved_url": "https://www.marcolangwatches.com/cad/010-zyl-s80x140-k160x40/?wpdmdl=2019&ind=1690623377995",
+      "bytes": 410724,
+      "sha256": "1e921b4d7b5fa12a0bd79618dcbd34c52a8168685497602b2663fedd1f6d40c2",
+      "content_type": "image/jpeg",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "maker CAD component render; not a photograph",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    },
+    {
+      "role": "chaton",
+      "path": "assets/reference/finishing/appearance-audit/ml01 Diamantchaton.jpg",
+      "url": "https://www.marcolangwatches.com/cad/ml01-diamantchaton/?wpdmdl=2077&ind=1690631695072",
+      "resolved_url": "https://www.marcolangwatches.com/cad/ml01-diamantchaton/?wpdmdl=2077&ind=1690631695072",
+      "bytes": 514455,
+      "sha256": "b893dce26c71e7eea52ff2a12214c4bd05fe1d182bffae18c456a8ce9d05c668",
+      "content_type": "image/jpeg",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden",
+      "classification": "maker CAD component render; not a photograph",
+      "redistribution": "Local-only; no explicit redistribution license established"
+    }
+  ],
+  "pages": [
+    {
+      "path": "assets/reference/finishing/appearance-audit/chaton-page.html",
+      "url": "https://www.marcolangwatches.com/cad/ml01-diamantchaton/",
+      "bytes": 95465,
+      "sha256": "cf5f6c475f845539a332d94b5ea2b2080a2fcafff3d4e37e9cf17e4281c48097",
+      "classification": "maker webpage; prose and download identity",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden"
+    },
+    {
+      "path": "assets/reference/finishing/appearance-audit/dial-hands.html",
+      "url": "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/dial-hands/",
+      "bytes": 112081,
+      "sha256": "7a1adae1dc9c2ebddd2e925f337b11fb76e6f343217603afa0a5360e382f0d01",
+      "classification": "maker webpage; prose and download identity",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden"
+    },
+    {
+      "path": "assets/reference/finishing/appearance-audit/diamond-page.html",
+      "url": "https://www.marcolangwatches.com/cad/030-brilliant_200/",
+      "bytes": 95390,
+      "sha256": "c8e8c1ac6bad8e31192b0d6bc12f3429c6a684104ac7fad69ba51b53f674a72b",
+      "classification": "maker webpage; prose and download identity",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden"
+    },
+    {
+      "path": "assets/reference/finishing/appearance-audit/dpl-page.html",
+      "url": "https://www.marcolangwatches.com/cad/ml01-dpl-rbr/",
+      "bytes": 95085,
+      "sha256": "394fad01e9e0a7a4dcc2dcc6cf930a944edc593bd1a99921057e73e585560e14",
+      "classification": "maker webpage; prose and download identity",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden"
+    },
+    {
+      "path": "assets/reference/finishing/appearance-audit/lug-page.html",
+      "url": "https://www.marcolangwatches.com/cad/ml01-werkhaltelasche/",
+      "bytes": 95592,
+      "sha256": "2471da995fa9d0fb5fd7244244e856a4e982165937010ff2944ac8916aab97fd",
+      "classification": "maker webpage; prose and download identity",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden"
+    },
+    {
+      "path": "assets/reference/finishing/appearance-audit/screw-page.html",
+      "url": "https://www.marcolangwatches.com/cad/010-zyl-s80x140-k160x40/",
+      "bytes": 95788,
+      "sha256": "7e8263cacabe99000a63f26d30ceac61a4a2792528ae7d8158f2a2e7a9d2588a",
+      "classification": "maker webpage; prose and download identity",
+      "attribution": "Atelier Marco Lang / Marco Lang Uhrmachermeister Dresden"
+    }
+  ]
+}

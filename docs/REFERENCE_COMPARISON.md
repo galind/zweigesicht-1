@@ -1,5 +1,7 @@
 # Maker-reference comparison
 
+> Appearance update, 9 September 2026: [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md) records the complete later audit and authentic maker STL diamond recovery. Original assembly STEP emptiness remains a source fact; statements below about missing viewer diamond geometry and prior material coverage are historical. Running/timing remains disabled.
+
 Prepared 9 September 2026 from the local CAD diagnostics and three visible maker-hosted reference images. This is a visual identity and variant comparison only. It does not validate dimensions, tolerances, contact, assembly procedure, or mechanical correctness.
 
 ## References and access

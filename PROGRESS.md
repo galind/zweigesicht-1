@@ -1,6 +1,20 @@
 # Zweigesicht — current execution state
 
-## Current outcome — animation removed, 9 September 2026
+## Current outcome — complete component appearance audit, 9 September 2026
+
+**All 365 source leaf instances are individually audited; the three reported mismatches are corrected locally.** DPL RBR d105 now has a warm straight-grained top and separately reviewed existing chamfers/underside. All three Werkhaltelasche screws (P43/P44/P45, d189) have exact-instance unblued-steel overrides. The maker’s authentic 1,640-facet diamond STL is recovered under the original empty STEP occurrence and unchanged matrix; no source mesh is recentered, scaled or reconstructed.
+
+The complete ledger covers 202 definitions, 223 movement leaves and 142 optional catalog leaves: **55 verified, 287 inferred, 23 unresolved**. It traces original source paths, matrices, body/face/definition colors, export losses, runtime assignment, surface regions, evidence, confidence and disposition. Explicit assignment is not physical certification. Remaining conflicts include clamp bodies, concealed warm/steel components, pale gaskets, red enamel alternatives and regulation tooling. The diamond’s maker mesh has a simplified eightfold cut; authored optics do not reproduce photographic brilliant-cut dispersion or internal bounces.
+
+Targeted catalog corrections include clear sapphire, blue metal hands with neutral seats, metal dial carriers and dark source markings. Exact face annotations now cover 58 definitions / 418,017 vertices. Twenty screw definitions preserve neutral shank/under-head faces while retaining reviewed head colors. Final macro review caught and corrected top-origin screw heads wrongly included by a shared Z0 assumption; explicit face lists and a spatial regression protect the two blue DPL screws and other affected heads. The clear-material shader also corrects Three r186’s white transmission backdrop without changing ruby shading. Existing finishing, source geometry/placements, static exploration and disabled timing remain intact.
+
+Verification: **29 actual-source/asset CPU checks**, four state tests, production build, TypeScript and authored lint pass. Original decoded attributes/indices remain byte-exact across 339 geometry objects; recovered STL vertex floats are individually compared to the original bytes. Six real-browser checks pass, including 20 interrupted reveals, exact reassembly (matrix error 0), restored visibility, stable resources and zero idle redraws. Both assembled sides, all six reveals, each clamp screw, DPL, diamond/setting, oblique orbit/zoom, separation/reassembly, Function, catalog and 390×844 / 320×740 layouts were visually reviewed. Neither narrow viewport has horizontal document overflow. Graphics recovery restores the diamond, all 58 annotation definitions and exact assembly.
+
+Detailed findings: [COMPONENT_APPEARANCE_AUDIT.md](docs/COMPONENT_APPEARANCE_AUDIT.md); complete [instance ledger](docs/appearance/LEDGER.md) and [structured source trace](docs/appearance/ledger.json). Before/after pairs, accepted views, rejected candidates and measured results are in the ignored [local evidence index](artifacts/browser/component-appearance-audit/index.html). Photographs and CAD renders are distinguished; the attachment directory contained goal text only, so no absent attached image is claimed as reviewed. New original downloads and maker pages have URLs, attribution and verified hashes in `assets/source-manifest/component-appearance-references.json`.
+
+Preview: **http://127.0.0.1:4173/** on the existing loopback server; restart with `cd explorer && npm run dev`. Next action: user review of the static explorer and the explicitly listed uncertainties. This checkpoint is **local-only**: no push, publication, deployment, Site upload or asset redistribution. The unrelated untracked `FINISHING_GOAL.md` remains untouched.
+
+## Previous outcome — animation removed, 9 September 2026
 
 **The explorer is now a static source-CAD construction experience.** This section supersedes the running/timing status in historical entries below. The user explicitly accepted removal when a convincing complete working watch could not be supported, and prohibited publication/push.
 

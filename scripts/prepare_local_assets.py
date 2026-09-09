@@ -7,6 +7,13 @@ source=root/'assets/generated'
 target=root/'explorer/public/models'
 target.mkdir(parents=True,exist_ok=True)
 paths={}
+diamond=root/'assets/source-originals/appearance-audit/030-Brilliant_200.stl'
+if diamond.is_file():
+    data=diamond.read_bytes()
+    assert hashlib.sha256(data).hexdigest()=='c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a'
+    name='diamond-c74ee2731a1f.stl'
+    (target/name).write_bytes(data)
+    (target/(name+'.gz')).write_bytes(gzip.compress(data,compresslevel=9,mtime=0))
 for role in ('overview','catalog'):
     path=source/'optimized'/f'{role}.glb'
     if not path.is_file():

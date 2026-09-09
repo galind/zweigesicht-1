@@ -1,5 +1,7 @@
 # CAD assembly audit — 9 September 2026
 
+> Appearance update, 9 September 2026: [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md) records the complete later audit and authentic maker STL diamond recovery. Original assembly STEP emptiness remains a source fact; statements below about missing viewer diamond geometry and prior material coverage are historical. Running/timing remains disabled.
+
 Proceed with local prototype development using the real movement subset. Source identity, reusable geometry, part addressing and placement are verified. Full source-fidelity acceptance remains open because the supplied file includes alternative designs, two invalid imported BReps, incomplete faces and an empty jewel definition. No mechanical or manufacturing correctness is claimed, and no source or derived CAD is authorized for publication.
 
 ## Reproduce

@@ -1,5 +1,7 @@
 # Zweigesicht finishing references
 
+> Appearance update, 9 September 2026: [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md) records the complete later audit and authentic maker STL diamond recovery. Original assembly STEP emptiness remains a source fact; statements below about missing viewer diamond geometry and prior material coverage are historical. Running/timing remains disabled.
+
 Prepared 9 September 2026 for local visual authoring. This ledger extends `MATERIAL_REFERENCE_AUDIT.md` with a full-resolution maker photograph and independent 2023 macro photography of an actual finished Zweigesicht-1. It records visible surface character, not measured material constants or manufacturing proof. All numerical shader parameters remain authored.
 
 ## Strongest references

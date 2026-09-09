@@ -1,5 +1,7 @@
 # Finishing refinement — local review record
 
+> Appearance update, 9 September 2026: [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md) records the complete later audit and authentic maker STL diamond recovery. Original assembly STEP emptiness remains a source fact; statements below about missing viewer diamond geometry and prior material coverage are historical. Running/timing remains disabled.
+
 > Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
 
 9 September 2026. Local-only implementation of `FINISHING_GOAL.md`. The materials have passed independent macro review; final qualification evidence is recorded below. No Site registration, upload, deployment or CAD/image redistribution occurred.

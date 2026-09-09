@@ -33,7 +33,7 @@ export async function runBrowserChecks(v: MovementViewer) {
   checks.push({
     name: 'Uncover reversal restores all default movement visibility',
     pass:
-      [...v.renderParts.values()].filter((p) => p.mesh.visible).length === 221,
+      [...v.renderParts.values()].filter((p) => p.mesh.visible).length === 222,
   });
   v.patch({ separation: 0.65, partSpread: 0.3 });
   await sleep(1800);

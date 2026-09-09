@@ -18,6 +18,7 @@ const {GLTFLoader}=await import(path.join(ROOT,'explorer/node_modules/three/exam
 const {MeshoptDecoder}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/libs/meshopt_decoder.module.js'));
 const {OrbitControls}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/controls/OrbitControls.js'));
 const {SSAOPass}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/postprocessing/SSAOPass.js'));
+const {STLLoader}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/loaders/STLLoader.js'));
 function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
  const cache=new Map();
  return function load(file){
@@ -28,6 +29,7 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
    if(id==='three')return THREE;
    if(id.includes('GLTFLoader'))return {GLTFLoader:loader};
    if(id.includes('SSAOPass'))return {SSAOPass};
+   if(id.includes('STLLoader'))return {STLLoader};
    if(id.startsWith('three/addons/'))return {}; // Constructor-only browser dependencies are unused.
    if(id.startsWith('.')){const p=path.resolve(path.dirname(file),id);return fs.existsSync(p+'.ts')?load(p+'.ts'):require(p)}
    return require(path.join(ROOT,'explorer/node_modules',id));
@@ -71,11 +73,24 @@ for(const entry of sidecarReport.definitions){
   assert.ok(Number.isFinite(data[i])&&Number.isFinite(data[i+1])&&Number.isFinite(data[i+2]));
   const len=Math.hypot(data[i],data[i+1],data[i+2]);
   assert.ok(Math.abs(len-1)<1e-5,'Nonzero shading normal must be normalized');
-  assert.ok([0,1,3,4,6,7].includes(data[i+3]));
+  assert.ok([0,1,2,3,4,5,6,7].includes(data[i+3]));
   roles[data[i+3]]=(roles[data[i+3]]??0)+1;
  }
  assert.deepEqual(roles,entry.roles);
 }
+// Independent spatial guard for the top-origin screw regression discovered in
+// the final macro. All vertices above the slot floor must retain blue head roles.
+for(const n of [9,107,122,180,181]){
+ const id=`d_0_1_1_${n}`,raw=fs.readFileSync(path.join(ROOT,`artifacts/finishing-cad/sidecars/${id}.bin`)),data=v.sourceSurfaces.get(id);
+ let head=0,shank=0;
+ for(let i=0;i<data.length/4;i++){
+  const z=raw.readFloatLE((i*10+2)*4),role=data[i*4+3];
+  if(z>-.05){assert.notEqual(role,2,id+' blue top must not become steel');head++;}
+  if(z<(n===180?-2:-.5)){assert.equal(role,2,id+' source shank must stay steel');shank++;}
+ }
+ assert.ok(head>0&&shank>0);
+}
+results.push({check:'top-origin screw heads retain blue roles while their actual source shanks are steel, including both DPL screws',status:'pass'});
 results.push({check:'actual hash-verified sidecars match packaged definition counts and recorded surface roles',status:'pass',bytes:sidecarReport.bytes,definitions:v.sourceSurfaces.size});
 for(const [label,alter]of [
  ['wrong overview',m=>({...m,overview:'/models/wrong.glb'})],
@@ -131,14 +146,14 @@ for(const part of v.renderParts.values()){
  assert.equal(part.material.defines.SOURCE_FINISH,1);
  const originalBuffer=n.data;surfaceModule.attachSourceSurface(g,data);assert.equal(g.getAttribute('sourceFinishNormal').data,originalBuffer);
 }
-assert.equal(new Set([...v.renderParts.values()].filter(p=>p.mesh.geometry.hasAttribute('sourceFinishNormal')).map(p=>p.source.definitionId)).size,v.sourceSurfaces.size);
+assert.equal(new Set([...v.renderParts.values()].filter(p=>p.mesh.geometry.hasAttribute('sourceFinishNormal')).map(p=>p.source.definitionId)).size,new Set([...v.renderParts.values()].filter(p=>v.sourceSurfaces.has(p.source.definitionId)).map(p=>p.source.definitionId)).size);
 const digestFixture=new THREE.BufferGeometry();digestFixture.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0],3));
 const cleanDigest=geometryDigest(digestFixture);
 surfaceModule.attachSourceSurface(digestFixture,new Float32Array([0,0,1,0]));assert.equal(geometryDigest(digestFixture),cleanDigest);
 digestFixture.setAttribute('unexpectedExtra',new THREE.Float32BufferAttribute([1],1));assert.notEqual(geometryDigest(digestFixture),cleanDigest,'Unexpected attributes must not bypass original-buffer verification');
 digestFixture.dispose();
 results.push({check:'actual ingest attaches reversible sidecars; only two known attributes are excluded from original hashes',status:'pass',annotatedMeshes});
-const fallback=Object.create(Viewer.prototype),badDefinition=v.sourceSurfaces.keys().next().value;
+const fallback=Object.create(Viewer.prototype),badDefinition='d_0_1_1_105';
 Object.assign(fallback,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},selectionBox:new THREE.Box3Helper(new THREE.Box3()),sourceSurfaces:new Map([[badDefinition,new Float32Array([0,0,1,0])]]),reduced:false,emit(){}});
 fallback.ingest((await parse('overview.glb')).scene);
 assert.equal(fallback.renderParts.size,222);assert.match(fallback.sourceSurfaceError,/vertex count changed/);
@@ -212,14 +227,31 @@ v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmissi
 const {finishFor,createMaterial,setFinishEnabled}=load('explorer/src/viewer/materials.ts');
 assert.equal(finishFor('si HMzylinder','d_0_1_1_155').family,'shockMass');
 const shockMaterial=createMaterial('si HMzylinder','d_0_1_1_155');setFinishEnabled(shockMaterial,false);assert.equal(shockMaterial.transmission,0);setFinishEnabled(shockMaterial,true);assert.equal(shockMaterial.transmission,.55);shockMaterial.dispose();
-for(const suffix of [33,77,78,81,82]){
+// Guard the installed renderer contract, so a Three upgrade cannot silently turn
+// isolated clear parts into white discs again. Browser evidence checks pixels.
+assert.ok(THREE.ShaderChunk.transmission_pars_fragment.includes('return textureBicubic( transmissionSamplerMap, fragCoord.xy, lod );'));
+const rendererSource=fs.readFileSync(path.join(ROOT,'explorer/node_modules/three/src/renderers/WebGLRenderer.js'),'utf8');
+assert.match(rendererSource,/setClearColor\(\s*0xffffff,\s*0\.5\s*\)/);
+for(const definition of [67,225,155]){
+ const optical=createMaterial('optical fixture',`d_0_1_1_${definition}`);
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+ optical.onBeforeCompile(shader,{});
+ assert.equal(shader.fragmentShader.includes('float uncovered ='),definition!==155);
+ assert.equal(optical.customProgramCacheKey().includes('clear'),definition!==155);
+ const transmission=optical.transmission;setFinishEnabled(optical,false);assert.equal(optical.transmission,0);setFinishEnabled(optical,true);assert.equal(optical.transmission,transmission);
+ optical.dispose();
+}
+const backdrop=(rgb,alpha)=>rgb.map((c,i)=>Math.max(c-Math.min(1,Math.max(0,(1-alpha)*2)),0)+[.012,.019,.024][i]*Math.min(1,Math.max(0,(1-alpha)*2)));
+assert.deepEqual(backdrop([.3,.6,.9],1),[.3,.6,.9]);assert.deepEqual(backdrop([1,1,1],.5),[.012,.019,.024]);
+results.push({check:'clear optics match installed transmission-buffer contract, preserve opaque samples, isolate program cache, and restore after Function; ruby unchanged',status:'pass',scope:'shader hook and renderer contract; actual pixels reviewed in browser'});
+for(const suffix of [33,43,44,45,77,78,81,82]){
  const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
  const assigned=finishFor(p.source.name,p.source.definitionId,p.source.id);
  assert.equal(assigned.assignment,'source-instance');assert.equal(assigned.family,'steel');assert.equal(p.material.name,'steel');
 }
 const sharedBlue=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_181'&&p.material.name==='blue');
 assert.ok(sharedBlue,'Instance overrides must preserve shared screw definition blue elsewhere');
-results.push({check:'five reviewed fasteners use instance steel overrides while shared screw definition stays blue elsewhere',status:'pass'});
+results.push({check:'eight reviewed fasteners use instance steel overrides while shared screw definition stays blue elsewhere',status:'pass'});
 const physicalDefaults=new THREE.MeshPhysicalMaterial();
 for(const p of v.renderParts.values()){
  assert.ok(p.material instanceof THREE.MeshPhysicalMaterial);
@@ -339,4 +371,37 @@ const resources=[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTa
 const disposals=new Map(resources.map(r=>[r,0]));for(const r of resources)r.addEventListener('dispose',()=>disposals.set(r,disposals.get(r)+1));
 ao.dispose();for(const count of disposals.values())assert.equal(count,1,'Every contact-pass owned resource must be disposed once');line.geometry.dispose();line.material.dispose();
 results.push({check:'contact pass refreshes camera/depth scale, multiplies after beauty, restores render state and disposes owned resources',status:'pass',resourcesDisposed:resources.length,scope:'real SSAOPass with CPU renderer facade; not WebGL proof'});
+// New recovery independently verifies original STL floats and original placement.
+const recovery=sourceModules({fetchImpl:modelFetch})('explorer/src/viewer/RecoveredDiamond.ts');
+const recovered=await recovery.loadRecoveredDiamond(parts);
+const gem=recovered.children[0],stl=fs.readFileSync(path.join(modelsDir,'diamond-c74ee2731a1f.stl'));
+assert.equal(gem.geometry.attributes.position.count,1640*3);
+for(let face=0;face<1640;face++)for(let vertex=0;vertex<3;vertex++)for(let axis=0;axis<3;axis++)
+ assert.equal(gem.geometry.attributes.position.getComponent(face*3+vertex,axis),stl.readFloatLE(84+face*50+12+vertex*12+axis*4));
+const sourceGem=parts.find(p=>p.id===recovery.DIAMOND_ID);
+assert.equal(sourceGem.triangles,0);assert.equal(sourceGem.boundsWorldMm,null);
+const oldCount=v.renderParts.size;v.ingest(recovered);assert.equal(v.renderParts.size,oldCount+1);
+const placed=v.renderParts.get(recovery.DIAMOND_ID);
+assert.ok(placed.assembled.equals(new THREE.Matrix4().set(...sourceGem.worldTransform.flat())));
+assert.ok(placed.center.distanceTo(new THREE.Vector3(0,-9.999833239,-5.220654917))<.01);
+v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(placed.mesh.visible,true);assert.equal(placed.material.transmission,.92);
+v.state={...initialState,part:recovery.DIAMOND_ID,isolated:true};v.retarget();assert.equal(placed.mesh.visible,true);
+v.state={...initialState,treatment:'function'};v.retarget();assert.equal(placed.material.transmission,0);
+v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError(),0);
+await assert.rejects(()=>recovery.loadRecoveredDiamond([]),/empty source record/);
+const badRecovery=sourceModules({fetchImpl:async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(84)})})('explorer/src/viewer/RecoveredDiamond.ts');
+await assert.rejects(()=>badRecovery.loadRecoveredDiamond(parts),/integrity mismatch/);
+results.push({check:'maker diamond STL vertices byte-exact, original empty record/matrix retained, placement, selection, optics, reassembly and corrupt recovery rejection',status:'pass'});
+for(const [clamp,screw]of [[38,45],[39,44],[41,43]]){
+ const c=parts.find(p=>p.id===PREFIX+clamp),s=parts.find(p=>p.id===PREFIX+screw);
+ assert.equal(c.definitionId,'d_0_1_1_185');assert.equal(s.definitionId,'d_0_1_1_189');
+ const hole=new THREE.Vector3(0,.6,0).applyMatrix4(new THREE.Matrix4().set(...c.worldTransform.flat()));
+ assert.ok(Math.hypot(hole.x-s.worldTransform[0][3],hole.y-s.worldTransform[1][3])<1e-8);
+ assert.equal(finishFor(s.name,s.definitionId,s.id).family,'steel');
+}
+assert.equal(finishFor('shared','d_0_1_1_189','unrelated-instance').family,'blue');
+for(const n of [105,120])assert.equal(finishFor('cap',`d_0_1_1_${n}`).family,'warmPlate');
+const leafDefs=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/generated/assembly-manifest.json'))).definitions.filter(d=>!d.isAssembly);
+for(const d of leafDefs)assert.equal(finishFor(d.name,d.id).assignment,'source-definition',d.id+' must not use fallback');
+results.push({check:'all 202 leaf definitions explicit; three steel screw axes coincide with clamp holes; shared definition remains blue; both warm cap identities fixed',status:'pass'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

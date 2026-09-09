@@ -527,9 +527,12 @@ export default function Home() {
               watch.
             </p>
             <p>
-              The source diamond is empty. Four balance eccentrics contain
-              untessellated faces. An overlapping setting-spring alternative is
-              hidden in the assembled view.
+              {s.stats.recoveredDiamond
+                ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
+                : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
+              Four balance eccentrics contain untessellated faces. An
+              overlapping setting-spring alternative is hidden in the assembled
+              view.
             </p>
             <p>
               Finishes follow maker photography and macro references. Surface
