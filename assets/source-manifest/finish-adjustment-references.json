@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-09",
+  "references": [
+    {
+      "id": "USER-FINISH-2026-09-09-01",
+      "file": "codex-clipboard-8cc9144e-605a-4977-b7dc-9ae00fa0bd32.png",
+      "source": "User attachment in this task; no external URL supplied",
+      "sha256": "a0f58aa75496add17d7557872c04df473f4536675900e474b52d7095ee7c6e16",
+      "bytes": 2251608,
+      "kind": "CAD render, visual finishing reference; not measured physical surface data",
+      "usage": "Local review only; image not copied into public assets"
+    },
+    {
+      "id": "USER-FINISH-2026-09-09-02",
+      "file": "codex-clipboard-3de8a220-c4ac-4f7f-8ed8-eb0e2891c38a.png",
+      "source": "User attachment in this task; no external URL supplied",
+      "sha256": "d40b1b25a0474ac87dd1495d2263b1df92cf99becb44f06b6b36db84793ef99c",
+      "bytes": 8359906,
+      "kind": "CAD render, visual finishing reference; not measured physical surface data",
+      "usage": "Local review only; image not copied into public assets"
+    }
+  ]
+}

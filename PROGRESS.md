@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Brushing and frosting adjustment — 9 September 2026
+
+Implemented the user’s two supplied CAD-render references: stronger irregular frosting on the main plate and lower bridge fields, readable circular satin on barrels/lids and wheels, and straight satin on eight keyless lever/spring definitions. Two previously plain-steel setting/coupling wheels now use circular satin. Existing chamfer contrast, source geometry/placements, whole-screw bluing, optics, interface and lighting remain intact. Both setting-spring variants are covered. Reference image hashes and attribution are recorded without copying the attachments into public assets; the complete appearance ledger is refreshed.
+
+**Verification:** 47 actual-source/asset CPU checks, four state tests, TypeScript, targeted material lint and production build pass. Twelve live-browser checks pass, including exact reassembly, all 216 spread members, stable 140 geometries/8 textures and zero idle redraws. Visual review covers opening movement, dial side, winding overview/close-up and oblique view; no shader errors were reported. Source decoded attributes/indices remain byte-exact across 339 geometry objects. This pass does not claim a new physical-device or sustained performance benchmark.
+
+Details and source IDs: [FINISH_ADJUSTMENTS.md](docs/FINISH_ADJUSTMENTS.md). Local screenshots/check output: `artifacts/browser/finish-adjustments/`. Next action: user visual review at **http://127.0.0.1:4173/**; existing preview server reused. This checkpoint is local-only, with no push or deployment. Unrelated user-owned `FINISHING_GOAL.md` remains untouched.
+
 ## Interface polish — complete locally, 9 September 2026
 
 Implemented WEBSITE_POLISH_PROMPT.md and completed local visual/regression review. The accepted composition, model, materials, lighting and static mechanical behavior are preserved. Loading now reports real transfer/preparation/readiness stages and reveals a valid first frame; overview, annotation, diamond, rendering and optional-catalog failures have dependable retry. Context restoration preserves the inspection. Labels and search share readable English names with original names and unique source references. Copy, SVG icons, availability, focus restoration and narrow search layouts are refined; no visitor emojis.

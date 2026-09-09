@@ -226,6 +226,24 @@ v.state={...initialState,treatment:'function',part:rubyPart.source.id};v.retarge
 v.state={...initialState,group:'energy'};v.retarget();assert.equal(rubyPart.material.transmission,rubyPart.material.userData.finishEnabled.value ? .55 : 0);
 v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
 const {finishFor,createMaterial,setFinishEnabled}=load('explorer/src/viewer/materials.ts');
+// Reference-requested keyless surfaces must reach a directional material on
+// real source geometry, including negative-Z faces and the catalog alternative.
+for(const n of [174,176,178,190,193,244,246,248,97,172]){
+ const part=[...v.renderParts.values()].find(p=>p.source.definitionId===`d_0_1_1_${n}`);
+ assert.ok(part,`Missing reviewed keyless definition ${n}`);
+ assert.equal(part.material.name,[97,172].includes(n)?'ratchet':'brushedSteel');
+ assert.ok(part.material.anisotropy>0,`Unbrushed keyless part ${n}`);
+ const normals=part.mesh.geometry.getAttribute('normal');
+ let flat=0;for(let i=0;i<normals.count;i++)if(Math.abs(normals.getZ(i))>.96)flat++;
+ assert.ok(flat>0,`Source-local brushing frame misses all faces on ${n}`);
+ const version=part.material.version;
+ setFinishEnabled(part.material,false);
+ assert.equal(part.material.userData.finishEnabled.value,0);
+ setFinishEnabled(part.material,true);
+ assert.equal(part.material.version,version);
+}
+for(const n of [143,144,173,177])assert.equal(finishFor('',`d_0_1_1_${n}`).family,'steel','Stem, coupling and pins keep their separate turned finish');
+results.push({check:'ten source keyless definitions use straight/circular satin with real local-Z face coverage; Function toggles without recompilation; turned shafts/pins remain separate',status:'pass'});
 assert.equal(finishFor('si HMzylinder','d_0_1_1_155').family,'shockMass');
 const shockMaterial=createMaterial('si HMzylinder','d_0_1_1_155');setFinishEnabled(shockMaterial,false);assert.equal(shockMaterial.transmission,0);setFinishEnabled(shockMaterial,true);assert.equal(shockMaterial.transmission,.55);shockMaterial.dispose();
 // Guard the installed renderer contract, so a Three upgrade cannot silently turn

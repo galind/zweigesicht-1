@@ -161,7 +161,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2 | d_0_1_1_94: ml01 Minutenrad z64 m0,13 | movement | brass → brass | verified | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_3 | d_0_1_1_95: ml01 Sekundenwellenlager | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_4 | d_0_1_1_96: ml01 ÜFHMinRad z26 m0,15 | movement | brass → brass | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_5 | d_0_1_1_97: ml01 Kupplungsrad z17 m0,15 | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_5 | d_0_1_1_97: ml01 Kupplungsrad z17 m0,15 | movement | steel → ratchet | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1 | d_0_1_1_99: ml01 Räderbrücke | movement | bridge → bridge | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_2 | d_0_1_1_100: ml01 Chaton RBR 149x210x60 | movement | gold → gold | verified | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_3 | d_0_1_1_101: 030-MG_30x160x30 | movement | ruby → ruby | verified | Retained with confidence stated |
@@ -256,12 +256,12 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_31 | d_0_1_1_163: 020-12x60 kon ms | movement | gold → gold | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_32 | d_0_1_1_170: 010-zyl s80x180 k125x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_33 | d_0_1_1_170: 010-zyl s80x180 k125x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_1 | d_0_1_1_172: ml01 Zeigerstellrad z19 m0,177 | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_1 | d_0_1_1_172: ml01 Zeigerstellrad z19 m0,177 | movement | steel → ratchet | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_2 | d_0_1_1_173: 020-120x120 | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_31 | d_0_1_1_174: ml01 Kupplungshebel | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_1 | d_0_1_1_176: ml01 Stoppfederplatte | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_31 | d_0_1_1_174: ml01 Kupplungshebel | movement | steel → brushedSteel | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_1 | d_0_1_1_176: ml01 Stoppfederplatte | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_2 | d_0_1_1_177: ml01 Stoppfedersäule | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_3 | d_0_1_1_178: ml01 Stoppfeder | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_3 | d_0_1_1_178: ml01 Stoppfeder | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_4 | d_0_1_1_179: 020-40x120 kon ms | movement | gold → gold | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_5 | d_0_1_1_162: 020-50x70 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_33 | d_0_1_1_180: 010-linzylans s70x90 k90x75 a125x25 ab98x93 | movement | steel → steel | verified | Retained/corrected with exact source-region annotations |
@@ -280,13 +280,13 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_44 | d_0_1_1_189: 010-zyl s80x140 k160x40 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_45 | d_0_1_1_189: 010-zyl s80x140 k160x40 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_46 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_47 | d_0_1_1_190: ml01 Zeigerstellhebel | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_47 | d_0_1_1_190: ml01 Zeigerstellhebel | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_48 | d_0_1_1_191: 010-zyl s80x95 k110x18 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_49 | d_0_1_1_192: 010-zyl s80x120 k220x35 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_50 | d_0_1_1_192: 010-zyl s80x120 k220x35 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_51 | d_0_1_1_191: 010-zyl s80x95 k110x18 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_52 | d_0_1_1_191: 010-zyl s80x95 k110x18 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_53 | d_0_1_1_193: ml01 Winkelhebelfeder | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_53 | d_0_1_1_193: ml01 Winkelhebelfeder | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1 | d_0_1_1_195: ml01 Grundplatine | movement | frosted → frosted | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_2 | d_0_1_1_196: 030-G_90x200x45 | movement | ruby → ruby | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_3 | d_0_1_1_197: 030-G_160x240x30 | movement | ruby → ruby | inferred | Retained with confidence stated |
@@ -350,13 +350,13 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_3 | d_0_1_1_149: 020-50x200 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1 | d_0_1_1_242: ml01 Sekundentrieb z8 m0,1159 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2 | d_0_1_1_243: ml01 Sekundenrad z81 m0,102 | movement | brass → brass | verified | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_66 | d_0_1_1_244: ml01 Winkelhebelfeder 2 Positionen | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_66 | d_0_1_1_244: ml01 Winkelhebelfeder 2 Positionen | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_67 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_68 | d_0_1_1_166: 010-zyl s60x58 k115x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_1 | d_0_1_1_124: 020-50x100 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_2 | d_0_1_1_124: 020-50x100 | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3 | d_0_1_1_246: ml01 Zeigerstellungsfeder | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_1 | d_0_1_1_248: ml01 Winkelhebel | movement | steel → steel | inferred | Retained with confidence stated |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3 | d_0_1_1_246: ml01 Zeigerstellungsfeder | movement | steel → brushedSteel | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_1 | d_0_1_1_248: ml01 Winkelhebel | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_2 | d_0_1_1_124: 020-50x100 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_71 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_72 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |

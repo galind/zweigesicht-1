@@ -20,6 +20,7 @@ const surfaces=read('explorer/public/models/finish-surfaces.json');
 const prefix='p_0_1_1_1__0_1_1_1_4__0_1_1_83_',movement='p_0_1_1_1__0_1_1_1_4';
 const families={
  steel:['Neutral steel/pale metal; alloy unresolved unless source SS','Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.'],
+ brushedSteel:['Brushed keyless steel appearance','User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
  bridge:['Steel bridge','Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
  warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher.'],
  frosted:['Warm pink-gilt plate appearance','Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.'],
@@ -73,6 +74,11 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  const n=Number(d.id.split('_').at(-1)),f=current(d.name,d.id),m=manifest.definitions.find(x=>x.id===d.id),entry=surfaces.definitions[d.id];
  let status=photo.has(n)?'verified':'inferred',evidence=photo.has(n)?'REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations':'STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)';
  let notes=families[f.family][1];if(specific[n]){evidence=specific[n][0];notes=specific[n][1]+' '+notes;}
+ if([97,172,174,176,178,190,193,244,246,248].includes(n)){
+  evidence+='; USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)';
+  notes+=' Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.';
+ }
+ if(['bridge','frosted','barrel','brass','ratchet'].includes(f.family))notes+=' User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.';
  if(conflicts[n]){status='unresolved';notes=conflicts[n]+' '+notes;}
  if([4,21].includes(n)){status='unresolved';notes+=' Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.';}
  if([9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255].includes(n))notes+=' User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.';

@@ -16,7 +16,7 @@
       "6": "source plate inscription floor",
       "7": "source red gauge inlay"
     },
-    "materialSourceSha256": "f8f5e9c7374fbf8dd33878bddf80fc2eafdb791ff6f12f480116ea2578b30f2e",
+    "materialSourceSha256": "0a8687485e6518302af373d3a783e55dbd5a3399b616f8ee8f86f500383338a0",
     "packagerSourceSha256": "e760417aad47eb2f43a41158f3058a905e074bf1ebe11665794ddcbc551571d2"
   },
   "coverage": {
@@ -29,7 +29,7 @@
       "inferred": 287,
       "unresolved": 23
     },
-    "changedFamilyInstances": 48,
+    "changedFamilyInstances": 58,
     "annotatedDefinitions": 58
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -18489,12 +18489,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -19402,12 +19402,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -19662,12 +19662,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -20575,12 +20575,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -20834,12 +20834,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -21364,12 +21364,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -21585,15 +21585,15 @@
       "name": "ml01 Kupplungsrad z17 m0,15",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Neutral steel ratchet",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
-        "color": 12831184,
+        "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.29,
+        "pattern": 2,
+        "family": "ratchet",
         "assignment": "source-definition"
       },
       "source": {
@@ -21764,7 +21764,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -23046,12 +23046,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -23120,12 +23120,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -23333,12 +23333,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -24230,12 +24230,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Neutral steel ratchet",
-      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured.",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
+        "roughness": 0.29,
         "pattern": 2,
         "family": "ratchet",
         "assignment": "source-definition"
@@ -24632,7 +24632,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -24940,12 +24940,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -25229,12 +25229,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -25510,12 +25510,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Hour-wheel-I hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hour-wheel-I hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -25890,7 +25890,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -26308,7 +26308,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 13685980,
@@ -26374,7 +26374,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 13685980,
@@ -26616,7 +26616,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -27627,7 +27627,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -28195,15 +28195,15 @@
       "name": "ml01 Zeigerstellrad z19 m0,177",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Neutral steel ratchet",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
-        "color": 12831184,
+        "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.29,
+        "pattern": 2,
+        "family": "ratchet",
         "assignment": "source-definition"
       },
       "source": {
@@ -28512,15 +28512,15 @@
       "name": "ml01 Kupplungshebel",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -28644,15 +28644,15 @@
       "name": "ml01 Stoppfederplatte",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -28797,15 +28797,15 @@
       "name": "ml01 Stoppfeder",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -29100,12 +29100,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Dial-II cannon pinion source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Dial-II cannon pinion source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -29358,12 +29358,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -29631,12 +29631,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Hour-wheel-II hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hour-wheel-II hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -29784,15 +29784,15 @@
       "name": "ml01 Zeigerstellhebel",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -30038,15 +30038,15 @@
       "name": "ml01 Winkelhebelfeder",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -30164,12 +30164,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm pink-gilt plate appearance",
-      "surfaceReview": "Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.",
+      "surfaceReview": "Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14265999,
         "metalness": 1,
-        "roughness": 0.43,
+        "roughness": 0.51,
         "pattern": 3,
         "family": "frosted",
         "assignment": "source-definition"
@@ -31793,12 +31793,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -32245,12 +32245,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -32614,12 +32614,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -32958,7 +32958,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -33136,7 +33136,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -33491,7 +33491,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -33726,7 +33726,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -33938,12 +33938,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -34406,12 +34406,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -34605,12 +34605,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -35123,7 +35123,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13685980,
@@ -35420,12 +35420,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -35967,15 +35967,15 @@
       "name": "ml01 Winkelhebelfeder 2 Positionen",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -36087,15 +36087,15 @@
       "name": "ml01 Zeigerstellungsfeder",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -36203,15 +36203,15 @@
       "name": "ml01 Winkelhebel",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -48012,7 +48012,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48024,7 +48024,7 @@
       "after": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -48085,7 +48085,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48097,7 +48097,7 @@
       "after": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -48304,7 +48304,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48316,7 +48316,7 @@
       "after": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -48377,7 +48377,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.",
+      "surfaceReview": "Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48389,7 +48389,7 @@
       "after": {
         "color": 14066047,
         "metalness": 1,
-        "roughness": 0.3,
+        "roughness": 0.34,
         "pattern": 2,
         "family": "barrel",
         "assignment": "source-definition"
@@ -48669,7 +48669,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -48681,7 +48681,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -48815,7 +48815,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -48827,7 +48827,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -48886,9 +48886,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Neutral steel ratchet",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -48898,15 +48898,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12831184,
+        "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.29,
+        "pattern": 2,
+        "family": "ratchet",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → ratchet",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -48961,7 +48961,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -50348,7 +50348,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -50360,7 +50360,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -50421,7 +50421,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -50433,7 +50433,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -50567,7 +50567,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -50579,7 +50579,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -51589,7 +51589,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Neutral steel ratchet",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured.",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13095130,
         "metalness": 1,
@@ -51601,7 +51601,7 @@
       "after": {
         "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
+        "roughness": 0.29,
         "pattern": 2,
         "family": "ratchet",
         "assignment": "source-definition"
@@ -51662,7 +51662,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Neutral steel ratchet",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured.",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13095130,
         "metalness": 1,
@@ -51674,7 +51674,7 @@
       "after": {
         "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
+        "roughness": 0.29,
         "pattern": 2,
         "family": "ratchet",
         "assignment": "source-definition"
@@ -51735,7 +51735,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -52246,7 +52246,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52258,7 +52258,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -52684,7 +52684,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52696,7 +52696,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -52757,7 +52757,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hour-wheel-I hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hour-wheel-I hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52769,7 +52769,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -52976,7 +52976,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53560,7 +53560,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Steel bridge",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53633,7 +53633,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Steel bridge",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53852,7 +53852,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -54728,7 +54728,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -55821,9 +55821,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Neutral steel ratchet",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "Circular satin fields with sharper edges; exact wheel polishing unmeasured. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -55833,15 +55833,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12831184,
+        "color": 13095130,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.29,
+        "pattern": 2,
+        "family": "ratchet",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → ratchet",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -55967,9 +55967,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -55981,13 +55981,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -56040,9 +56040,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -56054,13 +56054,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -56186,9 +56186,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -56200,13 +56200,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -56699,7 +56699,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Dial-II cannon pinion source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Dial-II cannon pinion source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -56711,7 +56711,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -56991,7 +56991,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -57003,7 +57003,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -57064,7 +57064,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hour-wheel-II hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hour-wheel-II hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -57076,7 +57076,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -57573,9 +57573,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -57587,13 +57587,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -58011,9 +58011,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -58025,13 +58025,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -58086,7 +58086,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm pink-gilt plate appearance",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.",
+      "surfaceReview": "Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14265999,
         "metalness": 1,
@@ -58098,7 +58098,7 @@
       "after": {
         "color": 14265999,
         "metalness": 1,
-        "roughness": 0.43,
+        "roughness": 0.51,
         "pattern": 3,
         "family": "frosted",
         "assignment": "source-definition"
@@ -59400,7 +59400,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59412,7 +59412,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -59546,7 +59546,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59558,7 +59558,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -59692,7 +59692,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59704,7 +59704,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -59838,7 +59838,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -60130,7 +60130,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -60703,7 +60703,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -60715,7 +60715,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -61141,7 +61141,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -61652,7 +61652,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -61944,7 +61944,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -61956,7 +61956,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -62090,7 +62090,7 @@
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62102,7 +62102,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -62236,7 +62236,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62248,7 +62248,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -62309,7 +62309,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -62601,7 +62601,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.",
+      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62613,7 +62613,7 @@
       "after": {
         "color": 14462597,
         "metalness": 1,
-        "roughness": 0.25,
+        "roughness": 0.31,
         "pattern": 2,
         "family": "brass",
         "assignment": "source-definition"
@@ -62672,9 +62672,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -62686,13 +62686,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -63037,9 +63037,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -63051,13 +63051,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -63110,9 +63110,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Brushed keyless steel appearance",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
+      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -63124,13 +63124,13 @@
       "after": {
         "color": 12831184,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 4,
+        "family": "brushedSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "steel → brushedSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
