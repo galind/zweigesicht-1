@@ -1,5 +1,9 @@
 # Zweigesicht — current execution state
 
+## Consistent side-toggle label — verified locally, 10 September 2026
+
+Renamed the side toggle to **Switch side** across bare Movement and both dials, including its tooltip and accessible name. Both faces are dial sides; the action no longer assigns a dial-versus-movement identity to them. Existing switching behavior and fixed control placement are preserved. Direct browser clicks verify the Movement front/back and Dial A-to-B routes with the same label; production build and diff checks pass. Preview remains running at **http://127.0.0.1:4173/** for user review. Local only; no push, merge, deployment or `FINISHING_GOAL.md` edit.
+
 ## Reset styling correction — verified locally, 10 September 2026
 
 User review rejected the outlined Reset view styling. Removed its custom fill, border, bright color and hover treatment so it uses the same muted text, transparent background and subtle hover as neighboring controls. The label, fixed slot and reset behavior remain intact. Browser review confirms matching 14px type, color, borderless surface and 44px target in Movement and All parts; direct Reset returns to Movement. Production build and diff checks pass. Evidence: `artifacts/browser/reset-control/desktop-quiet-reset.png`. Preview stays running at **http://127.0.0.1:4173/** for user review. Local only; `FINISHING_GOAL.md` untouched.

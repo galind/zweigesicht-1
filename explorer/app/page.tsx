@@ -246,14 +246,7 @@ export default function Home() {
         ? 'front'
         : 'back'
       : s.side;
-  const sideLabel =
-    s.presentation === 'dials' || s.dialRequest
-      ? dialSide === 'back'
-        ? 'Show Dial A'
-        : 'Show Dial B'
-      : s.side === 'back'
-        ? 'Show dial side'
-        : 'Show movement side';
+  const sideLabel = 'Switch side';
   const patch = (v: Parameters<MovementViewer['patch']>[0]) =>
     viewer.current?.patch(v);
   return (
