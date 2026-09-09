@@ -713,8 +713,11 @@ export class MovementViewer {
     if (view === 'movement') {
       this.cancelDialRequest();
       this.save();
+      this.cameraUserOwned = false;
+      this.restoringCamera = null;
       this.patch({
         presentation: 'movement',
+        side: 'back',
         layout: 'assembly',
         part: null,
         group: null,
@@ -723,6 +726,8 @@ export class MovementViewer {
         reveal: 0,
         phase: 'recovering',
       });
+      this.homeCamera();
+      if (this.travel) this.travel.duration = 1.05;
       return;
     }
     const intended = resolveState(this.state, {
@@ -795,17 +800,7 @@ export class MovementViewer {
     if (request) await this.showDial(request.view);
   }
   frameDials() {
-    const bounds = this.targetBounds(
-      (p) => belongs(p.source.id, ROOT) || this.fitted.has(p.source.id),
-    );
-    this.frameBounds(
-      bounds,
-      new THREE.Vector3(
-        0.04,
-        0.06,
-        this.state.side === 'front' ? 1 : -1,
-      ).normalize(),
-    );
+    this.homeCamera();
     if (this.travel) this.travel.duration = 1.05;
   }
   patch(patch: Partial<ExperienceState>) {
@@ -874,6 +869,15 @@ export class MovementViewer {
   }
   fitPresentation() {
     if (this.cameraUserOwned) return;
+    if (
+      !this.state.group &&
+      !this.state.part &&
+      !this.state.separation &&
+      !this.state.partSpread
+    ) {
+      this.homeCamera();
+      return;
+    }
     const group = GROUPS.find((g) => g.id === this.state.group);
     const include = (p: RenderPart) =>
       this.state.part
@@ -885,13 +889,30 @@ export class MovementViewer {
     const points = this.targetPoints(include);
     const bounds = new THREE.Box3().setFromPoints(points);
     if (bounds.isEmpty()) return;
-    const direction = this.cameraUserOwned
-      ? this.camera.position.clone().sub(this.controls.target).normalize()
-      : new THREE.Vector3(
-          this.state.group ? 0.62 : 0.62 + 0.43 * this.state.separation,
-          0.38,
-          this.state.side === 'front' ? 1 : -1,
-        ).normalize();
+    const progress = this.state.separation;
+    const eased = progress * progress * (3 - 2 * progress);
+    const direction =
+      this.state.group || this.state.part
+        ? new THREE.Vector3(
+            0.62,
+            0.38,
+            this.state.side === 'front' ? 1 : -1,
+          ).normalize()
+        : this.assemblyDirection()
+            .lerp(
+              new THREE.Vector3(
+                1.05,
+                0.38,
+                this.state.side === 'front' ? 1 : -1,
+              ).normalize(),
+              eased,
+            )
+            .normalize();
+    if (!group && !this.state.part) {
+      const envelope = this.assemblyBounds();
+      bounds.union(envelope);
+      points.push(...this.boundsCorners(envelope));
+    }
     this.frameBounds(bounds, direction, points);
   }
   targetPoints(include: (p: RenderPart) => boolean) {
@@ -918,25 +939,16 @@ export class MovementViewer {
     bounds: THREE.Box3,
     direction: THREE.Vector3,
     points?: THREE.Vector3[],
+    immediate = false,
   ) {
     const center = bounds.getCenter(new THREE.Vector3());
     const right = new THREE.Vector3()
-      .crossVectors(this.camera.up, direction)
+      .crossVectors(this.defaultUp(), direction)
       .normalize();
     const up = new THREE.Vector3().crossVectors(direction, right).normalize();
     const tangent = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
     let distance = 8;
-    const corners =
-      points ??
-      Array.from(
-        { length: 8 },
-        (_, i) =>
-          new THREE.Vector3(
-            i & 1 ? bounds.max.x : bounds.min.x,
-            i & 2 ? bounds.max.y : bounds.min.y,
-            i & 4 ? bounds.max.z : bounds.min.z,
-          ),
-      );
+    const corners = points ?? this.boundsCorners(bounds);
     for (const corner of corners) {
       const point = corner.clone().sub(center);
       distance = Math.max(
@@ -949,7 +961,12 @@ export class MovementViewer {
             ),
       );
     }
-    this.frameTo(center, distance * Math.min(1, this.camera.aspect), direction);
+    this.frameTo(
+      center,
+      distance * Math.min(1, this.camera.aspect),
+      direction,
+      immediate,
+    );
   }
   save() {
     this.history.push({
@@ -1025,12 +1042,48 @@ export class MovementViewer {
     this.emit();
   }
   homeCamera(immediate = false) {
-    this.frameTo(
-      new THREE.Vector3(1.8, 0, -2.8),
-      this.camera.aspect < 1 ? 78 : 70,
-      new THREE.Vector3(0.1, 0.17, -1),
+    this.frameBounds(
+      this.assemblyBounds(),
+      this.assemblyDirection(),
+      undefined,
       immediate,
     );
+  }
+  assemblyDirection() {
+    return new THREE.Vector3(
+      0.04,
+      0.06,
+      this.state.side === 'front' ? 1 : -1,
+    ).normalize();
+  }
+  defaultUp() {
+    return new THREE.Vector3(0, this.state.side === 'front' ? 1 : -1, 0);
+  }
+  boundsCorners(bounds: THREE.Box3) {
+    return Array.from(
+      { length: 8 },
+      (_, i) =>
+        new THREE.Vector3(
+          i & 1 ? bounds.max.x : bounds.min.x,
+          i & 2 ? bounds.max.y : bounds.min.y,
+          i & 4 ? bounds.max.z : bounds.min.z,
+        ),
+    );
+  }
+  assemblyBounds() {
+    // One immutable envelope for bare movement and either display, available
+    // before optional meshes load. Fitted hand tips stay inside the dial rings.
+    const structures = new Set(
+      Object.values(DIALS.faces).flatMap((face) => face.structureLeafIds),
+    );
+    const bounds = new THREE.Box3();
+    for (const p of this.parts) {
+      if (p.isAssembly || !p.boundsWorldMm || p.id === PREFIX + '66') continue;
+      if (!belongs(p.id, ROOT) && !structures.has(p.id)) continue;
+      bounds.expandByPoint(new THREE.Vector3(...p.boundsWorldMm[0]));
+      bounds.expandByPoint(new THREE.Vector3(...p.boundsWorldMm[1]));
+    }
+    return bounds.expandByScalar(0.75);
   }
   syncOrbitUp() {
     // Three r186 caches its orbit basis at construction. Keep that basis aligned
@@ -1060,13 +1113,7 @@ export class MovementViewer {
     this.controls.maxDistance = Math.max(200, distance * scale * 1.5);
     this.camera.far = Math.max(1000, this.controls.maxDistance * 2);
     this.camera.updateProjectionMatrix();
-    const up = new THREE.Vector3(
-      0,
-      this.state.presentation === 'dials' && this.state.side === 'front'
-        ? 1
-        : -1,
-      0,
-    );
+    const up = this.defaultUp();
     if (immediate || this.reduced) {
       this.camera.up.copy(up);
       this.syncOrbitUp();
@@ -1145,13 +1192,11 @@ export class MovementViewer {
       return;
     }
     if (this.state.layout === 'spread') return;
+    this.save();
+    this.cameraUserOwned = false;
+    this.restoringCamera = null;
     this.patch({ side });
-    const distance = this.camera.position.distanceTo(this.controls.target);
-    this.frameTo(
-      this.controls.target.clone(),
-      distance * Math.min(1, this.camera.aspect),
-      new THREE.Vector3(0.08, 0.1, side === 'back' ? -1 : 1),
-    );
+    this.fitPresentation();
   }
   view(kind: 'front' | 'back' | 'side' | 'oblique') {
     if (kind === 'side') {

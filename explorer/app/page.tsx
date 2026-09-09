@@ -19,6 +19,7 @@ import {
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { runDialChecks } from '@/src/viewer/dialValidation';
+import { runCameraChecks } from '@/src/viewer/cameraValidation';
 import { runBrowserChecks, startBenchmark } from '@/src/viewer/validation';
 import { captureMotion, type MotionCase } from '@/src/viewer/capture';
 import { DialControls } from '@/components/DialControls';
@@ -954,6 +955,15 @@ export default function Home() {
       {inspect && (
         <details className="inspection">
           <summary>Inspection tools</summary>
+          <button
+            onClick={async () => {
+              if (!viewer.current) return;
+              setQa({ running: true });
+              setQa(await runCameraChecks(viewer.current));
+            }}
+          >
+            Run camera checks
+          </button>
           <button
             onClick={async () => {
               if (viewer.current) {

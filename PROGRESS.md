@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Consistent default views — verified locally, 10 September 2026
+
+Reviewed loading → Movement → Dial A → Dial B → Movement → Separate → Reassemble. Replaced competing fixed/bounds/oblique defaults with one assembled center, scale and slight tilt, using immutable source metadata available before optional dials load. Movement selection and Reset return to the opening rear view; both dials use the same framing on their respective faces. Destination up direction is independent of presentation and previous orbit, so separating Dial A no longer adds a roll. Separation gradually introduces the oblique view and reassembly restores the exact assembled framing of the chosen face. Explicit side changes record history; manual separation preserves camera ownership and Back restores prior context. Display choices share 1.05-second camera travel; accepted fades, finishes, six 10:10 poses, complete separation and All parts remain intact.
+
+**64 CPU/source checks**, **seven state tests**, TypeScript, authored lint and production build pass. **17 camera browser checks pass at both 1280×720 and 390×844**, plus **24 desktop dial**, **eight portrait explosion** and **12 portrait interaction checks**. Fresh page load and Reset have zero camera/target difference. All displayed separation frames fit within **.853 desktop / .848 portrait NDC**. Direct before/after review confirms stable assembled framing across modes and the full separation return.
+
+Review: `docs/DEFAULT_VIEWS_REVIEW.md`; ignored evidence: `artifacts/browser/default-views/`. Repeatable inspector: **Run camera checks**. The prior preview process stopped during final verification; restored with `cd explorer` then `npm run dev -- --host 127.0.0.1 --port 4173` (session 23206, PID 38949). Fresh checks pass on the restarted server. Next action: user review at **http://127.0.0.1:4173/**, left running at the opening view. Local milestone only; no push, merge, deployment or `FINISHING_GOAL.md` edit.
+
 ## Dial crossfade — verified locally, 10 September 2026
 
 Added the requested **420 ms eased fade** to dial and hand-style changes. Outgoing displays retain their fitted 10:10 pose and materials while fading; incoming leaves fade in. Reversals continue from current opacity. The fade finishes independently of camera gestures, skips under reduced motion, and clears for raw inspection, mechanisms, All parts or Reset. Settled displays remain exclusive. Outgoing leaves cannot be picked, and fading meshes cannot cast opaque contact-depth silhouettes. Original material opacity/transparency/depth behavior returns at completion; accepted finishes, geometry, hand poses and the calmer turnover are preserved.

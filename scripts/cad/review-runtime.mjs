@@ -566,6 +566,26 @@ frameFixture.reduced=true;tick(frameFixture.lastFrame+10);assert.equal(frameFixt
 frameFixture.reduced=false;frameFixture.controls=facadeControls;
 results.push({check:'dial turnover keeps screen-right stable, follows one half-turn at safe radius, reverses continuously and respects reduced motion',status:'pass',scope:'actual frame callback and real OrbitControls'});
 
+const framing=Object.create(Viewer.prototype);
+Object.assign(framing,{parts,state:{...initialState},camera:new THREE.PerspectiveCamera(33,1,.05,2000),reduced:true,renderParts:new Map(),cameraUserOwned:false});
+framing.controls=new OrbitControls(framing.camera,null);
+for(const aspect of [1280/504,374/560,304/456,1920/864]) {
+ framing.camera.aspect=aspect;framing.state={...initialState};framing.homeCamera(true);
+ const center=framing.controls.target.clone(),position=framing.camera.position.clone(),radius=position.distanceTo(center);
+ assert.ok(Number.isFinite(radius)&&radius>40);
+ for(const side of ['front','back']) {
+  framing.state={...initialState,presentation:'dials',side};framing.camera.up.set(.3,.4,.5).normalize();framing.frameDials();
+  assert.ok(framing.controls.target.distanceTo(center)<1e-9,'All assembled presentations use the same center');
+  assert.ok(Math.abs(framing.camera.position.distanceTo(center)-radius)<1e-9,'Both faces use the same scale even after a rolled camera');
+  assert.equal(framing.camera.up.y,side==='front'?1:-1);
+ }
+ framing.state={...initialState};framing.fitPresentation();
+ assert.ok(framing.camera.position.distanceTo(position)<1e-9,'Reassembly framing must equal the opening preset');
+ framing.renderParts=v.renderParts;framing.homeCamera(true);
+ assert.ok(framing.camera.position.distanceTo(position)<1e-9,'Optional catalog availability cannot change the default');
+}
+results.push({check:'assembled framing shares center/radius across both faces, ignores prior rolled up vectors and optional catalog, and reassembly returns to the opening preset at four aspects',status:'pass',scope:'actual framing methods with real OrbitControls and source metadata'});
+
 const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
 Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
 const preserved=JSON.stringify(catalogFixture.state);
