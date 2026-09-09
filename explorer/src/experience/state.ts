@@ -78,10 +78,6 @@ export function resolveState(
   if (!next.part) next.isolated = false;
   return next;
 }
-/** Stable presentation offsets are evaluated in source world millimetres. */
-export function layerOffset(z: number, progress: number): number {
-  return (z + 2.8) * clamp(progress) * 4;
-}
 export function damp(
   current: number,
   target: number,

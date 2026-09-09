@@ -172,7 +172,7 @@ const essentials=[...v.renderParts.values()].filter(p=>['112','114','116','126',
 assert.equal(essentials.length,10);assert.ok(essentials.every(p=>p.mesh.visible));
 results.push({check:'legacy timing input is discarded; all ten essential former omissions retain exact visible source poses',status:'pass'});
 v.state={...initialState,group:'regulation',reveal:1};v.retarget();
-const bridge=[...v.renderParts.values()].find(p=>belongs(p.source.id,PREFIX+'59'));
+const bridge=[...v.renderParts.values()].find(p=>belongs(p.source.id,PREFIX+'6'));
 for(const p of v.renderParts.values())p.offset.copy(p.target);
 v.retargetVisibility();assert.equal(bridge.mesh.visible,false);
 v.state.reveal=0;v.retarget();
@@ -729,6 +729,8 @@ for(const sequence of sequences){for(const [name,e]of sequence)gesture[name](e);
 gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(selections,1);
 results.push({check:'out-and-back drags, pinch release orders, cancellation, right/middle clicks reject selection; deliberate tap selects exactly once',status:'pass',scope:'actual event handlers with CPU raycast fixture; browser/touch-emulation checked separately'});
 
+const {reviewExplosion}=await import('./review-explosion.mjs');
+reviewExplosion({v,THREE,initialState,load,ROOT,parts,results});
 const {reviewDials}=await import('./review-dials.mjs');
 await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

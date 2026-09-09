@@ -1,4 +1,5 @@
 'use client';
+import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -960,6 +961,16 @@ export default function Home() {
               Oblique reference
             </button>
           </div>
+          <button
+            onClick={async () => {
+              if (viewer.current) {
+                setQa({ running: true });
+                setQa(await runExplosionChecks(viewer.current));
+              }
+            }}
+          >
+            Run explosion checks
+          </button>
           <button
             onClick={async () => {
               if (viewer.current) {

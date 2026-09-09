@@ -1,12 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {initialState,resolveState,layerOffset,damp} from '../explorer/src/experience/state.ts';
+import {initialState,resolveState,damp} from '../explorer/src/experience/state.ts';
 test('obsolete playback input cannot enter the static explorer state',()=>{
  const s=resolveState(initialState,{study:true,playing:true,time:12,speed:1});
  for(const key of ['study','playing','time','speed'])assert.equal(key in s,false);
  assert.deepEqual(s,initialState);
 });
-test('restoring assembly is exact and independent of history',()=>{
- for(const z of [-6,-2.8,0,5]){assert.equal(Math.abs(layerOffset(z,0)),0);const a=layerOffset(z,.7);layerOffset(z,.9);assert.equal(layerOffset(z,.7),a)}
+test('separation endpoints normalize without changing accepted dial preferences',()=>{
+ for(const separation of [0,.2,.52,.72,1,.72,.2,0]) { const s=resolveState(initialState,{separation}); assert.equal(s.separation,separation);assert.equal(s.centralStyle,'fine'); }
 });
 test('interrupted reveal starts from current state and converges',()=>{
  let x=damp(0,10,.1);const interrupted=x;assert.equal(damp(x,-5,0),interrupted);

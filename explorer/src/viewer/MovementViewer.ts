@@ -1,3 +1,4 @@
+import { explosionOffsets, uncoverHost } from '../experience/explosion';
 import {
   DIALS,
   fittedLeaves,
@@ -31,7 +32,6 @@ import {
 import {
   initialState,
   resolveState,
-  layerOffset,
   type ExperienceState,
 } from '../experience/state';
 import {
@@ -122,6 +122,13 @@ export class MovementViewer {
   error = '';
   detailError = '';
   state = { ...initialState };
+  displayedExplosionState?: ExperienceState;
+  explosionTravel?: {
+    from: ExperienceState;
+    to: ExperienceState;
+    elapsed: number;
+    duration: number;
+  };
   manifest: Manifest | null = null;
   parts: Part[] = [];
   renderParts = new Map<string, RenderPart>();
@@ -373,7 +380,10 @@ export class MovementViewer {
       return null;
     let error = 0;
     for (const p of this.renderParts.values()) {
-      const expected = reference === 'presentation' ? (p.displayMatrix ?? p.assembled) : p.assembled;
+      const expected =
+        reference === 'presentation'
+          ? (p.displayMatrix ?? p.assembled)
+          : p.assembled;
       for (let i = 0; i < 16; i++)
         error = Math.max(
           error,
@@ -514,7 +524,9 @@ export class MovementViewer {
       this.spread = makeSpread(this.renderParts.values(), this.camera.aspect);
       this.contentPrepared = true;
       this.awaitingFirstFrame = true;
-      this.state = resolveState(this.reloadState ?? initialState, { phase: 'whole' });
+      this.state = resolveState(this.reloadState ?? initialState, {
+        phase: 'whole',
+      });
       this.status = '';
       if (!this.reloadState) this.homeCamera(true);
       this.reloadState = null;
@@ -847,14 +859,15 @@ export class MovementViewer {
   fitPresentation() {
     if (this.cameraUserOwned) return;
     const group = GROUPS.find((g) => g.id === this.state.group);
-    const bounds = this.targetBounds((p) =>
+    const include = (p: RenderPart) =>
       this.state.part
         ? belongs(p.source.id, this.state.part)
         : group
           ? inMembers(p.source.id, group.members)
           : (belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66') ||
-            this.fitted.has(p.source.id),
-    );
+            this.fitted.has(p.source.id);
+    const points = this.targetPoints(include);
+    const bounds = new THREE.Box3().setFromPoints(points);
     if (bounds.isEmpty()) return;
     const direction = this.cameraUserOwned
       ? this.camera.position.clone().sub(this.controls.target).normalize()
@@ -863,9 +876,33 @@ export class MovementViewer {
           0.38,
           this.state.side === 'front' ? 1 : -1,
         ).normalize();
-    this.frameBounds(bounds, direction);
+    this.frameBounds(bounds, direction, points);
   }
-  frameBounds(bounds: THREE.Box3, direction: THREE.Vector3) {
+  targetPoints(include: (p: RenderPart) => boolean) {
+    const points: THREE.Vector3[] = [];
+    for (const p of this.renderParts.values()) {
+      if (!include(p)) continue;
+      p.mesh.geometry.computeBoundingBox();
+      const b = p.mesh.geometry.boundingBox!;
+      const matrix = p.displayMatrix ?? p.assembled;
+      for (let i = 0; i < 8; i++)
+        points.push(
+          new THREE.Vector3(
+            i & 1 ? b.max.x : b.min.x,
+            i & 2 ? b.max.y : b.min.y,
+            i & 4 ? b.max.z : b.min.z,
+          )
+            .applyMatrix4(matrix)
+            .add(p.target),
+        );
+    }
+    return points;
+  }
+  frameBounds(
+    bounds: THREE.Box3,
+    direction: THREE.Vector3,
+    points?: THREE.Vector3[],
+  ) {
     const center = bounds.getCenter(new THREE.Vector3());
     const right = new THREE.Vector3()
       .crossVectors(this.camera.up, direction)
@@ -873,12 +910,19 @@ export class MovementViewer {
     const up = new THREE.Vector3().crossVectors(direction, right).normalize();
     const tangent = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
     let distance = 8;
-    for (let i = 0; i < 8; i++) {
-      const point = new THREE.Vector3(
-        i & 1 ? bounds.max.x : bounds.min.x,
-        i & 2 ? bounds.max.y : bounds.min.y,
-        i & 4 ? bounds.max.z : bounds.min.z,
-      ).sub(center);
+    const corners =
+      points ??
+      Array.from(
+        { length: 8 },
+        (_, i) =>
+          new THREE.Vector3(
+            i & 1 ? bounds.max.x : bounds.min.x,
+            i & 2 ? bounds.max.y : bounds.min.y,
+            i & 4 ? bounds.max.z : bounds.min.z,
+          ),
+      );
+    for (const corner of corners) {
+      const point = corner.clone().sub(center);
       distance = Math.max(
         distance,
         point.dot(direction) +
@@ -1222,33 +1266,48 @@ export class MovementViewer {
     }
     const group = GROUPS.find((g) => g.id === this.state.group),
       selection = this.state.part;
+    const previous = this.displayedExplosionState;
+    const changed =
+      previous &&
+      ['separation', 'partSpread', 'reveal'].some(
+        (key) =>
+          previous[key as keyof ExperienceState] !==
+          this.state[key as keyof ExperienceState],
+      );
+    if (
+      changed &&
+      previous.layout === 'assembly' &&
+      this.state.layout === 'assembly' &&
+      previous.group === this.state.group &&
+      (this.explosionTravel ||
+        ![...this.renderParts.values()].some((p) => p.motion))
+    ) {
+      this.explosionTravel = {
+        from: { ...previous },
+        to: { ...this.state },
+        elapsed: 0,
+        duration: this.poseDuration ?? 0.85,
+      };
+    } else if (
+      previous?.group !== this.state.group ||
+      previous?.layout !== this.state.layout
+    ) {
+      this.explosionTravel = undefined;
+    }
+    const explosion = explosionOffsets(this.parts, this.state);
     for (const p of this.renderParts.values()) {
       const previousTarget = p.target.clone(),
         previousRotation = p.targetRotation.clone();
       const id = p.source.id,
         selected = !!selection && belongs(id, selection),
         member = !!group && inMembers(id, group.members),
-        context = !!group && inMembers(id, group.context),
-        obstruction =
-          !!group &&
-          (inMembers(id, group.obstructions) ||
-            group.partObstructions?.some((suffix) =>
-              belongs(id, PREFIX + suffix),
-            ));
-      p.displayMatrix = this.fitted.has(id) && !(selection && !belongs(selection, ROOT))
-        ? handDisplayMatrix(id, p.assembled)
-        : undefined;
+        context = !!group && inMembers(id, group.context);
+      p.displayMatrix =
+        this.fitted.has(id) && !(selection && !belongs(selection, ROOT))
+          ? handDisplayMatrix(id, p.assembled)
+          : undefined;
       p.targetRotation.identity();
-      p.target.set(0, 0, layerOffset(p.center.z, this.state.separation));
-      if (group && obstruction)
-        p.target.z += group.side * 26 * this.state.reveal;
-      if (group && member && this.state.partSpread) {
-        p.target.z += (p.center.z + 2.8) * this.state.partSpread * 7;
-        p.target.x +=
-          (p.center.x - group.target[0]) * this.state.partSpread * 0.35;
-        p.target.y +=
-          (p.center.y - group.target[1]) * this.state.partSpread * 0.35;
-      }
+      p.target.fromArray(explosion.get(id) ?? [0, 0, 0]);
       if (this.state.layout === 'spread') {
         const placement = this.spread.get(id);
         if (placement) {
@@ -1328,8 +1387,29 @@ export class MovementViewer {
   applyPose(dt: number) {
     let moving = false;
     const temp = new THREE.Matrix4();
+    let staged: Map<string, [number, number, number]> | undefined;
+    if (this.explosionTravel) {
+      const travel = this.explosionTravel;
+      travel.elapsed += Math.max(0, dt);
+      const t = this.reduced
+        ? 1
+        : Math.min(1, travel.elapsed / travel.duration);
+      const eased = t * t * (3 - 2 * t);
+      const displayed = { ...travel.to };
+      for (const key of ['separation', 'partSpread', 'reveal'] as const)
+        displayed[key] =
+          travel.from[key] + (travel.to[key] - travel.from[key]) * eased;
+      staged = explosionOffsets(this.parts, displayed);
+      this.displayedExplosionState = displayed;
+      moving = t < 1;
+      if (!moving) this.explosionTravel = undefined;
+    }
     for (const p of this.renderParts.values()) {
-      if (p.motion && !this.reduced) {
+      if (staged) {
+        p.motion = undefined;
+        p.offset.fromArray(staged.get(p.source.id) ?? [0, 0, 0]);
+        p.rotation.copy(p.targetRotation);
+      } else if (p.motion && !this.reduced) {
         p.motion.elapsed += Math.max(0, dt);
         const t = Math.min(1, p.motion.elapsed / p.motion.duration);
         const eased = t * t * (3 - 2 * t);
@@ -1338,7 +1418,7 @@ export class MovementViewer {
         if (t < 1) moving = true;
         else p.motion = undefined;
       } else p.motion = undefined;
-      if (!p.motion) {
+      if (!p.motion && !staged) {
         p.offset.copy(p.target);
         p.rotation.copy(p.targetRotation);
       }
@@ -1355,6 +1435,7 @@ export class MovementViewer {
       p.mesh.matrix.premultiply(temp);
       p.mesh.matrixWorldNeedsUpdate = true;
     }
+    if (!moving) this.displayedExplosionState = { ...this.state };
     if (this.state.part) {
       const b = new THREE.Box3();
       for (const p of this.renderParts.values())
@@ -1566,7 +1647,10 @@ export class MovementViewer {
         .copy(this.controls.target)
         .add(from.multiplyScalar(distance));
       if (t === 1) {
-        if (travel.up) { this.camera.up.copy(travel.up); this.syncOrbitUp(); }
+        if (travel.up) {
+          this.camera.up.copy(travel.up);
+          this.syncOrbitUp();
+        }
         this.camera.position.copy(this.travel.position);
         this.controls.target.copy(this.travel.target);
         this.travel = null;
@@ -1650,9 +1734,7 @@ export class MovementViewer {
     if (group) {
       const member = inMembers(id, group.members),
         context = inMembers(id, group.context);
-      const obstruction =
-        inMembers(id, group.obstructions) ||
-        group.partObstructions?.some((suffix) => belongs(id, PREFIX + suffix));
+      const obstruction = uncoverHost(id, this.state.group);
       if (
         this.state.reveal > 0.5 &&
         !selected &&
@@ -1661,8 +1743,7 @@ export class MovementViewer {
         !obstruction
       )
         visible = false;
-      if (obstruction && Math.abs(p.offset.z) > 24 && !selected)
-        visible = false;
+      if (obstruction && p.offset.length() > 24 && !selected) visible = false;
     }
     return visible;
   }

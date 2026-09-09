@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Reviewed construction explosion — implementation milestone, 9 September 2026
+
+Replaced world-Z/position scattering with `assets/authored/explosion.json`: explicit rules for all 223 movement leaves and 21 coherent hosts. All 49 screws release along analytic head/shank axes; the two radial dial screws and horizontal stud clamp retain correct outward directions. Pressed jewels/pins, complete barrels, riveted packets and the balance/hairspring/bridge stay associated. Main-plate reference remains fixed. Separate and focused Uncover share one evaluator; stage animation advances the parameter itself, reverses from displayed poses and leaves inventory/fitted hand transforms separate. Per-part framing reduces excess empty space.
+
+Original STEP review passes 106 analytic and 55 authored checks. The winding audit rejected translating the larger coupling wheels through the stem opening and caught setting-lever interference. Corrected sequence clears keyless parts, withdraws the bare stem 8 mm along +X, then lifts coupling parts through the opened split bearing; 90 current stage/pair Boolean samples have zero common volume. These are bounded checks, not a fully swept or mechanical certification.
+
+59 CPU regressions, six state tests, TypeScript, targeted lint and production build pass. Initial desktop runs pass 7 explosion, 21 dial and 12 established movement checks; final responsive/direct visual review is in progress after winding timing and focused-slider refinements. Evidence: `artifacts/explode-cad/` and `artifacts/browser/explode/`; CAD findings: `docs/EXPLODE_CAD_FINDINGS.md`. Next action: complete portrait/320px, direct visual sequences, recovery and final audit; write the final explosion review. Preview stays **http://127.0.0.1:4173/**. Local milestone only; no push, merge or deploy. Unrelated `FINISHING_GOAL.md` untouched.
+
 ## Explode improvement goal prepared — 9 September 2026
 
 Created `EXPLODE_GOAL.md` at the user's request as a prompt for a new implementation agent. It identifies the current world-Z/position-based heuristics and exact radial dial-screw occurrences, and requires mounting-axis review, coherent host assemblies, staged reversible separation, preserved dial/finish behavior and live regression evidence. Documentation only; no explosion implementation or new agent goal has been started. Next action: launch that goal from the current project state. Preview remains **http://127.0.0.1:4173/**. Local only; `FINISHING_GOAL.md` untouched.

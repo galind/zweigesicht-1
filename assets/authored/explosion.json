@@ -1,0 +1,4777 @@
+{
+  "schemaVersion": 1,
+  "coordinateSpace": "source-local-directions/world-mm-translations",
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "reviewStatus": "authored construction illustration; mechanical review open",
+  "hosts": [
+    {
+      "id": "plate",
+      "label": "plate",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0.0,
+      "stage": [
+        0,
+        1
+      ],
+      "evidence": "Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "train-bridge",
+      "label": "train bridge",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 17.0,
+      "stage": [
+        0.2,
+        0.52
+      ],
+      "evidence": "Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "regulator",
+      "label": "regulator",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_1",
+      "directionLocal": [
+        -1.0200214309754157e-21,
+        -4.3520419901073005e-22,
+        1.0
+      ],
+      "distanceMm": 14.0,
+      "stage": [
+        0.2,
+        0.52
+      ],
+      "evidence": "Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "barrel-bridge",
+      "label": "barrel bridge",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 17.0,
+      "stage": [
+        0.2,
+        0.52
+      ],
+      "evidence": "Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "center-bridge",
+      "label": "center bridge",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 10.0,
+      "stage": [
+        0.52,
+        0.72
+      ],
+      "evidence": "Center jewel and two locating pins share Z; train bridge clears first.",
+      "confidence": "supported"
+    },
+    {
+      "id": "pallet-bridge",
+      "label": "pallet bridge",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 9.0,
+      "stage": [
+        0.52,
+        0.72
+      ],
+      "evidence": "Pallet jewel and locating pins share Z; retained pressed jewel and pins.",
+      "confidence": "supported"
+    },
+    {
+      "id": "barrel-left",
+      "label": "barrel left",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 6.0,
+      "stage": [
+        0.72,
+        1
+      ],
+      "evidence": "Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "barrel-right",
+      "label": "barrel right",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+      "directionLocal": [
+        1.9927586858861885e-18,
+        -6.27035263134649e-18,
+        -1.0
+      ],
+      "distanceMm": 6.0,
+      "stage": [
+        0.72,
+        1
+      ],
+      "evidence": "Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "center-wheel",
+      "label": "center wheel",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 4.0,
+      "stage": [
+        0.72,
+        1
+      ],
+      "evidence": "Center riveted wheel/pinion/bearing and barrel transfer wheel retained as a coupled illustrative packet; axial bearings.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "train-wheels",
+      "label": "train wheels",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 5.5,
+      "stage": [
+        0.72,
+        1
+      ],
+      "evidence": "Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "pallet",
+      "label": "pallet",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 4.0,
+      "stage": [
+        0.72,
+        1
+      ],
+      "evidence": "Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "front-cap",
+      "label": "front cap",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 4.0,
+      "stage": [
+        0.2,
+        0.5
+      ],
+      "evidence": "Cap plate and pressed endstone retained; screws enter from positive-Z face.",
+      "confidence": "supported"
+    },
+    {
+      "id": "front-display",
+      "label": "front display",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_9",
+      "directionLocal": [
+        -1.1102230246251563e-16,
+        -1.2853894925225273e-18,
+        -1.0
+      ],
+      "distanceMm": 5.0,
+      "stage": [
+        0.55,
+        1
+      ],
+      "evidence": "Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "ratchets",
+      "label": "ratchets",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_14",
+      "directionLocal": [
+        2.627293052381266e-18,
+        2.4460380842153373e-18,
+        -1.0
+      ],
+      "distanceMm": 5.0,
+      "stage": [
+        0.3,
+        0.65
+      ],
+      "evidence": "Ratchets withdraw toward positive-Z heads of their arbor screws; both complete barrels remain on the opposite side.",
+      "confidence": "supported"
+    },
+    {
+      "id": "rear-display",
+      "label": "rear display",
+      "parent": "barrel-bridge",
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 6,
+      "stage": [
+        0.2,
+        0.35
+      ],
+      "evidence": "Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "shock",
+      "label": "shock",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 8.0,
+      "stage": [
+        0.55,
+        1
+      ],
+      "evidence": "Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "winding-bridge",
+      "label": "winding bridge",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1",
+      "directionLocal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "distanceMm": 8.0,
+      "stage": [
+        0.3,
+        0.7
+      ],
+      "evidence": "Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "stem",
+      "label": "stem",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_27",
+      "directionLocal": [
+        3.583785344986134e-17,
+        -1.6353094300096853e-16,
+        1.0
+      ],
+      "distanceMm": 8,
+      "stage": [
+        0.42,
+        0.7
+      ],
+      "evidence": "Bare stem withdraws +world X through radius .7 plate passage; original BRep intersections remain zero at +1,+3,+6 mm. 8 mm clears the coupling-wheel outer face before the larger gears lift. Unknown service-release constraints are not simulated.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "keyless",
+      "label": "keyless",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_1",
+      "directionLocal": [
+        3.4128913646861605e-26,
+        3.485125474174598e-26,
+        1.0
+      ],
+      "distanceMm": 3.5,
+      "stage": [
+        0.2,
+        0.4
+      ],
+      "evidence": "Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "clamps",
+      "label": "clamps",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
+      "directionLocal": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "distanceMm": 3.0,
+      "stage": [
+        0.3,
+        0.6
+      ],
+      "evidence": "Three case mounting clamps follow their downward-facing screw heads; case is not displayed.",
+      "confidence": "supported"
+    },
+    {
+      "id": "stem-gears",
+      "label": "stem gears",
+      "parent": null,
+      "frameId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5",
+      "directionLocal": [
+        -0.5505693775885661,
+        -0.8347894108466752,
+        1.13666000890641e-20
+      ],
+      "distanceMm": 4,
+      "stage": [
+        0.72,
+        1
+      ],
+      "evidence": "Horizontal coupling wheel and clutch remain together, then lift through the open split-bearing side after stem extraction and winding bridge clearance. BRep common volume with plate is zero at -Z .25,.5,1,2,4 mm; +X packet route rejected for solid collisions.",
+      "confidence": "supported-path; service-release-unverified"
+    }
+  ],
+  "parts": [
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_1",
+      "host": "barrel-left",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_2",
+      "host": "barrel-left",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3",
+      "host": "barrel-left",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_4",
+      "host": "barrel-left",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+      "host": "barrel-right",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2",
+      "host": "barrel-right",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_3",
+      "host": "barrel-right",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4",
+      "host": "barrel-right",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete barrel drum/lid/arbor/mainspring retained; coaxial plate/bridge bearings. No spring or lid disassembly.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+      "host": "center-wheel",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center riveted wheel/pinion/bearing and barrel transfer wheel retained as a coupled illustrative packet; axial bearings.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2",
+      "host": "center-wheel",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center riveted wheel/pinion/bearing and barrel transfer wheel retained as a coupled illustrative packet; axial bearings.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_3",
+      "host": "center-wheel",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center riveted wheel/pinion/bearing and barrel transfer wheel retained as a coupled illustrative packet; axial bearings.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
+      "host": "center-wheel",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center riveted wheel/pinion/bearing and barrel transfer wheel retained as a coupled illustrative packet; axial bearings.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5",
+      "host": "stem-gears",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Horizontal coupling wheel and clutch remain together, then lift through the open split-bearing side after stem extraction and winding bridge clearance. BRep common volume with plate is zero at -Z .25,.5,1,2,4 mm; +X packet route rejected for solid collisions.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_2",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_3",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_4",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_5",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_6",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_7",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_8",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_9__0_1_1_104_1",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_9__0_1_1_104_2",
+      "host": "train-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Parallel source locating pins and jewel bores seat into main plate; cap and chatons stay fitted.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_10",
+      "host": "train-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.43013202638481296,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1:face57",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_9__0_1_1_104_1:face21"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_11",
+      "host": "train-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.43013202638481296,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1:face55",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_9__0_1_1_104_1:face16"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_1",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_6",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_7",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_8",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_2",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_3",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_4",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_5",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_1",
+      "host": "front-cap",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Cap plate and pressed endstone retained; screws enter from positive-Z face.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_2",
+      "host": "front-cap",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Cap plate and pressed endstone retained; screws enter from positive-Z face.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_9",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_10",
+      "host": "center-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 1,
+        "headBeyondShankMm": 0.781203617390581,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_1:face24"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_11",
+      "host": "front-display",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.44332008452216076,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1:face234",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face62",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face64",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face66",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face68",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face70",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face72",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face74",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face76",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face78",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face80",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face81",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2:face94"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_12",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "host": "pallet",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_2",
+      "host": "pallet",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_3",
+      "host": "pallet",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_4",
+      "host": "pallet",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "host": "pallet",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "host": "pallet",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet staff axis and bearing seats are Z; jewels, horns and safety component stay with fork.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_14",
+      "host": "ratchets",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Ratchets withdraw toward positive-Z heads of their arbor screws; both complete barrels remain on the opposite side.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15",
+      "host": "ratchets",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Ratchets withdraw toward positive-Z heads of their arbor screws; both complete barrels remain on the opposite side.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+      "host": "pallet-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet jewel and locating pins share Z; retained pressed jewel and pins.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_2",
+      "host": "pallet-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet jewel and locating pins share Z; retained pressed jewel and pins.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_3",
+      "host": "pallet-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet jewel and locating pins share Z; retained pressed jewel and pins.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_4",
+      "host": "pallet-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Pallet jewel and locating pins share Z; retained pressed jewel and pins.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_17",
+      "host": "barrel-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.2731128874149307,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_1:face35"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_18",
+      "host": "train-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.2731128874149307,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1:face19"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_19",
+      "host": "barrel-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.2731128874149307,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_1:face36"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_21",
+      "host": "barrel-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.2731128874149307,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_1:face37"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_22",
+      "host": "train-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.1231128874149254,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_1:face18"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_23",
+      "host": "regulator",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.1231128874149254,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1:face22"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_24",
+      "host": "regulator",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.2731128874149307,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1:face21"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_25",
+      "host": "center-wheel",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.6595780987944249,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4:face133",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4:face138",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4:face140"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_27",
+      "host": "stem",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Bare stem withdraws +world X through radius .7 plate passage; original BRep intersections remain zero at +1,+3,+6 mm. 8 mm clears the coupling-wheel outer face before the larger gears lift. Unknown service-release constraints are not simulated.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_28",
+      "host": "stem-gears",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Horizontal coupling wheel and clutch remain together, then lift through the open split-bearing side after stem extraction and winding bridge clearance. BRep common volume with plate is zero at -Z .25,.5,1,2,4 mm; +X packet route rejected for solid collisions.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_2",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_3",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_4",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_5",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_6",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_7",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_2",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_3",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_4",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_5",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_6",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_7",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_8",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_9",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.44332008452216076,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11:face131",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11:face181",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_12:face2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_12:face4",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_12:face8"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_10",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_12",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_13",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_14",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_15",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_16",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_17",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_18",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_19",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_20",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.3948469228349527,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_7:face63",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11:face179",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_17:face1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_17:face2"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_21",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.3948469228349527,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_7:face60",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11:face61",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11:face101",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11:face161",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_18:face1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_18:face2"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_22",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_23",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_24",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.79426406871193,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1:face34",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_2:face20",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_3:face6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_13:face20"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_25",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_26",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_27",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.79426406871193,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1:face37",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_4:face6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_5:face20"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_28",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_29",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_30",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.2731128874149307,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1:face40",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_7:face22",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_19:face10"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_31",
+      "host": "shock",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Complete shock module retained to preserve delicate return springs, forks, adjustment pins and reset linkage; base locating pins are axial.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_32",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.07311288741493,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1:face13",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_19:face3"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_33",
+      "host": "shock",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 1.07311288741493,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_1__0_1_1_146_1:face16",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_19:face6"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_1",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_2",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_31",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_1",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_2",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_3",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_4",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_5",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_33",
+      "host": "keyless",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "conservative-host; verified-axis",
+      "sourceEvidence": {
+        "headCylinderFace": 5,
+        "shankCylinderFace": 7,
+        "headBeyondShankMm": 0.5800000000000001,
+        "seatIds": []
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_34",
+      "host": "pallet-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.5142951994433851,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1:face48"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_35",
+      "host": "pallet-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.5142951994433851,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1:face43"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_36",
+      "host": "center-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 1,
+        "headBeyondShankMm": 0.781203617390581,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_1:face29"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
+      "host": "clamps",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Three case mounting clamps follow their downward-facing screw heads; case is not displayed.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39",
+      "host": "clamps",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Three case mounting clamps follow their downward-facing screw heads; case is not displayed.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41",
+      "host": "clamps",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Three case mounting clamps follow their downward-facing screw heads; case is not displayed.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_42",
+      "host": "rear-display",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.639295199443386,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_58__0_1_1_218_1:face32"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43",
+      "host": "clamps",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.8231128874149305,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41:face5",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41:face6"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44",
+      "host": "clamps",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.8231128874149305,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39:face5",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39:face6"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45",
+      "host": "clamps",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.8231128874149305,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38:face5",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38:face6"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_46",
+      "host": "rear-display",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.639295199443386,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_58__0_1_1_218_1:face27"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_47",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_48",
+      "host": "keyless",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.5131128874149273,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_47:face1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53:face34",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53:face39",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66:face33",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66:face38"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_49",
+      "host": "ratchets",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.5449999999999999,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face323",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face324",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face325",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face326",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face327",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face331",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face332",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face333",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15:face334"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_50",
+      "host": "ratchets",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "conservative-host; verified-axis",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.5449999999999999,
+        "seatIds": []
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_51",
+      "host": "keyless",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.5131128874149273,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53:face28",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53:face33",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66:face27",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66:face32"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_52",
+      "host": "keyless",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.5131128874149273,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3:face54",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3:face57"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_2",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_3",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_4",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_5",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_6",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_7",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_8",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_9",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_10",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_11",
+      "host": "plate",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 11,
+        "shankCylinderFace": 2,
+        "headBeyondShankMm": 0.6431494116136325,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1:face376",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1:face377"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_12",
+      "host": "plate",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 11,
+        "shankCylinderFace": 2,
+        "headBeyondShankMm": 0.6431494116136346,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1:face382",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1:face384"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_1",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_2",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_3",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_4",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_5",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_14",
+      "host": "plate",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Fixed construction reference; pressed plate jewels, Incabloc and banking pins retained.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+      "host": "front-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Coaxial cannon/hour assemblies and riveted motion works retained as front display packet, including through arbor; preserves nested tubes.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_58__0_1_1_218_1",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_58__0_1_1_218_2",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_58__0_1_1_218_3",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_58__0_1_1_218_4",
+      "host": "rear-display",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Rear motion-works bridge, pressed jewel/pins and nested wheel/arbor packet retained; clears barrel bridge before its lift. Screws seat in barrel bridge: host translation composes with that bridge exactly once.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_1",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_2",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_3",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_4",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_5",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_1",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_4",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_5",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_6",
+      "host": "regulator",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Balance staff and bridge locating pins are axial. Balance, hairspring, collet, both source studs and bridge retained together to avoid tearing the spring anchorage.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_7",
+      "host": "regulator",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 4,
+        "shankCylinderFace": 3,
+        "headBeyondShankMm": 0.3938905057061266,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1:face61"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_8",
+      "host": "regulator",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.44332008452216076,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1:face66"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_9",
+      "host": "regulator",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.44332008452216076,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1:face63"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_1",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_2",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_3",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_4",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_5",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_6",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_7",
+      "host": "barrel-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Two barrel jewel axes and locating pins are parallel to source Z. Bridge clears complete barrels before barrel lift.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_1",
+      "host": "center-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center jewel and two locating pins share Z; train bridge clears first.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_2",
+      "host": "center-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center jewel and two locating pins share Z; train bridge clears first.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_3",
+      "host": "center-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center jewel and two locating pins share Z; train bridge clears first.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_61__0_1_1_229_4",
+      "host": "center-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Center jewel and two locating pins share Z; train bridge clears first.",
+      "confidence": "supported"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_2",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_3",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_2",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_3",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2",
+      "host": "train-wheels",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted wheel/pinion/hub packets retain their relative source relationship; coaxial plate and bridge journals.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_67",
+      "host": "keyless",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "conservative-host; verified-axis",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.6392951994433855,
+        "seatIds": []
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_68",
+      "host": "keyless",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 5,
+        "headBeyondShankMm": 0.3948469228349527,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_31:face67",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_1:face8",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_1:face18"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_1",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_2",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_1",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_2",
+      "host": "keyless",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Riveted levers, setting springs and all pins retained as one illustrative keyless layer; +Z pivots. Alternate P66 remains hidden. Clear setting-lever finger from stem groove before the stem slides.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_71",
+      "host": "front-cap",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.43013202638481296,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_1:face8"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_72",
+      "host": "front-cap",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.43013202638481296,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_1:face13"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_73",
+      "host": "winding-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 1,
+        "headBeyondShankMm": 0.781203617390581,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face53"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_74",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_1",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_2",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_3",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_76",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_77",
+      "host": "winding-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 1,
+        "shankCylinderFace": 14,
+        "headBeyondShankMm": 0.8842640687119303,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face60",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face86",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_1:face15"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_78",
+      "host": "winding-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 2,
+        "shankCylinderFace": 6,
+        "headBeyondShankMm": 0.5142951994433851,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face46",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_76:face34"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_79",
+      "host": "winding-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 1,
+        "headBeyondShankMm": 0.781203617390581,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face56"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_80",
+      "host": "winding-bridge",
+      "rule": "attached",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 0,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Retain full source placement relative to host; Winding bridge with crown wheel/cap/click/spring retained as a unit; source locating pins are Z.",
+      "confidence": "conservative"
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_81",
+      "host": "winding-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 3,
+        "shankCylinderFace": 16,
+        "headBeyondShankMm": 1.0932575694955857,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face57"
+        ]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_82",
+      "host": "winding-bridge",
+      "rule": "release",
+      "directionLocal": [
+        0,
+        0,
+        1
+      ],
+      "distanceMm": 2.8,
+      "stage": [
+        0,
+        0.2
+      ],
+      "evidence": "Original STEP concentric head/shank cylinders; head lies along local +Z. Host association reviewed against mounted seat.",
+      "confidence": "supported",
+      "sourceEvidence": {
+        "headCylinderFace": 1,
+        "shankCylinderFace": 14,
+        "headBeyondShankMm": 0.8842640687119303,
+        "seatIds": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face62",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_64__0_1_1_239_1:face85",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_1:face10"
+        ]
+      }
+    }
+  ],
+  "mechanisms": {
+    "regulation": {
+      "uncover": [
+        "train-bridge",
+        "barrel-bridge",
+        "center-bridge",
+        "pallet-bridge"
+      ],
+      "separate": [
+        "regulator",
+        "pallet",
+        "train-wheels"
+      ],
+      "separateStages": {
+        "regulator": [
+          0.2,
+          0.6
+        ],
+        "pallet": [
+          0.6,
+          1
+        ],
+        "train-wheels": [
+          0.6,
+          1
+        ]
+      }
+    },
+    "energy": {
+      "uncover": [
+        "barrel-bridge",
+        "rear-display"
+      ],
+      "separate": [
+        "barrel-left",
+        "barrel-right"
+      ],
+      "separateStages": {
+        "barrel-left": [
+          0,
+          1
+        ],
+        "barrel-right": [
+          0,
+          1
+        ]
+      }
+    },
+    "transmission": {
+      "uncover": [
+        "train-bridge",
+        "center-bridge",
+        "regulator"
+      ],
+      "separate": [
+        "center-wheel",
+        "train-wheels"
+      ],
+      "separateStages": {
+        "center-wheel": [
+          0,
+          1
+        ],
+        "train-wheels": [
+          0,
+          1
+        ]
+      }
+    },
+    "display": {
+      "uncover": [
+        "train-bridge",
+        "barrel-bridge"
+      ],
+      "separate": [
+        "front-display",
+        "rear-display"
+      ],
+      "separateStages": {
+        "front-display": [
+          0,
+          1
+        ],
+        "rear-display": [
+          0.2,
+          1
+        ]
+      }
+    },
+    "winding": {
+      "uncover": [
+        "train-bridge"
+      ],
+      "separate": [
+        "winding-bridge",
+        "keyless",
+        "stem",
+        "ratchets",
+        "stem-gears"
+      ],
+      "separateStages": {
+        "ratchets": [
+          0.3,
+          0.65
+        ],
+        "winding-bridge": [
+          0.3,
+          0.7
+        ],
+        "stem": [
+          0.42,
+          0.7
+        ],
+        "keyless": [
+          0.2,
+          0.4
+        ],
+        "stem-gears": [
+          0.72,
+          1
+        ]
+      }
+    },
+    "shock": {
+      "uncover": [
+        "train-bridge",
+        "regulator",
+        "barrel-bridge"
+      ],
+      "separate": [
+        "shock"
+      ],
+      "separateStages": {
+        "shock": [
+          0.2,
+          1
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "Distances and stages are illustrative, not a collision-certified service order.",
+    "Pressed elements, delicate springs and riveted packets remain attached.",
+    "No geometry, orientation, scale or original matrix is changed.",
+    "Stem is removed along +X before the larger gears lift -Z through the opened split bearing. Original coupling axes have a .0071 mm residual.",
+    "Nominal thread solids overlap their seats initially; no screw helices or thread deformation are simulated."
+  ]
+}
