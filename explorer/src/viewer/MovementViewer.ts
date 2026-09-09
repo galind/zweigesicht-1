@@ -722,7 +722,7 @@ export class MovementViewer {
       return;
     }
     if (this.dead || request !== this.dialGeneration) return;
-    // Readiness and both complete displays commit together, never a partial preset.
+    // Readiness and the complete selected display commit together.
     const next = resolveState(this.state, {
       presentation: 'dials',
       side: view === 'central' ? 'front' : 'back',

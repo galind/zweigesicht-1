@@ -71,7 +71,7 @@ export function registerMovementTools(viewer: MovementViewer) {
     {
       name: 'configure_dials',
       description:
-        'Show Movement, Central dial or Small dial; fit both reviewed displays, remembering independent hand styles.',
+        'Show Movement (no dial), Dial A (central) or Dial B (small); show only the selected display, remembering independent hand styles.',
       inputSchema: {
         type: 'object',
         properties: {

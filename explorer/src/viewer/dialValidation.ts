@@ -37,7 +37,7 @@ export async function runDialChecks(v: MovementViewer) {
     await v.retryDials();
     await settle(v);
     check(
-      'Retry fits both complete displays',
+      'Retry fits the complete selected display',
       v.state.presentation === 'dials' && !v.dialError,
       { firstUseThroughSettledMs: performance.now() - start },
     );
@@ -62,7 +62,8 @@ export async function runDialChecks(v: MovementViewer) {
           ' ' +
           style.label +
           ' has exactly the fitted leaves and unchanged matrices',
-        visible.length === 43 &&
+        visible.length === (face === 'central' ? 22 : 21) &&
+          visible.every((p) => belongs(p.source.id, DIALS.faces[face].rootId)) &&
           visible.every((p) => expected.has(p.source.id)) &&
           v.assemblyError() === 0,
       );
@@ -116,6 +117,8 @@ export async function runDialChecks(v: MovementViewer) {
       v.state.side === 'front' &&
       v.state.smallStyle === 'pear',
   );
+  await v.showDial('small');
+  await settle(v);
   const raw = DIALS.presentationOverrides[0].leafId;
   await v.select(raw);
   v.patch({ isolated: true });
@@ -128,13 +131,13 @@ export async function runDialChecks(v: MovementViewer) {
   v.back();
   await settle(v);
   check(
-    'Back restores blue fitted enamel and both displays',
+    'Back restores only the small dial with blue enamel',
     v.renderParts.get(raw)?.material.color.getHex() === 0x143a69 &&
       [...v.renderParts.values()].filter(
         (p) => p.mesh.visible && !belongs(p.source.id, ROOT),
-      ).length === 43,
+      ).length === 21,
   );
-  v.setSide('back');
+  v.setSide('front');
   await pause(100);
   v.orbit(0.1, 0.02);
   const owned = v.camera.position.clone();

@@ -58,8 +58,8 @@ export function DialControls({
         }}
       >
         <ToggleGroupItem value="movement">Movement</ToggleGroupItem>
-        <ToggleGroupItem value="central">Central dial</ToggleGroupItem>
-        <ToggleGroupItem value="small">Small dial</ToggleGroupItem>
+        <ToggleGroupItem value="central">Dial A</ToggleGroupItem>
+        <ToggleGroupItem value="small">Dial B</ToggleGroupItem>
       </ToggleGroup>
       {view !== 'movement' && (
         <>
@@ -81,11 +81,7 @@ export function DialControls({
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
-          <p className="dial-help">
-            {state.presentation === 'dials'
-              ? 'Both displays are fitted. Turn the watch to see the other face.'
-              : 'Both displays will be fitted together.'}
-          </p>
+          <p className="dial-help">Only the selected dial is shown.</p>
         </>
       )}
       <output aria-live="polite" className="dial-status">

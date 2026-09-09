@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Exclusive dial choice — verified correction, 9 September 2026
+
+User review supersedes simultaneous fitting: the choices are now **Movement, Dial A, Dial B**. Movement hides both displays; Dial A shows only the central dial and hands (22 external leaves), and Dial B shows only the small dial and hands (21). Side switching swaps the displayed configuration. The opposite dial stays hidden during orbit. Independent style memory, accepted finishes, source geometry/placements, Back/Reset and recovery are preserved.
+
+Verification: 53 actual-asset/controller CPU checks, six state tests, 20 live dial checks and 12 established movement checks pass, including all supported styles, no opposite-face leaves, asynchronous cancellation/retry, graphics/preparation recovery and stable resources. TypeScript, targeted authored lint and production build pass. Local evidence: `artifacts/browser/dial-exclusive/`; the plan and review now explicitly mark the previous two-display behavior as superseded. Next action: user review at **http://127.0.0.1:4173/**, with the preview retained. Local commit only; no push, merge or deployment, and `FINISHING_GOAL.md` is untouched.
+
 ## Dial and hands goal — implementation and verification complete, 9 September 2026
 
 Completed `DIAL_AND_HANDS_PLAN.md` on the accepted finishing checkpoint. **Dial & hands** now fits both displays together, with central Fine/Open lance and small Lance/Broad lance/Pear, independent remembered choices, continuous side changes and camera-preserving style swaps. Movement remains the opening view. Loading/retry, latest intent, Back/Reset, raw catalog inspection, graphics recovery and preparation retry are verified. The rejected central Lance seconds is 14.301839 mm off-axis; duplicate loose blades and incompatible ring alternatives remain available only in the raw catalog. Source geometry, placements and all prior raw appearance records remain intact.

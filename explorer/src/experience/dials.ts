@@ -12,12 +12,9 @@ export function dialView(state: ExperienceState): DialView {
 }
 export function fittedLeaves(state: ExperienceState): Set<string> {
   if (state.presentation !== 'dials') return new Set();
-  return new Set(
-    (['central', 'small'] as const).flatMap((face) => {
-      const config = DIALS.faces[face];
-      const id = face === 'central' ? state.centralStyle : state.smallStyle;
-      const style = config.styles.find((s) => s.id === id) ?? config.styles[0];
-      return [...config.structureLeafIds, ...style.leafIds];
-    }),
-  );
+  const face = state.side === 'front' ? 'central' : 'small';
+  const config = DIALS.faces[face];
+  const id = face === 'central' ? state.centralStyle : state.smallStyle;
+  const style = config.styles.find((s) => s.id === id) ?? config.styles[0];
+  return new Set([...config.structureLeafIds, ...style.leafIds]);
 }

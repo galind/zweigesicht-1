@@ -17,23 +17,26 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  for(const central of DIALS.faces.central.styles) for(const small of DIALS.faces.small.styles){
    await controller.showDial('central','central',central.id);
    await controller.showDial('small','small',small.id);
-   controller.applyPose(0);controller.retargetVisibility();
-   const external=[...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement));
-   assert.equal(external.length,43);assert.equal(new Set(external.map(p=>p.source.id)).size,43);
-   assert.deepEqual(external.map(p=>p.source.id).sort(),[...fittedLeaves(controller.state)].sort());
-   assert.equal(external.filter(p=>/Sek_Zeiger/.test(p.source.name)).length,1,'Only central seconds');
-   for(const face of ['central','small']){
+   for(const face of ['central','small']) {
+     await controller.showDial(face);
+     controller.applyPose(0);controller.retargetVisibility();
+     const external=[...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement));
+     const count=face==='central'?22:21;
+     assert.equal(external.length,count);assert.equal(new Set(external.map(p=>p.source.id)).size,count);
+     assert.deepEqual(external.map(p=>p.source.id).sort(),[...fittedLeaves(controller.state)].sort());
+     assert.ok(external.every(p=>belongs(p.source.id,DIALS.faces[face].rootId)), 'No opposite-face leaves');
+     assert.equal(external.filter(p=>/Sek_Zeiger/.test(p.source.name)).length,face==='central'?1:0);
      const selected=face==='central'?central:small;
      for(const id of selected.supportLeafIds)assert.ok(external.some(p=>p.source.id===id));
      assert.equal(Object.keys(selected.handLeafIds).length,face==='central'?3:2);
-   }
-   for(const p of controller.renderParts.values()){
-     assert.equal(p.mesh.geometry,geometry.get(p.source.id).geometry);
-     assert.ok(p.assembled.equals(geometry.get(p.source.id).matrix));
-     assert.ok(p.mesh.matrix.equals(p.assembled));
+     for(const p of controller.renderParts.values()){
+       assert.equal(p.mesh.geometry,geometry.get(p.source.id).geometry);
+       assert.ok(p.assembled.equals(geometry.get(p.source.id).matrix));
+       assert.ok(p.mesh.matrix.equals(p.assembled));
+     }
    }
  }
- results.push({check:'six two-sided combinations: 43 unique reviewed display leaves, complete supports, one central seconds, unchanged decoded geometry and source matrices',status:'pass'});
+ results.push({check:'all six remembered style pairs on each face: exactly 22 central or 21 small leaves, no opposite dial, complete supports, source geometry and matrices unchanged',status:'pass'});
  const prior={...controller.state};const camera=controller.camera.position.clone();const frames=controller.framings;
  await controller.showDial('small','small','lance');assert.equal(controller.framings,frames);assert.ok(camera.equals(controller.camera.position));
  controller.back();assert.equal(controller.state.smallStyle,prior.smallStyle);assert.equal(controller.state.centralStyle,prior.centralStyle);
@@ -44,7 +47,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  await controller.select(raw);assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,1);
  assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x6c2031);assert.equal(controller.renderParts.get(raw).material.transmission,0);
  controller.patch({isolated:true});assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,1);
- controller.back();assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,43);
+ controller.back();assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,21);
  assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x143a69);assert.equal(controller.renderParts.get(raw).material.transmission,.3);
  controller.reset();assert.equal(controller.state.presentation,'movement');assert.equal(controller.state.centralStyle,'fine');assert.equal(controller.state.smallStyle,'lance');
  controller.controls._quat=new THREE.Quaternion();controller.controls._quatInverse=new THREE.Quaternion();

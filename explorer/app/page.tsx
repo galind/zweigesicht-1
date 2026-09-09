@@ -203,8 +203,8 @@ export default function Home() {
   const sideLabel =
     s.presentation === 'dials' || s.dialRequest
       ? dialSide === 'back'
-        ? 'Show central dial'
-        : 'Show small dial'
+        ? 'Show Dial A'
+        : 'Show Dial B'
       : s.side === 'back'
         ? 'Show dial side'
         : 'Show movement side';

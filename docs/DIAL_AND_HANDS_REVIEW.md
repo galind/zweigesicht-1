@@ -2,7 +2,15 @@
 
 9 September 2026. Local-only implementation of `DIAL_AND_HANDS_PLAN.md`, extending the accepted static explorer. Preview: **http://127.0.0.1:4173/**.
 
-## Presets and provenance
+## Accepted visibility correction
+
+After reviewing the implementation, the user requested **Movement, Dial A, Dial B** as mutually exclusive presentations. Dial A shows only the central dial and hands (22 external leaves); Dial B shows only the small dial and hands (21); Movement shows neither. Side switching swaps the displayed configuration. Orbiting around a chosen dial does not fit the opposite one. Independent hand preferences, source placements, accepted finishes, Back/Reset and recovery remain unchanged.
+
+The original two-display implementation and its measurements below are historical. The correction supersedes its simultaneous-fitting statements. Updated verification and captures are in ignored `artifacts/browser/dial-exclusive/`.
+
+Correction verification: 53 CPU checks, six state tests, all 20 live dial checks and 12 existing movement checks pass, along with TypeScript, targeted lint and production build. Every supported style has exactly its own face's 22 or 21 external leaves; no opposite-face occurrences appear. Central rendering is 459 beauty draw calls / 1,577,434–1,579,368 triangles; small rendering is 456 calls / 1,484,938–1,485,950 triangles. Loading/retry, interrupted input, Back, Reset, resource reuse and graphics/preparation restoration remain covered.
+
+## Original implementation — presets and provenance
 
 | Face | Supported hand styles | Default | Fitted leaves |
 | --- | --- | --- | --- |
