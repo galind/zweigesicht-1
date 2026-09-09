@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Interface polish brief — 9 September 2026
+
+The user is happy with the current website and requested evaluation plus a prompt for a future goal. Prepared `WEBSITE_POLISH_PROMPT.md` covering a matching loading/fallback presentation, honest loading stages, clearer control and component labels, searchable readable catalog names, no emojis and consistent SVG icons, and focused interaction/accessibility polish. The accepted composition, model, materials, lighting, static behavior, and All parts layout are protected.
+
+Preparation reviewed the live local opening, Options, source catalog, and forced no-3D fallback at 1280×720, observed loading status during navigation, and inspected related source. The fallback visibly uses an older gray render on a contrasting rectangular background; progress currently measures only the overview transfer. Mobile, throttled networking, recovery, performance, and the full regression suite were not re-run for this documentation-only task. No application or asset changes, goal creation, push, or deployment occurred. The user-owned `FINISHING_GOAL.md` remains untouched.
+
+Restarted the existing preview on **http://127.0.0.1:4173/** with `cd explorer` then `npm run dev -- --host 127.0.0.1 --port 4173`. Next action: the user launches the polish goal using the prepared prompt.
+
 ## Immersive website redesign — complete locally, 9 September 2026
 
 Implemented `WEBSITE_REDESIGN_PROMPT.md` around the accepted static model. The opening now occupies one viewport with a neutral charcoal environment, restrained attribution, a compact Explore / Separate / All parts / Reset deck and a discreet side switch. Removed the permanent sidebar and default explanation panel. Six focused mechanism views show source-verified facts; component selection, isolation, Back, reveal and the complete optional source catalog remain available through quieter secondary controls. Options retains Function, quality, keyboard guidance and alternative camera controls.
