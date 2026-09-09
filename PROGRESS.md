@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Affiliation note — verified locally, 10 September 2026
+
+Added a small centered note below the controls: “Independent project. Not affiliated with Marco Lang.” The underlined name links to the verified official website at `https://www.marcolangwatches.com/`, opening separately with `noopener noreferrer`. The footer measurement includes the note so contextual controls retain their clearance.
+
+Authored lint, production build and diff checks pass. Direct browser review covers desktop, 320px phone and doubled text; the note is centered, 11px at normal text, wraps within the viewport and remains below the menu. Evidence: ignored `artifacts/browser/affiliation-note/`. Restarted the stale-stylesheet preview; it remains running at **http://127.0.0.1:4173/** (session 10693, PID 44295). Local branch `codex/site-affiliation-note`; next action: user review. No push/deployment; `FINISHING_GOAL.md` untouched.
+
 ## Accepted and integrated into main — 10 September 2026
 
 User accepted the centered movement and balanced menu and explicitly authorized merging to `main` and pushing. Fetched the configured SSH remote: `origin/main` had no changes beyond the local base. Fast-forwarded `main` from `ff6b514` to `cd3404a`, preserving all nine verified UX/UI milestones without conflicts or code changes. The verification recorded below applies to the exact integrated implementation.

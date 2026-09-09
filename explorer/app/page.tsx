@@ -578,150 +578,165 @@ export default function Home() {
       )}
       <footer
         ref={deck}
-        className="control-deck"
+        className="viewer-footer"
         aria-label="Movement controls"
       >
-        <fieldset className="display-controls" aria-label="Explore the watch">
-          <Popover open={explore} onOpenChange={setExplore}>
-            <PopoverTrigger
-              className="explore-button text-button"
-              data-active={
-                s.layout === 'assembly' && s.presentation === 'movement'
-              }
-              disabled={s.loadStage === 'recovering'}
-            >
-              Explore <ChevronDown aria-hidden="true" />
-            </PopoverTrigger>
-            <PopoverContent
-              className="explore-menu"
-              side="top"
-              align="start"
-              sideOffset={12}
-            >
-              <PopoverTitle>Inside the movement</PopoverTitle>
-              <button className="menu-link" onClick={() => chooseGroup(null)}>
-                Whole movement <ChevronRight aria-hidden="true" />
-              </button>
-              {GROUPS.map((g, i) => (
-                <button
-                  className="menu-link"
-                  key={g.id}
-                  onClick={() => chooseGroup(g.id)}
-                >
-                  <span>
-                    <small>0{i + 1}</small>
-                    {g.technical}
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-              ))}
-            </PopoverContent>
-          </Popover>
-          <DialControls
-            state={s}
-            viewer={() => viewer.current}
-            available={available}
-            onOpenChange={setDialOpen}
-          />
-          <button
-            className="text-button all-parts-button"
-            disabled={!available}
-            aria-pressed={s.layout === 'spread'}
-            onClick={() =>
-              s.layout === 'spread'
-                ? chooseGroup(null)
-                : viewer.current?.allParts()
-            }
-          >
-            All parts
-          </button>
-        </fieldset>
-        <div className="side-slot">
-          <button
-            className="side-switch text-button"
-            disabled={!available || s.layout === 'spread'}
-            style={{ visibility: s.layout === 'spread' ? 'hidden' : 'visible' }}
-            onClick={() =>
-              viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
-            }
-            aria-label={sideLabel}
-            title={sideLabel}
-          >
-            <FlipHorizontal2 aria-hidden="true" />
-            <span>{sideLabel}</span>
-          </button>
-        </div>
-        <div className="separation-control">
-          {s.layout === 'spread' ? (
-            <>
-              <button
-                className="text-button overview-button"
-                disabled={!available}
-                onClick={() => viewer.current?.frameSpread()}
+        <div className="control-deck">
+          <fieldset className="display-controls" aria-label="Explore the watch">
+            <Popover open={explore} onOpenChange={setExplore}>
+              <PopoverTrigger
+                className="explore-button text-button"
+                data-active={
+                  s.layout === 'assembly' && s.presentation === 'movement'
+                }
+                disabled={s.loadStage === 'recovering'}
               >
-                Fit all
-              </button>
-              <Popover open={spreadGroups} onOpenChange={setSpreadGroups}>
-                <PopoverTrigger className="text-button" disabled={!available}>
-                  Groups
-                </PopoverTrigger>
-                <PopoverContent className="explore-menu" side="top">
-                  <PopoverTitle>Groups in the spread</PopoverTitle>
-                  {SPREAD_GROUPS.map((name) => (
-                    <button
-                      className="menu-link"
-                      key={name}
-                      onClick={() => {
-                        setSpreadGroups(false);
-                        viewer.current?.frameSpread(name);
-                      }}
-                    >
-                      {name}
-                      <ChevronRight aria-hidden="true" />
-                    </button>
-                  ))}
-                </PopoverContent>
-              </Popover>
-            </>
-          ) : (
-            <>
-              <span id="separation-label">
-                Separate
-                <span className="sr-only">{group ? ' section' : ''}</span>
-              </span>
-              <Slider
-                disabled={!available}
-                aria-labelledby="separation-label"
-                value={[group ? s.partSpread : s.separation]}
-                min={0}
-                max={1}
-                step={0.01}
-                onValueChange={(v) => {
-                  const value = Array.isArray(v) ? v[0] : v;
-                  viewer.current?.scrub(
-                    group ? { partSpread: value } : { separation: value },
-                  );
-                }}
-              />
-            </>
-          )}
+                Explore <ChevronDown aria-hidden="true" />
+              </PopoverTrigger>
+              <PopoverContent
+                className="explore-menu"
+                side="top"
+                align="start"
+                sideOffset={12}
+              >
+                <PopoverTitle>Inside the movement</PopoverTitle>
+                <button className="menu-link" onClick={() => chooseGroup(null)}>
+                  Whole movement <ChevronRight aria-hidden="true" />
+                </button>
+                {GROUPS.map((g, i) => (
+                  <button
+                    className="menu-link"
+                    key={g.id}
+                    onClick={() => chooseGroup(g.id)}
+                  >
+                    <span>
+                      <small>0{i + 1}</small>
+                      {g.technical}
+                    </span>
+                    <ChevronRight aria-hidden="true" />
+                  </button>
+                ))}
+              </PopoverContent>
+            </Popover>
+            <DialControls
+              state={s}
+              viewer={() => viewer.current}
+              available={available}
+              onOpenChange={setDialOpen}
+            />
+            <button
+              className="text-button all-parts-button"
+              disabled={!available}
+              aria-pressed={s.layout === 'spread'}
+              onClick={() =>
+                s.layout === 'spread'
+                  ? chooseGroup(null)
+                  : viewer.current?.allParts()
+              }
+            >
+              All parts
+            </button>
+          </fieldset>
+          <div className="side-slot">
+            <button
+              className="side-switch text-button"
+              disabled={!available || s.layout === 'spread'}
+              style={{
+                visibility: s.layout === 'spread' ? 'hidden' : 'visible',
+              }}
+              onClick={() =>
+                viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
+              }
+              aria-label={sideLabel}
+              title={sideLabel}
+            >
+              <FlipHorizontal2 aria-hidden="true" />
+              <span>{sideLabel}</span>
+            </button>
+          </div>
+          <div className="separation-control">
+            {s.layout === 'spread' ? (
+              <>
+                <button
+                  className="text-button overview-button"
+                  disabled={!available}
+                  onClick={() => viewer.current?.frameSpread()}
+                >
+                  Fit all
+                </button>
+                <Popover open={spreadGroups} onOpenChange={setSpreadGroups}>
+                  <PopoverTrigger className="text-button" disabled={!available}>
+                    Groups
+                  </PopoverTrigger>
+                  <PopoverContent className="explore-menu" side="top">
+                    <PopoverTitle>Groups in the spread</PopoverTitle>
+                    {SPREAD_GROUPS.map((name) => (
+                      <button
+                        className="menu-link"
+                        key={name}
+                        onClick={() => {
+                          setSpreadGroups(false);
+                          viewer.current?.frameSpread(name);
+                        }}
+                      >
+                        {name}
+                        <ChevronRight aria-hidden="true" />
+                      </button>
+                    ))}
+                  </PopoverContent>
+                </Popover>
+              </>
+            ) : (
+              <>
+                <span id="separation-label">
+                  Separate
+                  <span className="sr-only">{group ? ' section' : ''}</span>
+                </span>
+                <Slider
+                  disabled={!available}
+                  aria-labelledby="separation-label"
+                  value={[group ? s.partSpread : s.separation]}
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  onValueChange={(v) => {
+                    const value = Array.isArray(v) ? v[0] : v;
+                    viewer.current?.scrub(
+                      group ? { partSpread: value } : { separation: value },
+                    );
+                  }}
+                />
+              </>
+            )}
+          </div>
+          <button
+            className="text-button reset-button"
+            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+            title="Restore the opening view and options"
+            onClick={() => {
+              setExplore(false);
+              setSpreadGroups(false);
+              setDetails(false);
+              setDialOpen(false);
+              if (viewer.current) viewer.current.reset();
+              else set({ ...empty, loadStage: 'error', error: s.error });
+            }}
+          >
+            <RotateCcw aria-hidden="true" />
+            <span>Reset view</span>
+          </button>
         </div>
-        <button
-          className="text-button reset-button"
-          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-          title="Restore the opening view and options"
-          onClick={() => {
-            setExplore(false);
-            setSpreadGroups(false);
-            setDetails(false);
-            setDialOpen(false);
-            if (viewer.current) viewer.current.reset();
-            else set({ ...empty, loadStage: 'error', error: s.error });
-          }}
-        >
-          <RotateCcw aria-hidden="true" />
-          <span>Reset view</span>
-        </button>
+        <p className="affiliation-note">
+          Independent project. Not affiliated with{' '}
+          <a
+            href="https://www.marcolangwatches.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Marco Lang
+          </a>
+          .
+        </p>
       </footer>
       <Sheet open={details} onOpenChange={setDetails}>
         <SheetContent

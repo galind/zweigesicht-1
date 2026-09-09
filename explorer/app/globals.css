@@ -1248,6 +1248,27 @@ h2 {
 }
 
 /* Balanced display choices and a separate row of view tools. */
+.viewer-footer {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  z-index: 3;
+}
+.affiliation-note {
+  margin: 0;
+  color: #aaa8a4;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  text-align: center;
+}
+.affiliation-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.affiliation-note a:hover {
+  color: #eeede7;
+}
 .control-deck,
 .text-enlarged .control-deck {
   grid-template-columns: 136px minmax(0, 1fr) 136px;
