@@ -1,5 +1,12 @@
 # Zweigesicht — current execution state
 
+## Dial configuration review — verified locally, 9 September 2026
+
+Completed the original-STEP review for `DIAL_AND_HANDS_PLAN.md`: 50 analytic checks pass, with exact blade/bushing bores, depths, marker pins and fixing axes recorded. Reviewed unchanged-geometry contact sheet in `artifacts/dial-cad/source-contact.png`. The authored manifest supports central Fine/Open lance and small Lance/Broad lance/Pear, with 43 external leaves fitted across both faces. Central Lance has a seconds bore displaced 14.301839 mm; duplicate loose blades and ring alternatives with marker/fixing mismatches are excluded from fitting and retained in the catalog.
+
+`docs/DIAL_CAD_FINDINGS.md` records the recovered d27 mesh, inherited small-bushing axial gap and carrier/enamel material-layer overlap. Source geometry, matrices and original hashes remain intact; static fit is not a mechanical certification. Next action: complete integration, exact fitted-blue interpretation, live visual/recovery QA and regressions. Preview is running at **http://127.0.0.1:4173/**. Local milestone only; no push, merge or deployment. `FINISHING_GOAL.md` remains untouched.
+
+
 ## Dial and hand-style implementation plan — 9 September 2026
 
 Prepared `DIAL_AND_HANDS_PLAN.md` at the user's request for a separate goal run. It specifies a compact face/hand selector, independent style preferences, both physical displays fitted together, a preserved bare-movement opening, CAD-backed complete hand sets, shared visibility rules, loading/recovery behavior and verification criteria. Candidate mappings were checked against the current source manifest and viewer state/catalog paths; full fit and visual validation remain work for the executing agent.
