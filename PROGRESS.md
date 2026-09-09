@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Dial and hand-style implementation plan — 9 September 2026
+
+Prepared `DIAL_AND_HANDS_PLAN.md` at the user's request for a separate goal run. It specifies a compact face/hand selector, independent style preferences, both physical displays fitted together, a preserved bare-movement opening, CAD-backed complete hand sets, shared visibility rules, loading/recovery behavior and verification criteria. Candidate mappings were checked against the current source manifest and viewer state/catalog paths; full fit and visual validation remain work for the executing agent.
+
+This is documentation only: no application or asset changes, new goal/task, push, merge or deployment. The local preview remains the accepted finishing checkpoint. Next action: launch the separate implementation goal using the plan's suggested message. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Washer, winding grain, eccentric and chaton corrections — 9 September 2026
 
 Thin washer d121 now has a goldish circular satin finish. Winding bridge d240 grain and reflection frame compensate for its 8-degree source rotation to follow assembly horizontal. All four d111 timing eccentrics match the balance rim d110 color while retaining their prior polished roughness. Jewel chatons/settings d100/203/207/224 now use rose gold. The appearance ledger resolves the prior washer and hole-stone-shell color conflicts and records the user corrections.
