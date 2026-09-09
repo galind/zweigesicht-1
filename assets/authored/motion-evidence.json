@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewStatus": "AI engineering evidence; NOT expert mechanical review; illustrative cycle only",
+  "reviewStatus": "Historical engineering evidence; playback removed after animation review; NOT expert mechanical review",
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "coordinateSystem": {
     "units": "mm",
@@ -327,7 +327,7 @@
     }
   },
   "timingStudyPresentation": {
-    "recommended": true,
+    "recommended": false,
     "label": "Timing study \u2014 source gear counts, illustrative cadence",
     "hideDefinitionIds": [
       "0:1:1:116",
@@ -350,5 +350,10 @@
     "sourceInspection": "Reset every mechanical delta to zero before revealing hidden spring/pallet/roller parts; merely pausing at an arbitrary phase is insufficient.",
     "palletEvaluatorStatus": "Candidate for future contact investigation only; do not apply or show in recommended timing study.",
     "explanation": "Pallet, roller contact parts and hairspring are omitted. This studies the source-count-linked timing and shaft ratios, not impulse transfer or a complete running watch."
+  },
+  "runtimeDecision": {
+    "playbackEnabled": false,
+    "review": "docs/ANIMATION_REVIEW.md",
+    "reason": "Incomplete energy-to-display chain; unvalidated escapement contacts and spring deformation. Retained parameters are historical research, not runtime configuration."
   }
 }

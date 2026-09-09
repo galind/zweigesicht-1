@@ -26,9 +26,6 @@ export function registerMovementTools(viewer: MovementViewer) {
       ready: s.ready,
       group: s.group,
       part: s.part,
-      study: s.study,
-      playing: s.playing,
-      time: s.time,
       separation: s.separation,
       partSpread: s.partSpread,
       reveal: s.reveal,
@@ -74,7 +71,7 @@ export function registerMovementTools(viewer: MovementViewer) {
     {
       name: 'configure_movement',
       description:
-        'Select a mechanism, change reveal, separation, treatment or timing controls, or reset the local view. Updates the same visible explorer; no upload or publication.',
+        'Select a mechanism, change reveal, separation, or treatment, or reset the local view. Updates the same visible explorer; no upload or publication.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -86,10 +83,6 @@ export function registerMovementTools(viewer: MovementViewer) {
           reveal: { type: 'number', minimum: 0, maximum: 1 },
           separation: { type: 'number', minimum: 0, maximum: 1 },
           partSpread: { type: 'number', minimum: 0, maximum: 1 },
-          study: { type: 'boolean' },
-          playing: { type: 'boolean' },
-          time: { type: 'number', minimum: 0 },
-          speed: { type: 'number', enum: [0.05, 0.1, 0.25, 1] },
           side: { type: 'string', enum: ['front', 'back'] },
           treatment: { type: 'string', enum: ['finish', 'function'] },
         },
@@ -106,10 +99,6 @@ export function registerMovementTools(viewer: MovementViewer) {
           'reveal',
           'separation',
           'partSpread',
-          'study',
-          'playing',
-          'time',
-          'speed',
           'side',
           'treatment',
         ];
@@ -123,21 +112,8 @@ export function registerMovementTools(viewer: MovementViewer) {
               value > 1)
           )
             throw new Error('Invalid separation/reveal');
-          if (
-            ['reset', 'study', 'playing'].includes(key) &&
-            typeof value !== 'boolean'
-          )
+          if (key === 'reset' && typeof value !== 'boolean')
             throw new Error('Expected boolean');
-          if (
-            key === 'time' &&
-            (typeof value !== 'number' || !Number.isFinite(value) || value < 0)
-          )
-            throw new Error('Invalid time');
-          if (
-            key === 'speed' &&
-            (typeof value !== 'number' || ![0.05, 0.1, 0.25, 1].includes(value))
-          )
-            throw new Error('Invalid speed');
           if (
             key === 'side' &&
             (typeof value !== 'string' || !['front', 'back'].includes(value))
@@ -157,30 +133,13 @@ export function registerMovementTools(viewer: MovementViewer) {
             throw new Error('Unknown mechanism');
         }
         if (!viewer.ready) throw new Error('Movement is not ready');
-        if (
-          values.study === true &&
-          !['regulation', 'transmission'].includes(
-            (values.group as string | undefined) ??
-              (values.reset ? '' : (viewer.state.group ?? '')),
-          )
-        )
-          throw new Error(
-            'Timing study is available for regulation or transmission',
-          );
         if (values.reset) viewer.reset();
         if (values.group !== undefined)
           viewer.group(
             values.group === 'whole' ? null : (values.group as string),
           );
-        if (values.study !== undefined) viewer.setStudy(Boolean(values.study));
         if (values.side) viewer.setSide(values.side as 'front' | 'back');
-        const {
-          reset: _reset,
-          group: _group,
-          study: _study,
-          side: _side,
-          ...patch
-        } = values;
+        const { reset: _reset, group: _group, side: _side, ...patch } = values;
         viewer.patch(patch);
         return settle();
       },

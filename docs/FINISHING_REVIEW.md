@@ -1,5 +1,7 @@
 # Finishing refinement — local review record
 
+> Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
+
 9 September 2026. Local-only implementation of `FINISHING_GOAL.md`. The materials have passed independent macro review; final qualification evidence is recorded below. No Site registration, upload, deployment or CAD/image redistribution occurred.
 
 ## Reference rationale and scope

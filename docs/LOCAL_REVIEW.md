@@ -1,5 +1,7 @@
 # Local engineering review — 9 September 2026
 
+> Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
+
 **Working preview: http://127.0.0.1:4173/**. The local implementation is a real-CAD movement explorer with six authored reveals, complete source addressing and a bounded timing study. Public release and faithful running-watch animation are separate, open gates.
 
 ## What is implemented

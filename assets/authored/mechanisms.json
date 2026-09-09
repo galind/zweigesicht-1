@@ -37,8 +37,7 @@
       ],
       "distance": 31,
       "side": -1,
-      "color": "#e5b775",
-      "motion": "illustrative"
+      "color": "#e5b775"
     },
     {
       "id": "energy",
@@ -71,7 +70,6 @@
       "distance": 46,
       "side": -1,
       "color": "#d9b967",
-      "motion": "unverified",
       "partObstructions": [
         "1__0_1_1_84_2",
         "2__0_1_1_89_1"
@@ -81,7 +79,7 @@
       "id": "transmission",
       "name": "The going train",
       "technical": "Wheels & pinions",
-      "caption": "Four connected shafts carry the rhythm through the train. Tooth counts determine their relative speeds.",
+      "caption": "Trace the wheels and pinions between the barrels and escapement. Their tooth counts establish the train’s relative ratios.",
       "members": [
         3,
         4,
@@ -109,8 +107,7 @@
       ],
       "distance": 35,
       "side": -1,
-      "color": "#83bfcd",
-      "motion": "illustrative"
+      "color": "#83bfcd"
     },
     {
       "id": "display",
@@ -143,8 +140,7 @@
       ],
       "distance": 43,
       "side": 1,
-      "color": "#a9b9e5",
-      "motion": "unverified"
+      "color": "#a9b9e5"
     },
     {
       "id": "winding",
@@ -185,8 +181,7 @@
       ],
       "distance": 37,
       "side": 1,
-      "color": "#b3c895",
-      "motion": "conditional-unverified"
+      "color": "#b3c895"
     },
     {
       "id": "shock",
@@ -212,7 +207,6 @@
       "distance": 38,
       "side": -1,
       "color": "#d69dba",
-      "motion": "conditional-unverified",
       "partObstructions": [
         "29__0_1_1_145_7",
         "29__0_1_1_145_11",

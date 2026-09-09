@@ -484,48 +484,6 @@ h1 {
   min-width: 70px;
   flex: 1;
 }
-.playback {
-  border-top: 1px solid #ffffff10;
-  margin-top: 14px;
-  padding-top: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 52px;
-}
-.play-button {
-  height: 42px;
-  min-width: 42px;
-  border-radius: 50%;
-  border: 1px solid #d9bd85;
-  background: #d9bd85;
-  color: #152127;
-  font-size: 1rem;
-}
-.cycle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 170px;
-  font-size: 0.75rem;
-  color: #acb9bf;
-}
-.cycle [data-slot='slider'] {
-  flex: 1;
-}
-.event-label {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  color: #e5bd76;
-  min-width: 52px;
-}
-.timing-note {
-  margin-left: auto;
-  color: #889da4;
-  font-size: 0.75rem;
-  max-width: 230px;
-}
 .orientation-tools {
   position: absolute;
   bottom: 24px;
@@ -747,9 +705,6 @@ h1 {
     padding: 8px;
     font-size: 0.75rem;
   }
-  .timing-note {
-    display: none;
-  }
   .caption {
     left: 24px;
   }
@@ -933,37 +888,6 @@ h1 {
   .separation-control .text-button {
     font-size: 0.75rem;
   }
-  .playback {
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 9px;
-    padding-top: 9px;
-  }
-  .playback .primary,
-  .playback .tool {
-    font-size: 0.75rem;
-    min-height: 34px;
-    padding: 6px 9px;
-  }
-  .play-button {
-    height: 34px;
-    min-width: 34px;
-  }
-  .playback [data-slot='select-trigger'] {
-    font-size: 0.75rem;
-    width: 94px;
-  }
-  .cycle {
-    width: 90px;
-    font-size: 0.75rem;
-  }
-  .step-button {
-    display: none;
-  }
-  .event-label {
-    font-size: 0.75rem;
-    min-width: 38px;
-  }
   .fallback {
     inset: 145px 0 65px;
   }
@@ -1029,16 +953,6 @@ h1 {
   .focus-card {
     max-width: calc(100% - 30px);
   }
-  .playback {
-    min-width: 0;
-  }
-  .cycle {
-    min-width: 75px;
-    flex: 1;
-  }
-  .playback .event-label {
-    display: none;
-  }
   .topbar .text-button {
     font-size: 0.75rem;
     padding-left: 10px;
@@ -1056,12 +970,6 @@ h1 {
   }
   .workspace:has(.focus-card) .stage.panel-collapsed {
     bottom: 235px;
-  }
-  .control-deck .cycle {
-    flex-basis: 75px;
-  }
-  .playback [data-slot='select-trigger'] {
-    width: 80px;
   }
   .intro h1 {
     font-size: 1.75rem;
@@ -1089,8 +997,7 @@ h1 {
   width: 390px;
   max-height: 70%;
 }
-.text-enlarged .primary-controls,
-.text-enlarged .playback {
+.text-enlarged .primary-controls {
   flex-wrap: wrap;
 }
 .text-enlarged .separation-control {

@@ -1,5 +1,7 @@
 # Mechanical evidence and implementation boundary
 
+> Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
+
 Reviewed 9 September 2026 by a Codex engineering worker. This is a reproducible geometry investigation, **not expert watchmaker review, contact validation, or proof of mechanical correctness**. The source is the local STEP with SHA-256 `f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b`. The original source, sampled geometry and geometry illustration remain local behind the redistribution gate.
 
 A useful source-count-linked timing study can be implemented now using the actual balance, escape wheel and three preceding train shafts, with pallet/roller contact elements and the hairspring omitted during playback. The pivot locations and gear-count relationships have numerical support. The cycle's amplitude, absolute direction, phase, release duration and contact behavior remain authored approximations. Therefore present it explicitly as **Timing study — source gear counts, illustrative cadence** and explain the omitted contact and spring elements. A running-watch mechanical acceptance gate remains open.

@@ -17,7 +17,6 @@ import {
   category,
   type Part,
 } from '@/src/experience/catalog';
-import { evaluatePose } from '@/src/motion/evaluate';
 import { Slider } from '@/components/ui/slider';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
@@ -127,8 +126,6 @@ export default function Home() {
   };
   const patch = (v: Parameters<MovementViewer['patch']>[0]) =>
     viewer.current?.patch(v);
-  const pose = evaluatePose(s.time),
-    studyAvailable = ['regulation', 'transmission'].includes(s.group || '');
   return (
     <main className="explorer">
       <header className="topbar">
@@ -390,11 +387,9 @@ export default function Home() {
           </button>
         </div>
         <div className="caption">
-          {s.study
-            ? 'TIMING STUDY · CONTACT PARTS OMITTED'
-            : s.separation || s.partSpread
-              ? 'CONSTRUCTION STUDY · NOT A SERVICE SEQUENCE'
-              : 'Original Marco Lang CAD'}
+          {s.separation || s.partSpread
+            ? 'CONSTRUCTION STUDY · NOT A SERVICE SEQUENCE'
+            : 'Original Marco Lang CAD'}
         </div>
       </section>
       <footer
@@ -454,73 +449,6 @@ export default function Home() {
             </button>
           </div>
         </div>
-        {studyAvailable && s.ready && (
-          <div className="playback">
-            <button
-              className={s.study ? 'tool' : 'primary'}
-              onClick={() => viewer.current?.setStudy(!s.study)}
-            >
-              {s.study ? 'Source inspection' : 'Study the timing'}
-            </button>
-            {s.study && (
-              <>
-                <button
-                  className="play-button"
-                  aria-label={s.playing ? 'Pause motion' : 'Play motion'}
-                  onClick={() => patch({ playing: !s.playing })}
-                  disabled={!!(s.separation || s.partSpread)}
-                >
-                  {s.playing ? 'Ⅱ' : '▶'}
-                </button>
-                <Select
-                  value={String(s.speed)}
-                  onValueChange={(v) => patch({ speed: Number(v) })}
-                >
-                  <SelectTrigger aria-label="Playback speed">
-                    <SelectValue>{s.speed}×</SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[0.05, 0.1, 0.25, 1].map((v) => (
-                      <SelectItem key={v} value={String(v)}>
-                        {v}× speed
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="cycle">
-                  <span id="cycle-label">Cycle</span>
-                  <Slider
-                    aria-labelledby="cycle-label"
-                    min={0}
-                    max={1}
-                    step={0.005}
-                    value={[pose.phase]}
-                    onValueChange={(v) =>
-                      patch({
-                        time: (Array.isArray(v) ? v[0] : v) / 3,
-                        playing: false,
-                      })
-                    }
-                  />
-                </div>
-                <button
-                  className="tool step-button"
-                  onClick={() =>
-                    patch({ time: s.time + 1 / 6, playing: false })
-                  }
-                >
-                  Step beat
-                </button>
-                <span className="event-label">{pose.event}</span>
-              </>
-            )}
-            <span className="timing-note">
-              {s.study
-                ? 'Illustrative timing. Spring, lever and impulse contacts omitted.'
-                : 'Source geometry · inspected at rest'}
-            </span>
-          </div>
-        )}
       </footer>
       <Sheet open={catalog} onOpenChange={setCatalog}>
         <SheetContent className="catalog-sheet">
@@ -584,8 +512,8 @@ export default function Home() {
           <SheetHeader>
             <SheetTitle>A study of the ml–01</SheetTitle>
             <SheetDescription>
-              Actual Marco Lang CAD, with authored presentation and carefully
-              bounded motion.
+              Explore the original Marco Lang CAD at rest, with authored
+              materials and construction reveals.
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
@@ -594,15 +522,9 @@ export default function Home() {
               alternate dial designs. The catalog retains every imported part.
             </p>
             <p>
-              Timing study links four train shafts using source tooth counts and
-              the maker’s 3 Hz rate. The balance amplitude, motion direction and
-              release window are illustrative. It is not a validated running
+              The mechanism is shown in its source pose. Reveal and separation
+              controls expose its construction; they do not simulate a running
               watch.
-            </p>
-            <p>
-              The source hairspring, lever, roller and impulse jewel return in
-              Source inspection. Their contact and elastic motion remain
-              unvalidated.
             </p>
             <p>
               The source diamond is empty. Four balance eccentrics contain

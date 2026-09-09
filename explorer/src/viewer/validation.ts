@@ -35,22 +35,27 @@ export async function runBrowserChecks(v: MovementViewer) {
     pass:
       [...v.renderParts.values()].filter((p) => p.mesh.visible).length === 221,
   });
-  v.setStudy(true);
-  v.patch({ time: 0.172 });
-  v.setStudy(false);
-  v.patch({ reveal: 0 });
-  await sleep(300);
+  v.patch({ separation: 0.65, partSpread: 0.3 });
+  await sleep(1800);
+  v.patch({ separation: 0, partSpread: 0, reveal: 0 });
+  await sleep(1900);
   checks.push({
-    name: 'Source inspection restores original mechanical matrices',
+    name: 'Layer and component separation restore exact source matrices',
     pass: v.assemblyError() === 0,
     details: v.assemblyError(),
   });
-  v.patch({ study: true, playing: true });
-  await sleep(120);
-  v.patch({ separation: 0.2 });
+  const essential = [...v.renderParts.values()].filter((p) =>
+    ['112', '114', '116', '126', '127', '128', '129', '130', '96'].some(
+      (id) => p.source.definitionId === `d_0_1_1_${id}`,
+    ),
+  );
   checks.push({
-    name: 'Separation pauses playback',
-    pass: !v.clock.playing && !v.state.playing,
+    name: 'All ten former playback omissions remain visible at rest',
+    pass: essential.length === 10 && essential.every((p) => p.mesh.visible),
+    details: essential.map((p) => ({
+      id: p.source.id,
+      visible: p.mesh.visible,
+    })),
   });
   v.reset();
   await sleep(1900);
@@ -68,7 +73,7 @@ export async function runBrowserChecks(v: MovementViewer) {
   const first = v.renderCount;
   await sleep(500);
   checks.push({
-    name: 'Paused assembly renders on demand',
+    name: 'Static assembly renders on demand',
     pass: v.renderCount - first <= 1,
     details: { additionalRenders: v.renderCount - first },
   });
@@ -108,7 +113,6 @@ export function benchmarkFrame(
   const elapsed = now - b.start;
   if (elapsed >= b.duration) {
     b.done = true;
-    v.patch({ playing: false });
     b.result = {
       scope:
         'Desktop in-app browser, real rendered frames; not phone or thermal certification',
@@ -120,7 +124,11 @@ export function benchmarkFrame(
         const sorted = [...values].sort((a, b) => a - b),
           sum = values.reduce((a, b) => a + b, 0);
         return {
-          name: ['assembled orbit', 'timing study', 'separated orbit'][i],
+          name: [
+            'assembled orbit',
+            'revealed mechanism orbit',
+            'separated orbit',
+          ][i],
           samples: values.length,
           meanFrameMs: sum / values.length,
           p95FrameMs: sorted[Math.floor((sorted.length - 1) * 0.95)],
@@ -138,14 +146,12 @@ export function benchmarkFrame(
     if (phase === 0) v.reset();
     if (phase === 1) {
       v.group('regulation');
-      v.setStudy(true);
-      v.patch({ playing: true, speed: 0.1 });
     }
     if (phase === 2) {
       v.reset();
       v.patch({ separation: 0.65 });
     }
   }
-  if (phase !== 1 && !v.travel) v.orbit(0.002, 0);
+  if (!v.travel) v.orbit(0.002, 0);
   if (interval > 0) b.frames[phase].push(interval);
 }

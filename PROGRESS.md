@@ -1,5 +1,21 @@
 # Zweigesicht — current execution state
 
+## Current outcome — animation removed, 9 September 2026
+
+**The explorer is now a static source-CAD construction experience.** This section supersedes the running/timing status in historical entries below. The user explicitly accepted removal when a convincing complete working watch could not be supported, and prohibited publication/push.
+
+Inspected the existing loopback website before edits and reviewed mechanics, transforms, component identities, timing, both sides and all mechanisms. The old evaluator drove 19 leaves on five shafts (17 potentially visible) and hid ten essential leaves, including the entire pallet, impulse jewel, roller, hairspring and barrel-to-center wheel. Barrels, both motion works and all catalog hands had no running drivers. Correct internal ratios did not establish engagement, spring deformation or a full energy-to-display chain. Slowing or labeling that animation could not meet the requested standard.
+
+Removed timing controls, entry points, runtime clock/evaluator, timing state, rotations, omission branches and WebMCP timing inputs. Updated About and train copy, retired the historical timing recommendation, and adapted inspection checks/benchmark to static exploration. Refined materials, immutable source geometry/placements, source manifest/provenance, orbit/zoom, selection/isolation, catalog, both sides and authored reveal/separation transitions remain intact. No assets were rebuilt or redistributed.
+
+Verification: 25 real-source/asset CPU regressions and four state/presentation tests pass; production build, TypeScript and authored lint pass. Browser inspection covers both sides, six reveals, oblique macro, Function, isolation/Back, catalog hands and About. Six browser checks pass: 20 interrupted reveals, exact source reassembly (matrix error 0), visibility reversal, ten essential parts present, stable 138 geometries / 8 textures, zero idle redraws. Narrow 390×844 and 320×740 browser layouts inspected; 390 px document has no horizontal overflow. This is emulation, not device/thermal qualification.
+
+Decision and detailed evidence: `docs/ANIMATION_REVIEW.md`. Screenshots, original controller/evaluator snapshots, all 365 leaf classifications, numeric results and a hash ledger are local-only in ignored `artifacts/browser/animation-review/`. Prior review recommendations are explicitly historical. Source defects, overlapping dial/hand alternatives, authored optical approximations and extreme CAD faceting retain their documented limitations. No expert mechanical correctness or release readiness is claimed.
+
+Preview: **http://127.0.0.1:4173/**, using the existing loopback server; restart with `cd explorer && npm run dev`. Next action: user review of the static explorer. Restoring playback requires a new full-chain evidence task, not completion of this outcome. This verified checkpoint is local-only; no push, Site registration, save, upload or deployment is authorized or performed. The unrelated `FINISHING_GOAL.md` remains untouched and untracked.
+
+## Historical execution records
+
 Updated 9 September 2026. **Local implementation ready for engineering review.** **No Site has been registered, saved, uploaded or deployed.**
 
 ## Completed

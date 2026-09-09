@@ -39,11 +39,10 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
 const load=sourceModules();
 const {MovementViewer:Viewer}=load('explorer/src/viewer/MovementViewer.ts');
 const {initialState}=load('explorer/src/experience/state.ts');
-const {PlaybackClock}=load('explorer/src/motion/evaluate.ts');
 const {PREFIX,belongs}=load('explorer/src/experience/catalog.ts');
 const parts=JSON.parse(fs.readFileSync(path.join(ROOT,'explorer/public/models/assembly-manifest.json'))).instances;
 const v=Object.create(Viewer.prototype);
-Object.assign(v,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},clock:new PlaybackClock(),selectionBox:new THREE.Box3Helper(new THREE.Box3()),reduced:false,emit(){}});
+Object.assign(v,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},selectionBox:new THREE.Box3Helper(new THREE.Box3()),reduced:false,emit(){}});
 const assetPaths=JSON.parse(fs.readFileSync(path.join(ROOT,'explorer/public/models/asset-paths.json')));
 async function parse(name){
  const url=name==='overview.glb'?assetPaths.overview:assetPaths.catalog;
@@ -140,18 +139,22 @@ digestFixture.setAttribute('unexpectedExtra',new THREE.Float32BufferAttribute([1
 digestFixture.dispose();
 results.push({check:'actual ingest attaches reversible sidecars; only two known attributes are excluded from original hashes',status:'pass',annotatedMeshes});
 const fallback=Object.create(Viewer.prototype),badDefinition=v.sourceSurfaces.keys().next().value;
-Object.assign(fallback,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},clock:new PlaybackClock(),selectionBox:new THREE.Box3Helper(new THREE.Box3()),sourceSurfaces:new Map([[badDefinition,new Float32Array([0,0,1,0])]]),reduced:false,emit(){}});
+Object.assign(fallback,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},selectionBox:new THREE.Box3Helper(new THREE.Box3()),sourceSurfaces:new Map([[badDefinition,new Float32Array([0,0,1,0])]]),reduced:false,emit(){}});
 fallback.ingest((await parse('overview.glb')).scene);
 assert.equal(fallback.renderParts.size,222);assert.match(fallback.sourceSurfaceError,/vertex count changed/);
 for(const p of fallback.renderParts.values())if(p.source.definitionId===badDefinition)assert.equal(p.mesh.geometry.hasAttribute('sourceFinishNormal'),false);
 fallback.disposeObject(fallback.root);fallback.selectionBox.geometry.dispose();fallback.selectionBox.material.dispose();
 results.push({check:'invalid per-definition vertex counts fall back to source geometry while all movement leaves ingest',status:'pass'});
 results.push({check:'overview ingest preserves shared geometry and world placements',status:'pass',renderedParts:222,sharedGeometries:138,assemblyError:0});
-v.state.study=true;v.clock.time=.172;v.retarget();v.applyPose(1/60);
-assert.equal(v.renderParts.get(PREFIX+'4').mesh.visible,false,'Unanimated upstream meshing wheel must be omitted in timing study');
-for(const p of v.renderParts.values())if(['d_0_1_1_112','d_0_1_1_114','d_0_1_1_116'].includes(p.source.definitionId)||belongs(p.source.id,PREFIX+'13'))assert.equal(p.mesh.visible,false);
-v.state.study=false;v.retarget();v.applyPose(1/60);assert.equal(v.assemblyError(),0);
-results.push({check:'timing omits unresolved contacts/upstream wheel and source return restores exact matrices',status:'pass'});
+// A legacy input cannot recover a timing mode or alter source poses.
+v.patch({study:true,playing:true,time:.172,speed:1});
+assert.equal('study' in v.state,false);assert.equal('playing' in v.state,false);
+assert.equal('time' in v.state,false);assert.equal('speed' in v.state,false);
+for(let i=0;i<120;i++)v.applyPose(1/60);
+assert.equal(v.assemblyError(),0);
+const essentials=[...v.renderParts.values()].filter(p=>['112','114','116','126','127','128','129','130','96'].includes(p.source.definitionId.replace('d_0_1_1_','')));
+assert.equal(essentials.length,10);assert.ok(essentials.every(p=>p.mesh.visible));
+results.push({check:'legacy timing input is discarded; all ten essential former omissions retain exact visible source poses',status:'pass'});
 v.state={...initialState,group:'regulation',reveal:1};v.retarget();
 const bridge=[...v.renderParts.values()].find(p=>belongs(p.source.id,PREFIX+'59'));
 for(const p of v.renderParts.values())p.offset.copy(p.target);

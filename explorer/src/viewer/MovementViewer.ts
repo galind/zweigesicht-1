@@ -27,7 +27,6 @@ import {
   damp,
   type ExperienceState,
 } from '../experience/state';
-import { PlaybackClock, evaluatePose } from '../motion/evaluate';
 import { createMaterial, finishFor, setFinishEnabled } from './materials';
 
 type RenderPart = {
@@ -76,7 +75,6 @@ export class MovementViewer {
   error = '';
   detailError = '';
   state = { ...initialState };
-  clock = new PlaybackClock();
   manifest: Manifest | null = null;
   parts: Part[] = [];
   renderParts = new Map<string, RenderPart>();
@@ -220,12 +218,7 @@ export class MovementViewer {
     };
   }
   assemblyError() {
-    if (
-      this.state.study ||
-      this.state.reveal ||
-      this.state.separation ||
-      this.state.partSpread
-    )
+    if (this.state.reveal || this.state.separation || this.state.partSpread)
       return null;
     let error = 0;
     for (const p of this.renderParts.values())
@@ -244,7 +237,6 @@ export class MovementViewer {
     this.needsRender = true;
   };
   onVisibility = () => {
-    this.clock.rebase();
     this.lastFrame = 0;
     this.invalidate();
   };
@@ -252,8 +244,7 @@ export class MovementViewer {
     e.preventDefault();
     this.contextLost = true;
     this.contextLosses++;
-    this.patch({ playing: false });
-    this.error = '3D paused after a graphics interruption. Restoring…';
+    this.error = '3D interrupted. Restoring…';
     this.emit();
   };
   onContextRestored = () => {
@@ -463,19 +454,13 @@ export class MovementViewer {
     return this.catalogPending;
   }
   patch(patch: Partial<ExperienceState>) {
-    this.state = resolveState(this.state, {
-      ...(patch.time !== undefined ? { playing: false } : {}),
-      ...patch,
-    });
-    if (patch.time !== undefined) this.clock.seek(this.state.time);
-    this.clock.playing = this.state.playing;
-    this.clock.speed = this.state.speed;
+    this.state = resolveState(this.state, patch);
     this.retarget();
     this.emit();
   }
   save() {
     this.history.push({
-      state: { ...this.state, playing: false },
+      state: { ...this.state },
       position: this.camera.position.clone(),
       target: this.controls.target.clone(),
     });
@@ -497,8 +482,6 @@ export class MovementViewer {
       reveal: id ? 1 : 0,
       separation: 0,
       partSpread: 0,
-      study: false,
-      playing: false,
       side: group?.side === 1 ? 'front' : 'back',
     });
     if (group) this.frameGroup(group);
@@ -511,10 +494,8 @@ export class MovementViewer {
       return;
     }
     this.state = resolveState(previous.state, {
-      playing: false,
       phase: 'recovering',
     });
-    this.clock.seek(this.state.time);
     this.travel = { position: previous.position, target: previous.target };
     this.ensureFramingRange();
     this.retarget();
@@ -523,7 +504,6 @@ export class MovementViewer {
   reset() {
     this.history = [];
     this.state = { ...initialState, phase: 'recovering' };
-    this.clock.seek(0);
     this.detailError = '';
     this.homeCamera();
     this.retarget();
@@ -631,8 +611,6 @@ export class MovementViewer {
     this.patch({
       part: id,
       isolated: false,
-      playing: false,
-      study: false,
       phase: 'part',
     });
     if (!belongs(id, ROOT) && !this.catalogLoaded) {
@@ -659,19 +637,6 @@ export class MovementViewer {
     }
     this.retarget();
     this.emit();
-  }
-  setStudy(enabled: boolean) {
-    this.patch({
-      study: enabled,
-      playing: false,
-      time: 0,
-      part: null,
-      isolated: false,
-    });
-    if (enabled)
-      this.frameGroup(
-        GROUPS.find((g) => g.id === this.state.group) || GROUPS[0],
-      );
   }
   retarget() {
     const group = GROUPS.find((g) => g.id === this.state.group),
@@ -715,13 +680,6 @@ export class MovementViewer {
         visible = false;
       if (group && obstruction && Math.abs(p.offset.z) > 24 && !selected)
         visible = false;
-      const unsafe =
-        ['d_0_1_1_112', 'd_0_1_1_114', 'd_0_1_1_116'].includes(
-          p.source.definitionId,
-        ) ||
-        belongs(id, PREFIX + '13') ||
-        id === PREFIX + '4';
-      if (this.state.study && unsafe) visible = false;
       p.mesh.visible = visible;
       const finish = finishFor(
         p.source.name,
@@ -764,10 +722,7 @@ export class MovementViewer {
   }
   applyPose(dt: number) {
     let moving = false;
-    const pose = evaluatePose(this.clock.time),
-      temp = new THREE.Matrix4(),
-      rotation = new THREE.Matrix4(),
-      pivot = new THREE.Vector3();
+    const temp = new THREE.Matrix4();
     for (const p of this.renderParts.values()) {
       p.offset.set(
         damp(p.offset.x, p.target.x, dt, this.reduced),
@@ -777,37 +732,6 @@ export class MovementViewer {
       if (p.offset.distanceToSquared(p.target) < 1e-8) p.offset.copy(p.target);
       else moving = true;
       p.mesh.matrix.copy(p.assembled);
-      let angle = 0;
-      if (this.state.study) {
-        const id = p.source.id;
-        if (
-          belongs(id, PREFIX + '7__0_1_1_108_1') ||
-          id === PREFIX + '7__0_1_1_108_2'
-        ) {
-          angle = pose.balance;
-          pivot.set(0, -10, -2.65);
-        } else if (belongs(id, PREFIX + '62')) {
-          angle = pose.escape;
-          pivot.set(-1.99989817890187, -4.131405, -4.14);
-        } else if (belongs(id, PREFIX + '65')) {
-          angle = pose.seconds;
-          pivot.set(0, 0, -4.31);
-        } else if (belongs(id, PREFIX + '63')) {
-          angle = pose.third;
-          pivot.set(3.17046045103862, -3.61722, -3.21);
-        } else if (belongs(id, PREFIX + '3')) {
-          angle = pose.minute;
-          pivot.set(0, 0, -2.98);
-        }
-        if (angle) {
-          temp.makeTranslation(-pivot.x, -pivot.y, -pivot.z);
-          p.mesh.matrix.premultiply(temp);
-          rotation.makeRotationZ(angle);
-          p.mesh.matrix.premultiply(rotation);
-          temp.makeTranslation(pivot.x, pivot.y, pivot.z);
-          p.mesh.matrix.premultiply(temp);
-        }
-      }
       temp.makeTranslation(p.offset.x, p.offset.y, p.offset.z);
       p.mesh.matrix.premultiply(temp);
       p.mesh.matrixWorldNeedsUpdate = true;
@@ -890,7 +814,6 @@ export class MovementViewer {
     if (this.dead) return;
     this.frame = requestAnimationFrame(this.tick);
     if (document.hidden || this.contextLost) {
-      this.clock.sample(now, true);
       this.lastFrame = 0;
       return;
     }
@@ -898,10 +821,8 @@ export class MovementViewer {
     const dt = Math.min(interval / 1000, 0.1);
     this.lastFrame = now;
     if (this.benchmark) benchmarkFrame(this, this.benchmark, now, interval);
-    this.clock.sample(now);
-    this.state.time = this.clock.time;
     let moving = false;
-    if (this.needsRender || this.presentationMoving || this.clock.playing) {
+    if (this.needsRender || this.presentationMoving) {
       moving = this.applyPose(dt);
       this.presentationMoving = moving;
       this.retargetVisibility();
@@ -921,14 +842,14 @@ export class MovementViewer {
     }
     this.ensureFramingRange();
     const controlsChanged = this.controls.update();
-    if (this.needsRender || moving || this.clock.playing || controlsChanged) {
+    if (this.needsRender || moving || controlsChanged) {
       this.renderer.render(this.scene, this.camera);
       this.beautyTriangles = this.renderer.info.render.triangles;
       this.beautyDrawCalls = this.renderer.info.render.calls;
       if (this.state.treatment === 'finish' && this.state.quality !== 'low')
         this.surfaceOcclusion?.render(this.renderer);
       this.renderCount++;
-      if (this.clock.playing && dt > 0) {
+      if (interval > 0) {
         this.frameIntervals.push(interval);
         if (this.frameIntervals.length > 20000) this.frameIntervals.shift();
       }
@@ -978,15 +899,6 @@ export class MovementViewer {
       )
         visible = false;
       if (group && obstruction && Math.abs(p.offset.z) > 24 && !selected)
-        visible = false;
-      if (
-        this.state.study &&
-        (['d_0_1_1_112', 'd_0_1_1_114', 'd_0_1_1_116'].includes(
-          p.source.definitionId,
-        ) ||
-          belongs(id, PREFIX + '13') ||
-          id === PREFIX + '4')
-      )
         visible = false;
       if (p.mesh.visible !== visible) {
         p.mesh.visible = visible;

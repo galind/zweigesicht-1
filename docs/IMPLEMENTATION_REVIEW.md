@@ -1,5 +1,7 @@
 # Independent implementation review — 9 September 2026
 
+> Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
+
 This review examines the actual local application and CAD artifacts. It is an engineering source review by a separate Codex worker, not watchmaker approval, browser acceptance or real-device testing. Application files were read-only to this worker. The lead implemented the corrections identified below.
 
 Scope: `explorer/src/viewer/MovementViewer.ts`, `explorer/src/experience/state.ts`, `explorer/src/motion/evaluate.ts`, `explorer/src/experience/catalog.ts`, `explorer/app/page.tsx`, `assets/authored/mechanisms.json`, and the local optimized models. `docs/CAD_AUDIT.md` and `docs/MECHANICAL_REVIEW.md` supply the CAD and mechanical evidence.

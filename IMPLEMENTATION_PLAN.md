@@ -1,5 +1,7 @@
 **Marco Lang ml-01 — interactive movement implementation plan**
 
+Current scope decision, 9 September 2026: running/timing has been removed under the user-authorized static-explorer outcome. See `docs/ANIMATION_REVIEW.md` and `PROGRESS.md`. Playback ambitions and acceptance tasks below are historical planning, not remaining work for this local deliverable.
+
 Prepared 8 September 2026. Status: implementation proposal; CAD inspection and performance measurements remain outstanding.
 
 Execution update, 9 September 2026: source download, XCAF hierarchy extraction, and a single-component GLB/browser smoke test are complete. The full geometry audit, full-assembly rendering, and performance measurements remain outstanding. Follow PROGRESS.md and GOAL_PROMPT.md for the current starting point. The upcoming run is local-only; deployment and redistribution are deferred until the corresponding release gates are cleared.
