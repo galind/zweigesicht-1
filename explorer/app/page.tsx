@@ -79,8 +79,10 @@ const empty: ViewerSnapshot = {
 };
 export default function Home() {
   const catalogButton = useRef<HTMLButtonElement>(null),
+    optionsButton = useRef<HTMLButtonElement>(null),
     aboutButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
+  const selectionFocus = useRef(false);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
@@ -125,6 +127,25 @@ export default function Home() {
     let v: MovementViewer;
     try {
       v = new MovementViewer(host.current, set);
+      if (
+        flags.has('inspect') &&
+        ['render-failure', 'contact-failure'].includes(
+          flags.get('delivery') ?? '',
+        )
+      ) {
+        const render = v.renderer.render.bind(v.renderer);
+        v.renderer.render = (...args) => {
+          if (
+            v.awaitingFirstFrame &&
+            (flags.get('delivery') === 'render-failure' ||
+              v.scene.overrideMaterial)
+          ) {
+            v.renderer.render = render;
+            throw new Error('Local inspection: first prepared frame fails');
+          }
+          return render(...args);
+        };
+      }
       viewer.current = v;
     } catch {
       queueMicrotask(() =>
@@ -151,6 +172,7 @@ export default function Home() {
       (p) => !p.isAssembly && group && inMembers(p.id, group.members),
     );
   const selectPart = (id: string) => {
+    selectionFocus.current = true;
     setCatalog(false);
     setOptions(false);
     setDetails(false);
@@ -184,11 +206,27 @@ export default function Home() {
             Marco Lang <i>·</i> Calibre ml–01
           </span>
         </div>
-        <Sheet open={options} onOpenChange={setOptions}>
-          <SheetTrigger className="text-button options-trigger">
+        <Sheet
+          open={options}
+          onOpenChange={(open) => {
+            if (open) selectionFocus.current = false;
+            setOptions(open);
+          }}
+        >
+          <SheetTrigger
+            ref={optionsButton}
+            className="text-button options-trigger"
+          >
             Options
           </SheetTrigger>
-          <SheetContent className="about-sheet">
+          <SheetContent
+            className="about-sheet"
+            finalFocus={() =>
+              selectionFocus.current
+                ? (host.current?.querySelector('canvas') ?? false)
+                : optionsButton.current
+            }
+          >
             <SheetHeader>
               <SheetTitle>View options</SheetTitle>
               <SheetDescription>
@@ -414,9 +452,10 @@ export default function Home() {
             <button
               className="tool"
               disabled={s.catalogLoading || !available}
-              onClick={() =>
-                void viewer.current?.retryCatalog().catch(() => {})
-              }
+              onClick={() => {
+                host.current?.querySelector('canvas')?.focus();
+                void viewer.current?.retryCatalog().catch(() => {});
+              }}
             >
               Retry catalog
             </button>

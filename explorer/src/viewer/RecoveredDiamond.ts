@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import type { Part } from '../experience/catalog';
+import { assetRequestUrl } from '../experience/loading';
 
 export const DIAMOND_ID =
   'p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2';
@@ -16,7 +17,9 @@ export async function loadRecoveredDiamond(parts: Part[]) {
     record.triangles !== 0
   )
     throw new Error('Diamond recovery does not match the empty source record');
-  const response = await fetch('/models/diamond-c74ee2731a1f.stl');
+  const response = await fetch(
+    assetRequestUrl('/models/diamond-c74ee2731a1f.stl'),
+  );
   if (!response.ok) throw new Error('Maker diamond STL unavailable');
   const buffer = await response.arrayBuffer();
   const digest = Array.from(

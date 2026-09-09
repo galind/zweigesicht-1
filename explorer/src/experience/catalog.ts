@@ -140,6 +140,14 @@ const normalizeSearch = (text: string) =>
     .replace(/[–—-]/g, ' ');
 export function buildPartIndex(parts: Part[]) {
   const byId = new Map(parts.map((p) => [p.id, p]));
+  const suffixCounts = new Map<string, number>();
+  for (const p of parts) {
+    const segments = p.sourceInstanceId.split('/');
+    for (let length = 1; length <= segments.length; length++) {
+      const suffix = segments.slice(-length).join('/');
+      suffixCounts.set(suffix, (suffixCounts.get(suffix) ?? 0) + 1);
+    }
+  }
   return new Map(
     parts.map((p) => {
       const ancestry: Part[] = [];
@@ -152,12 +160,7 @@ export function buildPartIndex(parts: Part[]) {
       let length = 1;
       while (
         length < segments.length &&
-        parts.some(
-          (other) =>
-            other.id !== p.id &&
-            other.sourceInstanceId.split('/').slice(-length).join('/') ===
-              segments.slice(-length).join('/'),
-        )
+        (suffixCounts.get(segments.slice(-length).join('/')) ?? 0) > 1
       )
         length++;
       const reference = segments.slice(-length).join('/');

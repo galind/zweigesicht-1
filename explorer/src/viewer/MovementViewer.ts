@@ -392,6 +392,8 @@ export class MovementViewer {
     this.emit();
   };
   async load() {
+    let preparedScene: THREE.Object3D | undefined,
+      recoveredScene: THREE.Object3D | undefined;
     const generation = ++this.loadGeneration;
     this.selectionGeneration++;
     this.ready = false;
@@ -433,7 +435,7 @@ export class MovementViewer {
       ).catch((error: Error) => {
         if (!this.dead && generation === this.loadGeneration)
           this.sourceSurfaceError = error.message;
-        return undefined;
+        return { error };
       });
       const gltf = await new GLTFLoader()
         .setMeshoptDecoder(MeshoptDecoder)
@@ -447,6 +449,7 @@ export class MovementViewer {
             this.emit();
           }
         });
+      preparedScene = gltf.scene;
       if (!this.dead && generation === this.loadGeneration) {
         this.loadStage = 'preparing';
         this.transfer = null;
@@ -454,24 +457,27 @@ export class MovementViewer {
       }
       const sourceSurfaces = await surfaces;
       if (this.dead || generation !== this.loadGeneration) {
-        this.disposeObject(gltf.scene);
         return;
       }
+      if (sourceSurfaces && 'error' in sourceSurfaces)
+        throw sourceSurfaces.error;
       this.sourceSurfaces = sourceSurfaces;
-      this.ingest(gltf.scene);
       this.diamondRecoveryError = '';
       try {
-        const recovered = await loadRecoveredDiamond(this.parts);
+        recoveredScene = await loadRecoveredDiamond(this.parts);
         if (this.dead || generation !== this.loadGeneration) {
-          this.disposeObject(recovered);
           return;
         }
-        this.ingest(recovered);
       } catch (error) {
         if (!this.dead && generation === this.loadGeneration)
           this.diamondRecoveryError = String(error);
+        throw error;
       }
       if (this.dead || generation !== this.loadGeneration) return;
+      this.ingest(preparedScene);
+      preparedScene = undefined;
+      this.ingest(recoveredScene);
+      recoveredScene = undefined;
       this.spread = makeSpread(this.renderParts.values());
       this.contentPrepared = true;
       this.awaitingFirstFrame = true;
@@ -489,6 +495,9 @@ export class MovementViewer {
       this.status = '';
       this.emit();
       console.error('Movement load', error);
+    } finally {
+      if (preparedScene) this.disposeObject(preparedScene);
+      if (recoveredScene) this.disposeObject(recoveredScene);
     }
   }
   paths = {
@@ -516,6 +525,7 @@ export class MovementViewer {
         );
       } catch (error) {
         this.sourceSurfaceError = `${record.definitionId}: ${String(error)}`;
+        throw error;
       }
       const material = createMaterial(
         record.name,
@@ -1299,7 +1309,7 @@ export class MovementViewer {
   tick = (now: number) => {
     if (this.dead) return;
     this.frame = requestAnimationFrame(this.tick);
-    if (document.hidden || this.contextLost) {
+    if (document.hidden || this.contextLost || this.loadStage === 'error') {
       this.lastFrame = 0;
       return;
     }
@@ -1352,11 +1362,25 @@ export class MovementViewer {
       cameraWasMoving ||
       controlsChanged;
     if (rendered) {
-      this.renderer.render(this.scene, this.camera);
-      this.beautyTriangles = this.renderer.info.render.triangles;
-      this.beautyDrawCalls = this.renderer.info.render.calls;
-      if (this.state.treatment === 'finish' && this.state.quality !== 'low')
-        this.surfaceOcclusion?.render(this.renderer);
+      try {
+        this.renderer.render(this.scene, this.camera);
+        this.beautyTriangles = this.renderer.info.render.triangles;
+        this.beautyDrawCalls = this.renderer.info.render.calls;
+        if (this.state.treatment === 'finish' && this.state.quality !== 'low')
+          this.surfaceOcclusion?.render(this.renderer);
+      } catch {
+        this.ready = false;
+        this.awaitingFirstFrame = false;
+        this.loadStage = 'error';
+        this.error =
+          'The view could not render. Retry, or explore the section descriptions.';
+        this.controls.enabled = false;
+        this.travel = null;
+        this.presentationMoving = false;
+        this.needsRender = false;
+        this.emit();
+        return;
+      }
       this.renderCount++;
       if (interval > 0) {
         this.frameIntervals.push(interval);

@@ -14,7 +14,7 @@ function localCad(): Plugin {
       server.middlewares.use((req, res, next) => {
         const pathname = (req.url || '').split('?')[0];
         if (
-          !/^\/models\/(?:overview-[a-f0-9]{12}\.glb|catalog-[a-f0-9]{12}\.glb|finish-surfaces-[a-f0-9]{12}\.bin|(?:assembly-manifest|finish-surfaces)\.json)$/.test(
+          !/^\/models\/(?:overview-[a-f0-9]{12}\.glb|catalog-[a-f0-9]{12}\.glb|diamond-[a-f0-9]{12}\.stl|finish-surfaces-[a-f0-9]{12}\.bin|(?:assembly-manifest|finish-surfaces)\.json)$/.test(
             pathname,
           )
         )
@@ -31,7 +31,9 @@ function localCad(): Plugin {
         if (!existsSync(path)) return next();
         if (
           (delivery === 'failure' && pathname.includes('overview-')) ||
-          (delivery === 'catalog-failure' && pathname.includes('catalog-'))
+          (delivery === 'catalog-failure' && pathname.includes('catalog-')) ||
+          (delivery === 'surface-failure' && pathname.endsWith('.bin')) ||
+          (delivery === 'diamond-failure' && pathname.endsWith('.stl'))
         ) {
           const key = referrer.search;
           if (!failedCases.has(key)) {
@@ -45,7 +47,7 @@ function localCad(): Plugin {
           'Content-Type',
           pathname.endsWith('.glb')
             ? 'model/gltf-binary'
-            : pathname.endsWith('.bin')
+            : /\.(bin|stl)$/.test(pathname)
               ? 'application/octet-stream'
               : 'application/json',
         );

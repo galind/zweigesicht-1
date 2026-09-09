@@ -156,11 +156,11 @@ digestFixture.dispose();
 results.push({check:'actual ingest attaches reversible sidecars; only two known attributes are excluded from original hashes',status:'pass',annotatedMeshes});
 const fallback=Object.create(Viewer.prototype),badDefinition='d_0_1_1_105';
 Object.assign(fallback,{parts,root:new THREE.Group(),renderParts:new Map(),state:{...initialState},selectionBox:new THREE.Box3Helper(new THREE.Box3()),sourceSurfaces:new Map([[badDefinition,new Float32Array([0,0,1,0])]]),reduced:false,emit(){}});
-fallback.ingest((await parse('overview.glb')).scene);
-assert.equal(fallback.renderParts.size,222);assert.match(fallback.sourceSurfaceError,/vertex count changed/);
-for(const p of fallback.renderParts.values())if(p.source.definitionId===badDefinition)assert.equal(p.mesh.geometry.hasAttribute('sourceFinishNormal'),false);
-fallback.disposeObject(fallback.root);fallback.selectionBox.geometry.dispose();fallback.selectionBox.material.dispose();
-results.push({check:'invalid per-definition vertex counts fall back to source geometry while all movement leaves ingest',status:'pass'});
+const mismatchedScene=(await parse('overview.glb')).scene;
+assert.throws(()=>fallback.ingest(mismatchedScene),/vertex count changed/);
+assert.equal(fallback.renderParts.size,0);assert.equal(fallback.root.children.length,0);assert.match(fallback.sourceSurfaceError,/vertex count changed/);
+fallback.disposeObject(mismatchedScene);fallback.selectionBox.geometry.dispose();fallback.selectionBox.material.dispose();
+results.push({check:'invalid per-definition vertex counts reject ingestion before any movement leaves enter the visible scene',status:'pass'});
 results.push({check:'overview ingest preserves shared geometry and world placements',status:'pass',renderedParts:222,sharedGeometries:138,assemblyError:0});
 // A legacy input cannot recover a timing mode or alter source poses.
 v.patch({study:true,playing:true,time:.172,speed:1});
@@ -320,7 +320,8 @@ results.push({check:'actual six-card studio has HDR emission colors and disposes
 
 // No DOM was connected in this CPU harness, so OrbitControls has no DOM listeners to dispose.
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}
-const loadRace=sourceModules({loader:DeferredLoader,fetchImpl:async()=>({ok:true,json:async()=>({instances:[]})})});const {MovementViewer:RaceViewer}=loadRace('explorer/src/viewer/MovementViewer.ts');const race=Object.create(RaceViewer.prototype);
+const preparedFetch=async url=>url==='/models/assembly-manifest.json'?{ok:true,json:async()=>({instances:parts})}:url==='/models/asset-paths.json'?{ok:true,json:async()=>assetPaths}:modelFetch(url);
+const loadRace=sourceModules({loader:DeferredLoader,fetchImpl:preparedFetch});const {MovementViewer:RaceViewer}=loadRace('explorer/src/viewer/MovementViewer.ts');const race=Object.create(RaceViewer.prototype);
 Object.assign(race,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
 const obsolete=race.load();while(pending.length<1)await Promise.resolve();const current=race.load();while(pending.length<2)await Promise.resolve();pending[1].resolve({scene:{}});await current;assert.equal(race.ready,false);assert.equal(race.awaitingFirstFrame,true);assert.equal(race.error,'');pending[0].progress?.({loaded:25,total:100});assert.equal(race.status,'','Obsolete progress must not overwrite completed loading status');pending[0].reject(Error('Obsolete fixture request'));await obsolete;assert.equal(race.error,'','An obsolete failure must not overwrite newer successful state');
 results.push({check:'obsolete load progress/failure cannot overwrite newer successful load',status:'pass'});
@@ -334,21 +335,70 @@ const metadataPending=[];let immediateLoads=0;
 class ImmediateLoader{setMeshoptDecoder(){return this}async loadAsync(){immediateLoads++;return {scene:{}}}}
 const metadataModules=sourceModules({loader:ImmediateLoader,fetchImpl:async url=>{
  if(url==='/models/assembly-manifest.json')return new Promise(resolve=>metadataPending.push(resolve));
- if(url==='/models/asset-paths.json')return {ok:true,json:async()=>({overview:'latest.glb',catalog:'latest-catalog.glb'})};
- return {ok:false};
+ if(url==='/models/asset-paths.json')return {ok:true,json:async()=>assetPaths};
+ return modelFetch(url);
 }});
 const {MovementViewer:MetadataViewer}=metadataModules('explorer/src/viewer/MovementViewer.ts');
 const metadataRace=Object.create(MetadataViewer.prototype);
 Object.assign(metadataRace,{renderParts:new Map(),loadGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{overview:'fixture.glb'},emit(){},ingest(){},homeCamera(){},retarget(){},disposeObject(){}});
 const oldMetadata=metadataRace.load(),newMetadata=metadataRace.load();
 assert.equal(metadataPending.length,2);
-const latestParts=[{id:'latest'}];metadataPending[1]({ok:true,json:async()=>({instances:latestParts})});
+const latestParts=[...parts];metadataPending[1]({ok:true,json:async()=>({instances:latestParts})});
 await newMetadata;assert.equal(metadataRace.ready,false);assert.equal(metadataRace.awaitingFirstFrame,true);assert.equal(metadataRace.parts,latestParts);
 metadataPending[0]({ok:true,json:async()=>({instances:[{id:'obsolete'}]})});await oldMetadata;
 assert.equal(metadataRace.parts,latestParts);assert.equal(immediateLoads,1,'Obsolete metadata must not launch geometry');
-assert.equal(metadataRace.paths.overview,'latest.glb');
-assert.match(metadataRace.sourceSurfaceError,/unavailable/);assert.equal(metadataRace.error,'','Optional sidecar failure must preserve movement loading');
-results.push({check:'late metadata cannot overwrite current parts/paths or launch geometry; unavailable annotations fall back without movement failure',status:'pass'});
+assert.equal(metadataRace.paths.overview,assetPaths.overview);
+assert.equal(metadataRace.sourceSurfaces.size,sidecarReport.definitions.length);assert.equal(metadataRace.error,'');
+results.push({check:'late metadata cannot overwrite current parts/paths or launch geometry; current preparation verifies actual annotation and diamond assets',status:'pass'});
+
+// Protected prepared assets must fail before either temporary scene is ingested.
+// Read the real hashed sidecar/STL through modelFetch; only GLTF decoding and
+// scene ingestion are facades here (actual decoded geometry is checked above).
+for(const failingAsset of ['annotations','diamond']){
+ let failPrepared=true;const temporaryScenes=[],ingestedScenes=[],releasedScenes=[];
+ class PreparedLoader{setMeshoptDecoder(){return this}async loadAsync(){const scene=new THREE.Group();scene.name='temporary-overview';const mesh=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial());scene.add(mesh);scene.userData.disposals={geometry:0,material:0};mesh.geometry.addEventListener('dispose',()=>scene.userData.disposals.geometry++);mesh.material.addEventListener('dispose',()=>scene.userData.disposals.material++);temporaryScenes.push(scene);return {scene}}}
+ const preparedModules=sourceModules({loader:PreparedLoader,fetchImpl:async url=>{
+  if(failPrepared&&((failingAsset==='annotations'&&url==='/models/finish-surfaces.json')||(failingAsset==='diamond'&&url.includes('/models/diamond-'))))return {ok:false};
+  return preparedFetch(url);
+ }});
+ const {MovementViewer:PreparedViewer}=preparedModules('explorer/src/viewer/MovementViewer.ts');
+ const prepared=Object.create(PreparedViewer.prototype);
+ Object.assign(prepared,{renderParts:new Map(),loadGeneration:0,selectionGeneration:0,dead:false,error:'',ready:false,loadStart:performance.now(),paths:{...assetPaths},controls:{enabled:false},emit(){},ingest(scene){ingestedScenes.push(scene)},homeCamera(){},retarget(){},disposeObject(scene){releasedScenes.push(scene);Viewer.prototype.disposeObject.call(this,scene)}});
+ await prepared.load();
+ assert.equal(prepared.loadStage,'error',failingAsset+' failure needs a retry state');assert.equal(prepared.ready,false);assert.equal(prepared.awaitingFirstFrame,false);assert.equal(prepared.contentPrepared,false);assert.equal(prepared.controls.enabled,false);assert.ok(prepared.error);
+ assert.equal(ingestedScenes.length,0,'Do not ingest a partial scene after '+failingAsset+' failure');assert.equal(prepared.renderParts.size,0);
+ assert.equal(releasedScenes.filter(scene=>scene===temporaryScenes[0]).length,1,'Release temporary overview once after '+failingAsset+' failure');
+ assert.deepEqual(temporaryScenes[0].userData.disposals,{geometry:1,material:1});
+ failPrepared=false;await prepared.load();
+ assert.equal(prepared.error,'');assert.equal(prepared.ready,false,'Retry must still wait for its first complete frame');assert.equal(prepared.awaitingFirstFrame,true);assert.equal(prepared.contentPrepared,true);
+ assert.equal(prepared.sourceSurfaces.size,sidecarReport.definitions.length);assert.equal(ingestedScenes.length,2);assert.equal(ingestedScenes[0],temporaryScenes[1]);
+ assert.ok(ingestedScenes[1].children.some(mesh=>mesh.userData.sourceRecovery==='maker-component-stl'),'Retry must include the verified maker diamond');
+ for(const scene of ingestedScenes)Viewer.prototype.disposeObject.call(prepared,scene);
+ results.push({check:failingAsset+' preparation failure preserves an empty scene, disposes temporary geometry and retries with all annotations and recovered diamond',status:'pass'});
+}
+
+// A request may become obsolete after geometry and annotations have finished,
+// while its diamond fetch is pending. Both temporary scenes remain request-owned.
+let delayedDiamondResponse,diamondRequests=0;
+const diamondRaceScenes=[],diamondRaceReleased=[],diamondRaceIngested=[];
+class DiamondRaceLoader{setMeshoptDecoder(){return this}async loadAsync(){const scene=new THREE.Group();diamondRaceScenes.push(scene);return {scene}}}
+const diamondRaceModules=sourceModules({loader:DiamondRaceLoader,fetchImpl:async url=>{
+ if(url.includes('/models/diamond-')&&diamondRequests++===0)return new Promise(resolve=>{delayedDiamondResponse=resolve});
+ return preparedFetch(url);
+}});
+const {MovementViewer:DiamondRaceViewer}=diamondRaceModules('explorer/src/viewer/MovementViewer.ts');
+const diamondRace=Object.create(DiamondRaceViewer.prototype);
+Object.assign(diamondRace,{renderParts:new Map(),loadGeneration:0,selectionGeneration:0,dead:false,error:'',ready:false,paths:{...assetPaths},emit(){},ingest(scene){diamondRaceIngested.push(scene)},homeCamera(){},retarget(){},disposeObject(scene){diamondRaceReleased.push(scene);Viewer.prototype.disposeObject.call(this,scene)}});
+const oldDiamondLoad=diamondRace.load();
+while(!delayedDiamondResponse)await new Promise(setImmediate);
+await diamondRace.load();const preparedAnnotations=diamondRace.sourceSurfaces;
+assert.equal(diamondRaceIngested.length,2);assert.equal(diamondRaceIngested[0],diamondRaceScenes[1]);
+delayedDiamondResponse(await modelFetch('/models/diamond-c74ee2731a1f.stl'));await oldDiamondLoad;
+assert.equal(diamondRaceIngested.length,2,'Late recovered geometry must not enter the new scene');assert.equal(diamondRaceReleased.length,2);assert.equal(diamondRaceReleased[0],diamondRaceScenes[0]);
+assert.ok(diamondRaceReleased[1].children.some(mesh=>mesh.userData.sourceRecovery==='maker-component-stl'));
+assert.equal(diamondRace.sourceSurfaces,preparedAnnotations);assert.equal(diamondRace.error,'');assert.equal(diamondRace.contentPrepared,true);assert.equal(diamondRace.awaitingFirstFrame,true);
+for(const scene of diamondRaceIngested)Viewer.prototype.disposeObject.call(diamondRace,scene);
+results.push({check:'a stale diamond completion disposes both request-owned scenes without replacing newer preparation or entering the scene',status:'pass'});
 
 // Read the actual class-field handler through the TypeScript AST. This is resilient
 // to source formatting and does not construct the browser-bound viewer.
@@ -386,7 +436,7 @@ results.push({check:'unknown or invalid transfer totals remain indeterminate; me
 const tickField=viewerClass.members.find(n=>ts.isPropertyDeclaration(n)&&n.name.getText(viewerSource)==='tick');
 const tickModule={exports:{}};
 const tickCode=ts.transpileModule('module.exports=function(){return '+tickField.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
-vm.runInNewContext(tickCode,{module:tickModule,THREE,performance,requestAnimationFrame:()=>1,document:{hidden:false}});
+vm.runInNewContext(tickCode,{module:tickModule,THREE,performance,console,requestAnimationFrame:()=>1,document:{hidden:false}});
 const renderOrder=[];
 const frameFixture={dead:false,contextLost:false,lastFrame:0,lastNotify:1e9,benchmark:null,needsRender:true,presentationMoving:false,travel:null,ready:false,awaitingFirstFrame:true,loadStart:performance.now(),frameIntervals:[],renderCount:0,
  state:{...initialState,phase:'whole'},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
@@ -399,12 +449,17 @@ frameFixture.needsRender=false;frameFixture.presentationMoving=true;renderOrder.
 assert.deepEqual(renderOrder,['beauty','surface'],'The terminal pose sample must be painted even when moving becomes false');
 renderOrder.length=0;tick(112);assert.equal(renderOrder.length,0,'After the terminal sample the viewer must be idle');
 frameFixture.ready=false;frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.renderer.render=()=>{throw Error('No valid frame')};
-assert.throws(()=>tick(116),/No valid frame/);assert.equal(frameFixture.ready,false);
+assert.doesNotThrow(()=>tick(116));assert.equal(frameFixture.ready,false);assert.equal(frameFixture.awaitingFirstFrame,false);assert.equal(frameFixture.loadStage,'error');assert.equal(frameFixture.controls.enabled,false);assert.ok(frameFixture.error);assert.equal(frameFixture.travel,null);assert.equal(frameFixture.presentationMoving,false);
+let errorFrameAttempts=0;frameFixture.renderer.render=()=>{errorFrameAttempts++};tick(120);assert.equal(errorFrameAttempts,0,'A failed renderer must stay idle until retry');
+// Re-enter preparation as load() does, then require both passes before ready.
+frameFixture.loadStage='preparing';frameFixture.error='';frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;tick(124);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
+frameFixture.ready=false;frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.surfaceOcclusion.render=()=>{throw Error('No valid contact frame')};tick(128);assert.equal(frameFixture.loadStage,'error');assert.equal(frameFixture.ready,false);assert.equal(frameFixture.controls.enabled,false);
+frameFixture.surfaceOcclusion.render=()=>{};frameFixture.loadStage='preparing';frameFixture.error='';frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;tick(132);assert.equal(frameFixture.ready,true);
 frameFixture.renderer.render=()=>{};frameFixture.awaitingFirstFrame=false;frameFixture.ready=true;
 frameFixture.camera.position.set(0,0,70);frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3()};
 for(let i=1;i<=12;i++){tick(116+i*100);assert.ok(frameFixture.camera.position.distanceTo(frameFixture.controls.target)>69.999,'Side reversal must not cut through the movement');}
 assert.equal(frameFixture.travel,null);assert.ok(frameFixture.camera.position.equals(new THREE.Vector3(0,0,-70)));
-results.push({check:'readiness follows complete beauty/contact frame; failed rendering stays unavailable; camera side reversal keeps safe radius and settles exactly',status:'pass',scope:'actual frame callback with CPU renderer facade'});
+results.push({check:'readiness follows complete beauty/contact frame; beauty/contact failures expose a retry state and stop rendering until successful retry; camera side reversal keeps safe radius and settles exactly',status:'pass',scope:'actual frame callback with CPU renderer facade'});
 
 const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
 Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
@@ -459,7 +514,7 @@ ao.resize(640.4,479.6);assert.equal(pass.normalRenderTarget.width,640);assert.eq
 aoCamera.far=700;aoCamera.aspect=.6;aoCamera.updateProjectionMatrix();
 let target=null,clearAlpha=.3,clearColor=new THREE.Color(0x123456),clears=0;
 const initialClear=clearColor.clone(),draws=[];
-const renderer={autoClear:true,getClearColor(out){return out.copy(clearColor)},getClearAlpha(){return clearAlpha},setClearColor(value){clearColor.set(value)},setClearAlpha(value){clearAlpha=value},setRenderTarget(value){target=value},clear(){clears++},render(object){
+const renderer={autoClear:true,getRenderTarget(){return target},getClearColor(out){return out.copy(clearColor)},getClearAlpha(){return clearAlpha},setClearColor(value,alpha){clearColor.set(value);if(alpha!==undefined)clearAlpha=alpha},setClearAlpha(value){clearAlpha=value},setRenderTarget(value){target=value},clear(){clears++},render(object){
  if(object===aoScene){assert.equal(line.visible,false);assert.equal(aoScene.overrideMaterial,pass.normalMaterial)}
  draws.push({target,material:object===aoScene?aoScene.overrideMaterial:object.material});
 }};
@@ -470,6 +525,12 @@ assert.equal(clears,1);assert.equal(target,null);assert.equal(renderer.autoClear
 assert.equal(pass.ssaoMaterial.uniforms.cameraFar.value,700);assert.equal(pass.ssaoMaterial.uniforms.cameraNear.value,.05);assert.ok(pass.ssaoMaterial.uniforms.cameraProjectionMatrix.value.equals(aoCamera.projectionMatrix));assert.ok(pass.ssaoMaterial.uniforms.cameraInverseProjectionMatrix.value.equals(aoCamera.projectionMatrixInverse));
 assert.equal(pass.ssaoMaterial.uniforms.minDistance.value,.035/(700-.05));assert.equal(pass.ssaoMaterial.uniforms.maxDistance.value,.65/(700-.05));
 assert.equal(pass.copyMaterial.uniforms.tDiffuse.value,pass.blurRenderTarget.texture);assert.equal(pass.copyMaterial.blending,THREE.CustomBlending);
+const normalRender=renderer.render;
+renderer.render=()=>{throw Error('Injected normal-pass failure')};
+assert.throws(()=>ao.render(renderer),/Injected normal-pass failure/);
+assert.equal(target,null);assert.equal(renderer.autoClear,true);assert.equal(clearAlpha,.3);assert.ok(clearColor.equals(initialClear));assert.equal(line.visible,true);assert.equal(aoScene.overrideMaterial,null);
+line.visible=false;renderer.render=normalRender;ao.render(renderer);assert.equal(line.visible,false,'A failed pass must clear its visibility cache before retry');line.visible=true;
+results.push({check:'contact-pass exceptions restore render target, clear state, override material and line visibility before retry',status:'pass'});
 const resources=[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTarget,pass.normalMaterial,pass.blurMaterial,pass.copyMaterial,pass.depthRenderMaterial,pass.noiseTexture,pass.ssaoMaterial,pass._fsQuad._mesh.geometry];
 const disposals=new Map(resources.map(r=>[r,0]));for(const r of resources)r.addEventListener('dispose',()=>disposals.set(r,disposals.get(r)+1));
 ao.dispose();for(const count of disposals.values())assert.equal(count,1,'Every contact-pass owned resource must be disposed once');line.geometry.dispose();line.material.dispose();
