@@ -1,5 +1,7 @@
 # Separation style studies — 9 September 2026
 
+Superseded by user review: all alternatives were rejected. Return to one complete simultaneous separation with corrected part ordering and spacing. The comparison UI and evaluators have been removed. The notes below are historical.
+
 User review requested alternatives to the current Separate animation. The local comparison at `http://127.0.0.1:4173/?compare=explode` adds four choices, with explicit Open/Close buttons and the existing scrubbable Separate control. Each style selection returns to the assembled model before the next opening. The standard URL still uses the accepted current evaluator.
 
 | Study | Motion and composition | Evaluation |

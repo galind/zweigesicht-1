@@ -1,56 +1,40 @@
-# Reviewed construction separation
+# Complete simultaneous separation
 
-9 September 2026. Local implementation of `EXPLODE_GOAL.md`; source geometry, finishes, lighting and all six fitted 10:10 hand poses are preserved. This is a static assembly illustration, not a running watch or service procedure.
+9 September 2026. User review supersedes the staged host explosion and all style studies. Separate now expands the complete movement in one continuous motion. There is no comparison panel, island layout, guided sequence or per-component opening choreography.
 
-## What changed
+## Ordering and clearance
 
-The former `(z + 2.8) × progress × 4` offset separated each leaf independently in world Z. It pulled pressed jewels out of bridges, opened complete barrels, and displaced side-entering screws across their seats. Focused separation added another unrelated Z/XY offset.
+The original per-leaf `(z + 2.8) × progress × 4` calculation used each full bounding-box center. This misplaced long shafts relative to the wheel or shoulder that defines their place in the stack. The later host explosion also grouped many pieces and used unequal staged travel, which the user rejected.
 
-`assets/authored/explosion.json` now accounts for every one of the **223 source movement leaves** with an exact occurrence ID, host, rule, evidence/confidence, local direction, distance and stage. The **21 hosts** retain pressed jewels, pins, Incablocs, cap stones, riveted wheel/pinion packets, complete barrels and delicate spring assemblies. The main plate remains the fixed reference. The rear display bridge composes its own release with its barrel-bridge host once. Broader train, display and keyless packets are explicitly conservative explanatory groupings.
+The replacement measures actual axial body surfaces from the original STEP, using major coplanar face area to locate the body rather than the ends of a protruding shaft. Reviewed head geometry supplies screw anchors. Hard constraints preserve already-disjoint source depth intervals and place each recessed screw beyond its receiving seat in the correct outward direction. Remaining ordering uses measured body depth. Small parts without suitable axial surfaces retain an explicitly recorded midpoint fallback.
 
-All **49 screws** release toward their larger heads along the actual mounted axes. Forty-six are world-Z mounted; the two radial dial screws and balance-stud clamp are the three exceptions. The two non-Z taper pins remain attached to their spring/stud hosts. The original-STEP probe, exact faces, receiving seats and rejected extraction paths are documented in [EXPLODE_CAD_FINDINGS.md](EXPLODE_CAD_FINDINGS.md).
+A deterministic clearance solver uses full part extents, including long shafts. For every pair whose XY bounds overlap, the complete endpoint has at least **1 mm depth clearance** and the upper part receives at least as much travel as the lower part. There are **1,875 constrained pairs**. Parts move as rigid objects: no vertex, source matrix, material, rotation or scale changes. Every final translation is multiplied by the **same slider progress**, so there are no independent stages or parts catching up later.
 
-## Progression and transform ownership
+All **223 source movement leaves** have an explicit layout entry. The main plate stays fixed; every other leaf participates, including jewels, pins, individual barrel elements and the recovered diamond. The existing alternate setting-lever visibility rule remains in force, giving 222 visible default movement leaves. Three horizontal screws withdraw 4 mm along their reviewed mounted axes relative to their exact receiving seat's depth layer. The total axial offset range is approximately **−41.35 to +20.46 mm** about the plate.
 
-The whole-movement slider follows these overlapping but ordered stages:
+Generated layout: `assets/derived/complete-separation.json`. It is separate from the existing hand-authored mounting manifest. The source probe records exact planar-face/head evidence and confidence under ignored `artifacts/explode-depth-audit/`. Reproduce with:
 
-- **0–20%:** screws withdraw 2.8 mm along their own mounted axes.
-- **20–52%:** outer bridges and the intact regulator lift; the rear display releases before following the barrel bridge. Keyless parts lift by 40% to clear the stem groove.
-- **42–72%:** the bare stem withdraws 8 mm along world +X; inner bridges finish clearing their bearings. Ratchets remain associated with their positive-Z screws while barrels stay on the other side.
-- **72–100%:** complete barrels, riveted train and pallet packets lift into inspection spacing. The coupling wheel and clutch lift together through the opened split-bearing side after the stem and winding bridge clear.
+```sh
+.venv-cad/bin/python scripts/cad/separation-depth-probe.py
+python3 scripts/cad/build-complete-separation.py
+node scripts/cad/review-runtime.mjs
+node --test tests/experience.test.mjs
+```
 
-Focused Uncover and Separate use the same host evaluator. Focused barrel/train sliders use their useful travel range immediately; the winding view retains its prerequisite order. No gear rotation, spring deformation, scale change or illustrative part rotation is introduced. Uncover removes distant opaque host covers, preserving the existing visual language.
+The probe reuses the original STEP, accepted maker diamond STL and prior mounting evidence; run `scripts/cad/explode_probe.py` first if that evidence is absent. No new downloads or asset regeneration are needed. Repeated layout generation is byte deterministic.
 
-Offsets are recomputed from immutable source matrices. Endpoint animation advances the authored progress parameter, so it traverses stages instead of moving all parts simultaneously toward final endpoints. Slider reversal starts at the displayed parameter; switching contexts blends from displayed matrices. Back, Reset, selection outlines and picking retain the existing controller. Manual camera input cancels automatic framing. Framing uses transformed per-part corners to avoid excess padding from one combined world box.
+## Interaction and preserved work
 
-All parts retains its separate 216-member packing contract and exclusions. Separation enters bare Movement with remembered dial preferences; Back/direct dial return restores the exclusive display and fitted 10:10 poses. Original catalog poses and the fitted-only central Lance correction remain separate from explosion transforms.
+The single Separate slider retains continuous scrubbing, exact reassembly and reversal from the displayed pose. Whole-view framing becomes slightly more oblique as depth expands; manual orbit retains ownership. Picking, outlines, isolation, Back/Reset and recovery retain their existing controller. Focused mechanisms retain their reviewed Uncover/Separate behavior; this correction replaces whole-movement separation.
 
-## Evidence and limits
+Accepted finishes, lighting, source provenance and geometry are unchanged. Movement/Dial A/Dial B remains exclusive; all six fitted styles retain 10:10:00. Raw catalog poses and the central Lance fitted-only correction remain separate. All parts keeps its independent 216-member inventory packing.
 
-Reproduction commands:
+## Verification and limits
 
-- `.venv-cad/bin/python scripts/cad/explode_probe.py`
-- `node scripts/cad/review-runtime.mjs`
-- `node --test tests/experience.test.mjs`
-- In `explorer/`: `npx tsc --noEmit`, targeted `npx oxlint` for the edited authored sources, and `npm run build`.
+**59 CPU/source checks**, six state tests, TypeScript, authored lint and production build pass. New CPU checks cover exact leaf coverage, 101 simultaneous progression/reversal samples, all 1,875 clearance/order constraints, recessed screw precedence, three exact radial seats, immutable source geometry and actual-controller interruption. An independent check transforms the actual GLB vertices and recovered diamond: minimum full-endpoint depth clearance is **0.99999987 mm**, within mesh precision of 1 mm.
 
-The original-source audit passes **106 analytic checks**, **55 authored checks**, and **90 winding part-pair/stage intersection samples**. The runtime suite passes **59 CPU checks** and the state suite passes **six tests**. The new tests cover exact leaf coverage, source-derived screw polarity, all authored stage boundaries plus 101 progress samples in both directions, host-relative positions, winding prerequisites, source-matrix immutability and displayed-pose continuity. Existing decoded geometry/material/hand/dial regressions remain intact.
+This is a complete assembly illustration. Conservative bounding extents prove full-endpoint depth clearance for the axial parts and preserve the order of initially disjoint intervals; they do not certify continuous service extraction through initially interlocking solids. Horizontal screw polarity retains the original analytic seat evidence. Existing invalid/tiny source geometry and nominal threaded overlaps are unchanged. No swept-solid, physical-device or expert mechanical certification is claimed.
 
-The winding audit rejected moving the complete stem/gear packet through the small plate port and detected the setting lever intersecting an early stem withdrawal. The revised stages remove both detected defects. Initial nominal-thread overlap remains: each radial screw starts with about .15870 mm³ common volume against its simplified thread seat and clears at sampled 1 mm withdrawal. The stud clamp clears at .5 mm. This is geometric evidence for the chosen direction, not an unscrewing simulation.
+At 1280×720 and 390×844, all eight explosion browser checks pass, including complete animated opening/closing, both sides, intermediate positions, reversal, selection/isolation, manual camera ownership, reduced motion, stable resources and zero idle redraws. Maximum animated viewport corner is 0.850018 desktop and 0.919490 portrait. All 21 dial and 12 movement checks also pass. Direct review covers both sides, intermediate/full views and portrait; 320px controls do not overflow horizontally. Live evidence is recorded under ignored `artifacts/browser/explode-complete/`. The earlier staged source audit remains documented in `EXPLODE_CAD_FINDINGS.md`; its named winding path checks apply to the retained focused mechanism, not the new simultaneous whole layout.
 
-The source coupling-axis residual (~.0071 mm), existing invalid/tiny geometry and duplicate stud placements remain unchanged. Discrete checks cover named pairs; they do not prove continuous swept clearance against every movement leaf. Retained train/display/keyless packets and movement of ratchets opposite complete barrels are explanatory compromises. No physical-device, human-comprehension or expert mechanical certification is claimed.
-
-Local evidence is ignored under `artifacts/explode-cad/` and `artifacts/browser/explode/`. Final responsive and visual results follow. Preview: **http://127.0.0.1:4173/**. No push, merge, deployment or Site upload.
-
-
-## Final live verification
-
-At **1280×720** and **390×844**, all **7 explosion checks, 21 dial checks and 12 established movement checks pass**. The explosion suite samples both sides and stage/reversal positions, all six mechanisms, interrupted scrubbing, camera takeover, selection/isolation, reduced motion, resources and idle rendering. Target pose error is zero; the largest projected visible-part corner is **0.847458 NDC**, inside the viewport. Stable explosion cycles retain **140 geometries / 8 textures** on the fresh portrait run and the warmed desktop counts recorded in its JSON; both add **zero idle renders**. Other suites warm catalog/outline resources separately.
-
-Direct review covers assembled, release/intermediate/full separation from both sides, a pointer-orbited side/oblique view, all six mechanisms, the three non-Z screws close up, complete barrels, regulator spring/bridge and shock packet, and all six fitted 10:10 styles. The final orbit makes the host layers and attached screws readable without additional guides or labels. Front-facing depth naturally overlaps in projection; free orbit and isolation provide the intended inspection views. Mechanism framing emphasizes its members, so the dim surrounding plate can extend outside the focused viewport.
-
-At **320×740**, document width remains 320 px. The slider responds to arrow/End keys, the dial choice responds to Space, and Escape closes the sheet with focus returned to Dial & hands. A direct separation→Back sequence restores the remembered small Pear display at **10:10:00**, with **zero display-pose error**. Graphics loss/restoration at 52% separation preserves the state and camera, annotations, recovered diamond and finishes. Final browser error log is empty. Physical-device and screen-reader testing remain outside these browser observations.
-
-TypeScript, authored lint and production build pass. The build retains the existing chunk-size notice; linting the broader pre-existing runtime test script also reports two existing regex-style warnings, with no errors. The CPU suite's intentionally unavailable annotation/diamond fixtures log expected errors while passing recovery assertions.
-
-The ignored screenshot gallery is `artifacts/browser/explode/index.html`; numeric evidence includes desktop/portrait explosion, movement and dial reports, source probe output, stage intersection reports, keyboard/focus evidence, separated graphics recovery and exact dial Back restoration. The implementation checkpoint is **a8fbcc2**; this final review is a second local milestone. No push, merge, deployment, Site upload or unrelated `FINISHING_GOAL.md` edit was performed. The original loopback preview remains running.
+Preview remains **http://127.0.0.1:4173/**. Local changes only; no push, merge, deployment, Site upload or unrelated `FINISHING_GOAL.md` edit.

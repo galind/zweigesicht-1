@@ -1,7 +1,9 @@
+import complete from '../../../assets/derived/complete-separation.json';
 import authored from '../../../assets/authored/explosion.json';
 import type { Part } from './catalog';
 
 export const EXPLOSION = authored;
+export const COMPLETE_SEPARATION = complete;
 export type ExplosionState = {
   separation: number;
   partSpread: number;
@@ -37,6 +39,15 @@ export function explosionOffsets(
   parts: Part[],
   state: ExplosionState,
 ): Map<string, Vec3> {
+  if (!state.group) {
+    const progress = Math.max(0, Math.min(1, state.separation));
+    const ids = new Set(parts.map((p) => p.id));
+    return new Map(
+      complete.parts
+        .filter((p) => ids.has(p.id))
+        .map((p) => [p.id, p.offsetMm.map((n) => n * progress) as Vec3]),
+    );
+  }
   const byId = new Map(parts.map((p) => [p.id, p]));
   const focus =
     authored.mechanisms[state.group as keyof typeof authored.mechanisms];

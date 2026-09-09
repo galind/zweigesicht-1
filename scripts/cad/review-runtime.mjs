@@ -731,8 +731,6 @@ results.push({check:'out-and-back drags, pinch release orders, cancellation, rig
 
 const {reviewExplosion}=await import('./review-explosion.mjs');
 reviewExplosion({v,THREE,initialState,load,ROOT,parts,results});
-const {reviewExplosionStyles}=await import('./review-explosion-styles.mjs');
-reviewExplosionStyles({load,parts,initialState,results});
 const {reviewDials}=await import('./review-dials.mjs');
 await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

@@ -1,9 +1,4 @@
 'use client';
-import {
-  EXPLOSION_STYLES,
-  type ExplosionStyle,
-} from '@/src/experience/explosionStyles';
-import { runExplosionStyleChecks } from '@/src/viewer/explosionStyleValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -104,9 +99,6 @@ export default function Home() {
     [details, setDetails] = useState(false),
     [inspect, setInspect] = useState(false),
     [qa, setQa] = useState<unknown>(null);
-  const [compare, setCompare] = useState(false);
-  const [explosionStyle, setExplosionStyle] =
-    useState<ExplosionStyle>('current');
   const [motion, setMotion] = useState<unknown>(null);
   const [catalogQuery, setCatalogQuery] = useState('');
   const partIndex = useMemo(() => buildPartIndex(s.parts), [s.parts]);
@@ -118,10 +110,7 @@ export default function Home() {
   useEffect(() => {
     if (!host.current) return;
     const flags = new URLSearchParams(location.search);
-    queueMicrotask(() => {
-      setInspect(flags.has('inspect'));
-      setCompare(flags.get('compare') === 'explode');
-    });
+    queueMicrotask(() => setInspect(flags.has('inspect')));
     document.documentElement.style.fontSize =
       flags.get('text') === '200' ? '200%' : '';
     document.documentElement.classList.toggle(
@@ -226,7 +215,6 @@ export default function Home() {
     <main
       className={
         'explorer' +
-        (compare ? ' comparing-explosion' : '') +
         (group || selected || s.layout === 'spread' ? ' has-focus' : '')
       }
     >
@@ -941,88 +929,9 @@ export default function Home() {
       <pre id="viewer-diagnostics" hidden>
         {JSON.stringify({ ...s, parts: undefined })}
       </pre>
-      {compare && (
-        <section
-          className="explosion-comparison"
-          aria-label="Separation style comparison"
-        >
-          <div className="comparison-heading">
-            Separation studies <span>Choose a style, then open</span>
-          </div>
-          <div className="comparison-styles">
-            {EXPLOSION_STYLES.map((style) => (
-              <button
-                key={style.id}
-                aria-pressed={explosionStyle === style.id}
-                disabled={!available}
-                onClick={() => {
-                  setExplosionStyle(style.id);
-                  viewer.current?.compareExplosion(style.id);
-                }}
-              >
-                {style.label}
-              </button>
-            ))}
-          </div>
-          <p>
-            {
-              EXPLOSION_STYLES.find((style) => style.id === explosionStyle)
-                ?.description
-            }
-          </p>
-          <div className="comparison-actions">
-            <button
-              disabled={
-                !available ||
-                s.presentation !== 'movement' ||
-                !!s.group ||
-                s.layout !== 'assembly'
-              }
-              onClick={() => viewer.current?.playExplosionStudy(true)}
-            >
-              Open study
-            </button>
-            <button
-              disabled={
-                !available ||
-                s.presentation !== 'movement' ||
-                !!s.group ||
-                s.layout !== 'assembly'
-              }
-              onClick={() => viewer.current?.playExplosionStudy(false)}
-            >
-              Close study
-            </button>
-            <button
-              className="comparison-exit"
-              onClick={() => {
-                location.href = '/?inspect=1';
-              }}
-            >
-              Leave comparison
-            </button>
-          </div>
-        </section>
-      )}
       {inspect && (
         <details className="inspection">
           <summary>Inspection tools</summary>
-          {compare && (
-            <button
-              onClick={async () => {
-                if (!viewer.current) return;
-                setQa({ running: true });
-                try {
-                  setQa(await runExplosionStyleChecks(viewer.current));
-                } catch (error) {
-                  setQa({ error: String(error) });
-                }
-                setExplosionStyle('current');
-              }}
-            >
-              Run style checks
-            </button>
-          )}
           {(['scrub', 'spread', 'interrupt'] as MotionCase[]).map((kind) => (
             <button
               key={kind}

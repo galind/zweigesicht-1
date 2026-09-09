@@ -1,8 +1,4 @@
-import { uncoverHost } from '../experience/explosion';
-import {
-  styleOffsets,
-  type ExplosionStyle,
-} from '../experience/explosionStyles';
+import { explosionOffsets, uncoverHost } from '../experience/explosion';
 import {
   DIALS,
   fittedLeaves,
@@ -99,7 +95,6 @@ export interface ViewerSnapshot extends ExperienceState {
   stats: Record<string, unknown>;
 }
 export class MovementViewer {
-  explosionStyle: ExplosionStyle = 'current';
   inspectionFrame?: (now: number, rendered: boolean) => void;
   benchmark: Benchmark | null = null;
   renderer: THREE.WebGLRenderer;
@@ -830,59 +825,6 @@ export class MovementViewer {
       this.fitPresentation();
     this.emit();
   }
-  compareExplosion(style: ExplosionStyle) {
-    this.explosionStyle = style;
-    // Switching studies returns from the displayed pose, using the regular pose tween.
-    this.explosionTravel = undefined;
-    this.displayedExplosionState = undefined;
-    this.cameraUserOwned = false;
-    this.patch({
-      presentation: 'movement',
-      layout: 'assembly',
-      group: null,
-      part: null,
-      isolated: false,
-      separation: 0,
-      partSpread: 0,
-      reveal: 0,
-    });
-  }
-  async playExplosionStudy(open: boolean) {
-    const generation = this.selectionGeneration;
-    // Let a style switch finish returning from the previous study before playing.
-    while (
-      !this.dead &&
-      !this.explosionTravel &&
-      [...this.renderParts.values()].some((p) => p.motion)
-    ) {
-      await new Promise<void>((resolve) =>
-        requestAnimationFrame(() => resolve()),
-      );
-      if (generation !== this.selectionGeneration) return;
-    }
-    if (this.dead) return;
-    this.poseDuration = this.explosionStyle === 'guided' ? 7 : 3;
-    const userOwned = this.cameraUserOwned;
-    if (!open) this.cameraUserOwned = true;
-    this.patch({ separation: open ? 1 : 0 });
-    this.cameraUserOwned = userOwned;
-    this.poseDuration = 0.85;
-    if (open && this.travel && !userOwned) this.travel.duration = 0.6;
-    if (!open) {
-      const closingGeneration = this.selectionGeneration;
-      while (
-        !this.dead &&
-        (this.explosionTravel ||
-          [...this.renderParts.values()].some((p) => p.motion))
-      ) {
-        await new Promise<void>((resolve) =>
-          requestAnimationFrame(() => resolve()),
-        );
-        if (closingGeneration !== this.selectionGeneration) return;
-      }
-      if (!this.dead) this.fitPresentation();
-    }
-  }
   scrub(patch: Partial<ExperienceState>) {
     this.poseDuration = 0.075;
     this.patch(patch);
@@ -927,14 +869,11 @@ export class MovementViewer {
     const points = this.targetPoints(include);
     const bounds = new THREE.Box3().setFromPoints(points);
     if (bounds.isEmpty()) return;
-    const style = this.state.group
-      ? 'current'
-      : (this.explosionStyle ?? 'current');
     const direction = this.cameraUserOwned
       ? this.camera.position.clone().sub(this.controls.target).normalize()
       : new THREE.Vector3(
-          style === 'layers' ? 1.7 : style === 'current' ? 0.62 : 0.15,
-          style === 'layers' ? 0.55 : style === 'current' ? 0.38 : 0.12,
+          this.state.group ? 0.62 : 0.62 + 0.43 * this.state.separation,
+          0.38,
           this.state.side === 'front' ? 1 : -1,
         ).normalize();
     this.frameBounds(bounds, direction, points);
@@ -1355,7 +1294,7 @@ export class MovementViewer {
     ) {
       this.explosionTravel = undefined;
     }
-    const explosion = styleOffsets(this.parts, this.state, this.explosionStyle);
+    const explosion = explosionOffsets(this.parts, this.state);
     for (const p of this.renderParts.values()) {
       const previousTarget = p.target.clone(),
         previousRotation = p.targetRotation.clone();
@@ -1455,15 +1394,12 @@ export class MovementViewer {
       const t = this.reduced
         ? 1
         : Math.min(1, travel.elapsed / travel.duration);
-      const eased =
-        this.explosionStyle === 'guided' && !travel.to.group
-          ? t
-          : t * t * (3 - 2 * t);
+      const eased = t * t * (3 - 2 * t);
       const displayed = { ...travel.to };
       for (const key of ['separation', 'partSpread', 'reveal'] as const)
         displayed[key] =
           travel.from[key] + (travel.to[key] - travel.from[key]) * eased;
-      staged = styleOffsets(this.parts, displayed, this.explosionStyle);
+      staged = explosionOffsets(this.parts, displayed);
       this.displayedExplosionState = displayed;
       moving = t < 1;
       if (!moving) this.explosionTravel = undefined;

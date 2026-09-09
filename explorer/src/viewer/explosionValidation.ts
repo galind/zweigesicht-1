@@ -17,6 +17,41 @@ export async function runExplosionChecks(v: MovementViewer) {
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   v.reset();
   await settle(v);
+  let maxAnimatedNdc = 0;
+  v.inspectionFrame = (_now, rendered) => {
+    if (!rendered) return;
+    for (const p of v.renderParts.values()) {
+      if (!p.mesh.visible) continue;
+      const b = p.mesh.geometry.boundingBox!;
+      for (let i = 0; i < 8; i++) {
+        const point = new THREE.Vector3(
+          i & 1 ? b.max.x : b.min.x,
+          i & 2 ? b.max.y : b.min.y,
+          i & 4 ? b.max.z : b.min.z,
+        )
+          .applyMatrix4(p.mesh.matrixWorld)
+          .project(v.camera);
+        maxAnimatedNdc = Math.max(
+          maxAnimatedNdc,
+          Math.abs(point.x),
+          Math.abs(point.y),
+        );
+      }
+    }
+  };
+  try {
+    v.patch({ separation: 1 });
+    await settle(v);
+    v.patch({ separation: 0 });
+    await settle(v);
+  } finally {
+    v.inspectionFrame = undefined;
+  }
+  checks.push({
+    name: 'Complete opening and closing keep displayed geometry within the viewport',
+    pass: maxAnimatedNdc < 1,
+    details: { maxAnimatedNdc },
+  });
   const source = new Map(
     [...v.renderParts].map(([id, p]) => [id, p.assembled.clone()]),
   );
@@ -46,7 +81,7 @@ export async function runExplosionChecks(v: MovementViewer) {
     }
   }
   checks.push({
-    name: 'Both sides: stage boundaries and reversal match authored poses and fit all visible bounds',
+    name: 'Both sides: intermediate separation and reversal match complete poses and fit all visible bounds',
     pass: maxPoseError < 1e-9 && maxNdc < 1,
     details: { maxPoseError, maxNdc },
   });
@@ -64,7 +99,7 @@ export async function runExplosionChecks(v: MovementViewer) {
         );
   }
   checks.push({
-    name: 'All six mechanisms use the shared host evaluator for Uncover and Separate',
+    name: 'All six focused mechanisms retain their reviewed host evaluator for Uncover and Separate',
     pass: maxPoseError < 1e-9,
   });
   for (let i = 0; i < 24; i++) {
@@ -121,7 +156,7 @@ export async function runExplosionChecks(v: MovementViewer) {
   await settle(v);
   v.reduced = reduced;
   checks.push({
-    name: 'Reduced motion reaches staged endpoint and restores source assembly',
+    name: 'Reduced motion reaches complete endpoint and restores source assembly',
     pass: v.assemblyError() === 0,
   });
   const before = v.stats();
