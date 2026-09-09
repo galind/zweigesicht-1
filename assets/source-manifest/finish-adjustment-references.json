@@ -18,6 +18,30 @@
       "bytes": 8359906,
       "kind": "CAD render, visual finishing reference; not measured physical surface data",
       "usage": "Local review only; image not copied into public assets"
+    },
+    {
+      "id": "USER-FINISH-2026-09-09-03",
+      "file": "codex-clipboard-1e681bb2-97ec-4065-9560-59146afbf1c8.png",
+      "source": "User attachment in this task; no external URL supplied",
+      "sha256": "6f6fd6982e7384c64ffc2bb1445717464ee3f943ed59bb0436511064c3b8e5cd",
+      "bytes": 342726,
+      "kind": "Cap plate photograph",
+      "usage": "Local review only; image not copied into public assets"
+    },
+    {
+      "id": "USER-FINISH-2026-09-09-04",
+      "file": "codex-clipboard-35a6f043-7dd2-455d-a623-69c8e104821e.png",
+      "source": "User attachment in this task; no external URL supplied",
+      "sha256": "4cc9440d4ec2effbd4d12ce644781c6f35a3f5fedb9044d747c04f7ac0a8b084",
+      "bytes": 2112553,
+      "kind": "Barrel snailing CAD-render reference",
+      "usage": "Local review only; image not copied into public assets"
     }
-  ]
+  ],
+  "terminology": {
+    "url": "https://www.hautehorlogerie.org/en/watches-and-culture/watchmaking-knowledge/encyclopedia/decorating-and-engraving-the-movement",
+    "publisher": "Fondation Haute Horlogerie",
+    "accessed": "2026-09-09",
+    "note": "Snailing is spiral decoration about a central point; actual target appearance follows user attachment 04."
+  }
 }

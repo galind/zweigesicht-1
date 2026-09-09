@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Snailing, cap plate and dial-screw corrections — 9 September 2026
+
+Implemented the user-confirmed follow-up on `codex/watch-polish-finishes`: curved snailing on all four barrel/drum definitions, explicitly brushed crown wheel d249, cap plate d105 grain/reflections aligned from the screw pair toward the jewel, stronger plate/lower-bridge frosting, and a smooth satin d99 cap-plate seat. Two radial outer-rim dial retaining screws (d201 occurrences P54/194:11 and :12) now use whole-screw neutral steel via exact-instance overrides. Other shared d201 assignments remain blue. The crown cap/blue cone, source geometry, annotations, placements and lighting are preserved.
+
+**Verification:** 49 actual-source/asset CPU checks, four state tests, TypeScript, targeted material lint and production build pass. New regressions verify the dial screws’ source placement/orientation, the cap grain against actual screw bores, and the seat mask against all source-face vertices (exactly 263 on face54). Original decoded geometry buffers remain byte-exact across 339 objects. Twelve live-browser checks pass with exact reassembly, 216 spread members, stable 140 geometries/8 textures and zero idle redraws. Opening, cap/crown close-ups and each isolated neutral dial screw were visually reviewed; no shader errors. No new physical-device or sustained-performance benchmark is claimed.
+
+Reference hashes and the updated appearance ledger are recorded. Details: [FINISH_ADJUSTMENTS.md](docs/FINISH_ADJUSTMENTS.md). Evidence: `artifacts/browser/snailing-corrections/`. Next action: user visual review at **http://127.0.0.1:4173/** on the existing local server. The prior branch checkpoint was pushed at the user’s request; this new finishing checkpoint is local-only and has not been pushed or merged. Unrelated `FINISHING_GOAL.md` is untouched.
+
 ## Brushing and frosting adjustment — 9 September 2026
 
 Implemented the user’s two supplied CAD-render references: stronger irregular frosting on the main plate and lower bridge fields, readable circular satin on barrels/lids and wheels, and straight satin on eight keyless lever/spring definitions. Two previously plain-steel setting/coupling wheels now use circular satin. Existing chamfer contrast, source geometry/placements, whole-screw bluing, optics, interface and lighting remain intact. Both setting-spring variants are covered. Reference image hashes and attribution are recorded without copying the attachments into public assets; the complete appearance ledger is refreshed.

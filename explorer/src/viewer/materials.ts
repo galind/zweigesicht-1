@@ -6,13 +6,14 @@ const profiles = {
   brushedSteel: { color: 0xc3c9d0, metalness: 1, roughness: 0.31, pattern: 4 },
   bridge: { color: 0xd0d4dc, metalness: 1, roughness: 0.23, pattern: 1 },
   warmPlate: { color: 0xd9ab94, metalness: 1, roughness: 0.24, pattern: 1 },
-  frosted: { color: 0xd9ae8f, metalness: 1, roughness: 0.51, pattern: 3 },
+  frosted: { color: 0xd9ae8f, metalness: 1, roughness: 0.55, pattern: 3 },
   brass: { color: 0xdcae85, metalness: 1, roughness: 0.31, pattern: 2 },
   barrel: { color: 0xd6a17f, metalness: 1, roughness: 0.34, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
   gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xd1d5dd, metalness: 1, roughness: 0.12, pattern: 0 },
+  brushedCrown: { color: 0xd1d5dd, metalness: 1, roughness: 0.29, pattern: 2 },
   blue: { color: 0x287bb8, metalness: 0.92, roughness: 0.19, pattern: 0 },
   spring: { color: 0x304f83, metalness: 1, roughness: 0.25, pattern: 0 },
   ruby: { color: 0xd34f8c, metalness: 0, roughness: 0.09, pattern: 0 },
@@ -41,7 +42,8 @@ for (const [family, ids] of Object.entries({
   // Flat keyless levers/springs, including both source setting-spring variants.
   // Unlike bridge feet these faces are brushed on both sides of local Z0.
   brushedSteel: [174, 176, 178, 190, 193, 244, 246, 248],
-  crown: [249, 251],
+  brushedCrown: [249],
+  crown: [251],
   blue: screwDefinitions,
   steel: [
     53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 121, 124, 126,
@@ -94,6 +96,8 @@ export function finishFor(
   if (
     [33, 43, 44, 45, 77, 78, 81, 82].some(
       (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_${i}`,
+    ) || ['11', '12'].some(
+      (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_${i}`,
     )
   ) {
     family = 'steel';
@@ -139,6 +143,10 @@ uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
 uniform float finishFrosted;
+uniform float finishSnailing;
+uniform float finishRadius;
+uniform vec2 finishBrushAxis;
+uniform float finishCapSeat;
 `;
 const surface = /* glsl */ `
 float finishHash(vec2 p) {
@@ -228,6 +236,10 @@ export function createMaterial(
   }
   // Kept for the existing catalog framing cache; never change source buffers.
   geometry?.computeBoundingBox();
+  const bounds = geometry?.boundingBox;
+  const radius = bounds ? Math.max(Math.abs(bounds.min.x), Math.abs(bounds.max.x), Math.abs(bounds.min.y), Math.abs(bounds.max.y)) : 6;
+  // d105 screw axes are (+/-.75,-1.1), jewel axis (0,0): grain follows +Y.
+  const brushAxis = new THREE.Vector2(definitionId === 'd_0_1_1_105' ? 0 : 1, definitionId === 'd_0_1_1_105' ? 1 : 0);
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
   const etched = [99, 222, 228, 230].includes(
@@ -240,6 +252,10 @@ export function createMaterial(
       finishEngraved: { value: etched ? 1 : 0 },
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
       finishFrosted: { value: finish.family === 'frosted' ? 1 : 0 },
+      finishSnailing: { value: finish.family === 'barrel' ? 1 : 0 },
+      finishRadius: { value: Math.max(radius, .01) },
+      finishBrushAxis: { value: brushAxis },
+      finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
     });
     shader.vertexShader =
       'varying vec3 vFinishPosition;\nvarying vec3 vFinishNormal;\nvarying vec3 vFinishX;\nvarying vec3 vFinishY;\nvarying float vFinishRole;\n#ifdef SOURCE_FINISH\nattribute vec3 sourceFinishNormal;\nattribute float sourceFinishRole;\n#endif\n' +
@@ -277,6 +293,7 @@ export function createMaterial(
       /* glsl */ `
 #include <color_fragment>
 vec2 finishUv=vFinishPosition.xy;
+vec2 finishBrushUv=vec2(dot(finishUv,finishBrushAxis),dot(finishUv,vec2(-finishBrushAxis.y,finishBrushAxis.x)));
 float finishFacing=abs(normalize(vFinishNormal).z);
 float finishFace=smoothstep(.96,.999,finishFacing);
 // Only existing inclined faces receive a polish; vertical walls stay satin.
@@ -285,6 +302,9 @@ float finishGrain=0.0;
 float finishHeight=0.0;
 float finishField=1.0;
 float finishFrostMask=finishFrosted;
+// Audited d99 face 54 is the only flat source plane at Z=-.3 mm.
+// The tight plane mask leaves the lower feet, chamfers and engraving separate.
+float finishSeat=finishCapSeat*finishFace*(1.0-smoothstep(.0001,.0003,abs(vFinishPosition.z+.3)));
 // Only separately audited source regions may cross metal/dielectric families.
 if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) diffuseColor.rgb=vec3(.546,.584,.631);
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) diffuseColor.rgb=vec3(.006);
@@ -293,29 +313,42 @@ if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.35,.005,.
 if(finishEnabled>.5 && finishPattern>.5) {
  if(finishPattern<1.5 || finishPattern>3.5) {
   finishField=finishPattern>3.5?1.0:smoothstep(-.025,-.005,vFinishPosition.z);
-  diffuseColor.rgb*=mix(.62,1.0,finishField);
-  float brushed=finishPattern>3.5?finishBrush(finishUv):filteredFinishNoise(finishUv*vec2(2.0,40.0));
+  diffuseColor.rgb*=mix(.62,1.0,max(finishField,finishSeat));
+  float brushed=finishPattern>3.5?finishBrush(finishBrushUv):filteredFinishNoise(finishBrushUv*vec2(2.0,40.0));
   float frost=finishFrost(finishUv);
   finishFrostMask=1.0-finishField;
   finishGrain=mix(frost,brushed,finishField);
-  finishHeight=mix(frost*.009,brushed*(finishPattern>3.5?.0012:.00065),finishField);
+  finishHeight=mix(frost*.011,brushed*(finishPattern>3.5?.0012:.00065),finishField);
+  finishFrostMask*=1.0-finishSeat;
+  finishGrain*=1.0-finishSeat;
+  finishHeight*=1.0-finishSeat;
  } else if(finishPattern<2.5) {
   float radius=length(finishUv);
+  if(finishSnailing>.5) {
+   // Curved rays: theta + 1.15*r/R is constant along each sweeping stroke.
+   // Sample a closed circle, avoiding an atan seam and concentric lathe rings.
+   float phase=atan(finishUv.y,finishUv.x)+1.15*radius/finishRadius;
+   vec2 spiral=vec2(cos(phase),sin(phase));
+   finishGrain=filteredFinishNoise(spiral*48.0+radius*.15)*.55
+     + filteredFinishNoise(spiral*120.0+radius*.08)*.3
+     + filteredFinishNoise(spiral*260.0)*.15;
+  } else {
   // Irregular concentric brushing around the original source axle. The slow
   // XY variation breaks up perfect lathe rings without an angular seam.
   float wander=finishNoise(finishUv*1.7)*.035;
   finishGrain=filteredFinishNoise(vec2((radius+wander)*20.0,0.0))*.45
     + filteredFinishNoise(vec2((radius+wander*.5)*55.0,7.0))*.35
     + filteredFinishNoise(vec2(radius*120.0,19.0))*.2;
+  }
   finishHeight=finishGrain*.0012;
  } else {
   finishGrain=finishFrosted>.5?finishFrost(finishUv):filteredFinishNoise(finishUv*32.0);
-  finishHeight=finishGrain*mix(.0006,.009,finishFrosted);
+  finishHeight=finishGrain*mix(.0006,.011,finishFrosted);
  }
  // Small reflectance variation carries the grain through broad studio lights;
  // existing chamfers stay distinct from the textured flat fields.
  if(finishPattern<2.5 || finishPattern>3.5 || finishFrosted>.5)
-  diffuseColor.rgb*=1.0+finishGrain*mix(.34,.48,finishFrostMask)*finishFace;
+  diffuseColor.rgb*=1.0+finishGrain*mix(.34,.8,finishFrostMask)*finishFace;
  if(vFinishRole>5.5) diffuseColor.rgb*=.64;
  // Existing recessed decoration on audited bridges. This is reversible surface
  // shading of source floors, never fabricated text, outlines or bevel geometry.
@@ -342,7 +375,8 @@ if(finishEnabled>.5 && finishPattern>.5) {
  roughnessFactor=clamp(roughnessFactor+finishGrain*finishContrast,.09,.85);
  if(finishPattern<2.5 || finishPattern>3.5) {
   roughnessFactor=mix(.42,roughnessFactor,finishFace);
-  roughnessFactor=mix(roughnessFactor,.52+finishGrain*.24,finishFace*finishFrostMask);
+  roughnessFactor=mix(roughnessFactor,.55+finishGrain*.3,finishFace*finishFrostMask);
+  roughnessFactor=mix(roughnessFactor,.34,finishSeat);
   roughnessFactor=mix(roughnessFactor,.10,finishBevel);
  }
 }
@@ -365,7 +399,9 @@ if(finishEnabled>.5 && finishPattern>.5) {
 }
 #ifdef USE_ANISOTROPY
 // Source-local frame avoids dependence on absent CAD UVs or tangent attributes.
-vec2 finishDirection=finishPattern>1.5 && finishPattern<2.5?normalize(finishUv+vec2(1e-8)):vec2(0,1);
+vec2 radial=normalize(finishUv+vec2(1e-8));
+vec2 finishDirection=finishPattern>1.5 && finishPattern<2.5?radial:vec2(-finishBrushAxis.y,finishBrushAxis.x);
+if(finishSnailing>.5) finishDirection=normalize(vec2(-radial.y,radial.x)+radial*(1.15*length(finishUv)/finishRadius));
 vec3 finishT=vFinishX*finishDirection.x+vFinishY*finishDirection.y;
 finishT-=normal*dot(normal,finishT);
 if(dot(finishT,finishT)<1e-8) finishT=cross(normal,abs(normal.z)<.9?vec3(0,0,1):vec3(0,1,0));
@@ -388,7 +424,7 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   };
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v5'
-      : 'ml01-source-surface-v5';
+      ? 'ml01-source-surface-clear-v6'
+      : 'ml01-source-surface-v6';
   return material;
 }

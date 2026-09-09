@@ -1,3 +1,22 @@
+# Snailing, cap plate and dial-screw corrections
+
+9 September 2026, following user confirmation. This section supersedes the earlier circular barrel finish, unchanged crown wheel, cap-grain direction and blanket lower-bridge frosting described below.
+
+- Barrel/drum faces (d85/86/90/91) now carry curved snailing strokes. A radius-dependent angular field controls both shallow surface grain and the anisotropic reflection frame. Sampling around a closed circle avoids an angular seam; strokes curve through approximately 66 degrees from centre to rim. This is an authored visual interpretation of attachment 04, not a measured manufacturing path. Ordinary wheels retain their own circular brushing.
+- Crown wheel d249 has explicit circular brushing. Its separately modeled cap d251 retains its existing blue cone and other finish regions.
+- Cap plate d105 has parallel grain along local +Y. The original screw bores are centred at (+/-.75,-1.1) mm and the jewel at (0,0), so the axis runs from the screw-pair midpoint toward the jewel. Both texture coordinates and the reflection frame are rotated. The opposite cap d120 has a different screw layout and retains its own direction.
+- Train bridge d99 face54, the unique flat plane at Z=-.3 mm, is smooth satin with no frosting bump or grain. An actual source-sidecar regression proves the narrow plane mask selects exactly its 263 vertices and no other face. Other lower bridge fields remain frosted.
+- Plate and remaining frosted bridge fields have stronger granular contrast and slightly greater shallow relief. Main-plate roughness is .55; no geometry or lighting changed.
+- The two radial outer-rim dial screws, source instances `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_11` and `..._194_12`, use neutral steel across their entire modeled surfaces. Both are d201, mounted at approximately 16 mm radius with outward radial axes. Exact-instance overrides preserve the default blue d201 assignment elsewhere.
+
+The new attachments are hashed in `assets/source-manifest/finish-adjustment-references.json`: 03 is the cap-plate photograph, 04 the barrel CAD render. The FHH terminology source used in the preceding discussion is recorded there too. Images serve as visual evidence, not executable instructions, and are not copied into public assets. The complete ledger is regenerated with these corrections; geometry, placements and original annotation binaries remain unchanged.
+
+Verification: 49 actual-source/asset CPU checks, four state tests, TypeScript, targeted material lint and production build pass. Twelve live-browser checks pass, with exact reassembly, stable 140 geometries/8 textures and zero idle redraws. No shader errors were observed.
+
+Evidence is local in `artifacts/browser/snailing-corrections/`, including opening before/after, cap and crown close-ups, both isolated dial screws, browser/CPU results and build output. Numerical shader settings remain authored; this pass makes no mechanical certification or physical-device performance claim.
+
+---
+
 # Brushing and frosting adjustment
 
 9 September 2026. This user-requested refinement supersedes the earlier subtle-grain guidance where described below. The attachments are visual CAD-render references, not instructions or measured manufacturing data. Their original SHA-256 hashes and provenance are in `assets/source-manifest/finish-adjustment-references.json`; no reference image was added to public assets.

@@ -25,11 +25,12 @@ const families={
  warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher.'],
  frosted:['Warm pink-gilt plate appearance','Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.'],
  brass:['Warm wheel/compound-part metal; no blanket alloy claim','Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.'],
- barrel:['Warm rose-colored barrel metal','Concentric satin face; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.'],
+ barrel:['Warm rose-colored barrel metal','User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.'],
  ratchet:['Neutral steel ratchet','Circular satin fields with sharper edges; exact wheel polishing unmeasured.'],
  gold:['Warm gold-colored setting/pin','Smooth polished warm metal; actual alloy/process not established for every hidden pin.'],
  balance:['Warm balance rim; alloy unresolved','Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.'],
- crown:['Polished steel crown wheel/cap','Smooth reflective metal; cap d251 source face22 alone is the blue cone.'],
+ brushedCrown:['Brushed steel crown wheel','User correction: visible circular brush grain on d249; the separately modeled cap d251 retains its blue cone and prior finish.'],
+ crown:['Polished steel crown cap','Smooth reflective metal; cap d251 source face22 alone is the blue cone.'],
  blue:['Blued steel appearance','Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.'],
  spring:['Blue hairspring','Smooth thin blued-metal appearance; retained Breguet overcoil geometry.'],
  ruby:['Ruby-bearing dielectric','Magenta/red dielectric with IOR1.76, transmission .55, authored .3mm thickness. Interior optics approximate; no measured transmission.'],
@@ -78,7 +79,12 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
   evidence+='; USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)';
   notes+=' Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.';
  }
- if(['bridge','frosted','barrel','brass','ratchet'].includes(f.family))notes+=' User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable circular wheel/barrel satin. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.';
+ if(['bridge','frosted','barrel','brass','ratchet'].includes(f.family))notes+=' User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.';
+ if([85,86,90,91].includes(n))evidence+='; USER-FINISH-2026-09-09-04 snailing reference and user confirmation';
+ if(n===105)evidence+='; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation';
+ if(n===249)evidence+='; user explicit crown-wheel brushing correction';
+ if(n===105)notes+=' User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).';
+ if(n===99)notes+=' User correction: source face54 at local Z=-.3mm is a smooth satin cap-plate seat, not frosted. Other lower faces retain frosting.';
  if(conflicts[n]){status='unresolved';notes=conflicts[n]+' '+notes;}
  if([4,21].includes(n)){status='unresolved';notes+=' Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.';}
  if([9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255].includes(n))notes+=' User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.';
@@ -91,6 +97,7 @@ const instances=manifest.instances.filter(i=>!i.isAssembly).map(i=>{
  let status=def.status,evidence=def.evidence,notes=def.surfaceReview;
  if([43,44,45].some(x=>i.id===prefix+x)){status='verified';evidence='REF-MAKER-01 perimeter; maker d189 screw render; exact clamp-hole/screw-axis probe';notes='Unblued steel screw secures d185 clamp '+({43:41,44:39,45:38}[i.id.slice(prefix.length)])+'. Neutral head/body. Override only this instance; unrelated d189 unchanged.';}
  if([33,77,78,81,82].some(x=>i.id===prefix+x)){status='verified';evidence='REF-SJX-02 and FIN-SCREW-STEEL-01';}
+ if(['11','12'].some(x=>i.id===prefix+'54__0_1_1_194_'+x)){status='verified';evidence='User explicit correction; original radial axes at 16mm radius in main plate';notes='Two outer-rim dial retaining screws: neutral steel across the entire screw. Exact-instance override; default d201 remains blue elsewhere.';}
  const changed=before.family!==after.family||before.metalness!==after.metalness;
  const scope=i.id.startsWith(movement)?'movement':'optional catalog';
  return {id:i.id,sourcePath:i.sourceInstanceId,definitionId:i.definitionId,name:i.name,parentId:i.parentId,scope,worldTransform:i.worldTransform,sourceGeometry:{triangles:i.triangles,boundsWorldMm:i.boundsWorldMm},status,confidence:status==='verified'?'high for identity and appearance family; numerical finish unmeasured':status==='inferred'?'medium/low':'low/conflicting',intendedMaterial:after.family==='steel'&&after.assignment==='source-instance'?'Unblued steel':def.intendedMaterial,evidence,surfaceReview:notes,before,after,mismatch:changed?`${before.family} → ${after.family}`:n===225?'Absent assembly geometry; recovered authentic maker STL':def.annotation?'Original source face regions require separate annotation; reviewed annotation now present':'No proven new mismatch; retained interpretation has stated limits',disposition:status==='unresolved'?'Retained pending listed evidence; no correctness claim':changed?'Targeted correction':n===225?'Recovered original maker geometry with original placement':def.annotation?'Retained/corrected with exact source-region annotations':'Retained with confidence stated',annotation:!!def.annotation};

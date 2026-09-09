@@ -226,6 +226,41 @@ v.state={...initialState,treatment:'function',part:rubyPart.source.id};v.retarge
 v.state={...initialState,group:'energy'};v.retarget();assert.equal(rubyPart.material.transmission,rubyPart.material.userData.finishEnabled.value ? .55 : 0);
 v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
 const {finishFor,createMaterial,setFinishEnabled}=load('explorer/src/viewer/materials.ts');
+const finishShaderFor=(n)=>{
+ const p=[...v.renderParts.values()].find(p=>p.source.definitionId===`d_0_1_1_${n}`);
+ assert.ok(p);
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+ p.material.onBeforeCompile(shader,{});return {p,shader};
+};
+for(const suffix of ['54__0_1_1_194_11','54__0_1_1_194_12']){
+ const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
+ assert.equal(p.source.definitionId,'d_0_1_1_201');
+ assert.equal(p.material.name,'steel');
+ const m=new THREE.Matrix4().set(...p.source.worldTransform.flat());
+ const pos=new THREE.Vector3().setFromMatrixPosition(m),axis=new THREE.Vector3(0,0,1).transformDirection(m);
+ assert.ok(Math.abs(Math.hypot(pos.x,pos.y)-16)<1e-4);
+ assert.ok(Math.abs(axis.z)<1e-8&&axis.dot(new THREE.Vector3(pos.x,pos.y,0).normalize())>.99999);
+}
+assert.equal(finishFor('shared screw','d_0_1_1_201','other-instance').family,'blue');
+results.push({check:'exact two radial dial screws at 16mm radius use neutral steel; unrelated shared d201 stays blue',status:'pass'});
+const capMeta=JSON.parse(fs.readFileSync(path.join(ROOT,'artifacts/finishing-cad/sidecars/d_0_1_1_105.json')));
+const holeCenter=(i)=>{const b=capMeta.faces[i-1].boundsLocalMm;return new THREE.Vector2((b[0][0]+b[1][0])/2,(b[0][1]+b[1][1])/2)};
+const toJewel=holeCenter(16).add(holeCenter(21)).multiplyScalar(-.5).normalize();
+assert.ok(toJewel.dot(finishShaderFor(105).shader.uniforms.finishBrushAxis.value)>.999999);
+const seatRaw=fs.readFileSync(path.join(ROOT,'artifacts/finishing-cad/sidecars/d_0_1_1_99.bin'));
+let seatCount=0;for(let offset=0;offset<seatRaw.length;offset+=40){
+ const z=seatRaw.readFloatLE(offset+8),nz=seatRaw.readFloatLE(offset+32),face=seatRaw.readFloatLE(offset+36);
+ const seat=Math.abs(z+.3)<.0001&&Math.abs(nz)>.999;
+ assert.equal(seat,face===54,'Satin mask must identify only the original cap-seat face');if(seat)seatCount++;
+}
+assert.equal(seatCount,263);assert.equal(finishShaderFor(99).shader.uniforms.finishCapSeat.value,1);
+assert.equal(finishShaderFor(222).shader.uniforms.finishCapSeat.value,0);
+for(const n of [85,86,90,91])assert.equal(finishShaderFor(n).shader.uniforms.finishSnailing.value,1);
+for(const n of [94,131,249])assert.equal(finishShaderFor(n).shader.uniforms.finishSnailing.value,0);
+assert.equal(finishShaderFor(249).p.material.name,'brushedCrown');
+assert.equal(finishShaderFor(249).shader.uniforms.finishPattern.value,2);
+assert.equal(finishShaderFor(251).p.material.name,'crown');
+results.push({check:'cap grain follows actual screw bores toward jewel; satin mask selects all and only 263 seat vertices; four barrels use snailing independently of wheels/crown cap',status:'pass'});
 // Reference-requested keyless surfaces must reach a directional material on
 // real source geometry, including negative-Z faces and the catalog alternative.
 for(const n of [174,176,178,190,193,244,246,248,97,172]){
@@ -294,9 +329,9 @@ for(const p of v.renderParts.values()){
   for(let i=0;i<roles.count;i++)if(roles.getX(i)===2)neutralHandSeats++;
  }
 }
-assert.equal(blueScrewDefinitions.size,16);assert.ok(steelScrews>=8);
+assert.equal(blueScrewDefinitions.size,15);assert.ok(steelScrews>=10);
 assert.ok(blueShankVertices>0&&neutralHandSeats>0);
-// Four screw definitions currently occur only at steel-override locations;
+// Five screw definitions currently occur only at steel-override locations;
 // their default finish must still cover the whole screw at any blue placement.
 for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255]){
  const material=createMaterial('010-screw',`d_0_1_1_${n}`);
@@ -305,7 +340,7 @@ for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,20
  assert.equal(shader.uniforms.finishWholeBlue.value,1);
  material.dispose();
 }
-results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while eight steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
+results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while ten steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
 const physicalDefaults=new THREE.MeshPhysicalMaterial();
 for(const p of v.renderParts.values()){
  assert.ok(p.material instanceof THREE.MeshPhysicalMaterial);
