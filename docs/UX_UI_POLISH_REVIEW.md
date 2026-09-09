@@ -10,12 +10,12 @@ At 1280×720, entering the balance mechanism moved the side switch from y=580 to
 
 | Mode | Final actions and placement | State, exits and disabled behavior |
 |---|---|---|
-| Every mode | Header: Back, Reset, Options. Footer first row: Explore, Dial & hands, All parts. | Back restores saved context/camera; disabled without history. Reset restores opening defaults. Graphics-dependent actions disable until ready. |
-| Whole movement, either side | Footer second row: side switch, Separate, Reassemble. | Reassemble stays in its slot and disables at zero; clears separation/reveal, preserving camera ownership and other preferences. |
+| Every mode | Header: Back, Options. Footer first row: Explore, Dial & hands, All parts. Reset view anchors the right of the second row. | Back restores saved context/camera; disabled without history. Reset restores opening defaults. Graphics-dependent actions disable until ready. |
+| Whole movement, either side | Footer second row: side switch, Separate, Reset view. | Separate at zero reassembles while preserving the current face and context. Reset view restores the opening view and options. |
 | Dial A / Dial B | Same controls; existing responsive dial popover/sheet selects the face and three independent hand styles. | Only the chosen display is visible. Side switch changes faces. Separation or mechanism inspection returns to movement. Global Back remains available. |
 | Focused mechanism | Fixed contextual title/Details; same Separate slot and side control. Uncover remains in mechanism Details. | Separate affects the mechanism; its accessible label says Separate section. Explore → Whole movement exits the mechanism. Back preserves previous context. |
 | Selected component | Fixed contextual title, Details, dismiss button; source context and Isolate part/Show context beneath. | Dismiss and Escape clear selection and isolation while keeping mode, separation, styles, inventory group and camera. Long titles truncate visually; full names remain in title/Details. |
-| All parts / inventory group | Same primary slots. View row contains Fit all and Groups. Side slot is hidden. | Existing 216-member packing and framing preserved. All parts toggles back to whole; Explore and Dial controls also exit. |
+| All parts / inventory group | Same primary slots. View row contains Fit all, Groups and Reset view. Side slot is hidden. | Existing 216-member packing and framing preserved. All parts toggles back to whole; Explore and Dial controls also exit. |
 | Catalog / Details / Options / About | Existing sheets and searchable catalog. | Escape closes the top overlay first and restores focus. Catalog selection returns focus to canvas. Details closes when its subject changes. |
 | Loading / optional loading / retry / recovery | Existing progress, catalog/dial error and retry surfaces. Header/footer keep their positions. | Pending selection is invalidated on background dismissal; even a late failure cannot resurrect its retry/error. Dial loading retains its independent intent. |
 
@@ -41,3 +41,9 @@ An initial portrait run failed the existing strict camera-equality assertion aft
 The final normal-preview console log is empty. Preview remains **http://127.0.0.1:4173/**. Existing loopback server is retained. Restart command if needed: `cd explorer && npm run dev -- --host 127.0.0.1 --port 4173`. Implementation checkpoint: **2b8e19c**, followed by the responsive polish/verification checkpoint recorded in Git and PROGRESS.md.
 
 No physical-device, screen-reader, human usability or mechanical certification is claimed. CAD publication gates remain unchanged. Nothing is pushed, merged, registered, uploaded or deployed; `FINISHING_GOAL.md` remains untouched.
+
+## Reset prominence follow-up — 10 September 2026
+
+Replaced the small reassemble-only icon with a persistent, labeled **Reset view** beside Separate, and removed the header duplicate. The outlined button keeps a fixed width and position across assembly and inventory modes; its label wraps at enlarged text sizes. It retains the existing global reset behavior and also closes the dial picker. Moving Separate to zero remains the context-preserving reassembly path.
+
+TypeScript, authored lint and production build pass. The existing **27 UX checks pass at 1280×720 and 320×740 with 200% text**, with zero control displacement across six contexts. Direct browser Reset clicks from a dial, separated movement, mechanism and All parts restore opening defaults. Keyboard Home on the section slider returns separation to zero while retaining the front face, mechanism and reveal. Ordinary 320px and enlarged-text layouts were visually reviewed. Results and screenshots: ignored `artifacts/browser/reset-control/`. This follow-up changes only the control markup/styling; viewer behavior and accepted geometry/materials remain unchanged.

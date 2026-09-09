@@ -283,20 +283,6 @@ export default function Home() {
           >
             <ArrowLeft aria-hidden="true" />
           </button>
-          <button
-            className="text-button reset-button"
-            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-            title="Restore the opening view and options"
-            onClick={() => {
-              setExplore(false);
-              setSpreadGroups(false);
-              setDetails(false);
-              if (viewer.current) viewer.current.reset();
-              else set({ ...empty, loadStage: 'error', error: s.error });
-            }}
-          >
-            Reset
-          </button>
           <Sheet
             open={options}
             onOpenChange={(open) => {
@@ -703,21 +689,24 @@ export default function Home() {
                   );
                 }}
               />
-              <button
-                className="text-button reassemble"
-                aria-label="Reassemble"
-                title="Reassemble"
-                disabled={
-                  !available || !(s.separation || s.partSpread || s.reveal)
-                }
-                onClick={() =>
-                  patch({ separation: 0, partSpread: 0, reveal: 0 })
-                }
-              >
-                <RotateCcw aria-hidden="true" />
-              </button>
             </>
           )}
+          <button
+            className="text-button reset-button"
+            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+            title="Restore the opening view and options"
+            onClick={() => {
+              setExplore(false);
+              setSpreadGroups(false);
+              setDetails(false);
+              setDialOpen(false);
+              if (viewer.current) viewer.current.reset();
+              else set({ ...empty, loadStage: 'error', error: s.error });
+            }}
+          >
+            <RotateCcw aria-hidden="true" />
+            <span>Reset view</span>
+          </button>
         </div>
         <button
           className="text-button all-parts-button"

@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Reset control prominence — verified locally, 10 September 2026
+
+Moved the global **Reset view** into the separation row, replacing the small Reassemble icon and removing the header duplicate. Its labeled, outlined button stays in the same position in Movement, dials, mechanisms and All parts. It restores opening view/options and closes contextual menus. The Separate slider still returns to zero independently, retaining the chosen face and mechanism context.
+
+TypeScript, authored lint and production build pass. All **27 UX browser checks pass at 1280×720 and at 320×740 with 200% text**, including unchanged control positions across six contexts, deselection and gesture safeguards. Direct Reset clicks from a dial, separated movement, mechanism and All parts restore defaults. A keyboard slider return to zero preserves the front face, selected mechanism and reveal. Ordinary and enlarged narrow layouts were visually reviewed. Viewer logic, finishes, hand poses and separation geometry are unchanged.
+
+Review: `docs/UX_UI_POLISH_REVIEW.md`; ignored evidence: `artifacts/browser/reset-control/`. Next action: user review at **http://127.0.0.1:4173/**, left running. Local milestone only; no push, merge, deployment or `FINISHING_GOAL.md` edit.
+
 ## Consistent default views — verified locally, 10 September 2026
 
 Reviewed loading → Movement → Dial A → Dial B → Movement → Separate → Reassemble. Replaced competing fixed/bounds/oblique defaults with one assembled center, scale and slight tilt, using immutable source metadata available before optional dials load. Movement selection and Reset return to the opening rear view; both dials use the same framing on their respective faces. Destination up direction is independent of presentation and previous orbit, so separating Dial A no longer adds a roll. Separation gradually introduces the oblique view and reassembly restores the exact assembled framing of the chosen face. Explicit side changes record history; manual separation preserves camera ownership and Back restores prior context. Display choices share 1.05-second camera travel; accepted fades, finishes, six 10:10 poses, complete separation and All parts remain intact.
