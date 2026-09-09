@@ -49,7 +49,6 @@ const conflicts={
  137:'Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo.',
  142:'Hour-wheel-I hub source is gray; warm current assignment unresolved.',
  183:'Dial-II cannon pinion source is gray; warm current assignment unresolved.',
- 188:'Hour-wheel-II hub source is gray; warm current assignment unresolved.',
  203:'Incabloc hole-stone shell source gray versus current warm setting; mostly concealed, unresolved.',
  206:'Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved.',
  233:'Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy.',
@@ -59,6 +58,7 @@ const conflicts={
  66:'Pale source glass gasket rendered dark rubber; no exposed production reference resolves color/composition. Retained, not certified.',
 };
 const specific={
+ 188:['User explicit Hour-wheel hub 2 steel correction; source ml01 Butzen Stundenrad2 identity and gray appearance','The separately modeled hour-wheel-II hub uses neutral steel. Its wheel d187 retains its own warm finish.'],
  117:['User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance','Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal.'],
  105:['REF-SJX-04; REF-SJX-05; maker DPL component render','Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong.'],
  120:['STEP d120 face colors; d105 photographic analogy','Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap.'],
@@ -75,7 +75,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  const n=Number(d.id.split('_').at(-1)),f=current(d.name,d.id),m=manifest.definitions.find(x=>x.id===d.id),entry=surfaces.definitions[d.id];
  let status=photo.has(n)?'verified':'inferred',evidence=photo.has(n)?'REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations':'STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)';
  let notes=families[f.family][1];if(specific[n]){evidence=specific[n][0];notes=specific[n][1]+' '+notes;}
- if(n===117)status='verified';
+ if([117,188].includes(n))status='verified';
  if([97,172,174,176,178,190,193,244,246,248].includes(n)){
   evidence+='; USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)';
   notes+=' Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.';

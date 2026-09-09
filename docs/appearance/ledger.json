@@ -16,7 +16,7 @@
       "6": "source plate inscription floor",
       "7": "source red gauge inlay"
     },
-    "materialSourceSha256": "ce6f2796fc987d8771491f9e414bcfc5057fc02384f8aceb320a3e0cecf1f07b",
+    "materialSourceSha256": "2af3e313795e2dcfc58b025c45beaf33c39c81bb64eadf5b52ea10fdad8cfbe5",
     "packagerSourceSha256": "e760417aad47eb2f43a41158f3058a905e074bf1ebe11665794ddcbc551571d2"
   },
   "coverage": {
@@ -25,11 +25,11 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 78,
+      "verified": 79,
       "inferred": 266,
-      "unresolved": 21
+      "unresolved": 20
     },
-    "changedFamilyInstances": 82,
+    "changedFamilyInstances": 83,
     "annotatedDefinitions": 58
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -29628,17 +29628,17 @@
     {
       "id": "d_0_1_1_188",
       "name": "ml01 Butzen Stundenrad2",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Hour-wheel-II hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "The separately modeled hour-wheel-II hub uses neutral steel. Its wheel d187 retains its own warm finish. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit Hour-wheel hub 2 steel correction; source ml01 Butzen Stundenrad2 identity and gray appearance",
       "assignment": {
-        "color": 14462597,
+        "color": 12831184,
         "metalness": 1,
-        "roughness": 0.31,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.2,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -57060,11 +57060,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hour-wheel-II hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit Hour-wheel hub 2 steel correction; source ml01 Butzen Stundenrad2 identity and gray appearance",
+      "surfaceReview": "The separately modeled hour-wheel-II hub uses neutral steel. Its wheel d187 retains its own warm finish. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -57074,15 +57074,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14462597,
+        "color": 12831184,
         "metalness": 1,
-        "roughness": 0.31,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.2,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {

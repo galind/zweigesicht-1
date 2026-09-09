@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Hour-wheel hub 2 steel correction — 9 September 2026
+
+Changed d188 (`ml01 Butzen Stundenrad2`, occurrence P40/186:2) to neutral steel per user instruction. The complete appearance ledger resolves its previous warm/steel uncertainty. Compared all 365 ledger occurrences: only this hub changes assignment; source geometry and matrices are unchanged.
+
+**Verification:** 50 source/asset CPU checks, TypeScript and targeted material lint pass. Reviewed the isolated Hour-wheel hub 2 in the live browser with no errors; evidence in `artifacts/browser/hour-wheel-hub-steel/`. No new production build or broader browser interaction suite was run for this material assignment. Next action: user visual review at **http://127.0.0.1:4173/**. Local checkpoint only on `codex/watch-polish-finishes`; no push or merge. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Shock-indicator steel screws — 9 September 2026
 
 Matched the user's additional CAD-render reference: seven screws in the shock-indicator assembly now use whole-screw steel through exact-instance overrides (P29/145 suffixes 9, 20, 21, 24, 27, 32, 33). The central mounting screw, suffix30, stays blue as shown. Recorded the reference hash and refreshed the complete appearance ledger.
