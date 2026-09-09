@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Website redesign brief — 9 September 2026
+
+User review established a single-screen immersive direction: the accepted watch model is the focal point, with a neutral near-black background, direct touch manipulation, minimal progressively revealed controls, continuous separation, a new arranged All parts view, and cleaner section views with verified specifications. The objective is appreciation of beauty and engineering rather than rapid instruction.
+
+The ready-to-use implementation brief is `WEBSITE_REDESIGN_PROMPT.md`. This checkpoint prepares the prompt only; no application, model, asset, or deployed-site changes have been made. Next action: launch the redesign using that brief when the user chooses. Its execution scope is local-only, with existing geometry/appearance protected and publication requiring a later instruction. The unrelated untracked `FINISHING_GOAL.md` remains untouched.
+
 ## Current outcome — complete component appearance audit, 9 September 2026
 
 **All 365 source leaf instances are individually audited; the three reported mismatches are corrected locally.** DPL RBR d105 now has a warm straight-grained top and separately reviewed existing chamfers/underside. All three Werkhaltelasche screws (P43/P44/P45, d189) have exact-instance unblued-steel overrides. The maker’s authentic 1,640-facet diamond STL is recovered under the original empty STEP occurrence and unchanged matrix; no source mesh is recentered, scaled or reconstructed.
