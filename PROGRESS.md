@@ -82,3 +82,9 @@ Preview remains **http://127.0.0.1:4173/** on the reused loopback server, restor
 Next action: user visual review of the local preview and comparison sheet. Measured reflectance, full manufacturing grain fields, multi-layer gem optics, source repairs/empty diamond, physical-device/cold-network qualification, mechanical expert approval and public-release gates remain open. These are documented limits beyond this local finishing handoff.
 
 Checkpoint `28c6f3a` is committed locally. Automatic approval review rejected `git push origin main`, citing an unverified external remote/default branch and insufficient explicit trusted push authorization. No push occurred; explicit user confirmation is pending. The local finishing deliverable is complete and available for review. The user-owned `FINISHING_GOAL.md` remains untracked.
+
+## Vercel deployment checkpoint — 9 September 2026
+
+The user connected the private GitHub repository to the renamed Vercel project `zweigesicht` and explicitly authorized pushing. Repository-root `vercel.json` now runs the `explorer` install/build from the monorepo root. The Vercel asset-pruning step skips local-only CAD manifests when they are absent from the checkout, so the checked-in app shell can build without publishing ignored source or derived CAD.
+
+Verification: local `npm run build:vercel` passes; commits `f1e68d8` and `a7e0cd0` are pushed to `origin/main`; Vercel production deployment `zweigesicht-3vls6e8sx-guillem-galindos-projects.vercel.app` is **READY** for commit `a7e0cd0`. The branch URL is [zweigesicht-git-main-guillem-galindos-projects.vercel.app](https://zweigesicht-git-main-guillem-galindos-projects.vercel.app). The deployment is private and redirects unauthenticated requests to Vercel login. CAD model binaries remain local-only and are not included in Git or the deployment.
