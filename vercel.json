@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "installCommand": "cd explorer && npm ci",
+  "buildCommand": "cd explorer && npm run build:vercel",
+  "outputDirectory": "explorer/.vercel/output"
+}
