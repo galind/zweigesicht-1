@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { SurfaceOcclusion } from './SurfaceOcclusion';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
   ROOT,
@@ -22,7 +23,7 @@ import {
   type ExperienceState,
 } from '../experience/state';
 import { PlaybackClock, evaluatePose } from '../motion/evaluate';
-import { createMaterial, finishFor } from './materials';
+import { createMaterial, finishFor, setFinishEnabled } from './materials';
 
 type RenderPart = {
   source: Part;
@@ -57,6 +58,9 @@ export class MovementViewer {
   controls: OrbitControls;
   root = new THREE.Group();
   environment: THREE.WebGLRenderTarget;
+  surfaceOcclusion?: SurfaceOcclusion;
+  beautyTriangles?: number;
+  beautyDrawCalls?: number;
   observer: ResizeObserver;
   frame = 0;
   dead = false;
@@ -115,17 +119,18 @@ export class MovementViewer {
       room = new RoomEnvironment();
     this.environment = pmrem.fromScene(room, 0.04);
     this.scene.environment = this.environment.texture;
-    this.scene.environmentIntensity = 0.8;
+    this.scene.environmentIntensity = 0.9;
     room.dispose();
     pmrem.dispose();
-    this.scene.add(new THREE.HemisphereLight(0xc8e0ed, 0x29221b, 0.8));
-    const key = new THREE.DirectionalLight(0xffecd6, 2.2);
+    this.scene.add(new THREE.HemisphereLight(0xc8e0ed, 0x29221b, 0.25));
+    const key = new THREE.DirectionalLight(0xffecd6, 0.8);
     key.position.set(-25, 40, -45);
     this.scene.add(key);
-    const rim = new THREE.DirectionalLight(0xc0dff3, 1.4);
+    const rim = new THREE.DirectionalLight(0xc0dff3, 0.6);
     rim.position.set(30, -10, 35);
     this.scene.add(rim);
     this.scene.add(this.root, this.selectionBox);
+    this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
     this.selectionBox.visible = false;
     this.observer = new ResizeObserver(() => this.resize());
     this.observer.observe(host);
@@ -174,8 +179,10 @@ export class MovementViewer {
       renderableLoaded: this.renderParts.size,
       visible: [...this.renderParts.values()].filter((p) => p.mesh.visible)
         .length,
-      triangles: this.renderer.info.render.triangles,
-      drawCalls: this.renderer.info.render.calls,
+      triangles: this.beautyTriangles ?? this.renderer.info.render.triangles,
+      drawCalls: this.beautyDrawCalls ?? this.renderer.info.render.calls,
+      contactShading:
+        this.state.treatment === 'finish' && this.state.quality !== 'low',
       geometries: this.renderer.info.memory.geometries,
       textures: this.renderer.info.memory.textures,
       renderCount: this.renderCount,
@@ -323,7 +330,11 @@ export class MovementViewer {
       }
       if (!record || this.renderParts.has(record.id)) return;
       const original = node.material;
-      const material = createMaterial(record.name);
+      const material = createMaterial(
+        record.name,
+        record.definitionId,
+        node.geometry,
+      );
       node.material = material;
       for (const m of Array.isArray(original) ? original : [original])
         m.dispose();
@@ -679,11 +690,15 @@ export class MovementViewer {
         id === PREFIX + '4';
       if (this.state.study && unsafe) visible = false;
       p.mesh.visible = visible;
-      const finish = finishFor(p.source.name);
+      const finish = finishFor(p.source.name, p.source.definitionId);
       p.material.color.setHex(finish.color);
       p.material.metalness = finish.metalness;
       p.material.roughness = finish.roughness;
       p.material.emissive.setHex(0);
+      setFinishEnabled(
+        p.material,
+        this.state.treatment === 'finish' && (!group || member) && !selected,
+      );
       if (this.state.treatment === 'function') {
         p.material.metalness = 0.22;
         p.material.roughness = 0.55;
@@ -802,6 +817,7 @@ export class MovementViewer {
     if (w < 1 || h < 1) return;
     const old = this.camera.aspect;
     this.renderer.setSize(w, h);
+    this.surfaceOcclusion?.resize(w, h);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
     if (this.ready && Math.abs(old - this.camera.aspect) > 0.15) {
@@ -870,6 +886,10 @@ export class MovementViewer {
     const controlsChanged = this.controls.update();
     if (this.needsRender || moving || this.clock.playing || controlsChanged) {
       this.renderer.render(this.scene, this.camera);
+      this.beautyTriangles = this.renderer.info.render.triangles;
+      this.beautyDrawCalls = this.renderer.info.render.calls;
+      if (this.state.treatment === 'finish' && this.state.quality !== 'low')
+        this.surfaceOcclusion?.render(this.renderer);
       this.renderCount++;
       if (this.clock.playing && dt > 0) {
         this.frameIntervals.push(interval);
@@ -978,6 +998,7 @@ export class MovementViewer {
     this.selectionBox.geometry.dispose();
     (this.selectionBox.material as THREE.Material).dispose();
     this.environment.dispose();
+    this.surfaceOcclusion?.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
   }

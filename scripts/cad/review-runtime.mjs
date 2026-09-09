@@ -4,6 +4,7 @@
  * Does not create a browser, WebGL context, server, or generated output.
  */
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -16,6 +17,7 @@ const THREE=await import(path.join(ROOT,'explorer/node_modules/three/build/three
 const {GLTFLoader}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/loaders/GLTFLoader.js'));
 const {MeshoptDecoder}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/libs/meshopt_decoder.module.js'));
 const {OrbitControls}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/controls/OrbitControls.js'));
+const {SSAOPass}=await import(path.join(ROOT,'explorer/node_modules/three/examples/jsm/postprocessing/SSAOPass.js'));
 function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
  const cache=new Map();
  return function load(file){
@@ -25,6 +27,7 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
   const localRequire=id=>{
    if(id==='three')return THREE;
    if(id.includes('GLTFLoader'))return {GLTFLoader:loader};
+   if(id.includes('SSAOPass'))return {SSAOPass};
    if(id.startsWith('three/addons/'))return {}; // Constructor-only browser dependencies are unused.
    if(id.startsWith('.')){const p=path.resolve(path.dirname(file),id);return fs.existsSync(p+'.ts')?load(p+'.ts'):require(p)}
    return require(path.join(ROOT,'explorer/node_modules',id));
@@ -49,7 +52,22 @@ async function parse(name){
  return new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength),'');
 }
 const results=[];
-v.ingest((await parse('overview.glb')).scene);v.retarget();v.applyPose(0);
+// Hash decoded attribute/index bytes before material construction or controller edits.
+const geometryBefore=new Map();
+function geometryDigest(geometry){
+ const hash=createHash('sha256');
+ const attributes=[...Object.entries(geometry.attributes),['index',geometry.index],...Object.entries(geometry.morphAttributes).flatMap(([name,attrs])=>attrs.map((a,i)=>[`${name}:${i}`,a]))];
+ for(const [name,attribute]of attributes){
+  if(!attribute)continue;
+  const array=attribute.isInterleavedBufferAttribute?attribute.data.array:attribute.array;
+  hash.update(JSON.stringify([name,attribute.itemSize,attribute.count,attribute.normalized,attribute.offset,attribute.data?.stride]));
+  hash.update(new Uint8Array(array.buffer,array.byteOffset,array.byteLength));
+ }
+ return hash.digest('hex');
+}
+function rememberGeometry(scene){scene.traverse(o=>{if(o instanceof THREE.Mesh&&!geometryBefore.has(o.geometry))geometryBefore.set(o.geometry,geometryDigest(o.geometry))})}
+const overviewScene=(await parse('overview.glb')).scene;rememberGeometry(overviewScene);
+v.ingest(overviewScene);v.retarget();v.applyPose(0);
 assert.equal(v.renderParts.size,222);
 assert.equal(new Set([...v.renderParts.values()].map(p=>p.mesh.geometry)).size,138);
 assert.equal(v.assemblyError(),0);
@@ -72,7 +90,7 @@ assert.equal(v.renderParts.get(PREFIX+'66').mesh.visible,true);assert.equal(v.re
 v.state.part=null;v.retarget();v.retargetVisibility();assert.equal(v.renderParts.get(PREFIX+'66').mesh.visible,false);assert.equal(v.renderParts.get(PREFIX+'53').mesh.visible,true);
 results.push({check:'setting-spring alternative is exclusive and default restores on exit',status:'pass'});
 const movementObjects=new Map([...v.renderParts].map(([id,p])=>[id,p.mesh]));
-v.ingest((await parse('catalog.glb')).scene);assert.equal(v.renderParts.size,364);
+const catalogScene=(await parse('catalog.glb')).scene;rememberGeometry(catalogScene);v.ingest(catalogScene);assert.equal(v.renderParts.size,364);
 for(const [id,mesh]of movementObjects)assert.equal(v.renderParts.get(id).mesh,mesh,'Catalog must not replace existing movement objects');
 v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError(),0);
 results.push({check:'catalog adds external leaves without replacing movement objects',status:'pass',totalRenderedParts:v.renderParts.size});
@@ -127,4 +145,33 @@ Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',erro
 const snapshot=snapshotFixture.snapshot();assert.equal(snapshot.catalogLoaded,true);assert.equal(snapshot.benchmarkResult,benchmarkResult);
 snapshotFixture.benchmark=null;assert.equal(snapshotFixture.snapshot().benchmarkResult,undefined);
 results.push({check:'snapshot exposes catalog/benchmark values without requiring render-time refs',status:'pass'});
+for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Material creation, ingest, reveal and timing must preserve all decoded geometry bytes');
+results.push({check:'surface materials and controller operations preserve decoded attributes and indices byte for byte',status:'pass',decodedGeometryObjects:geometryBefore.size});
+
+// Real installed SSAOPass objects; only renderer operations are a CPU facade.
+// This exercises render-target sequencing and disposal, not GLSL compilation or pixels.
+const {SurfaceOcclusion}=load('explorer/src/viewer/SurfaceOcclusion.ts');
+const aoScene=new THREE.Scene(),aoCamera=new THREE.PerspectiveCamera(33,1,.05,2000);
+const line=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial());aoScene.add(line);
+const ao=new SurfaceOcclusion(aoScene,aoCamera),pass=ao.pass;
+assert.ok(pass instanceof SSAOPass);assert.ok(pass.ssaoMaterial.fragmentShader.includes('1.0 - 0.48 * occlusion'));
+ao.resize(640.4,479.6);assert.equal(pass.normalRenderTarget.width,640);assert.equal(pass.blurRenderTarget.height,480);
+aoCamera.far=700;aoCamera.aspect=.6;aoCamera.updateProjectionMatrix();
+let target=null,clearAlpha=.3,clearColor=new THREE.Color(0x123456),clears=0;
+const initialClear=clearColor.clone(),draws=[];
+const renderer={autoClear:true,getClearColor(out){return out.copy(clearColor)},getClearAlpha(){return clearAlpha},setClearColor(value){clearColor.set(value)},setClearAlpha(value){clearAlpha=value},setRenderTarget(value){target=value},clear(){clears++},render(object){
+ if(object===aoScene){assert.equal(line.visible,false);assert.equal(aoScene.overrideMaterial,pass.normalMaterial)}
+ draws.push({target,material:object===aoScene?aoScene.overrideMaterial:object.material});
+}};
+ao.render(renderer);
+assert.deepEqual(draws.map(d=>d.target),[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTarget,null]);
+assert.deepEqual(draws.map(d=>d.material),[pass.normalMaterial,pass.ssaoMaterial,pass.blurMaterial,pass.copyMaterial]);
+assert.equal(clears,1);assert.equal(target,null);assert.equal(renderer.autoClear,true);assert.equal(clearAlpha,.3);assert.ok(clearColor.equals(initialClear));assert.equal(line.visible,true);assert.equal(aoScene.overrideMaterial,null);
+assert.equal(pass.ssaoMaterial.uniforms.cameraFar.value,700);assert.equal(pass.ssaoMaterial.uniforms.cameraNear.value,.05);assert.ok(pass.ssaoMaterial.uniforms.cameraProjectionMatrix.value.equals(aoCamera.projectionMatrix));assert.ok(pass.ssaoMaterial.uniforms.cameraInverseProjectionMatrix.value.equals(aoCamera.projectionMatrixInverse));
+assert.equal(pass.ssaoMaterial.uniforms.minDistance.value,.035/(700-.05));assert.equal(pass.ssaoMaterial.uniforms.maxDistance.value,1.4/(700-.05));
+assert.equal(pass.copyMaterial.uniforms.tDiffuse.value,pass.blurRenderTarget.texture);assert.equal(pass.copyMaterial.blending,THREE.CustomBlending);
+const resources=[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTarget,pass.normalMaterial,pass.blurMaterial,pass.copyMaterial,pass.depthRenderMaterial,pass.noiseTexture,pass.ssaoMaterial,pass._fsQuad._mesh.geometry];
+const disposals=new Map(resources.map(r=>[r,0]));for(const r of resources)r.addEventListener('dispose',()=>disposals.set(r,disposals.get(r)+1));
+ao.dispose();for(const count of disposals.values())assert.equal(count,1,'Every contact-pass owned resource must be disposed once');line.geometry.dispose();line.material.dispose();
+results.push({check:'contact pass refreshes camera/depth scale, multiplies after beauty, restores render state and disposes owned resources',status:'pass',resourcesDisposed:resources.length,scope:'real SSAOPass with CPU renderer facade; not WebGL proof'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

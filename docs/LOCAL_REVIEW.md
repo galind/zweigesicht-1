@@ -17,7 +17,23 @@
 | Responsive/accessibility | Portrait framing accounts for panels; horizontal mechanism picker, collapsible phone panel, semantic controls, keyboard sliders/playback, focus styling, text enlargement test. All motion starts paused. |
 | Inspection/reproduction | Developer-only query controls, three validated local WebMCP tools, converter/cache, binary audits, lossless optimizer and test harnesses. No Sites account or cloud service needed. |
 
-## Recorded checks
+## Material correction after user review
+
+The initial engineering handoff did not satisfy visual finishing. The user's assembled screenshot exposed a central classification error: `ml01 Grundplatine` missed the old `Grundplatte` name rule and appeared default gray. The correction uses exact source-definition assignments for the plate and reviewed components, distinguishes steel/brass pins from blue screw heads, and corrects balance, winding and exterior families. All 223 movement source leaves resolve to a profile; that is assignment coverage, not verified physical material identity. See `MATERIAL_REFERENCE_AUDIT.md`.
+
+The current Finish treatment adds component-local straight bridge grain, circular wheel/barrel grain, a warm frosted plate and polished reflections on existing CAD chamfers. A live screen-space contact pass adds restrained depth shading after each pose; Function and Lightweight skip that pass. Numeric grain, reflectance, lighting and color remain authored interpretations of the cached maker references. No CAD geometry, transforms or original assets were changed. `MATERIAL_IMPLEMENTATION_REVIEW.md` records the independent Astra High implementation review.
+
+Current validation, superseding the older renderer baseline below:
+
+- **14 runtime checks and 7 pure tests pass**, plus TypeScript, authored lint and production build. New checks hash all 339 separately decoded geometry objects byte for byte and exercise the real SSAOPass lifecycle with an explicitly CPU-only renderer facade.
+- **All 6 real-browser checks pass**, including interrupted reveals, exact reassembly and no idle redraw. Resources remain **138 GPU geometries / 7 textures** across switches. Real context-loss recovery restores appearance with those same counts and matrix error 0. Evidence: `materials-interactions.json`, `materials-context-restored.json/.png`.
+- **A fresh 60-second desktop sequence** at 1440×900 browser viewport, DPR 1 (final canvas 1180×734), runs Finish with contact shading. Each phase has 1,200 samples: assembled orbit, timing study and separated orbit each have mean approximately **16.667 ms**, p95 **18.2 ms**, maximum **18.7 ms**. Resources finish at 138/7. Type/lint/build validation ran concurrently. Evidence: `materials-benchmark-60s.json`. The five-minute run below predates this material pass; it is not a sustained qualification of the new shading.
+- **390×844 viewport emulation** renders the updated movement and accessible controls without horizontal document overflow. Lightweight retains materials while reporting contact shading off and exact assembly. Evidence: `materials-phone.png/.json`, `materials-lightweight.json`. No physical-phone performance claim follows from this desktop emulation.
+- Screenshots `materials-assembled.png`, `materials-context-restored.png`, and `materials-function-check.png` preserve the inspected appearance. The final local preview returns to its ordinary viewport and clean URL. No captured console errors occurred in the final preview check.
+
+Beauty-pass triangle/draw counters exclude the additional contact depth and fullscreen work; measured frame intervals above include it. Visual acceptance remains a user-review question. The refinements do not establish photographed or measured finish fidelity.
+
+## Initial implementation checks (before material correction)
 
 | Check | Result / evidence |
 |---|---|
@@ -35,7 +51,7 @@
 
 All binary/visual evidence lives in ignored local paths. The screenshots were visually inspected, not used to claim exact pixel parity across devices. The independent CAD audit compares binary source transforms and optimized geometry bytes, which is stronger evidence for those invariants.
 
-## Performance measurements
+## Initial performance measurements (before material correction)
 
 Host: **Mac mini, Mac16,10, Apple M4 (10-core CPU/10-core GPU), 24 GB RAM**. In-app Chromium identifies as Chrome 152.0.0.0 on macOS. Browser viewport 1440×900, pixel ratio 1; canvas varies as the focused panel/playback controls reserve space. Automatic quality did not reduce pixel ratio below 1. Dev server and cached loopback network, not a production or cold-network test.
 
