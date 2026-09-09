@@ -1,5 +1,9 @@
 # Zweigesicht — current execution state
 
+## Reset styling correction — verified locally, 10 September 2026
+
+User review rejected the outlined Reset view styling. Removed its custom fill, border, bright color and hover treatment so it uses the same muted text, transparent background and subtle hover as neighboring controls. The label, fixed slot and reset behavior remain intact. Browser review confirms matching 14px type, color, borderless surface and 44px target in Movement and All parts; direct Reset returns to Movement. Production build and diff checks pass. Evidence: `artifacts/browser/reset-control/desktop-quiet-reset.png`. Preview stays running at **http://127.0.0.1:4173/** for user review. Local only; `FINISHING_GOAL.md` untouched.
+
 ## Reset control prominence — verified locally, 10 September 2026
 
 Moved the global **Reset view** into the separation row, replacing the small Reassemble icon and removing the header duplicate. Its labeled, outlined button stays in the same position in Movement, dials, mechanisms and All parts. It restores opening view/options and closes contextual menus. The Separate slider still returns to zero independently, retaining the chosen face and mechanism context.

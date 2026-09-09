@@ -232,9 +232,6 @@ canvas:focus-visible {
   color: white;
   box-shadow: inset 0 -1px #ddd;
 }
-.reset-button {
-  color: #aaa8a4;
-}
 .explore-menu {
   background: #222 !important;
   width: min(345px, calc(100vw - 32px)) !important;
@@ -917,19 +914,9 @@ h2 {
 }
 .separation-control .reset-button {
   flex: 0 0 112px;
-  min-height: 44px;
   padding: 8px;
-  gap: 6px;
-  border: 1px solid #55544e;
-  border-radius: 6px;
-  background: #33332f;
-  color: #eeede7;
   white-space: normal;
   line-height: 1.1;
-}
-.separation-control .reset-button:hover:not(:disabled) {
-  background: #45453f;
-  border-color: #77766e;
 }
 .focus-strip {
   position: absolute;
