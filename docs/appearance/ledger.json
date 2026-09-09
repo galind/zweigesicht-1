@@ -16,7 +16,7 @@
       "6": "source plate inscription floor",
       "7": "source red gauge inlay"
     },
-    "materialSourceSha256": "2af3e313795e2dcfc58b025c45beaf33c39c81bb64eadf5b52ea10fdad8cfbe5",
+    "materialSourceSha256": "f2021d7fa140b212a674a5effddb5dff175188d2c6b7e8cf19490417896b659f",
     "packagerSourceSha256": "e760417aad47eb2f43a41158f3058a905e074bf1ebe11665794ddcbc551571d2"
   },
   "coverage": {
@@ -25,11 +25,11 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 79,
-      "inferred": 266,
-      "unresolved": 20
+      "verified": 84,
+      "inferred": 264,
+      "unresolved": 17
     },
-    "changedFamilyInstances": 83,
+    "changedFamilyInstances": 95,
     "annotatedDefinitions": 58
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -22096,15 +22096,15 @@
       "name": "ml01 Chaton RBR 149x210x60",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit rose-gold jewel-chaton correction",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -22811,15 +22811,15 @@
       "name": "ml01 Unruhexcenter",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Warm balance rim; alloy unresolved",
+      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
+      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
       "assignment": {
-        "color": 14202226,
+        "color": 13016451,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "balance",
         "assignment": "source-definition"
       },
       "source": {
@@ -23542,17 +23542,17 @@
     {
       "id": "d_0_1_1_121",
       "name": "Flitter 200x400",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Flitter source is warm but current steel profile differs; hidden underside washer composition/finish unresolved. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Satin yellow-gold-colored metal",
+      "surfaceReview": "Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict. User correction: goldish thin washer with circular satin grain; authored color and roughness, not an alloy claim.",
+      "evidence": "User explicit thin-washer goldish satin correction; source Flitter 200x400 identity",
       "assignment": {
-        "color": 12831184,
+        "color": 14202226,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 2,
+        "family": "satinGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -31204,17 +31204,17 @@
     {
       "id": "d_0_1_1_203",
       "name": "incabloc_sous_937-21_Lochsteinschale",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Incabloc hole-stone shell source gray versus current warm setting; mostly concealed, unresolved. Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); user explicit rose-gold jewel-chaton correction",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -31621,17 +31621,17 @@
     {
       "id": "d_0_1_1_207",
       "name": "incabloc_sous_937-21_Grundschale",
-      "status": "inferred",
-      "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); user explicit rose-gold jewel-chaton correction",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -33315,15 +33315,15 @@
       "name": "ml01 Diamantchaton",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit rose-gold jewel-chaton correction",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -35123,8 +35123,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit horizontal winding-bridge brushing correction",
       "assignment": {
         "color": 13685980,
         "metalness": 1,
@@ -49032,9 +49032,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -49044,15 +49044,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -49178,9 +49178,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -49190,15 +49190,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -49908,9 +49908,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Warm balance rim; alloy unresolved",
+      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
+      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -49920,15 +49920,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 13016451,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "balance",
         "assignment": "source-definition"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "gold → balance",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -49981,9 +49981,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Warm balance rim; alloy unresolved",
+      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
+      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -49993,15 +49993,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 13016451,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "balance",
         "assignment": "source-definition"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "gold → balance",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -50054,9 +50054,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Warm balance rim; alloy unresolved",
+      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
+      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50066,15 +50066,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 13016451,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "balance",
         "assignment": "source-definition"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "gold → balance",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -50127,9 +50127,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Warm balance rim; alloy unresolved",
+      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
+      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50139,15 +50139,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 13016451,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "balance",
         "assignment": "source-definition"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "gold → balance",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -50855,11 +50855,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Flitter source is warm but current steel profile differs; hidden underside washer composition/finish unresolved. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Satin yellow-gold-colored metal",
+      "evidence": "User explicit thin-washer goldish satin correction; source Flitter 200x400 identity",
+      "surfaceReview": "Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict. User correction: goldish thin washer with circular satin grain; authored color and roughness, not an alloy claim.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -50869,15 +50869,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12831184,
+        "color": 14202226,
         "metalness": 1,
-        "roughness": 0.2,
-        "pattern": 0,
-        "family": "steel",
+        "roughness": 0.31,
+        "pattern": 2,
+        "family": "satinGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "steel → satinGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -58958,11 +58958,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Incabloc hole-stone shell source gray versus current warm setting; mostly concealed, unresolved. Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -58972,15 +58972,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -59250,11 +59250,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -59264,15 +59264,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -60199,11 +60199,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Incabloc hole-stone shell source gray versus current warm setting; mostly concealed, unresolved. Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -60213,15 +60213,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -60491,11 +60491,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -60505,15 +60505,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -60566,9 +60566,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit rose-gold jewel-chaton correction",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate. Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -60578,15 +60578,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "gold → roseGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -62308,8 +62308,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit horizontal winding-bridge brushing correction",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,

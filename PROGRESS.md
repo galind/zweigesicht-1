@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Washer, winding grain, eccentric and chaton corrections — 9 September 2026
+
+Thin washer d121 now has a goldish circular satin finish. Winding bridge d240 grain and reflection frame compensate for its 8-degree source rotation to follow assembly horizontal. All four d111 timing eccentrics match the balance rim d110 color while retaining their prior polished roughness. Jewel chatons/settings d100/203/207/224 now use rose gold. The appearance ledger resolves the prior washer and hole-stone-shell color conflicts and records the user corrections.
+
+**Verification:** 50 source/asset CPU checks, TypeScript, targeted material lint and production build pass. A source-transform regression verifies the winding grain has zero assembly Y/Z component. The ledger confirms 12 material-assignment changes, identical rim/eccentric colors and unchanged geometry/matrices for all 365 occurrences. Live isolated washer, winding bridge, balance/eccentrics and balance setting were reviewed, with no browser errors. Evidence: `artifacts/browser/washer-chatons-grain/`. The broader browser interaction suite and device benchmarks were not rerun for these material changes.
+
+Next action: user review at **http://127.0.0.1:4173/**. Local checkpoint on `codex/watch-polish-finishes`; no push or merge. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Hour-wheel hub 2 steel correction — 9 September 2026
 
 Changed d188 (`ml01 Butzen Stundenrad2`, occurrence P40/186:2) to neutral steel per user instruction. The complete appearance ledger resolves its previous warm/steel uncertainty. Compared all 365 ledger occurrences: only this hub changes assignment; source geometry and matrices are unchanged.

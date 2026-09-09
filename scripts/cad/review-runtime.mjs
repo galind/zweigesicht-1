@@ -244,6 +244,9 @@ for(const suffix of ['54__0_1_1_194_11','54__0_1_1_194_12']){
 assert.equal(finishFor('shared screw','d_0_1_1_201','other-instance').family,'blue');
 results.push({check:'exact two radial dial screws at 16mm radius use neutral steel; unrelated shared d201 stays blue',status:'pass'});
 const capMeta=JSON.parse(fs.readFileSync(path.join(ROOT,'artifacts/finishing-cad/sidecars/d_0_1_1_105.json')));
+const windingFinish=finishShaderFor(240),windingAxis=windingFinish.shader.uniforms.finishBrushAxis.value;
+const windingWorld=new THREE.Vector3(windingAxis.x,windingAxis.y,0).transformDirection(new THREE.Matrix4().set(...windingFinish.p.source.worldTransform.flat()));
+assert.ok(Math.abs(windingWorld.y)<1e-10&&Math.abs(windingWorld.z)<1e-10&&Math.abs(windingWorld.x)>.999999,'Winding grain must be horizontal in the actual source assembly');
 const holeCenter=(i)=>{const b=capMeta.faces[i-1].boundsLocalMm;return new THREE.Vector2((b[0][0]+b[1][0])/2,(b[0][1]+b[1][1])/2)};
 const toJewel=holeCenter(16).add(holeCenter(21)).multiplyScalar(-.5).normalize();
 assert.ok(toJewel.dot(finishShaderFor(105).shader.uniforms.finishBrushAxis.value)>.999999);

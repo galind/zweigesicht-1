@@ -11,6 +11,8 @@ const profiles = {
   barrel: { color: 0xd6a17f, metalness: 1, roughness: 0.34, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
   gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
+  satinGold: { color: 0xd8b572, metalness: 1, roughness: 0.31, pattern: 2 },
+  roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xd1d5dd, metalness: 1, roughness: 0.12, pattern: 0 },
   brushedCrown: { color: 0xd1d5dd, metalness: 1, roughness: 0.29, pattern: 2 },
@@ -46,7 +48,7 @@ for (const [family, ids] of Object.entries({
   crown: [251],
   blue: screwDefinitions,
   steel: [
-    53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 117, 121, 124, 126,
+    53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 117, 124, 126,
     127, 129, 130, 135, 143, 144, 148, 149, 150, 151, 154, 157, 158, 159, 160,
     161, 162, 164, 167, 173, 177, 184, 185, 188, 211,
     214, 217, 220, 234, 237, 242, 252, 254,
@@ -55,8 +57,10 @@ for (const [family, ids] of Object.entries({
     94, 96, 114, 115, 137, 141, 142, 183, 187, 210, 213, 216, 233,
     235, 238, 243,
   ],
-  gold: [100, 111, 118, 163, 179, 200, 203, 206, 207, 224],
-  balance: [110],
+  gold: [118, 163, 179, 200, 206],
+  satinGold: [121],
+  roseGold: [100, 203, 207, 224],
+  balance: [110, 111],
   ruby: [101, 102, 106, 112, 128, 134, 196, 197, 198, 199, 204, 205, 208, 231],
   sapphire: [67],
   diamond: [225],
@@ -127,6 +131,8 @@ export function finishFor(
     else family = 'steel';
   }
   const finish = { ...profiles[family], family, assignment };
+  // Match the balance rim's color while retaining the eccentric's polish.
+  if (definitionId === 'd_0_1_1_111') finish.roughness = 0.16;
   if (family === 'leather' && /dunkelblau/i.test(name)) finish.color = 0x182a41;
   if (family === 'leather' && /schwarz/i.test(name)) finish.color = 0x191b20;
   if (family === 'enamel' && /rot/i.test(name)) finish.color = 0x6c2031;
@@ -244,6 +250,9 @@ export function createMaterial(
   const radius = bounds ? Math.max(Math.abs(bounds.min.x), Math.abs(bounds.max.x), Math.abs(bounds.min.y), Math.abs(bounds.max.y)) : 6;
   // d105 screw axes are (+/-.75,-1.1), jewel axis (0,0): grain follows +Y.
   const brushAxis = new THREE.Vector2(definitionId === 'd_0_1_1_105' ? 0 : 1, definitionId === 'd_0_1_1_105' ? 1 : 0);
+  // d240 source placement rotates local X by 8 degrees from assembly horizontal.
+  // Counter-rotate the grain and its reflection frame; keep the CAD pose intact.
+  if (definitionId === 'd_0_1_1_240') brushAxis.set(Math.cos(Math.PI * 8 / 180), -Math.sin(Math.PI * 8 / 180));
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
   const etched = [99, 222, 228, 230].includes(

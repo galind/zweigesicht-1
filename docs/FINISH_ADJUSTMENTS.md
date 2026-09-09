@@ -1,3 +1,16 @@
+# Washer, winding bridge, eccentric and chaton corrections
+
+9 September 2026, explicit user corrections:
+
+- Thin washer d121 (`Flitter 200x400`) uses goldish color `#d8b572`, roughness .31 and circular satin grain.
+- Winding bridge d240 uses local brush axis `(cos8deg,-sin8deg)`, cancelling its source placement's 8-degree tilt. Grain follows assembly X; the existing shader derives both grain coordinates and anisotropic frame from this axis.
+- Timing eccentric d111 matches balance rim d110 color `#c69d83`. All four occurrences retain their prior polished roughness .16.
+- Jewel-setting metal d100 (two train chatons), d224 (diamond chaton), and d203/207 (both Incabloc hole-stone/base shells) uses rose gold `#d9ab94` with retained polished roughness .16. The separate stones and lyre springs retain their own finishes.
+
+The complete ledger records the changes and resolves earlier washer/shell appearance conflicts. All 50 source/asset CPU checks, TypeScript, targeted material lint and production build pass. The actual source matrix regression proves horizontal winding grain. All 365 ledger geometry/matrix records are unchanged; 12 occurrences change material assignment. Isolated live views were reviewed without browser errors; screenshots and checks are in `artifacts/browser/washer-chatons-grain/`. No broader interaction or device benchmark rerun is claimed. Numerical colors and surface parameters remain authored. Local-only checkpoint pending user review.
+
+---
+
 # Shock-indicator screw correction
 
 9 September 2026. User reference `USER-FINISH-2026-09-09-05` shows neutral screws around the shock-indicator mechanism, with the central mounting screw blue. Exact source prefix `p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_`: suffixes 9 (d123), 20/21 (d166), 24/27 (d168), and 32/33 (d170) now use steel throughout. Suffix30 (d169) stays blue. Shared definitions keep their default assignments elsewhere.
