@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Construction explosion — completed and verified locally, 9 September 2026
+
+Implemented `EXPLODE_GOAL.md` in local checkpoint **a8fbcc2**, followed by this final verification record. Separate now stages all 49 screw releases along original mounted axes, retains 21 coherent hosts covering all 223 source leaves, preserves pressed/delicate assemblies, and uses a verified winding release sequence. Whole/focused motion shares one immutable-source evaluator; direct reversal, framing, picking, isolation, camera ownership, All parts and fitted 10:10 displays remain intact.
+
+Final evidence: **106 analytic + 55 authored source checks**, **90 winding pair/stage samples**, **59 CPU regressions**, **six state tests**, TypeScript, authored lint and production build pass. Both **1280×720** and **390×844** pass **7 explosion + 21 dial + 12 movement checks**. Visible bounds fit (maximum .847458 NDC), source reassembly is exact, resources stay stable and settled views add zero renders. Direct visual review covers stages/both sides/oblique, every mechanism, non-Z screws and all six hand styles. 320px controls, keyboard/focus, separated graphics recovery and remembered dial Back return are verified. Final browser error log is empty.
+
+Review and retained compromises: [EXPLODE_REVIEW.md](docs/EXPLODE_REVIEW.md), [EXPLODE_CAD_FINDINGS.md](docs/EXPLODE_CAD_FINDINGS.md). Evidence/gallery: ignored `artifacts/browser/explode/` and `artifacts/explode-cad/`. Nominal thread overlaps, inherited source defects and conservative grouped packets remain documented; no swept-collision, service, expert or physical-device certification is claimed. Next action: user review at **http://127.0.0.1:4173/**. The original preview server remains running and the browser is retained. All milestones are local; no push, merge or deployment. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Reviewed construction explosion — implementation milestone, 9 September 2026
 
 Replaced world-Z/position scattering with `assets/authored/explosion.json`: explicit rules for all 223 movement leaves and 21 coherent hosts. All 49 screws release along analytic head/shank axes; the two radial dial screws and horizontal stud clamp retain correct outward directions. Pressed jewels/pins, complete barrels, riveted packets and the balance/hairspring/bridge stay associated. Main-plate reference remains fixed. Separate and focused Uncover share one evaluator; stage animation advances the parameter itself, reverses from displayed poses and leaves inventory/fitted hand transforms separate. Per-part framing reduces excess empty space.
