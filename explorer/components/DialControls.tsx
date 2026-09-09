@@ -82,7 +82,9 @@ export function DialControls({
             ))}
           </ToggleGroup>
           <p className="dial-help">
-            Both displays are fitted. Turn the watch to see the other face.
+            {state.presentation === 'dials'
+              ? 'Both displays are fitted. Turn the watch to see the other face.'
+              : 'Both displays will be fitted together.'}
           </p>
         </>
       )}

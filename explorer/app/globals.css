@@ -879,6 +879,7 @@ h2 {
   line-height: 1.5;
 }
 .dial-status {
+  display: block;
   font-size: 0.875rem;
   color: #cbc9c5;
 }
