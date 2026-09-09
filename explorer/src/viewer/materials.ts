@@ -46,13 +46,13 @@ for (const [family, ids] of Object.entries({
   crown: [251],
   blue: screwDefinitions,
   steel: [
-    53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 121, 124, 126,
+    53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 117, 121, 124, 126,
     127, 129, 130, 135, 143, 144, 148, 149, 150, 151, 154, 157, 158, 159, 160,
     161, 162, 164, 167, 173, 177, 184, 185, 211,
     214, 217, 220, 234, 237, 242, 252, 254,
   ],
   brass: [
-    94, 96, 114, 115, 117, 137, 141, 142, 183, 187, 188, 210, 213, 216, 233,
+    94, 96, 114, 115, 137, 141, 142, 183, 187, 188, 210, 213, 216, 233,
     235, 238, 243,
   ],
   gold: [100, 111, 118, 163, 179, 200, 203, 206, 207, 224],
@@ -92,13 +92,14 @@ export function finishFor(
     ? definitions[Number(definitionId!.split('_').at(-1))]
     : undefined;
   let assignment = family ? 'source-definition' : 'catalog-fallback';
-  // Photographed crown-cap / click fasteners; shared d181 stays blue elsewhere.
+  // Exact source instances: rear-facing screws, hairspring stud screw, and
+  // previously reviewed neutral fasteners. Shared screw definitions stay blue.
   if (
-    [33, 43, 44, 45, 77, 78, 81, 82].some(
+    [11, 25, 33, 43, 44, 45, 48, 49, 50, 51, 52, 67, 68, 71, 72, 77, 78, 81, 82].some(
       (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_${i}`,
     ) || ['11', '12'].some(
       (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_${i}`,
-    )
+    ) || instanceId === 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_7'
   ) {
     family = 'steel';
     assignment = 'source-instance';
@@ -144,6 +145,7 @@ uniform float finishEngraved;
 uniform float finishWholeBlue;
 uniform float finishFrosted;
 uniform float finishSnailing;
+uniform float finishSnailTurn;
 uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
@@ -253,6 +255,9 @@ export function createMaterial(
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
       finishFrosted: { value: finish.family === 'frosted' ? 1 : 0 },
       finishSnailing: { value: finish.family === 'barrel' ? 1 : 0 },
+      // Right-hand drum/lid local XY has the opposite handedness to the left.
+      // Reverse its source-local winding, preserving the left barrel's finish.
+      finishSnailTurn: { value: ['d_0_1_1_90', 'd_0_1_1_91'].includes(definitionId ?? '') ? -1.15 : 1.15 },
       finishRadius: { value: Math.max(radius, .01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
@@ -325,9 +330,9 @@ if(finishEnabled>.5 && finishPattern>.5) {
  } else if(finishPattern<2.5) {
   float radius=length(finishUv);
   if(finishSnailing>.5) {
-   // Curved rays: theta + 1.15*r/R is constant along each sweeping stroke.
+   // Curved rays: theta + turn*r/R is constant along each sweeping stroke.
    // Sample a closed circle, avoiding an atan seam and concentric lathe rings.
-   float phase=atan(finishUv.y,finishUv.x)+1.15*radius/finishRadius;
+   float phase=atan(finishUv.y,finishUv.x)+finishSnailTurn*radius/finishRadius;
    vec2 spiral=vec2(cos(phase),sin(phase));
    finishGrain=filteredFinishNoise(spiral*48.0+radius*.15)*.55
      + filteredFinishNoise(spiral*120.0+radius*.08)*.3
@@ -401,7 +406,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
 // Source-local frame avoids dependence on absent CAD UVs or tangent attributes.
 vec2 radial=normalize(finishUv+vec2(1e-8));
 vec2 finishDirection=finishPattern>1.5 && finishPattern<2.5?radial:vec2(-finishBrushAxis.y,finishBrushAxis.x);
-if(finishSnailing>.5) finishDirection=normalize(vec2(-radial.y,radial.x)+radial*(1.15*length(finishUv)/finishRadius));
+if(finishSnailing>.5) finishDirection=normalize(vec2(-radial.y,radial.x)+radial*(finishSnailTurn*length(finishUv)/finishRadius));
 vec3 finishT=vFinishX*finishDirection.x+vFinishY*finishDirection.y;
 finishT-=normal*dot(normal,finishT);
 if(dot(finishT,finishT)<1e-8) finishT=cross(normal,abs(normal.z)<.9?vec3(0,0,1):vec3(0,1,0));
@@ -424,7 +429,7 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   };
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v6'
-      : 'ml01-source-surface-v6';
+      ? 'ml01-source-surface-clear-v7'
+      : 'ml01-source-surface-v7';
   return material;
 }

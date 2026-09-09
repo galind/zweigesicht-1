@@ -1,3 +1,17 @@
+# Matching snailing and steel attachment corrections
+
+9 September 2026, following the user's review of the previous checkpoint.
+
+- Both barrels now match the accepted left snailing direction. The left d85/86 source XY orientation has opposite parity to right d90/91. Keeping +1.15 curvature on the left and using -1.15 on the right produces matching world-space winding for all four lid/drum parts. Both procedural grain and anisotropic reflections use the corrected direction; source transforms are unchanged.
+- Eleven screws fitted from the back now use steel throughout. With prefix `p_0_1_1_1__0_1_1_1_4__0_1_1_83_`, these are suffixes `11, 25, 48, 49, 50, 51, 52, 67, 68, 71, 72`. Their original local +Z screw axes all face world +Z. The runtime regression independently inventories them from source names/orientations and checks their materials. Exact-instance overrides retain other shared-definition assignments.
+- The hairspring stud/holder, d117 (`ml01 Klötzchen`), is steel in both source occurrences. Its horizontal clamping screw, suffix `59__0_1_1_221_7` (d226), is also steel. The nearby balance-cock mounting screws retain their existing blue finish. The user correction resolves the ledger's earlier hidden-stud warm/steel uncertainty.
+
+Verification: 50 source/asset CPU checks, four state tests, TypeScript, targeted material lint and production build pass. Twelve live-browser interaction checks pass. Both assembled sides and a balance-cock attachment close-up were visually reviewed with no browser shader errors. All 365 ledger geometry/matrix records are unchanged; exactly 14 occurrences change material family (11 rear screws, one stud screw, two studs). Decoded geometry remains byte-exact across 339 objects.
+
+Local evidence: `artifacts/browser/finish-handedness-steel/`. No new physical-device or performance qualification is claimed. This checkpoint is local-only, pending user visual review.
+
+---
+
 # Snailing, cap plate and dial-screw corrections
 
 9 September 2026, following user confirmation. This section supersedes the earlier circular barrel finish, unchanged crown wheel, cap-grain direction and blanket lower-bridge frosting described below.

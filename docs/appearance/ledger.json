@@ -16,7 +16,7 @@
       "6": "source plate inscription floor",
       "7": "source red gauge inlay"
     },
-    "materialSourceSha256": "b8cfadd69256510e085dca33109bdd3386b9cbb262c1e7532ae93aad856a90a5",
+    "materialSourceSha256": "47c5d659d43a43a7ba34c4fcfb846f443d547bf062371ada403206a75d0f789d",
     "packagerSourceSha256": "e760417aad47eb2f43a41158f3058a905e074bf1ebe11665794ddcbc551571d2"
   },
   "coverage": {
@@ -25,11 +25,11 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 57,
-      "inferred": 285,
-      "unresolved": 23
+      "verified": 71,
+      "inferred": 273,
+      "unresolved": 21
     },
-    "changedFamilyInstances": 61,
+    "changedFamilyInstances": 75,
     "annotatedDefinitions": 58
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -18489,7 +18489,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
       "assignment": {
         "color": 14066047,
@@ -19402,7 +19402,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
       "assignment": {
         "color": 14066047,
@@ -19662,7 +19662,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
       "assignment": {
         "color": 14066047,
@@ -20575,7 +20575,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored barrel metal",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
       "assignment": {
         "color": 14066047,
@@ -23330,17 +23330,17 @@
     {
       "id": "d_0_1_1_117",
       "name": "ml01 Klötzchen",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance",
       "assignment": {
-        "color": 14462597,
+        "color": 12831184,
         "metalness": 1,
-        "roughness": 0.31,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.2,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -48012,7 +48012,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48085,7 +48085,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48304,7 +48304,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -48377,7 +48377,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored barrel metal",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; USER-FINISH-2026-09-09-04 snailing reference and user confirmation",
-      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "surfaceReview": "User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored. Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.",
       "before": {
         "color": 14066047,
         "metalness": 1,
@@ -50563,11 +50563,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance",
+      "surfaceReview": "Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -50577,15 +50577,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14462597,
+        "color": 12831184,
         "metalness": 1,
-        "roughness": 0.31,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.2,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -51001,11 +51001,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -51015,15 +51015,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -52607,11 +52607,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -52621,15 +52621,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -57644,11 +57644,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57658,15 +57658,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -57717,11 +57717,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57731,15 +57731,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -57790,11 +57790,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57804,15 +57804,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -57863,11 +57863,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57877,15 +57877,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -57936,11 +57936,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -57950,15 +57950,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -60699,11 +60699,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance",
+      "surfaceReview": "Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -60713,15 +60713,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14462597,
+        "color": 12831184,
         "metalness": 1,
-        "roughness": 0.31,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.2,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -60918,11 +60918,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit hairspring-stud screw correction; original d226 occurrence in balance-cock assembly",
+      "surfaceReview": "Horizontal hairspring-stud clamping screw uses neutral steel throughout, together with the separate d117 stud. Other d226 screws and the nearby balance-cock mounting screws retain their own assignments.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -60932,15 +60932,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -62743,11 +62743,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -62757,15 +62757,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -62816,11 +62816,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -62830,15 +62830,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -63254,11 +63254,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -63268,15 +63268,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -63327,11 +63327,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Blued steel appearance",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred. User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Unblued steel",
+      "evidence": "User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z",
+      "surfaceReview": "One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.",
       "before": {
         "color": 2653112,
         "metalness": 0.92,
@@ -63341,15 +63341,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 2653112,
-        "metalness": 0.92,
-        "roughness": 0.19,
+        "color": 12831184,
+        "metalness": 1,
+        "roughness": 0.2,
         "pattern": 0,
-        "family": "blue",
-        "assignment": "source-definition"
+        "family": "steel",
+        "assignment": "source-instance"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "blue → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {

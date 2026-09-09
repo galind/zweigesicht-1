@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Matching snailing and steel attachments — 9 September 2026
+
+Both barrel/lid pairs now share the accepted left snailing direction, compensating for their opposite source-local XY orientation in both grain and reflections. Eleven back-fitted screws, the horizontal hairspring-stud screw and both d117 stud/holder occurrences now use neutral steel. Exact screw-instance overrides preserve shared-definition assignments elsewhere. The complete appearance ledger resolves the prior stud-color uncertainty and records all corrected identities.
+
+**Verification:** 50 actual-source/asset CPU checks, four state tests, TypeScript, targeted material lint and production build pass. Twelve live-browser checks pass; both assembled sides and the hairspring attachment close-up were reviewed without shader errors. Original decoded geometry remains byte-exact across 339 objects; all 365 ledger source geometry/matrix records remain unchanged, with exactly 14 material-family corrections. No new physical-device or sustained-performance benchmark is claimed.
+
+Details: [FINISH_ADJUSTMENTS.md](docs/FINISH_ADJUSTMENTS.md). Local evidence: `artifacts/browser/finish-handedness-steel/`. Next action: user review at **http://127.0.0.1:4173/**. This checkpoint on `codex/watch-polish-finishes` is local-only; no push or merge. Unrelated `FINISHING_GOAL.md` remains untouched.
+
 ## Snailing, cap plate and dial-screw corrections — 9 September 2026
 
 Implemented the user-confirmed follow-up on `codex/watch-polish-finishes`: curved snailing on all four barrel/drum definitions, explicitly brushed crown wheel d249, cap plate d105 grain/reflections aligned from the screw pair toward the jewel, stronger plate/lower-bridge frosting, and a smooth satin d99 cap-plate seat. Two radial outer-rim dial retaining screws (d201 occurrences P54/194:11 and :12) now use whole-screw neutral steel via exact-instance overrides. Other shared d201 assignments remain blue. The crown cap/blue cone, source geometry, annotations, placements and lighting are preserved.

@@ -256,6 +256,23 @@ let seatCount=0;for(let offset=0;offset<seatRaw.length;offset+=40){
 assert.equal(seatCount,263);assert.equal(finishShaderFor(99).shader.uniforms.finishCapSeat.value,1);
 assert.equal(finishShaderFor(222).shader.uniforms.finishCapSeat.value,0);
 for(const n of [85,86,90,91])assert.equal(finishShaderFor(n).shader.uniforms.finishSnailing.value,1);
+// A world-space winding comparison catches mirrored source-local barrel axes.
+const barrelWinding=[85,86,90,91].map(n=>{
+ const {p,shader}=finishShaderFor(n),m=p.source.worldTransform;
+ const parity=Math.sign(m[0][0]*m[1][1]-m[0][1]*m[1][0]);
+ if(n===85||n===86)assert.equal(shader.uniforms.finishSnailTurn.value,1.15,'Accepted left barrel must retain its winding');
+ return parity*shader.uniforms.finishSnailTurn.value;
+});
+for(const winding of barrelWinding)assert.equal(winding,barrelWinding[0]);
+const rearScrews=[...v.renderParts.values()].filter(p=>p.source.id.startsWith(PREFIX)&&/^010-/.test(p.source.name)&&p.source.worldTransform[2][2]>.999);
+assert.equal(rearScrews.length,11);
+for(const p of rearScrews)assert.equal(p.material.name,'steel',p.source.id+' is fitted from the back');
+const studScrew=v.renderParts.get(PREFIX+'59__0_1_1_221_7');
+assert.equal(studScrew.source.definitionId,'d_0_1_1_226');assert.equal(studScrew.material.name,'steel');
+const studs=[...v.renderParts.values()].filter(p=>p.source.definitionId==='d_0_1_1_117');
+assert.equal(studs.length,2);for(const p of studs)assert.equal(p.material.name,'steel');
+assert.equal(finishFor('shared stud screw','d_0_1_1_226','elsewhere').family,'blue');
+results.push({check:'all four source barrel transforms produce the accepted left winding; all eleven rear-facing screws and hairspring stud/screw are steel with exact instance scope',status:'pass'});
 for(const n of [94,131,249])assert.equal(finishShaderFor(n).shader.uniforms.finishSnailing.value,0);
 assert.equal(finishShaderFor(249).p.material.name,'brushedCrown');
 assert.equal(finishShaderFor(249).shader.uniforms.finishPattern.value,2);
@@ -329,9 +346,9 @@ for(const p of v.renderParts.values()){
   for(let i=0;i<roles.count;i++)if(roles.getX(i)===2)neutralHandSeats++;
  }
 }
-assert.equal(blueScrewDefinitions.size,15);assert.ok(steelScrews>=10);
+assert.equal(blueScrewDefinitions.size,11);assert.ok(steelScrews>=22);
 assert.ok(blueShankVertices>0&&neutralHandSeats>0);
-// Five screw definitions currently occur only at steel-override locations;
+// Nine screw definitions currently occur only at steel-override locations;
 // their default finish must still cover the whole screw at any blue placement.
 for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255]){
  const material=createMaterial('010-screw',`d_0_1_1_${n}`);
@@ -340,7 +357,7 @@ for(const n of [9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,20
  assert.equal(shader.uniforms.finishWholeBlue.value,1);
  material.dispose();
 }
-results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while ten steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
+results.push({check:'all blued screw surfaces bypass neutral CAD color/roughness while twenty-two steel screws and neutral hand seats retain their finishes',status:'pass',blueScrews,definitions:blueScrewDefinitions.size,blueShankVertices,neutralHandSeats});
 const physicalDefaults=new THREE.MeshPhysicalMaterial();
 for(const p of v.renderParts.values()){
  assert.ok(p.material instanceof THREE.MeshPhysicalMaterial);

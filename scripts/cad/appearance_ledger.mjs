@@ -44,7 +44,6 @@ const families={
 const photo=new Set([85,86,90,91,94,99,100,101,102,105,106,110,111,116,133,134,147,155,156,159,165,187,195,208,213,216,219,222,224,225,228,230,231,238,240,243,249,251]);
 const conflicts={
  114:'Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy.',
- 117:'Hairspring stud source is gray; historical warm assignment not independently resolved for the hidden stud.',
  121:'Flitter source is warm but current steel profile differs; hidden underside washer composition/finish unresolved.',
  130:'Safety piece source is warm; current steel family retained pending component-specific evidence.',
  137:'Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo.',
@@ -60,6 +59,7 @@ const conflicts={
  66:'Pale source glass gasket rendered dark rubber; no exposed production reference resolves color/composition. Retained, not certified.',
 };
 const specific={
+ 117:['User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance','Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal.'],
  105:['REF-SJX-04; REF-SJX-05; maker DPL component render','Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong.'],
  120:['STEP d120 face colors; d105 photographic analogy','Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap.'],
  225:['Maker component STL+STEP; REF-SJX-05; REF-MAKER-01','Assembly STEP #509351 contains only placement #509383, no solid; standalone STEP also axis-only. Original STL off-origin coordinates cancel unchanged source matrix.1640 triangles recovered; original STEP triangles0/boundsnull preserved.'],
@@ -75,12 +75,14 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  const n=Number(d.id.split('_').at(-1)),f=current(d.name,d.id),m=manifest.definitions.find(x=>x.id===d.id),entry=surfaces.definitions[d.id];
  let status=photo.has(n)?'verified':'inferred',evidence=photo.has(n)?'REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations':'STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)';
  let notes=families[f.family][1];if(specific[n]){evidence=specific[n][0];notes=specific[n][1]+' '+notes;}
+ if(n===117)status='verified';
  if([97,172,174,176,178,190,193,244,246,248].includes(n)){
   evidence+='; USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)';
   notes+=' Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.';
  }
  if(['bridge','frosted','barrel','brass','ratchet'].includes(f.family))notes+=' User finishing adjustment, 9 September 2026: stronger multiscale frosting on plate/lower bridge fields and readable wheel grain and curved barrel snailing. See docs/FINISH_ADJUSTMENTS.md and assets/source-manifest/finish-adjustment-references.json; numerical grain is authored.';
  if([85,86,90,91].includes(n))evidence+='; USER-FINISH-2026-09-09-04 snailing reference and user confirmation';
+ if([85,86,90,91].includes(n))notes+=' Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.';
  if(n===105)evidence+='; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation';
  if(n===249)evidence+='; user explicit crown-wheel brushing correction';
  if(n===105)notes+=' User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).';
@@ -98,6 +100,8 @@ const instances=manifest.instances.filter(i=>!i.isAssembly).map(i=>{
  if([43,44,45].some(x=>i.id===prefix+x)){status='verified';evidence='REF-MAKER-01 perimeter; maker d189 screw render; exact clamp-hole/screw-axis probe';notes='Unblued steel screw secures d185 clamp '+({43:41,44:39,45:38}[i.id.slice(prefix.length)])+'. Neutral head/body. Override only this instance; unrelated d189 unchanged.';}
  if([33,77,78,81,82].some(x=>i.id===prefix+x)){status='verified';evidence='REF-SJX-02 and FIN-SCREW-STEEL-01';}
  if(['11','12'].some(x=>i.id===prefix+'54__0_1_1_194_'+x)){status='verified';evidence='User explicit correction; original radial axes at 16mm radius in main plate';notes='Two outer-rim dial retaining screws: neutral steel across the entire screw. Exact-instance override; default d201 remains blue elsewhere.';}
+ if([11,25,48,49,50,51,52,67,68,71,72].some(x=>i.id===prefix+x)){status='verified';evidence='User explicit rear-fitted screw correction; original source local +Z screw axes face world +Z';notes='One of eleven screws fitted from the back: neutral steel across all modeled surfaces. Exact-instance override preserves other uses of shared screw definitions.';}
+ if(i.id===prefix+'59__0_1_1_221_7'){status='verified';evidence='User explicit hairspring-stud screw correction; original d226 occurrence in balance-cock assembly';notes='Horizontal hairspring-stud clamping screw uses neutral steel throughout, together with the separate d117 stud. Other d226 screws and the nearby balance-cock mounting screws retain their own assignments.';}
  const changed=before.family!==after.family||before.metalness!==after.metalness;
  const scope=i.id.startsWith(movement)?'movement':'optional catalog';
  return {id:i.id,sourcePath:i.sourceInstanceId,definitionId:i.definitionId,name:i.name,parentId:i.parentId,scope,worldTransform:i.worldTransform,sourceGeometry:{triangles:i.triangles,boundsWorldMm:i.boundsWorldMm},status,confidence:status==='verified'?'high for identity and appearance family; numerical finish unmeasured':status==='inferred'?'medium/low':'low/conflicting',intendedMaterial:after.family==='steel'&&after.assignment==='source-instance'?'Unblued steel':def.intendedMaterial,evidence,surfaceReview:notes,before,after,mismatch:changed?`${before.family} → ${after.family}`:n===225?'Absent assembly geometry; recovered authentic maker STL':def.annotation?'Original source face regions require separate annotation; reviewed annotation now present':'No proven new mismatch; retained interpretation has stated limits',disposition:status==='unresolved'?'Retained pending listed evidence; no correctness claim':changed?'Targeted correction':n===225?'Recovered original maker geometry with original placement':def.annotation?'Retained/corrected with exact source-region annotations':'Retained with confidence stated',annotation:!!def.annotation};
