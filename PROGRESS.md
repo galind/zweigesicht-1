@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Accepted and integrated into main — 10 September 2026
+
+User accepted the centered movement and balanced menu and explicitly authorized merging to `main` and pushing. Fetched the configured SSH remote: `origin/main` had no changes beyond the local base. Fast-forwarded `main` from `ff6b514` to `cd3404a`, preserving all nine verified UX/UI milestones without conflicts or code changes. The verification recorded below applies to the exact integrated implementation.
+
+Delivery scope is `main` on the configured SSH remote. This integration changes only code and documentation; no new CAD assets are included and no site deployment is requested. `FINISHING_GOAL.md` remains untouched and untracked. The local preview stays at **http://127.0.0.1:4173/**. Next action: continue future work from the accepted `main` baseline.
+
 ## Movement-axis centering and balanced menu — verified locally, 10 September 2026
 
 Centered the common framing envelope on the authored central hand axis, keeping the protruding stem within view without letting it offset the orbit target. Movement, both dials, Reset and reassembly share **[0, 0, -2.425] mm**; full separation retains XY **[0, 0]** while adapting depth. Dedicated mechanism/inventory framing and manual ownership remain intact.
