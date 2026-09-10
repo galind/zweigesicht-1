@@ -308,10 +308,17 @@ for(const n of [174,176,178,190,193,244,246,248,97,172]){
 }
 for(const n of [143,144,173,177])assert.equal(finishFor('',`d_0_1_1_${n}`).family,'steel','Stem, coupling and pins keep their separate turned finish');
 results.push({check:'ten source keyless definitions use straight/circular satin with real local-Z face coverage; Function toggles without recompilation; turned shafts/pins remain separate',status:'pass'});
-for(const definition of [137,142,183,188,235]){
+for(const definition of [114,137,142,183,188,235]){
  const steelPart=createMaterial('steel correction fixture',`d_0_1_1_${definition}`);
  assert.equal(steelPart.name,'steel');assert.equal(steelPart.metalness,1);assert.equal(steelPart.transmission,0);steelPart.dispose();
 }
+assert.equal(finishShaderFor(114).shader.uniforms.finishPattern.value,0);
+for(const n of [99,133,147,156,165,219,222,228,230,240]){
+ const shader=finishShaderFor(n).shader.fragmentShader;
+ assert.ok(!shader.includes('frost*finishBase'),'No bridge base grain or bump frosting');
+ assert.ok(shader.includes('finishBase>.5) roughnessFactor=.24'),'Shared satin base response');
+}
+results.push({check:'all ten formerly frosted bridge bases use smooth satin; double roller is unbrushed steel',status:'pass'});
 const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
 assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
 for(const id of [99,230]){

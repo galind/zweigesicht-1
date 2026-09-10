@@ -1,5 +1,10 @@
 # Zweigesicht — current execution state
 
+## Satin bridge bases and steel double roller — verified locally, 10 September 2026
+
+User corrected the frosted lower bridge treatment and double roller. All ten role-8 base regions (d99/133/147/156/165/219/222/228/230/240) now use smooth satin steel, roughness .24, with no frost grain, bump or color variation. Existing polished bevels and brushed upper fields remain separate. Double roller d114 uses neutral steel, pattern 0, with no brushing. Main plate frosting is unchanged. All 67 CPU/source checks, lint, TypeScript and build pass; browser lower/underside bridge and double-roller review shows smooth metal, with no warnings/errors. Geometry, annotations and assets unchanged. Current ledger resolves d114's former material uncertainty: 89 verified / 264 inferred / 12 unresolved occurrences. No push or deployment. Next action: user comparison.
+
+
 ## Spring-block full blue arms and later fade — verified locally, 10 September 2026
 
 Follow-up to `9540d8f`: user clarified that every face of the four arms must be blue and the fade should begin further left. d159 now uses a source-local per-fragment arm region, covering narrow connections, bevels, walls and the shared underside independently of interpolated face roles. Fade moved from Y .65–1.05 to 1.05–1.45 mm (0.4 mm left in the reference view). The steel center is preserved. All 66 CPU/source checks, lint, TypeScript and build pass; top/edge/underside browser captures reviewed. Source tests cover all vertices of 168 complete arm/connection faces. Geometry, assets and annotations unchanged in this follow-up. No push or deployment. Next action: user comparison.

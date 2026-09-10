@@ -22,7 +22,7 @@ const families={
  steel:['Neutral steel/pale metal; alloy unresolved unless source SS','Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.'],
  dialSilver:['Solid-silver dial carrier appearance','Fine circular satin on the visible carrier field; source-dark markings remain separate. Numerical response authored.'],
  brushedSteel:['Brushed keyless steel appearance','User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
- bridge:['Steel bridge','Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
+ bridge:['Steel bridge','Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
  warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher.'],
  frosted:['Warm pink-gilt plate appearance','Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.'],
  brass:['Warm wheel/compound-part metal; no blanket alloy claim','Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.'],
@@ -45,7 +45,6 @@ const families={
 };
 const photo=new Set([85,86,90,91,94,99,100,101,102,105,106,110,111,116,133,134,147,155,156,159,165,187,195,208,213,216,219,222,224,225,228,230,231,238,240,243,249,251]);
 const conflicts={
- 114:'Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy.',
  130:'Safety piece source is warm; current steel family retained pending component-specific evidence.',
  206:'Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved.',
  233:'Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy.',
@@ -54,6 +53,7 @@ const conflicts={
  66:'Pale source glass gasket rendered dark rubber; no exposed production reference resolves color/composition. Retained, not certified.',
 };
 const specific={
+ 114:['User explicit double-roller steel and unbrushed correction','Smooth neutral steel, pattern 0; no brushing or frosting.'],
  137:['User explicit cannon-pinion steel correction; source gray appearance','Dial-I cannon pinion uses neutral polished steel.'],
  142:['User explicit wheel-hub steel correction; source ml01 Butzen Stundenrad1 identity and gray appearance','The separately modeled hour-wheel-I hub uses neutral steel. Its wheel retains its own warm finish.'],
  155:['User correction 2026-09-10 explicitly supersedes earlier steel instruction; USER-FINISH-2026-09-10-02','The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate.'],
@@ -80,7 +80,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  const n=Number(d.id.split('_').at(-1)),f=current(d.name,d.id),m=manifest.definitions.find(x=>x.id===d.id),entry=surfaces.definitions[d.id];
  let status=photo.has(n)?'verified':'inferred',evidence=photo.has(n)?'REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations':'STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)';
  let notes=families[f.family][1];if(specific[n]){evidence=specific[n][0];notes=specific[n][1]+' '+notes;}
- if([111,117,121,137,142,155,183,188,235,100,203,207,224].includes(n))status='verified';
+ if([111,114,117,121,137,142,155,183,188,235,100,203,207,224].includes(n))status='verified';
  if([100,203,207,224].includes(n)){evidence+='; user explicit rose-gold jewel-chaton correction';notes+=' Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.';}
  if(n===240){evidence+='; user explicit horizontal winding-bridge brushing correction';notes+=' Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged.';}
  if([97,172,174,176,178,190,193,244,246,248].includes(n)){
@@ -95,7 +95,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  if(n===99){evidence+='; user enamel request and exact source faces';notes+=' Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained.';}
  if(n===230){evidence+='; user enamel request and exact source faces';notes+=' Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.';}
  if(n===105)notes+=' User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).';
- if(n===99)notes+=' Source face54 at local Z=-.3mm remains smooth satin. Frosting is limited to the separately mapped exposed base field; other lower faces are no longer classified by height alone.';
+ if(n===99)notes+=' Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.';
  if(conflicts[n]){status='unresolved';notes=conflicts[n]+' '+notes;}
  if([4,21].includes(n)){status='unresolved';notes+=' Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.';}
  if([9,107,122,123,136,138,139,166,168,169,170,180,181,189,191,192,201,226,253,255].includes(n))notes+=' User correction, 9 September 2026: the entire blued screw (head, slot, underside, shaft and any modeled thread) uses blue metal. Source neutral shank/under-head annotations remain as provenance but are bypassed by the whole-screw material override. Explicit steel instances remain unblued. Top-origin variants d9/d107/d122/d180/d181 use their own face identities, not Z0. Region map: scripts/assets/prepare-finishes.mjs.';

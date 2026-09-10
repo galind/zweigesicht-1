@@ -47,13 +47,13 @@ for (const [family, ids] of Object.entries({
   crown: [251],
   blue: screwDefinitions,
   steel: [
-    53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 117, 124, 126,
+    53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 114, 117, 124, 126,
     127, 129, 130, 135, 137, 142, 143, 144, 148, 149, 150, 151, 154,
     157, 158, 159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188,
     211, 214, 217, 220, 234, 235, 237, 242, 252, 254,
   ],
   brass: [
-    94, 96, 114, 115, 141, 187, 210, 213, 216, 233, 238, 243,
+    94, 96, 115, 141, 187, 210, 213, 216, 233, 238, 243,
   ],
   gold: [118, 163, 179, 200, 206],
   satinGold: [121],
@@ -368,15 +368,15 @@ if(finishEnabled>.5 && finishPattern>.5) {
   }
   #endif
   // Lower bridge geometry is no longer darkened or frosted by position alone.
-  // Only role 8 is a documented exposed base; everything else remains satin.
+  // Role 8 identifies the exposed base, now smooth satin by user correction.
   float silverRadius=length(finishUv);
   float brushed=finishPattern>5.5
     ? filteredFinishNoise(vec2(silverRadius*150.0,11.0))
     : finishBrush(finishBrushUv);
-  float frost=finishFrost(finishUv);
-  finishFrostMask=finishBase;
-  finishGrain=brushed*finishField+frost*finishBase;
-  finishHeight=brushed*finishField*.00018+frost*finishBase*.0014;
+  // User correction: lower bridge fields are smooth satin, never frosted.
+  finishFrostMask=0.0;
+  finishGrain=brushed*finishField;
+  finishHeight=brushed*finishField*.00018;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -449,6 +449,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
+if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,
     );
