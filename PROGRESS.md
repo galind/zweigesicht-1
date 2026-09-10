@@ -1,5 +1,10 @@
 # Zweigesicht — current execution state
 
+## Spring-block full blue arms and later fade — verified locally, 10 September 2026
+
+Follow-up to `9540d8f`: user clarified that every face of the four arms must be blue and the fade should begin further left. d159 now uses a source-local per-fragment arm region, covering narrow connections, bevels, walls and the shared underside independently of interpolated face roles. Fade moved from Y .65–1.05 to 1.05–1.45 mm (0.4 mm left in the reference view). The steel center is preserved. All 66 CPU/source checks, lint, TypeScript and build pass; top/edge/underside browser captures reviewed. Source tests cover all vertices of 168 complete arm/connection faces. Geometry, assets and annotations unchanged in this follow-up. No push or deployment. Next action: user comparison.
+
+
 ## Photo-led material corrections — verified locally, 10 September 2026
 
 Applied the user's subsequent five corrections: d155 is a ruby-family jewel (superseding steel), d249 circular brushed steel (superseding black polish), d99 actual logo/serial faces receive dielectric enamel, d230's two real outlines receive enamel, and d159's blue arms wrap their thickness with a shorter soft transition into the central steel spine. d230 has no modeled lettering, so none was added. Scope/evidence: `docs/FINISH_PHOTO_CORRECTIONS.md`.

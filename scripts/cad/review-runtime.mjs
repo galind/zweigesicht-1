@@ -341,6 +341,23 @@ for(const id of [99,230]){
  }
  for(const [region,count] of Object.entries(coverage))assert.ok(count>0,`Blue thickness coverage: ${region}`);
 }
+{
+ const rawBytes=fs.readFileSync(path.join(ROOT,'artifacts/finishing-cad/sidecars/d_0_1_1_159.bin'));
+ const raw=new Float32Array(rawBytes.buffer,rawBytes.byteOffset,rawBytes.length/4);
+ const range=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+ const arms=new Set([...range(1,4),...range(62,70),...range(79,98),...range(104,123),...range(139,158),...range(164,173),180,...range(186,261),8,11,12,15,33,38,39,44]);
+ const visited=new Set();
+ for(let i=0;i<raw.length;i+=10){
+  const [x,y]=raw.subarray(i,i+2),face=raw[i+9];
+  if(arms.has(face)){
+   assert.ok(Math.abs(x)>=y*.5 || y<=1.05,`Entire arm face ${face} must be fully blue, not merely its top footprint`);
+   visited.add(face);
+  }
+  if(face>=125&&face<=137&&y>=1.45)assert.ok(Math.abs(x)<y*.5,'Spine sides must stay outside the blue arm region');
+ }
+ assert.equal(visited.size,arms.size);
+ results.push({check:'every vertex of all complete arm/connection faces lies in the fully blue fragment region; spine sidewalls stay steel beyond the fade',status:'pass',faces:visited.size});
+}
 results.push({check:'jewel mass is dielectric; enamel matches every intended face and no others; both spring arms carry blue on upper and lower surfaces with steel spine preserved',status:'pass'});
 // Guard the installed renderer contract, so a Three upgrade cannot silently turn
 // isolated clear parts into white discs again. Browser evidence checks pixels.

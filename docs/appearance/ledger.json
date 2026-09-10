@@ -50,7 +50,7 @@
       "10": "broad plate frost field",
       "11": "user-approved recessed enamel"
     },
-    "materialSourceSha256": "f7ebb6f492d8b38c4a900f4702c556866ac1abd6f558dea56e1103e595248fb3",
+    "materialSourceSha256": "1b6a3038178237342c83d875b528a813cf942dd75d1a8bc8e8086114d98dfcc2",
     "packagerSourceSha256": "7c23d8f67c5b9e838c44544c0c347da74dbf6e1e3bf46e4e1d8a32f807b3c711"
   },
   "coverage": {
@@ -26970,8 +26970,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Blue wraps upper/lower arm faces and edges. The screw-end join fades from blue to steel at local Y 0.65–1.05 mm on all sides; the central spine remains steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "USER-FINISH-2026-09-10-02; exact source blue-arm footprints projected through thickness",
+      "surfaceReview": "Blue covers every arm surface, including connections, bevels and shared underside, through a source-local per-fragment region. The join fades at local Y 1.05–1.45 mm, shifted 0.4 mm left from the preceding pass; the central spine remains steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "USER-FINISH-2026-09-10-02; source-verified full arm regions and subsequent user all-face correction",
       "assignment": {
         "color": 13094356,
         "metalness": 1,
@@ -54177,8 +54177,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "USER-FINISH-2026-09-10-02; exact source blue-arm footprints projected through thickness",
-      "surfaceReview": "Blue wraps upper/lower arm faces and edges. The screw-end join fades from blue to steel at local Y 0.65–1.05 mm on all sides; the central spine remains steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "USER-FINISH-2026-09-10-02; source-verified full arm regions and subsequent user all-face correction",
+      "surfaceReview": "Blue covers every arm surface, including connections, bevels and shared underside, through a source-local per-fragment region. The join fades at local Y 1.05–1.45 mm, shifted 0.4 mm left from the preceding pass; the central spine remains steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 12831184,
         "metalness": 1,

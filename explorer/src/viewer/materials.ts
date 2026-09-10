@@ -347,9 +347,11 @@ if(finishEnabled>.5 && abs(vFinishRole-4.0)<.2) diffuseColor.rgb=vec3(.018,.08,.
 if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.22,.002,.018);
 // Heat-blued steel changes from blue-black to cobalt as the reflected angle
 // turns. Neutral source seats remain steel unless the whole screw is blued.
-// Projected source arm roles wrap the thickness. The screw-end join also
-// wraps every side, with a shorter 0.65–1.05 mm blue-to-steel transition.
-float finishShockBlue=finishShockBlock*(1.0-smoothstep(.65,1.05,vFinishPosition.y));
+// All four arms, including narrow connections, bevels and their shared bottom
+// face, lie outside |X| = Y/2. The steel spine lies inside this source-local
+// wedge. Evaluate per fragment so interpolated face roles cannot leave gaps.
+float finishShockArms=step(vFinishPosition.y*.5,abs(vFinishPosition.x));
+float finishShockBlue=finishShockBlock*max(finishShockArms,1.0-smoothstep(1.05,1.45,vFinishPosition.y));
 float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
 if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=0.0;
 if(finishEnabled>.5 && finishBlueSurface>0.0) {

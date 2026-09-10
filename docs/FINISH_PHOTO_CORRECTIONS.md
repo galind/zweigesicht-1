@@ -24,3 +24,9 @@ Reference: `USER-FINISH-2026-09-10-02` in `assets/source-manifest/finish-adjustm
 Local evidence: `artifacts/browser/finish-photo-corrections/` contains nine reviewed captures, the user image, runtime report, build log, geometry/annotation verification and browser state/logs. `evidence-index.json` hashes these files. Derived model binaries remain ignored under the existing repository policy; regenerate annotations with `node scripts/assets/prepare-finishes.mjs` using verified local CAD sidecars.
 
 No lighting, UI, geometry, original CAD or placement changes. No push, merge or deployment. Local preview: http://127.0.0.1:4173/?inspect&review=photo-corrections. Next action: user visual comparison of these five corrections.
+
+## Follow-up: all arm faces and later fade
+
+The user clarified that the entire four arms must be blue. The earlier projected top-footprint treatment missed parts of their narrow connections and edges. The d159 shader now evaluates the complete arm region per fragment, outside the source-local wedge `abs(X) < Y/2`, on every face including the shared bottom. Every vertex of 168 explicitly inventoried arm/connection faces is checked for full blue coverage; central spine sidewalls beyond the fade are checked to remain steel. The fade moves 0.4 mm toward the left of the reference view, from .65–1.05 to 1.05–1.45 mm in local Y, retaining the soft width. These values are authored visual adjustments.
+
+All 66 CPU/source checks, lint, TypeScript and build pass. Browser `arms-full-top.jpg`, `arms-full-edge.jpg` and `arms-full-underside.jpg` confirm coverage and shifted fade. Blue metal retains bright reflected highlights. This follow-up changes no geometry, assets, annotations, lighting or UI. The previous screenshots and dimensions above are retained as history.
