@@ -12,8 +12,8 @@ assert len(leaves)==len(source['occurrences'])==len(pipeline['occurrences'])
 assert set(leaves)=={x['id'] for x in source['occurrences']}=={x['id'] for x in pipeline['occurrences']}
 expected_definitions={p['definitionId'] for p in leaves.values()}
 assert expected_definitions=={d['id'] for d in source['definitions']}=={d['id'] for d in pipeline['definitions']}
-indexes=[E/'index.json',E/'catalog/capture-index.json',E/'catalog-second/index.json',E/'movement-second/capture-index.json']
-notes=[E/'visual-notes.json',E/'catalog/visual-notes.json',E/'catalog-second/pixel-notes.json',E/'movement-second/visual-notes.json']
+indexes=[E/'index.json',E/'catalog/capture-index.json',E/'catalog-second/index.json',E/'movement-second/capture-index.json',E/'movement-middle/capture-index.json']
+notes=[E/'visual-notes.json',E/'catalog/visual-notes.json',E/'catalog-second/pixel-notes.json',E/'movement-second/visual-notes.json',E/'movement-middle/visual-notes.json']
 captures=[];reviewed=[]
 for p in indexes:
  if p.exists():
@@ -29,15 +29,25 @@ for p in indexes:
 for p in notes:
  if p.exists():
   a=read(p)
-  if isinstance(a,dict):a=a.get('occurrences',a.get('notes',a.get('reviews',[])))
+  if isinstance(a,dict):a=([{'id':k,'observation':v} for k,v in a.items()] if all(k in leaves for k in a) else a.get('occurrences',a.get('notes',a.get('reviews',[]))))
   for r in a:
-   if isinstance(r,dict) and r.get('id') in leaves:reviewed.append(r['id'])
+   if isinstance(r,dict):
+    if 'id' not in r and 'index' in r:
+     matching=[x for x in read(E/'movement-second/capture-index.json') if x['index']==r['index']]
+     assert len(matching)==1
+     r={**r,'id':matching[0]['id']}
+    if r.get('id') in leaves:reviewed.append(r['id'])
 ids=[c['id'] for c in captures]
 assert len(ids)==len(set(ids)), 'Overlapping browser assignments'
 by_parent=collections.defaultdict(lambda:{'expected':0,'captured':0,'reviewed':0})
 for id,p in leaves.items():
  row=by_parent[p['parentId']];row['expected']+=1;row['captured']+=id in ids;row['reviewed']+=id in reviewed
-report={'status':'in-progress: captured is not reviewed','sourceDefinitions':len(expected_definitions),'sourceOccurrences':len(leaves),'bodies':source['summary']['bodies'],'faces':source['summary']['faces'],'capturedOccurrences':len(ids),'pixelReviewedOccurrences':len(set(reviewed)),'captures':captures,'byActualParent':dict(by_parent),'notCaptured':[id for id in leaves if id not in ids],'notPixelReviewed':[id for id in leaves if id not in reviewed]}
+status='in-progress: captured is not reviewed'
+if set(reviewed)==set(leaves):
+ status='all individual notes present; final verification pending'
+ final_path=ROOT/'docs/appearance/cad-finishing-audit.json'
+ if final_path.exists() and read(final_path).get('status')=='complete audit; approval required before implementation':status='complete verified audit; approval required before implementation'
+report={'status':status,'sourceDefinitions':len(expected_definitions),'sourceOccurrences':len(leaves),'bodies':source['summary']['bodies'],'faces':source['summary']['faces'],'capturedOccurrences':len(ids),'pixelReviewedOccurrences':len(set(reviewed)),'captures':captures,'byActualParent':dict(by_parent),'notCaptured':[id for id in leaves if id not in ids],'notPixelReviewed':[id for id in leaves if id not in reviewed]}
 (S/'coverage.json').write_text(json.dumps(report,indent=2))
 lines=['# Live CAD finishing audit coverage','', 'Captured screenshots are not accepted as reviewed rows until individual pixel notes exist.','',f"Source and runtime reconciled: **{len(expected_definitions)} definitions / {len(leaves)} occurrences**; {source['summary']['bodies']} bodies / {source['summary']['faces']} faces.",'',f'Captured: {len(ids)}; pixel notes: {len(set(reviewed))}.','', '| Actual parent source ID | Expected leaves | Captured | Pixel notes |','|---|---:|---:|---:|']
 for parent,row in by_parent.items():lines.append(f"| {parent} | {row['expected']} | {row['captured']} | {row['reviewed']} |")
