@@ -40,16 +40,15 @@ for (const [family, ids] of Object.entries({
   warmPlate: [105, 120],
   bridge: [99, 133, 147, 152, 153, 156, 165, 219, 222, 228, 230, 240],
   barrel: [85, 86, 90, 91],
-  ratchet: [97, 131, 172],
+  ratchet: [97, 131, 172, 249],
   // Flat keyless levers/springs, including both source setting-spring variants.
   // Unlike bridge feet these faces are brushed on both sides of local Z0.
   brushedSteel: [174, 176, 178, 190, 193, 244, 246, 248],
-  blackPolished: [249],
   crown: [251],
   blue: screwDefinitions,
   steel: [
     53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 117, 124, 126,
-    127, 129, 130, 135, 137, 142, 143, 144, 148, 149, 150, 151, 154, 155,
+    127, 129, 130, 135, 137, 142, 143, 144, 148, 149, 150, 151, 154,
     157, 158, 159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188,
     211, 214, 217, 220, 234, 235, 237, 242, 252, 254,
   ],
@@ -60,7 +59,7 @@ for (const [family, ids] of Object.entries({
   satinGold: [121],
   roseGold: [100, 203, 207, 224],
   balance: [110, 111],
-  ruby: [101, 102, 106, 112, 128, 134, 196, 197, 198, 199, 204, 205, 208, 231],
+  ruby: [101, 102, 106, 112, 128, 134, 155, 196, 197, 198, 199, 204, 205, 208, 231],
   sapphire: [67],
   diamond: [225],
   spring: [116],
@@ -348,15 +347,14 @@ if(finishEnabled>.5 && abs(vFinishRole-4.0)<.2) diffuseColor.rgb=vec3(.018,.08,.
 if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.22,.002,.018);
 // Heat-blued steel changes from blue-black to cobalt as the reflected angle
 // turns. Neutral source seats remain steel unless the whole screw is blued.
-// The d159 source splits its four blue arms from a single steel top face. The
-// reference shows blue continuing over that face only around the retaining
-// screw end (local Y <= 1.56); the central spine and other surfaces stay steel.
-float finishShockBlue=finishShockBlock*(1.0-step(.2,abs(vFinishRole-1.0)))*(1.0-step(1.56,vFinishPosition.y));
+// Projected source arm roles wrap the thickness. The screw-end join also
+// wraps every side, with a shorter 0.65–1.05 mm blue-to-steel transition.
+float finishShockBlue=finishShockBlock*(1.0-smoothstep(.65,1.05,vFinishPosition.y));
 float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
 if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=0.0;
-if(finishEnabled>.5 && finishBlueSurface>.5) {
+if(finishEnabled>.5 && finishBlueSurface>0.0) {
  float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);
- diffuseColor.rgb=mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78);
+ diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78),finishBlueSurface);
 }
 if(finishEnabled>.5 && finishPattern>.5) {
  if(finishPattern<1.5 || (finishPattern>3.5 && finishPattern<4.5) || finishPattern>5.5) {
@@ -423,6 +421,10 @@ if(finishEnabled>.5 && finishPattern>.5) {
   diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.008,.03,.105),ink*.82);
  }
 }
+if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) {
+ diffuseColor.rgb=vec3(.008,.03,.105);
+ finishHeight=0.0;
+}
 `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
@@ -433,6 +435,7 @@ if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) roughnessF
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
 if(finishEnabled>.5 && abs(vFinishRole-3.0)<.2) roughnessFactor=.085;
 if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || abs(vFinishRole-2.0)>.2)) roughnessFactor=.13;
+if(finishEnabled>.5 && finishShockBlock>.5) roughnessFactor=mix(roughnessFactor,.13,finishBlueSurface);
 if(finishEnabled>.5 && finishBlackPolished>.5) roughnessFactor=.055;
 if(finishEnabled>.5 && finishPattern>.5) {
  float finishContrast=.1;
@@ -444,11 +447,12 @@ if(finishEnabled>.5 && finishPattern>.5) {
   roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
+if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <metalnessmap_fragment>',
-      '#include <metalnessmap_fragment>\nif(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) metalnessFactor=0.0;',
+      '#include <metalnessmap_fragment>\nif(finishEnabled>.5 && (abs(vFinishRole-5.0)<.2 || abs(vFinishRole-11.0)<.2)) metalnessFactor=0.0;',
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <normal_fragment_maps>',

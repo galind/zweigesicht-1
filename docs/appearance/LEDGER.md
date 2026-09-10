@@ -228,7 +228,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_3 | d_0_1_1_152: ml01 si GabelY UPlatte | movement | bridge → bridge | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_4 | d_0_1_1_153: ml01 si GabelX UPlatte | movement | bridge → bridge | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_5 | d_0_1_1_154: ml01 si GabelX | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_6 | d_0_1_1_155: si HMzylinder | movement | shockMass → steel | verified | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_6 | d_0_1_1_155: si HMzylinder | movement | shockMass → ruby | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_7 | d_0_1_1_156: ml01 si Klobenplatte | movement | bridge → bridge | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_8 | d_0_1_1_157: 020-50x130 a40x50 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_9 | d_0_1_1_123: 010-linzyl s50x75 k95x25 | movement | blue → steel | verified | Targeted correction |
@@ -361,7 +361,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_71 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_72 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_73 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Targeted correction |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_74 | d_0_1_1_249: ml01 Kronrad z45 m0,15 | movement | crown → blackPolished | verified | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_74 | d_0_1_1_249: ml01 Kronrad z45 m0,15 | movement | crown → ratchet | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_1 | d_0_1_1_251: ml01 Kronradplatte | movement | crown → crown | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_2 | d_0_1_1_220: 020-40x140 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_3 | d_0_1_1_220: 020-40x140 | movement | steel → steel | inferred | Retained with confidence stated |

@@ -1,0 +1,26 @@
+# Photo-led finishing corrections — 10 September 2026
+
+Implemented locally after the completed audit checkpoint `23889a5`, following the user's subsequent explicit corrections. This supersedes the earlier steel instruction for d155, black-polished instruction for d249, top-only blue extent for d159 and omitted outline for d230. Other audit proposals remain pending; this is not blanket approval of that plan.
+
+| Part | Applied scope | Evidence and appearance |
+|---|---|---|
+| Indicator mass cylinder d155 | Shared ruby profile: magenta-ruby dielectric, metalness 0, transmission .72, IOR 1.76 | User explicitly corrected steel to jewel. Browser front/oblique and assembled views show colored depth and bright surface reflections. Optical values are authored approximations, not measurements. |
+| Crown wheel d249 | Shared circular satin steel profile, pattern 2, roughness .29 | User explicitly requests brushing. Browser macro shows concentric grain and directional reflection; cap d251 remains separate. |
+| Train bridge d99 | New enamel role 11 on exactly 116 logo/number faces: 129–247 excluding steel counters 219/223/227 | The source has real lettering. These faces previously retained metallic response despite dark color. Enamel now has full dark blue color, metalness 0, final roughness .085 and no procedural grain relief. Existing border faces 59–108 retain their previous treatment. |
+| Center-wheel bridge d230 | Enamel role 11 on exactly 30 recessed outline faces 37–66, including floors 51/66 | Source has two decorative outlines and **no modeled lettering**. Browser shows both outlines; no logo or number was fabricated. Other chamfers remain steel. |
+| Indicator hand-lever spring block d159 | Four original blue arm footprints projected through thickness, with .04 mm allowance around their modeled edges; retaining-screw join blue on every side with smooth fade from local Y .65 to 1.05 mm | Interpreted “only right side as of now” as the existing defect: corresponding blue regions wrap tops, undersides and edges. Earlier hard termination at Y 1.56 is superseded. Exact fade dimensions are authored from the photo, not measured. The central steel spine and narrow steel connections remain distinct. |
+
+Reference: `USER-FINISH-2026-09-10-02` in `assets/source-manifest/finish-adjustment-references.json`; original image is retained only in ignored local evidence. Existing red gauge inlays, neutral screws, cannon pinions, wheel hubs, other jewel/rose-gold profiles and all 29 exact steel-instance overrides remain unchanged.
+
+## Verification
+
+- All 65 CPU/source/asset checks pass, including exact per-vertex enamel face membership, blue upper/lower coverage on both branches and retained steel spine. Expected negative fixtures intentionally emit load-error messages.
+- Authored lint, TypeScript and production build pass.
+- Browser review: spring top, edge and underside; jewel front and oblique; crown-wheel macro; train-bridge logo and serial; center-wheel outlines; assembled shock mechanism. No browser warnings/errors, source-surface error or context loss.
+- Both GLBs and the assembly manifest are byte-identical to the pre-change baseline. Original positions, normals, indices and transforms are therefore unchanged.
+- Packed annotations change only d99, d159 and d230; every stored annotation normal and every definition byte range is unchanged. New annotation SHA-256: `53080b9766107cf7233e7fba91e82ed86a9562d30cd5f045036d0c56031497f1`.
+- Current appearance ledger retains complete 202-definition/365-occurrence inventory. The exhaustive audit JSON remains the historical pre-implementation snapshot and was not presented as a new exhaustive browser audit.
+
+Local evidence: `artifacts/browser/finish-photo-corrections/` contains nine reviewed captures, the user image, runtime report, build log, geometry/annotation verification and browser state/logs. `evidence-index.json` hashes these files. Derived model binaries remain ignored under the existing repository policy; regenerate annotations with `node scripts/assets/prepare-finishes.mjs` using verified local CAD sidecars.
+
+No lighting, UI, geometry, original CAD or placement changes. No push, merge or deployment. Local preview: http://127.0.0.1:4173/?inspect&review=photo-corrections. Next action: user visual comparison of these five corrections.

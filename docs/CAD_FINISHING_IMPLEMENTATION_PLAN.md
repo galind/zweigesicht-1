@@ -1,5 +1,8 @@
 # CAD finishing implementation plan — approval required
 
+> Historical audit/plan snapshot. Subsequent user-authorized corrections to d155, d249, d99, d230 and d159 are recorded in [FINISH_PHOTO_CORRECTIONS.md](FINISH_PHOTO_CORRECTIONS.md). Those specific earlier locks are superseded; other proposals remain pending. The audit's no-production-change statement describes its original checkpoint.
+
+
 This is a plan only. No production materials, shaders, geometry, assets, lighting, assignments or UI were changed by the audit. Each milestone below requires approval before implementation. Keep commits local unless separately authorized. Retain all 18 correction locks in `docs/appearance/cad-finishing-audit.json`.
 
 ## A1 — factual raw d21 color correction

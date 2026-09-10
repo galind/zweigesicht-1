@@ -35,6 +35,25 @@ for(const id of ids) {
  if(sha(raw)!==meta.sha256||!meta.cachedPositionsAndIndicesExactlyReproduced)throw Error('Unverified source sidecar '+key);
  const input=new Float32Array(raw.buffer,raw.byteOffset,raw.length/4),g=geometries.get(key);
  if(!g||g.attributes.position.count!==meta.vertexCount)throw Error('Missing or changed geometry '+key);
+ // Project the four source-blue arm fields through the 0.2 mm thickness.
+ // A 0.04 mm edge allowance includes their modeled edge rounding. The
+ // central steel spine is outside these exact projected source triangles.
+ const blueTriangles=[];
+ if(id===159)for(let t=0;t<g.index.count;t+=3){
+  const indices=[g.index.getX(t),g.index.getX(t+1),g.index.getX(t+2)];
+  if(indices.every(i=>input[i*10+9]>=1&&input[i*10+9]<=4))
+   blueTriangles.push(indices.map(i=>[input[i*10],input[i*10+1]]));
+ }
+ const inBlueArm=(x,y)=>blueTriangles.some(([a,b,c])=>{
+  const cross=(u,v)=>(v[0]-u[0])*(y-u[1])-(v[1]-u[1])*(x-u[0]);
+  const signs=[cross(a,b),cross(b,c),cross(c,a)];
+  if(signs.every(v=>v>=0)||signs.every(v=>v<=0))return true;
+  return [[a,b],[b,c],[c,a]].some(([u,v])=>{
+   const dx=v[0]-u[0],dy=v[1]-u[1],length=dx*dx+dy*dy;
+   const f=length?Math.max(0,Math.min(1,((x-u[0])*dx+(y-u[1])*dy)/length)):0;
+   return Math.hypot(x-u[0]-f*dx,y-u[1]-f*dy)<=.04;
+  });
+ });
  const output=new Float32Array(meta.vertexCount*4);let normalFallbacks=0;
  const roles={};
  for(let i=0;i<meta.vertexCount;i++) {
@@ -57,6 +76,7 @@ for(const id of ids) {
   if([99,219,222,228].includes(id)&&color&&color[2]>.45&&color[0]<.03&&color[1]===0)role=3;
   if(id===156&&color&&color[0]>.3&&color[1]===0&&color[2]===0)role=7;
   if((id===251&&f.index===22)||(id===159&&f.index>=1&&f.index<=4))role=4;
+  if(id===159&&inBlueArm(input[i*10],input[i*10+1]))role=4;
   if(id===195&&flat&&Math.abs(z+1.9)<.001)role=6;
   if(bridgeBaseFaces[id]?.includes(f.index))role=8;
   // BRep cones and oblique planar bands on reviewed bridges are modeled
@@ -65,6 +85,8 @@ for(const id of ids) {
   // Restrict plate frosting to broad axial source faces. Small functional
   // recesses and the separately identified inscription floors remain distinct.
   if(id===195&&flat&&f.areaMm2>.4&&role===0)role=10;
+  // User-approved enamel: actual recessed lettering and outlines only.
+  if((id===99&&f.index>=129&&f.index<=247&&![219,223,227].includes(f.index))||(id===230&&f.index>=37&&f.index<=66))role=11;
   const nx=input[i*10+6],ny=input[i*10+7],nz=input[i*10+8];
   const agreement=nx*n.getX(i)+ny*n.getY(i)+nz*n.getZ(i);
   // Exclude individual sliver outliers; retain original shading at >30 degree disagreement.
@@ -80,7 +102,7 @@ for(const id of ids) {
 }
 const packed=Buffer.concat(blocks),digest=sha(packed),file=`finish-surfaces-${digest.slice(0,12)}.bin`;
 fs.writeFileSync(path.join(modelDir,file),packed);fs.writeFileSync(path.join(modelDir,file+'.gz'),gzipSync(packed,{level:9,mtime:0}));
-const manifest={schemaVersion:1,sourceStepSha256:'f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b',overview:paths.overview,file:'/models/'+file,sha256:digest,definitions,roles:{0:'normal-based conservative surface',1:'source main plane',2:'source steel hand seat or screw shank/under-head',3:'source decorative groove and engraving',4:'source blue crown cone or shock spring field',5:'source dark dial marking',6:'source plate inscription floor',7:'source red gauge inlay',8:'reference-supported exposed bridge base field',9:'modeled bridge chamfer or countersink',10:'broad plate frost field'}};
+const manifest={schemaVersion:1,sourceStepSha256:'f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b',overview:paths.overview,file:'/models/'+file,sha256:digest,definitions,roles:{0:'normal-based conservative surface',1:'source main plane',2:'source steel hand seat or screw shank/under-head',3:'source decorative groove and engraving',4:'source blue crown cone or shock spring field',5:'source dark dial marking',6:'source plate inscription floor',7:'source red gauge inlay',8:'reference-supported exposed bridge base field',9:'modeled bridge chamfer or countersink',10:'broad plate frost field',11:'user-approved recessed enamel'}};
 fs.writeFileSync(path.join(modelDir,'finish-surfaces.json'),JSON.stringify(manifest));
 fs.writeFileSync(path.join(root,'artifacts/finishing-cad/runtime-sidecar-report.json'),JSON.stringify({bytes:packed.length,gzipBytes:gzipSync(packed,{level:9,mtime:0}).length,definitions:reports},null,2)+'\n');
 console.log(JSON.stringify({bytes:packed.length,definitions:reports},null,2));

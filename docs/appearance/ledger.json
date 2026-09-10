@@ -34,8 +34,8 @@
   "baseline": "00ae9d3f3e441c1a7d2559e5b500b99ac4f5567b",
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "runtimeAnnotations": {
-    "file": "/models/finish-surfaces-5ad97cd16281.bin",
-    "sha256": "5ad97cd1628170baba5040771d42963afd374bffa267bf51e82fa883c6461d88",
+    "file": "/models/finish-surfaces-53080b976610.bin",
+    "sha256": "53080b9766107cf7233e7fba91e82ed86a9562d30cd5f045036d0c56031497f1",
     "roles": {
       "0": "normal-based conservative surface",
       "1": "source main plane",
@@ -47,10 +47,11 @@
       "7": "source red gauge inlay",
       "8": "reference-supported exposed bridge base field",
       "9": "modeled bridge chamfer or countersink",
-      "10": "broad plate frost field"
+      "10": "broad plate frost field",
+      "11": "user-approved recessed enamel"
     },
-    "materialSourceSha256": "8b01efeb92d225357eb9d53c0c21e600ca46a4e7f1bbece82833acb229d851ce",
-    "packagerSourceSha256": "2bdff4ff85d627431e1d6501f4d88741a1719d5abd37b30328049cea5d5bd739"
+    "materialSourceSha256": "f7ebb6f492d8b38c4a900f4702c556866ac1abd6f558dea56e1103e595248fb3",
+    "packagerSourceSha256": "7c23d8f67c5b9e838c44544c0c347da74dbf6e1e3bf46e4e1d8a32f807b3c711"
   },
   "coverage": {
     "leafDefinitions": 202,
@@ -21797,8 +21798,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Source face54 at local Z=-.3mm remains smooth satin. Frosting is limited to the separately mapped exposed base field; other lower faces are no longer classified by height alone.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. Frosting is limited to the separately mapped exposed base field; other lower faces are no longer classified by height alone.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
       "assignment": {
         "color": 13949150,
         "metalness": 1,
@@ -26580,15 +26581,15 @@
       "name": "si HMzylinder",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance",
+      "intendedMaterial": "Ruby-bearing dielectric",
+      "surfaceReview": "The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate. Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "evidence": "User correction 2026-09-10 explicitly supersedes earlier steel instruction; USER-FINISH-2026-09-10-02",
       "assignment": {
-        "color": 13094356,
-        "metalness": 1,
-        "roughness": 0.18,
+        "color": 12004200,
+        "metalness": 0,
+        "roughness": 0.055,
         "pattern": 0,
-        "family": "steel",
+        "family": "ruby",
         "assignment": "source-definition"
       },
       "source": {
@@ -26969,8 +26970,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "The four heat-blue lever fields extend across the adjoining broad top face only through the retaining-screw end at local Y 1.56 mm. The central spine, underside and sidewalls remain steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "USER-FINISH-2026-09-10-01; d159 source face topology",
+      "surfaceReview": "Blue wraps upper/lower arm faces and edges. The screw-end join fades from blue to steel at local Y 0.65–1.05 mm on all sides; the central spine remains steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "USER-FINISH-2026-09-10-02; exact source blue-arm footprints projected through thickness",
       "assignment": {
         "color": 13094356,
         "metalness": 1,
@@ -33759,8 +33760,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
       "assignment": {
         "color": 13949150,
         "metalness": 1,
@@ -36329,15 +36330,15 @@
       "name": "ml01 Kronrad z45 m0,15",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Black-polished steel crown wheel",
-      "surfaceReview": "Mirror-smooth steel response on d249; broad light-to-dark reflections provide the black-polished appearance without painting it black.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; SJX 2023 explicit black-polished crown-wheel description; maker and SJX macro photographs",
+      "intendedMaterial": "Neutral steel ratchet",
+      "surfaceReview": "Shared circular satin steel profile, pattern 2.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; User correction 2026-09-10 explicitly requests brushing, superseding earlier black-polished instruction",
       "assignment": {
-        "color": 11450048,
+        "color": 13095130,
         "metalness": 1,
-        "roughness": 0.055,
-        "pattern": 5,
-        "family": "blackPolished",
+        "roughness": 0.29,
+        "pattern": 2,
+        "family": "ratchet",
         "assignment": "source-definition"
       },
       "source": {
@@ -48993,8 +48994,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Source face54 at local Z=-.3mm remains smooth satin. Frosting is limited to the separately mapped exposed base field; other lower faces are no longer classified by height alone.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. Frosting is limited to the separately mapped exposed base field; other lower faces are no longer classified by height alone.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53810,9 +53811,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance",
-      "surfaceReview": "The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "intendedMaterial": "Ruby-bearing dielectric",
+      "evidence": "User correction 2026-09-10 explicitly supersedes earlier steel instruction; USER-FINISH-2026-09-10-02",
+      "surfaceReview": "The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate. Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "before": {
         "color": 13793182,
         "metalness": 0,
@@ -53822,14 +53823,14 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 13094356,
-        "metalness": 1,
-        "roughness": 0.18,
+        "color": 12004200,
+        "metalness": 0,
+        "roughness": 0.055,
         "pattern": 0,
-        "family": "steel",
+        "family": "ruby",
         "assignment": "source-definition"
       },
-      "mismatch": "shockMass → steel",
+      "mismatch": "shockMass → ruby",
       "disposition": "Targeted correction",
       "annotation": true
     },
@@ -54176,8 +54177,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "USER-FINISH-2026-09-10-01; d159 source face topology",
-      "surfaceReview": "The four heat-blue lever fields extend across the adjoining broad top face only through the retaining-screw end at local Y 1.56 mm. The central spine, underside and sidewalls remain steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "USER-FINISH-2026-09-10-02; exact source blue-arm footprints projected through thickness",
+      "surfaceReview": "Blue wraps upper/lower arm faces and edges. The screw-end join fades from blue to steel at local Y 0.65–1.05 mm on all sides; the central spine remains steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -61684,8 +61685,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
+      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -63508,9 +63509,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Black-polished steel crown wheel",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; SJX 2023 explicit black-polished crown-wheel description; maker and SJX macro photographs",
-      "surfaceReview": "Mirror-smooth steel response on d249; broad light-to-dark reflections provide the black-polished appearance without painting it black.",
+      "intendedMaterial": "Neutral steel ratchet",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; User correction 2026-09-10 explicitly requests brushing, superseding earlier black-polished instruction",
+      "surfaceReview": "Shared circular satin steel profile, pattern 2.",
       "before": {
         "color": 13751773,
         "metalness": 1,
@@ -63520,14 +63521,14 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11450048,
+        "color": 13095130,
         "metalness": 1,
-        "roughness": 0.055,
-        "pattern": 5,
-        "family": "blackPolished",
+        "roughness": 0.29,
+        "pattern": 2,
+        "family": "ratchet",
         "assignment": "source-definition"
       },
-      "mismatch": "crown → blackPolished",
+      "mismatch": "crown → ratchet",
       "disposition": "Targeted correction",
       "annotation": true
     },

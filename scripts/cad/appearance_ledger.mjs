@@ -56,9 +56,9 @@ const conflicts={
 const specific={
  137:['User explicit cannon-pinion steel correction; source gray appearance','Dial-I cannon pinion uses neutral polished steel.'],
  142:['User explicit wheel-hub steel correction; source ml01 Butzen Stundenrad1 identity and gray appearance','The separately modeled hour-wheel-I hub uses neutral steel. Its wheel retains its own warm finish.'],
- 155:['User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance','The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate.'],
+ 155:['User correction 2026-09-10 explicitly supersedes earlier steel instruction; USER-FINISH-2026-09-10-02','The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate.'],
  156:['USER-FINISH-2026-09-10-01; source-red gauge-inlay faces','The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes.'],
- 159:['USER-FINISH-2026-09-10-01; d159 source face topology','The four heat-blue lever fields extend across the adjoining broad top face only through the retaining-screw end at local Y 1.56 mm. The central spine, underside and sidewalls remain steel.'],
+ 159:['USER-FINISH-2026-09-10-02; exact source blue-arm footprints projected through thickness','Blue wraps upper/lower arm faces and edges. The screw-end join fades from blue to steel at local Y 0.65–1.05 mm on all sides; the central spine remains steel.'],
  183:['User explicit cannon-pinion steel correction; source gray appearance','Dial-II cannon pinion uses neutral polished steel.'],
  121:['User explicit thin-washer goldish satin correction; source Flitter 200x400 identity','Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict.'],
  111:['User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity','All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16.'],
@@ -91,7 +91,9 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  if([85,86,90,91].includes(n))evidence+='; USER-FINISH-2026-09-09-04 snailing reference and user confirmation';
  if([85,86,90,91].includes(n))notes+=' Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.';
  if(n===105)evidence+='; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation';
- if(n===249)evidence+='; SJX 2023 explicit black-polished crown-wheel description; maker and SJX macro photographs';
+ if(n===249){evidence+='; User correction 2026-09-10 explicitly requests brushing, superseding earlier black-polished instruction';notes='Shared circular satin steel profile, pattern 2.';}
+ if(n===99){evidence+='; user enamel request and exact source faces';notes+=' Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained.';}
+ if(n===230){evidence+='; user enamel request and exact source faces';notes+=' Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.';}
  if(n===105)notes+=' User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).';
  if(n===99)notes+=' Source face54 at local Z=-.3mm remains smooth satin. Frosting is limited to the separately mapped exposed base field; other lower faces are no longer classified by height alone.';
  if(conflicts[n]){status='unresolved';notes=conflicts[n]+' '+notes;}

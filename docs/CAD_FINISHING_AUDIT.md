@@ -1,5 +1,8 @@
 # CAD-to-runtime finishing audit
 
+> Historical audit/plan snapshot. Subsequent user-authorized corrections to d155, d249, d99, d230 and d159 are recorded in [FINISH_PHOTO_CORRECTIONS.md](FINISH_PHOTO_CORRECTIONS.md). Those specific earlier locks are superseded; other proposals remain pending. The audit's no-production-change statement describes its original checkpoint.
+
+
 **Complete local audit; ready for user approval before implementation.** Production appearance is unchanged. All individual browser reviews and the programmatic coverage gates passed.
 
 This investigation compares the actual maker STEP/XCAF with the existing production renderer. It proposes no immediate visual changes. The machine-readable [audit ledger](appearance/cad-finishing-audit.json) contains a definition record for every leaf definition and an individual occurrence record with its transform, assignment, observations, evidence and disposition. The [implementation plan](CAD_FINISHING_IMPLEMENTATION_PLAN.md) separates one factual color correction from unresolved optical/finish decisions and geometry work.

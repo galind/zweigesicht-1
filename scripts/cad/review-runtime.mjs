@@ -73,7 +73,7 @@ for(const entry of sidecarReport.definitions){
   assert.ok(Number.isFinite(data[i])&&Number.isFinite(data[i+1])&&Number.isFinite(data[i+2]));
   const len=Math.hypot(data[i],data[i+1],data[i+2]);
   assert.ok(Math.abs(len-1)<1e-5,'Nonzero shading normal must be normalized');
-  assert.ok([0,1,2,3,4,5,6,7,8,9,10].includes(data[i+3]));
+  assert.ok([0,1,2,3,4,5,6,7,8,9,10,11].includes(data[i+3]));
   roles[data[i+3]]=(roles[data[i+3]]??0)+1;
  }
  assert.deepEqual(roles,entry.roles);
@@ -274,9 +274,9 @@ assert.equal(studs.length,2);for(const p of studs)assert.equal(p.material.name,'
 assert.equal(finishFor('shared stud screw','d_0_1_1_226','elsewhere').family,'blue');
 results.push({check:'all four source barrel transforms produce the accepted left winding; all eleven rear-facing screws and hairspring stud/screw are steel with exact instance scope',status:'pass'});
 for(const n of [94,131,249])assert.equal(finishShaderFor(n).shader.uniforms.finishSnailing.value,0);
-assert.equal(finishShaderFor(249).p.material.name,'blackPolished');
-assert.equal(finishShaderFor(249).shader.uniforms.finishPattern.value,5);
-assert.equal(finishShaderFor(249).shader.uniforms.finishBlackPolished.value,1);
+assert.equal(finishShaderFor(249).p.material.name,'ratchet');
+assert.equal(finishShaderFor(249).shader.uniforms.finishPattern.value,2);
+assert.equal(finishShaderFor(249).shader.uniforms.finishBlackPolished.value,0);
 assert.equal(finishShaderFor(251).p.material.name,'crown');
 for(const n of [99,133,147,156,165,219,222,228,230,240]){
  const roles=finishShaderFor(n).p.mesh.geometry.getAttribute('sourceFinishRole');
@@ -288,9 +288,8 @@ assert.equal(finishShaderFor(219).shader.uniforms.finishEngraved.value,1);
 const shockBlockShader=finishShaderFor(159).shader;
 assert.equal(shockBlockShader.uniforms.finishShockBlock.value,1);
 assert.equal(finishShaderFor(156).shader.uniforms.finishShockBlock.value,0);
-assert.match(shockBlockShader.fragmentShader,/finishShockBlock\*\(1\.0-step\(\.2,abs\(vFinishRole-1\.0\)\)\)\*\(1\.0-step\(1\.56,vFinishPosition\.y\)\)/);
 assert.match(shockBlockShader.fragmentShader,/vFinishRole-7\.0\)<\.2\) diffuseColor\.rgb=vec3\(\.22,\.002,\.018\)/);
-results.push({check:'cap grain follows actual screw bores; exact bridge bases and recesses replace blanket lower-Z frosting; four barrels retain handed fine snailing; crown wheel is black polished',status:'pass'});
+results.push({check:'cap grain follows actual screw bores; exact bridge bases and recesses replace blanket lower-Z frosting; four barrels retain handed fine snailing; crown wheel is circular brushed',status:'pass'});
 // Reference-requested keyless surfaces must reach a directional material on
 // real source geometry, including negative-Z faces and the catalog alternative.
 for(const n of [174,176,178,190,193,244,246,248,97,172]){
@@ -309,10 +308,40 @@ for(const n of [174,176,178,190,193,244,246,248,97,172]){
 }
 for(const n of [143,144,173,177])assert.equal(finishFor('',`d_0_1_1_${n}`).family,'steel','Stem, coupling and pins keep their separate turned finish');
 results.push({check:'ten source keyless definitions use straight/circular satin with real local-Z face coverage; Function toggles without recompilation; turned shafts/pins remain separate',status:'pass'});
-for(const definition of [137,142,155,183,188,235]){
+for(const definition of [137,142,183,188,235]){
  const steelPart=createMaterial('steel correction fixture',`d_0_1_1_${definition}`);
  assert.equal(steelPart.name,'steel');assert.equal(steelPart.metalness,1);assert.equal(steelPart.transmission,0);steelPart.dispose();
 }
+const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
+assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
+for(const id of [99,230]){
+ const part=finishShaderFor(id).p;
+ const roles=part.mesh.geometry.getAttribute('sourceFinishRole');
+ const bytes=fs.readFileSync(path.join(ROOT,`artifacts/finishing-cad/sidecars/d_0_1_1_${id}.bin`));
+ const raw=new Float32Array(bytes.buffer,bytes.byteOffset,bytes.length/4);
+ const faces=new Set();
+ for(let i=0;i<roles.count;i++){
+  const face=raw[i*10+9];
+  const expected=id===99?face>=129&&face<=247&&![219,223,227].includes(face):face>=37&&face<=66;
+  assert.equal(roles.getX(i)===11,expected,`Enamel scope d${id} face ${face}`);
+  if(expected)faces.add(face);
+ }
+ assert.equal(faces.size,id===99?116:30);
+}
+{
+ const p=finishShaderFor(159).p,roles=p.mesh.geometry.getAttribute('sourceFinishRole'),pos=p.mesh.geometry.getAttribute('position');
+ const coverage={leftTop:0,rightTop:0,leftBottom:0,rightBottom:0};
+ for(let i=0;i<roles.count;i++){
+  const x=pos.getX(i),y=pos.getY(i),z=pos.getZ(i);
+  if(y>5)assert.notEqual(roles.getX(i),4,'Central spine must remain steel');
+  if(roles.getX(i)===4&&Math.abs(x)>2){
+   if(z>-.01)coverage[x<0?'leftTop':'rightTop']++;
+   if(z<-.19)coverage[x<0?'leftBottom':'rightBottom']++;
+  }
+ }
+ for(const [region,count] of Object.entries(coverage))assert.ok(count>0,`Blue thickness coverage: ${region}`);
+}
+results.push({check:'jewel mass is dielectric; enamel matches every intended face and no others; both spring arms carry blue on upper and lower surfaces with steel spine preserved',status:'pass'});
 // Guard the installed renderer contract, so a Three upgrade cannot silently turn
 // isolated clear parts into white discs again. Browser evidence checks pixels.
 assert.ok(THREE.ShaderChunk.transmission_pars_fragment.includes('return textureBicubic( transmissionSamplerMap, fragCoord.xy, lod );'));

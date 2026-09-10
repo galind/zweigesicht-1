@@ -1,5 +1,12 @@
 # Zweigesicht — current execution state
 
+## Photo-led material corrections — verified locally, 10 September 2026
+
+Applied the user's subsequent five corrections: d155 is a ruby-family jewel (superseding steel), d249 circular brushed steel (superseding black polish), d99 actual logo/serial faces receive dielectric enamel, d230's two real outlines receive enamel, and d159's blue arms wrap their thickness with a shorter soft transition into the central steel spine. d230 has no modeled lettering, so none was added. Scope/evidence: `docs/FINISH_PHOTO_CORRECTIONS.md`.
+
+All 65 CPU/source checks, lint, TypeScript and build pass. Browser macro/top/edge/underside and assembled views pass with no warnings/errors or source-surface/context-loss errors. Both GLBs, the assembly manifest and every annotation normal remain byte-identical; only face roles on d99/d159/d230 changed. Current 365-occurrence ledger refreshed. The exhaustive audit below remains historical; other proposals are still pending. Nothing pushed, merged or deployed; user-owned goal files untouched. Next action: user visual comparison at the local preview.
+
+
 ## Exhaustive CAD finishing audit — complete, awaiting approval, 10 September 2026
 
 Completed local audit-only execution of `CAD_FINISHING_AUDIT_GOAL.md`, based on `d522497`. **202/202 leaf definitions and 365/365 occurrences individually reviewed**, including all **223 movement / 142 optional catalog leaves**, **204 bodies / 203 solids / 204 shells / 25,228 faces / 276 exact face-appearance groups**. All **60 mixed-appearance and 18 source-transparent definitions**, 29 exact steel overrides, 58 annotated definitions, 11 roles, 13 unused-family-fallback probes and four differently treated repeated definitions reconcile. Every row retains source evidence, assignment, orientation, substantive browser observations, disposition, confidence and a scoped recommendation.
