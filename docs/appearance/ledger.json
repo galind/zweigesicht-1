@@ -50,7 +50,7 @@
       "10": "broad plate frost field",
       "11": "user-approved recessed enamel"
     },
-    "materialSourceSha256": "91c5322c75b94dc933188507c4b033517c3882ca778bbd91970bac65a174890d",
+    "materialSourceSha256": "93816a30ccb689fa12ebf85f4b38a3e4d8e637c27e6a64e9c3b62a7a04bd2bbb",
     "packagerSourceSha256": "7c23d8f67c5b9e838c44544c0c347da74dbf6e1e3bf46e4e1d8a32f807b3c711"
   },
   "coverage": {
@@ -21798,7 +21798,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
       "assignment": {
         "color": 13949150,
@@ -22395,7 +22395,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm rose-colored metal cap; exact alloy/coating unmeasured",
-      "surfaceReview": "Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong. Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher. User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).",
+      "surfaceReview": "Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong. More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher. User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).",
       "evidence": "REF-SJX-04; REF-SJX-05; maker DPL component render; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation",
       "assignment": {
         "color": 13936014,
@@ -23493,7 +23493,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Warm rose-colored metal cap; exact alloy/coating unmeasured",
-      "surfaceReview": "Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap. Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher.",
+      "surfaceReview": "Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap. More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher.",
       "evidence": "STEP d120 face colors; d105 photographic analogy",
       "assignment": {
         "color": 13936014,
@@ -24666,7 +24666,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13949150,
@@ -25924,7 +25924,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13949150,
@@ -26342,7 +26342,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 13949150,
@@ -26408,7 +26408,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 13949150,
@@ -26650,7 +26650,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes. Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes. More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "USER-FINISH-2026-09-10-01; source-red gauge-inlay faces",
       "assignment": {
         "color": 13949150,
@@ -27661,7 +27661,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13949150,
@@ -28547,7 +28547,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -28679,7 +28679,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -28832,7 +28832,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -29819,7 +29819,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -30073,7 +30073,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -32992,7 +32992,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13949150,
@@ -33170,7 +33170,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13949150,
@@ -33525,7 +33525,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
         "color": 13949150,
@@ -33760,7 +33760,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
       "assignment": {
         "color": 13949150,
@@ -35157,7 +35157,7 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit horizontal winding-bridge brushing correction",
       "assignment": {
         "color": 13949150,
@@ -36002,7 +36002,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -36122,7 +36122,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -36238,7 +36238,7 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Brushed keyless steel appearance",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
       "assignment": {
         "color": 13225685,
@@ -48995,7 +48995,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -49579,7 +49579,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Warm rose-colored metal cap; exact alloy/coating unmeasured",
       "evidence": "REF-SJX-04; REF-SJX-05; maker DPL component render; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation",
-      "surfaceReview": "Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong. Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher. User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).",
+      "surfaceReview": "Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong. More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher. User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -50747,7 +50747,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Warm rose-colored metal cap; exact alloy/coating unmeasured",
       "evidence": "STEP d120 face colors; d105 photographic analogy",
-      "surfaceReview": "Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap. Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher.",
+      "surfaceReview": "Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap. More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -51769,7 +51769,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53010,7 +53010,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53594,7 +53594,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Steel bridge",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53667,7 +53667,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Steel bridge",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -53886,7 +53886,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "USER-FINISH-2026-09-10-01; source-red gauge-inlay faces",
-      "surfaceReview": "The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes. Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes. More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -54762,7 +54762,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -56003,7 +56003,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -56076,7 +56076,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -56222,7 +56222,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -57609,7 +57609,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -58047,7 +58047,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -59872,7 +59872,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -60164,7 +60164,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -61175,7 +61175,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -61686,7 +61686,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -62343,7 +62343,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user explicit horizontal winding-bridge brushing correction",
-      "surfaceReview": "Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -62708,7 +62708,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -63073,7 +63073,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -63146,7 +63146,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Brushed keyless steel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation); USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)",
-      "surfaceReview": "User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
+      "surfaceReview": "User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored. Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.",
       "before": {
         "color": 12831184,
         "metalness": 1,

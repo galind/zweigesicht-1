@@ -319,6 +319,10 @@ for(const n of [99,133,147,156,165,219,222,228,230,240]){
  assert.ok(shader.includes('finishBase>.5) roughnessFactor=.24'),'Shared satin base response');
 }
 results.push({check:'all ten formerly frosted bridge bases use smooth satin; double roller is unbrushed steel',status:'pass'});
+for(const n of [99,133,147,152,153,156,165,219,222,228,230,240])assert.equal(finishShaderFor(n).shader.uniforms.finishBrushDetail.value,2.6);
+for(const n of [105,120,174,176,178,190,193,244,246,248])assert.equal(finishShaderFor(n).shader.uniforms.finishBrushDetail.value,1.65);
+for(const n of [85,86,90,91,94,97,114,131,172,187,233,249])assert.equal(finishShaderFor(n).shader.uniforms.finishBrushDetail.value,1,'Circular gears, barrels and smooth steel must keep their response');
+results.push({check:'stronger straight brushing reaches every bridge and flat brushed family; circular gear/barrel and smooth double-roller responses remain unchanged',status:'pass'});
 const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
 assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
 for(const id of [99,230]){

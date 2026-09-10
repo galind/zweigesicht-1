@@ -27,6 +27,13 @@ const profiles = {
   diamond: { color: 0xffffff, metalness: 0, roughness: 0.025, pattern: 0 },
 };
 type Finish = keyof typeof profiles;
+// Shared straight-brush controls: updating a family affects all its parts.
+// Circular gear finishes keep their existing response.
+const brushingDetail: Partial<Record<Finish, number>> = {
+  bridge: 2.6,
+  brushedSteel: 1.65,
+  warmPlate: 1.65,
+};
 const screwDefinitions = [
   9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
   192, 201, 226, 253, 255,
@@ -147,6 +154,7 @@ varying vec3 vFinishX;
 varying vec3 vFinishY;
 varying float vFinishRole;
 uniform float finishPattern;
+uniform float finishBrushDetail;
 uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
@@ -182,9 +190,12 @@ float finishFrost(vec2 p) {
       + filteredFinishNoise(p*210.0)*.18;
 }
 float finishBrush(vec2 p) {
- return filteredFinishNoise(p*vec2(.8,90.0))*.46
-      + filteredFinishNoise(p*vec2(2.2,230.0))*.34
-      + filteredFinishNoise(p*vec2(5.0,520.0))*.2;
+ // A wider strand layer survives normal bridge framing, while the finer
+ // layers retain close-up detail. Derivative filtering still prevents shimmer.
+ return filteredFinishNoise(p*vec2(.45,32.0))*.35
+      + filteredFinishNoise(p*vec2(.8,90.0))*.3
+      + filteredFinishNoise(p*vec2(2.2,230.0))*.23
+      + filteredFinishNoise(p*vec2(5.0,520.0))*.12;
 }
 `;
 
@@ -273,6 +284,7 @@ export function createMaterial(
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
+      finishBrushDetail: { value: brushingDetail[finish.family] ?? 1 },
       finishEnabled: enabled,
       finishEngraved: { value: etched ? 1 : 0 },
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
@@ -372,7 +384,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   float silverRadius=length(finishUv);
   float brushed=finishPattern>5.5
     ? filteredFinishNoise(vec2(silverRadius*150.0,11.0))
-    : finishBrush(finishBrushUv);
+    : finishBrush(finishBrushUv)*finishBrushDetail;
   // User correction: lower bridge fields are smooth satin, never frosted.
   finishFrostMask=0.0;
   finishGrain=brushed*finishField;

@@ -21,9 +21,9 @@ const prefix='p_0_1_1_1__0_1_1_1_4__0_1_1_83_',movement='p_0_1_1_1__0_1_1_1_4';
 const families={
  steel:['Neutral steel/pale metal; alloy unresolved unless source SS','Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.'],
  dialSilver:['Solid-silver dial carrier appearance','Fine circular satin on the visible carrier field; source-dark markings remain separate. Numerical response authored.'],
- brushedSteel:['Brushed keyless steel appearance','User reference correction: straight satin on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
- bridge:['Steel bridge','Fine local-X straight-grained upper fields; smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
- warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','Straight-grained top; polished existing chamfers/countersinks; underside and walls rougher.'],
+ brushedSteel:['Brushed keyless steel appearance','User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
+ bridge:['Steel bridge','More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
+ warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher.'],
  frosted:['Warm pink-gilt plate appearance','Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.'],
  brass:['Warm wheel/compound-part metal; no blanket alloy claim','Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.'],
  barrel:['Warm rose-colored barrel metal','User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.'],

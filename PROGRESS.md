@@ -1,5 +1,10 @@
 # Zweigesicht — current execution state
 
+## Stronger bridge and flat-part brushing — verified locally, 10 September 2026
+
+User requested more visible bridge brushing and modestly more detail on keyless/other flat brushed parts, while accepting existing gears. Added a derivative-filtered wider strand layer to straight brushing and centralized family strengths in `brushingDetail`: bridges 2.6, brushed steel flats/warm caps 1.65. Circular gears, barrels and dial brushing are unchanged, as are smooth bridge bases, polished bevels, enamel and the unbrushed double roller. All 68 CPU/source checks, lint, TypeScript and build pass. Local browser train-bridge frontal/oblique and coupling-lever views show clearer directional detail. Geometry, assets, annotations and lighting unchanged; no push or deployment. Next action: user visual comparison.
+
+
 ## Satin bridge bases and steel double roller — verified locally, 10 September 2026
 
 User corrected the frosted lower bridge treatment and double roller. All ten role-8 base regions (d99/133/147/156/165/219/222/228/230/240) now use smooth satin steel, roughness .24, with no frost grain, bump or color variation. Existing polished bevels and brushed upper fields remain separate. Double roller d114 uses neutral steel, pattern 0, with no brushing. Main plate frosting is unchanged. All 67 CPU/source checks, lint, TypeScript and build pass; browser lower/underside bridge and double-roller review shows smooth metal, with no warnings/errors. Geometry, annotations and assets unchanged. Current ledger resolves d114's former material uncertainty: 89 verified / 264 inferred / 12 unresolved occurrences. No push or deployment. Next action: user comparison.

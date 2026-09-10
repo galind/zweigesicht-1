@@ -36,3 +36,9 @@ All 66 CPU/source checks, lint, TypeScript and build pass. Browser `arms-full-to
 The user rejected frosting on the lower bridge surfaces. The shared role-8 treatment now gives all ten affected definitions (99,133,147,156,165,219,222,228,230,240) smooth satin reflectance at authored roughness .24, with zero frost grain or relief. Polished bevels, brushed upper fields and the main plate's separate frosting remain intact. The user also resolves double roller d114 as steel with no brushing: shared steel profile, pattern 0, roughness .18.
 
 All 67 CPU/source checks, lint, TypeScript and build pass. Browser captures `bridge-satin-base.jpg`, `bridge-satin-underside.jpg`, and `double-roller-steel.jpg` show the updated local appearance; no browser warnings/errors. Geometry, placements, annotation buffers and all other material assignments are unchanged. Earlier frosting and unresolved d114 statements are historical and superseded by this correction. No publication.
+
+## Follow-up: more visible straight brushing
+
+User requested stronger bridge grain and a gentler increase on keyless/other flat brushed parts; gear brushing was explicitly accepted. Shared `brushingDetail` controls in `materials.ts` now set bridges to 2.6 and brushed-steel flats/warm caps to 1.65. A wider 32-cycles/mm strand layer supplements the 90/230/520 layers, preserving derivative filtering while improving visibility at normal framing. Strength scales the straight grain's reflectance, roughness variation and optical relief together. Values are authored, not measured manufacturing parameters.
+
+All 68 CPU/source checks, lint, TypeScript and build pass. Browser captures `bridge-stronger-brush.jpg`, `bridge-brush-oblique.jpg` and `keyless-brush-detail.jpg` show the stronger grain. Circular gear/barrel/dial calculations, smooth bridge bases, enamel, polished bevels and unbrushed double roller remain unchanged. No geometry, lighting, assets, annotation or UI changes; no publication.
