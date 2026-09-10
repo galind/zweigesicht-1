@@ -4,7 +4,7 @@ Current scope decision, 9 September 2026: running/timing has been removed under 
 
 Prepared 8 September 2026. Status: implementation proposal; CAD inspection and performance measurements remain outstanding.
 
-Execution update, 9 September 2026: source download, XCAF hierarchy extraction, and a single-component GLB/browser smoke test are complete. The full geometry audit, full-assembly rendering, and performance measurements remain outstanding. Follow PROGRESS.md and GOAL_PROMPT.md for the current starting point. The upcoming run is local-only; deployment and redistribution are deferred until the corresponding release gates are cleared.
+Execution update, 11 September 2026: the real-CAD explorer, full geometry audit, assembly rendering, interaction work, and local verification are complete and accepted. Follow PROGRESS.md for the current state. Deployment and redistribution remain subject to the corresponding release gates.
 
 **1. Product objective and working assumptions**
 

@@ -1,6 +1,6 @@
 **Marco Lang — unattended execution brief**
 
-Prepared 8 September 2026; readiness reconciled 9 September 2026. Companion to IMPLEMENTATION_PLAN.md. This document prepares a future run; it does not start Goal mode, configure models, enable a schedule, or grant permissions. Use GOAL_PROMPT.md for the current launch instruction and PROGRESS.md/PREFLIGHT_REPORT.md for verified state.
+Prepared 8 September 2026; final state reconciled 11 September 2026. Companion to IMPLEMENTATION_PLAN.md. This document records unattended-run constraints; it does not start Goal mode, configure models, enable a schedule, or grant permissions. Use PROGRESS.md for the current verified state.
 
 **Outcome**
 
@@ -67,7 +67,7 @@ Mechanical research can accompany source preparation. Accessibility controls and
 | Work preservation | Progress file and reproducible asset source records | Git repository, provenance manifest, progress file and reproducible probes present |
 | Long-running host availability | Mac powered, online, app running; prevent-sleep setting enabled | User confirmed persistent settings in preflight; lead task rechecked active ChatGPT no-idle-sleep assertion |
 
-Use `.venv-cad/bin/python` for CAD work. The original default-Python tooling inventory is historical and does not describe the provisioned environment. Exact versions and rerun commands are in PREFLIGHT_REPORT.md.
+Use `.venv-cad/bin/python` for CAD work. The original default-Python tooling inventory is historical and does not describe the provisioned environment. Reuse the checked local environment and the rerun commands in README.md.
 
 Resolve CAD support through a suitable isolated environment or an available application. Keep installation reproducible and scoped where practical. Do not assume CAD packages support the current default Python version. A lightweight STEP-to-mesh conversion may be enough for the first render; Blender need not block that if another route works.
 
@@ -101,6 +101,6 @@ Do not contact Marco or other people, purchase services, or redeem usage-reset c
 
 Report concrete milestones, failures that need action, and completion. Keep progress updates concise. At handoff, provide the working preview, screenshots, completed capabilities, known limitations, and next steps. No schedule is created by this document.
 
-**Suggested launch instruction**
+**Resuming work**
 
-Use GOAL_PROMPT.md with Goal mode when ready. It incorporates the completed preflight, model assignments, milestone commit policy, and current local-only scope. Its model selections become instructions only when the user actually adopts them.
+Read AGENTS.md, PROGRESS.md, IMPLEMENTATION_PLAN.md, and this file, then inspect the actual worktree before changing anything. Treat model assignments above as historical recommendations unless the user explicitly adopts them.

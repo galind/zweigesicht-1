@@ -19,7 +19,7 @@ The server binds to `127.0.0.1:4173`. The local middleware serves prepared gzip 
 
 ## Reproduce local assets when needed
 
-The original STEP files, existing `.venv-cad` and Blender are documented in [PREFLIGHT_REPORT.md](PREFLIGHT_REPORT.md). Preserve the files and hashes in `assets/source-manifest/`. The exporter uses its geometry cache unless the source/settings require regeneration.
+Preserve the original STEP files and the URLs and hashes in `assets/source-manifest/`. CAD tooling uses the existing `.venv-cad` environment and Blender installation; the exporter reuses its geometry cache unless source files or conversion settings require regeneration.
 
 ```sh
 scripts/cad/run_pipeline.sh
