@@ -49,7 +49,7 @@
       "9": "modeled bridge chamfer or countersink",
       "10": "broad plate frost field"
     },
-    "materialSourceSha256": "0d64d37f5d74ee347233a7a810ae29a0a885228f052c80fe6120cc8cd91e70a0",
+    "materialSourceSha256": "8b01efeb92d225357eb9d53c0c21e600ca46a4e7f1bbece82833acb229d851ce",
     "packagerSourceSha256": "2bdff4ff85d627431e1d6501f4d88741a1719d5abd37b30328049cea5d5bd739"
   },
   "coverage": {
@@ -26649,8 +26649,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes. Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "USER-FINISH-2026-09-10-01; source-red gauge-inlay faces",
       "assignment": {
         "color": 13949150,
         "metalness": 1,
@@ -26969,8 +26969,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "The four heat-blue lever fields extend across the adjoining broad top face only through the retaining-screw end at local Y 1.56 mm. The central spine, underside and sidewalls remain steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "USER-FINISH-2026-09-10-01; d159 source face topology",
       "assignment": {
         "color": 13094356,
         "metalness": 1,
@@ -53884,8 +53884,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "USER-FINISH-2026-09-10-01; source-red gauge-inlay faces",
+      "surfaceReview": "The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes. Fine local-X straight-grained upper fields; matte/frosted lower feet; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -54176,8 +54176,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "USER-FINISH-2026-09-10-01; d159 source face topology",
+      "surfaceReview": "The four heat-blue lever fields extend across the adjoining broad top face only through the retaining-screw end at local Y 1.56 mm. The central spine, underside and sidewalls remain steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 12831184,
         "metalness": 1,

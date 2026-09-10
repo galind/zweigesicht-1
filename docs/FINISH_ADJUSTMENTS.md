@@ -1,5 +1,11 @@
 # Finishing-fidelity correction
 
+## Shock-indicator lever reach and inlay tone
+
+10 September 2026. User photograph `USER-FINISH-2026-09-10-01` resolves two details on the shock indicator. The heat-blue top finish on d159 continues from its four source-purple lever faces across the retaining-screw end of the adjoining broad top face, through local Y 1.56 mm. A definition-local mask limits that extension to the screw end; the central spine, underside and polished sidewalls remain steel. Definition 156's existing gauge-inlay faces use a deeper ruby-red response. No geometry, source face identity or placement changes.
+
+The attachment hash is recorded in `assets/source-manifest/finish-adjustment-references.json` and the image is not copied into public assets.
+
 10 September 2026. This pass supersedes the coarse lower-field frosting and crown-wheel brushing described in the historical sections below.
 
 - Bridge frosting is no longer inferred from every vertex below local Z0. Ten reviewed bridge/shock definitions use exact source-face role 8 for exposed base fields; all other lower faces remain neutral satin unless separately identified. BRep cones and oblique chamfer planes use role 9 for polished bevel/countersink response.

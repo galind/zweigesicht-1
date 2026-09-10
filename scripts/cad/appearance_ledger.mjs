@@ -57,6 +57,8 @@ const specific={
  137:['User explicit cannon-pinion steel correction; source gray appearance','Dial-I cannon pinion uses neutral polished steel.'],
  142:['User explicit wheel-hub steel correction; source ml01 Butzen Stundenrad1 identity and gray appearance','The separately modeled hour-wheel-I hub uses neutral steel. Its wheel retains its own warm finish.'],
  155:['User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance','The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate.'],
+ 156:['USER-FINISH-2026-09-10-01; source-red gauge-inlay faces','The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes.'],
+ 159:['USER-FINISH-2026-09-10-01; d159 source face topology','The four heat-blue lever fields extend across the adjoining broad top face only through the retaining-screw end at local Y 1.56 mm. The central spine, underside and sidewalls remain steel.'],
  183:['User explicit cannon-pinion steel correction; source gray appearance','Dial-II cannon pinion uses neutral polished steel.'],
  121:['User explicit thin-washer goldish satin correction; source Flitter 200x400 identity','Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict.'],
  111:['User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity','All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16.'],

@@ -157,6 +157,7 @@ uniform float finishSnailTurn;
 uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
+uniform float finishShockBlock;
 uniform float finishHeatBlue;
 uniform float finishBlackPolished;
 `;
@@ -284,6 +285,7 @@ export function createMaterial(
       finishRadius: { value: Math.max(radius, .01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
+      finishShockBlock: { value: definitionId === 'd_0_1_1_159' ? 1 : 0 },
       finishHeatBlue: { value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0 },
       finishBlackPolished: { value: ['blackPolished', 'crown'].includes(finish.family) ? 1 : 0 },
     });
@@ -343,10 +345,14 @@ float finishSeat=finishCapSeat*finishFace*(1.0-smoothstep(.0001,.0003,abs(vFinis
 if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) diffuseColor.rgb=vec3(.546,.584,.631);
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) diffuseColor.rgb=vec3(.006);
 if(finishEnabled>.5 && abs(vFinishRole-4.0)<.2) diffuseColor.rgb=vec3(.018,.08,.24);
-if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.35,.005,.04);
+if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.22,.002,.018);
 // Heat-blued steel changes from blue-black to cobalt as the reflected angle
 // turns. Neutral source seats remain steel unless the whole screw is blued.
-float finishBlueSurface=max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0)));
+// The d159 source splits its four blue arms from a single steel top face. The
+// reference shows blue continuing over that face only around the retaining
+// screw end (local Y <= 1.56); the central spine and other surfaces stay steel.
+float finishShockBlue=finishShockBlock*(1.0-step(.2,abs(vFinishRole-1.0)))*(1.0-step(1.56,vFinishPosition.y));
+float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
 if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=0.0;
 if(finishEnabled>.5 && finishBlueSurface>.5) {
  float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);

@@ -1,5 +1,9 @@
 # Zweigesicht — current execution state
 
+## Shock-indicator blue reach and darker inlays — verified locally, 10 September 2026
+
+Matched the user-supplied movement photograph: d159's heat-blue lever top now continues across the retaining-screw end of its adjoining broad CAD face without recoloring the central spine, underside or polished sidewalls. The existing d156 gauge-inlay faces use a darker ruby-red response. The reference image hash is recorded without adding the image to public assets; geometry, placements and source annotations are unchanged. The complete CPU/source suite, lint, TypeScript and production build pass. Direct WebGL inspection confirms the blue termination around the screw seat, the retained steel spine and darker inlays; no browser errors were recorded.
+
 ## Steel shock mass, cannon pinions and wheel hubs — verified locally, 10 September 2026
 
 Applied the user's authoritative material correction on `codex/finishing-fidelity`: cylindrical shock mass d155, cannon pinions d137/d183 and separately modeled wheel hubs d142/d188/d235 use neutral polished steel. Their associated wheel plates and the shock indicator's red gauge inlays retain their separate finishes. Ruby bearings also move from crimson toward a less-red magenta-ruby appearance while preserving their dielectric depth. Geometry, IDs, placements and source annotations are unchanged. The complete ledger now records 88 verified / 264 inferred / 13 unresolved assignments; the CPU source/asset regression suite, lint, TypeScript and production build pass. Direct local WebGL inspection confirms d155 reads as reflective steel and a representative d101 jewel retains transparent internal depth with the softer magenta-red hue.

@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-09",
+  "date": "2026-09-10",
   "references": [
     {
       "id": "USER-FINISH-2026-09-09-01",
@@ -44,6 +44,15 @@
       "sha256": "240a929573ba61ef792c5be40793e6ea51623f7bc75c6ba8cdd00b4202c7f59a",
       "bytes": 1905771,
       "kind": "Shock-indicator CAD render showing neutral screws and retained central blue mounting screw",
+      "usage": "Local review only; image not copied into public assets"
+    },
+    {
+      "id": "USER-FINISH-2026-09-10-01",
+      "file": "codex-clipboard-16fc53fc-c374-420f-a9f2-7be9a375ed30.png",
+      "source": "User attachment in this task; no external URL supplied",
+      "sha256": "83b04d3216fb8ef65ae9de80d5d074107fcf4d185b80856abc858cba16faf24e",
+      "bytes": 3609749,
+      "kind": "Shock-indicator photograph showing blue lever finish through the retaining-screw end and dark ruby-red gauge inlays",
       "usage": "Local review only; image not copied into public assets"
     }
   ],

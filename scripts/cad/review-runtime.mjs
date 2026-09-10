@@ -285,6 +285,11 @@ for(const n of [99,133,147,156,165,219,222,228,230,240]){
 }
 assert.ok(!finishShaderFor(230).shader.uniforms.finishEngraved.value);
 assert.equal(finishShaderFor(219).shader.uniforms.finishEngraved.value,1);
+const shockBlockShader=finishShaderFor(159).shader;
+assert.equal(shockBlockShader.uniforms.finishShockBlock.value,1);
+assert.equal(finishShaderFor(156).shader.uniforms.finishShockBlock.value,0);
+assert.match(shockBlockShader.fragmentShader,/finishShockBlock\*\(1\.0-step\(\.2,abs\(vFinishRole-1\.0\)\)\)\*\(1\.0-step\(1\.56,vFinishPosition\.y\)\)/);
+assert.match(shockBlockShader.fragmentShader,/vFinishRole-7\.0\)<\.2\) diffuseColor\.rgb=vec3\(\.22,\.002,\.018\)/);
 results.push({check:'cap grain follows actual screw bores; exact bridge bases and recesses replace blanket lower-Z frosting; four barrels retain handed fine snailing; crown wheel is black polished',status:'pass'});
 // Reference-requested keyless surfaces must reach a directional material on
 // real source geometry, including negative-Z faces and the catalog alternative.
