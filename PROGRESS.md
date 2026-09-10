@@ -1,5 +1,9 @@
 # Zweigesicht — current execution state
 
+## Vercel Analytics — verified locally, 10 September 2026
+
+Added the official `@vercel/analytics` dependency and mounted its Next.js `Analytics` component in the root layout so page views are collected across the website when deployed on Vercel. Authored lint, the standard production build and the Vercel-specific production build pass. This checkpoint changes code and dependency metadata only; no deployment was performed and `FINISHING_GOAL.md` remains untouched.
+
 ## Affiliation note — accepted and integrated into main, 10 September 2026
 
 Added a small centered note below the controls: “Independent project. Not affiliated with Marco Lang.” The underlined name links to the verified official website at `https://www.marcolangwatches.com/`, opening separately with `noopener noreferrer`. The footer measurement includes the note so contextual controls retain their clearance.
