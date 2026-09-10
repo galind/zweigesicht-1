@@ -4,7 +4,7 @@
 
 > Historical checkpoint. The 9 September animation decision in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md) supersedes the playback recommendations and timing-feature status below. The current explorer is static; source evidence and material findings remain applicable.
 
-**Working preview: http://127.0.0.1:4173/**. The local implementation is a real-CAD movement explorer with six authored reveals, complete source addressing and a bounded timing study. Public release and faithful running-watch animation are separate, open gates.
+**Working preview: http://127.0.0.1:4173/**. The local implementation is a real-CAD movement explorer with six authored static reveals and complete source addressing. Public release remains a separate, open gate.
 
 ## What is implemented
 
@@ -25,7 +25,7 @@
 
 The initial engineering handoff did not satisfy visual finishing. The user's assembled screenshot exposed a central classification error: `ml01 Grundplatine` missed the old `Grundplatte` name rule and appeared default gray. The correction uses exact source-definition assignments for the plate and reviewed components, distinguishes steel/brass pins from blue screw heads, and corrects balance, winding and exterior families. All 223 movement source leaves resolve to a profile; that is assignment coverage, not verified physical material identity. See `MATERIAL_REFERENCE_AUDIT.md`.
 
-The current Finish treatment adds component-local straight bridge grain, circular wheel/barrel grain, a warm frosted plate and polished reflections on existing CAD chamfers. A live screen-space contact pass adds restrained depth shading after each pose; Function and Lightweight skip that pass. Numeric grain, reflectance, lighting and color remain authored interpretations of the cached maker references. No CAD geometry, transforms or original assets were changed. `MATERIAL_IMPLEMENTATION_REVIEW.md` records the independent Astra High implementation review.
+The current Finish treatment adds component-local straight bridge grain, circular wheel/barrel grain, a warm frosted plate and polished reflections on existing CAD chamfers. A live screen-space contact pass adds restrained depth shading after each pose; Function and Lightweight skip that pass. Numeric grain, reflectance, lighting and color remain authored interpretations of the cached maker references. No CAD geometry, transforms or original assets were changed.
 
 Current validation, superseding the older renderer baseline below:
 
@@ -42,7 +42,7 @@ Beauty-pass triangle/draw counters exclude the additional contact depth and full
 | Check | Result / evidence |
 |---|---|
 | Pure state/motion tests | 7 pass (`node --test tests/*.test.mjs`): signed ratios, escape dwell/step, clock seek/speed/hidden freeze, exact restoration and interrupted transitions. |
-| Actual runtime controller review | Astra High independent review and 12 passing harness checks using actual decoded Three.js geometry (PMREM lifecycle uses explicit CPU stubs); see `docs/IMPLEMENTATION_REVIEW.md`. |
+| Actual runtime controller review | Passing source/runtime harness checks using actual decoded Three.js geometry; see the verification commands below. |
 | Real browser regression sequence | 6 checks pass: 20 interrupted reveals → exact matrix error 0; visibility reversal; source-pose restoration; separation pauses; stable GPU resources (137 geometries, 2 textures); zero additional renders in 500 ms at rest. `artifacts/browser/interaction-checks.json` and final post-cleanup `interaction-checks-final.json`. |
 | Optional asset failure | Deliberate missing catalog URL leaves the overview intact. Visible Retry catalog succeeds, all 364 renderable leaves become available, error clears. `catalog-failure.png`, `webmcp-validation.json`. |
 | Context loss | Actual `WEBGL_lose_context` loss/restoration. Initial test found missing PMREM reflections; fixed by rebuilding the environment. Retest restores full appearance and 2 textures, error clears, source assembly error 0. `context-restored.json/.png`. |

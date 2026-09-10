@@ -2,9 +2,9 @@
 
 Local real-CAD explorer for Marco Lang's ml–01 movement. Open **http://127.0.0.1:4173/** while the local development server is running.
 
-The movement opens fully assembled. Reveal six functional groups, switch Finish/Function, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. The catalog addresses all 426 source instances. Regulation and the going train include a deliberately bounded timing study with pause, speed, scrubbing and beat stepping.
+The movement opens fully assembled. Reveal six functional groups, switch Finish/Function, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
 
-This is ready for **local engineering review**, not a certified running-watch simulation or a public release. Contact parts and the hairspring are omitted during illustrative motion and restored for static source inspection. See [local review and limitations](docs/LOCAL_REVIEW.md), [CAD audit](docs/CAD_AUDIT.md), [mechanical review](docs/MECHANICAL_REVIEW.md), and [current progress](PROGRESS.md).
+This is ready for **local engineering review**, not a certified mechanical simulation or a public release. See [local review and limitations](docs/LOCAL_REVIEW.md), [CAD audit](docs/CAD_AUDIT.md), [mechanical review](docs/MECHANICAL_REVIEW.md), and [current progress](PROGRESS.md).
 
 ## Run the prepared checkout
 
@@ -42,7 +42,7 @@ npm run build
 npm audit
 ```
 
-`http://127.0.0.1:4173/?inspect=1` exposes real browser regression, 60-second/five-minute benchmark, optional-asset failure and WebGL recovery checks. `?no3d=1` deliberately exercises the static fallback; `?text=200` exercises a 200% root-font layout. These are explicit test modes, not real-device certification. Screenshots, numeric traces and generated assets remain local in ignored `artifacts/` and `assets/generated/` paths.
+`http://127.0.0.1:4173/?inspect=1` exposes browser regression, benchmark, optional-asset failure and WebGL recovery checks. `?no3d=1` exercises the static fallback; `?text=200` exercises a 200% root-font layout. These are explicit test modes, not real-device certification. Screenshots, numeric traces and generated assets remain local in ignored `artifacts/` and `assets/generated/` paths.
 
 ## Source and publication boundary
 

@@ -2,19 +2,19 @@
 
 Current scope decision, 9 September 2026: running/timing has been removed under the user-authorized static-explorer outcome. See `docs/ANIMATION_REVIEW.md` and `PROGRESS.md`. Playback ambitions and acceptance tasks below are historical planning, not remaining work for this local deliverable.
 
-Prepared 8 September 2026. Status: implementation proposal; CAD inspection and performance measurements remain outstanding.
+Prepared 8 September 2026. The implementation work described here is complete for the local static-explorer scope. The release gates and technical constraints below remain the authoritative checklist for any future public release.
 
 Execution update, 11 September 2026: the real-CAD explorer, full geometry audit, assembly rendering, interaction work, and local verification are complete and accepted. Follow PROGRESS.md for the current state. Deployment and redistribution remain subject to the corresponding release gates.
 
 **1. Product objective and working assumptions**
 
-Build a visually exceptional, interactive explanation of the Zweigesicht-1 movement. Visitors should be able to appreciate the complete object, uncover its construction, inspect individual components, and understand selected mechanisms through motion with very little text.
+Build a visually exceptional, interactive explanation of the Zweigesicht-1 movement. Visitors should be able to appreciate the complete object, uncover its construction, inspect individual components, and understand selected mechanisms with very little text.
 
 The complete movement is the visual anchor. Guided transitions connect it to focused mechanism views. Free exploration remains available, with a predictable way back to the assembled watch.
 
 Working assumptions: English first; public educational experience; desktop and touch devices are both core targets; no accounts; no commerce; mechanical fidelity matters, while engineering simulation is outside the initial scope. These assumptions can change without delaying the CAD audit.
 
-Success means a visitor can uncover a mechanism, slow it down, identify a component, and return to the whole without assistance. Rendering all the parts is necessary but insufficient.
+Success means a visitor can uncover a mechanism, identify a component, and return to the whole without assistance. Rendering all the parts is necessary but insufficient.
 
 **2. Evidence and unresolved questions**
 
@@ -44,7 +44,7 @@ The first milestone must replace these unknowns with an inventory, rendered evid
 | Section cuts | Technical experiment only if needed | Authored cutaway where essential to explanation | General movable section plane |
 | Shock indicator | Verify variant and geometry | Inspectable if present; static unless validated | Explicit shock/reset demonstration |
 
-The initial public release includes the running-watch ambition. It is not complete if unexplained static components visibly interrupt a mechanism presented as running. A prototype may intentionally demonstrate only one mechanism and must be described accordingly.
+The accepted local release profile is static construction exploration. Any future running-watch experience is a separate scope requiring the mechanical evidence described in the release gates; it must not be implied by the current explorer.
 
 Winding, setting, stopping, and shock response have different operating conditions. They should not be animated continuously simply because the watch is running.
 

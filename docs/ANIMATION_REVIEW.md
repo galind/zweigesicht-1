@@ -4,7 +4,7 @@
 
 9 September 2026. **Running/timing is removed.** The local experience preserves the original movement at rest, the refined materials, both sides, orbit/zoom, selection/isolation, full source catalog and explanatory reveal/separation transitions. This satisfies the explicitly authorized static-explorer outcome. Nothing was published, deployed, uploaded or pushed.
 
-The inspected baseline is commit `215be75c3a6fcdb29acaa1af2952b716d25ee7c7` with a clean tracked working tree. The unrelated user-owned `FINISHING_GOAL.md` was left untouched. Earlier progress entries and reviews describe historical milestones; their acceptance of a bounded timing illustration does not satisfy this review's whole-watch criterion.
+The inspected baseline is commit `215be75c3a6fcdb29acaa1af2952b716d25ee7c7` with a clean tracked working tree. Earlier progress entries and reviews describe historical milestones; their acceptance of a bounded timing illustration does not satisfy this review's whole-watch criterion.
 
 ## Evidence and method
 
