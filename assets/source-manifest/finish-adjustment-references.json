@@ -63,6 +63,14 @@
       "bytes": 1421634,
       "kind": "Shock-indicator photograph accompanying explicit jewel, brushed crown wheel, enamel and full-thickness blue corrections",
       "usage": "Local review only; image retained under ignored artifacts/browser/finish-photo-corrections/user-reference.png"
+    },
+    {
+      "id": "USER-FROST-2026-09-11",
+      "file": "codex-clipboard-d963199c-d148-460f-8ceb-8999e7074ebd.png",
+      "source": "User-provided watch photograph in this task",
+      "sha256": "daf31547e80dbecca023a69682b4c018f23c52a968d4bc46a658e59cde60672b",
+      "bytes": 4104817,
+      "usage": "Local visual reference; retained only in ignored artifacts"
     }
   ],
   "terminology": {

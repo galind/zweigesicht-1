@@ -34,6 +34,12 @@ const brushingDetail: Partial<Record<Finish, number>> = {
   brushedSteel: 1.65,
   warmPlate: 1.65,
 };
+// Authored frosting controls: grain frequency per mm, optical depth and
+// roughness contrast. Source face masks independently define placement.
+const frostingDetail = {
+  plate: { scale: 12, depth: .006, contrast: .26 },
+  mounting: { scale: 16, depth: .0045, contrast: .22 },
+};
 const screwDefinitions = [
   9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
   192, 201, 226, 253, 255,
@@ -159,6 +165,7 @@ uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
 uniform float finishFrosted;
+uniform vec3 finishFrostDetail;
 uniform float finishSnailing;
 uniform float finishSnailTurn;
 uniform float finishRadius;
@@ -182,12 +189,24 @@ float filteredFinishNoise(vec2 p) {
  float footprint=max(length(dFdx(p)),length(dFdy(p)));
  return (finishNoise(p)-.5)*(1.0-smoothstep(.4,1.8,footprint));
 }
-// Fine millimetre-scale fields. Derivatives remove detail below a pixel; the
-// remaining relief stays optical rather than reading as modeled topography.
+// Jittered cellular grains provide irregular pits/ridges rather than soft
+// cloudy noise. Screen-space filtering removes grains below pixel resolution.
 float finishFrost(vec2 p) {
- return filteredFinishNoise(p*28.0)*.48
-      + filteredFinishNoise(p*85.0)*.34
-      + filteredFinishNoise(p*210.0)*.18;
+ vec2 q=p*finishFrostDetail.x;
+ q+=1.6*vec2(finishNoise(q*.43),finishNoise(q*.43+vec2(37.1,9.2)));
+ vec2 cell=floor(q), f=fract(q);
+ float nearest=4.0;
+ for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++) {
+  vec2 offset=vec2(float(x),float(y));
+  vec2 seed=cell+offset;
+  vec2 jitter=vec2(finishHash(seed),finishHash(seed+vec2(19.7,71.3)));
+  vec2 delta=offset+.15+.7*jitter-f;
+  nearest=min(nearest,dot(delta,delta));
+ }
+ float footprint=max(length(dFdx(q)),length(dFdy(q)));
+ float filtered=1.0-smoothstep(.35,1.3,footprint);
+ float grains=(.3-sqrt(nearest))*filtered;
+ return grains*.78+filteredFinishNoise(q*3.7)*.22;
 }
 float finishBrush(vec2 p) {
  // A wider strand layer survives normal bridge framing, while the finer
@@ -281,6 +300,7 @@ export function createMaterial(
   const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
+  const frost = finish.family === 'frosted' ? frostingDetail.plate : frostingDetail.mounting;
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
@@ -288,6 +308,7 @@ export function createMaterial(
       finishEnabled: enabled,
       finishEngraved: { value: etched ? 1 : 0 },
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
+      finishFrostDetail: { value: new THREE.Vector3(frost.scale, frost.depth, frost.contrast) },
       finishFrosted: { value: finish.family === 'frosted' ? 1 : 0 },
       finishSnailing: { value: finish.family === 'barrel' ? 1 : 0 },
       // Right-hand drum/lid local XY has the opposite handedness to the left.
@@ -387,9 +408,9 @@ if(finishEnabled>.5 && finishPattern>.5) {
     : finishBrush(finishBrushUv)*finishBrushDetail;
   // Broad lower bases stay satin; only seven explicit mounting pads frost.
   finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
-  float mountingFrost=finishFrost(finishUv)*finishFrostMask;
+  float mountingFrost=finishFrostMask>.5?finishFrost(finishUv):0.0;
   finishGrain=brushed*finishField+mountingFrost;
-  finishHeight=brushed*finishField*.00018+mountingFrost*.0014;
+  finishHeight=brushed*finishField*.00018+mountingFrost*finishFrostDetail.y;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -417,12 +438,12 @@ if(finishEnabled>.5 && finishPattern>.5) {
   finishFrostMask=finishFrosted*(1.0-step(.2,abs(vFinishRole-10.0)));
   #endif
   finishGrain=finishFrosted>.5?finishFrost(finishUv)*finishFrostMask:0.0;
-  finishHeight=finishGrain*.0014;
+  finishHeight=finishGrain*finishFrostDetail.y;
  }
  // Restrained reflectance variation carries the grain without wood/stone-like
  // color mottling. Geometry and broad studio reflections do most of the work.
  if(finishPattern<4.5 || finishPattern>5.5)
-  diffuseColor.rgb*=1.0+finishGrain*mix(.08,.2,finishFrostMask)*finishFace;
+  diffuseColor.rgb*=1.0+finishGrain*mix(.08,.045,finishFrostMask)*finishFace;
  if(abs(vFinishRole-6.0)<.2) diffuseColor.rgb*=.62;
  // Existing recessed decoration on audited bridges. This is reversible surface
  // shading of source floors, never fabricated text, outlines or bevel geometry.
@@ -462,6 +483,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
+if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=clamp(.46+finishGrain*finishFrostDetail.z,.3,.65);
 if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,

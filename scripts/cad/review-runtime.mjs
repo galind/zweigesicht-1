@@ -335,6 +335,9 @@ for(const [n,expected] of [[99,[28,30]],[222,[31,33]],[228,[49,50,52]]]){
 }
 for(const [id,data] of v.sourceSurfaces)if(!['d_0_1_1_99','d_0_1_1_222','d_0_1_1_228'].includes(id))for(let i=3;i<data.length;i+=4)assert.notEqual(data[i],12);
 results.push({check:'frosting matches exactly seven mounting pad faces on the three approved bridges; no other definition receives mounting frosting',status:'pass'});
+assert.deepEqual(finishShaderFor(195).shader.uniforms.finishFrostDetail.value.toArray(),[12,.006,.26]);
+for(const n of [99,222,228])assert.deepEqual(finishShaderFor(n).shader.uniforms.finishFrostDetail.value.toArray(),[16,.0045,.22]);
+results.push({check:'main plate and seven mounting pads use separately controlled coarse frosting; existing face-mask tests retain exact 49-face scope',status:'pass'});
 const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
 assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
 for(const id of [99,230]){

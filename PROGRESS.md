@@ -1,5 +1,10 @@
 # Zweigesicht — current execution state
 
+## Coarser granular frosting — verified locally, 11 September 2026
+
+Implemented the approved photograph-led frosting refinement on the existing four parts / 49 faces. Irregular cellular grains replace fine smooth noise; coordinate warping removes the regular grid observed during comparison. Shared `frostingDetail` controls separate the warm plate (frequency12, optical depth .006, roughness contrast .26) and steel mounting pads (16, .0045, .22). Color modulation is restrained; grain detail primarily changes surface normals and roughness. Compared moderate and stronger settings at matched plate framing and retained stronger, with finer pads. Geometry, source masks, brushing, bevels, enamel and lighting unchanged. All 70 CPU/source checks, lint, TypeScript and build pass. Reviewed plate front/oblique, pad orbit/zoom and whole movement; no browser errors or context loss, observed p95 frame time 17.4ms on this local session. No publication. Next action: user visual comparison.
+
+
 ## Seven bridge screw-mounting frost areas — verified locally, 10 September 2026
 
 After explicit user confirmation, added frosting only to the upper faces of seven lower screw-mounting pads: train bridge d99 faces28/30, balance bridge d222 faces31/33, barrel bridge d228 faces49/50/52. These are at local Z=-1.2 mm and are distinct from the broad satin undersides and bottom contact planes. New annotation role12 keeps frosting off brushed tops, polished bevels and screw bores. Existing main-plate frosting remains unchanged: current total four parts / 49 source faces carrying frosting. All 69 CPU/source checks, lint, TypeScript and build pass; all three bridges reviewed in the local browser without warnings/errors. Both GLBs and assembly manifest unchanged; only the three named definitions' face roles changed, with every annotation normal preserved. No push or deployment. Next action: user comparison of frosting appearance.

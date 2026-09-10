@@ -24,7 +24,7 @@ const families={
  brushedSteel:['Brushed keyless steel appearance','User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
  bridge:['Steel bridge','More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
  warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher.'],
- frosted:['Warm pink-gilt plate appearance','Fine isotropic frosting; existing inscription regions darkened; actual engraving geometry retained.'],
+ frosted:['Warm pink-gilt plate appearance','Coarser irregular cellular frosting with fine detail and restrained color contrast; existing inscription regions darkened; actual engraving geometry retained.'],
  brass:['Warm wheel/compound-part metal; no blanket alloy claim','Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.'],
  barrel:['Warm rose-colored barrel metal','User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.'],
  ratchet:['Neutral steel ratchet','Circular satin fields with sharper edges; exact wheel polishing unmeasured.'],
@@ -94,7 +94,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  if(n===249){evidence+='; User correction 2026-09-10 explicitly requests brushing, superseding earlier black-polished instruction';notes='Shared circular satin steel profile, pattern 2.';}
  if(n===99){evidence+='; user enamel request and exact source faces';notes+=' Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained.';}
  if(n===230){evidence+='; user enamel request and exact source faces';notes+=' Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.';}
- if([99,222,228].includes(n)){evidence+='; user approved seven screw-mounting frost areas';notes+=' Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.';}
+ if([99,222,228].includes(n)){evidence+='; user approved seven screw-mounting frost areas';notes+=' Exact role-12 mounting pads use coarser irregular frosting per USER-FROST-2026-09-11: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.';}
  if(n===105)notes+=' User correction: parallel brushing follows local +Y, from midpoint of screw axes (+/-.75,-1.1) to jewel (0,0).';
  if(n===99)notes+=' Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; only the separately approved screw mounting pads receive frosting.';
  if(conflicts[n]){status='unresolved';notes=conflicts[n]+' '+notes;}
