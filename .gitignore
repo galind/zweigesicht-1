@@ -51,3 +51,7 @@ artifacts/explode-depth-audit/
 
 # Local exhaustive CAD audit extraction/evidence.
 artifacts/cad-finishing-audit/
+
+# Final user-approved material annotations.
+!explorer/public/models/finish-surfaces-afd3394797bd.bin
+!explorer/public/models/finish-surfaces-afd3394797bd.bin.gz

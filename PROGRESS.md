@@ -1,5 +1,10 @@
 # Zweigesicht — current execution state
 
+## Model accepted as done — main delivery, 11 September 2026
+
+User accepted the model as done and explicitly authorized merging to main and pushing. Accepted appearance checkpoint: `d0132e2`, with all 70 source/runtime checks, lint, TypeScript and production build passing. Include the current hash-verified annotation payload `finish-surfaces-afd3394797bd.bin` and its matching gzip in the delivery; these exact bytes were used in the approved local preview. Geometry remains unchanged. Original CAD downloads, local visual evidence and user-owned goal files stay excluded. Historical audit proposals are retained as records, not outstanding tasks for the accepted model. Next action: deliver the accepted branch to main through the configured SSH remote.
+
+
 ## Coarser granular frosting — verified locally, 11 September 2026
 
 Implemented the approved photograph-led frosting refinement on the existing four parts / 49 faces. Irregular cellular grains replace fine smooth noise; coordinate warping removes the regular grid observed during comparison. Shared `frostingDetail` controls separate the warm plate (frequency12, optical depth .006, roughness contrast .26) and steel mounting pads (16, .0045, .22). Color modulation is restrained; grain detail primarily changes surface normals and roughness. Compared moderate and stronger settings at matched plate framing and retained stronger, with finer pads. Geometry, source masks, brushing, bevels, enamel and lighting unchanged. All 70 CPU/source checks, lint, TypeScript and build pass. Reviewed plate front/oblique, pad orbit/zoom and whole movement; no browser errors or context loss, observed p95 frame time 17.4ms on this local session. No publication. Next action: user visual comparison.
