@@ -35,6 +35,24 @@ export async function runBrowserChecks(v: MovementViewer) {
     'winding',
     'shock',
   ];
+  for (const id of ids) {
+    v.group(id);
+    await settle(v);
+    const unstyled = [...v.renderParts.values()]
+      .filter((p) => p.mesh.visible)
+      .filter(
+        (p) =>
+          (p.material.userData.finishEnabled as { value?: number } | undefined)
+            ?.value !== 1,
+      );
+    checks.push({
+      name: `${id} keeps authored finishes on every visible part`,
+      pass: unstyled.length === 0,
+      details: unstyled.map((p) => p.source.id),
+    });
+  }
+  v.reset();
+  await settle(v);
   for (let i = 0; i < 24; i++) {
     v.scrub({ separation: (i % 5) / 5 });
     if (i % 4 === 0) v.setSide('front');

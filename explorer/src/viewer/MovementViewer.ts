@@ -1462,7 +1462,10 @@ export class MovementViewer {
         enamel.polygonOffsetFactor = -1;
         enamel.polygonOffsetUnits = -1;
       }
-      setFinishEnabled(p.material, !group || member || selected);
+      // Highlighting changes emphasis, not craftsmanship. Any part that remains
+      // in the scene keeps its authored finish, including muted context and
+      // covers that are still visible while exploring a mechanism.
+      setFinishEnabled(p.material, true);
       if (group && !member && !selected) {
         p.material.color.multiplyScalar(context ? 0.16 : 0.1);
         p.material.metalness = 0.05;

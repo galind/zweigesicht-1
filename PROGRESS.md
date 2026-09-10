@@ -13,3 +13,7 @@ This is not a certified running-watch simulation or service procedure. Mechanica
 ## Current maintenance task
 
 Rename the local folder, GitHub repository, and Vercel project from their legacy names to `zweigesicht-1`. Remove superseded one-off goal and prompt documents while preserving operating instructions, implementation constraints, provenance, and verification evidence.
+
+## Current interaction refinement
+
+Explore mechanism views now retain authored surface finishes on every visible part. Highlighting still controls emphasis, while visible context and covering parts remain dimmed without losing their material styling. Formatting, lint, TypeScript, seven state tests, the production build, and the real renderer interaction suite pass; the latter checks this contract across all six mechanisms.
