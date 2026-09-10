@@ -335,9 +335,25 @@ for(const [n,expected] of [[99,[28,30]],[222,[31,33]],[228,[49,50,52]]]){
 }
 for(const [id,data] of v.sourceSurfaces)if(!['d_0_1_1_99','d_0_1_1_222','d_0_1_1_228'].includes(id))for(let i=3;i<data.length;i+=4)assert.notEqual(data[i],12);
 results.push({check:'frosting matches exactly seven mounting pad faces on the three approved bridges; no other definition receives mounting frosting',status:'pass'});
-assert.deepEqual(finishShaderFor(195).shader.uniforms.finishFrostDetail.value.toArray(),[12,.006,.26]);
-for(const n of [99,222,228])assert.deepEqual(finishShaderFor(n).shader.uniforms.finishFrostDetail.value.toArray(),[16,.0045,.22]);
-results.push({check:'main plate and seven mounting pads use separately controlled coarse frosting; existing face-mask tests retain exact 49-face scope',status:'pass'});
+assert.deepEqual(finishShaderFor(195).shader.uniforms.finishFrostDetail.value.toArray(),[6,.06]);
+for(const n of [99,222,228])assert.deepEqual(finishShaderFor(n).shader.uniforms.finishFrostDetail.value.toArray(),[8,.05]);
+for(const n of [195,99,222,228]){
+ const {shader}=finishShaderFor(n),fragment=shader.fragmentShader;
+ // The real compile hook must keep frosting out of the normal/anisotropy path,
+ // including mounting masks on otherwise brushed materials. Pixel QA is separate.
+ assert.match(fragment,/finishBlackPolished<\.5 && finishFrostMask<\.5/);
+ assert.match(fragment,/material\.anisotropy\*=finishFace\*finishEnabled\*\(1\.0-finishFrostMask\)/);
+ const heights=fragment.split('\n').filter(line=>line.includes('finishHeight='));
+ assert.ok(heights.every(line=>!/(mountingFrost|finishFrostDetail|finishGrain)/.test(line)||line.includes('*.00022')), 'Frosting must never drive bump height');
+ assert.match(fragment,/clamp\(\.49\+finishGrain\*finishFrostDetail\.y,\.46,\.52\)/);
+ assert.ok(fragment.indexOf('float finishFrostGrain=finishFrost(finishUv)')<fragment.indexOf('if(finishEnabled>.5'), 'Frost derivatives must run before source-role branches');
+ assert.match(fragment,/1\.0-smoothstep\(\.2,\.75,footprint\)/);
+ assert.ok(!fragment.includes('sqrt(nearest)'), 'No sharp cellular ridges');
+}
+assert.equal(finishShaderFor(195).p.material.roughness,.49);
+assert.equal(finishShaderFor(99).p.material.anisotropy,.52);
+assert.equal(finishShaderFor(251).p.material.roughness,.055);
+results.push({check:'plate and seven mounting pads retain filtered reflectance grain with bounded roughness, no frost normal perturbation or anisotropy; satin and polished responses remain distinct',status:'pass',scope:'actual shader hooks and source masks; temporal appearance requires browser review'});
 const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
 assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
 for(const id of [99,230]){

@@ -34,11 +34,11 @@ const brushingDetail: Partial<Record<Finish, number>> = {
   brushedSteel: 1.65,
   warmPlate: 1.65,
 };
-// Authored frosting controls: grain frequency per mm, optical depth and
-// roughness contrast. Source face masks independently define placement.
+// Authored frosting controls: grain frequency per mm and restrained roughness
+// contrast. Frost never perturbs normals; source face masks define placement.
 const frostingDetail = {
-  plate: { scale: 12, depth: .006, contrast: .26 },
-  mounting: { scale: 16, depth: .0045, contrast: .22 },
+  plate: { scale: 6, contrast: .06 },
+  mounting: { scale: 8, contrast: .05 },
 };
 const screwDefinitions = [
   9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
@@ -165,7 +165,7 @@ uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
 uniform float finishFrosted;
-uniform vec3 finishFrostDetail;
+uniform vec2 finishFrostDetail;
 uniform float finishSnailing;
 uniform float finishSnailTurn;
 uniform float finishRadius;
@@ -189,24 +189,16 @@ float filteredFinishNoise(vec2 p) {
  float footprint=max(length(dFdx(p)),length(dFdy(p)));
  return (finishNoise(p)-.5)*(1.0-smoothstep(.4,1.8,footprint));
 }
-// Jittered cellular grains provide irregular pits/ridges rather than soft
-// cloudy noise. Screen-space filtering removes grains below pixel resolution.
+// Smooth source-local grain carries frosting in reflectance, never in normals.
+// Fade each octave before it becomes subpixel. Use unwarped coordinates so
+// filtering cannot vary with cellular boundaries or a noise-warp Jacobian.
+float finishFrostOctave(vec2 q) {
+ float footprint=length(vec2(length(dFdx(q)),length(dFdy(q))));
+ return (finishNoise(q)-.5)*(1.0-smoothstep(.2,.75,footprint));
+}
 float finishFrost(vec2 p) {
  vec2 q=p*finishFrostDetail.x;
- q+=1.6*vec2(finishNoise(q*.43),finishNoise(q*.43+vec2(37.1,9.2)));
- vec2 cell=floor(q), f=fract(q);
- float nearest=4.0;
- for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++) {
-  vec2 offset=vec2(float(x),float(y));
-  vec2 seed=cell+offset;
-  vec2 jitter=vec2(finishHash(seed),finishHash(seed+vec2(19.7,71.3)));
-  vec2 delta=offset+.15+.7*jitter-f;
-  nearest=min(nearest,dot(delta,delta));
- }
- float footprint=max(length(dFdx(q)),length(dFdy(q)));
- float filtered=1.0-smoothstep(.35,1.3,footprint);
- float grains=(.3-sqrt(nearest))*filtered;
- return grains*.78+filteredFinishNoise(q*3.7)*.22;
+ return finishFrostOctave(q)*.75+finishFrostOctave(q*2.0+vec2(17.3,9.2))*.25;
 }
 float finishBrush(vec2 p) {
  // A wider strand layer survives normal bridge framing, while the finer
@@ -308,7 +300,7 @@ export function createMaterial(
       finishEnabled: enabled,
       finishEngraved: { value: etched ? 1 : 0 },
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
-      finishFrostDetail: { value: new THREE.Vector3(frost.scale, frost.depth, frost.contrast) },
+      finishFrostDetail: { value: new THREE.Vector2(frost.scale, frost.contrast) },
       finishFrosted: { value: finish.family === 'frosted' ? 1 : 0 },
       finishSnailing: { value: finish.family === 'barrel' ? 1 : 0 },
       // Right-hand drum/lid local XY has the opposite handedness to the left.
@@ -357,6 +349,8 @@ export function createMaterial(
       /* glsl */ `
 #include <color_fragment>
 vec2 finishUv=vFinishPosition.xy;
+// Evaluate derivatives before source-role branches, including at mask edges.
+float finishFrostGrain=finishFrost(finishUv);
 vec2 finishBrushUv=vec2(dot(finishUv,finishBrushAxis),dot(finishUv,vec2(-finishBrushAxis.y,finishBrushAxis.x)));
 float finishFacing=abs(normalize(vFinishNormal).z);
 float finishFace=smoothstep(.96,.999,finishFacing);
@@ -408,9 +402,9 @@ if(finishEnabled>.5 && finishPattern>.5) {
     : finishBrush(finishBrushUv)*finishBrushDetail;
   // Broad lower bases stay satin; only seven explicit mounting pads frost.
   finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
-  float mountingFrost=finishFrostMask>.5?finishFrost(finishUv):0.0;
+  float mountingFrost=finishFrostMask*finishFrostGrain;
   finishGrain=brushed*finishField+mountingFrost;
-  finishHeight=brushed*finishField*.00018+mountingFrost*finishFrostDetail.y;
+  finishHeight=brushed*finishField*.00018;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -437,8 +431,8 @@ if(finishEnabled>.5 && finishPattern>.5) {
   #ifdef SOURCE_FINISH
   finishFrostMask=finishFrosted*(1.0-step(.2,abs(vFinishRole-10.0)));
   #endif
-  finishGrain=finishFrosted>.5?finishFrost(finishUv)*finishFrostMask:0.0;
-  finishHeight=finishGrain*finishFrostDetail.y;
+  finishGrain=finishFrostGrain*finishFrostMask;
+  // Frost has no bump height: broad reflections retain the source normals.
  }
  // Restrained reflectance variation carries the grain without wood/stone-like
  // color mottling. Geometry and broad studio reflections do most of the work.
@@ -483,7 +477,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
-if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=clamp(.46+finishGrain*finishFrostDetail.z,.3,.65);
+if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=clamp(.49+finishGrain*finishFrostDetail.y,.46,.52);
 if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,
@@ -496,7 +490,7 @@ if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
       '#include <normal_fragment_maps>',
       /* glsl */ `
 #include <normal_fragment_maps>
-if(finishEnabled>.5 && finishPattern>.5 && finishBlackPolished<.5) {
+if(finishEnabled>.5 && finishPattern>.5 && finishBlackPolished<.5 && finishFrostMask<.5) {
  vec3 dx=dFdx(-vViewPosition),dy=dFdy(-vViewPosition);
  vec3 r1=cross(dy,normal),r2=cross(normal,dx);
  float det=dot(dx,r1);
@@ -521,7 +515,7 @@ tbn=mat3(finishT,normalize(cross(normal,finishT)),normal);
       /* glsl */ `
 #include <lights_physical_fragment>
 #ifdef USE_ANISOTROPY
-material.anisotropy*=finishFace*finishEnabled;
+material.anisotropy*=finishFace*finishEnabled*(1.0-finishFrostMask);
 if(finishPattern<1.5) material.anisotropy*=finishField;
 material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
 #endif
@@ -530,7 +524,7 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   };
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v7'
-      : 'ml01-source-surface-v7';
+      ? 'ml01-source-surface-clear-v8'
+      : 'ml01-source-surface-v8';
   return material;
 }
