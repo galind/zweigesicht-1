@@ -1,5 +1,10 @@
 # Zweigesicht — current execution state
 
+## Seven bridge screw-mounting frost areas — verified locally, 10 September 2026
+
+After explicit user confirmation, added frosting only to the upper faces of seven lower screw-mounting pads: train bridge d99 faces28/30, balance bridge d222 faces31/33, barrel bridge d228 faces49/50/52. These are at local Z=-1.2 mm and are distinct from the broad satin undersides and bottom contact planes. New annotation role12 keeps frosting off brushed tops, polished bevels and screw bores. Existing main-plate frosting remains unchanged: current total four parts / 49 source faces carrying frosting. All 69 CPU/source checks, lint, TypeScript and build pass; all three bridges reviewed in the local browser without warnings/errors. Both GLBs and assembly manifest unchanged; only the three named definitions' face roles changed, with every annotation normal preserved. No push or deployment. Next action: user comparison of frosting appearance.
+
+
 ## Stronger bridge and flat-part brushing — verified locally, 10 September 2026
 
 User requested more visible bridge brushing and modestly more detail on keyless/other flat brushed parts, while accepting existing gears. Added a derivative-filtered wider strand layer to straight brushing and centralized family strengths in `brushingDetail`: bridges 2.6, brushed steel flats/warm caps 1.65. Circular gears, barrels and dial brushing are unchanged, as are smooth bridge bases, polished bevels, enamel and the unbrushed double roller. All 68 CPU/source checks, lint, TypeScript and build pass. Local browser train-bridge frontal/oblique and coupling-lever views show clearer directional detail. Geometry, assets, annotations and lighting unchanged; no push or deployment. Next action: user visual comparison.

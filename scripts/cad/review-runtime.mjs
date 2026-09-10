@@ -73,7 +73,7 @@ for(const entry of sidecarReport.definitions){
   assert.ok(Number.isFinite(data[i])&&Number.isFinite(data[i+1])&&Number.isFinite(data[i+2]));
   const len=Math.hypot(data[i],data[i+1],data[i+2]);
   assert.ok(Math.abs(len-1)<1e-5,'Nonzero shading normal must be normalized');
-  assert.ok([0,1,2,3,4,5,6,7,8,9,10,11].includes(data[i+3]));
+  assert.ok([0,1,2,3,4,5,6,7,8,9,10,11,12].includes(data[i+3]));
   roles[data[i+3]]=(roles[data[i+3]]??0)+1;
  }
  assert.deepEqual(roles,entry.roles);
@@ -323,6 +323,18 @@ for(const n of [99,133,147,152,153,156,165,219,222,228,230,240])assert.equal(fin
 for(const n of [105,120,174,176,178,190,193,244,246,248])assert.equal(finishShaderFor(n).shader.uniforms.finishBrushDetail.value,1.65);
 for(const n of [85,86,90,91,94,97,114,131,172,187,233,249])assert.equal(finishShaderFor(n).shader.uniforms.finishBrushDetail.value,1,'Circular gears, barrels and smooth steel must keep their response');
 results.push({check:'stronger straight brushing reaches every bridge and flat brushed family; circular gear/barrel and smooth double-roller responses remain unchanged',status:'pass'});
+for(const [n,expected] of [[99,[28,30]],[222,[31,33]],[228,[49,50,52]]]){
+ const p=finishShaderFor(n).p,roles=p.mesh.geometry.getAttribute('sourceFinishRole');
+ const b=fs.readFileSync(path.join(ROOT,`artifacts/finishing-cad/sidecars/d_0_1_1_${n}.bin`));
+ const raw=new Float32Array(b.buffer,b.byteOffset,b.length/4),found=new Set();
+ for(let i=0;i<roles.count;i++){
+  const face=raw[i*10+9];assert.equal(roles.getX(i)===12,expected.includes(face),`Mounting frost d${n} face ${face}`);
+  if(roles.getX(i)===12)found.add(face);
+ }
+ assert.deepEqual([...found].sort((a,b)=>a-b),expected);
+}
+for(const [id,data] of v.sourceSurfaces)if(!['d_0_1_1_99','d_0_1_1_222','d_0_1_1_228'].includes(id))for(let i=3;i<data.length;i+=4)assert.notEqual(data[i],12);
+results.push({check:'frosting matches exactly seven mounting pad faces on the three approved bridges; no other definition receives mounting frosting',status:'pass'});
 const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
 assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
 for(const id of [99,230]){

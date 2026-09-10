@@ -87,6 +87,8 @@ for(const id of ids) {
   if(id===195&&flat&&f.areaMm2>.4&&role===0)role=10;
   // User-approved enamel: actual recessed lettering and outlines only.
   if((id===99&&f.index>=129&&f.index<=247&&![219,223,227].includes(f.index))||(id===230&&f.index>=37&&f.index<=66))role=11;
+  // Seven user-approved upper mounting pads, not the lower bridge bases.
+  if(({99:[28,30],222:[31,33],228:[49,50,52]})[id]?.includes(f.index))role=12;
   const nx=input[i*10+6],ny=input[i*10+7],nz=input[i*10+8];
   const agreement=nx*n.getX(i)+ny*n.getY(i)+nz*n.getZ(i);
   // Exclude individual sliver outliers; retain original shading at >30 degree disagreement.
@@ -102,7 +104,7 @@ for(const id of ids) {
 }
 const packed=Buffer.concat(blocks),digest=sha(packed),file=`finish-surfaces-${digest.slice(0,12)}.bin`;
 fs.writeFileSync(path.join(modelDir,file),packed);fs.writeFileSync(path.join(modelDir,file+'.gz'),gzipSync(packed,{level:9,mtime:0}));
-const manifest={schemaVersion:1,sourceStepSha256:'f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b',overview:paths.overview,file:'/models/'+file,sha256:digest,definitions,roles:{0:'normal-based conservative surface',1:'source main plane',2:'source steel hand seat or screw shank/under-head',3:'source decorative groove and engraving',4:'source blue crown cone or shock spring field',5:'source dark dial marking',6:'source plate inscription floor',7:'source red gauge inlay',8:'reference-supported exposed bridge base field',9:'modeled bridge chamfer or countersink',10:'broad plate frost field',11:'user-approved recessed enamel'}};
+const manifest={schemaVersion:1,sourceStepSha256:'f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b',overview:paths.overview,file:'/models/'+file,sha256:digest,definitions,roles:{0:'normal-based conservative surface',1:'source main plane',2:'source steel hand seat or screw shank/under-head',3:'source decorative groove and engraving',4:'source blue crown cone or shock spring field',5:'source dark dial marking',6:'source plate inscription floor',7:'source red gauge inlay',8:'reference-supported exposed bridge base field',9:'modeled bridge chamfer or countersink',10:'broad plate frost field',11:'user-approved recessed enamel',12:'user-approved bridge screw mounting pad frosting'}};
 fs.writeFileSync(path.join(modelDir,'finish-surfaces.json'),JSON.stringify(manifest));
 fs.writeFileSync(path.join(root,'artifacts/finishing-cad/runtime-sidecar-report.json'),JSON.stringify({bytes:packed.length,gzipBytes:gzipSync(packed,{level:9,mtime:0}).length,definitions:reports},null,2)+'\n');
 console.log(JSON.stringify({bytes:packed.length,definitions:reports},null,2));

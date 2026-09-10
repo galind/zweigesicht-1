@@ -385,10 +385,11 @@ if(finishEnabled>.5 && finishPattern>.5) {
   float brushed=finishPattern>5.5
     ? filteredFinishNoise(vec2(silverRadius*150.0,11.0))
     : finishBrush(finishBrushUv)*finishBrushDetail;
-  // User correction: lower bridge fields are smooth satin, never frosted.
-  finishFrostMask=0.0;
-  finishGrain=brushed*finishField;
-  finishHeight=brushed*finishField*.00018;
+  // Broad lower bases stay satin; only seven explicit mounting pads frost.
+  finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
+  float mountingFrost=finishFrost(finishUv)*finishFrostMask;
+  finishGrain=brushed*finishField+mountingFrost;
+  finishHeight=brushed*finishField*.00018+mountingFrost*.0014;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;

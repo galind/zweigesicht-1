@@ -34,8 +34,8 @@
   "baseline": "00ae9d3f3e441c1a7d2559e5b500b99ac4f5567b",
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "runtimeAnnotations": {
-    "file": "/models/finish-surfaces-53080b976610.bin",
-    "sha256": "53080b9766107cf7233e7fba91e82ed86a9562d30cd5f045036d0c56031497f1",
+    "file": "/models/finish-surfaces-afd3394797bd.bin",
+    "sha256": "afd3394797bde7102750e86c5ceb2f06ec7a329c1a1549789e004cf25be064e0",
     "roles": {
       "0": "normal-based conservative surface",
       "1": "source main plane",
@@ -48,10 +48,11 @@
       "8": "reference-supported exposed bridge base field",
       "9": "modeled bridge chamfer or countersink",
       "10": "broad plate frost field",
-      "11": "user-approved recessed enamel"
+      "11": "user-approved recessed enamel",
+      "12": "user-approved bridge screw mounting pad frosting"
     },
-    "materialSourceSha256": "93816a30ccb689fa12ebf85f4b38a3e4d8e637c27e6a64e9c3b62a7a04bd2bbb",
-    "packagerSourceSha256": "7c23d8f67c5b9e838c44544c0c347da74dbf6e1e3bf46e4e1d8a32f807b3c711"
+    "materialSourceSha256": "66b4d0a8f2cd507fb4ce355138600de66ad5943c1612702e54587887a343bcdf",
+    "packagerSourceSha256": "4e42d1006371a514e26c33f051f0f968aa589b2a728dce21e5cd1b5f0193ac78"
   },
   "coverage": {
     "leafDefinitions": 202,
@@ -21798,8 +21799,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; only the separately approved screw mounting pads receive frosting.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces; user approved seven screw-mounting frost areas",
       "assignment": {
         "color": 13949150,
         "metalness": 1,
@@ -33170,8 +33171,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user approved seven screw-mounting frost areas",
       "assignment": {
         "color": 13949150,
         "metalness": 1,
@@ -33525,8 +33526,8 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Steel bridge",
-      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user approved seven screw-mounting frost areas",
       "assignment": {
         "color": 13949150,
         "metalness": 1,
@@ -48994,8 +48995,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces",
-      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; no lower bridge faces receive frosting.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user enamel request and exact source faces; user approved seven screw-mounting frost areas",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained. Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved. Source face54 at local Z=-.3mm remains smooth satin. The exposed base is now smooth satin per user correction; only the separately approved screw mounting pads receive frosting.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -60163,8 +60164,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user approved seven screw-mounting frost areas",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.",
       "before": {
         "color": 13685980,
         "metalness": 1,
@@ -61174,8 +61175,8 @@
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Steel bridge",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations; user approved seven screw-mounting frost areas",
+      "surfaceReview": "More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored. Exact role-12 mounting pads are frosted: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.",
       "before": {
         "color": 13685980,
         "metalness": 1,
