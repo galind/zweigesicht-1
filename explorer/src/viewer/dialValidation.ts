@@ -219,7 +219,7 @@ export async function runDialChecks(v: MovementViewer) {
   await settle(v);
   check(
     'Back restores only the small dial with blue enamel',
-    v.renderParts.get(raw)?.material.color.getHex() === 0x143a69 &&
+    v.renderParts.get(raw)?.material.color.getHex() === 0x062e78 &&
       [...v.renderParts.values()].filter(
         (p) => p.mesh.visible && !belongs(p.source.id, ROOT),
       ).length === 21,

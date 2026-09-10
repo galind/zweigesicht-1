@@ -1,5 +1,11 @@
 # Zweigesicht — current execution state
 
+## Finishing-fidelity branch — verified locally, 10 September 2026
+
+Implemented the approved reference/CAD finishing plan on `codex/finishing-fidelity`, based on `main` at `61ea264`. Blanket lower-Z frosting is replaced by exact exposed-base face roles on ten reviewed bridge/shock definitions; modeled bridge chamfers/countersinks and broad plate frost fields also have separate reversible roles. Procedural grain and frosting are finer, shallower and lower contrast. The crown wheel is black polished, blue steel gains angular blue-black/cobalt response, ruby bearings gain optical depth, Dial A silver carriers gain fine circular satin, and fitted Dial B enamel is translucent cobalt over its separate silver carrier. Geometry, transforms, IDs and original attributes remain unchanged.
+
+TypeScript, authored lint, production build, the complete source/asset suite and dial CPU/state checks pass. Real WebGL review at 1280×720 passes **18 camera, 27 UX, 24 dial, 8 explosion and 12 interaction checks** with stable resources, exact assembly and no current annotation/diamond errors. Direct review covers assembled, macro, edge-on lower surfaces and both dials. Details: `docs/FINISHING_FIDELITY_REVIEW.md`. The appearance ledger is reconciled at 84 verified / 264 inferred / 17 unresolved. Preview: **http://127.0.0.1:4173/**. Delivery target is the SSH branch `codex/finishing-fidelity`; next action is user comparison. No deployment or CAD redistribution; `FINISHING_GOAL.md` remains untouched and untracked.
+
 ## Vercel Analytics — verified locally, 10 September 2026
 
 Added the official `@vercel/analytics` dependency and mounted its Next.js `Analytics` component in the root layout so page views are collected across the website when deployed on Vercel. Authored lint, the standard production build and the Vercel-specific production build pass. This checkpoint changes code and dependency metadata only; no deployment was performed and `FINISHING_GOAL.md` remains untouched.

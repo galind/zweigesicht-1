@@ -71,7 +71,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x6c2031);assert.equal(controller.renderParts.get(raw).material.transmission,0);
  controller.patch({isolated:true});assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,1);
  controller.back();assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,21);
- assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x143a69);assert.equal(controller.renderParts.get(raw).material.transmission,.3);
+ assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x062e78);assert.equal(controller.renderParts.get(raw).material.transmission,.58);
  await controller.showDial('central','central','lance');controller.applyPose(0);
  const lanceSeconds=DIALS.faces.central.styles.find(s=>s.id==='lance').handLeafIds.seconds;
  const sourceMatrix=controller.renderParts.get(lanceSeconds).assembled.clone();

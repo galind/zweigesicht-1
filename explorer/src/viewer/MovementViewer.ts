@@ -1447,10 +1447,15 @@ export class MovementViewer {
         const fitted =
           (this.fitted.has(id) || !!p.dialFade) &&
           !(selection && !belongs(selection, ROOT));
-        enamel.color.setHex(fitted ? 0x143a69 : finish.color);
-        enamel.transmission = fitted ? 0.3 : 0;
-        enamel.ior = 1.5;
-        enamel.thickness = 0.1;
+        enamel.color.setHex(fitted ? 0x062e78 : finish.color);
+        enamel.transmission = fitted ? 0.58 : 0;
+        enamel.userData.finishTransmission = enamel.transmission;
+        enamel.ior = 1.53;
+        enamel.thickness = 0.35;
+        enamel.attenuationColor.setHex(0x063b9a);
+        enamel.attenuationDistance = 0.65;
+        enamel.clearcoat = fitted ? 1 : 0;
+        enamel.clearcoatRoughness = 0.035;
         // The supplied carrier and enamel share coplanar outward faces.
         // Depth bias resolves their source overlap without moving either mesh.
         enamel.polygonOffset = fitted;

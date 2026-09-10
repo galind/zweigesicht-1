@@ -52,7 +52,7 @@ Excluded from fitted presets, retained in the raw catalog:
 
 The recovered central d27 mesh retains all 33,194 triangles, no missing triangulated faces and no degenerate triangles despite its invalid imported BRep. The small display retains a nominal 0.02 mm shaft/bushing axial gap and source press-fit overlaps. These are recorded source limitations, not repaired or certified mechanics.
 
-Only fitted S28/d21 enamel receives the maker-referenced blue interpretation: color `#143a69`, transmission .3, IOR 1.5 and authored .1 mm optical thickness. The carrier/enamel source solids overlap by 3.477922 mm³ and share an outward plane; exact-instance polygon depth bias prevents coplanar flicker without moving either surface. Raw catalog red is restored during external inspection. The complete appearance ledger records this scoped interpretation separately; all 365 existing raw instance appearance/geometry/matrix records remain intact.
+Only fitted S28/d21 enamel receives the maker-referenced blue interpretation: cobalt color `#062e78`, transmission .58, IOR 1.53, clearcoat and authored .35 mm optical thickness with blue attenuation. The carrier/enamel source solids overlap by 3.477922 mm³ and share an outward plane; exact-instance polygon depth bias prevents coplanar flicker without moving either surface. Raw catalog red is restored during external inspection. The complete appearance ledger records this scoped interpretation separately; all 365 existing raw instance appearance/geometry/matrix records remain intact.
 
 ## Interaction and recovery
 

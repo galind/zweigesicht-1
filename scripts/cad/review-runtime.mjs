@@ -73,7 +73,7 @@ for(const entry of sidecarReport.definitions){
   assert.ok(Number.isFinite(data[i])&&Number.isFinite(data[i+1])&&Number.isFinite(data[i+2]));
   const len=Math.hypot(data[i],data[i+1],data[i+2]);
   assert.ok(Math.abs(len-1)<1e-5,'Nonzero shading normal must be normalized');
-  assert.ok([0,1,2,3,4,5,6,7].includes(data[i+3]));
+  assert.ok([0,1,2,3,4,5,6,7,8,9,10].includes(data[i+3]));
   roles[data[i+3]]=(roles[data[i+3]]??0)+1;
  }
  assert.deepEqual(roles,entry.roles);
@@ -211,17 +211,17 @@ v.state={...initialState};v.retarget();
 const rubyPart=[...v.renderParts.values()].find(p=>p.material.name==='ruby');
 const anisotropicPart=[...v.renderParts.values()].find(p=>p.material.anisotropy>0);
 assert.ok(rubyPart&&anisotropicPart);
-assert.equal(rubyPart.material.transmission,.55);
+assert.equal(rubyPart.material.transmission,.72);
 const anisotropicVersion=anisotropicPart.material.version;
 v.patch({treatment:'function'});
 assert.equal('treatment' in v.state,false);
 for(const p of v.renderParts.values()) assert.equal(p.material.userData.finishEnabled.value,1);
 assert.equal(anisotropicPart.material.version,anisotropicVersion,'Legacy appearance input must preserve shader programs');
 const rubyFinishColor=rubyPart.material.color.clone();
-v.state={...initialState,part:rubyPart.source.id,isolated:true};v.retarget();assert.equal(rubyPart.material.transmission,.55);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
-v.patch({treatment:'function'});assert.equal(rubyPart.material.transmission,.55);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
-v.state={...initialState,group:'energy'};v.retarget();assert.equal(rubyPart.material.transmission,rubyPart.material.userData.finishEnabled.value ? .55 : 0);
-v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.55);
+v.state={...initialState,part:rubyPart.source.id,isolated:true};v.retarget();assert.equal(rubyPart.material.transmission,.72);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
+v.patch({treatment:'function'});assert.equal(rubyPart.material.transmission,.72);assert.ok(rubyPart.material.color.equals(rubyFinishColor));
+v.state={...initialState,group:'energy'};v.retarget();assert.equal(rubyPart.material.transmission,rubyPart.material.userData.finishEnabled.value ? .72 : 0);
+v.state={...initialState};v.retarget();assert.equal(rubyPart.material.transmission,.72);
 const {finishFor,createMaterial,setFinishEnabled}=load('explorer/src/viewer/materials.ts');
 const finishShaderFor=(n)=>{
  const p=[...v.renderParts.values()].find(p=>p.source.definitionId===`d_0_1_1_${n}`);
@@ -274,10 +274,18 @@ assert.equal(studs.length,2);for(const p of studs)assert.equal(p.material.name,'
 assert.equal(finishFor('shared stud screw','d_0_1_1_226','elsewhere').family,'blue');
 results.push({check:'all four source barrel transforms produce the accepted left winding; all eleven rear-facing screws and hairspring stud/screw are steel with exact instance scope',status:'pass'});
 for(const n of [94,131,249])assert.equal(finishShaderFor(n).shader.uniforms.finishSnailing.value,0);
-assert.equal(finishShaderFor(249).p.material.name,'brushedCrown');
-assert.equal(finishShaderFor(249).shader.uniforms.finishPattern.value,2);
+assert.equal(finishShaderFor(249).p.material.name,'blackPolished');
+assert.equal(finishShaderFor(249).shader.uniforms.finishPattern.value,5);
+assert.equal(finishShaderFor(249).shader.uniforms.finishBlackPolished.value,1);
 assert.equal(finishShaderFor(251).p.material.name,'crown');
-results.push({check:'cap grain follows actual screw bores toward jewel; satin mask selects all and only 263 seat vertices; four barrels use snailing independently of wheels/crown cap',status:'pass'});
+for(const n of [99,133,147,156,165,219,222,228,230,240]){
+ const roles=finishShaderFor(n).p.mesh.geometry.getAttribute('sourceFinishRole');
+ assert.ok(roles);let bases=0;for(let i=0;i<roles.count;i++)if(roles.getX(i)===8)bases++;
+ assert.ok(bases>0,`Reviewed bridge ${n} must have an exact exposed-base role`);
+}
+assert.ok(!finishShaderFor(230).shader.uniforms.finishEngraved.value);
+assert.equal(finishShaderFor(219).shader.uniforms.finishEngraved.value,1);
+results.push({check:'cap grain follows actual screw bores; exact bridge bases and recesses replace blanket lower-Z frosting; four barrels retain handed fine snailing; crown wheel is black polished',status:'pass'});
 // Reference-requested keyless surfaces must reach a directional material on
 // real source geometry, including negative-Z faces and the catalog alternative.
 for(const n of [174,176,178,190,193,244,246,248,97,172]){
@@ -332,7 +340,7 @@ for(const p of v.renderParts.values()){
  const screw=/^010-/.test(p.source.name),blue=screw&&p.material.name==='blue';
  assert.equal(shader.uniforms.finishWholeBlue.value,blue?1:0,p.source.id);
  // Both steel color and roughness overrides must respect the per-instance gate.
- assert.equal((shader.fragmentShader.match(/finishWholeBlue<\.5 && abs\(vFinishRole-2\.0\)<\.2/g)||[]).length,2);
+ assert.equal((shader.fragmentShader.match(/finishEnabled>\.5 && finishWholeBlue<\.5 && abs\(vFinishRole-2\.0\)<\.2/g)||[]).length,2);
  const roles=p.mesh.geometry.getAttribute('sourceFinishRole');
  if(blue){
   blueScrews++;blueScrewDefinitions.add(p.source.definitionId);

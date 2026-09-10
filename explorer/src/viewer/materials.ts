@@ -2,27 +2,28 @@ import * as THREE from 'three';
 
 /** Authored surface interpretations of local maker references, not measured finishes. */
 const profiles = {
-  steel: { color: 0xc3c9d0, metalness: 1, roughness: 0.2, pattern: 0 },
-  brushedSteel: { color: 0xc3c9d0, metalness: 1, roughness: 0.31, pattern: 4 },
-  bridge: { color: 0xd0d4dc, metalness: 1, roughness: 0.23, pattern: 1 },
-  warmPlate: { color: 0xd9ab94, metalness: 1, roughness: 0.24, pattern: 1 },
-  frosted: { color: 0xd9ae8f, metalness: 1, roughness: 0.55, pattern: 3 },
-  brass: { color: 0xdcae85, metalness: 1, roughness: 0.31, pattern: 2 },
-  barrel: { color: 0xd6a17f, metalness: 1, roughness: 0.34, pattern: 2 },
+  steel: { color: 0xc7cdd4, metalness: 1, roughness: 0.18, pattern: 0 },
+  brushedSteel: { color: 0xc9ced5, metalness: 1, roughness: 0.28, pattern: 4 },
+  bridge: { color: 0xd4d8de, metalness: 1, roughness: 0.25, pattern: 1 },
+  warmPlate: { color: 0xd4a58e, metalness: 1, roughness: 0.27, pattern: 1 },
+  frosted: { color: 0xd2a48b, metalness: 1, roughness: 0.49, pattern: 3 },
+  brass: { color: 0xd9aa7d, metalness: 1, roughness: 0.27, pattern: 2 },
+  barrel: { color: 0xd2a079, metalness: 1, roughness: 0.3, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
   gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
   satinGold: { color: 0xd8b572, metalness: 1, roughness: 0.31, pattern: 2 },
   roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
-  crown: { color: 0xd1d5dd, metalness: 1, roughness: 0.12, pattern: 0 },
-  brushedCrown: { color: 0xd1d5dd, metalness: 1, roughness: 0.29, pattern: 2 },
-  blue: { color: 0x287bb8, metalness: 0.92, roughness: 0.19, pattern: 0 },
+  crown: { color: 0xbac1ca, metalness: 1, roughness: 0.055, pattern: 5 },
+  blackPolished: { color: 0xaeb6c0, metalness: 1, roughness: 0.055, pattern: 5 },
+  dialSilver: { color: 0xd5d8dc, metalness: 1, roughness: 0.25, pattern: 6 },
+  blue: { color: 0x0b3768, metalness: 1, roughness: 0.13, pattern: 0 },
   spring: { color: 0x304f83, metalness: 1, roughness: 0.25, pattern: 0 },
-  ruby: { color: 0xd34f8c, metalness: 0, roughness: 0.09, pattern: 0 },
+  ruby: { color: 0xa80e45, metalness: 0, roughness: 0.055, pattern: 0 },
   shockMass: { color: 0xd2779e, metalness: 0, roughness: 0.12, pattern: 0 },
   leather: { color: 0x684330, metalness: 0, roughness: 0.78, pattern: 3 },
   rubber: { color: 0x17191c, metalness: 0, roughness: 0.7, pattern: 0 },
-  enamel: { color: 0x143a69, metalness: 0, roughness: 0.12, pattern: 0 },
+  enamel: { color: 0x062e78, metalness: 0, roughness: 0.065, pattern: 0 },
   sapphire: { color: 0xffffff, metalness: 0, roughness: 0.035, pattern: 0 },
   diamond: { color: 0xffffff, metalness: 0, roughness: 0.025, pattern: 0 },
 };
@@ -44,7 +45,7 @@ for (const [family, ids] of Object.entries({
   // Flat keyless levers/springs, including both source setting-spring variants.
   // Unlike bridge feet these faces are brushed on both sides of local Z0.
   brushedSteel: [174, 176, 178, 190, 193, 244, 246, 248],
-  brushedCrown: [249],
+  blackPolished: [249],
   crown: [251],
   blue: screwDefinitions,
   steel: [
@@ -72,8 +73,9 @@ for (const [family, ids] of Object.entries({
 // Reviewed optional catalog identities. Keep material-bearing rings separate
 // from enamel inserts and hands; name fallbacks conflated all three.
 for (const [family, ids] of Object.entries({
+  dialSilver: [3, 14, 17, 26],
   steel: [
-    3, 5, 14, 17, 23, 26, 27, 46, 48, 52, 54, 56, 59, 62, 70, 71, 73, 75, 76,
+    5, 23, 27, 46, 48, 52, 54, 56, 59, 62, 70, 71, 73, 75, 76,
     77, 256,
   ],
   blue: [
@@ -144,6 +146,7 @@ export function finishFor(
 const declarations = /* glsl */ `
 varying vec3 vFinishPosition;
 varying vec3 vFinishNormal;
+varying vec3 vFinishViewNormal;
 varying vec3 vFinishX;
 varying vec3 vFinishY;
 varying float vFinishRole;
@@ -157,6 +160,8 @@ uniform float finishSnailTurn;
 uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
+uniform float finishHeatBlue;
+uniform float finishBlackPolished;
 `;
 const surface = /* glsl */ `
 float finishHash(vec2 p) {
@@ -172,17 +177,17 @@ float filteredFinishNoise(vec2 p) {
  float footprint=max(length(dFdx(p)),length(dFdy(p)));
  return (finishNoise(p)-.5)*(1.0-smoothstep(.4,1.8,footprint));
 }
-// Several irregular scales keep satin readable at assembly distance, while
-// derivatives fade only the unresolved scratches instead of the entire finish.
+// Fine millimetre-scale fields. Derivatives remove detail below a pixel; the
+// remaining relief stays optical rather than reading as modeled topography.
 float finishFrost(vec2 p) {
- return filteredFinishNoise(p*10.0)*.55
-      + filteredFinishNoise(p*32.0)*.32
-      + filteredFinishNoise(p*80.0)*.13;
+ return filteredFinishNoise(p*28.0)*.48
+      + filteredFinishNoise(p*85.0)*.34
+      + filteredFinishNoise(p*210.0)*.18;
 }
 float finishBrush(vec2 p) {
- return filteredFinishNoise(p*vec2(.65,20.0))*.45
-      + filteredFinishNoise(p*vec2(2.0,55.0))*.35
-      + filteredFinishNoise(p*vec2(4.0,120.0))*.2;
+ return filteredFinishNoise(p*vec2(.8,90.0))*.46
+      + filteredFinishNoise(p*vec2(2.2,230.0))*.34
+      + filteredFinishNoise(p*vec2(5.0,520.0))*.2;
 }
 `;
 
@@ -196,14 +201,10 @@ export function setFinishEnabled(
   if (uniform) uniform.value = enabled ? 1 : 0;
   if (
     material instanceof THREE.MeshPhysicalMaterial &&
-    ['ruby', 'shockMass', 'sapphire', 'diamond'].includes(material.name)
+    ['ruby', 'shockMass', 'enamel', 'sapphire', 'diamond'].includes(material.name)
   ) {
     material.transmission = enabled
-      ? material.name === 'sapphire'
-        ? 0.98
-        : material.name === 'diamond'
-          ? 0.92
-          : 0.55
+      ? ((material.userData.finishTransmission as number | undefined) ?? 0)
       : 0;
   }
 }
@@ -224,17 +225,30 @@ export function createMaterial(
     color: finish.color,
     metalness: finish.metalness,
     roughness: finish.roughness,
-    anisotropy: finish.pattern === 1 ? 0.48 : finish.pattern === 2 ? 0.68 : finish.pattern === 4 ? 0.6 : 0,
+    anisotropy: finish.pattern === 1 ? 0.52 : finish.pattern === 2 ? 0.58 : finish.pattern === 4 ? 0.55 : finish.pattern === 6 ? 0.48 : 0,
   });
   material.name = finish.family;
   if (geometry?.hasAttribute('sourceFinishNormal'))
     material.defines = { ...material.defines, SOURCE_FINISH: 1 };
   if (['ruby', 'shockMass'].includes(finish.family)) {
     material.ior = 1.76;
-    material.transmission = 0.55;
-    material.thickness = 0.3;
-    material.attenuationColor.setHex(0xb52c67);
-    material.attenuationDistance = 0.45;
+    material.transmission = finish.family === 'ruby' ? 0.72 : 0.55;
+    material.thickness = finish.family === 'ruby' ? 0.55 : 0.3;
+    material.attenuationColor.setHex(finish.family === 'ruby' ? 0x8f0738 : 0xb52c67);
+    material.attenuationDistance = finish.family === 'ruby' ? 0.7 : 0.45;
+    material.clearcoat = 1;
+    material.clearcoatRoughness = 0.035;
+  }
+  if (finish.family === 'enamel') {
+    material.ior = 1.53;
+    // Raw catalog enamel retains its source-color inspection. The fitted blue
+    // chapter ring supplies the translucent optical target in retarget().
+    material.transmission = 0;
+    material.thickness = 0.35;
+    material.attenuationColor.setHex(0x063b9a);
+    material.attenuationDistance = 0.65;
+    material.clearcoat = 1;
+    material.clearcoatRoughness = 0.035;
   }
   if (finish.family === 'sapphire' || finish.family === 'diamond') {
     // Authored optical emulation; source geometry is retained. Single-layer
@@ -244,6 +258,7 @@ export function createMaterial(
     material.thickness = finish.family === 'diamond' ? 1.26 : 1;
     material.attenuationDistance = Infinity;
   }
+  material.userData.finishTransmission = material.transmission;
   // Kept for the existing catalog framing cache; never change source buffers.
   geometry?.computeBoundingBox();
   const bounds = geometry?.boundingBox;
@@ -255,7 +270,7 @@ export function createMaterial(
   if (definitionId === 'd_0_1_1_240') brushAxis.set(Math.cos(Math.PI * 8 / 180), -Math.sin(Math.PI * 8 / 180));
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
-  const etched = [99, 222, 228, 230].includes(
+  const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
   material.onBeforeCompile = (shader) => {
@@ -272,9 +287,11 @@ export function createMaterial(
       finishRadius: { value: Math.max(radius, .01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
+      finishHeatBlue: { value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0 },
+      finishBlackPolished: { value: ['blackPolished', 'crown'].includes(finish.family) ? 1 : 0 },
     });
     shader.vertexShader =
-      'varying vec3 vFinishPosition;\nvarying vec3 vFinishNormal;\nvarying vec3 vFinishX;\nvarying vec3 vFinishY;\nvarying float vFinishRole;\n#ifdef SOURCE_FINISH\nattribute vec3 sourceFinishNormal;\nattribute float sourceFinishRole;\n#endif\n' +
+      'varying vec3 vFinishPosition;\nvarying vec3 vFinishNormal;\nvarying vec3 vFinishViewNormal;\nvarying vec3 vFinishX;\nvarying vec3 vFinishY;\nvarying float vFinishRole;\n#ifdef SOURCE_FINISH\nattribute vec3 sourceFinishNormal;\nattribute float sourceFinishRole;\n#endif\n' +
       shader.vertexShader
         .replace(
           '#include <beginnormal_vertex>',
@@ -282,7 +299,7 @@ export function createMaterial(
         )
         .replace(
           '#include <begin_vertex>',
-          '#include <begin_vertex>\nvFinishPosition=position; vFinishNormal=normal; vFinishRole=0.0;\n#ifdef SOURCE_FINISH\nvFinishNormal=sourceFinishNormal; vFinishRole=sourceFinishRole;\n#endif\nvFinishX=mat3(modelViewMatrix)*vec3(1,0,0); vFinishY=mat3(modelViewMatrix)*vec3(0,1,0);',
+          '#include <begin_vertex>\nvFinishPosition=position; vFinishNormal=normal; vFinishRole=0.0;\n#ifdef SOURCE_FINISH\nvFinishNormal=sourceFinishNormal; vFinishRole=sourceFinishRole;\n#endif\nvFinishViewNormal=normalize(normalMatrix*vFinishNormal);\nvFinishX=mat3(modelViewMatrix)*vec3(1,0,0); vFinishY=mat3(modelViewMatrix)*vec3(0,1,0);',
         );
     shader.fragmentShader = declarations + surface + shader.fragmentShader;
     if (finish.family === 'sapphire' || finish.family === 'diamond') {
@@ -312,12 +329,16 @@ vec2 finishUv=vFinishPosition.xy;
 vec2 finishBrushUv=vec2(dot(finishUv,finishBrushAxis),dot(finishUv,vec2(-finishBrushAxis.y,finishBrushAxis.x)));
 float finishFacing=abs(normalize(vFinishNormal).z);
 float finishFace=smoothstep(.96,.999,finishFacing);
-// Only existing inclined faces receive a polish; vertical walls stay satin.
-float finishBevel=smoothstep(.12,.4,finishFacing)*(1.0-smoothstep(.85,.98,finishFacing));
+// Reviewed BRep roles override the conservative normal-angle fallback.
+float finishBevel=smoothstep(.16,.42,finishFacing)*(1.0-smoothstep(.82,.96,finishFacing));
+#ifdef SOURCE_FINISH
+finishBevel=1.0-step(.2,abs(vFinishRole-9.0));
+#endif
 float finishGrain=0.0;
 float finishHeight=0.0;
 float finishField=1.0;
 float finishFrostMask=finishFrosted;
+float finishBase=0.0;
 // Audited d99 face 54 is the only flat source plane at Z=-.3 mm.
 // The tight plane mask leaves the lower feet, chamfers and engraving separate.
 float finishSeat=finishCapSeat*finishFace*(1.0-smoothstep(.0001,.0003,abs(vFinishPosition.z+.3)));
@@ -326,15 +347,33 @@ if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) diffuseCol
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) diffuseColor.rgb=vec3(.006);
 if(finishEnabled>.5 && abs(vFinishRole-4.0)<.2) diffuseColor.rgb=vec3(.018,.08,.24);
 if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.35,.005,.04);
+// Heat-blued steel changes from blue-black to cobalt as the reflected angle
+// turns. Neutral source seats remain steel unless the whole screw is blued.
+float finishBlueSurface=max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0)));
+if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=0.0;
+if(finishEnabled>.5 && finishBlueSurface>.5) {
+ float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);
+ diffuseColor.rgb=mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78);
+}
 if(finishEnabled>.5 && finishPattern>.5) {
- if(finishPattern<1.5 || finishPattern>3.5) {
-  finishField=finishPattern>3.5?1.0:smoothstep(-.025,-.005,vFinishPosition.z);
-  diffuseColor.rgb*=mix(.62,1.0,max(finishField,finishSeat));
-  float brushed=finishPattern>3.5?finishBrush(finishBrushUv):filteredFinishNoise(finishBrushUv*vec2(2.0,40.0));
+ if(finishPattern<1.5 || (finishPattern>3.5 && finishPattern<4.5) || finishPattern>5.5) {
+  finishField=finishPattern<1.5?smoothstep(-.006,.001,vFinishPosition.z):1.0;
+  #ifdef SOURCE_FINISH
+  if(finishPattern<1.5) {
+   finishField=1.0-step(.2,abs(vFinishRole-1.0));
+   finishBase=1.0-step(.2,abs(vFinishRole-8.0));
+  }
+  #endif
+  // Lower bridge geometry is no longer darkened or frosted by position alone.
+  // Only role 8 is a documented exposed base; everything else remains satin.
+  float silverRadius=length(finishUv);
+  float brushed=finishPattern>5.5
+    ? filteredFinishNoise(vec2(silverRadius*150.0,11.0))
+    : finishBrush(finishBrushUv);
   float frost=finishFrost(finishUv);
-  finishFrostMask=1.0-finishField;
-  finishGrain=mix(frost,brushed,finishField);
-  finishHeight=mix(frost*.011,brushed*(finishPattern>3.5?.0012:.00065),finishField);
+  finishFrostMask=finishBase;
+  finishGrain=brushed*finishField+frost*finishBase;
+  finishHeight=brushed*finishField*.00018+frost*finishBase*.0014;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -345,27 +384,30 @@ if(finishEnabled>.5 && finishPattern>.5) {
    // Sample a closed circle, avoiding an atan seam and concentric lathe rings.
    float phase=atan(finishUv.y,finishUv.x)+finishSnailTurn*radius/finishRadius;
    vec2 spiral=vec2(cos(phase),sin(phase));
-   finishGrain=filteredFinishNoise(spiral*48.0+radius*.15)*.55
-     + filteredFinishNoise(spiral*120.0+radius*.08)*.3
-     + filteredFinishNoise(spiral*260.0)*.15;
+   finishGrain=filteredFinishNoise(spiral*90.0+radius*.12)*.5
+     + filteredFinishNoise(spiral*250.0+radius*.06)*.32
+     + filteredFinishNoise(spiral*600.0)*.18;
   } else {
   // Irregular concentric brushing around the original source axle. The slow
   // XY variation breaks up perfect lathe rings without an angular seam.
-  float wander=finishNoise(finishUv*1.7)*.035;
-  finishGrain=filteredFinishNoise(vec2((radius+wander)*20.0,0.0))*.45
-    + filteredFinishNoise(vec2((radius+wander*.5)*55.0,7.0))*.35
-    + filteredFinishNoise(vec2(radius*120.0,19.0))*.2;
+  float wander=finishNoise(finishUv*2.1)*.012;
+  finishGrain=filteredFinishNoise(vec2((radius+wander)*45.0,0.0))*.46
+    + filteredFinishNoise(vec2((radius+wander*.5)*140.0,7.0))*.34
+    + filteredFinishNoise(vec2(radius*360.0,19.0))*.2;
   }
-  finishHeight=finishGrain*.0012;
+  finishHeight=finishGrain*.00022;
  } else {
-  finishGrain=finishFrosted>.5?finishFrost(finishUv):filteredFinishNoise(finishUv*32.0);
-  finishHeight=finishGrain*mix(.0006,.011,finishFrosted);
+  #ifdef SOURCE_FINISH
+  finishFrostMask=finishFrosted*(1.0-step(.2,abs(vFinishRole-10.0)));
+  #endif
+  finishGrain=finishFrosted>.5?finishFrost(finishUv)*finishFrostMask:0.0;
+  finishHeight=finishGrain*.0014;
  }
- // Small reflectance variation carries the grain through broad studio lights;
- // existing chamfers stay distinct from the textured flat fields.
- if(finishPattern<2.5 || finishPattern>3.5 || finishFrosted>.5)
-  diffuseColor.rgb*=1.0+finishGrain*mix(.34,.8,finishFrostMask)*finishFace;
- if(vFinishRole>5.5) diffuseColor.rgb*=.64;
+ // Restrained reflectance variation carries the grain without wood/stone-like
+ // color mottling. Geometry and broad studio reflections do most of the work.
+ if(finishPattern<4.5 || finishPattern>5.5)
+  diffuseColor.rgb*=1.0+finishGrain*mix(.08,.2,finishFrostMask)*finishFace;
+ if(abs(vFinishRole-6.0)<.2) diffuseColor.rgb*=.62;
  // Existing recessed decoration on audited bridges. This is reversible surface
  // shading of source floors, never fabricated text, outlines or bevel geometry.
  if(finishEngraved>.5) {
@@ -375,7 +417,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   #ifdef SOURCE_FINISH
   ink=1.0-step(.2,abs(vFinishRole-3.0));
   #endif
-  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.008,.018,.05),ink*.9);
+  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.008,.03,.105),ink*.82);
  }
 }
 `,
@@ -386,14 +428,17 @@ if(finishEnabled>.5 && finishPattern>.5) {
 #include <roughnessmap_fragment>
 if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) roughnessFactor=.2;
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
+if(finishEnabled>.5 && abs(vFinishRole-3.0)<.2) roughnessFactor=.085;
+if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || abs(vFinishRole-2.0)>.2)) roughnessFactor=.13;
+if(finishEnabled>.5 && finishBlackPolished>.5) roughnessFactor=.055;
 if(finishEnabled>.5 && finishPattern>.5) {
- float finishContrast=finishPattern>2.5 && finishPattern<3.5 && finishFrosted<.5?.14:.24;
+ float finishContrast=.1;
  roughnessFactor=clamp(roughnessFactor+finishGrain*finishContrast,.09,.85);
- if(finishPattern<2.5 || finishPattern>3.5) {
-  roughnessFactor=mix(.42,roughnessFactor,finishFace);
-  roughnessFactor=mix(roughnessFactor,.55+finishGrain*.3,finishFace*finishFrostMask);
+ if(finishPattern<2.5 || (finishPattern>3.5 && finishPattern<4.5) || finishPattern>5.5) {
+  roughnessFactor=mix(.34,roughnessFactor,finishFace);
+  roughnessFactor=mix(roughnessFactor,.5+finishGrain*.12,finishFace*finishFrostMask);
   roughnessFactor=mix(roughnessFactor,.34,finishSeat);
-  roughnessFactor=mix(roughnessFactor,.10,finishBevel);
+  roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
 `,
@@ -406,7 +451,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
       '#include <normal_fragment_maps>',
       /* glsl */ `
 #include <normal_fragment_maps>
-if(finishEnabled>.5 && finishPattern>.5) {
+if(finishEnabled>.5 && finishPattern>.5 && finishBlackPolished<.5) {
  vec3 dx=dFdx(-vViewPosition),dy=dFdy(-vViewPosition);
  vec3 r1=cross(dy,normal),r2=cross(normal,dx);
  float det=dot(dx,r1);
@@ -432,7 +477,7 @@ tbn=mat3(finishT,normalize(cross(normal,finishT)),normal);
 #include <lights_physical_fragment>
 #ifdef USE_ANISOTROPY
 material.anisotropy*=finishFace*finishEnabled;
-if(finishPattern<1.5) material.anisotropy*=smoothstep(-.025,-.005,vFinishPosition.z);
+if(finishPattern<1.5) material.anisotropy*=finishField;
 material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
 #endif
 `,

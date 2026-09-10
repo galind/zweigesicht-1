@@ -1,3 +1,18 @@
+# Finishing-fidelity correction
+
+10 September 2026. This pass supersedes the coarse lower-field frosting and crown-wheel brushing described in the historical sections below.
+
+- Bridge frosting is no longer inferred from every vertex below local Z0. Ten reviewed bridge/shock definitions use exact source-face role 8 for exposed base fields; all other lower faces remain neutral satin unless separately identified. BRep cones and oblique chamfer planes use role 9 for polished bevel/countersink response.
+- The main plate uses role 10 for broad axial frost fields. Small functional floors and role 6 inscription floors remain distinct.
+- Frost, straight grain, circular satin and snailing use finer millimetre-scale frequencies, relief at or below .0014 mm, and restrained color modulation. The former .011 mm relief and heavy mottling are removed.
+- d249 and d251 use mirror-smooth steel response for the documented black-polished crown wheel/cap. Exact d251 face22 remains flame blue.
+- Heat-blued steel varies from blue-black to cobalt with view angle while retaining whole-screw bluing and exact neutral-seat exceptions.
+- Ruby bearings use deeper red transmission, increased optical thickness and a polished clear surface. The fitted Dial B ring uses translucent cobalt enamel over its separate silver carrier; Dial A carrier fields receive fine circular satin. Raw catalog enamel remains unchanged during part inspection.
+
+The content-addressed surface payload remains reversible and preserves all source positions, normals, indices and matrices. Full evidence and validation are in [FINISHING_FIDELITY_REVIEW.md](FINISHING_FIDELITY_REVIEW.md).
+
+---
+
 # Washer, winding bridge, eccentric and chaton corrections
 
 9 September 2026, explicit user corrections:

@@ -8,7 +8,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 
 | Source instance | Definition / name | Scope | Before → after | Status | Disposition |
 |---|---|---|---|---|---|
-| p_0_1_1_1__0_1_1_1_1__0_1_1_2_1 | d_0_1_1_3: ZB Ring 18 Emaille rot transluzid | optional catalog | enamel → steel | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_1__0_1_1_2_1 | d_0_1_1_3: ZB Ring 18 Emaille rot transluzid | optional catalog | enamel → dialSilver | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_2 | d_0_1_1_4: ZB Ring 18 nur Emaille rot | optional catalog | enamel → enamel | unresolved | Retained pending listed evidence; no correctness claim |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_3 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_4 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
@@ -19,20 +19,20 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_8 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_9 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_10 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_1__0_1_1_2_11 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | optional catalog | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_1__0_1_1_2_11 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | optional catalog | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_12 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_13 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_14 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_15 | d_0_1_1_5: Applik Punkt 80 | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1 | d_0_1_1_11: St_Zeiger 5,0 Lanze | optional catalog | enamel → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2 | d_0_1_1_12: Zeigerbuchse_67x135x91 | optional catalog | brass → blue | inferred | Targeted correction |
-| p_0_1_1_1__0_1_1_1_1__0_1_1_2_17 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | optional catalog | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_1__0_1_1_2_17 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | optional catalog | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_18 | d_0_1_1_13: St_Zeiger 5,0 Lanze massiver | optional catalog | enamel → blue | inferred | Targeted correction |
-| p_0_1_1_1__0_1_1_1_1__0_1_1_2_19 | d_0_1_1_14: ZB Ring 18 4segmentig | optional catalog | enamel → steel | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_1__0_1_1_2_19 | d_0_1_1_14: ZB Ring 18 4segmentig | optional catalog | enamel → dialSilver | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1 | d_0_1_1_16: Min_Zeiger 8,5 Lanze massiver | optional catalog | enamel → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2 | d_0_1_1_8: Zeigerbuchse_28x100x70 | optional catalog | brass → blue | inferred | Targeted correction |
-| p_0_1_1_1__0_1_1_1_1__0_1_1_2_21 | d_0_1_1_17: ZB Ring 18 gerade Schenkel | optional catalog | brass → steel | inferred | Targeted correction |
-| p_0_1_1_1__0_1_1_1_1__0_1_1_2_22 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | optional catalog | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_1__0_1_1_2_21 | d_0_1_1_17: ZB Ring 18 gerade Schenkel | optional catalog | brass → dialSilver | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_1__0_1_1_2_22 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | optional catalog | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_23 | d_0_1_1_18: St_Zeiger 5,0 Birne | optional catalog | enamel → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_24 | d_0_1_1_19: Min_Zeiger 8,5 Birne | optional catalog | enamel → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_1__0_1_1_2_25 | d_0_1_1_16: Min_Zeiger 8,5 Lanze massiver | optional catalog | enamel → blue | inferred | Targeted correction |
@@ -43,7 +43,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_2__0_1_1_22_1 | d_0_1_1_23: ml01 ZB Übergangsring | optional catalog | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_2__0_1_1_22_2 | d_0_1_1_24: Min_Zeiger 14,7 Faden | optional catalog | enamel → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_2__0_1_1_22_3 | d_0_1_1_25: ml01 5min Index | optional catalog | steel → gold | inferred | Targeted correction |
-| p_0_1_1_1__0_1_1_1_2__0_1_1_22_4 | d_0_1_1_26: ml01 ZB Außenring V2 | optional catalog | steel → steel | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_2__0_1_1_22_4 | d_0_1_1_26: ml01 ZB Außenring V2 | optional catalog | steel → dialSilver | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_2__0_1_1_22_5 | d_0_1_1_27: ml01 ZB Innenteil V2 | optional catalog | steel → steel | inferred | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_2__0_1_1_22_6 | d_0_1_1_28: St_Zeiger 8,8 Faden | optional catalog | enamel → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_2__0_1_1_22_7 | d_0_1_1_25: ml01 5min Index | optional catalog | steel → gold | inferred | Targeted correction |
@@ -172,8 +172,8 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_8 | d_0_1_1_103: 020-50x165 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_9__0_1_1_104_1 | d_0_1_1_105: ml01 DPL RBR | movement | steel → warmPlate | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_9__0_1_1_104_2 | d_0_1_1_106: 030-CB_100x25 | movement | ruby → ruby | verified | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_10 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_11 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_10 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_6__0_1_1_98_11 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_1 | d_0_1_1_110: ml01 Unruhreif | movement | balance → balance | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2 | d_0_1_1_111: ml01 Unruhexcenter | movement | gold → balance | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3 | d_0_1_1_111: ml01 Unruhexcenter | movement | gold → balance | verified | Targeted correction |
@@ -189,7 +189,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_1 | d_0_1_1_120: ml01 DPL WPL | movement | steel → warmPlate | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_8__0_1_1_119_2 | d_0_1_1_106: 030-CB_100x25 | movement | ruby → ruby | verified | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_9 | d_0_1_1_121: Flitter 200x400 | movement | steel → satinGold | verified | Targeted correction |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_10 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_10 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_11 | d_0_1_1_123: 010-linzyl s50x75 k95x25 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_12 | d_0_1_1_124: 020-50x100 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1 | d_0_1_1_126: ml01 Ankerkörper Niv20.5 | movement | steel → steel | inferred | Retained with confidence stated |
@@ -204,14 +204,14 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_2 | d_0_1_1_134: 030-GO_10x100x22 | movement | ruby → ruby | verified | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_3 | d_0_1_1_135: 020-40x80 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_4 | d_0_1_1_135: 020-40x80 | movement | steel → steel | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_17 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_18 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_19 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_17 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_18 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_19 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_20 | d_0_1_1_137: ml01 Viertelrohr1 z12 m0,177 | movement | brass → brass | unresolved | Retained pending listed evidence; no correctness claim |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_21 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_22 | d_0_1_1_138: 010-zyl s80x190 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_23 | d_0_1_1_138: 010-zyl s80x190 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_24 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_21 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_22 | d_0_1_1_138: 010-zyl s80x190 k160x50 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_23 | d_0_1_1_138: 010-zyl s80x190 k160x50 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_24 | d_0_1_1_136: 010-zyl s80x220 k160x50 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_25 | d_0_1_1_139: 010-zyl s70x110 k180x30 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1 | d_0_1_1_141: ml01 Stundenrad1 z40 m0,17 | movement | brass → brass | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2 | d_0_1_1_142: ml01 Butzen Stundenrad1 | movement | brass → brass | unresolved | Retained pending listed evidence; no correctness claim |
@@ -252,7 +252,7 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_27 | d_0_1_1_168: 010-zyl s60x140 k115x23 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_28 | d_0_1_1_163: 020-12x60 kon ms | movement | gold → gold | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_29 | d_0_1_1_163: 020-12x60 kon ms | movement | gold → gold | inferred | Retained with confidence stated |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_30 | d_0_1_1_169: 010-zyl s80x220 k125x50 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_30 | d_0_1_1_169: 010-zyl s80x220 k125x50 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_31 | d_0_1_1_163: 020-12x60 kon ms | movement | gold → gold | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_32 | d_0_1_1_170: 010-zyl s80x180 k125x50 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_33 | d_0_1_1_170: 010-zyl s80x180 k125x50 | movement | blue → steel | verified | Targeted correction |
@@ -265,9 +265,9 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_4 | d_0_1_1_179: 020-40x120 kon ms | movement | gold → gold | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_5 | d_0_1_1_162: 020-50x70 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_33 | d_0_1_1_180: 010-linzylans s70x90 k90x75 a125x25 ab98x93 | movement | steel → steel | verified | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_34 | d_0_1_1_181: 010-linsenk s60x80 k90x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_35 | d_0_1_1_181: 010-linsenk s60x80 k90x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_36 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_34 | d_0_1_1_181: 010-linsenk s60x80 k90x25 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_35 | d_0_1_1_181: 010-linsenk s60x80 k90x25 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_36 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1 | d_0_1_1_183: ml01 Viertelrohr2 z8 m0,15 | movement | brass → brass | unresolved | Retained pending listed evidence; no correctness claim |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2 | d_0_1_1_184: ml01 Welle Viertelrohr2 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_38 | d_0_1_1_185: ml01 Werkhaltelasche | movement | steel → steel | unresolved | Retained pending listed evidence; no correctness claim |
@@ -275,11 +275,11 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1 | d_0_1_1_187: ml01 Stundenrad2 z32 m0,12 | movement | brass → brass | verified | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2 | d_0_1_1_188: ml01 Butzen Stundenrad2 | movement | brass → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_41 | d_0_1_1_185: ml01 Werkhaltelasche | movement | steel → steel | unresolved | Retained pending listed evidence; no correctness claim |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_42 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_42 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_43 | d_0_1_1_189: 010-zyl s80x140 k160x40 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_44 | d_0_1_1_189: 010-zyl s80x140 k160x40 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_45 | d_0_1_1_189: 010-zyl s80x140 k160x40 | movement | blue → steel | verified | Targeted correction |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_46 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_46 | d_0_1_1_9: 010-linsenk s60x105 k90x25 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_47 | d_0_1_1_190: ml01 Zeigerstellhebel | movement | steel → brushedSteel | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_48 | d_0_1_1_191: 010-zyl s80x95 k110x18 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_49 | d_0_1_1_192: 010-zyl s80x120 k220x35 | movement | blue → steel | verified | Targeted correction |
@@ -327,8 +327,8 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_5 | d_0_1_1_103: 020-50x165 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_6 | d_0_1_1_103: 020-50x165 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_7 | d_0_1_1_226: 010-linzyl s40x70 k80x20 | movement | blue → steel | verified | Targeted correction |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_8 | d_0_1_1_123: 010-linzyl s50x75 k95x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_9 | d_0_1_1_123: 010-linzyl s50x75 k95x25 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_8 | d_0_1_1_123: 010-linzyl s50x75 k95x25 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_9 | d_0_1_1_123: 010-linzyl s50x75 k95x25 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_1 | d_0_1_1_228: ml01 Federhausbrücke | movement | bridge → bridge | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_2 | d_0_1_1_196: 030-G_90x200x45 | movement | ruby → ruby | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_60__0_1_1_227_3 | d_0_1_1_196: 030-G_90x200x45 | movement | ruby → ruby | inferred | Retained with confidence stated |
@@ -360,15 +360,15 @@ Each row corresponds to one original leaf occurrence. Shared definitions are nev
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_2 | d_0_1_1_124: 020-50x100 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_71 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → steel | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_72 | d_0_1_1_107: 010-linsenk s50x55 k80x25 | movement | blue → steel | verified | Targeted correction |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_73 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_74 | d_0_1_1_249: ml01 Kronrad z45 m0,15 | movement | crown → brushedCrown | verified | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_73 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Targeted correction |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_74 | d_0_1_1_249: ml01 Kronrad z45 m0,15 | movement | crown → blackPolished | verified | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_1 | d_0_1_1_251: ml01 Kronradplatte | movement | crown → crown | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_2 | d_0_1_1_220: 020-40x140 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_75__0_1_1_250_3 | d_0_1_1_220: 020-40x140 | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_76 | d_0_1_1_252: ml01 Sperrfeder | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_77 | d_0_1_1_253: 010-zylsenk s60x150 k115x23 | movement | steel → steel | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_78 | d_0_1_1_181: 010-linsenk s60x80 k90x25 | movement | steel → steel | verified | Retained/corrected with exact source-region annotations |
-| p_0_1_1_1__0_1_1_1_4__0_1_1_83_79 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Retained/corrected with exact source-region annotations |
+| p_0_1_1_1__0_1_1_1_4__0_1_1_83_79 | d_0_1_1_122: 010-zylsenk s80x120 k125x40 | movement | blue → blue | inferred | Targeted correction |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_80 | d_0_1_1_254: ml01 Sperrklinke | movement | steel → steel | inferred | Retained with confidence stated |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_81 | d_0_1_1_255: 010-zylans s80x90 k160x45 a96x50 | movement | steel → steel | verified | Retained/corrected with exact source-region annotations |
 | p_0_1_1_1__0_1_1_1_4__0_1_1_83_82 | d_0_1_1_253: 010-zylsenk s60x150 k115x23 | movement | steel → steel | verified | Retained/corrected with exact source-region annotations |
