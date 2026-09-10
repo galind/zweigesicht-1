@@ -1,5 +1,13 @@
 # Zweigesicht — current execution state
 
+## Exhaustive CAD finishing audit — in progress, 10 September 2026
+
+Audit-only execution of `CAD_FINISHING_AUDIT_GOAL.md` from local `d522497`. Fresh original STEP/XCAF inspection reconciles **202 leaf definitions / 365 leaf occurrences**, **204 bodies / 203 solids / 204 shells / 25,228 faces**, including **60 mixed-appearance and 18 source-transparent definitions**. All source bodies/faces and runtime mappings are inventoried; the renderer has 29 exact steel occurrence overrides, 58 annotated definitions and no current name fallback. The read-only 64-check source/asset regression suite passes. Its expected deliberate missing-annotation/diamond fixtures log errors; these are test fixtures, not browser-load failures.
+
+Visual review remains open: last saved reconciliation has **105 captured / 50 pixel-reviewed occurrences**. Run `python3 scripts/cad/cad_finishing_audit_coverage.py` for current exact coverage by actual source parent. Screenshots without individual pixel notes do not count as reviewed. Evidence is ignored under `artifacts/browser/cad-finishing-audit/`; full source/pipeline/reference extraction and the live coverage table are in ignored `artifacts/cad-finishing-audit/`.
+
+Fresh finding: d21 has two explicitly blue source bodies (alpha .73) despite its red-enamel name; raw catalog currently appears burgundy. d4 is the genuine source-red body alternative. Additional source/runtime conflicts and optical limitations are under review. All explicit user corrections remain protected. No production appearance, geometry, generated asset, lighting or UI is changed; no push/merge/deployment. Both user-owned goal files remain untouched. Next action: finish every occurrence's visual/source disposition, reconcile high-risk regions and produce the final ledger, report and staged plan for user approval before implementation.
+
 ## Shock-indicator blue reach and darker inlays — verified locally, 10 September 2026
 
 Matched the user-supplied movement photograph: d159's heat-blue lever top now continues across the retaining-screw end of its adjoining broad CAD face without recoloring the central spine, underside or polished sidewalls. The existing d156 gauge-inlay faces use a darker ruby-red response. The reference image hash is recorded without adding the image to public assets; geometry, placements and source annotations are unchanged. The complete CPU/source suite, lint, TypeScript and production build pass. Direct WebGL inspection confirms the blue termination around the screw seat, the retained steel spine and darker inlays; no browser errors were recorded.

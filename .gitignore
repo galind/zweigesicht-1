@@ -48,3 +48,6 @@ artifacts/dial-time/
 artifacts/explode-cad/
 
 artifacts/explode-depth-audit/
+
+# Local exhaustive CAD audit extraction/evidence.
+artifacts/cad-finishing-audit/
