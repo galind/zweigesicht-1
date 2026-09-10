@@ -6,7 +6,7 @@ The three reported problems are corrected locally: **DPL RBR is warm straight-gr
 
 The [complete ledger](appearance/LEDGER.md) contains every **365 source leaf occurrence**, individually identified even when it shares a definition: 223 movement and 142 optional catalog leaves, across 202 definitions. The [machine-readable ledger](appearance/ledger.json) records original source paths, matrices, geometry state, face/body/definition appearance, before/after material, intended finish, evidence, confidence, mismatch and disposition. All 202 definitions now have explicit material-family assignments; no current leaf relies on a name fallback. Explicit coverage does not prove physical correctness.
 
-The current ledger distinguishes **84 verified, 264 inferred and 17 unresolved instance assignments**. “Verified” means the identified visible appearance family/region has reference support. It does not certify every concealed surface, alloy, roughness, grain scale, internal optical path or manufacturing process. The 264 inferences remain visible in the ledger rather than being promoted to verified by a passing test. The 17 conflicts are enumerated below. All 61 assembly occurrences are structural parents, not additional material-bearing leaves; the original hierarchy and 426 instance count remain unchanged.
+The current ledger distinguishes **88 verified, 264 inferred and 13 unresolved instance assignments**. “Verified” means the identified visible appearance family/region has reference support. It does not certify every concealed surface, alloy, roughness, grain scale, internal optical path or manufacturing process. The 264 inferences remain visible in the ledger rather than being promoted to verified by a passing test. The 13 conflicts are enumerated below. All 61 assembly occurrences are structural parents, not additional material-bearing leaves; the original hierarchy and 426 instance count remain unchanged.
 
 Baseline: local commit `00ae9d3f3e441c1a7d2559e5b500b99ac4f5567b`. The actual existing preview at `http://127.0.0.1:4173/` was inspected and photographed before product edits. Original working notes and mechanical, CAD, material, finishing and animation reviews were read. The user-referenced attachment directory contained only the goal text, **no image attachment**. Existing maker photographs, macro references and seven narrowly targeted maker component downloads supplied the evidence instead; that missing attachment has not been pretended to have been inspected.
 
@@ -72,9 +72,9 @@ Additional exact-identity corrections:
 
 ## Remaining uncertainty, precisely scoped
 
-The 17 unresolved occurrences span 13 definitions:
+The 13 unresolved occurrences span 9 definitions:
 
-- d114 double roller, d130 safety piece, d137/d183 cannon pinions, d142 hour-wheel hub, d206 lyre spring, d233 escape wheel and d235 escape hub: source display colors disagree with inherited warm/steel interpretations. Exposed component-specific primary material evidence is missing; retained rather than guessed.
+- d114 double roller, d130 safety piece, d206 lyre spring and d233 escape wheel: source display colors disagree with inherited warm/steel interpretations. Exposed component-specific primary material evidence is missing; retained rather than guessed. The user has resolved d137/d183 cannon pinions and d142/d188/d235 wheel hubs as steel.
 - d185×3 clamp bodies: gray source versus blue/violet component-render top; installed surface largely occluded.
 - d66×2 glass gaskets: pale source versus dark rubber emulation; exposed production color/composition evidence missing.
 - d4/d21 red enamel alternatives: source variant versus photographed blue production dial remains a choice, not a demonstrated source error.

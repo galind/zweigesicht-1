@@ -304,25 +304,27 @@ for(const n of [174,176,178,190,193,244,246,248,97,172]){
 }
 for(const n of [143,144,173,177])assert.equal(finishFor('',`d_0_1_1_${n}`).family,'steel','Stem, coupling and pins keep their separate turned finish');
 results.push({check:'ten source keyless definitions use straight/circular satin with real local-Z face coverage; Function toggles without recompilation; turned shafts/pins remain separate',status:'pass'});
-assert.equal(finishFor('si HMzylinder','d_0_1_1_155').family,'shockMass');
-const shockMaterial=createMaterial('si HMzylinder','d_0_1_1_155');setFinishEnabled(shockMaterial,false);assert.equal(shockMaterial.transmission,0);setFinishEnabled(shockMaterial,true);assert.equal(shockMaterial.transmission,.55);shockMaterial.dispose();
+for(const definition of [137,142,155,183,188,235]){
+ const steelPart=createMaterial('steel correction fixture',`d_0_1_1_${definition}`);
+ assert.equal(steelPart.name,'steel');assert.equal(steelPart.metalness,1);assert.equal(steelPart.transmission,0);steelPart.dispose();
+}
 // Guard the installed renderer contract, so a Three upgrade cannot silently turn
 // isolated clear parts into white discs again. Browser evidence checks pixels.
 assert.ok(THREE.ShaderChunk.transmission_pars_fragment.includes('return textureBicubic( transmissionSamplerMap, fragCoord.xy, lod );'));
 const rendererSource=fs.readFileSync(path.join(ROOT,'explorer/node_modules/three/src/renderers/WebGLRenderer.js'),'utf8');
 assert.match(rendererSource,/setClearColor\(\s*0xffffff,\s*0\.5\s*\)/);
-for(const definition of [67,225,155]){
+for(const definition of [67,225]){
  const optical=createMaterial('optical fixture',`d_0_1_1_${definition}`);
  const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
  optical.onBeforeCompile(shader,{});
- assert.equal(shader.fragmentShader.includes('float uncovered ='),definition!==155);
- assert.equal(optical.customProgramCacheKey().includes('clear'),definition!==155);
+ assert.equal(shader.fragmentShader.includes('float uncovered ='),true);
+ assert.equal(optical.customProgramCacheKey().includes('clear'),true);
  const transmission=optical.transmission;setFinishEnabled(optical,false);assert.equal(optical.transmission,0);setFinishEnabled(optical,true);assert.equal(optical.transmission,transmission);
  optical.dispose();
 }
 const backdrop=(rgb,alpha)=>rgb.map((c,i)=>Math.max(c-Math.min(1,Math.max(0,(1-alpha)*2)),0)+[.012,.019,.024][i]*Math.min(1,Math.max(0,(1-alpha)*2)));
 assert.deepEqual(backdrop([.3,.6,.9],1),[.3,.6,.9]);assert.deepEqual(backdrop([1,1,1],.5),[.012,.019,.024]);
-results.push({check:'clear optics match installed transmission-buffer contract, preserve opaque samples, isolate program cache, and restore after Function; ruby unchanged',status:'pass',scope:'shader hook and renderer contract; actual pixels reviewed in browser'});
+results.push({check:'clear optics match installed transmission-buffer contract, preserve opaque samples, isolate program cache, and restore after Function; ruby optical path retained',status:'pass',scope:'shader hook and renderer contract; actual pixels reviewed in browser'});
 for(const suffix of [33,43,44,45,77,78,81,82,...[9,20,21,24,27,32,33].map(n=>'29__0_1_1_145_'+n)]){
  const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
  const assigned=finishFor(p.source.name,p.source.definitionId,p.source.id);

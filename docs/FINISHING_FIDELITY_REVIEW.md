@@ -44,4 +44,4 @@ The initial browser compile caught an undeclared fragment-stage normal in the he
 
 ## Remaining limits
 
-The ledger still records 84 verified, 264 inferred and 17 unresolved occurrences. Wheel-spoke grain remains a radial approximation where no face-specific spoke direction exists. The original maker diamond STL remains a simplified eight-fold cut. Numerical color, roughness, anisotropy, transmission and microtexture scale are authored visual values, not measured manufacturing specifications. No mechanical, physical-device or production-watch certification is claimed.
+After the user's steel material correction for the shock mass, cannon pinions and wheel hubs, the ledger records 88 verified, 264 inferred and 13 unresolved occurrences. Wheel-spoke grain remains a radial approximation where no face-specific spoke direction exists. The original maker diamond STL remains a simplified eight-fold cut. Numerical color, roughness, anisotropy, transmission and microtexture scale are authored visual values, not measured manufacturing specifications. No mechanical, physical-device or production-watch certification is claimed.

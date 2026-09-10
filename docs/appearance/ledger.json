@@ -49,7 +49,7 @@
       "9": "modeled bridge chamfer or countersink",
       "10": "broad plate frost field"
     },
-    "materialSourceSha256": "202a0f6bd3e25fb9f90da2f104c9a782ec86f6e64b9de90714cb83ee40a5619e",
+    "materialSourceSha256": "0d64d37f5d74ee347233a7a810ae29a0a885228f052c80fe6120cc8cd91e70a0",
     "packagerSourceSha256": "2bdff4ff85d627431e1d6501f4d88741a1719d5abd37b30328049cea5d5bd739"
   },
   "coverage": {
@@ -58,11 +58,11 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 84,
+      "verified": 88,
       "inferred": 264,
-      "unresolved": 17
+      "unresolved": 13
     },
-    "changedFamilyInstances": 96,
+    "changedFamilyInstances": 101,
     "annotatedDefinitions": 58
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -22200,7 +22200,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -22269,7 +22269,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -22500,7 +22500,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -22934,7 +22934,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -24056,7 +24056,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -24785,7 +24785,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -24970,17 +24970,17 @@
     {
       "id": "d_0_1_1_137",
       "name": "ml01 Viertelrohr1 z12 m0,177",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "Dial-I cannon pinion uses neutral polished steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit cannon-pinion steel correction; source gray appearance",
       "assignment": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -25540,17 +25540,17 @@
     {
       "id": "d_0_1_1_142",
       "name": "ml01 Butzen Stundenrad1",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Hour-wheel-I hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "The separately modeled hour-wheel-I hub uses neutral steel. Its wheel retains its own warm finish. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit wheel-hub steel correction; source ml01 Butzen Stundenrad1 identity and gray appearance",
       "assignment": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -26580,15 +26580,15 @@
       "name": "si HMzylinder",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Ruby shock mass",
-      "surfaceReview": "Dielectric ruby emulation; chiefly hidden, supported by named mass in macro-review prose and maker exploded identity.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance",
       "assignment": {
-        "color": 13793182,
-        "metalness": 0,
-        "roughness": 0.12,
+        "color": 13094356,
+        "metalness": 1,
+        "roughness": 0.18,
         "pattern": 0,
-        "family": "shockMass",
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -29130,17 +29130,17 @@
     {
       "id": "d_0_1_1_183",
       "name": "ml01 Viertelrohr2 z8 m0,15",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Dial-II cannon pinion source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "Dial-II cannon pinion uses neutral polished steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit cannon-pinion steel correction; source gray appearance",
       "assignment": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -30830,7 +30830,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -30897,7 +30897,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -30964,7 +30964,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31031,7 +31031,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31320,7 +31320,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31388,7 +31388,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31762,7 +31762,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -33907,7 +33907,7 @@
       "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -34436,17 +34436,17 @@
     {
       "id": "d_0_1_1_235",
       "name": "ml01 Butzen Gangrad",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "surfaceReview": "The separately modeled escape-wheel hub uses neutral steel. Its wheel d233 retains its own finish. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
+      "evidence": "User explicit wheel-hub steel correction; source ml01 Butzen Gangrad identity and pale neutral appearance",
       "assignment": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
       "source": {
@@ -49150,7 +49150,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49296,7 +49296,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49369,7 +49369,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49661,7 +49661,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -50245,7 +50245,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -50829,7 +50829,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -51340,7 +51340,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -51413,7 +51413,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -51851,7 +51851,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -52275,11 +52275,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit cannon-pinion steel correction; source gray appearance",
+      "surfaceReview": "Dial-I cannon pinion uses neutral polished steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52289,15 +52289,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -52786,11 +52786,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Hour-wheel-I hub source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit wheel-hub steel correction; source ml01 Butzen Stundenrad1 identity and gray appearance",
+      "surfaceReview": "The separately modeled hour-wheel-I hub uses neutral steel. Its wheel retains its own warm finish. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52800,15 +52800,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -53810,9 +53810,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Ruby shock mass",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Dielectric ruby emulation; chiefly hidden, supported by named mass in macro-review prose and maker exploded identity.",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance",
+      "surfaceReview": "The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 13793182,
         "metalness": 0,
@@ -53822,15 +53822,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 13793182,
-        "metalness": 0,
-        "roughness": 0.12,
+        "color": 13094356,
+        "metalness": 1,
+        "roughness": 0.18,
         "pattern": 0,
-        "family": "shockMass",
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
-      "disposition": "Retained/corrected with exact source-region annotations",
+      "mismatch": "shockMass → steel",
+      "disposition": "Targeted correction",
       "annotation": true
     },
     {
@@ -56728,11 +56728,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Dial-II cannon pinion source is gray; warm current assignment unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit cannon-pinion steel correction; source gray appearance",
+      "surfaceReview": "Dial-II cannon pinion uses neutral polished steel. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -56742,15 +56742,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -58202,7 +58202,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58275,7 +58275,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58348,7 +58348,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58421,7 +58421,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58494,7 +58494,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58567,7 +58567,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58786,7 +58786,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59078,7 +59078,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59151,7 +59151,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59370,7 +59370,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59954,7 +59954,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -60319,7 +60319,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -60392,7 +60392,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61257,7 +61257,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61330,7 +61330,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61549,7 +61549,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61622,7 +61622,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61914,7 +61914,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 11013701,
+        "color": 12004200,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -62119,11 +62119,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Neutral steel/pale metal; alloy unresolved unless source SS",
+      "evidence": "User explicit wheel-hub steel correction; source ml01 Butzen Gangrad identity and pale neutral appearance",
+      "surfaceReview": "The separately modeled escape-wheel hub uses neutral steel. Its wheel d233 retains its own finish. Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62133,15 +62133,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
-        "roughness": 0.27,
-        "pattern": 2,
-        "family": "brass",
+        "roughness": 0.18,
+        "pattern": 0,
+        "family": "steel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → steel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {

@@ -37,7 +37,6 @@ const families={
  blue:['Blued steel appearance','Reflective blue across each whole blued screw; neutral source-identified hand seats remain where annotated. Unobserved locations remain inferred.'],
  spring:['Blue hairspring','Smooth thin blued-metal appearance; retained Breguet overcoil geometry.'],
  ruby:['Ruby-bearing dielectric','Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.'],
- shockMass:['Ruby shock mass','Dielectric ruby emulation; chiefly hidden, supported by named mass in macro-review prose and maker exploded identity.'],
  leather:['Named leather color variant','Rough dielectric; no pore/stitch material region or measured hide finish claimed.'],
  rubber:['Seal/gasket dielectric','Matte dark rubber-like emulation; composition and pale gasket variant unresolved.'],
  enamel:['Source-named red enamel variant','Red glossy dielectric appearance; optional red CAD variant is not silently recolored to the photographed blue production dial.'],
@@ -48,20 +47,21 @@ const photo=new Set([85,86,90,91,94,99,100,101,102,105,106,110,111,116,133,134,1
 const conflicts={
  114:'Double roller source is gray but current warm profile is historical; no unobstructed primary material view resolves steel versus warm alloy.',
  130:'Safety piece source is warm; current steel family retained pending component-specific evidence.',
- 137:'Dial-I cannon pinion source is gray; warm current assignment lacks an exposed primary photo.',
- 142:'Hour-wheel-I hub source is gray; warm current assignment unresolved.',
- 183:'Dial-II cannon pinion source is gray; warm current assignment unresolved.',
  206:'Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved.',
  233:'Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy.',
- 235:'Escape-wheel hub source pale neutral versus warm profile; physical composition unresolved.',
  185:'Clamp body source gray and maker component render blue/violet top conflict; installed photo exposes too little of the lug. Keep steel body, resolve only its separately identified screws.',
  256:'Regulation support is optional source tooling, not a watch part; orange CAD color does not establish metal/plastic composition. Neutral retained.',
  66:'Pale source glass gasket rendered dark rubber; no exposed production reference resolves color/composition. Retained, not certified.',
 };
 const specific={
+ 137:['User explicit cannon-pinion steel correction; source gray appearance','Dial-I cannon pinion uses neutral polished steel.'],
+ 142:['User explicit wheel-hub steel correction; source ml01 Butzen Stundenrad1 identity and gray appearance','The separately modeled hour-wheel-I hub uses neutral steel. Its wheel retains its own warm finish.'],
+ 155:['User explicit cylindrical shock-mass steel correction; source si HMzylinder identity and gray appearance','The cylindrical shock-indicator mass uses neutral polished steel; red gauge inlays remain separate.'],
+ 183:['User explicit cannon-pinion steel correction; source gray appearance','Dial-II cannon pinion uses neutral polished steel.'],
  121:['User explicit thin-washer goldish satin correction; source Flitter 200x400 identity','Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict.'],
  111:['User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity','All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16.'],
  188:['User explicit Hour-wheel hub 2 steel correction; source ml01 Butzen Stundenrad2 identity and gray appearance','The separately modeled hour-wheel-II hub uses neutral steel. Its wheel d187 retains its own warm finish.'],
+ 235:['User explicit wheel-hub steel correction; source ml01 Butzen Gangrad identity and pale neutral appearance','The separately modeled escape-wheel hub uses neutral steel. Its wheel d233 retains its own finish.'],
  117:['User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance','Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal.'],
  105:['REF-SJX-04; REF-SJX-05; maker DPL component render','Exactly one instance. All34 source faces warm: face13 top at Z0; face12 underside at -.35mm; 15-18,20,22-33 conical chamfers/countersinks; original normals/face identity separately recovered. Prior whole-steel assignment wrong.'],
  120:['STEP d120 face colors; d105 photographic analogy','Opposite escape cap:18 source faces warm, top face5 at Z0, underside face4 at -.25mm. Warm correction inferred; no exposed photograph of this dial-side cap.'],
@@ -78,7 +78,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  const n=Number(d.id.split('_').at(-1)),f=current(d.name,d.id),m=manifest.definitions.find(x=>x.id===d.id),entry=surfaces.definitions[d.id];
  let status=photo.has(n)?'verified':'inferred',evidence=photo.has(n)?'REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations':'STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)';
  let notes=families[f.family][1];if(specific[n]){evidence=specific[n][0];notes=specific[n][1]+' '+notes;}
- if([111,117,121,188,100,203,207,224].includes(n))status='verified';
+ if([111,117,121,137,142,155,183,188,235,100,203,207,224].includes(n))status='verified';
  if([100,203,207,224].includes(n)){evidence+='; user explicit rose-gold jewel-chaton correction';notes+=' Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.';}
  if(n===240){evidence+='; user explicit horizontal winding-bridge brushing correction';notes+=' Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged.';}
  if([97,172,174,176,178,190,193,244,246,248].includes(n)){

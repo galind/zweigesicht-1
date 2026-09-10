@@ -79,7 +79,7 @@ The `020-*` definitions are pins/studs rather than screw heads. The initial rule
 - Brass-family pins marked `ms`: `d_0_1_1_163` `020-12x60 kon ms`; `d_0_1_1_118` `020-30x80 kon ms`; `d_0_1_1_179` `020-40x120 kon ms`; and `d_0_1_1_200` `020-40x135 ms`. Their source hint is approximately `[0.730, 0.394, 0.052]`, and the maker's exploded shock image visibly includes warm small pins.
 - `d_0_1_1_72` `ml01 Riegelstift fest` is source-gray and now explicitly `steel`.
 
-The shock mass `d_0_1_1_155` `si HMzylinder` now uses the red `ruby` appearance profile, matching the red/pink cylinder in the exploded maker reference. This is a color-family assignment, not a claim that the mass is made of ruby.
+The shock mass `d_0_1_1_155` `si HMzylinder` uses neutral polished steel per the user's explicit material correction, corroborated by its gray CAD appearance. The red/pink cylinder in the exploded maker reference is treated as a presentation color cue, not physical-material evidence.
 
 ## Initial false classifications and current status
 

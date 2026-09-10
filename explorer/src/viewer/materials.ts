@@ -19,8 +19,7 @@ const profiles = {
   dialSilver: { color: 0xd5d8dc, metalness: 1, roughness: 0.25, pattern: 6 },
   blue: { color: 0x0b3768, metalness: 1, roughness: 0.13, pattern: 0 },
   spring: { color: 0x304f83, metalness: 1, roughness: 0.25, pattern: 0 },
-  ruby: { color: 0xa80e45, metalness: 0, roughness: 0.055, pattern: 0 },
-  shockMass: { color: 0xd2779e, metalness: 0, roughness: 0.12, pattern: 0 },
+  ruby: { color: 0xb72b68, metalness: 0, roughness: 0.055, pattern: 0 },
   leather: { color: 0x684330, metalness: 0, roughness: 0.78, pattern: 3 },
   rubber: { color: 0x17191c, metalness: 0, roughness: 0.7, pattern: 0 },
   enamel: { color: 0x062e78, metalness: 0, roughness: 0.065, pattern: 0 },
@@ -50,13 +49,12 @@ for (const [family, ids] of Object.entries({
   blue: screwDefinitions,
   steel: [
     53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 117, 124, 126,
-    127, 129, 130, 135, 143, 144, 148, 149, 150, 151, 154, 157, 158, 159, 160,
-    161, 162, 164, 167, 173, 177, 184, 185, 188, 211,
-    214, 217, 220, 234, 237, 242, 252, 254,
+    127, 129, 130, 135, 137, 142, 143, 144, 148, 149, 150, 151, 154, 155,
+    157, 158, 159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188,
+    211, 214, 217, 220, 234, 235, 237, 242, 252, 254,
   ],
   brass: [
-    94, 96, 114, 115, 137, 141, 142, 183, 187, 210, 213, 216, 233,
-    235, 238, 243,
+    94, 96, 114, 115, 141, 187, 210, 213, 216, 233, 238, 243,
   ],
   gold: [118, 163, 179, 200, 206],
   satinGold: [121],
@@ -66,7 +64,6 @@ for (const [family, ids] of Object.entries({
   sapphire: [67],
   diamond: [225],
   spring: [116],
-  shockMass: [155],
 }))
   for (const id of ids) definitions[id] = family as Finish;
 
@@ -201,7 +198,7 @@ export function setFinishEnabled(
   if (uniform) uniform.value = enabled ? 1 : 0;
   if (
     material instanceof THREE.MeshPhysicalMaterial &&
-    ['ruby', 'shockMass', 'enamel', 'sapphire', 'diamond'].includes(material.name)
+    ['ruby', 'enamel', 'sapphire', 'diamond'].includes(material.name)
   ) {
     material.transmission = enabled
       ? ((material.userData.finishTransmission as number | undefined) ?? 0)
@@ -230,12 +227,12 @@ export function createMaterial(
   material.name = finish.family;
   if (geometry?.hasAttribute('sourceFinishNormal'))
     material.defines = { ...material.defines, SOURCE_FINISH: 1 };
-  if (['ruby', 'shockMass'].includes(finish.family)) {
+  if (finish.family === 'ruby') {
     material.ior = 1.76;
-    material.transmission = finish.family === 'ruby' ? 0.72 : 0.55;
-    material.thickness = finish.family === 'ruby' ? 0.55 : 0.3;
-    material.attenuationColor.setHex(finish.family === 'ruby' ? 0x8f0738 : 0xb52c67);
-    material.attenuationDistance = finish.family === 'ruby' ? 0.7 : 0.45;
+    material.transmission = 0.72;
+    material.thickness = 0.55;
+    material.attenuationColor.setHex(0x9b174f);
+    material.attenuationDistance = 0.7;
     material.clearcoat = 1;
     material.clearcoatRoughness = 0.035;
   }
