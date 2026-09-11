@@ -561,7 +561,7 @@ export default function Home() {
       </section>
       {(group || selected || s.layout === 'spread') && (
         <section
-          className="focus-strip"
+          className={`focus-strip${selected ? ' part-selection' : ''}`}
           aria-label="Current view"
           aria-live="polite"
         >

@@ -1123,3 +1123,50 @@ canvas:focus-visible {
   line-height: 1.45;
   color: #d1ccc5;
 }
+/* Selected parts use a compact label/action row, independent of mechanism copy. */
+.focus-strip.part-selection {
+  right: auto;
+  width: max-content;
+  max-width: min(480px, calc(100% - var(--edge-left) - var(--edge-right)));
+  padding: 5px 5px 5px 14px;
+  border: 1px solid #ffffff1a;
+  border-radius: 10px;
+  background: #222221f5;
+  box-shadow: 0 4px 16px #00000018;
+}
+.part-selection .focus-title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+}
+.part-selection .focus-title h2 {
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  max-height: none;
+  overflow: visible;
+}
+.part-selection .isolate-button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #ffffff18;
+  border-radius: 6px;
+  background: #ffffff0c;
+  white-space: nowrap;
+}
+.part-selection .isolate-button:hover {
+  background: #ffffff18;
+}
+.part-selection .isolate-button[aria-pressed='true'] {
+  color: #24231f;
+  background: #e4dfd3;
+  border-color: #e4dfd3;
+}
+.text-enlarged .part-selection .focus-title {
+  display: flex;
+  flex-wrap: wrap;
+}
+.text-enlarged .part-selection .focus-title h2 {
+  flex: 1 1 160px;
+}

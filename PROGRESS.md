@@ -129,3 +129,9 @@ Manual browser checks cover Enter/Space provenance disclosure, Escape/close focu
 Following user review, selected parts now show only their readable name and Isolate part, switching to Show context while isolated. Removed the part description, About part action, provenance popup and deselect icon from selection. Escape, empty-space deselection and navigation remain available; mechanism descriptions and About mechanism are unchanged. Source identity remains accessible in the deliberate Source catalog workflow.
 
 Verified lint, TypeScript, production build and all 47 desktop browser UX checks, including name-only selection and working isolation across six representative part types. Manual 390×844 mobile review confirms the compact single-row layout, Enter isolation and Escape deselection with focus returning to the canvas. Build warnings remain unchanged. Updated `docs/COMPONENT_DETAILS_REVIEW.md`; local preview remains at `http://127.0.0.1:4173/`. Next action: user review.
+
+## Part selection styling — 11 September 2026
+
+Cleaned up the selected-part card with a compact label/action row, consistent sans-serif label, restrained surface and border, and a distinct 44 px isolation button. Isolated state uses a light pressed treatment. The card sizes to its content; long names wrap beside the action without clipping. Enlarged text permits wrapping. Only the name and isolation action remain; mechanism styling is unaffected.
+
+Verified lint, TypeScript and production build. Browser review at 1280×720 and 320×568 covers short and long names, no horizontal overflow, and Enter activation of Isolate part / Show context. Existing build warnings remain. Local preview at `http://127.0.0.1:4173/` is ready for visual review.
