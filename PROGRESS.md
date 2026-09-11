@@ -16,7 +16,7 @@ The local implementation is ready for user and engineering review. Public releas
 
 ## Current interaction refinement
 
-Explore now uses a shared emphasis hierarchy across all six groups. Authored finishes and opaque depth remain intact; active parts receive an edge accent, explanatory context stays readable, and surroundings are gently subdued. Only authored lifted covers retire from the scene. Mechanism framing includes the movement envelope, and the Explore menu marks the current section. See the 11 September emphasis milestone below.
+Explore has been refined after the first emphasis milestone was rejected in user review. The current model restores mechanism-sized framing, separates explanatory context from the supporting plate, preserves authored finishes without a color wash, and fixes inherited cover visibility. See the focus refinement milestone below and `docs/EXPLORE_EMPHASIS_REVIEW.md`.
 
 ## Frosting stability — 11 September 2026
 
@@ -42,7 +42,7 @@ The indicator hand-lever spring block (d159) had narrow steel patches where inte
 The focused regression evaluates the actual shader assignment for blue arms, neutral steel and the transition. All 70 source/runtime checks, seven state tests, lint, TypeScript and the production build pass. Browser macro review checked the isolated part and assembly context across orbit angles; no browser/shader errors. Local evidence: `artifacts/browser/shock-arm-blue/`. The existing preview remains open on the corrected part for user review.
 
 
-## Explore emphasis — 11 September 2026
+## Explore emphasis — 11 September 2026 (superseded after user review)
 
 Replaced the 10–16% base-color / matte-material overrides with emphasis applied after physical lighting. Active parts retain full lighting with a depth-respecting edge accent; context retains 90% lighting and surroundings 68%. Selected components receive a stronger accent and the existing selection box. Source finishes, face masks, geometry and optical parameters remain unchanged. Function/Finish was already retired; the single authored-finish view remains authoritative.
 
@@ -53,3 +53,16 @@ Verified: lint, TypeScript, production build, seven state tests and all 71 sourc
 Browser verification at 1440×900 and 390×844 covers all mechanisms, menu selection, orbit, section separation and reset. Each viewport passes 24 real-renderer checks, including interruption/Back, manual camera ownership, reduced motion, visibility restoration and resource stability. Mobile is desktop Chromium viewport/handler emulation, not physical-device certification. Evidence: `artifacts/browser/explore-emphasis/` (ignored). Local preview: `http://127.0.0.1:4173/?inspect=1`.
 
 Next action: user appearance review. Publication, CAD redistribution, expert mechanical review and physical-device gates remain unchanged; no deployment or upload was performed.
+
+
+## Explore focus refinement — 11 September 2026
+
+User review rejected `4be987f`: full-movement framing made mechanisms too small, broad context competed with the selection, and some lifted child components remained visible as floating occluders. This milestone refines that implementation; it does not revert it.
+
+Mechanism framing now fits active parts plus 2.5 mm of local context. A shared classifier distinguishes active members, explicit explanatory context, related host parts, the supporting plate and unrelated surroundings. Keyless setting springs and winding supports stay readable while the large plate is quieter. Removed the colored fill from highlights; retained only a small edge cue with physical finishes unchanged.
+
+Uncover visibility now follows the authored host ancestry, so rear-display parts retire with the lifted barrel bridge in unrelated views. The balance bridge and its two named obstruction screws fade out together over 280 ms to expose the hairspring; reversal continues from the displayed level and restores material opacity/depth. Details explains the cutaway and how to restore it. Fading covers are excluded from opaque contact depth to avoid ghost shadows. Source geometry, assembly poses and finish annotations are unchanged.
+
+Verification: lint, TypeScript, production build, seven state tests and 72 source/runtime checks pass. All 30 real-renderer checks pass at both 1440×900 and 390×844, with no browser/shader errors. Added screen-space focus-size/containment checks for all groups, explicit keyless/plate contrast checks, inherited-cover regression, cutaway reversal and contact-depth checks. Desktop focus spans 49–87% of the shorter stage dimension across the six groups. Visual review covers every group, manual orbit, section separation, cover restoration, selected-spring isolation and reset. Mobile remains viewport/handler emulation.
+
+Evidence and reports: `artifacts/browser/explore-focus-refinement/` (ignored). Detailed audit: `docs/EXPLORE_EMPHASIS_REVIEW.md`. Preview remains at `http://127.0.0.1:4173/?inspect=1`, focused on Winding & setting. Next action is user visual review; test success is not user appearance acceptance. Publication, CAD redistribution, mechanical and physical-device gates remain unchanged.

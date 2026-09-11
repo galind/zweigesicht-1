@@ -30,7 +30,14 @@ export function explosionHost(id: string) {
 }
 export function uncoverHost(id: string, group: string | null) {
   const focus = authored.mechanisms[group as keyof typeof authored.mechanisms];
-  return !!focus?.uncover.includes(explosionHost(id) ?? '');
+  // Children inherit the cover's lift. Treat the whole lifted packet as an
+  // obstruction so rear-display parts cannot float across an unrelated focus.
+  let host = explosionHost(id);
+  while (host) {
+    if (focus?.uncover.includes(host)) return true;
+    host = hosts.get(host)?.parent ?? undefined;
+  }
+  return false;
 }
 /** One evaluator owns all assembly presentation offsets. Source matrices are read only.
  * Inventory packing and fitted hand poses have separate, mutually exclusive ownership.

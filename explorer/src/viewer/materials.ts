@@ -238,16 +238,20 @@ export type EmphasisRole =
   | 'whole'
   | 'selected'
   | 'member'
+  | 'connected'
   | 'context'
+  | 'support'
   | 'surrounding';
 // Applied after physical lighting: finishes, face masks, opacity and depth remain
 // authored. A view-dependent edge light identifies focus without x-ray geometry.
 export const EMPHASIS = {
   whole: [1, 0],
-  selected: [1, 0.65],
-  member: [1, 0.45],
-  context: [0.9, 0],
-  surrounding: [0.68, 0],
+  selected: [1, 0.22],
+  member: [1, 0.1],
+  context: [0.85, 0],
+  connected: [0.55, 0],
+  support: [0.32, 0],
+  surrounding: [0.2, 0],
 } as const;
 export function setEmphasis(
   material: THREE.MeshStandardMaterial,
@@ -409,7 +413,7 @@ export function createMaterial(
       '#include <opaque_fragment>',
       `
 float focusRim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 3.0);
-outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * (0.18 + 0.82 * focusRim);
+outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * focusRim;
 #include <opaque_fragment>
 `,
     );

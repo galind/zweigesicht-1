@@ -496,23 +496,39 @@ results.push({check:'authored surface and optical hooks retain physical lighting
 const {GROUPS:emphasisGroups,inMembers:emphasisMember}=load('explorer/src/experience/catalog.ts');
 const {finishFor:emphasisFinish,EMPHASIS}=load('explorer/src/viewer/materials.ts');
 const {uncoverHost:emphasisCover}=load('explorer/src/experience/explosion.ts');
+const {focusRole,focusCover}=load('explorer/src/experience/emphasis.ts');
 for(const group of emphasisGroups) {
  for(const reveal of [0,.49,.51,1]) {
   v.state={...initialState,group:group.id,reveal};v.retarget();v.applyPose(10);v.retargetVisibility();
   for(const p of v.renderParts.values()) {
    if(!belongs(p.source.id,ROOT)||p.source.id===PREFIX+'66')continue;
-   const member=emphasisMember(p.source.id,group.members),context=emphasisMember(p.source.id,group.context);
-   const role=member?'member':context?'context':'surrounding';
+   const member=emphasisMember(p.source.id,group.members);
+   const role=focusRole(p.source.id,p.source.definitionId,group);
    assert.equal(p.material.userData.emphasisRole,role);
    assert.deepEqual([...p.material.userData.emphasis.value.toArray()],[...EMPHASIS[role]]);
    const finish=emphasisFinish(p.source.name,p.source.definitionId,p.source.id);
    assert.equal(p.material.color.getHex(),finish.color);
    assert.equal(p.material.metalness,finish.metalness);assert.equal(p.material.roughness,finish.roughness);
    assert.equal(p.material.opacity,1);assert.equal(p.material.depthWrite,true);
-   if(member||!emphasisCover(p.source.id,group.id))assert.ok(p.mesh.visible,`${group.id}: unexplained missing ${p.source.id}`);
+   if((member||!emphasisCover(p.source.id,group.id)) && !(focusCover(p.source.id,group)&&reveal>.8))assert.ok(p.mesh.visible,`${group.id}: unexplained missing ${p.source.id}`);
   }
  }
 }
+const windingFocus=emphasisGroups.find(g=>g.id==='winding');
+assert.equal(focusRole(PREFIX+'53','d_0_1_1_193',windingFocus),'context','Keyless setting spring must remain readable');
+assert.equal(focusRole(PREFIX+'54__0_1_1_194_1','d_0_1_1_195',windingFocus),'support','Plate must not compete with keyless work');
+assert.ok(EMPHASIS.context[0] >= EMPHASIS.support[0]*2);
+assert.ok(EMPHASIS.member[0] >= EMPHASIS.surrounding[0]*3);
+assert.equal(emphasisCover(PREFIX+'37__0_1_1_182_1','shock'),true,'Rear display inherits barrel-cover occlusion');
+v.state={...initialState,group:'regulation',reveal:1};v.retarget();v.applyPose(.14);
+const bridgeCut=v.renderParts.get(PREFIX+'59__0_1_1_221_1');
+assert.ok(bridgeCut.cutaway.level>0&&bridgeCut.cutaway.level<1);
+assert.ok(bridgeCut.mesh.userData.cutawayFading);
+v.state={...initialState,group:'winding',reveal:1};v.retarget();v.applyPose(.28);v.retargetVisibility();
+assert.equal(bridgeCut.cutaway.level,1);assert.equal(bridgeCut.material.opacity,1);assert.ok(bridgeCut.material.depthWrite);
+v.state={...initialState,group:'regulation',reveal:1};v.retarget();v.applyPose(1);v.retargetVisibility();
+for(const suffix of ['59__0_1_1_221_1','34','35'])assert.equal(v.renderParts.get(PREFIX+suffix).mesh.visible,false);
+results.push({check:'keyless springs outrank supporting plate; lifted children inherit cover visibility; balance bridge and fasteners fade together and reverse without residual transparency',status:'pass'});
 v.state={...initialState,group:'winding',part:PREFIX+'53'};v.retarget();
 const focusedSpring=v.renderParts.get(PREFIX+'53');
 assert.equal(focusedSpring.material.userData.emphasisRole,'selected');
@@ -795,6 +811,7 @@ const {SurfaceOcclusion}=load('explorer/src/viewer/SurfaceOcclusion.ts');
 const aoScene=new THREE.Scene(),aoCamera=new THREE.PerspectiveCamera(33,1,.05,2000);
 const line=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial());aoScene.add(line);
 const fadingDial=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial());fadingDial.userData.dialFading=true;aoScene.add(fadingDial);
+const fadingCover=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial());fadingCover.userData.cutawayFading=true;aoScene.add(fadingCover);
 const ao=new SurfaceOcclusion(aoScene,aoCamera),pass=ao.pass;
 assert.ok(pass instanceof SSAOPass);assert.ok(pass.ssaoMaterial.fragmentShader.includes('1.0 - 0.24 * occlusion'));
 assert.equal(pass.kernelRadius,.4);
@@ -803,7 +820,7 @@ aoCamera.far=700;aoCamera.aspect=.6;aoCamera.updateProjectionMatrix();
 let target=null,clearAlpha=.3,clearColor=new THREE.Color(0x123456),clears=0;
 const initialClear=clearColor.clone(),draws=[];
 const renderer={autoClear:true,getRenderTarget(){return target},getClearColor(out){return out.copy(clearColor)},getClearAlpha(){return clearAlpha},setClearColor(value,alpha){clearColor.set(value);if(alpha!==undefined)clearAlpha=alpha},setClearAlpha(value){clearAlpha=value},setRenderTarget(value){target=value},clear(){clears++},render(object){
- if(object===aoScene){assert.equal(line.visible,false);assert.equal(fadingDial.visible,false,'Fading dials must not cast solid contact silhouettes');assert.equal(aoScene.overrideMaterial,pass.normalMaterial)}
+ if(object===aoScene){assert.equal(line.visible,false);assert.equal(fadingDial.visible,false,'Fading dials must not cast solid contact silhouettes');assert.equal(fadingCover.visible,false,'Cutaway covers must not cast solid contact silhouettes');assert.equal(aoScene.overrideMaterial,pass.normalMaterial)}
  draws.push({target,material:object===aoScene?aoScene.overrideMaterial:object.material});
 }};
 ao.render(renderer);

@@ -806,6 +806,8 @@ export default function Home() {
                   <p className="secondary">
                     Moves covering parts aside. Separate section spaces the
                     section’s own components.
+                    {group.id === 'regulation' &&
+                      ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}
                   </p>
                   <h3>Components</h3>
                   <div className="catalog-index">

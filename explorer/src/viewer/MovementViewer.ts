@@ -1,3 +1,4 @@
+import { focusRole, focusCover } from '../experience/emphasis';
 import { explosionOffsets, uncoverHost } from '../experience/explosion';
 import {
   DIALS,
@@ -52,6 +53,15 @@ import {
 } from '../experience/loading';
 
 type RenderPart = {
+  cutaway?: {
+    level: number;
+    from: number;
+    target: number;
+    elapsed: number;
+    opacity: number;
+    transparent: boolean;
+    depthWrite: boolean;
+  };
   dialFade?: {
     from: number;
     to: number;
@@ -1157,9 +1167,9 @@ export class MovementViewer {
         ),
     );
     if (bounds.isEmpty()) return;
-    // Retained context must fit too; framing only the active wheels cropped the
-    // movement into disconnected fragments. Exclude covers travelling away.
-    bounds.union(this.assemblyBounds());
+    // Fit the mechanism with room for its local connections, not the whole
+    // plate. Whole-movement framing made small mechanisms impossible to read.
+    bounds.expandByScalar(2.5);
     this.frameBounds(bounds, new THREE.Vector3(0.22, 0.24, g.side).normalize());
   }
   allParts() {
@@ -1410,10 +1420,7 @@ export class MovementViewer {
     for (const p of this.renderParts.values()) {
       const previousTarget = p.target.clone(),
         previousRotation = p.targetRotation.clone();
-      const id = p.source.id,
-        selected = !!selection && belongs(id, selection),
-        member = !!group && inMembers(id, group.members),
-        context = !!group && inMembers(id, group.context);
+      const id = p.source.id;
       this.retargetDialFade(
         p,
         !!previousFitted?.has(id),
@@ -1476,17 +1483,32 @@ export class MovementViewer {
       setFinishEnabled(p.material, true);
       setEmphasis(
         p.material,
-        selected
-          ? 'selected'
-          : member
-            ? 'member'
-            : context
-              ? 'context'
-              : group
-                ? 'surrounding'
-                : 'whole',
+        focusRole(id, p.source.definitionId, group, selection),
         group?.color,
       );
+      const cutawayTarget =
+        focusCover(id, group) &&
+        this.state.reveal > 0.8 &&
+        !(selection && belongs(id, selection))
+          ? 0
+          : 1;
+      if (!cutawayTarget || p.cutaway) {
+        p.cutaway ??= {
+          level: 1,
+          from: 1,
+          target: 1,
+          elapsed: 0,
+          opacity: p.material.opacity,
+          transparent: p.material.transparent,
+          depthWrite: p.material.depthWrite,
+        };
+        if (p.cutaway.target !== cutawayTarget)
+          Object.assign(p.cutaway, {
+            from: p.cutaway.level,
+            target: cutawayTarget,
+            elapsed: 0,
+          });
+      }
       if (
         !previousTarget.equals(p.target) ||
         !previousRotation.equals(p.targetRotation)
@@ -1574,6 +1596,25 @@ export class MovementViewer {
     }
     for (const p of this.renderParts.values()) {
       moving = this.applyDialFade(p, dt) || moving;
+      if (p.cutaway) {
+        const fade = p.cutaway;
+        fade.elapsed += Math.max(0, dt);
+        const t = this.reduced ? 1 : Math.min(1, fade.elapsed / 0.28);
+        fade.level = THREE.MathUtils.lerp(
+          fade.from,
+          fade.target,
+          t * t * (3 - 2 * t),
+        );
+        const fading = t < 1 && fade.from !== fade.target;
+        const transparent = fading || fade.transparent;
+        if (p.material.transparent !== transparent)
+          p.material.needsUpdate = true;
+        p.material.transparent = transparent;
+        p.material.opacity = fade.opacity * (fading ? fade.level : 1);
+        p.material.depthWrite = fading ? false : fade.depthWrite;
+        p.mesh.userData.cutawayFading = fading;
+        moving = fading || moving;
+      }
       if (staged) {
         p.motion = undefined;
         p.offset.fromArray(staged.get(p.source.id) ?? [0, 0, 0]);
@@ -1928,6 +1969,7 @@ export class MovementViewer {
       // Reveal only removes authored covers after they have travelled clear.
       // Never cull the rest of the movement at an arbitrary slider threshold.
       const obstruction = uncoverHost(id, this.state.group);
+
       if (
         obstruction &&
         p.offset.length() > 24 &&
@@ -1936,6 +1978,7 @@ export class MovementViewer {
       )
         visible = false;
     }
+    if (p.cutaway?.level === 0 && !selected) visible = false;
     return visible;
   }
   retargetVisibility() {

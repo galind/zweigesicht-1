@@ -1,3 +1,4 @@
+import { focusRole, focusCover } from '../experience/emphasis';
 import {
   GROUPS,
   ROOT,
@@ -23,6 +24,7 @@ async function settle(v: MovementViewer) {
 }
 export async function runBrowserChecks(v: MovementViewer) {
   if (!v.ready) throw new Error('Movement not ready');
+  const canvas = v.renderer.domElement;
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   v.reset();
   await settle(v);
@@ -64,6 +66,31 @@ export async function runBrowserChecks(v: MovementViewer) {
   for (const group of GROUPS) {
     v.group(group.id);
     await settle(v);
+    const focusPoints = v
+      .targetPoints(
+        (p) =>
+          inMembers(p.source.id, group.members) &&
+          !group.partObstructions?.some((suffix) =>
+            belongs(p.source.id, PREFIX + suffix),
+          ),
+      )
+      .map((point) => point.project(v.camera));
+    const xs = focusPoints.map((p) => p.x),
+      ys = focusPoints.map((p) => p.y);
+    const width =
+      ((Math.max(...xs) - Math.min(...xs)) * canvas.clientWidth) / 2;
+    const height =
+      ((Math.max(...ys) - Math.min(...ys)) * canvas.clientHeight) / 2;
+    const occupancy =
+      Math.max(width, height) /
+      Math.min(canvas.clientWidth, canvas.clientHeight);
+    checks.push({
+      name: `${group.id} focus is readable and fits the viewport`,
+      pass:
+        occupancy >= 0.28 &&
+        focusPoints.every((p) => Math.abs(p.x) < 1 && Math.abs(p.y) < 1),
+      details: { occupancy },
+    });
     v.orbit(0.35, 0.15);
     v.scrub({ partSpread: 0.35 });
     await settle(v);
@@ -71,11 +98,7 @@ export async function runBrowserChecks(v: MovementViewer) {
     for (const p of v.renderParts.values()) {
       const id = p.source.id;
       if (!belongs(id, ROOT) || id === PREFIX + '66') continue;
-      const role: EmphasisRole = inMembers(id, group.members)
-        ? 'member'
-        : inMembers(id, group.context)
-          ? 'context'
-          : 'surrounding';
+      const role: EmphasisRole = focusRole(id, p.source.definitionId, group);
       const finish = finishFor(p.source.name, p.source.definitionId, id);
       if (
         p.material.userData.emphasisRole !== role ||
@@ -86,7 +109,9 @@ export async function runBrowserChecks(v: MovementViewer) {
         p.material.metalness !== finish.metalness ||
         p.material.opacity !== 1 ||
         !p.material.depthWrite ||
-        ((!uncoverHost(id, group.id) || role === 'member') && !p.mesh.visible)
+        ((!uncoverHost(id, group.id) || role === 'member') &&
+          !focusCover(id, group) &&
+          !p.mesh.visible)
       )
         failures.push(id);
     }
