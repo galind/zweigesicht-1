@@ -1481,15 +1481,13 @@ export class MovementViewer {
       // in the scene keeps its authored finish, including muted context and
       // covers that are still visible while exploring a mechanism.
       setFinishEnabled(p.material, true);
-      setEmphasis(
-        p.material,
-        focusRole(id, p.source.definitionId, group, selection),
-        group?.color,
-      );
+      const emphasis = focusRole(id, p.source.definitionId, group, selection);
+      setEmphasis(p.material, emphasis, group?.color);
       const cutawayTarget =
-        focusCover(id, group) &&
-        this.state.reveal > 0.8 &&
-        !(selection && belongs(id, selection))
+        (belongs(id, ROOT) && emphasis === 'surrounding') ||
+        (focusCover(id, group) &&
+          this.state.reveal > 0.8 &&
+          emphasis !== 'selected')
           ? 0
           : 1;
       if (!cutawayTarget || p.cutaway) {
@@ -1613,6 +1611,7 @@ export class MovementViewer {
         p.material.opacity = fade.opacity * (fading ? fade.level : 1);
         p.material.depthWrite = fading ? false : fade.depthWrite;
         p.mesh.userData.cutawayFading = fading;
+        if (!fading && fade.target === 1) p.cutaway = undefined;
         moving = fading || moving;
       }
       if (staged) {
@@ -1966,8 +1965,8 @@ export class MovementViewer {
     if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
     const group = GROUPS.find((g) => g.id === this.state.group);
     if (group) {
-      // Reveal only removes authored covers after they have travelled clear.
-      // Never cull the rest of the movement at an arbitrary slider threshold.
+      // Retained covers retire after travelling clear. Unrelated assemblies
+      // use the independent section fade, regardless of the reveal slider.
       const obstruction = uncoverHost(id, this.state.group);
 
       if (

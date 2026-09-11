@@ -804,8 +804,9 @@ export default function Home() {
                     }
                   />
                   <p className="secondary">
-                    Moves covering parts aside. Separate section spaces the
-                    section’s own components.
+                    Other mechanisms are hidden; connected parts stay dimmed.
+                    Uncover moves this section’s covers aside. Separate section
+                    spaces its own components.
                     {group.id === 'regulation' &&
                       ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}
                   </p>

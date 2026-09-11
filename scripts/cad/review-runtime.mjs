@@ -181,7 +181,7 @@ assert.equal(bridge.mesh.visible,true,'Bridge must return when Uncover returns t
 results.push({check:'completed reveal reverses visibility and exact assembled placement',status:'pass'});
 v.state={...initialState,part:PREFIX+'66'};v.retarget();v.retargetVisibility();
 assert.equal(v.renderParts.get(PREFIX+'66').mesh.visible,true);assert.equal(v.renderParts.get(PREFIX+'53').mesh.visible,false);
-v.state.part=null;v.retarget();v.retargetVisibility();assert.equal(v.renderParts.get(PREFIX+'66').mesh.visible,false);assert.equal(v.renderParts.get(PREFIX+'53').mesh.visible,true);
+v.state.part=null;v.retarget();v.applyPose(1);v.retargetVisibility();assert.equal(v.renderParts.get(PREFIX+'66').mesh.visible,false);assert.equal(v.renderParts.get(PREFIX+'53').mesh.visible,true);
 results.push({check:'setting-spring alternative is exclusive and default restores on exit',status:'pass'});
 const movementObjects=new Map([...v.renderParts].map(([id,p])=>[id,p.mesh]));
 const catalogScene=(await parse('catalog.glb')).scene;rememberGeometry(catalogScene);v.ingest(catalogScene);assert.equal(v.renderParts.size,364);
@@ -496,7 +496,7 @@ results.push({check:'authored surface and optical hooks retain physical lighting
 const {GROUPS:emphasisGroups,inMembers:emphasisMember}=load('explorer/src/experience/catalog.ts');
 const {finishFor:emphasisFinish,EMPHASIS}=load('explorer/src/viewer/materials.ts');
 const {uncoverHost:emphasisCover}=load('explorer/src/experience/explosion.ts');
-const {focusRole,focusCover}=load('explorer/src/experience/emphasis.ts');
+const {focusRole,focusCover,EXPLORE_SCOPE}=load('explorer/src/experience/emphasis.ts');
 for(const group of emphasisGroups) {
  for(const reveal of [0,.49,.51,1]) {
   v.state={...initialState,group:group.id,reveal};v.retarget();v.applyPose(10);v.retargetVisibility();
@@ -510,7 +510,9 @@ for(const group of emphasisGroups) {
    assert.equal(p.material.color.getHex(),finish.color);
    assert.equal(p.material.metalness,finish.metalness);assert.equal(p.material.roughness,finish.roughness);
    assert.equal(p.material.opacity,1);assert.equal(p.material.depthWrite,true);
-   if((member||!emphasisCover(p.source.id,group.id)) && !(focusCover(p.source.id,group)&&reveal>.8))assert.ok(p.mesh.visible,`${group.id}: unexplained missing ${p.source.id}`);
+   const covered=emphasisCover(p.source.id,group.id)&&p.offset.length()>24&&!member;
+   const removed=role==='surrounding'||(focusCover(p.source.id,group)&&reveal>.8)||covered;
+   assert.equal(p.mesh.visible,!removed,`${group.id}: wrong section visibility ${p.source.id}`);
   }
  }
 }
@@ -524,10 +526,30 @@ v.state={...initialState,group:'regulation',reveal:1};v.retarget();v.applyPose(.
 const bridgeCut=v.renderParts.get(PREFIX+'59__0_1_1_221_1');
 assert.ok(bridgeCut.cutaway.level>0&&bridgeCut.cutaway.level<1);
 assert.ok(bridgeCut.mesh.userData.cutawayFading);
-v.state={...initialState,group:'winding',reveal:1};v.retarget();v.applyPose(.28);v.retargetVisibility();
-assert.equal(bridgeCut.cutaway.level,1);assert.equal(bridgeCut.material.opacity,1);assert.ok(bridgeCut.material.depthWrite);
+v.state={...initialState};v.retarget();v.applyPose(.28);v.retargetVisibility();
+assert.equal(bridgeCut.cutaway,undefined);assert.equal(bridgeCut.material.opacity,1);assert.ok(bridgeCut.material.depthWrite);
 v.state={...initialState,group:'regulation',reveal:1};v.retarget();v.applyPose(1);v.retargetVisibility();
-for(const suffix of ['59__0_1_1_221_1','34','35'])assert.equal(v.renderParts.get(PREFIX+suffix).mesh.visible,false);
+for(const suffix of ['59__0_1_1_221_1','23','24','34','35'])assert.equal(v.renderParts.get(PREFIX+suffix).mesh.visible,false);
+// Every presentation scope is explicit, source-addressable, and disjoint.
+for(const group of emphasisGroups){
+ const rule=EXPLORE_SCOPE[group.id];const indices=[...rule.context,...rule.connected,...rule.covers];
+ assert.equal(indices.length,new Set(indices).size);
+ for(const index of indices)assert.ok(parts.some(p=>p.id===PREFIX+index),`${group.id}: unknown scope ${index}`);
+ for(const index of rule.cutaway)assert.ok(rule.covers.includes(index));
+ for(const index of group.members)assert.ok(!indices.includes(index),`${group.id}: primary part reclassified`);
+}
+assert.equal(focusCover(PREFIX+'23',emphasisGroups[0]),true,'Actual balance-bridge screw');
+assert.equal(focusCover(PREFIX+'34',emphasisGroups[0]),false,'Pallet-bridge screw follows its own cover');
+const {explosionOffsets:scopeOffsets}=load('explorer/src/experience/explosion.ts');
+const displayScope={group:'display',separation:0,partSpread:0,reveal:1};
+const scopePose=scopeOffsets(parts,displayScope);
+const rearDisplayLeaves=parts.filter(p=>!p.isAssembly&&emphasisMember(p.id,[37,40,57,58]));
+assert.ok(rearDisplayLeaves.length>=10);
+for(const p of rearDisplayLeaves)assert.deepEqual([...scopePose.get(p.id)],[0,0,0],`${p.id}: retained display inherited cover reveal`);
+assert.ok(Math.hypot(...scopePose.get(PREFIX+'60__0_1_1_227_1'))>24);
+const fullDisplay=scopeOffsets(parts,{...displayScope,separation:1});
+assert.ok(Math.hypot(...fullDisplay.get(PREFIX+'37__0_1_1_182_1'))>17,'Complete separation still includes physical parent travel');
+results.push({check:'six explicit scopes retain primary and useful context only; real balance fasteners match cover; display reveal keeps retained child packet assembled while full separation composes parent travel',status:'pass'});
 results.push({check:'keyless springs outrank supporting plate; lifted children inherit cover visibility; balance bridge and fasteners fade together and reverse without residual transparency',status:'pass'});
 v.state={...initialState,group:'winding',part:PREFIX+'53'};v.retarget();
 const focusedSpring=v.renderParts.get(PREFIX+'53');

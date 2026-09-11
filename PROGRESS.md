@@ -16,7 +16,7 @@ The local implementation is ready for user and engineering review. Public releas
 
 ## Current interaction refinement
 
-Explore has been refined after the first emphasis milestone was rejected in user review. The current model restores mechanism-sized framing, separates explanatory context from the supporting plate, preserves authored finishes without a color wash, and fixes inherited cover visibility. See the focus refinement milestone below and `docs/EXPLORE_EMPHASIS_REVIEW.md`.
+Explore now uses explicit per-section scopes following user review of the focus refinement. Unrelated mechanisms disappear, useful connections remain subdued, and retained display components stay assembled when their parent cover is uncovered. The mechanism framing and authored finishes from the prior refinement remain. See the section-scope milestone below and `docs/EXPLORE_EMPHASIS_REVIEW.md`.
 
 ## Frosting stability — 11 September 2026
 
@@ -66,3 +66,14 @@ Uncover visibility now follows the authored host ancestry, so rear-display parts
 Verification: lint, TypeScript, production build, seven state tests and 72 source/runtime checks pass. All 30 real-renderer checks pass at both 1440×900 and 390×844, with no browser/shader errors. Added screen-space focus-size/containment checks for all groups, explicit keyless/plate contrast checks, inherited-cover regression, cutaway reversal and contact-depth checks. Desktop focus spans 49–87% of the shorter stage dimension across the six groups. Visual review covers every group, manual orbit, section separation, cover restoration, selected-spring isolation and reset. Mobile remains viewport/handler emulation.
 
 Evidence and reports: `artifacts/browser/explore-focus-refinement/` (ignored). Detailed audit: `docs/EXPLORE_EMPHASIS_REVIEW.md`. Preview remains at `http://127.0.0.1:4173/?inspect=1`, focused on Winding & setting. Next action is user visual review; test success is not user appearance acceptance. Publication, CAD redistribution, mechanical and physical-device gates remain unchanged.
+
+
+## Explore section scopes — 11 September 2026
+
+User review found the focus refinement closer, but some irrelevant components and floating parts remained. Added an explicit source-index scope for every mechanism in `assets/authored/explore-scope.json`. Primary parts remain clear, explanatory springs/supports stay readable, useful connections are dimmed, and unrelated assemblies fade out independently of Uncover. Keyless retains the adjoining hand-setting output wheels; shock retains its whole subassembly and supporting plate without surrounding gear trains.
+
+Corrected balance-bridge cutaway fasteners to source 23/24; source 34/35 follow their actual pallet-bridge host. Retained rear-display parts no longer inherit the barrel bridge's cover-only lift in Time display. Physical parent displacement still composes during complete separation. Scope fades restore original material flags and release their state, avoiding interference with later dial fades. Details distinguishes restoring covers with Uncover from restoring the full movement with Reset. Authored geometry and material finishes remain unchanged.
+
+Verified: all 73 source/runtime checks, seven state tests, lint, TypeScript and the production build pass. All 31 real-renderer interaction checks pass at desktop 1280×720 and mobile 390×844, with no browser/shader errors. Coverage now verifies explicit scope visibility, actual cover fasteners, retained-child reveal offsets, reverse fades and cleanup, whole-view restoration and existing dial transitions. Build retains its existing Node deprecation and large-chunk warnings; missing-asset errors in the CPU suite are expected fault injections.
+
+Visual checks cover all six sections on desktop/mobile, rear-display side switching and manual orbit, section separation, mobile menu/Details, Uncover restoration and Reset. Local evidence: `artifacts/browser/explore-section-scope/`. Mobile remains viewport/handler emulation. The local preview at `http://127.0.0.1:4173/?inspect=1` is ready for user appearance review. Publication, CAD redistribution and mechanical/device review gates remain unchanged.

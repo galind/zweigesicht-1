@@ -1,7 +1,14 @@
-import { belongs, inMembers, PREFIX, type Mechanism } from './catalog';
-import { EXPLOSION, explosionHost } from './explosion';
+import { inMembers, belongs, type Mechanism } from './catalog';
+import { explosionHost } from './explosion';
+import scope from '../../../assets/authored/explore-scope.json';
 
-/** Context follows the authored rigid packets, not just the top-level CAD tree. */
+export const EXPLORE_SCOPE = scope.sections;
+function section(group: Mechanism) {
+  return EXPLORE_SCOPE[group.id as keyof typeof EXPLORE_SCOPE];
+}
+
+/** Explicit section scope prevents shared presentation hosts from pulling in
+ * unrelated mechanisms. Source subassemblies retain all of their own leaves. */
 export function focusRole(
   id: string,
   definition: string,
@@ -11,27 +18,21 @@ export function focusRole(
   if (selection && belongs(id, selection)) return 'selected';
   if (!group) return 'whole';
   if (inMembers(id, group.members)) return 'member';
-  // The large plate is a spatial reference. Its pressed jewels still provide
-  // readable bearing locations and keep their contextual treatment.
   if (definition === 'd_0_1_1_195') return 'support';
-  if (inMembers(id, group.context)) return 'context';
-  const host = explosionHost(id);
+  const rule = section(group);
+  if (inMembers(id, rule.context)) return 'context';
+  // Plate-mounted pins and jewels remain with the spatial reference.
   if (
-    host &&
-    EXPLOSION.parts.some(
-      (part) => part.host === host && inMembers(part.id, group.members),
-    )
+    explosionHost(id) === 'plate' ||
+    inMembers(id, rule.connected) ||
+    inMembers(id, rule.covers)
   )
     return 'connected';
   return 'surrounding';
 }
 
-/** The balance bridge belongs to the regulator packet but covers its spring.
- * Uncover may hide that named bridge without moving the spring anchorage.
- * This is a presentation cutaway, not a disassembly instruction. */
+/** Named static cutaways, including the fasteners belonging to that cover.
+ * Other covers follow their authored extraction paths before being hidden. */
 export function focusCover(id: string, group?: Mechanism) {
-  return (
-    group?.id === 'regulation' &&
-    [59, 34, 35].some((index) => belongs(id, PREFIX + index))
-  );
+  return !!group && inMembers(id, section(group).cutaway);
 }

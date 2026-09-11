@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "reviewStatus": "presentation scope from source identities and authored host graph; mechanical review open",
+  "indexSpace": "mechanisms.directChildPrefix suffix; primary members remain in mechanisms.json",
+  "sections": {
+    "regulation": {
+      "context": [54],
+      "connected": [63, 65],
+      "covers": [6, 18, 22, 16, 34, 35, 59, 23, 24],
+      "cutaway": [59, 23, 24]
+    },
+    "energy": {
+      "context": [54],
+      "connected": [3, 4, 25, 14, 15, 49, 50],
+      "covers": [60, 17, 19, 21],
+      "cutaway": []
+    },
+    "transmission": {
+      "context": [54],
+      "connected": [1, 2, 13, 16, 34, 35, 25],
+      "covers": [6, 18, 22, 61, 10, 36],
+      "cutaway": []
+    },
+    "display": {
+      "context": [54, 58],
+      "connected": [3, 4, 25, 9, 11, 42, 46],
+      "covers": [6, 18, 22, 60, 17, 19, 21],
+      "cutaway": []
+    },
+    "winding": {
+      "context": [54, 53, 64, 75],
+      "connected": [
+        33, 48, 49, 50, 51, 52, 67, 68, 73, 77, 78, 79, 81, 82, 20, 26, 55, 9,
+        11
+      ],
+      "covers": [6, 18, 22],
+      "cutaway": []
+    },
+    "shock": {
+      "context": [54],
+      "connected": [],
+      "covers": [6, 18, 22, 59, 23, 24, 60, 17, 19, 21],
+      "cutaway": []
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import complete from '../../../assets/derived/complete-separation.json';
 import authored from '../../../assets/authored/explosion.json';
-import type { Part } from './catalog';
+import { GROUPS, inMembers, type Part } from './catalog';
 
 export const EXPLOSION = authored;
 export const COMPLETE_SEPARATION = complete;
@@ -58,14 +58,25 @@ export function explosionOffsets(
   const byId = new Map(parts.map((p) => [p.id, p]));
   const focus =
     authored.mechanisms[state.group as keyof typeof authored.mechanisms];
+  const mechanism = GROUPS.find((group) => group.id === state.group);
+  const activeHosts = new Set(
+    authored.parts
+      .filter((part) => mechanism && inMembers(part.id, mechanism.members))
+      .map((part) => part.host),
+  );
   const hostOffsets = new Map<string, Vec3>();
-  function hostOffset(id: string): Vec3 {
-    const cached = hostOffsets.get(id);
+  function hostOffset(id: string, revealAncestors = true): Vec3 {
+    const cacheKey = `${id}:${revealAncestors}`;
+    const cached = hostOffsets.get(cacheKey);
     if (cached) return cached;
     const host = hosts.get(id)!;
     const frame = byId.get(host.frameId)!;
     const direction = worldDirection(frame, host.directionLocal);
-    const parent = host.parent ? hostOffset(host.parent) : [0, 0, 0];
+    // A cover-only reveal must not lift a retained mechanism with its parent
+    // cover. Complete separation still composes the physical parent offset.
+    const parent = host.parent
+      ? hostOffset(host.parent, revealAncestors && !activeHosts.has(id))
+      : [0, 0, 0];
     // A focused control advances the same reviewed progression, never adds another delta.
     let distance =
       host.distanceMm * stageProgress(state.separation, host.stage);
@@ -77,10 +88,10 @@ export function explosionOffsets(
       );
     }
     // Uncover follows the host's reviewed extraction axis, then removes the distant cover.
-    if (focus?.uncover.includes(id))
+    if (revealAncestors && focus?.uncover.includes(id))
       distance = Math.max(distance, 28 * stageProgress(state.reveal, [0.2, 1]));
     const offset = direction.map((n, i) => parent[i] + n * distance) as Vec3;
-    hostOffsets.set(id, offset);
+    hostOffsets.set(cacheKey, offset);
     return offset;
   }
   const result = new Map<string, Vec3>();

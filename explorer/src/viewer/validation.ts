@@ -109,9 +109,14 @@ export async function runBrowserChecks(v: MovementViewer) {
         p.material.metalness !== finish.metalness ||
         p.material.opacity !== 1 ||
         !p.material.depthWrite ||
-        ((!uncoverHost(id, group.id) || role === 'member') &&
-          !focusCover(id, group) &&
-          !p.mesh.visible)
+        p.mesh.visible !==
+          (role !== 'surrounding' &&
+            !focusCover(id, group) &&
+            !(
+              uncoverHost(id, group.id) &&
+              p.offset.length() > 24 &&
+              role !== 'member'
+            ))
       )
         failures.push(id);
     }
@@ -226,10 +231,19 @@ export async function runBrowserChecks(v: MovementViewer) {
   await settle(v);
   v.patch({ reveal: 0 });
   await settle(v);
+  const regulation = GROUPS.find((g) => g.id === 'regulation')!;
   checks.push({
-    name: 'Uncover reversal restores all default movement visibility',
-    pass:
-      [...v.renderParts.values()].filter((p) => p.mesh.visible).length === 222,
+    name: 'Uncover reversal restores section covers and keeps unrelated assemblies hidden',
+    pass: [...v.renderParts.values()]
+      .filter(
+        (p) => belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66',
+      )
+      .every(
+        (p) =>
+          p.mesh.visible ===
+          (focusRole(p.source.id, p.source.definitionId, regulation) !==
+            'surrounding'),
+      ),
   });
   v.patch({ separation: 0.65, partSpread: 0.3 });
   await settle(v);
@@ -239,6 +253,14 @@ export async function runBrowserChecks(v: MovementViewer) {
     name: 'Layer and component separation restore exact source matrices',
     pass: v.assemblyError() === 0,
     details: v.assemblyError(),
+  });
+  v.reset();
+  await settle(v);
+  checks.push({
+    name: 'Reset restores all default movement parts and releases section fade state',
+    pass:
+      [...v.renderParts.values()].filter((p) => p.mesh.visible).length ===
+        222 && [...v.renderParts.values()].every((p) => !p.cutaway),
   });
   const essential = [...v.renderParts.values()].filter((p) =>
     ['112', '114', '116', '126', '127', '128', '129', '130', '96'].some(
