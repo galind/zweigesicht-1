@@ -344,3 +344,10 @@ Corrected the blue target after user clarification: the fitted Skeleton inner fo
 Three hands five-minute indices (d25, all 12 occurrences) and applied logo (d36) now share the chatons' exact roseGold profile. Thin washer d121 retains .31 satin roughness and its gold color, with procedural brushing and anisotropy disabled. Geometry, transforms, softened dial brushing and control order are unchanged.
 
 Verified lint, TypeScript, production build and all 87 source/runtime checks, including added exact chaton-profile and unbrushed washer coverage. Browser review covers both assembled dial faces and the isolated Thin washer; screenshots under ignored `artifacts/browser/dial-polish/`: `inner-ring-crown-blue.png`, `rose-gold-indices-logo.png`, `satin-thin-washer.png`. Preview remains `http://127.0.0.1:4173/?inspect=1` on Skeleton for user appearance review. No upload, publication or push.
+
+
+## Electric-blue inner dial ring — 11 September 2026
+
+Following the supplied SJX reference and user request for a lighter, more electric blue, the fitted Skeleton inner insert now has its own cobalt lacquer treatment: sRGB #1265ee, metalness .15, roughness .18 and clearcoat. Removed its heat-blue shader routing, so it no longer darkens toward blue-black with the steel response. The minute holes, outer silver track, movement finishes, hands, rose-gold accents and satin washer are unchanged. This is an authored visual interpretation of the supplied photograph, not a measured coating.
+
+Verified lint, TypeScript, production build and all 87 source/runtime checks. Browser review confirms a visibly lighter electric ring; screenshot: ignored `artifacts/browser/dial-polish/electric-blue-inner-ring.png`. Geometry and surface annotations are unchanged. Preview remains open on Skeleton at `http://127.0.0.1:4173/?inspect=1` for appearance review. No upload, publication or push.
