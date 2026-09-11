@@ -49,6 +49,7 @@ export function DialControls({
   }, []);
   const view = state.dialRequest?.view ?? dialView(state);
   const face = view === 'central' ? 'central' : 'small';
+  const faceLabel = face === 'central' ? 'Three hands' : 'Skeleton';
   const style =
     face === 'central'
       ? (state.dialRequest?.centralStyle ?? state.centralStyle)
@@ -64,17 +65,16 @@ export function DialControls({
         }}
       >
         <ToggleGroupItem value="movement">Movement</ToggleGroupItem>
-        <ToggleGroupItem value="central">Dial A</ToggleGroupItem>
-        <ToggleGroupItem value="small">Dial B</ToggleGroupItem>
+        <ToggleGroupItem value="central">Three hands</ToggleGroupItem>
+        <ToggleGroupItem value="small">Skeleton</ToggleGroupItem>
       </ToggleGroup>
       {view !== 'movement' && (
         <>
           <p className="dial-label">
-            Hands{' '}
-            <span>{face === 'central' ? 'Central dial' : 'Small dial'}</span>
+            Hands <span>{faceLabel}</span>
           </p>
           <ToggleGroup
-            aria-label={`${face === 'central' ? 'Central' : 'Small'} dial hands`}
+            aria-label={`${faceLabel} hand styles`}
             value={[style]}
             disabled={!available}
             onValueChange={(values) => {

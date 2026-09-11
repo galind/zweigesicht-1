@@ -87,15 +87,15 @@ export async function runCameraChecks(v: MovementViewer) {
   v.patch({ separation: 0.4 });
   await settle(v);
   check(
-    'Separating directly from Dial A keeps the same face upright',
+    'Separating directly from Three hands keeps the same face upright',
     v.state.side === 'front' && v.camera.up.distanceTo(central.up) < 1e-10,
   );
   v.patch({ separation: 0 });
   await settle(v);
   check(
-    'Reassembly from Dial A restores its framing as bare movement',
+    'Reassembly from Three hands restores its framing as bare movement',
     v.state.presentation === 'movement' &&
-      same(central, snapshot('Dial A reassembled')),
+      same(central, snapshot('Three hands reassembled')),
   );
   let maxNdc = 0;
   for (const side of ['back', 'front'] as const) {

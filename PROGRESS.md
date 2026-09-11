@@ -77,3 +77,7 @@ Corrected balance-bridge cutaway fasteners to source 23/24; source 34/35 follow 
 Verified: all 73 source/runtime checks, seven state tests, lint, TypeScript and the production build pass. All 31 real-renderer interaction checks pass at desktop 1280×720 and mobile 390×844, with no browser/shader errors. Coverage now verifies explicit scope visibility, actual cover fasteners, retained-child reveal offsets, reverse fades and cleanup, whole-view restoration and existing dial transitions. Build retains its existing Node deprecation and large-chunk warnings; missing-asset errors in the CPU suite are expected fault injections.
 
 Visual checks cover all six sections on desktop/mobile, rear-display side switching and manual orbit, section separation, mobile menu/Details, Uncover restoration and Reset. Local evidence: `artifacts/browser/explore-section-scope/`. Mobile remains viewport/handler emulation. The local preview at `http://127.0.0.1:4173/?inspect=1` is ready for user appearance review. Publication, CAD redistribution and mechanical/device review gates remain unchanged.
+
+## Dial labels — 11 September 2026
+
+Renamed Dial A to Three hands and Dial B to Skeleton in the dial controls, hand-style captions, accessible group labels and local interaction-tool description. Internal dial IDs and behavior remain unchanged. Lint and TypeScript pass; browser selection and label layout were checked on desktop and at 390×844. Local screenshot: `artifacts/browser/dial-labels/mobile.png`.
