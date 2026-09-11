@@ -301,3 +301,14 @@ Evidence: ignored `artifacts/browser/upright-hands/` (screenshots, browser repor
 ## Flip icon orientation — 11 September 2026
 
 Rotated the existing Flip movement dock icon 90° so its two directional halves sit at the top and bottom, as requested. The button label, size, accessibility and flip behavior are unchanged. Lint and TypeScript pass; the actual local preview confirms the new orientation. Screenshot: ignored `artifacts/browser/flip-icon/rotated.png`. Next action: user visual review.
+
+
+## Dial finish polish — 11 September 2026
+
+Strengthened the Three hands outer silver dial's circular brushing with a coarser derivative-filtered strand layer and stronger surface response, limited to d26. Added a white steel face to the Fine seconds counterbalance while retaining its blue edge and stem. The user's correction preserves the existing white hour/minute faces and bushings. The Skeleton perforated minute-track face now uses the same blue dielectric finish as the movement's recessed enamel; borders, spokes and minute recesses retain their existing treatment.
+
+Source-face evidence identifies d30 face 6 as the outward bent counterweight/stem surface; its lobe below local Y=-4.25 mm receives steel. d14 face 129 is the perforated upper annulus. Extended the reproducible source audit to d30 and regenerated reversible annotations. The new payload is `finish-surfaces-90ce588bc969.bin`. Byte comparison confirms d14 has exactly 3,207 changed roles and unchanged normals; every other existing definition is byte-identical. d30 is newly annotated. Original CAD/GLB geometry, transforms, source URLs and hashes remain unchanged.
+
+Verified lint, TypeScript, production build and all 86 CPU/source/runtime checks. Added a focused regression for the exact annulus and counterbalance masks, plus preservation of hour/minute white source faces. Actual browser review covers straight and oblique views, zoom, both sides, and 390×844 viewport emulation; no captured browser errors or warnings. Local screenshots, annotation diff and verification logs are under ignored `artifacts/browser/dial-polish/`. Existing production build warnings remain.
+
+Preview: `http://127.0.0.1:4173/?inspect=1`, left on Three hands with Fine hands. Next action: user appearance review. Phone review is viewport emulation; mechanical/device/release gates remain unchanged. Nothing was uploaded, published or pushed.

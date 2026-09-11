@@ -17,7 +17,7 @@ assert hashlib.sha256(source.read_bytes()).hexdigest()=='f34148903818c273e20deeb
 doc,st=load_xcaf(source);labels=TDF_LabelSequence();st.GetShapes(labels)
 a=json.loads((root/'artifacts/finishing-cad/audit.json').read_text()); records={d['id']:d for d in a['definitions']}
 # Extend exact shading identities only for individually reviewed surface/fastener regions.
-selected={3,8,12,14,17,21,24,26,27,28,34,38,41,105,120,189,9,107,122,123,136,138,139,166,168,169,170,180,181,191,192,201,226,253,255}
+selected={3,8,12,14,17,21,24,26,27,28,30,34,38,41,105,120,189,9,107,122,123,136,138,139,166,168,169,170,180,181,191,192,201,226,253,255}
 fa.SIDECARS=selected
 for idx in range(1,labels.Length()+1):
  l=labels.Value(idx);did='d_'+label_entry(l).replace(':','_')

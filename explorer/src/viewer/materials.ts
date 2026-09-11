@@ -349,7 +349,9 @@ export function createMaterial(
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
-      finishBrushDetail: { value: brushingDetail[finish.family] ?? 1 },
+      finishBrushDetail: {
+        value: definitionId === 'd_0_1_1_26' ? 2.4 : (brushingDetail[finish.family] ?? 1),
+      },
       finishEnabled: enabled,
       emphasis,
       emphasisColor,
@@ -477,12 +479,16 @@ if(finishEnabled>.5 && finishPattern>.5) {
   // Role 8 identifies the exposed base, now smooth satin by user correction.
   float silverRadius=length(finishUv);
   float brushed=finishPattern>5.5
-    ? filteredFinishNoise(vec2(silverRadius*150.0,11.0))
+    ? (finishBrushDetail>1.5
+      ? (filteredFinishNoise(vec2(silverRadius*12.0,11.0))*.55
+        + filteredFinishNoise(vec2(silverRadius*38.0,23.0))*.3
+        + filteredFinishNoise(vec2(silverRadius*150.0,37.0))*.15)*finishBrushDetail
+      : filteredFinishNoise(vec2(silverRadius*150.0,11.0)))
     : finishBrush(finishBrushUv)*finishBrushDetail;
   // Broad lower bases stay satin; only seven explicit mounting pads frost.
   finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
   finishGrain=brushed*finishField;
-  finishHeight=brushed*finishField*.00018;
+  finishHeight=brushed*finishField*(finishPattern>5.5 && finishBrushDetail>1.5?.0008:.00018);
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -513,7 +519,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
  }
  // Authored brushing retains its reflectance response; frosting has no color noise.
  if(finishPattern<4.5 || finishPattern>5.5)
-  diffuseColor.rgb*=1.0+finishGrain*.08*finishFace;
+  diffuseColor.rgb*=1.0+finishGrain*(finishPattern>5.5 && finishBrushDetail>1.5?.18:.08)*finishFace;
  if(abs(vFinishRole-6.0)<.2) diffuseColor.rgb*=.62;
  // Existing recessed decoration on audited bridges. This is reversible surface
  // shading of source floors, never fabricated text, outlines or bevel geometry.
@@ -544,7 +550,7 @@ if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || abs(vFinishRo
 if(finishEnabled>.5 && finishShockBlock>.5) roughnessFactor=mix(roughnessFactor,.13,finishBlueSurface);
 if(finishEnabled>.5 && finishBlackPolished>.5) roughnessFactor=.055;
 if(finishEnabled>.5 && finishPattern>.5) {
- float finishContrast=.1;
+ float finishContrast=finishPattern>5.5 && finishBrushDetail>1.5?.18:.1;
  roughnessFactor=clamp(roughnessFactor+finishGrain*finishContrast,.09,.85);
  if(finishPattern<2.5 || (finishPattern>3.5 && finishPattern<4.5) || finishPattern>5.5) {
   roughnessFactor=mix(.34,roughnessFactor,finishFace);
@@ -613,6 +619,6 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
       ? 'ml01-source-surface-clear-v10'
-      : 'ml01-source-surface-v10';
+      : 'ml01-source-surface-v11';
   return material;
 }

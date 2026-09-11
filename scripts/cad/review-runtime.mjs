@@ -78,6 +78,27 @@ for(const entry of sidecarReport.definitions){
  }
  assert.deepEqual(roles,entry.roles);
 }
+// Dial polish stays confined to the counterweight face and perforated annulus.
+for(const n of [14,24,28,30]) {
+ const id=`d_0_1_1_${n}`,base=path.join(ROOT,`artifacts/finishing-cad/sidecars/${id}`);
+ const meta=JSON.parse(fs.readFileSync(base+'.json')),bytes=fs.readFileSync(base+'.bin');
+ const raw=new Float32Array(bytes.buffer,bytes.byteOffset,bytes.length/4),data=v.sourceSurfaces.get(id);
+ let affected=0;
+ for(let i=0;i<meta.vertexCount;i++) {
+  const face=meta.faces[raw[i*10+9]-1],role=data[i*4+3];
+  if(n===14) { assert.equal(role===11,face.index===129); if(role===11)affected++; }
+  else if(n===30) {
+   assert.equal(role===2,face.index===6 && raw[i*10+1]<-4.25);
+   if(role===2) { assert.ok(raw[i*10+8]>.99,'Counterweight outward face only'); affected++; }
+  } else {
+   const color=face.directColors.surface??face.directColors.generic;
+   assert.equal(role===2,!!color && Math.abs(color[0]-.36724645)<.001,'Preserve all hour/minute white source faces and bushings');
+   if(role===2)affected++;
+  }
+ }
+ assert.ok(affected>0);
+}
+results.push({check:'seconds counterweight white outward face, unchanged hour/minute steel faces, and exact skeleton minute annulus enamel mask',status:'pass'});
 // Independent spatial guard for the top-origin screw regression discovered in
 // the final macro. Preserve original region identity independently of the
 // whole-screw bluing override in the material shader.

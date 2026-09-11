@@ -68,6 +68,12 @@ for(const id of ids) {
   // Catalog hands/bushings retain source steel seats. Source-dark dial markings
   // are distinct from pale carriers and separately modeled enamel inserts.
   if([8,12,24,28,34,38,41].includes(id)&&color&&Math.abs(color[0]-.36724645)<.001)role=2;
+  // Fine seconds: outward counterbalance face, excluding the adjoining stem.
+  // d30 face 6 follows the source blade bend; its circular lobe starts at Y=-4.25.
+  if(id===30&&f.index===6&&input[i*10+1]<-4.25)role=2;
+  // Skeleton minute track: the perforated upper annulus, not its spokes,
+  // beveled borders or recessed minute holes. Match movement recessed enamel.
+  if(id===14&&f.index===129)role=11;
   // Exact source shank/under-head faces. Origins differ: d9/d107/d122/d180/
   // d181 place the head top near Z=0, unlike the shoulder-origin screws.
   // Never infer a head boundary from a shared zero-plane convention.
