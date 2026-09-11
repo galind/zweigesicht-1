@@ -48,13 +48,12 @@ export async function runCameraChecks(v: MovementViewer) {
   );
   let faceRadius: number | undefined;
   check(
-    'Opening uses the tilted overview',
+    'Opening uses the straight-on overview',
     opening.state.viewAngle === 'overview' &&
       Math.abs(opening.position.y - opening.target.y) < 1e-8 &&
       Math.abs(
         (opening.position.x - opening.target.x) /
-          (opening.position.z - opening.target.z) +
-          0.22,
+          (opening.position.z - opening.target.z),
       ) < 1e-8,
   );
   for (const face of ['central', 'small'] as const) {
@@ -109,13 +108,12 @@ export async function runCameraChecks(v: MovementViewer) {
   v.patch({ separation: 0 });
   await settle(v);
   check(
-    'Reassembly keeps Three hands visible and returns to the tilted overview',
+    'Reassembly keeps Three hands visible and returns to the straight-on overview',
     v.state.centralVisible &&
       v.state.viewAngle === 'overview' &&
       Math.abs(
         (v.camera.position.x - v.controls.target.x) /
-          (v.camera.position.z - v.controls.target.z) -
-          0.22,
+          (v.camera.position.z - v.controls.target.z),
       ) < 1e-8,
   );
   let maxNdc = 0;
@@ -192,8 +190,7 @@ export async function runCameraChecks(v: MovementViewer) {
       v.state.side === owned.state.side &&
       Math.abs(
         (v.camera.position.x - v.controls.target.x) /
-          Math.abs(v.camera.position.z - v.controls.target.z) -
-          0.22,
+          Math.abs(v.camera.position.z - v.controls.target.z),
       ) < 1e-8,
   );
   return { checks, views, viewport: [v.host.clientWidth, v.host.clientHeight] };

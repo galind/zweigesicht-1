@@ -834,7 +834,7 @@ export default function Home() {
           className="text-button reset-button"
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
-          title="Return to the tilted overview; keep dials and hands"
+          title="Return to the straight-on view; keep dials and hands"
           onClick={() => {
             closePanels();
             if (viewer.current) viewer.current.reset();

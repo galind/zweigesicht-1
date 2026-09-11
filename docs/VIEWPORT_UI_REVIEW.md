@@ -66,3 +66,10 @@ After the user rejected the diagonal appearance, the overview changed to normali
 All six bottom controls now use text without pictograms or chevrons. Popup expanded states, active backgrounds, the separation status dot, accessible names, focus styling and touch targets remain. This supersedes the icon/chevron treatment above; it does not change the dock order.
 
 Verified lint, TypeScript, production build, nine state tests, 80 CPU/runtime checks and 19 rendered camera checks. Manual desktop/mobile review confirms zero dock icons, at least 44 px targets and no horizontal overflow at 390 and 320 px. Evidence: ignored `artifacts/browser/level-overview/`. Angle acceptance remains with the user.
+
+
+### Straight-on opening and Reset — accepted composition follow-up
+
+The user selected a straight-on composition. Opening and Reset now use exact direction `(0, 0, ±1)`, superseding the earlier tilt experiments. The movement opens on its existing back side; Reset retains the current side and configured displays/styles. Whole assembly separation still transitions to its oblique presentation, and reassembly returns straight-on. Dial selection remains face-on. The six matching dock icons and labels remain as accepted in the subsequent icon refinement.
+
+Verified lint, TypeScript, production build, nine state tests, 80 CPU/runtime checks and 19 rendered camera checks. Mobile separation/Reset with both dials preserves styles and restores exact fitted poses. Evidence: ignored `artifacts/browser/straight-on-default/`. Physical-device and release limitations remain unchanged.

@@ -1091,11 +1091,7 @@ export class MovementViewer {
     );
   }
   assemblyDirection() {
-    return new THREE.Vector3(
-      this.state.viewAngle === 'face' ? 0 : 0.22,
-      0,
-      this.state.side === 'front' ? 1 : -1,
-    ).normalize();
+    return new THREE.Vector3(0, 0, this.state.side === 'front' ? 1 : -1);
   }
   defaultUp() {
     return new THREE.Vector3(0, this.state.side === 'front' ? 1 : -1, 0);
