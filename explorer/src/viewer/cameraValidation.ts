@@ -37,6 +37,7 @@ export async function runCameraChecks(v: MovementViewer) {
     a.up.distanceTo(b.up) < 1e-10;
   const check = (name: string, pass: boolean, details?: unknown) =>
     checks.push({ name, pass, details });
+  await v.showDial('movement');
   v.reset();
   await settle(v);
   const opening = snapshot('Opening / Reset');
@@ -45,14 +46,28 @@ export async function runCameraChecks(v: MovementViewer) {
     Math.abs(opening.target.x) < 1e-9 && Math.abs(opening.target.y) < 1e-9,
     { target: opening.target },
   );
+  let faceRadius: number | undefined;
+  check(
+    'Opening uses the tilted overview',
+    opening.state.viewAngle === 'overview' &&
+      Math.abs(
+        (opening.position.x - opening.target.x) /
+          (opening.position.z - opening.target.z) +
+          0.32,
+      ) < 1e-8,
+  );
   for (const face of ['central', 'small'] as const) {
     await v.showDial(face);
     await settle(v);
     const dial = snapshot(face);
+    faceRadius ??= dial.radius;
     check(
-      face + ' shares the opening center and scale',
+      face + ' faces straight on with the shared dial center and scale',
       dial.target.distanceTo(opening.target) < 1e-8 &&
-        Math.abs(dial.radius - opening.radius) < 1e-8,
+        Math.abs(dial.radius - faceRadius) < 1e-8 &&
+        Math.abs(dial.position.x - dial.target.x) < 1e-8 &&
+        Math.abs(dial.position.y - dial.target.y) < 1e-8 &&
+        v.state.viewAngle === 'face',
     );
     await v.showDial('movement');
     await settle(v);
@@ -93,9 +108,14 @@ export async function runCameraChecks(v: MovementViewer) {
   v.patch({ separation: 0 });
   await settle(v);
   check(
-    'Reassembly from Three hands restores its framing as bare movement',
-    v.state.presentation === 'movement' &&
-      same(central, snapshot('Three hands reassembled')),
+    'Reassembly keeps Three hands visible and returns to the tilted overview',
+    v.state.centralVisible &&
+      v.state.viewAngle === 'overview' &&
+      Math.abs(
+        (v.camera.position.x - v.controls.target.x) /
+          (v.camera.position.z - v.controls.target.z) -
+          0.32,
+      ) < 1e-8,
   );
   let maxNdc = 0;
   for (const side of ['back', 'front'] as const) {
@@ -149,10 +169,10 @@ export async function runCameraChecks(v: MovementViewer) {
     'Separation respects manual camera ownership',
     same(owned, snapshot('Manual separated')),
   );
-  await v.showDial('movement');
+  v.group(null);
   await settle(v);
   check(
-    'Explicit Movement restores its default after manual separation',
+    'Whole movement restores its default after manual separation',
     same(opening, snapshot('Movement after manual separation')),
   );
   v.back();
@@ -166,8 +186,14 @@ export async function runCameraChecks(v: MovementViewer) {
   v.reset();
   await settle(v);
   check(
-    'Reset returns to the same opening position',
-    same(opening, snapshot('Final reset')),
+    'Reset returns to the overview of the retained side',
+    v.state.viewAngle === 'overview' &&
+      v.state.side === owned.state.side &&
+      Math.abs(
+        (v.camera.position.x - v.controls.target.x) /
+          Math.abs(v.camera.position.z - v.controls.target.z) -
+          0.32,
+      ) < 1e-8,
   );
   return { checks, views, viewport: [v.host.clientWidth, v.host.clientHeight] };
 }

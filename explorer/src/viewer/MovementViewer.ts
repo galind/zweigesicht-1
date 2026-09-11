@@ -730,6 +730,7 @@ export class MovementViewer {
       ...(focusAssembly
         ? {
             side: focus === 'central' ? 'front' : 'back',
+            viewAngle: 'face',
             // An unrelated section can suppress a requested display. Return to the
             // whole view so choosing the dial always makes its face available.
             ...(this.state.group && this.state.group !== 'display'
@@ -744,6 +745,7 @@ export class MovementViewer {
       'centralStyle',
       'smallStyle',
       'side',
+      'viewAngle',
       'group',
       'part',
       'isolated',
@@ -830,7 +832,9 @@ export class MovementViewer {
       generation !== this.cameraGeneration
     )
       return;
+    this.state.viewAngle = view === 'movement' ? 'overview' : 'face';
     this.setSide(view === 'central' ? 'front' : 'back');
+    this.fitPresentation();
   }
   async retryDials() {
     if (this.dialError) this.catalogLoaded = false;
@@ -842,7 +846,12 @@ export class MovementViewer {
   }
   patch(patch: Partial<ExperienceState>) {
     this.selectionGeneration++;
-    this.state = resolveState(this.state, patch);
+    this.state = resolveState(this.state, {
+      ...patch,
+      ...((patch.separation ?? 0) > 0 || (patch.partSpread ?? 0) > 0
+        ? { viewAngle: 'overview' }
+        : {}),
+    });
     this.retarget();
     if (
       this.ready &&
@@ -913,22 +922,24 @@ export class MovementViewer {
     const progress = this.state.separation;
     const eased = progress * progress * (3 - 2 * progress);
     const direction =
-      this.state.group || this.state.part
-        ? new THREE.Vector3(
-            0.62,
-            0.38,
-            this.state.side === 'front' ? 1 : -1,
-          ).normalize()
-        : this.assemblyDirection()
-            .lerp(
-              new THREE.Vector3(
-                1.05,
-                0.38,
-                this.state.side === 'front' ? 1 : -1,
-              ).normalize(),
-              eased,
-            )
-            .normalize();
+      this.state.viewAngle === 'face'
+        ? new THREE.Vector3(0, 0, this.state.side === 'front' ? 1 : -1)
+        : this.state.group || this.state.part
+          ? new THREE.Vector3(
+              0.62,
+              0.38,
+              this.state.side === 'front' ? 1 : -1,
+            ).normalize()
+          : this.assemblyDirection()
+              .lerp(
+                new THREE.Vector3(
+                  1.05,
+                  0.38,
+                  this.state.side === 'front' ? 1 : -1,
+                ).normalize(),
+                eased,
+              )
+              .normalize();
     if (!group && !this.state.part) {
       const envelope = this.assemblyBounds();
       bounds.union(envelope);
@@ -1018,6 +1029,7 @@ export class MovementViewer {
       part: null,
       isolated: false,
       phase: id ? 'revealing' : 'recovering',
+      viewAngle: 'overview',
       reveal: id ? 1 : 0,
       separation: 0,
       partSpread: 0,
@@ -1080,8 +1092,8 @@ export class MovementViewer {
   }
   assemblyDirection() {
     return new THREE.Vector3(
-      0.04,
-      0.06,
+      this.state.viewAngle === 'face' ? 0 : 0.32,
+      this.state.viewAngle === 'face' ? 0 : 0.22,
       this.state.side === 'front' ? 1 : -1,
     ).normalize();
   }
@@ -1291,7 +1303,9 @@ export class MovementViewer {
       );
       return;
     }
+    this.state.viewAngle = 'face';
     this.setSide(kind);
+    this.fitPresentation();
   }
   zoom(factor: number) {
     this.manual();
@@ -1768,7 +1782,11 @@ export class MovementViewer {
     ) {
       if (this.state.layout === 'spread')
         this.frameSpread(this.spreadFocus ?? undefined);
-      else if (this.state.separation || this.state.partSpread)
+      else if (
+        this.state.viewAngle === 'face' ||
+        this.state.separation ||
+        this.state.partSpread
+      )
         this.fitPresentation();
       else if (this.state.group)
         this.frameGroup(GROUPS.find((g) => g.id === this.state.group)!);

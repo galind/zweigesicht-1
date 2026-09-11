@@ -179,13 +179,13 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  const resetPrefs=preferences(),resetSide=controller.state.side;controller.reset();pose();assert.equal(controller.assemblyError('presentation'),0);assert.deepEqual(preferences(),resetPrefs);assert.equal(controller.state.side,resetSide);
  results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset retains fitted preferences',status:'pass'});
  controller.reduced=true;await controller.configureDials({centralVisible:false,smallVisible:false,centralStyle:'fine',smallStyle:'lance'});controller.reset();pose();
- await controller.chooseDial('central',true);pose();
+ await controller.chooseDial('central',true);pose();assert.equal(controller.state.viewAngle,'face');
  assert.equal(controller.state.side,'front');assert.deepEqual(preferences(),[true,false,'fine','lance']);
  await controller.chooseDial('small',true,'pear');pose();
  assert.equal(controller.state.side,'back');assert.deepEqual(preferences(),[true,true,'fine','pear']);
  await controller.chooseDial('central',false);pose();assert.equal(controller.state.side,'back');
  await controller.chooseDial('central',true,'lance');pose();assert.equal(controller.state.side,'front');assert.equal(controller.state.smallVisible,true);
- controller.patch({separation:1});pose();await controller.chooseDial('small',true);pose();assert.equal(controller.state.separation,1);
+ controller.patch({separation:1});pose();assert.equal(controller.state.viewAngle,'overview');await controller.chooseDial('small',true);pose();assert.equal(controller.state.separation,1);
  controller.group('display');controller.patch({partSpread:1});pose();await controller.chooseDial('central',true);pose();assert.equal(controller.state.group,'display');assert.equal(controller.state.partSpread,1);
  controller.group('energy');pose();const history=controller.history.length;await controller.chooseDial('central',true);pose();
  assert.equal(controller.state.group,null);assert.equal(controller.state.side,'front');assert.equal(controller.state.smallVisible,true);assert.equal(controller.history.length,history+1);
@@ -200,7 +200,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  assert.equal(loads,1);r.group('display');r.patch({partSpread:.5});r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);
  assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);assert.equal(r.state.side,'front');assert.equal(r.state.smallStyle,'pear');assert.equal(r.state.group,'display');assert.equal(r.state.partSpread,.5);
  r=makeRace();a=r.chooseDial('central',true);assert.equal(r.state.side,'front');b=r.chooseDial('small',true,'pear');assert.equal(r.state.side,'back');r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.side,'front');assert.deepEqual([r.state.centralVisible,r.state.smallVisible,r.state.smallStyle],[true,true,'pear']);
- r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'front');assert.equal(r.state.centralVisible,true);
+ r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'front');assert.equal(r.state.centralVisible,true);assert.equal(r.state.viewAngle,'overview');
  r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
  r=makeRace();a=r.configureDials({centralVisible:true});await r.configureDials({centralVisible:false});pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
  r=makeRace();a=r.configureDials({centralVisible:true,smallVisible:true});pending.shift().reject(Error('offline'));await a;assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);assert.equal(r.dialRequest.smallVisible,true);

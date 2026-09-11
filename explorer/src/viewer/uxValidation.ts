@@ -17,6 +17,21 @@ async function settle(v: MovementViewer) {
 export async function runUxChecks(v: MovementViewer) {
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   const canvas = v.renderer.domElement;
+  const dockButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>('.action-dock button'),
+  ];
+  checks.push({
+    name: 'Dock follows inspection, display, reset order in keyboard navigation',
+    pass:
+      dockButtons
+        .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
+        .join('|') ===
+      'Explore|Separate|All parts|Dial & hands|Flip movement|Reset view',
+  });
+  checks.push({
+    name: 'Dock controls retain touch targets',
+    pass: dockButtons.every((b) => b.getBoundingClientRect().height >= 44),
+  });
   const sample = [...v.spread.keys()].find(
     (id) => v.renderParts.get(id)?.source.definitionId === 'd_0_1_1_225',
   )!;
@@ -86,26 +101,38 @@ export async function runUxChecks(v: MovementViewer) {
     );
   v.reset();
   await settle(v);
-  for (const label of ['Balance bridge', 'Third wheel', 'Setting lever', 'Dial ring', 'Screw', 'Regulation support']) {
+  for (const label of [
+    'Balance bridge',
+    'Third wheel',
+    'Setting lever',
+    'Dial ring',
+    'Screw',
+    'Regulation support',
+  ]) {
     const part = v.parts.find((p) => partLabel(p) === label)!;
     await v.select(part.id);
     await settle(v);
     const strip = document.querySelector<HTMLElement>('.focus-strip')!;
     checks.push({
       name: `${label}: selection shows only readable name and isolation action`,
-      pass: strip.querySelector('h2')?.textContent === label &&
+      pass:
+        strip.querySelector('h2')?.textContent === label &&
         strip.querySelectorAll('button').length === 1 &&
         strip.querySelector('button')?.textContent?.trim() === 'Isolate part' &&
         !strip.querySelector('.component-caption') &&
         !document.querySelector('#component-details') &&
-        ![part.id, part.definitionId, part.sourceInstanceId, part.name].some((id) => strip.innerText.includes(id)),
+        ![part.id, part.definitionId, part.sourceInstanceId, part.name].some(
+          (id) => strip.innerText.includes(id),
+        ),
     });
     strip.querySelector<HTMLButtonElement>('button')!.click();
     await settle(v);
-    checks.push({name: `${label}: isolation remains available`, pass: v.state.isolated && strip.innerText.includes('Show context')});
+    checks.push({
+      name: `${label}: isolation remains available`,
+      pass: v.state.isolated && strip.innerText.includes('Show context'),
+    });
     strip.querySelector<HTMLButtonElement>('button')!.click();
     await settle(v);
-
   }
   v.reset();
   await settle(v);

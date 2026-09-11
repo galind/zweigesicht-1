@@ -249,7 +249,7 @@ export default function Home() {
       }));
   };
   const dialSide = s.side;
-  const sideLabel = 'Switch side';
+  const sideLabel = 'Flip movement';
   const closePanels = () => {
     setExplore(false);
     setSeparate(false);
@@ -476,7 +476,11 @@ export default function Home() {
           </Sheet>
         </nav>
       </header>
-      <section className="workspace" aria-label="Movement explorer">
+      <section
+        className="workspace"
+        aria-label="Movement explorer"
+        style={{ bottom: panelBottom ?? undefined }}
+      >
         <div
           className="stage"
           ref={host}
@@ -649,53 +653,6 @@ export default function Home() {
         </Sheet>
         <Sheet
           modal={false}
-          open={dials}
-          onOpenChange={(open) => openPanel(setDials, open)}
-        >
-          <SheetTrigger
-            className="text-button dial-trigger"
-            disabled={!available}
-          >
-            <span>Dial &amp; hands</span>
-            <ChevronDown aria-hidden="true" />
-          </SheetTrigger>
-          <SheetContent
-            side="bottom"
-            style={panelStyle}
-            className="explorer-panel dial-panel"
-            showOverlay={false}
-            scrollContent
-          >
-            <SheetHeader>
-              <SheetTitle>Dial &amp; hands</SheetTitle>
-              <SheetDescription className="sr-only">
-                Show either dial, or both. Choose hands for each.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="panel-body">
-              <DialControls
-                state={s}
-                viewer={() => viewer.current}
-                available={available}
-              />
-            </div>
-          </SheetContent>
-        </Sheet>
-        <button
-          className="text-button all-parts-button"
-          disabled={!available}
-          aria-pressed={s.layout === 'spread'}
-          onClick={() => {
-            closePanels();
-            if (s.layout === 'spread') chooseGroup(null);
-            else viewer.current?.allParts();
-          }}
-        >
-          All parts
-        </button>
-
-        <Sheet
-          modal={false}
           open={separate}
           onOpenChange={(open) => openPanel(setSeparate, open)}
         >
@@ -803,6 +760,53 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
+        <button
+          className="text-button all-parts-button"
+          disabled={!available}
+          aria-pressed={s.layout === 'spread'}
+          onClick={() => {
+            closePanels();
+            if (s.layout === 'spread') chooseGroup(null);
+            else viewer.current?.allParts();
+          }}
+        >
+          All parts
+        </button>
+
+        <Sheet
+          modal={false}
+          open={dials}
+          onOpenChange={(open) => openPanel(setDials, open)}
+        >
+          <SheetTrigger
+            className="text-button dial-trigger"
+            disabled={!available}
+          >
+            <span>Dial &amp; hands</span>
+            <ChevronDown aria-hidden="true" />
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            style={panelStyle}
+            className="explorer-panel dial-panel"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>Dial &amp; hands</SheetTitle>
+              <SheetDescription className="sr-only">
+                Show either dial, or both. Choose hands for each.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="panel-body">
+              <DialControls
+                state={s}
+                viewer={() => viewer.current}
+                available={available}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
         <div className="side-slot">
           <button
             className="side-switch text-button"
@@ -824,7 +828,7 @@ export default function Home() {
           className="text-button reset-button"
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
-          title="Reassemble and recenter; keep dials and hands"
+          title="Return to the tilted overview; keep dials and hands"
           onClick={() => {
             closePanels();
             if (viewer.current) viewer.current.reset();

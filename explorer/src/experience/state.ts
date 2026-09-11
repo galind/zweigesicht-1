@@ -17,6 +17,7 @@ export interface ExperienceState {
   group: string | null;
   part: string | null;
   side: 'back' | 'front';
+  viewAngle: 'overview' | 'face';
   separation: number;
   partSpread: number;
   reveal: number;
@@ -34,6 +35,7 @@ export const initialState: ExperienceState = {
   group: null,
   part: null,
   side: 'back',
+  viewAngle: 'overview',
   separation: 0,
   partSpread: 0,
   reveal: 0,
@@ -51,6 +53,7 @@ export function resolveState(
   for (const key of Object.keys(next))
     if (!(key in initialState))
       delete (next as unknown as Record<string, unknown>)[key];
+  next.viewAngle = next.viewAngle === 'face' ? 'face' : 'overview';
   next.centralVisible = next.centralVisible === true;
   next.smallVisible = next.smallVisible === true;
   next.presentation =

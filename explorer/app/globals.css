@@ -522,15 +522,8 @@ canvas:focus-visible {
 .action-dock .text-button {
   white-space: nowrap;
 }
-.action-dock .explore-button {
-  background: #e7e1d5;
-  color: #24211c;
-}
-.action-dock .explore-button:hover {
-  background: #fff5e2;
-  color: #171717;
-}
-.action-dock [aria-expanded='true']:not(.explore-button) {
+.action-dock [aria-expanded='true'],
+.action-dock .all-parts-button[aria-pressed='true'] {
   background: #ffffff12;
   color: white;
 }
@@ -932,9 +925,6 @@ canvas:focus-visible {
   .action-dock .text-button {
     padding: 8px 6px;
   }
-  .action-dock > .text-button > svg:last-child:not(:first-child) {
-    display: none;
-  }
   .action-dock .separate-trigger {
     min-width: 74px;
   }
@@ -1218,4 +1208,89 @@ canvas:focus-visible {
 }
 .text-enlarged .part-selection .focus-title h2 {
   flex: 1 1 160px;
+}
+
+/* Inspection, display, then recovery — DOM order also owns keyboard order. */
+.action-dock .dial-trigger,
+.action-dock .reset-button {
+  margin-left: 12px;
+}
+.action-dock .reset-button {
+  color: #aaa8a4;
+}
+@media (max-width: 780px) {
+  .action-dock {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: calc(100% - var(--edge-left) - var(--edge-right));
+    gap: 4px;
+  }
+  .action-dock .text-button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    padding: 7px 5px;
+    font-size: 0.8125rem;
+    white-space: normal;
+  }
+  .action-dock .explore-button {
+    grid-area: 1 / 1;
+  }
+  .action-dock .separate-trigger {
+    grid-area: 1 / 2;
+  }
+  .action-dock .all-parts-button {
+    grid-area: 1 / 3;
+  }
+  .action-dock .dial-trigger {
+    grid-area: 2 / 1;
+  }
+  .action-dock .side-slot {
+    grid-area: 2 / 2;
+    min-width: 0;
+  }
+  .action-dock .reset-button {
+    grid-area: 2 / 3;
+  }
+  .action-dock .side-switch span,
+  .action-dock .reset-button span {
+    display: inline;
+  }
+  .action-dock .side-switch > svg,
+  .action-dock .reset-button > svg {
+    display: none;
+  }
+  .action-dock .explore-button > svg,
+  .action-dock .separate-trigger > svg,
+  .action-dock .dial-trigger > svg {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+  .workspace {
+    bottom: calc(var(--bottom) + 104px);
+  }
+  .text-enlarged .action-dock {
+    width: calc(100% - var(--edge-left) - var(--edge-right));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .text-enlarged .action-dock .explore-button {
+    grid-area: 1 / 1;
+  }
+  .text-enlarged .action-dock .separate-trigger {
+    grid-area: 1 / 2;
+  }
+  .text-enlarged .action-dock .all-parts-button {
+    grid-area: 2 / 1;
+  }
+  .text-enlarged .action-dock .dial-trigger {
+    grid-area: 2 / 2;
+  }
+  .text-enlarged .action-dock .side-slot {
+    grid-area: 3 / 1;
+  }
+  .text-enlarged .action-dock .reset-button {
+    grid-area: 3 / 2;
+  }
 }

@@ -23,6 +23,17 @@ export async function runDialChecks(v: MovementViewer) {
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   const check = (name: string, pass: boolean, details?: unknown) =>
     checks.push({ name, pass, details });
+  const faceOn = () => {
+    const direction = v.camera.position
+      .clone()
+      .sub(v.controls.target)
+      .normalize();
+    return (
+      v.state.viewAngle === 'face' &&
+      Math.abs(direction.x) < 1e-8 &&
+      Math.abs(direction.y) < 1e-8
+    );
+  };
   const prefs = () =>
     JSON.stringify([
       v.state.centralVisible,
@@ -175,6 +186,7 @@ export async function runDialChecks(v: MovementViewer) {
         `${label}: Reset keeps visibility/styles/side and reassembles from inventory`,
         before === prefs() &&
           v.state.side === resetSide &&
+          v.state.viewAngle === 'overview' &&
           exact() &&
           v.state.layout === 'assembly' &&
           v.assemblyError('presentation') === 0,
@@ -292,6 +304,7 @@ export async function runDialChecks(v: MovementViewer) {
   check(
     'Menu enable turns to Three hands and shows its complete dial',
     v.state.side === 'front' &&
+      faceOn() &&
       exact() &&
       v.state.centralVisible &&
       !v.state.smallVisible,
@@ -301,6 +314,7 @@ export async function runDialChecks(v: MovementViewer) {
   check(
     'Menu style choice enables Skeleton and faces it without hiding Three hands',
     v.state.side === 'back' &&
+      faceOn() &&
       exact() &&
       v.state.centralVisible &&
       v.state.smallVisible &&
@@ -421,6 +435,7 @@ export async function runDialChecks(v: MovementViewer) {
     'Reset retains pending dial preferences and current side while reassembling',
     prefs() === resetPreferences &&
       v.state.side === resetSide &&
+      v.state.viewAngle === 'overview' &&
       v.state.layout === 'assembly' &&
       v.state.separation === 0 &&
       v.state.partSpread === 0 &&

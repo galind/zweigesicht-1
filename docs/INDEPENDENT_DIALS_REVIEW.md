@@ -55,3 +55,10 @@ Verification: seven state tests, 78 CPU/runtime checks, lint, TypeScript and bui
 ### Reset view keeps the configured displays
 
 Reset now retains both visibility preferences, both hand styles and the current side. It clears exploration/layout/selection/separation and recenters the assembled view. The initial opening remains unchanged. Retained incomplete geometry reconciles through the shared catalog load, and failure stays retryable. Verification: eight state tests, 79 CPU/runtime checks, lint, TypeScript and build; 77 desktop browser dial checks; manual mobile reset with both non-default displays and exact reassembly. Evidence: ignored `artifacts/browser/reset-keeps-dials/`.
+
+
+### Tilted Reset and exact dial-facing intent
+
+The opening and Reset now use a gentle overview, approximately 18° sideways and 12° vertically. Reset preserves visibility, styles and the current side. Enabling a dial or choosing its style uses a straight-on view of that dial; hiding leaves the camera intent unchanged. Flip movement retains the overview/face mode. Resizing also retains it, including Three hands selected within Time display. Starting separation restores the dimensional view without changing display preferences. All parts continues to use its existing forward-facing inventory. Camera intent is part of saved state, allowing Back and asynchronous completion to preserve the user's newer choice.
+
+Verification for this follow-up: nine state tests, 80 CPU/source/runtime checks, lint, TypeScript and production build pass. Browser evidence includes 19 desktop camera checks, 77 desktop dial checks and 49 mobile UX checks. Manual checks cover both separated displays and exact restoration, dial-facing resize inside Time display, 320 px/200% text, 740 px dock containment and 844 px landscape. Evidence: ignored `artifacts/browser/tilted-overview/`. Existing build warnings, physical-device and screen-reader limitations, appearance acceptance and mechanical/publication gates remain unchanged.

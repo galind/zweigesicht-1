@@ -42,12 +42,19 @@ test('obsolete appearance input is discarded from patches and historical state',
 
 test('Reset view preserves all dial combinations, styles and current side while clearing exploration',()=>{
  for(const centralVisible of [false,true]) for(const smallVisible of [false,true]) for(const side of ['front','back']) {
-  const before=resolveState(initialState,{centralVisible,smallVisible,centralStyle:'open-lance',smallStyle:'pear',side,group:'display',part:'part',isolated:true,separation:1,partSpread:.8,reveal:1});
+  const before=resolveState(initialState,{centralVisible,smallVisible,centralStyle:'open-lance',smallStyle:'pear',side,viewAngle:'face',group:'display',part:'part',isolated:true,separation:1,partSpread:.8,reveal:1});
   for(const layout of ['assembly','spread']) {
    const reset=resetViewState({...before,layout});
    for(const key of ['centralVisible','smallVisible','centralStyle','smallStyle','side'])assert.equal(reset[key],before[key]);
-   assert.equal(reset.layout,'assembly');assert.equal(reset.group,null);assert.equal(reset.part,null);assert.equal(reset.isolated,false);
+   assert.equal(reset.viewAngle,'overview');assert.equal(reset.layout,'assembly');assert.equal(reset.group,null);assert.equal(reset.part,null);assert.equal(reset.isolated,false);
    assert.equal(reset.separation,0);assert.equal(reset.partSpread,0);assert.equal(reset.reveal,0);
   }
  }
+});
+
+test('camera intent normalizes and survives unrelated state changes',()=>{
+ assert.equal(initialState.viewAngle,'overview');
+ assert.equal(resolveState(initialState,{viewAngle:'unknown'}).viewAngle,'overview');
+ const face=resolveState(initialState,{viewAngle:'face'});
+ for(const patch of [{side:'front'},{side:'back'},{centralVisible:true},{smallStyle:'pear'}])assert.equal(resolveState(face,patch).viewAngle,'face');
 });

@@ -760,18 +760,38 @@ for(const aspect of [1280/504,374/560,304/456,1920/864]) {
  const center=framing.controls.target.clone(),position=framing.camera.position.clone(),radius=position.distanceTo(center);
  assert.ok(Number.isFinite(radius)&&radius>40);
  assert.ok(Math.abs(center.x)<1e-9 && Math.abs(center.y)<1e-9,'The central hand arbor is the movement framing anchor, independent of the stem');
+ let faceRadius;
+ assert.ok(position.clone().sub(center).normalize().distanceTo(new THREE.Vector3(.32,.22,-1).normalize())<1e-9,'Opening uses the tilted overview');
  for(const side of ['front','back']) {
-  framing.state={...initialState,presentation:'dials',side};framing.camera.up.set(.3,.4,.5).normalize();framing.frameDials();
+  framing.state={...initialState,presentation:'dials',side,viewAngle:'face'};framing.camera.up.set(.3,.4,.5).normalize();framing.frameDials();
   assert.ok(framing.controls.target.distanceTo(center)<1e-9,'All assembled presentations use the same center');
-  assert.ok(Math.abs(framing.camera.position.distanceTo(center)-radius)<1e-9,'Both faces use the same scale even after a rolled camera');
+  faceRadius ??= framing.camera.position.distanceTo(center);
+  assert.ok(Math.abs(framing.camera.position.distanceTo(center)-faceRadius)<1e-9,'Both faces use the same scale even after a rolled camera');
+  assert.ok(framing.camera.position.clone().sub(center).normalize().distanceTo(new THREE.Vector3(0,0,side==='front'?1:-1))<1e-9,'Dial presets are exactly face-on');
   assert.equal(framing.camera.up.y,side==='front'?1:-1);
  }
  framing.state={...initialState};framing.fitPresentation();
  assert.ok(framing.camera.position.distanceTo(position)<1e-9,'Reassembly framing must equal the opening preset');
+ framing.state.presentation='dials';framing.frameDials();
+ assert.equal(framing.state.viewAngle,'overview');
+ assert.ok(framing.camera.position.distanceTo(position)<1e-9,'Visible-dial resize framing preserves the tilted overview');
  framing.renderParts=v.renderParts;framing.homeCamera(true);
  assert.ok(framing.camera.position.distanceTo(position)<1e-9,'Optional catalog availability cannot change the default');
 }
-results.push({check:'assembled framing shares center/radius across both faces, ignores prior rolled up vectors and optional catalog, and reassembly returns to the opening preset at four aspects',status:'pass',scope:'actual framing methods with real OrbitControls and source metadata'});
+results.push({check:'tilted opening and exact axial dial framing share a center, both faces share scale, and reassembly restores the overview at four aspects',status:'pass',scope:'actual framing methods with real OrbitControls and source metadata'});
+
+// Exercise resize routing itself: it must not replace a chosen face with a group's authored side.
+Object.assign(framing,{fitted:new Map(),ready:true,host:{clientWidth:390,clientHeight:680},renderer:{setSize(){}},invalidate(){},ensureFramingRange(){},restoringCamera:null});
+for(const state of [
+ {...initialState,centralVisible:true,presentation:'dials'},
+ {...initialState,centralVisible:true,presentation:'dials',group:'display',side:'front',viewAngle:'face'}
+]) {
+ framing.state=state;framing.camera.aspect=2;framing.resize();
+ assert.equal(framing.state.viewAngle,state.viewAngle);
+ const direction=framing.camera.position.clone().sub(framing.controls.target).normalize();
+ assert.ok(direction.distanceTo(state.viewAngle==='face'?new THREE.Vector3(0,0,1):new THREE.Vector3(.32,.22,-1).normalize())<1e-8,'Resize preserves the current overview or selected section dial face');
+}
+results.push({check:'viewport resize preserves Reset overview with visible dials and exact selected face inside Time display',status:'pass'});
 
 const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
 Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
