@@ -1593,7 +1593,7 @@ export class MovementViewer {
             !this.fitted.has(selection)
           );
         // Dedicated electric cobalt lacquer, independent of heat-blued steel.
-        enamel.color.setHex(fitted ? 0x1053d2 : finish.color);
+        enamel.color.setHex(fitted ? 0x0e47ba : finish.color);
         enamel.metalness = fitted ? 0.15 : finish.metalness;
         enamel.roughness = fitted ? 0.18 : finish.roughness;
         enamel.transmission = 0;

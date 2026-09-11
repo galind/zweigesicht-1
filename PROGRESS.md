@@ -356,3 +356,8 @@ Verified lint, TypeScript, production build and all 87 source/runtime checks. Br
 ## Slightly darker electric cobalt — 11 September 2026
 
 Darkened only the fitted Skeleton inner-ring base color from #1265ee to #1053d2 after user review. The electric-cobalt lacquer response and all other finishes are preserved. Lint, TypeScript and production build pass. Browser review confirms the darker shade; screenshot: ignored `artifacts/browser/dial-polish/darker-electric-blue.png`. Preview remains open on Skeleton for appearance review. No publication or push.
+
+
+## Deeper cobalt follow-up — 11 September 2026
+
+Darkened the fitted Skeleton inner ring one further step, from #1053d2 to #0e47ba, as requested. Material response and all other finishes remain unchanged. Lint, TypeScript and production build pass; local browser appearance reviewed. Evidence: ignored `artifacts/browser/dial-polish/deeper-cobalt.png`. Preview remains on Skeleton for user review. No publication or push.
