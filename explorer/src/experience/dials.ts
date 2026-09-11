@@ -3,18 +3,36 @@ import type { ExperienceState } from './state';
 export const DIALS = configurations;
 export type DialFace = 'central' | 'small';
 export type DialView = 'movement' | DialFace;
-export function dialView(state: ExperienceState): DialView {
-  return state.presentation === 'movement'
-    ? 'movement'
-    : state.side === 'front'
-      ? 'central'
-      : 'small';
+export type DialPreferences = Pick<
+  ExperienceState,
+  'centralVisible' | 'smallVisible' | 'centralStyle' | 'smallStyle'
+>;
+export function fittedLeaves(state: DialPreferences): Set<string> {
+  const leaves = new Set<string>();
+  for (const face of ['central', 'small'] as const) {
+    if (!state[face === 'central' ? 'centralVisible' : 'smallVisible'])
+      continue;
+    const config = DIALS.faces[face];
+    const id = state[face === 'central' ? 'centralStyle' : 'smallStyle'];
+    const style = config.styles.find((s) => s.id === id) ?? config.styles[0];
+    for (const leaf of [...config.structureLeafIds, ...style.leafIds])
+      leaves.add(leaf);
+  }
+  return leaves;
 }
-export function fittedLeaves(state: ExperienceState): Set<string> {
-  if (state.presentation !== 'dials') return new Set();
-  const face = state.side === 'front' ? 'central' : 'small';
-  const config = DIALS.faces[face];
-  const id = face === 'central' ? state.centralStyle : state.smallStyle;
-  const style = config.styles.find((s) => s.id === id) ?? config.styles[0];
-  return new Set([...config.structureLeafIds, ...style.leafIds]);
+
+// Reviewed presentation hosts; source identities and geometry remain external.
+const movementPrefix = 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_';
+export function displayFace(id: string): DialFace | undefined {
+  return (['central', 'small'] as const).find((face) =>
+    id.startsWith(DIALS.faces[face].rootId + '__'),
+  );
+}
+export function displayHostPart(id: string): string {
+  const face = displayFace(id);
+  return face === 'central'
+    ? movementPrefix + '20'
+    : face === 'small'
+      ? movementPrefix + '37__0_1_1_182_1'
+      : id;
 }

@@ -30,9 +30,13 @@ export const SPREAD_GROUPS = [
 ];
 /** Layout is evaluated from actual immutable geometry in source millimetres.
  * Pack whole projected bounding boxes; never use manifest triangle/size filters. */
-export function makeSpread(parts: Iterable<SpreadInput>, aspect = 2) {
+export function makeSpread(
+  parts: Iterable<SpreadInput>,
+  aspect = 2,
+  fitted = new Set<string>(),
+) {
   const entries = [...parts]
-    .filter((p) => spreadMember(p.source))
+    .filter((p) => spreadMember(p.source) || fitted.has(p.source.id))
     .sort((a, b) => a.source.id.localeCompare(b.source.id));
   const blocks = SPREAD_GROUPS.map(
     () =>
@@ -81,7 +85,13 @@ export function makeSpread(parts: Iterable<SpreadInput>, aspect = 2) {
     const hardware = /^(010|020)|schraube|stift|stein|scheibe/i.test(
       p.source.name,
     );
-    const group = mechanism >= 0 ? mechanism : hardware ? 7 : 6;
+    const group = fitted.has(p.source.id)
+      ? GROUPS.findIndex((g) => g.id === 'display')
+      : mechanism >= 0
+        ? mechanism
+        : hardware
+          ? 7
+          : 6;
     blocks[group].push({
       p,
       rotation,

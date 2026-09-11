@@ -1,5 +1,5 @@
 import type { MovementViewer } from '../viewer/MovementViewer';
-import { DIALS, type DialView, type DialFace } from './dials';
+import { type DialPreferences } from './dials';
 import { GROUPS } from './catalog';
 type Tool = {
   name: string;
@@ -27,6 +27,8 @@ export function registerMovementTools(viewer: MovementViewer) {
       ready: s.ready,
       layout: s.layout,
       presentation: s.presentation,
+      centralVisible: s.centralVisible,
+      smallVisible: s.smallVisible,
       centralStyle: s.centralStyle,
       smallStyle: s.smallStyle,
       dialRequest: s.dialRequest,
@@ -70,40 +72,26 @@ export function registerMovementTools(viewer: MovementViewer) {
     {
       name: 'configure_dials',
       description:
-        'Show Movement (no dial), Three hands (central) or Skeleton (small); show only the selected display, remembering independent hand styles.',
+        'Set independent Three hands (central) and Skeleton (small) visibility and hand styles without changing side or separation.',
       inputSchema: {
         type: 'object',
         properties: {
-          view: { type: 'string', enum: ['movement', 'central', 'small'] },
-          face: { type: 'string', enum: ['central', 'small'] },
-          style: {
+          centralVisible: { type: 'boolean' },
+          smallVisible: { type: 'boolean' },
+          centralStyle: {
             type: 'string',
-            enum: [
-              ...new Set(
-                [
-                  ...DIALS.faces.central.styles,
-                  ...DIALS.faces.small.styles,
-                ].map((s) => s.id),
-              ),
-            ],
+            enum: ['fine', 'lance', 'open-lance'],
+          },
+          smallStyle: {
+            type: 'string',
+            enum: ['lance', 'broad-lance', 'pear'],
           },
         },
-        required: ['view'],
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false },
       execute: async (input) => {
-        const { view, face, style } = input as {
-          view: DialView;
-          face?: DialFace;
-          style?: string;
-        };
-        if (
-          !['movement', 'central', 'small'].includes(view) ||
-          (face && !['central', 'small'].includes(face))
-        )
-          throw new Error('Invalid display');
-        await viewer.showDial(view, face, style);
+        await viewer.configureDials(input as Partial<DialPreferences>);
         return settle();
       },
     },

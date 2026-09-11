@@ -341,13 +341,60 @@ canvas:focus-visible {
   background: #deddd8;
   color: #171717;
 }
-.dial-label {
-  margin: 22px 0 10px;
-  font-size: 0.875rem;
+.dial-face + .dial-face {
+  border-top: 1px solid #ffffff20;
+  margin-top: 16px;
+  padding-top: 12px;
 }
-.dial-label span {
-  float: right;
+.dial-visibility {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  font-size: 1rem;
+  text-align: left;
+  border-radius: 6px;
+}
+.dial-toggle-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
   color: #aaa8a4;
+}
+.dial-switch {
+  width: 32px;
+  height: 20px;
+  border: 1px solid #aaa8a4;
+  border-radius: 12px;
+  padding: 3px;
+}
+.dial-switch::after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: #aaa8a4;
+  border-radius: 50%;
+}
+.dial-visibility[aria-pressed='true'] .dial-switch {
+  background: #deddd8;
+  border-color: #deddd8;
+}
+.dial-visibility[aria-pressed='true'] .dial-switch::after {
+  transform: translateX(12px);
+  background: #171717;
+}
+.dial-visibility[aria-pressed='true'] .dial-toggle-state {
+  color: #deddd8;
+}
+.dial-style-row {
+  margin-top: 6px;
+}
+.dial-options [data-slot='toggle-group-item'] {
+  min-height: 44px;
 }
 .dial-status {
   display: block;

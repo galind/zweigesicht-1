@@ -1,6 +1,6 @@
 'use client';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { DIALS, dialView, type DialView } from '@/src/experience/dials';
+import { DIALS } from '@/src/experience/dials';
 import type {
   MovementViewer,
   ViewerSnapshot,
@@ -15,48 +15,56 @@ export function DialControls({
   viewer: () => MovementViewer | null;
   available: boolean;
 }) {
-  const view = state.dialRequest?.view ?? dialView(state);
-  const face = view === 'central' ? 'central' : 'small';
-  const faceLabel = face === 'central' ? 'Three hands' : 'Skeleton';
-  const style =
-    face === 'central'
-      ? (state.dialRequest?.centralStyle ?? state.centralStyle)
-      : (state.dialRequest?.smallStyle ?? state.smallStyle);
-  const controls = (
+  return (
     <div className="dial-options">
-      <ToggleGroup
-        aria-label="Display view"
-        value={[view]}
-        disabled={!available}
-        onValueChange={(values) => {
-          if (values[0]) void viewer()?.showDial(values[0] as DialView);
-        }}
-      >
-        <ToggleGroupItem value="movement">Movement</ToggleGroupItem>
-        <ToggleGroupItem value="central">Three hands</ToggleGroupItem>
-        <ToggleGroupItem value="small">Skeleton</ToggleGroupItem>
-      </ToggleGroup>
-      {view !== 'movement' && (
-        <>
-          <p className="dial-label">
-            Hands <span>{faceLabel}</span>
-          </p>
-          <ToggleGroup
-            aria-label={`${faceLabel} hand styles`}
-            value={[style]}
-            disabled={!available}
-            onValueChange={(values) => {
-              if (values[0]) void viewer()?.showDial(view, face, values[0]);
-            }}
+      {(['central', 'small'] as const).map((face) => {
+        const label = face === 'central' ? 'Three hands' : 'Skeleton';
+        const visibilityKey =
+          face === 'central' ? 'centralVisible' : 'smallVisible';
+        const styleKey = face === 'central' ? 'centralStyle' : 'smallStyle';
+        return (
+          <section
+            className="dial-face"
+            key={face}
+            aria-label={`${label} display`}
           >
-            {DIALS.faces[face].styles.map((hand) => (
-              <ToggleGroupItem key={hand.id} value={hand.id}>
-                {hand.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </>
-      )}
+            <button
+              className="dial-visibility"
+              type="button"
+              aria-pressed={state[visibilityKey]}
+              disabled={!available}
+              onClick={() =>
+                void viewer()?.configureDials({
+                  [visibilityKey]: !state[visibilityKey],
+                })
+              }
+            >
+              <span>{label}</span>
+              <span className="dial-toggle-state" aria-hidden="true">
+                {state[visibilityKey] ? 'Shown' : 'Hidden'}
+                <span className="dial-switch" />
+              </span>
+            </button>
+            <div className="dial-style-row">
+              <ToggleGroup
+                aria-label={`${label} hand styles`}
+                value={[state[styleKey]]}
+                disabled={!available}
+                onValueChange={(values) => {
+                  if (values[0])
+                    void viewer()?.configureDials({ [styleKey]: values[0] });
+                }}
+              >
+                {DIALS.faces[face].styles.map((hand) => (
+                  <ToggleGroupItem key={hand.id} value={hand.id}>
+                    {hand.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+          </section>
+        );
+      })}
       <output aria-live="polite" className="dial-status">
         {state.dialError || (state.dialRequest ? 'Loading dials…' : '')}
       </output>
@@ -71,5 +79,4 @@ export function DialControls({
       )}
     </div>
   );
-  return controls;
 }

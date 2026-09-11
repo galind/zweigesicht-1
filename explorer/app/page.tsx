@@ -248,12 +248,7 @@ export default function Home() {
         phase: id ? 'mechanism' : 'whole',
       }));
   };
-  const dialSide =
-    s.dialRequest && s.dialRequest.view !== 'movement'
-      ? s.dialRequest.view === 'central'
-        ? 'front'
-        : 'back'
-      : s.side;
+  const dialSide = s.side;
   const sideLabel = 'Switch side';
   const closePanels = () => {
     setExplore(false);
@@ -630,11 +625,7 @@ export default function Home() {
             <div className="panel-body explore-menu">
               <button
                 className="menu-link"
-                aria-pressed={
-                  !s.group &&
-                  s.layout === 'assembly' &&
-                  s.presentation === 'movement'
-                }
+                aria-pressed={!s.group && s.layout === 'assembly'}
                 onClick={() => chooseGroup(null)}
               >
                 Whole movement <ChevronRight aria-hidden="true" />
@@ -677,7 +668,9 @@ export default function Home() {
           >
             <SheetHeader>
               <SheetTitle>Dial &amp; hands</SheetTitle>
-              <SheetDescription>Choose a face and its hands.</SheetDescription>
+              <SheetDescription className="sr-only">
+                Show either dial, or both. Choose hands for each.
+              </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
               <DialControls
@@ -863,41 +856,39 @@ export default function Home() {
           <div className="about-copy">
             {group && (
               <>
-                  <ul className="detail-facts">
-                    {factsFor(group.id).map((f) => (
-                      <li key={f.text}>
-                        {f.text}{' '}
-                        <a href={f.url} target="_blank" rel="noreferrer">
-                          {f.attribution} <ExternalLink aria-hidden="true" />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="secondary">
-                    Other mechanisms are hidden; connected parts stay dimmed. In
-                    Separate, Uncover moves this section’s covers aside.
-                    Separate section spaces its own components.
-                    {group.id === 'regulation' &&
-                      ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}
-                  </p>
-                  <h3>Components</h3>
-                  <div className="catalog-index">
-                    {members.map((p) => (
-                      <button
-                        key={p.id}
-                        disabled={!available}
-                        onClick={() => selectPart(p.id)}
-                      >
-                        <span>
-                          {partLabel(p)}
-                          <small>
-                            {partIndex.get(p.id)?.context}
-                          </small>
-                        </span>{' '}
-                        <ChevronRight aria-hidden="true" />
-                      </button>
-                    ))}
-                  </div>
+                <ul className="detail-facts">
+                  {factsFor(group.id).map((f) => (
+                    <li key={f.text}>
+                      {f.text}{' '}
+                      <a href={f.url} target="_blank" rel="noreferrer">
+                        {f.attribution} <ExternalLink aria-hidden="true" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="secondary">
+                  Other mechanisms are hidden; connected parts stay dimmed. In
+                  Separate, Uncover moves this section’s covers aside. Separate
+                  section spaces its own components.
+                  {group.id === 'regulation' &&
+                    ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}
+                </p>
+                <h3>Components</h3>
+                <div className="catalog-index">
+                  {members.map((p) => (
+                    <button
+                      key={p.id}
+                      disabled={!available}
+                      onClick={() => selectPart(p.id)}
+                    >
+                      <span>
+                        {partLabel(p)}
+                        <small>{partIndex.get(p.id)?.context}</small>
+                      </span>{' '}
+                      <ChevronRight aria-hidden="true" />
+                    </button>
+                  ))}
+                </div>
               </>
             )}
           </div>

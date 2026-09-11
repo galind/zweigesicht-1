@@ -60,75 +60,95 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    }
  }
  results.push({check:'all nine remembered style pairs on each face: exactly 22 central or 21 small leaves, no opposite dial, complete supports, source geometry and matrices unchanged',status:'pass'});
- const prior={...controller.state};const camera=controller.camera.position.clone();const frames=controller.framings;
- await controller.showDial('small','small','lance');assert.equal(controller.framings,frames);assert.ok(camera.equals(controller.camera.position));
- controller.back();assert.equal(controller.state.smallStyle,prior.smallStyle);assert.equal(controller.state.centralStyle,prior.centralStyle);
- const historyCount=controller.history.length;controller.group('energy');assert.equal(controller.history.length,historyCount+1);assert.equal(controller.state.presentation,'movement');controller.back();assert.equal(controller.state.presentation,'dials');
- controller.scrub({separation:.4});assert.equal(controller.state.presentation,'movement');controller.back();assert.equal(controller.state.presentation,'dials');
- controller.allParts();assert.equal(controller.state.presentation,'movement');assert.equal(controller.spread.size,216);controller.back();assert.equal(controller.state.presentation,'dials');
- const raw=DIALS.presentationOverrides[0].leafId;
- await controller.select(raw);assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,1);
- assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x6c2031);assert.equal(controller.renderParts.get(raw).material.transmission,0);
- controller.patch({isolated:true});assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,1);
- controller.back();assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement)).length,21);
- assert.equal(controller.renderParts.get(raw).material.color.getHex(),0x062e78);assert.equal(controller.renderParts.get(raw).material.transmission,.58);
- await controller.showDial('central','central','lance');controller.applyPose(0);
- const lanceSeconds=DIALS.faces.central.styles.find(s=>s.id==='lance').handLeafIds.seconds;
- const sourceMatrix=controller.renderParts.get(lanceSeconds).assembled.clone();
- assert.ok(!controller.renderParts.get(lanceSeconds).mesh.matrix.equals(sourceMatrix));
- await controller.select(lanceSeconds);controller.applyPose(0);
- assert.ok(controller.renderParts.get(lanceSeconds).mesh.matrix.equals(sourceMatrix),'Raw catalog restores original off-axis seconds');
- controller.back();controller.applyPose(0);
- assert.ok(!controller.renderParts.get(lanceSeconds).mesh.matrix.equals(sourceMatrix));
- assert.equal(controller.assemblyError('presentation'),0);
- results.push({check:'all 15 actual decoded hand tips indicate 10:10:00 around analytic bores; rigid XY correction only, original Z/supports intact; raw Lance seconds and Back restore exact respective poses',status:'pass'});
- controller.reset();controller.applyPose(0);assert.equal(controller.assemblyError(),0);assert.equal(controller.state.presentation,'movement');assert.equal(controller.state.centralStyle,'fine');assert.equal(controller.state.smallStyle,'lance');
- controller.controls._quat=new THREE.Quaternion();controller.controls._quatInverse=new THREE.Quaternion();
- for(const up of [new THREE.Vector3(0,1,0),new THREE.Vector3(1,0,0),new THREE.Vector3(0,-1,0)]){
-   controller.camera.up.copy(up);controller.syncOrbitUp();
-   assert.ok(up.clone().applyQuaternion(controller.controls._quat).distanceTo(new THREE.Vector3(0,1,0))<1e-12);
-   assert.ok(new THREE.Vector3(0,1,0).applyQuaternion(controller.controls._quatInverse).distanceTo(up)<1e-12);
+ const pose=()=>{controller.applyPose(1);controller.retargetVisibility();};
+ const preferences=()=>[controller.state.centralVisible,controller.state.smallVisible,controller.state.centralStyle,controller.state.smallStyle];
+ for(const centralVisible of [false,true]) for(const smallVisible of [false,true]) {
+  controller.reset();
+  await controller.configureDials({centralVisible,smallVisible,centralStyle:'lance',smallStyle:'pear'});pose();
+  const expected=[...fittedLeaves(controller.state)];const prefs=preferences();
+  for(const side of ['front','back']) {controller.setSide(side);pose();assert.deepEqual(preferences(),prefs);}
+  for(const separation of [0,.2,.7,1,.35,0]) {
+   controller.patch({separation});pose();assert.deepEqual(preferences(),prefs);
+   for(const id of expected) {const p=controller.renderParts.get(id);assert.ok(p.mesh.visible);assert.equal(p.offset.x,0);assert.equal(p.offset.y,0);}
+   for(const face of ['central','small']) {
+    const packet=expected.filter(id=>belongs(id,DIALS.faces[face].rootId));
+    if(packet.length) assert.ok(packet.every(id=>controller.renderParts.get(id).offset.equals(controller.renderParts.get(packet[0]).offset)));
+   }
+  }
+  assert.equal(controller.assemblyError('presentation'),0);
+  controller.allParts();pose();assert.equal(controller.spread.size,216+expected.length);
+  assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,216+expected.length);
+  // Actual transformed boxes must equal packing boxes, including off-axis Lance seconds.
+  for(const id of expected) {
+   const p=controller.renderParts.get(id),box=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);
+   assert.ok(box.min.distanceTo(controller.spread.get(id).bounds.min)<1e-8);
+   assert.ok(box.max.distanceTo(controller.spread.get(id).bounds.max)<1e-8);
+   await controller.select(id);pose();assert.equal(controller.state.layout,'spread');
+  }
+  controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);assert.deepEqual(preferences(),prefs);
  }
- results.push({check:'style changes retain camera; Back restores dials after section/separation/spread/raw isolation; exact blue override reverts to raw red; Reset defaults',status:'pass'});
+ results.push({check:'all four visibility combinations preserve styles and side; enabled rigid packets separate/reassemble; all selected leaves packed at exact rendered bounds and selectable without leaving All parts',status:'pass'});
+ await controller.configureDials({centralVisible:true,smallVisible:true});pose();
+ for(const group of ['display','winding','energy','regulation','transmission','shock']) {
+  controller.group(group);pose();
+  const before=preferences();
+  for(const partSpread of [0,.5,1,.2,0]) {controller.patch({partSpread});pose();assert.deepEqual(preferences(),before);}
+  if(group==='display') {
+   for(const id of controller.fitted) {assert.ok(controller.renderParts.get(id).mesh.visible);assert.equal(controller.renderParts.get(id).offset.length(),0,'Uncover must not lift retained display with barrel bridge');}
+   controller.patch({partSpread:1});pose();
+   for(const id of controller.fitted) assert.equal(controller.renderParts.get(id).offset.z,belongs(id,DIALS.faces.central.rootId)?5:-6);
+  }
+ }
+ controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);
+ results.push({check:'all six scopes preserve display preferences; Time display Uncover leaves both packets assembled and section separation follows +5/-6 mm hosts',status:'pass'});
  controller.reduced=false;
- await controller.showDial('central');controller.applyPose(1);controller.retargetVisibility();
- const outgoing=[...controller.fitted];
- const fittedMatrices=new Map(outgoing.map(id=>[id,controller.renderParts.get(id).mesh.matrix.clone()]));
- await controller.showDial('small');controller.applyPose(0);controller.retargetVisibility();
- for(const id of outgoing){const p=controller.renderParts.get(id);assert.ok(p.mesh.visible);assert.equal(p.material.opacity,1);assert.ok(p.mesh.matrix.equals(fittedMatrices.get(id)),'Outgoing hands keep their 10:10 pose');}
- controller.applyPose(.21);controller.retargetVisibility();
- for(const id of outgoing)assert.ok(Math.abs(controller.renderParts.get(id).material.opacity-.5)<1e-12);
- const halfOpacity=controller.renderParts.get(outgoing[0]).material.opacity;
- await controller.showDial('central');controller.applyPose(0);
- assert.equal(controller.renderParts.get(outgoing[0]).material.opacity,halfOpacity,'Rapid reversal continues from displayed opacity');
- controller.travel=null;
- controller.applyPose(1);controller.retargetVisibility();
- assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite));
- await controller.showDial('small');controller.applyPose(.1);controller.allParts();controller.applyPose(1);controller.retargetVisibility();
+ await controller.configureDials({centralVisible:false});controller.applyPose(.15);
+ await controller.configureDials({centralVisible:true});controller.applyPose(.1);
+ controller.patch({separation:1});controller.applyPose(.2);
+ controller.allParts();controller.applyPose(.1);controller.group(null);pose();
+ assert.equal(controller.assemblyError('presentation'),0);
  assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&!p.mesh.userData.dialFading&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite));
- assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,216);
- controller.reduced=true;await controller.showDial('central');controller.applyPose(0);controller.retargetVisibility();
- assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade));
- controller.reset();controller.applyPose(0);controller.retargetVisibility();
- results.push({check:'dial fade keeps outgoing 10:10 matrices, interpolates opacity, reverses continuously, completes without camera travel and clears for inventory/reduced motion',status:'pass'});
+ // Scope restoration owns opacity until it settles; dial style/toggle changes cannot capture temporary flags.
+ for(const change of [{centralStyle:'fine'},{centralVisible:false},{smallStyle:'lance'}]) {
+  controller.reduced=true;await controller.configureDials({centralVisible:true,smallVisible:true});controller.group('energy');pose();
+  controller.reduced=false;controller.group(null);controller.applyPose(.1);
+  await controller.configureDials(change);pose();
+  assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&!p.cutaway&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite),'Interrupted section fade must restore original material state');
+ }
+ controller.reset();pose();assert.equal(controller.assemblyError(),0);assert.deepEqual(preferences(),[false,false,'fine','lance']);
+ results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset restores opening',status:'pass'});
  let pending=[],loads=0,disposed=0;
  class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
  const {MovementViewer:Race}=sourceModules({loader:Loader})('explorer/src/viewer/MovementViewer.ts');
  const makeRace=()=>Object.assign(make(Race),{catalogLoaded:false,ingest(){},disposeObject(){disposed++}});
- let r=makeRace();let a=r.showDial('central');let b=r.showDial('small','small','pear');
- assert.equal(r.state.presentation,'movement');assert.equal(loads,1);pending.shift().resolve({scene:{}});await Promise.all([a,b]);
- assert.equal(r.state.presentation,'dials');assert.equal(r.state.side,'back');assert.equal(r.state.smallStyle,'pear');
- r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'movement');assert.equal(r.dialRequest,null);
- r=makeRace();a=r.showDial('central');await r.showDial('movement');pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
- r=makeRace();a=r.showDial('central');pending.shift().reject(Error('offline'));await a;assert.equal(r.state.presentation,'movement');assert.ok(r.dialError);assert.equal(r.dialRequest.view,'central');
- a=r.showDial('small','small','broad-lance');pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'back');assert.equal(r.state.smallStyle,'broad-lance');assert.equal(r.dialError,'');
- r=makeRace();a=r.showDial('central');pending.shift().reject(Error('offline'));await a;b=r.retryDials();pending.shift().resolve({scene:{}});await b;assert.equal(r.state.side,'front');assert.equal(r.dialError,'');
- r=makeRace();a=r.showDial('central');r.patch({quality:'low',treatment:'function'});pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.quality,'low');assert.equal('treatment' in r.state,false);
- r=makeRace();a=r.showDial('central');r.cameraGeneration++;pending.shift().resolve({scene:{}});await a;assert.equal(r.framings,undefined,'Manual camera input during load owns camera');
- r=makeRace();a=r.showDial('central');r.dead=true;pending.shift().resolve({scene:{}});await a;assert.equal(disposed,1);assert.equal(r.state.presentation,'movement');
- r=makeRace();a=r.showDial('central');b=r.select(raw);pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.part,raw);assert.equal(r.state.presentation,'movement');
- r=makeRace();a=r.select(raw);b=r.showDial('small');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.part,null);assert.equal(r.state.presentation,'dials');
- results.push({check:'actual async controller: shared single catalog request, latest face/style wins, reset/movement cancellation, failure/retry/new intent, manual takeover, disposal, competing raw selection',status:'pass'});
+ let r=makeRace();let a=r.configureDials({centralVisible:true});let b=r.configureDials({smallVisible:true,smallStyle:'pear'});
+ assert.equal(loads,1);r.group('display');r.patch({partSpread:.5});r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);
+ assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);assert.equal(r.state.side,'front');assert.equal(r.state.smallStyle,'pear');assert.equal(r.state.group,'display');assert.equal(r.state.partSpread,.5);
+ r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'movement');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
+ r=makeRace();a=r.configureDials({centralVisible:true});await r.configureDials({centralVisible:false});pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
+ r=makeRace();a=r.configureDials({centralVisible:true,smallVisible:true});pending.shift().reject(Error('offline'));await a;assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);assert.equal(r.dialRequest.smallVisible,true);
+ r.setSide('front');r.allParts();a=r.retryDials();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.layout,'spread');assert.equal(r.dialError,'');assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);
+ r=makeRace();a=r.configureDials({centralVisible:true});r.cameraGeneration++;pending.shift().resolve({scene:{}});await a;assert.equal(r.framings,undefined);
+ r=makeRace();a=r.configureDials({centralVisible:true});r.dead=true;pending.shift().resolve({scene:{}});await a;assert.equal(disposed,1);
+ // A missing leaf cannot silently report a complete display; a retry can ingest it.
+ r=makeRace();r.renderParts=new Map(v.renderParts);const missing=DIALS.faces.central.structureLeafIds[0];const saved=r.renderParts.get(missing);r.renderParts.delete(missing);
+ a=r.configureDials({centralVisible:true});pending.shift().resolve({scene:{}});await a;assert.ok(r.dialError);
+ a=r.retryDials();r.renderParts.set(missing,saved);pending.shift().resolve({scene:{}});await a;assert.equal(r.dialError,'');
+ // Back after failure must reconcile restored preferences with missing geometry.
+ r=makeRace();r.renderParts=new Map([...v.renderParts].filter(([id])=>belongs(id,movement)));
+ a=r.configureDials({centralVisible:true});pending.shift().reject(Error('offline'));await a;
+ await r.configureDials({centralVisible:false});r.back();assert.ok(r.dialRequest);assert.equal(r.state.centralVisible,true);
+ const failedBack=r.catalogPending;pending.shift().reject(Error('still offline'));await failedBack.catch(()=>{});await Promise.resolve();assert.ok(r.dialError);
+ // Final full-separation packet envelopes clear real rendered movement geometry.
+ controller.reduced=true;controller.reset();await controller.configureDials({centralVisible:true,smallVisible:true});controller.patch({separation:1});pose();
+ const packetBox=(predicate)=>{const box=new THREE.Box3();for(const p of controller.renderParts.values())if(predicate(p))box.union(p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix));return box;};
+ const movementBox=packetBox(p=>belongs(p.source.id,movement));
+ const frontBox=packetBox(p=>controller.fitted.has(p.source.id)&&belongs(p.source.id,DIALS.faces.central.rootId));
+ const rearBox=packetBox(p=>controller.fitted.has(p.source.id)&&belongs(p.source.id,DIALS.faces.small.rootId));
+ assert.ok(frontBox.min.z-movementBox.max.z>=.999);assert.ok(movementBox.min.z-rearBox.max.z>=.999);
+ controller.reset();pose();
+ results.push({check:'fitted dial packet endpoints clear the actual transformed movement envelope by at least 0.999 mm; no collision-free service-path claim',status:'pass'});
+ results.push({check:'actual async controller: single shared load, latest independent intent, navigation during load, reset/hide cancellation, failure/retry in spread, missing-leaf retry, manual camera ownership and disposal',status:'pass'});
  // Verify XCAF-derived checks came from the exact protected STEP.
  assert.equal(fit.sourceSha256,DIALS.source.sha256);
  assert.equal(Object.values(fit.checks).length,50);assert.ok(Object.values(fit.checks).every(Boolean));

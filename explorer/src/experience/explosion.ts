@@ -1,3 +1,4 @@
+import { DIALS, displayFace, displayHostPart } from './dials';
 import complete from '../../../assets/derived/complete-separation.json';
 import authored from '../../../assets/authored/explosion.json';
 import { GROUPS, inMembers, type Part } from './catalog';
@@ -40,7 +41,7 @@ export function uncoverHost(id: string, group: string | null) {
   return false;
 }
 /** One evaluator owns all assembly presentation offsets. Source matrices are read only.
- * Inventory packing and fitted hand poses have separate, mutually exclusive ownership.
+ * Fitted hand poses compose underneath presentation offsets; packing owns spread offsets.
  */
 export function explosionOffsets(
   parts: Part[],
@@ -49,11 +50,38 @@ export function explosionOffsets(
   if (!state.group) {
     const progress = Math.max(0, Math.min(1, state.separation));
     const ids = new Set(parts.map((p) => p.id));
-    return new Map(
+    const result = new Map<string, Vec3>(
       complete.parts
         .filter((p) => ids.has(p.id))
         .map((p) => [p.id, p.offsetMm.map((n) => n * progress) as Vec3]),
     );
+    const minZ = Math.min(
+      ...complete.parts.map((p) => p.boundsWorldMm[0][2] + p.offsetMm[2]),
+    );
+    const maxZ = Math.max(
+      ...complete.parts.map((p) => p.boundsWorldMm[1][2] + p.offsetMm[2]),
+    );
+    for (const face of ['central', 'small'] as const) {
+      // Rigid display packets stay aligned, outside the movement's final
+      // envelope. This is presentation clearance, not a service sequence.
+      const structure = parts.filter(
+        (p) =>
+          DIALS.faces[face].structureLeafIds.includes(p.id) && p.boundsWorldMm,
+      );
+      if (!structure.length) continue;
+      const edge =
+        face === 'central'
+          ? Math.min(...structure.map((p) => p.boundsWorldMm![0][2]))
+          : Math.max(...structure.map((p) => p.boundsWorldMm![1][2]));
+      const z =
+        face === 'central'
+          ? maxZ + complete.gapMm - edge
+          : minZ - complete.gapMm - edge;
+      for (const part of parts)
+        if (!part.isAssembly && displayFace(part.id) === face)
+          result.set(part.id, [0, 0, z * progress]);
+    }
+    return result;
   }
   const byId = new Map(parts.map((p) => [p.id, p]));
   const focus =
@@ -110,6 +138,11 @@ export function explosionOffsets(
       for (let i = 0; i < 3; i++) offset[i] += direction[i] * distance;
     }
     result.set(rule.id, offset);
+  }
+  for (const part of parts) {
+    const proxy = displayHostPart(part.id);
+    if (!part.isAssembly && proxy !== part.id)
+      result.set(part.id, result.get(proxy) ?? [0, 0, 0]);
   }
   return result;
 }

@@ -8,7 +8,9 @@ export type Phase =
   | 'recovering';
 export interface ExperienceState {
   phase: Phase;
-  presentation: 'movement' | 'dials';
+  presentation: 'movement' | 'dials'; // Derived summary; visibility belongs to each face.
+  centralVisible: boolean;
+  smallVisible: boolean;
   centralStyle: string;
   smallStyle: string;
   layout: 'assembly' | 'spread';
@@ -24,6 +26,8 @@ export interface ExperienceState {
 export const initialState: ExperienceState = {
   phase: 'loading',
   presentation: 'movement',
+  centralVisible: false,
+  smallVisible: false,
   centralStyle: configurations.defaults.central,
   smallStyle: configurations.defaults.small,
   layout: 'assembly',
@@ -47,7 +51,10 @@ export function resolveState(
   for (const key of Object.keys(next))
     if (!(key in initialState))
       delete (next as unknown as Record<string, unknown>)[key];
-  next.presentation = next.presentation === 'dials' ? 'dials' : 'movement';
+  next.centralVisible = next.centralVisible === true;
+  next.smallVisible = next.smallVisible === true;
+  next.presentation =
+    next.centralVisible || next.smallVisible ? 'dials' : 'movement';
   for (const face of ['central', 'small'] as const) {
     const key = face === 'central' ? 'centralStyle' : 'smallStyle';
     if (
@@ -64,14 +71,6 @@ export function resolveState(
     next.partSpread = 0;
     next.reveal = 0;
   }
-  if (
-    next.layout === 'spread' ||
-    next.group ||
-    next.separation > 0 ||
-    next.partSpread > 0 ||
-    next.reveal > 0
-  )
-    next.presentation = 'movement';
   if (!next.part) next.isolated = false;
   return next;
 }

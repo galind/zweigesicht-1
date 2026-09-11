@@ -16,7 +16,8 @@ export function reviewExplosion({v,THREE,initialState,load,ROOT,parts,results}) 
  for(const separation of [...samples,...samples.toReversed()]) {
   const offsets=explosionOffsets(parts,{...initialState,separation});const serialized=JSON.stringify([...offsets]);
   if(snapshots.has(separation))assert.equal(serialized,snapshots.get(separation));snapshots.set(separation,serialized);
-  assert.equal(offsets.size,223);
+  const {displayFace}=load('explorer/src/experience/dials.ts');
+  assert.equal(offsets.size,223+parts.filter(p=>!p.isAssembly&&displayFace(p.id)).length);
   for(const p of complete.parts) {
    const offset=offsets.get(p.id);assert.ok(offset.every(Number.isFinite));
    for(let i=0;i<3;i++)assert.ok(Math.abs(offset[i]-p.offsetMm[i]*separation)<1e-12,'Every part uses exactly the same progression');

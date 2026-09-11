@@ -936,7 +936,7 @@ for(const p of v.renderParts.values()) {
 // Verify perspective projection from the actual spread overview method at all requested aspect ratios.
 const corners=box=>[0,1,2,3,4,5,6,7].map(i=>new THREE.Vector3(i&1?box.max.x:box.min.x,i&2?box.max.y:box.min.y,i&4?box.max.z:box.min.z));
 for(const aspect of [1280/480,1600/740,390/500,320/390,600/220]){
- v.spread=makeSpread(v.renderParts.values(),aspect);v.retarget();v.applyPose(0);v.root.updateMatrixWorld(true);
+ v.camera.aspect=aspect;v.spread=makeSpread(v.renderParts.values(),aspect);v.retarget();v.applyPose(0);v.root.updateMatrixWorld(true);
  const repeated=makeSpread([...v.renderParts.values()].reverse(),aspect);
  for(const [id,p]of v.spread)assert.ok(p.offset.equals(repeated.get(id).offset));
  const spreadBoxes=[...v.renderParts.values()].filter(p=>spreadMember(p.source)).map(p=>({id:p.source.id,box:new THREE.Box3().setFromObject(p.mesh)}));

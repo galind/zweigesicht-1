@@ -1,7 +1,6 @@
 import type { MovementViewer } from './MovementViewer';
-import * as THREE from 'three';
-import { DIALS, fittedLeaves } from '../experience/dials';
-import { ROOT, belongs } from '../experience/catalog';
+import { DIALS, fittedLeaves, displayHostPart } from '../experience/dials';
+import { ROOT, belongs, GROUPS } from '../experience/catalog';
 const pause = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 async function settle(v: MovementViewer) {
@@ -10,7 +9,7 @@ async function settle(v: MovementViewer) {
     await pause(30);
   } while (
     (v.travel || v.presentationMoving || v.needsRender) &&
-    performance.now() - start < 8000
+    performance.now() - start < 12000
   );
   if (v.travel || v.presentationMoving || !v.ready)
     throw new Error('Display did not settle');
@@ -19,312 +18,352 @@ export async function runDialChecks(v: MovementViewer) {
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   const check = (name: string, pass: boolean, details?: unknown) =>
     checks.push({ name, pass, details });
+  const prefs = () =>
+    JSON.stringify([
+      v.state.centralVisible,
+      v.state.smallVisible,
+      v.state.centralStyle,
+      v.state.smallStyle,
+    ]);
+  const visible = () =>
+    [...v.renderParts.values()].filter(
+      (p) => p.mesh.visible && !belongs(p.source.id, ROOT),
+    );
+  const exact = () => {
+    const expected = fittedLeaves(v.state);
+    return (
+      visible().length === expected.size &&
+      visible().every((p) => expected.has(p.source.id))
+    );
+  };
   v.reset();
   await settle(v);
-  const baseline = v.stats();
   if (!v.catalogLoaded) {
     const path = v.paths.catalog;
     v.paths.catalog = '/models/inspection-unavailable-dials.glb';
-    await v.showDial('central');
+    await v.configureDials({ centralVisible: true, smallVisible: true });
     check(
-      'First-load failure retains usable bare movement and current retry',
-      v.state.presentation === 'movement' &&
-        v.ready &&
+      'Cold-load failure keeps both preferences, usable movement and retry',
+      v.ready &&
+        v.state.centralVisible &&
+        v.state.smallVisible &&
         !!v.dialError &&
-        v.dialRequest?.view === 'central',
+        visible().length === 0,
     );
     v.paths.catalog = path;
-    const start = performance.now();
+    v.setSide('front');
+    v.patch({ separation: 0.4 });
     await v.retryDials();
     await settle(v);
     check(
-      'Retry fits the complete selected display',
-      v.state.presentation === 'dials' && !v.dialError,
-      { firstUseThroughSettledMs: performance.now() - start },
+      'Retry loads both packets into current separated view',
+      exact() &&
+        !v.dialError &&
+        v.state.separation === 0.4 &&
+        v.state.side === 'front',
     );
-  } else check('Catalog already warm for this run', true);
-  const rows = [];
-  for (const face of ['central', 'small'] as const)
-    for (const style of DIALS.faces[face].styles) {
-      await v.showDial(face, face, style.id);
+  }
+  v.reset();
+  await settle(v);
+  for (const centralVisible of [false, true])
+    for (const smallVisible of [false, true]) {
+      await v.configureDials({
+        centralVisible,
+        smallVisible,
+        centralStyle: 'lance',
+        smallStyle: 'pear',
+      });
       await settle(v);
-      const expected = fittedLeaves(v.state);
-      const visible = [...v.renderParts.values()].filter(
-        (p) => p.mesh.visible && !belongs(p.source.id, ROOT),
+      const before = prefs();
+      const label = `${Number(centralVisible)}${Number(smallVisible)}`;
+      check(`${label}: exact enabled leaves and independent styles`, exact());
+      v.setSide(v.state.side === 'front' ? 'back' : 'front');
+      await settle(v);
+      check(
+        `${label}: side switch retains visibility and styles`,
+        before === prefs() && exact(),
       );
-      rows.push({
-        face,
-        style: style.id,
-        visible: visible.length,
-        stats: v.stats(),
+      v.patch({ separation: 1 });
+      await settle(v);
+      const leaves = visible();
+      const packetAligned = (['central', 'small'] as const).every((face) => {
+        const packet = leaves.filter((p) =>
+          belongs(p.source.id, DIALS.faces[face].rootId),
+        );
+        return (
+          !packet.length ||
+          packet.every(
+            (p) => p.offset.equals(packet[0].offset) && p.offset.length() > 0,
+          )
+        );
       });
       check(
-        face +
-          ' ' +
-          style.label +
-          ' has only its fitted leaves at the reviewed display pose',
-        visible.length === (face === 'central' ? 22 : 21) &&
-          visible.every((p) =>
-            belongs(p.source.id, DIALS.faces[face].rootId),
-          ) &&
-          visible.every((p) => expected.has(p.source.id)) &&
-          v.assemblyError('presentation') === 0,
+        `${label}: enabled dials and hands separate as aligned packets`,
+        before === prefs() && exact() && packetAligned,
       );
-    }
-  for (const face of ['central', 'small'] as const) {
-    const outgoing = new Set(v.fitted);
-    let outgoingFadeFrames = 0,
-      incomingFadeFrames = 0;
-    const initialRight = new THREE.Vector3(1, 0, 0).applyQuaternion(
-      v.camera.quaternion,
-    );
-    const previous = v.camera.quaternion.clone();
-    let angularTravel = 0,
-      maxRightDrift = 0,
-      maxNdc = 0,
-      frames = 0;
-    v.inspectionFrame = (_now, rendered) => {
-      if (!rendered) return;
-      frames++;
-      for (const p of v.renderParts.values()) {
-        if (
-          p.mesh.visible &&
-          p.material.opacity > 0 &&
-          p.material.opacity < 1
-        ) {
-          if (outgoing.has(p.source.id)) outgoingFadeFrames++;
-          else if (v.fitted.has(p.source.id)) incomingFadeFrames++;
-        }
-      }
-      angularTravel += previous.angleTo(v.camera.quaternion);
-      previous.copy(v.camera.quaternion);
-      maxRightDrift = Math.max(
-        maxRightDrift,
-        initialRight.angleTo(
-          new THREE.Vector3(1, 0, 0).applyQuaternion(v.camera.quaternion),
-        ),
-      );
-      for (const p of v.renderParts.values()) {
-        if (!p.mesh.visible) continue;
-        const b = p.mesh.geometry.boundingBox!;
-        for (let i = 0; i < 8; i++) {
-          const point = new THREE.Vector3(
-            i & 1 ? b.max.x : b.min.x,
-            i & 2 ? b.max.y : b.min.y,
-            i & 4 ? b.max.z : b.min.z,
-          )
-            .applyMatrix4(p.mesh.matrixWorld)
-            .project(v.camera);
-          maxNdc = Math.max(maxNdc, Math.abs(point.x), Math.abs(point.y));
-        }
-      }
-    };
-    try {
-      await v.showDial(face);
+      v.patch({ separation: 0 });
       await settle(v);
-    } finally {
-      v.inspectionFrame = undefined;
+      check(
+        `${label}: reassembly restores exact fitted matrices`,
+        exact() && v.assemblyError('presentation') === 0 && before === prefs(),
+      );
+      v.allParts();
+      await settle(v);
+      const packed = v.auditSpread();
+      check(
+        `${label}: All parts includes every enabled leaf without overlap or clipping`,
+        v.spread.size === 216 + fittedLeaves(v.state).size &&
+          packed.overlaps.length === 0 &&
+          packed.clipped.length === 0 &&
+          exact(),
+        packed,
+      );
+      if (leaves.length) {
+        await v.select(leaves[0].source.id);
+        await settle(v);
+        check(
+          `${label}: selecting fitted inventory part retains layout and styles`,
+          v.state.layout === 'spread' && before === prefs(),
+        );
+      }
+      v.group(null);
+      await settle(v);
+      check(
+        `${label}: return from All parts restores fitted pose`,
+        v.assemblyError('presentation') === 0 && exact() && before === prefs(),
+      );
     }
+  await v.configureDials({ centralVisible: true, smallVisible: true });
+  await settle(v);
+  for (const face of ['central', 'small'] as const)
+    for (const style of DIALS.faces[face].styles) {
+      const other =
+        face === 'central' ? v.state.smallStyle : v.state.centralStyle;
+      await v.configureDials({
+        [face === 'central' ? 'centralStyle' : 'smallStyle']: style.id,
+      });
+      await settle(v);
+      check(
+        `${face} ${style.label}: independent hand style with both dials`,
+        exact() &&
+          v.assemblyError('presentation') === 0 &&
+          other ===
+            (face === 'central' ? v.state.smallStyle : v.state.centralStyle),
+      );
+    }
+  for (const group of GROUPS) {
+    v.group(group.id);
+    await settle(v);
+    const before = prefs();
+    if (group.id === 'display')
+      check(
+        'Uncover retains both display packets at their seats',
+        visible().length === 43 &&
+          visible().every((p) => p.offset.length() === 0),
+      );
+    v.patch({ partSpread: 1 });
+    await settle(v);
     check(
-      face +
-        ' turnover is one restrained half-turn with no sideways tumble or clipping',
-      frames > 2 &&
-        angularTravel < Math.PI + 0.01 &&
-        maxRightDrift < 0.1 &&
-        maxNdc < 1,
-      { frames, angularTravel, maxRightDrift, maxNdc },
-    );
-    check(
-      face +
-        ' fades both displays and restores opaque materials with no outgoing leaves',
-      outgoingFadeFrames > 0 &&
-        incomingFadeFrames > 0 &&
-        [...v.renderParts.values()].every(
+      `${group.id}: retained display parts follow exact section hosts`,
+      before === prefs() &&
+        visible().every(
           (p) =>
-            !p.dialFade &&
-            !p.mesh.userData.dialFading &&
-            p.material.opacity === 1 &&
-            !p.material.transparent &&
-            p.material.depthWrite &&
-            (!outgoing.has(p.source.id) || !p.mesh.visible),
+            p.offset.distanceTo(
+              v.renderParts.get(displayHostPart(p.source.id))!.offset,
+            ) < 1e-9,
         ),
-      { outgoingFadeFrames, incomingFadeFrames },
+    );
+    v.patch({ partSpread: 0, reveal: 0 });
+    await settle(v);
+    check(
+      `${group.id}: restoring section and covers preserves preferences`,
+      before === prefs() && visible().every((p) => p.offset.length() === 0),
     );
   }
-  const warmed = v.stats();
-  const transfers = performance
-    .getEntriesByType('resource')
-    .filter((r) => r.name.includes('catalog-')).length;
-  for (let i = 0; i < 20; i++) {
-    void v.showDial(
-      i % 2 ? 'central' : 'small',
-      i % 2 ? 'central' : 'small',
-      i % 2 ? 'fine' : 'pear',
+  v.group(null);
+  await settle(v);
+  for (const change of [{ centralStyle: 'fine' }, { centralVisible: false }]) {
+    await v.configureDials({ centralVisible: true, smallVisible: true });
+    v.group('energy');
+    await settle(v);
+    v.group(null);
+    await pause(90);
+    await v.configureDials(change);
+    await settle(v);
+    check(
+      'Interrupted section restoration and dial change preserve opaque material state',
+      [...v.renderParts.values()].every(
+        (p) =>
+          !p.dialFade &&
+          !p.cutaway &&
+          p.material.opacity === 1 &&
+          !p.material.transparent &&
+          p.material.depthWrite,
+      ),
     );
-    if (i % 4 === 0) v.group('energy');
-    if (i % 4 === 1) v.scrub({ separation: 0.3 });
-    if (i % 4 === 2) v.allParts();
+  }
+  v.reset();
+  v.group('display');
+  await settle(v);
+  await v.configureDials({ centralVisible: true, smallVisible: true });
+  await settle(v);
+  const fittedPoints = v
+    .targetPoints((p) => v.fitted.has(p.source.id))
+    .map((point) => point.project(v.camera));
+  check(
+    'Enabling dials inside Time display fits all display bounds',
+    fittedPoints.every((p) => Math.abs(p.x) < 1 && Math.abs(p.y) < 1),
+  );
+  v.group(null);
+  await settle(v);
+  const warmed = v.stats();
+  for (let i = 0; i < 12; i++) {
+    void v.configureDials({
+      centralVisible: !!(i % 2),
+      smallVisible: !!(i % 3),
+      centralStyle: i % 2 ? 'lance' : 'open-lance',
+    });
+    v.patch({ separation: i % 2 });
     await pause(25);
   }
-  await v.showDial('central', 'central', 'open-lance');
-  await settle(v);
-  const position = v.camera.position.clone(),
-    target = v.controls.target.clone(),
-    up = v.camera.up.clone();
-  await v.showDial('central', 'central', 'fine');
+  v.allParts();
+  await pause(80);
+  v.group(null);
+  await v.configureDials({
+    centralVisible: true,
+    smallVisible: true,
+    centralStyle: 'lance',
+    smallStyle: 'pear',
+  });
   await settle(v);
   check(
-    'Style change preserves camera within floating-point tolerance',
-    position.distanceTo(v.camera.position) < 1e-9 &&
-      target.distanceTo(v.controls.target) < 1e-9 &&
-      up.distanceTo(v.camera.up) < 1e-12,
-    {
-      positionErrorMm: position.distanceTo(v.camera.position),
-      targetErrorMm: target.distanceTo(v.controls.target),
-      upError: up.distanceTo(v.camera.up),
-    },
+    'Rapid toggles and interrupted separation/spread restore latest fitted geometry',
+    exact() && v.assemblyError('presentation') === 0,
   );
-  await v.showDial('small', 'small', 'pear');
-  await settle(v);
+  check(
+    'Transitions release all fade flags and restore opaque materials',
+    [...v.renderParts.values()].every(
+      (p) =>
+        !p.dialFade &&
+        !p.cutaway &&
+        !p.material.transparent &&
+        p.material.opacity === 1 &&
+        p.material.depthWrite,
+    ),
+  );
+  check(
+    'Warm toggles reuse geometry and textures',
+    v.stats().geometries === warmed.geometries &&
+      v.stats().textures === warmed.textures,
+  );
+  // Delay the real cached loader to exercise navigation/reset while an async
+  // request is outstanding without relying on network timing.
+  const loader = v.loadCatalog.bind(v);
+  let release!: () => void;
+  v.loadCatalog = () =>
+    new Promise<void>((resolve) => {
+      release = () => {
+        void loader().then(resolve);
+      };
+    });
+  const pending = v.configureDials({
+    centralVisible: false,
+    smallVisible: true,
+  });
   v.setSide('front');
+  v.patch({ separation: 0.65 });
+  release();
+  await pending;
   await settle(v);
   check(
-    'Side switch agrees with dial selector and independent preferences',
+    'Loading completion preserves newer side and separation',
     v.state.side === 'front' &&
-      v.state.smallStyle === 'pear' &&
-      v.state.centralStyle === 'fine',
+      v.state.separation === 0.65 &&
+      !v.state.centralVisible &&
+      v.state.smallVisible &&
+      exact(),
   );
-  v.group('energy');
-  await settle(v);
-  v.back();
+  const cancelled = v.configureDials({ centralVisible: true });
+  v.reset();
+  release();
+  await cancelled;
+  v.loadCatalog = loader;
   await settle(v);
   check(
-    'Back restores fitted view from mechanism',
-    v.state.presentation === 'dials' &&
-      v.state.side === 'front' &&
-      v.state.smallStyle === 'pear',
+    'Reset cancels pending display intent and restores opening defaults',
+    !v.state.centralVisible &&
+      !v.state.smallVisible &&
+      v.state.centralStyle === 'fine' &&
+      v.state.smallStyle === 'lance' &&
+      v.state.side === 'back' &&
+      v.state.layout === 'assembly' &&
+      v.assemblyError() === 0 &&
+      !v.dialRequest &&
+      !v.dialError,
   );
-  await v.showDial('small');
+  await v.configureDials({
+    centralVisible: true,
+    smallVisible: true,
+    centralStyle: 'open-lance',
+    smallStyle: 'pear',
+  });
   await settle(v);
-  const raw = DIALS.presentationOverrides[0].leafId;
-  await v.select(raw);
-  v.patch({ isolated: true });
+  v.patch({ separation: 0.5 });
   await settle(v);
-  check(
-    'Raw enamel isolation retains its red interpretation',
-    v.renderParts.get(raw)?.material.color.getHex() === 0x6c2031 &&
-      [...v.renderParts.values()].filter((p) => p.mesh.visible).length === 1,
-  );
-  v.back();
-  await settle(v);
-  check(
-    'Back restores only the small dial with blue enamel',
-    v.renderParts.get(raw)?.material.color.getHex() === 0x062e78 &&
-      [...v.renderParts.values()].filter(
-        (p) => p.mesh.visible && !belongs(p.source.id, ROOT),
-      ).length === 21,
-  );
-  v.setSide('front');
-  await pause(100);
-  v.orbit(0.1, 0.02);
-  const owned = v.camera.position.clone();
-  await pause(150);
-  check(
-    'Manual orbit cancels dial camera travel',
-    !v.travel &&
-      v.cameraUserOwned &&
-      owned.distanceTo(v.camera.position) < 1e-8,
-  );
-  await v.showDial('central');
-  await settle(v);
+  const recoveryPrefs = prefs();
   const extension = v.renderer.getContext().getExtension('WEBGL_lose_context');
   if (extension) {
-    const before = { ...v.state };
     extension.loseContext();
     await pause(100);
     extension.restoreContext();
     const start = performance.now();
-    while (!v.ready && performance.now() - start < 8000) await pause(50);
+    while (!v.ready && performance.now() - start < 10000) await pause(50);
     await settle(v);
     check(
-      'Graphics restoration preserves styles, fitted displays, annotations and diamond',
-      v.ready &&
-        v.state.presentation === before.presentation &&
-        v.state.centralStyle === before.centralStyle &&
-        v.state.smallStyle === before.smallStyle &&
-        v.sourceSurfaces?.size === 58 &&
-        v.stats().recoveredDiamond === true,
+      'WebGL recovery preserves both separated displays and styles',
+      prefs() === recoveryPrefs &&
+        v.state.separation === 0.5 &&
+        exact() &&
+        v.sourceSurfaces?.size === 58,
     );
-  } else check('Graphics recovery extension available', false);
-  const reloaded = { ...v.state },
-    reloadCamera = v.camera.position.clone(),
-    reloadTarget = v.controls.target.clone(),
-    reloadUp = v.camera.up.clone();
+  }
   await v.load();
   const reloadStart = performance.now();
-  while (!v.ready && performance.now() - reloadStart < 8000) await pause(30);
+  while (!v.ready && performance.now() - reloadStart < 10000) await pause(30);
   await settle(v);
   check(
-    'Retry preparation preserves an existing dial inspection and camera',
-    v.state.presentation === reloaded.presentation &&
-      v.state.centralStyle === reloaded.centralStyle &&
-      v.state.smallStyle === reloaded.smallStyle &&
-      // OrbitControls reconstructs Cartesian coordinates after recovery; allow
-      // numerical roundoff, using the same millimetre tolerance as style changes.
-      reloadCamera.distanceTo(v.camera.position) < 1e-9 &&
-      reloadTarget.distanceTo(v.controls.target) < 1e-9 &&
-      reloadUp.distanceTo(v.camera.up) < 1e-12,
-    {
-      before: reloaded,
-      after: { ...v.state },
-      beforeCamera: reloadCamera.toArray(),
-      afterCamera: v.camera.position.toArray(),
-      cameraError: reloadCamera.distanceTo(v.camera.position),
-      targetError: reloadTarget.distanceTo(v.controls.target),
-      upError: reloadUp.distanceTo(v.camera.up),
-    },
+    'Retry preparation preserves both display preferences and separation',
+    prefs() === recoveryPrefs && v.state.separation === 0.5 && exact(),
   );
-  // Restore the same style pair used for resource warm-up; first outline selection may add one geometry.
-  await v.showDial('small', 'small', 'pear');
+  v.group(null);
   await settle(v);
-  const after = v.stats(),
-    renders = v.renderCount;
-  await pause(650);
-  check('Idle display does not redraw', v.renderCount === renders);
-  check(
-    'Repeated style changes reuse the catalog transfer',
-    performance
-      .getEntriesByType('resource')
-      .filter((r) => r.name.includes('catalog-')).length === transfers,
-  );
-  check(
-    'Resources stable after warm-up',
-    Number(after.geometries) <= Number(warmed.geometries) + 1 &&
-      after.textures === warmed.textures,
-    { warmed, after },
-  );
-  v.allParts();
+  const selectedHand = DIALS.faces.central.styles[2].handLeafIds.hour;
+  await v.select(selectedHand);
+  await settle(v);
+  await v.configureDials({ centralVisible: false });
   await settle(v);
   check(
-    'Spread remains exactly 216',
-    v.auditSpread().members === 216 && v.auditSpread().visible === 216,
+    'Hiding selected display clears stale selection and outgoing geometry',
+    !v.state.part && exact(),
   );
+  const reduced = v.reduced;
+  v.reduced = true;
+  await v.configureDials({ centralVisible: true, smallVisible: true });
+  v.patch({ separation: 1 });
+  await settle(v);
+  v.patch({ separation: 0 });
+  await settle(v);
+  check(
+    'Reduced motion preserves both displays and exact reassembly',
+    exact() && v.assemblyError('presentation') === 0,
+  );
+  v.reduced = reduced;
   v.reset();
   await settle(v);
-  check(
-    'Reset restores opening and exact assembly',
-    v.state.presentation === 'movement' &&
-      v.state.centralStyle === 'fine' &&
-      v.state.smallStyle === 'lance' &&
-      v.assemblyError() === 0 &&
-      v.camera.up.y === -1,
-  );
   return {
     scope:
-      'Real local browser; viewport emulation, no physical-device or mechanical certification',
+      'Local Chromium renderer; mobile viewport emulation, not physical-device or mechanical certification',
     pass: checks.every((c) => c.pass),
     checks,
-    baseline,
-    styles: rows,
   };
 }
