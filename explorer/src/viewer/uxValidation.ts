@@ -75,10 +75,8 @@ export async function runUxChecks(v: MovementViewer) {
         '.reset-button',
         '.options-trigger',
         '.explore-button',
-        '.dial-trigger',
-        '.all-parts-button',
+        '.separate-trigger',
         '.side-slot',
-        '.separation-control',
       ].map((selector) => {
         const r = document.querySelector(selector)!.getBoundingClientRect();
         return [selector, [r.x, r.y, r.width, r.height]];
@@ -87,6 +85,44 @@ export async function runUxChecks(v: MovementViewer) {
   v.reset();
   await settle(v);
   const baseline = rects();
+  // A panel is UI state, never a camera or presentation action. Exercise the
+  // actual React triggers so regressions in layout and focus restoration count.
+  for (const selector of [
+    '.explore-button',
+    '.separate-trigger',
+    '.options-trigger',
+  ]) {
+    const trigger = document.querySelector<HTMLButtonElement>(selector)!;
+    const position = v.camera.position.clone(),
+      target = v.controls.target.clone();
+    const state = JSON.stringify(v.state),
+      history = v.history.length;
+    trigger.click();
+    await sleep(300);
+    const panel = document.querySelector<HTMLElement>('.explorer-panel');
+    const beforeClose = rects();
+    checks.push({
+      name: `${selector} opens without reframing, changing selection, or blocking the canvas`,
+      pass:
+        !!panel &&
+        panel.getAttribute('aria-modal') !== 'true' &&
+        !document.querySelector('[data-slot="sheet-overlay"]') &&
+        JSON.stringify(beforeClose) === JSON.stringify(baseline) &&
+        v.camera.position.distanceTo(position) < 1e-8 &&
+        v.controls.target.distanceTo(target) < 1e-8 &&
+        JSON.stringify(v.state) === state &&
+        v.history.length === history,
+    });
+    panel
+      ?.querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')
+      ?.click();
+    await sleep(300);
+    checks.push({
+      name: `${selector} restores keyboard focus on close`,
+      pass: document.activeElement === trigger,
+    });
+  }
+
   for (const mode of [
     'whole',
     'separated',

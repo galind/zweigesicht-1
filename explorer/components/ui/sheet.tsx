@@ -41,15 +41,21 @@ function SheetContent({
   children,
   side = 'right',
   showCloseButton = true,
+  showOverlay = true,
+  scrollContent = false,
   ...props
 }: SheetPrimitive.Popup.Props & {
   side?: 'top' | 'right' | 'bottom' | 'left';
   showCloseButton?: boolean;
+  showOverlay?: boolean;
+  scrollContent?: boolean;
 }) {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
   return (
     <SheetPortal>
-      <SheetOverlay />
+      {showOverlay && <SheetOverlay />}
       <SheetPrimitive.Popup
+        initialFocus={scrollContent ? scrollRef : undefined}
         data-slot="sheet-content"
         data-side={side}
         className={cn(
@@ -58,7 +64,13 @@ function SheetContent({
         )}
         {...props}
       >
-        {children}
+        {scrollContent ? (
+          <div className="sheet-scroll-area" tabIndex={-1} ref={scrollRef}>
+            {children}
+          </div>
+        ) : (
+          children
+        )}
         {showCloseButton && (
           <SheetPrimitive.Close
             data-slot="sheet-close"

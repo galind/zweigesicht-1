@@ -34,12 +34,6 @@ import {
   category,
   type Part,
 } from '@/src/experience/catalog';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverTitle,
-} from '@/components/ui/popover';
 import { SPREAD_GROUPS } from '@/src/experience/spread';
 import { factsFor, partDetail } from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
@@ -89,17 +83,15 @@ export default function Home() {
     aboutButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const selectionFocus = useRef(false);
-  const deck = useRef<HTMLElement>(null);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
     [catalog, setCatalog] = useState(false),
     [about, setAbout] = useState(false),
     [explore, setExplore] = useState(false),
-    [spreadGroups, setSpreadGroups] = useState(false),
+    [separate, setSeparate] = useState(false),
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
-    [dialOpen, setDialOpen] = useState(false),
     [inspect, setInspect] = useState(false),
     [qa, setQa] = useState<unknown>(null);
   const [motion, setMotion] = useState<unknown>(null);
@@ -174,19 +166,6 @@ export default function Home() {
       viewer.current = null;
     };
   }, []);
-  useEffect(() => {
-    const footer = deck.current;
-    if (!footer) return;
-    const measure = () =>
-      footer.parentElement?.style.setProperty(
-        '--deck-height',
-        `${footer.getBoundingClientRect().height}px`,
-      );
-    const observer = new ResizeObserver(measure);
-    observer.observe(footer);
-    measure();
-    return () => observer.disconnect();
-  }, []);
   const group = GROUPS.find((g) => g.id === s.group),
     selected = s.parts.find((p) => p.id === s.part),
     members = s.parts.filter(
@@ -208,10 +187,9 @@ export default function Home() {
         catalog ||
         about ||
         explore ||
-        spreadGroups ||
+        separate ||
         options ||
-        details ||
-        dialOpen
+        details
       )
         return;
       event.preventDefault();
@@ -220,7 +198,7 @@ export default function Home() {
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [catalog, about, explore, spreadGroups, options, details, dialOpen]);
+  }, [catalog, about, explore, separate, options, details]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
     setCatalog(false);
@@ -247,6 +225,21 @@ export default function Home() {
         : 'back'
       : s.side;
   const sideLabel = 'Switch side';
+  const closePanels = () => {
+    setExplore(false);
+    setSeparate(false);
+    setOptions(false);
+    setDetails(false);
+    setCatalog(false);
+    setAbout(false);
+  };
+  const openPanel = (update: (open: boolean) => void, open: boolean) => {
+    if (open) {
+      selectionFocus.current = false;
+      closePanels();
+    }
+    update(open);
+  };
   const patch = (v: Parameters<MovementViewer['patch']>[0]) =>
     viewer.current?.patch(v);
   return (
@@ -259,9 +252,7 @@ export default function Home() {
       <header className="topbar">
         <div className="identity">
           <h1>Zweigesicht</h1>
-          <span>
-            Marco Lang <i>·</i> <span className="calibre">Calibre ml–01</span>
-          </span>
+          <span>ml–01</span>
         </div>
         <nav className="global-actions" aria-label="View history and options">
           <button
@@ -277,10 +268,11 @@ export default function Home() {
             <ArrowLeft aria-hidden="true" />
           </button>
           <Sheet
+            modal={false}
             open={options}
             onOpenChange={(open) => {
               if (open) selectionFocus.current = false;
-              setOptions(open);
+              openPanel(setOptions, open);
             }}
           >
             <SheetTrigger
@@ -290,7 +282,9 @@ export default function Home() {
               Options
             </SheetTrigger>
             <SheetContent
-              className="about-sheet"
+              className="explorer-panel about-sheet"
+              showOverlay={false}
+              scrollContent
               finalFocus={() =>
                 selectionFocus.current
                   ? (host.current?.querySelector('canvas') ?? false)
@@ -422,7 +416,7 @@ export default function Home() {
                 <button
                   ref={catalogButton}
                   className="menu-link"
-                  onClick={() => setCatalog(true)}
+                  onClick={() => openPanel(setCatalog, true)}
                   disabled={!s.parts.length}
                 >
                   Source catalog <ChevronRight aria-hidden="true" />
@@ -430,7 +424,7 @@ export default function Home() {
                 <button
                   ref={aboutButton}
                   className="menu-link"
-                  onClick={() => setAbout(true)}
+                  onClick={() => openPanel(setAbout, true)}
                 >
                   About & sources <ChevronRight aria-hidden="true" />
                 </button>
@@ -538,7 +532,8 @@ export default function Home() {
                 <button
                   ref={detailButton}
                   className="text-button"
-                  onClick={() => setDetails(true)}
+                  onClick={() => openPanel(setDetails, !details)}
+                  aria-expanded={details}
                 >
                   Details
                 </button>
@@ -557,13 +552,6 @@ export default function Home() {
           </div>
           {selected && (
             <div className="selected-summary">
-              <small
-                className="selection-identity"
-                title={partIndex.get(selected.id)?.reference}
-              >
-                {partIndex.get(selected.id)?.context} ·{' '}
-                {partIndex.get(selected.id)?.reference}
-              </small>
               <button
                 className="text-button isolate-button"
                 aria-pressed={s.isolated}
@@ -576,178 +564,224 @@ export default function Home() {
           )}
         </section>
       )}
-      <footer
-        ref={deck}
-        className="viewer-footer"
-        aria-label="Movement controls"
-      >
-        <div className="control-deck">
-          <fieldset className="display-controls" aria-label="Explore the watch">
-            <Popover open={explore} onOpenChange={setExplore}>
-              <PopoverTrigger
-                className="explore-button text-button"
-                data-active={
-                  s.layout === 'assembly' && s.presentation === 'movement'
+      <nav className="action-dock" aria-label="Movement controls">
+        <Sheet
+          modal={false}
+          open={explore}
+          onOpenChange={(open) => openPanel(setExplore, open)}
+        >
+          <SheetTrigger
+            className="explore-button text-button"
+            disabled={s.loadStage === 'recovering'}
+          >
+            Explore <ChevronDown aria-hidden="true" />
+          </SheetTrigger>
+          <SheetContent
+            className="explorer-panel explore-panel"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>Explore</SheetTitle>
+              <SheetDescription>
+                Choose a mechanism or display.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="panel-body explore-menu">
+              <button
+                className="menu-link"
+                aria-pressed={
+                  !s.group &&
+                  s.layout === 'assembly' &&
+                  s.presentation === 'movement'
                 }
-                disabled={s.loadStage === 'recovering'}
+                onClick={() => chooseGroup(null)}
               >
-                Explore <ChevronDown aria-hidden="true" />
-              </PopoverTrigger>
-              <PopoverContent
-                className="explore-menu"
-                side="top"
-                align="start"
-                sideOffset={12}
-              >
-                <PopoverTitle>Inside the movement</PopoverTitle>
+                Whole movement <ChevronRight aria-hidden="true" />
+              </button>
+              {GROUPS.map((g, i) => (
                 <button
                   className="menu-link"
-                  aria-pressed={!s.group && s.layout === 'assembly'}
-                  onClick={() => chooseGroup(null)}
+                  key={g.id}
+                  aria-pressed={s.group === g.id}
+                  onClick={() => chooseGroup(g.id)}
                 >
-                  Whole movement <ChevronRight aria-hidden="true" />
+                  <span>
+                    <small>0{i + 1}</small>
+                    {g.technical}
+                  </span>
+                  <ChevronRight aria-hidden="true" />
                 </button>
-                {GROUPS.map((g, i) => (
+              ))}
+
+              <div className="display-choices">
+                <DialControls
+                  state={s}
+                  viewer={() => viewer.current}
+                  available={available}
+                />
+                <button
+                  className="text-button all-parts-button"
+                  disabled={!available}
+                  aria-pressed={s.layout === 'spread'}
+                  onClick={() => {
+                    setExplore(false);
+                    if (s.layout === 'spread') chooseGroup(null);
+                    else viewer.current?.allParts();
+                  }}
+                >
+                  All parts
+                </button>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+        <Sheet
+          modal={false}
+          open={separate}
+          onOpenChange={(open) => openPanel(setSeparate, open)}
+        >
+          <SheetTrigger
+            className="text-button separate-trigger"
+            disabled={!available}
+          >
+            {s.layout === 'spread' ? 'Arrange' : 'Separate'}
+            {(group ? s.partSpread : s.separation) > 0 &&
+              s.layout !== 'spread' && (
+                <span className="state-dot" aria-label="Separation active" />
+              )}
+            <ChevronDown aria-hidden="true" />
+          </SheetTrigger>
+          <SheetContent
+            className="explorer-panel separation-panel"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>
+                {s.layout === 'spread'
+                  ? 'Arrange parts'
+                  : group
+                    ? 'Separate section'
+                    : 'Separate movement'}
+              </SheetTitle>
+              <SheetDescription>
+                {s.layout === 'spread'
+                  ? 'Fit the spread or focus on a group.'
+                  : group
+                    ? group.technical
+                    : 'Space the assembly to see its construction.'}
+              </SheetDescription>
+            </SheetHeader>
+            <div className="panel-body">
+              {s.layout === 'spread' ? (
+                <>
                   <button
                     className="menu-link"
-                    key={g.id}
-                    aria-pressed={s.group === g.id}
-                    onClick={() => chooseGroup(g.id)}
+                    onClick={() => viewer.current?.frameSpread()}
                   >
-                    <span>
-                      <small>0{i + 1}</small>
-                      {g.technical}
-                    </span>
-                    <ChevronRight aria-hidden="true" />
+                    Fit all
                   </button>
-                ))}
-              </PopoverContent>
-            </Popover>
-            <DialControls
-              state={s}
-              viewer={() => viewer.current}
-              available={available}
-              onOpenChange={setDialOpen}
-            />
-            <button
-              className="text-button all-parts-button"
-              disabled={!available}
-              aria-pressed={s.layout === 'spread'}
-              onClick={() =>
-                s.layout === 'spread'
-                  ? chooseGroup(null)
-                  : viewer.current?.allParts()
-              }
-            >
-              All parts
-            </button>
-          </fieldset>
-          <div className="side-slot">
-            <button
-              className="side-switch text-button"
-              disabled={!available || s.layout === 'spread'}
-              style={{
-                visibility: s.layout === 'spread' ? 'hidden' : 'visible',
-              }}
-              onClick={() =>
-                viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
-              }
-              aria-label={sideLabel}
-              title={sideLabel}
-            >
-              <FlipHorizontal2 aria-hidden="true" />
-              <span>{sideLabel}</span>
-            </button>
-          </div>
-          <div className="separation-control">
-            {s.layout === 'spread' ? (
-              <>
-                <button
-                  className="text-button overview-button"
-                  disabled={!available}
-                  onClick={() => viewer.current?.frameSpread()}
-                >
-                  Fit all
-                </button>
-                <Popover open={spreadGroups} onOpenChange={setSpreadGroups}>
-                  <PopoverTrigger className="text-button" disabled={!available}>
-                    Groups
-                  </PopoverTrigger>
-                  <PopoverContent className="explore-menu" side="top">
-                    <PopoverTitle>Groups in the spread</PopoverTitle>
-                    {SPREAD_GROUPS.map((name) => (
-                      <button
-                        className="menu-link"
-                        key={name}
-                        onClick={() => {
-                          setSpreadGroups(false);
-                          viewer.current?.frameSpread(name);
-                        }}
-                      >
-                        {name}
-                        <ChevronRight aria-hidden="true" />
-                      </button>
-                    ))}
-                  </PopoverContent>
-                </Popover>
-              </>
-            ) : (
-              <>
-                <span id="separation-label">
-                  Separate
-                  <span className="sr-only">{group ? ' section' : ''}</span>
-                </span>
-                <Slider
-                  disabled={!available}
-                  aria-labelledby="separation-label"
-                  value={[group ? s.partSpread : s.separation]}
-                  min={0}
-                  max={1}
-                  step={0.01}
-                  onValueChange={(v) => {
-                    const value = Array.isArray(v) ? v[0] : v;
-                    viewer.current?.scrub(
-                      group ? { partSpread: value } : { separation: value },
-                    );
-                  }}
-                />
-              </>
-            )}
-          </div>
+                  {SPREAD_GROUPS.map((name) => (
+                    <button
+                      className="menu-link"
+                      key={name}
+                      onClick={() => viewer.current?.frameSpread(name)}
+                    >
+                      {name}
+                      <ChevronRight aria-hidden="true" />
+                    </button>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div className="slider-heading">
+                    <span id="separation-label">
+                      {group ? 'Separate section' : 'Separate'}
+                    </span>
+                    <output>
+                      {Math.round((group ? s.partSpread : s.separation) * 100)}%
+                    </output>
+                  </div>
+                  <Slider
+                    disabled={!available}
+                    aria-labelledby="separation-label"
+                    value={[group ? s.partSpread : s.separation]}
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    onValueChange={(v) => {
+                      const value = Array.isArray(v) ? v[0] : v;
+                      viewer.current?.scrub(
+                        group ? { partSpread: value } : { separation: value },
+                      );
+                    }}
+                  />
+                  {group && (
+                    <>
+                      <div className="slider-heading">
+                        <span id="uncover-label">Uncover section</span>
+                        <output>{Math.round(s.reveal * 100)}%</output>
+                      </div>
+                      <Slider
+                        disabled={!available}
+                        aria-labelledby="uncover-label"
+                        value={[s.reveal]}
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        onValueChange={(v) =>
+                          viewer.current?.scrub({
+                            reveal: Array.isArray(v) ? v[0] : v,
+                          })
+                        }
+                      />
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
+        <div className="side-slot">
           <button
-            className="text-button reset-button"
-            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-            title="Restore the opening view and options"
-            onClick={() => {
-              setExplore(false);
-              setSpreadGroups(false);
-              setDetails(false);
-              setDialOpen(false);
-              if (viewer.current) viewer.current.reset();
-              else set({ ...empty, loadStage: 'error', error: s.error });
+            className="side-switch text-button"
+            disabled={!available || s.layout === 'spread'}
+            style={{
+              visibility: s.layout === 'spread' ? 'hidden' : 'visible',
             }}
+            onClick={() =>
+              viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
+            }
+            aria-label={sideLabel}
+            title={sideLabel}
           >
-            <RotateCcw aria-hidden="true" />
-            <span>Reset view</span>
+            <FlipHorizontal2 aria-hidden="true" />
+            <span>{sideLabel}</span>
           </button>
         </div>
-        <p className="affiliation-note">
-          Independent project. Not affiliated with{' '}
-          <a
-            href="https://www.marcolangwatches.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Marco Lang
-          </a>
-          .
-        </p>
-      </footer>
-      <Sheet open={details} onOpenChange={setDetails}>
+        <button
+          className="text-button reset-button"
+          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+          aria-label="Reset view"
+          title="Restore the opening view and options"
+          onClick={() => {
+            closePanels();
+            if (viewer.current) viewer.current.reset();
+            else set({ ...empty, loadStage: 'error', error: s.error });
+          }}
+        >
+          <RotateCcw aria-hidden="true" />
+          <span>Reset view</span>
+        </button>
+      </nav>
+      <Sheet modal={false} open={details} onOpenChange={setDetails}>
         <SheetContent
-          className="about-sheet"
+          className="explorer-panel about-sheet"
+          showOverlay={false}
+          scrollContent
           finalFocus={() =>
-            detailButton.current ??
+            (selectionFocus.current ? null : detailButton.current) ??
             host.current?.querySelector('canvas') ??
             false
           }
@@ -789,24 +823,10 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                  <span id="reveal-label">Uncover section</span>
-                  <Slider
-                    disabled={!available}
-                    aria-labelledby="reveal-label"
-                    value={[s.reveal]}
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    onValueChange={(v) =>
-                      viewer.current?.scrub({
-                        reveal: Array.isArray(v) ? v[0] : v,
-                      })
-                    }
-                  />
                   <p className="secondary">
-                    Other mechanisms are hidden; connected parts stay dimmed.
-                    Uncover moves this section’s covers aside. Separate section
-                    spaces its own components.
+                    Other mechanisms are hidden; connected parts stay dimmed. In
+                    Separate, Uncover moves this section’s covers aside.
+                    Separate section spaces its own components.
                     {group.id === 'regulation' &&
                       ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}
                   </p>
@@ -835,13 +855,15 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <Sheet open={catalog} onOpenChange={setCatalog}>
+      <Sheet modal={false} open={catalog} onOpenChange={setCatalog}>
         <SheetContent
-          className="catalog-sheet"
+          className="explorer-panel catalog-sheet"
+          showOverlay={false}
+          scrollContent
           finalFocus={() =>
-            options
-              ? catalogButton.current
-              : (host.current?.querySelector('canvas') ?? false)
+            selectionFocus.current
+              ? (host.current?.querySelector('canvas') ?? false)
+              : optionsButton.current
           }
         >
           <SheetHeader>
@@ -911,8 +933,13 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <Sheet open={about} onOpenChange={setAbout}>
-        <SheetContent className="about-sheet" finalFocus={aboutButton}>
+      <Sheet modal={false} open={about} onOpenChange={setAbout}>
+        <SheetContent
+          className="explorer-panel about-sheet"
+          showOverlay={false}
+          scrollContent
+          finalFocus={optionsButton}
+        >
           <SheetHeader>
             <SheetTitle>A study of the ml–01</SheetTitle>
             <SheetDescription>
@@ -921,6 +948,7 @@ export default function Home() {
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
+            <p>Independent project. Not affiliated with Marco Lang.</p>
             <p>
               The overview shows the movement without the case, straps or
               alternate dial designs. The catalog retains every imported part.
