@@ -335,8 +335,8 @@ for(const [n,expected] of [[99,[28,30]],[222,[31,33]],[228,[49,50,52]]]){
 }
 for(const [id,data] of v.sourceSurfaces)if(!['d_0_1_1_99','d_0_1_1_222','d_0_1_1_228'].includes(id))for(let i=3;i<data.length;i+=4)assert.notEqual(data[i],12);
 results.push({check:'frosting matches exactly seven mounting pad faces on the three approved bridges; no other definition receives mounting frosting',status:'pass'});
-assert.deepEqual(finishShaderFor(195).shader.uniforms.finishFrostDetail.value.toArray(),[6,.06]);
-for(const n of [99,222,228])assert.deepEqual(finishShaderFor(n).shader.uniforms.finishFrostDetail.value.toArray(),[8,.05]);
+assert.deepEqual(finishShaderFor(195).shader.uniforms.finishFrostDetail.value.toArray(),[4,.16]);
+for(const n of [99,222,228])assert.deepEqual(finishShaderFor(n).shader.uniforms.finishFrostDetail.value.toArray(),[6,.13]);
 for(const n of [195,99,222,228]){
  const {shader}=finishShaderFor(n),fragment=shader.fragmentShader;
  // The real compile hook must keep frosting out of the normal/anisotropy path,
@@ -345,7 +345,7 @@ for(const n of [195,99,222,228]){
  assert.match(fragment,/material\.anisotropy\*=finishFace\*finishEnabled\*\(1\.0-finishFrostMask\)/);
  const heights=fragment.split('\n').filter(line=>line.includes('finishHeight='));
  assert.ok(heights.every(line=>!/(mountingFrost|finishFrostDetail|finishGrain)/.test(line)||line.includes('*.00022')), 'Frosting must never drive bump height');
- assert.match(fragment,/clamp\(\.49\+finishGrain\*finishFrostDetail\.y,\.46,\.52\)/);
+ assert.match(fragment,/clamp\(\.49\+finishGrain\*finishFrostDetail\.y,\.43,\.57\)/);
  assert.ok(fragment.indexOf('float finishFrostGrain=finishFrost(finishUv)')<fragment.indexOf('if(finishEnabled>.5'), 'Frost derivatives must run before source-role branches');
  assert.match(fragment,/1\.0-smoothstep\(\.2,\.75,footprint\)/);
  assert.ok(!fragment.includes('sqrt(nearest)'), 'No sharp cellular ridges');

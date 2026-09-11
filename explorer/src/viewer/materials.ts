@@ -37,8 +37,8 @@ const brushingDetail: Partial<Record<Finish, number>> = {
 // Authored frosting controls: grain frequency per mm and restrained roughness
 // contrast. Frost never perturbs normals; source face masks define placement.
 const frostingDetail = {
-  plate: { scale: 6, contrast: .06 },
-  mounting: { scale: 8, contrast: .05 },
+  plate: { scale: 4, contrast: .16 },
+  mounting: { scale: 6, contrast: .13 },
 };
 const screwDefinitions = [
   9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
@@ -198,7 +198,7 @@ float finishFrostOctave(vec2 q) {
 }
 float finishFrost(vec2 p) {
  vec2 q=p*finishFrostDetail.x;
- return finishFrostOctave(q)*.75+finishFrostOctave(q*2.0+vec2(17.3,9.2))*.25;
+ return finishFrostOctave(q)*.4+finishFrostOctave(mat2(.8,-.6,.6,.8)*q*2.0+vec2(17.3,9.2))*.6;
 }
 float finishBrush(vec2 p) {
  // A wider strand layer survives normal bridge framing, while the finer
@@ -434,10 +434,10 @@ if(finishEnabled>.5 && finishPattern>.5) {
   finishGrain=finishFrostGrain*finishFrostMask;
   // Frost has no bump height: broad reflections retain the source normals.
  }
- // Restrained reflectance variation carries the grain without wood/stone-like
- // color mottling. Geometry and broad studio reflections do most of the work.
+ // Resolved frost grain needs enough reflectance contrast to remain visible
+ // without bump normals. Its subpixel fade still blends to the base metal.
  if(finishPattern<4.5 || finishPattern>5.5)
-  diffuseColor.rgb*=1.0+finishGrain*mix(.08,.045,finishFrostMask)*finishFace;
+  diffuseColor.rgb*=1.0+finishGrain*mix(.08,.26,finishFrostMask)*finishFace;
  if(abs(vFinishRole-6.0)<.2) diffuseColor.rgb*=.62;
  // Existing recessed decoration on audited bridges. This is reversible surface
  // shading of source floors, never fabricated text, outlines or bevel geometry.
@@ -477,7 +477,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
-if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=clamp(.49+finishGrain*finishFrostDetail.y,.46,.52);
+if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=clamp(.49+finishGrain*finishFrostDetail.y,.43,.57);
 if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,

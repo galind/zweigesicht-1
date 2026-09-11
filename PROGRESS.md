@@ -20,10 +20,17 @@ Explore mechanism views now retain authored surface finishes on every visible pa
 
 ## Frosting stability — 11 September 2026
 
-Frosting now uses restrained source-local color/roughness grain instead of cellular bump normals. Two smooth octaves fade before becoming subpixel; the plate and seven reviewed mounting pads retain separate grain scales. Frost roughness stays within 0.46–0.52, with no frost normal perturbation or directional anisotropy. Existing satin bases, brushing, polished bevels, source face masks, geometry buffers and asset identities are preserved.
+Frosting now uses restrained source-local color/roughness grain instead of cellular bump normals. Two smooth octaves fade before becoming subpixel; the plate and seven reviewed mounting pads retain separate grain scales. At the initial stability checkpoint, frost roughness stayed within 0.46–0.52, with no frost normal perturbation or directional anisotropy. Existing satin bases, brushing, polished bevels, source face masks, geometry buffers and asset identities are preserved.
 
 Verified: lint, TypeScript (`tsc --noEmit`), production build, seven state tests and all 70 source/runtime checks pass. The focused shader regression protects filtering, bounded roughness and the exclusion of frosting from bump/anisotropy, alongside existing exact face-mask and geometry-byte checks. Build retains the existing large-chunk and Node deprecation warnings.
 
 Browser review at 1440×900 and 390×844 covered assembled and close-up views, orbit angles, zoom, separation and mechanism selection. Frost remained subdued without observed sparkle; satin grain and polished edges remained distinct. All 18 real-renderer interaction checks passed in each viewport, including all six mechanism finish contracts, with no browser/shader errors. This is desktop Chromium with mobile viewport emulation, not physical-phone certification or a cross-GPU temporal guarantee.
 
 Local screenshots and reports: `artifacts/browser/frost-stability/` (ignored). Preview: `http://127.0.0.1:4173/?inspect=1`; the pre-existing development server remains available. Next action: user appearance review; publication and mechanical/device release gates remain unchanged.
+
+
+## Frosting visibility follow-up — 11 September 2026
+
+User review found the first stable treatment too faint. The follow-up restores visible granulation with stronger color/roughness contrast and slightly coarser source-local grain. A rotated fine octave carries most close-up detail without emphasizing a square noise grid. Frost roughness is bounded at 0.43–0.57; the existing subpixel fade, no-bump and no-anisotropy safeguards remain intact. Satin/polished finishes, geometry, source identities and exact face masks are unchanged.
+
+Lint, TypeScript, production build, seven state tests and all 70 source/runtime checks pass. Desktop (1440×900) and mobile-sized (390×844) browser review covered zoom/orbit, separation and mechanism selection, with more visible close-up grain and no observed sparkle. All 18 mobile-sized renderer interaction checks also pass, with no browser/shader errors. Screenshots and reports are local under `artifacts/browser/frost-presence/`. Appearance is ready for user review in the existing local preview; mobile review remains viewport emulation.
