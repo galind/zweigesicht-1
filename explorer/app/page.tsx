@@ -28,6 +28,7 @@ import {
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { runDialChecks } from '@/src/viewer/dialValidation';
+import { runInventoryChecks } from '@/src/viewer/inventoryValidation';
 import { runCameraChecks } from '@/src/viewer/cameraValidation';
 import { runBrowserChecks, startBenchmark } from '@/src/viewer/validation';
 import { captureMotion, type MotionCase } from '@/src/viewer/capture';
@@ -252,7 +253,6 @@ export default function Home() {
         phase: id ? 'mechanism' : 'whole',
       }));
   };
-  const dialSide = s.side;
   const sideLabel = 'Flip movement';
   const closePanels = () => {
     setExplore(false);
@@ -816,13 +816,9 @@ export default function Home() {
         <div className="side-slot">
           <button
             className="side-switch text-button"
-            disabled={!available || s.layout === 'spread'}
-            style={{
-              visibility: s.layout === 'spread' ? 'hidden' : 'visible',
-            }}
-            onClick={() =>
-              viewer.current?.setSide(dialSide === 'back' ? 'front' : 'back')
-            }
+            disabled={!available}
+            onClick={() => viewer.current?.flipMovement()}
+            aria-pressed={s.layout === 'spread' ? s.inventoryBack : undefined}
             aria-label={sideLabel}
             title={sideLabel}
           >
@@ -1050,6 +1046,15 @@ export default function Home() {
       {inspect && (
         <details className="inspection">
           <summary>Inspection tools</summary>
+          <button
+            onClick={async () => {
+              if (!viewer.current) return;
+              setQa({ running: true });
+              setQa(await runInventoryChecks(viewer.current));
+            }}
+          >
+            Run inventory checks
+          </button>
           <button
             onClick={async () => {
               if (!viewer.current) return;

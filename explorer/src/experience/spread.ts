@@ -22,6 +22,7 @@ export type SpreadPlacement = {
   offset: THREE.Vector3;
   rotation: THREE.Quaternion;
   bounds: THREE.Box3;
+  sweptBounds?: THREE.Box3;
   group: string;
 };
 export const SPREAD_GROUPS = [
@@ -31,7 +32,7 @@ export const SPREAD_GROUPS = [
 ];
 /** Layout is evaluated from actual immutable geometry in source millimetres.
  * Pack whole projected bounding boxes; never use manifest triangle/size filters. */
-export function makeSpread(
+export function makeSpreadSlots(
   parts: Iterable<SpreadInput>,
   aspect = 2,
   fitted = new Set<string>(),
@@ -188,4 +189,69 @@ export function makeSpread(
     }
   });
   return placements;
+}
+
+/** Forward presentation is independent of the accepted packing measurements. */
+export function forwardRotation(p: SpreadInput, fitted: Set<string>) {
+  const rotation = new THREE.Quaternion();
+  if (fitted.has(p.source.id)) {
+    if (displayFace(p.source.id) === 'central')
+      rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
+  } else if (p.source.definitionId === 'd_0_1_1_97') {
+    rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+  } else if (
+    [
+      87, 103, 112, 113, 117, 124, 127, 135, 148, 149, 150, 157, 158, 160, 162,
+      163, 177, 184, 200, 214, 220,
+    ].some((id) => p.source.definitionId === `d_0_1_1_${id}`)
+  ) {
+    // Source-reviewed axial profiles: a pin/staff has no unique visual front.
+    rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+  } else if (p.source.name.startsWith('010-')) {
+    // The source slotted head is +local Z, including horizontal mounting screws.
+    const head = new THREE.Vector3(0, 0, 1).transformDirection(p.assembled);
+    rotation.setFromUnitVectors(head, new THREE.Vector3(0, 0, -1));
+  }
+  return rotation;
+}
+
+export function makeSpread(
+  parts: Iterable<SpreadInput>,
+  aspect = 2,
+  fitted = new Set<string>(),
+) {
+  const entries = [...parts];
+  const slots = makeSpreadSlots(entries, aspect, fitted);
+  for (const p of entries) {
+    const placement = slots.get(p.source.id);
+    if (!placement) continue;
+    const slotCenter = placement.bounds.getCenter(new THREE.Vector3());
+    const rotation = forwardRotation(p, fitted);
+    const matrix = new THREE.Matrix4()
+      .makeRotationFromQuaternion(rotation)
+      .multiply(
+        new THREE.Matrix4().makeTranslation(
+          -p.center.x,
+          -p.center.y,
+          -p.center.z,
+        ),
+      )
+      .multiply(p.assembled);
+    const bounds = p.mesh.geometry.boundingBox!.clone().applyMatrix4(matrix);
+    const destination = slotCenter
+      .clone()
+      .sub(bounds.getCenter(new THREE.Vector3()));
+    placement.offset.copy(destination).sub(p.center);
+    placement.rotation.copy(rotation);
+    // Symmetric swept bounds keep framing independent of the flip endpoint.
+    // Y is the common upright axis: x/z sweep, y and every slot center stay fixed.
+    const half = bounds.getSize(new THREE.Vector3()).multiplyScalar(0.5);
+    const radius = Math.hypot(half.x, half.z);
+    placement.bounds.copy(bounds).translate(destination);
+    placement.sweptBounds = new THREE.Box3().set(
+      slotCenter.clone().sub(new THREE.Vector3(radius, half.y, radius)),
+      slotCenter.clone().add(new THREE.Vector3(radius, half.y, radius)),
+    );
+  }
+  return slots;
 }

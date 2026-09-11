@@ -146,6 +146,10 @@ export class MovementViewer {
   restoringCamera: Saved | null = null;
   spread = new Map<string, SpreadPlacement>();
   spreadFocus: string | null = null;
+  inventoryAngle = 0;
+  inventoryTravel?: { from: number; to: number; elapsed: number };
+  inventoryApplied = false;
+  inventoryEntering = false;
   reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   travel: {
     position: THREE.Vector3;
@@ -352,19 +356,41 @@ export class MovementViewer {
           Math.abs(p.mesh.matrix.determinant() - p.assembled.determinant()),
         );
       }
+    // Rotated world AABBs can overlap in projection even when the actual mesh
+    // silhouettes are disjoint. Refine only broad-phase candidates with source
+    // vertices; this is an opt-in QA audit, never part of the render loop.
+    const refined = new Set<string>();
+    const precise = (entry: { id: string; box: THREE.Box3 }) => {
+      if (refined.has(entry.id)) return entry.box;
+      const p = this.renderParts.get(entry.id)!;
+      const positions = p.mesh.geometry.getAttribute('position');
+      entry.box.makeEmpty();
+      const point = new THREE.Vector3();
+      for (let i = 0; i < positions.count; i++)
+        entry.box.expandByPoint(
+          point
+            .fromBufferAttribute(positions, i)
+            .applyMatrix4(p.mesh.matrixWorld)
+            .project(this.camera),
+        );
+      refined.add(entry.id);
+      return entry.box;
+    };
+    const intersects = (a: THREE.Box3, b: THREE.Box3) =>
+      a.max.x > b.min.x &&
+      b.max.x > a.min.x &&
+      a.max.y > b.min.y &&
+      b.max.y > a.min.y;
+    const outside = (b: THREE.Box3) =>
+      b.min.x < -1 || b.max.x > 1 || b.min.y < -1 || b.max.y > 1;
     const overlaps: string[][] = [];
     for (let i = 0; i < projected.length; i++)
-      for (let j = i + 1; j < projected.length; j++) {
-        const a = projected[i].box,
-          b = projected[j].box;
+      for (let j = i + 1; j < projected.length; j++)
         if (
-          a.max.x > b.min.x &&
-          b.max.x > a.min.x &&
-          a.max.y > b.min.y &&
-          b.max.y > a.min.y
+          intersects(projected[i].box, projected[j].box) &&
+          intersects(precise(projected[i]), precise(projected[j]))
         )
           overlaps.push([projected[i].id, projected[j].id]);
-      }
     return {
       members: projected.length,
       visible: [...this.renderParts.values()].filter((p) => p.mesh.visible)
@@ -372,13 +398,7 @@ export class MovementViewer {
       maxScaleError,
       overlaps,
       clipped: projected
-        .filter(
-          (p) =>
-            p.box.min.x < -1 ||
-            p.box.max.x > 1 ||
-            p.box.min.y < -1 ||
-            p.box.max.y > 1,
-        )
+        .filter((p) => outside(p.box) && outside(precise(p)))
         .map((p) => p.id),
     };
   }
@@ -1033,7 +1053,12 @@ export class MovementViewer {
       reveal: id ? 1 : 0,
       separation: 0,
       partSpread: 0,
-      side: group?.side === 1 ? 'front' : 'back',
+      side:
+        !group && this.state.layout === 'spread'
+          ? this.state.side
+          : group?.side === 1
+            ? 'front'
+            : 'back',
     });
     if (group) this.frameGroup(group);
     else this.homeCamera();
@@ -1094,7 +1119,15 @@ export class MovementViewer {
     return new THREE.Vector3(0, 0, this.state.side === 'front' ? 1 : -1);
   }
   defaultUp() {
-    return new THREE.Vector3(0, this.state.side === 'front' ? 1 : -1, 0);
+    return new THREE.Vector3(
+      0,
+      this.state.layout === 'spread'
+        ? -1
+        : this.state.side === 'front'
+          ? 1
+          : -1,
+      0,
+    );
   }
   boundsCorners(bounds: THREE.Box3) {
     return Array.from(
@@ -1235,7 +1268,7 @@ export class MovementViewer {
       part: null,
       isolated: false,
       phase: 'recovering',
-      side: 'back',
+      inventoryBack: false,
     });
     this.frameSpread();
   }
@@ -1244,7 +1277,7 @@ export class MovementViewer {
     if (!this.spread.size) return;
     const bounds = new THREE.Box3();
     for (const p of this.spread.values())
-      if (!group || p.group === group) bounds.union(p.bounds);
+      if (!group || p.group === group) bounds.union(p.sweptBounds ?? p.bounds);
     const size = bounds.getSize(new THREE.Vector3());
     const distance =
       (Math.max(size.y, size.x / this.camera.aspect) /
@@ -1273,6 +1306,28 @@ export class MovementViewer {
     this.controls.target.add(delta);
     this.controls.update();
     this.invalidate();
+  }
+  flipMovement() {
+    if (!this.ready) return;
+    if (this.state.layout !== 'spread') {
+      this.setSide(this.state.side === 'back' ? 'front' : 'back');
+      return;
+    }
+    this.save();
+    // Finish entry framing before a queued turn starts. Otherwise freeze an
+    // inspection close-up at its displayed pose; the turn never orbits or refits.
+    if (!this.inventoryEntering) this.travel = null;
+    this.restoringCamera = null;
+    this.state = resolveState(this.state, {
+      inventoryBack: !this.state.inventoryBack,
+    });
+    this.inventoryTravel = {
+      from: this.inventoryAngle,
+      to: this.state.inventoryBack ? Math.PI : 0,
+      elapsed: 0,
+    };
+    this.invalidate();
+    this.emit();
   }
   setSide(side: 'back' | 'front') {
     if (this.state.layout === 'spread' || this.state.side === side) return;
@@ -1413,6 +1468,38 @@ export class MovementViewer {
       await this.select(retry.id);
   }
   retarget() {
+    // Fold the actually displayed inventory turn into each departing pose before
+    // starting the ordinary assembly transition; interruption cannot snap back.
+    if (this.inventoryApplied && this.state.layout !== 'spread') {
+      for (const p of this.renderParts.values()) {
+        if (!this.spread.has(p.source.id)) continue;
+        const delta = p.mesh.matrix
+          .clone()
+          .multiply((p.displayMatrix ?? p.assembled).clone().invert());
+        p.rotation.setFromRotationMatrix(delta);
+        p.offset.copy(p.center).applyMatrix4(delta).sub(p.center);
+        p.targetRotation.copy(p.rotation);
+        p.target.copy(p.offset);
+      }
+    }
+    // Navigation can happen before the first inventory frame. Clear its pending
+    // turn even when there is no displayed inventory matrix to fold yet.
+    if (this.state.layout !== 'spread') {
+      this.inventoryAngle = 0;
+      this.inventoryTravel = undefined;
+      this.inventoryApplied = false;
+      this.inventoryEntering = false;
+    }
+    if (this.state.layout === 'spread') {
+      if (!this.inventoryApplied) this.inventoryEntering = true;
+      const to = this.state.inventoryBack ? Math.PI : 0;
+      if ((this.inventoryTravel?.to ?? this.inventoryAngle ?? 0) !== to)
+        this.inventoryTravel = {
+          from: this.inventoryAngle ?? 0,
+          to,
+          elapsed: 0,
+        };
+    }
     const previousFitted = this.fitted;
     this.fitted = this.renderableDials();
     if (this.state.layout === 'spread') this.rebuildSpread();
@@ -1579,6 +1666,19 @@ export class MovementViewer {
   applyPose(dt: number) {
     let moving = false;
     const temp = new THREE.Matrix4();
+    if (this.inventoryTravel && (!this.inventoryEntering || this.reduced)) {
+      const turn = this.inventoryTravel;
+      turn.elapsed += Math.max(0, dt);
+      const t = this.reduced ? 1 : Math.min(1, turn.elapsed / 0.85);
+      this.inventoryAngle = THREE.MathUtils.lerp(
+        turn.from,
+        turn.to,
+        t * t * (3 - 2 * t),
+      );
+      moving = t < 1;
+      if (!moving) this.inventoryTravel = undefined;
+    }
+    const flip = new THREE.Matrix4().makeRotationY(this.inventoryAngle ?? 0);
     let staged: Map<string, [number, number, number]> | undefined;
     if (this.explosionTravel) {
       const travel = this.explosionTravel;
@@ -1645,8 +1745,31 @@ export class MovementViewer {
       }
       temp.makeTranslation(p.offset.x, p.offset.y, p.offset.z);
       p.mesh.matrix.premultiply(temp);
+      if (this.state.layout === 'spread' && this.spread.has(p.source.id)) {
+        const pivot = p.mesh.geometry
+          .boundingBox!.getCenter(new THREE.Vector3())
+          .applyMatrix4(p.mesh.matrix);
+        if (this.inventoryAngle) {
+          p.mesh.matrix.premultiply(
+            temp.makeTranslation(-pivot.x, -pivot.y, -pivot.z),
+          );
+          p.mesh.matrix.premultiply(flip);
+          p.mesh.matrix.premultiply(
+            temp.makeTranslation(pivot.x, pivot.y, pivot.z),
+          );
+        }
+        this.inventoryApplied = true;
+      }
       p.mesh.matrixWorldNeedsUpdate = true;
     }
+    if (
+      this.inventoryEntering &&
+      !this.travel &&
+      ![...this.renderParts.values()].some((p) => p.motion)
+    )
+      this.inventoryEntering = false;
+    // Keep rendering a queued turn after the entry camera and poses arrive.
+    moving = !!this.inventoryTravel || moving;
     if (!moving) this.displayedExplosionState = { ...this.state };
     if (this.state.part) {
       const b = new THREE.Box3();

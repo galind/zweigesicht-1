@@ -979,9 +979,9 @@ for(let i=0;i<24;i++) {
  v.allParts();v.applyPose(.05);v.group(groupIds[i%6]);v.applyPose(.04);
  v.patch({partSpread:.6,reveal:.6});v.applyPose(.03);v.allParts();v.applyPose(.02);
  await v.select(recovery.DIAMOND_ID);v.patch({isolated:true});v.applyPose(.01);v.back();
- v.reset();for(let n=0;n<260;n++)v.applyPose(1/60);v.retargetVisibility();
+ const retainedSide=v.state.side;v.reset();for(let n=0;n<260;n++)v.applyPose(1/60);v.retargetVisibility();
  assert.equal(v.assemblyError(),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,222);
- assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,'back');assert.equal('treatment' in v.state,false);assert.equal(v.history.length,0);assert.equal(v.state.part,null);
+ assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,retainedSide);assert.equal('treatment' in v.state,false);assert.equal(v.history.length,0);assert.equal(v.state.part,null);
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
 results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
@@ -1024,4 +1024,7 @@ const {reviewExplosion}=await import('./review-explosion.mjs');
 reviewExplosion({v,THREE,initialState,load,ROOT,parts,results});
 const {reviewDials}=await import('./review-dials.mjs');
 await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results});
+const {reviewInventory}=await import('./review-inventory.mjs');
+await reviewInventory({v,Viewer,THREE,initialState,load,parts,results});
+for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Inventory must preserve source geometry bytes');
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

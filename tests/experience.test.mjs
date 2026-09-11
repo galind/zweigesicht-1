@@ -58,3 +58,16 @@ test('camera intent normalizes and survives unrelated state changes',()=>{
  const face=resolveState(initialState,{viewAngle:'face'});
  for(const patch of [{side:'front'},{side:'back'},{centralVisible:true},{smallStyle:'pear'}])assert.equal(resolveState(face,patch).viewAngle,'face');
 });
+
+
+test('inventory flip state is independent of assembly side and clears on exit/Reset',()=>{
+ for(const side of ['front','back']) {
+  const forward=resolveState(initialState,{layout:'spread',side});
+  const back=resolveState(forward,{inventoryBack:true});
+  assert.equal(back.side,side);assert.equal(back.inventoryBack,true);
+  assert.equal(resolveState(back,{smallVisible:true,smallStyle:'pear'}).inventoryBack,true);
+  assert.equal(resolveState(back,{inventoryBack:false}).side,side);
+  assert.equal(resolveState(back,{layout:'assembly'}).inventoryBack,false);
+  assert.equal(resetViewState(back).inventoryBack,false);assert.equal(resetViewState(back).side,side);
+ }
+});

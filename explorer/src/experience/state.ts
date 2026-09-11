@@ -14,6 +14,7 @@ export interface ExperienceState {
   centralStyle: string;
   smallStyle: string;
   layout: 'assembly' | 'spread';
+  inventoryBack: boolean;
   group: string | null;
   part: string | null;
   side: 'back' | 'front';
@@ -32,6 +33,7 @@ export const initialState: ExperienceState = {
   centralStyle: configurations.defaults.central,
   smallStyle: configurations.defaults.small,
   layout: 'assembly',
+  inventoryBack: false,
   group: null,
   part: null,
   side: 'back',
@@ -53,6 +55,7 @@ export function resolveState(
   for (const key of Object.keys(next))
     if (!(key in initialState))
       delete (next as unknown as Record<string, unknown>)[key];
+  next.inventoryBack = next.layout === 'spread' && next.inventoryBack === true;
   next.viewAngle = next.viewAngle === 'face' ? 'face' : 'overview';
   next.centralVisible = next.centralVisible === true;
   next.smallVisible = next.smallVisible === true;

@@ -26,6 +26,7 @@ export function registerMovementTools(viewer: MovementViewer) {
     return {
       ready: s.ready,
       layout: s.layout,
+      inventoryBack: s.inventoryBack,
       presentation: s.presentation,
       centralVisible: s.centralVisible,
       smallVisible: s.smallVisible,
