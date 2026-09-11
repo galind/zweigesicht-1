@@ -91,33 +91,21 @@ export async function runUxChecks(v: MovementViewer) {
     await v.select(part.id);
     await settle(v);
     const strip = document.querySelector<HTMLElement>('.focus-strip')!;
-    const trigger = strip.querySelector<HTMLButtonElement>('[aria-controls="component-details"]')!;
-    const stage = JSON.stringify(rects());
-    const position = v.camera.position.clone(), target = v.controls.target.clone();
-    trigger.click();
-    await sleep(300);
-    const panel = document.querySelector<HTMLElement>('#component-details')!;
-    const provenance = panel.querySelector<HTMLDetailsElement>('.technical-provenance')!;
-    const primary = strip.innerText + panel.innerText;
     checks.push({
-      name: `${label}: inline explanation and optional panel hide CAD identity by default`,
-      pass: !!strip.querySelector('.component-caption')?.textContent &&
-        trigger.textContent?.trim() === 'About part' && !provenance.open &&
-        ![part.id, part.definitionId, part.sourceInstanceId, part.name].some((id) => primary.includes(id)) &&
-        !/\b\d+(?::\d+){2,}/.test(primary) &&
-        stage === JSON.stringify(rects()) &&
-        position.distanceTo(v.camera.position) < 1e-8 && target.distanceTo(v.controls.target) < 1e-8,
+      name: `${label}: selection shows only readable name and isolation action`,
+      pass: strip.querySelector('h2')?.textContent === label &&
+        strip.querySelectorAll('button').length === 1 &&
+        strip.querySelector('button')?.textContent?.trim() === 'Isolate part' &&
+        !strip.querySelector('.component-caption') &&
+        !document.querySelector('#component-details') &&
+        ![part.id, part.definitionId, part.sourceInstanceId, part.name].some((id) => strip.innerText.includes(id)),
     });
-    provenance.querySelector('summary')!.click();
-    checks.push({name: `${label}: provenance remains available on request`, pass: provenance.open && provenance.innerText.includes(part.sourceInstanceId)});
-    panel.querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!.click();
-    await sleep(300);
-    checks.push({name: `${label}: dismissal restores focus`, pass: document.activeElement === trigger});
-    trigger.click();
-    await sleep(300);
-    checks.push({name: `${label}: reopening collapses provenance`, pass: !document.querySelector<HTMLDetailsElement>('.technical-provenance')!.open});
-    document.querySelector<HTMLButtonElement>('#component-details [data-slot="sheet-close"]')!.click();
-    await sleep(300);
+    strip.querySelector<HTMLButtonElement>('button')!.click();
+    await settle(v);
+    checks.push({name: `${label}: isolation remains available`, pass: v.state.isolated && strip.innerText.includes('Show context')});
+    strip.querySelector<HTMLButtonElement>('button')!.click();
+    await settle(v);
+
   }
   v.reset();
   await settle(v);

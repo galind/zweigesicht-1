@@ -14,7 +14,6 @@ import {
   ChevronRight,
   ExternalLink,
   FlipHorizontal2,
-  X,
   RotateCcw,
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
@@ -37,11 +36,10 @@ import {
   partLabel,
   buildPartIndex,
   matchesPart,
-  category,
   type Part,
 } from '@/src/experience/catalog';
 import { SPREAD_GROUPS } from '@/src/experience/spread';
-import { factsFor, partDetail } from '@/src/experience/copy';
+import { factsFor } from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
 import {
   Combobox,
@@ -210,11 +208,6 @@ export default function Home() {
   useEffect(() => {
     queueMicrotask(() => setDetails(false));
   }, [s.part, s.group]);
-  const dismissSelection = () => {
-    setDetails(false);
-    viewer.current?.deselect();
-    host.current?.querySelector('canvas')?.focus();
-  };
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (
@@ -583,7 +576,7 @@ export default function Home() {
                     : 'All parts'}
             </h2>
             <div className="focus-actions">
-              {(group || selected) && (
+              {group && !selected && (
                 <button
                   ref={detailButton}
                   className="text-button"
@@ -591,35 +584,23 @@ export default function Home() {
                   aria-expanded={details}
                   aria-controls="component-details"
                 >
-                  {selected ? 'About part' : 'About mechanism'}
+                  About mechanism
                 </button>
               )}
               {selected && (
                 <button
-                  className="text-button dismiss-button"
-                  aria-label="Deselect part"
-                  title="Deselect part (Escape)"
-                  onClick={dismissSelection}
+                  className="text-button isolate-button"
+                  aria-pressed={s.isolated}
+                  disabled={!available}
+                  onClick={() => patch({ isolated: !s.isolated })}
                 >
-                  <X aria-hidden="true" />
+                  {s.isolated ? 'Show context' : 'Isolate part'}
                 </button>
               )}
             </div>
           </div>
-          <p className="component-caption">
-            {selected ? partDetail(selected) : group?.caption}
-          </p>
-          {selected && (
-            <div className="selected-summary">
-              <button
-                className="text-button isolate-button"
-                aria-pressed={s.isolated}
-                disabled={!available}
-                onClick={() => patch({ isolated: !s.isolated })}
-              >
-                {s.isolated ? 'Show context' : 'Isolate part'}
-              </button>
-            </div>
+          {group && !selected && (
+            <p className="component-caption">{group.caption}</p>
           )}
         </section>
       )}
@@ -876,36 +857,12 @@ export default function Home() {
           }
         >
           <SheetHeader>
-            <SheetTitle>
-              {selected ? partLabel(selected) : group?.technical}
-            </SheetTitle>
-            {(!selected || partDetail(selected)) && (
-              <SheetDescription>
-                {selected ? partDetail(selected) : group?.caption}
-              </SheetDescription>
-            )}
+            <SheetTitle>{group?.technical}</SheetTitle>
+            <SheetDescription>{group?.caption}</SheetDescription>
           </SheetHeader>
           <div className="about-copy">
-            {selected ? (
+            {group && (
               <>
-                <p className="secondary">
-                  Part of {partIndex.get(selected.id)?.context}
-                </p>
-                <details className="technical-provenance" key={selected.id}>
-                  <summary>Technical provenance</summary>
-                  <p>These references identify this instance in the original CAD assembly.</p>
-                  <dl>
-                    <dt>Source name</dt>
-                    <dd lang="de">{selected.name}</dd>
-                    <dt>CAD instance</dt>
-                    <dd className="source-id">{selected.sourceInstanceId}</dd>
-                  </dl>
-                  <p>{category(selected)}</p>
-                </details>
-              </>
-            ) : (
-              group && (
-                <>
                   <ul className="detail-facts">
                     {factsFor(group.id).map((f) => (
                       <li key={f.text}>
@@ -941,8 +898,7 @@ export default function Home() {
                       </button>
                     ))}
                   </div>
-                </>
-              )
+              </>
             )}
           </div>
         </SheetContent>
