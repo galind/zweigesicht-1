@@ -25,13 +25,13 @@ The review decoded the existing local overview and catalog GLBs and inspected pa
 | Source family / definition | Forward decision and evidence |
 | --- | --- |
 | Broad plates, bridges, flat wheels, springs and forks | Remove arbitrary tilt; retain source world XY roll. Paired source-mesh views establish broad recognizable faces, without asserting a universal mechanical front. |
-| `010-` screws, including horizontal d201/d226 | Map the assembled local +Z axis to inventory -Z and local +Y to -Y, so every screw slot is vertical, including the three Skeleton dial screws. The source slot walls have ±local X normals in all 20 reviewed screw definitions. Actual slot geometry distinguishes the head from the shank end; size does not decide orientation. This consistent slot roll is a presentation convention. |
+| `010-` screws, including horizontal d201/d226 | Map source local +Z to inventory -Y: stand the whole screw vertically with its head above the shaft, including the three Skeleton dial screws. Cancel occurrence roll and use a source-local X quarter-turn to show the full side profile. The source head/slot geometry establishes the positive axial end in all 20 reviewed definitions; size does not decide orientation. This supersedes the earlier head-on slot alignment, which misunderstood the user’s request. Source shanks that are smooth remain smooth; no thread geometry is invented. |
 | Coupling wheel d97 | World Y rotation -π/2 exposes its toothed face; identity showed the thin edge because the source axis is world X. |
 | Toothed pinions d93/d137/d234/d237/d242 | Retain face-on identity despite long shafts; recognizable teeth take precedence over the old size-based side view. |
 | Winding stem d143 and sliding clutch d144 | Retain the existing world XY profile, exposing stepped source geometry. |
 | Plain axial profiles d87/d103/d112/d113/d117/d124/d127/d135/d148/d149/d150/d157/d158/d160/d162/d163/d177/d184/d200/d214/d220 | Explicit world Y rotation π/2 presents informative pin/staff/arbor profiles. These parts have no uniquely established visual front. |
 | Three hands dial and all fitted hands/supports | World X rotation π. Actual d27 guilloché lies on source world +Z; the same convention keeps the logo and numeral orientation upright. |
-| Skeleton dial and all fitted hands/supports | Identity. Actual d14/d21 outward ring/enamel geometry faces world -Z. |
+| Skeleton dial and all fitted hands/supports | Identity, except the explicitly upright screws above. Actual d14/d21 outward ring/enamel geometry faces world -Z. |
 | All hand styles | Retain the existing fitted 10:10:00 bearings and source-specific corrections. Upright means the display face convention, not rotating every blade to twelve o'clock. Thin/bent hands never inherit a bounding-size quarter-turn. |
 
 Symmetric wheels, washers, jewels, bearings and structural counterbores can be ambiguous. The chosen forward view is an inspection convention. No expert mechanical front classification is claimed.

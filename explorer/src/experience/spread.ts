@@ -195,15 +195,15 @@ export function makeSpreadSlots(
 export function forwardRotation(p: SpreadInput, fitted: Set<string>) {
   const rotation = new THREE.Quaternion();
   if (p.source.name.startsWith('010-')) {
-    // Source slot walls have +/-local X normals: local Y runs along the slot.
-    // Cancel occurrence roll, then face the head (-Z) with its slot upright (-Y).
+    // Source +Z runs from the threaded shaft toward the head. Cancel occurrence
+    // roll and stand the whole screw upright (-Y), exposing its side profile.
     rotation
       .setFromRotationMatrix(p.assembled)
       .invert()
       .premultiply(
         new THREE.Quaternion().setFromAxisAngle(
           new THREE.Vector3(1, 0, 0),
-          Math.PI,
+          Math.PI / 2,
         ),
       );
   } else if (fitted.has(p.source.id)) {

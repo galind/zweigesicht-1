@@ -244,8 +244,17 @@ Browser inventory suites pass all 24 checks at 1440×900 and 390×844 with both 
 Local screenshots, reports and paired source-geometry contact sheets: ignored `artifacts/browser/inventory-flip/`. Preview remains `http://127.0.0.1:4173/`. Mobile evidence is desktop Chromium viewport emulation, not a physical-device or cross-GPU certification. User appearance acceptance, expert mechanical review, physical-device review, CAD redistribution permission and publication remain open gates. No source assets, identities, authored finishes or occurrence transforms changed; nothing was published, uploaded, pushed or redistributed. Next action: user review of the forward presentation and in-place turn.
 
 
-## Straight screw slots — 11 September 2026
+## Straight screw slots — 11 September 2026 (superseded: misunderstood user intent)
 
 Following user acceptance of the inventory and request to straighten the screws, aligned every All parts screw-head slot vertically, including the three fitted Skeleton dial screws. Actual source-face records for all 20 screw definitions show slot walls normal to local ±X, establishing local Y as the slot direction. Presentation now cancels each occurrence's roll and maps the head toward the viewer with its slot upright. Existing slot centers, ordering, sizes, flip behavior, assembly transforms and authored finishes are preserved.
 
 Verified lint, TypeScript, production build and all 84 source/runtime checks, including added slot-axis assertions and fitted-dial orientation coverage. The existing full inventory sweep, nine style pairs, original-slot fit, exact double flip and reassembly checks pass. Desktop and mobile-sized browser close-ups confirm straight slots on a movement screw and a Skeleton dial screw. Local evidence: ignored `artifacts/browser/straight-screws/`. Existing build warnings and physical-device/mechanical limitations remain; no source assets were changed or redistributed and nothing was published. Preview remains `http://127.0.0.1:4173/`.
+
+
+## Upright screw profiles — 11 September 2026
+
+The user clarified that “up” means the whole screw standing vertically so its head and shaft are visible together, rather than upright head slots. Replaced the head-on presentation with a side profile: source local +Z points to screen up (-Y), with the head above the shaft. This applies to all movement screws and the three fitted Skeleton screws, independently of their source occurrence roll. The existing inventory slots, centers, packing, scale, camera and all other part orientations remain unchanged. A shared Y-axis flip keeps the screws upright through both endpoints and restores the exact forward matrix on a double flip.
+
+Verified lint, TypeScript, production build and all 84 source/runtime checks. Updated source-axis regressions protect head-above-shaft side profiles; the existing nine-style-pair desktop/portrait checks confirm the complete turn fits the original padded slots without overlap/clipping, fixed centers, rapid reversals, visibility/loading/retries and exact reassembly. Desktop and mobile-sized browser review with both dials enabled confirms the inventory arrangement and upright movement/Skeleton screw close-ups; Reset restores zero fitted-dial pose error. Evidence and logs: ignored `artifacts/browser/upright-screws/`.
+
+Actual source geometry remains authoritative: some screw shanks are smooth in the supplied model; no helical threads were fabricated. Source identities, finishes and assembly transforms remain unchanged. Existing build warnings and physical-device/mechanical review limitations remain. Nothing was published or redistributed. Preview remains `http://127.0.0.1:4173/` for appearance review.

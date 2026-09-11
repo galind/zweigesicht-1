@@ -159,7 +159,7 @@ export async function runDialChecks(v: MovementViewer) {
         leaves.every((p) => {
           if (p.source.name.startsWith('010-'))
             return (
-              new THREE.Vector3(0, 1, 0)
+              new THREE.Vector3(0, 0, 1)
                 .transformDirection(p.mesh.matrix)
                 .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
             );
