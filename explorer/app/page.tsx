@@ -92,12 +92,15 @@ export default function Home() {
   const panelAnchor = useRef<HTMLElement | null>(null);
   const [panelX, setPanelX] = useState<number | null>(null);
   const [panelBottom, setPanelBottom] = useState<number | null>(null);
+  const [optionsTop, setOptionsTop] = useState(64);
   const panelStyle = {
     '--panel-anchor-x': panelX === null ? '50vw' : `${panelX}px`,
     '--panel-bottom': panelBottom === null ? undefined : `${panelBottom}px`,
   } as CSSProperties;
   useEffect(() => {
     const measure = () => {
+      const optionsRect = optionsButton.current?.getBoundingClientRect();
+      if (optionsRect) setOptionsTop(optionsRect.bottom + 12);
       const rect = panelAnchor.current?.getBoundingClientRect();
       if (rect) setPanelX(rect.left + rect.width / 2);
       const dockRect = document
@@ -109,6 +112,7 @@ export default function Home() {
     const observer = new ResizeObserver(measure);
     const dock = document.querySelector('.action-dock');
     if (dock) observer.observe(dock);
+    if (optionsButton.current) observer.observe(optionsButton.current);
     return () => {
       window.removeEventListener('resize', measure);
       observer.disconnect();
@@ -331,9 +335,9 @@ export default function Home() {
               Options
             </SheetTrigger>
             <SheetContent
-              side="bottom"
-              style={panelStyle}
-              className="explorer-panel about-sheet"
+              side="top"
+              style={{ '--options-top': `${optionsTop}px` } as CSSProperties}
+              className="explorer-panel about-sheet options-panel"
               showOverlay={false}
               scrollContent
               finalFocus={() =>

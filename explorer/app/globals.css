@@ -1081,3 +1081,38 @@ canvas:focus-visible {
     grid-area: 3 / 2;
   }
 }
+
+/* Options stays beside its top-right trigger. */
+.explorer-panel.options-panel[data-slot='sheet-content'],
+.text-enlarged .explorer-panel.options-panel[data-slot='sheet-content'] {
+  top: var(--options-top, 64px);
+  right: max(12px, env(safe-area-inset-right));
+  bottom: auto;
+  left: auto;
+  transform: none;
+  --popup-width: min(
+    380px,
+    calc(
+      100vw - max(12px, env(safe-area-inset-left)) -
+        max(12px, env(safe-area-inset-right))
+    )
+  );
+  max-height: min(
+    520px,
+    calc(
+      100dvh - var(--options-top, 64px) - max(12px, env(safe-area-inset-bottom))
+    )
+  );
+}
+@media (max-width: 700px) {
+  .explorer-panel.options-panel[data-slot='sheet-content'],
+  .text-enlarged .explorer-panel.options-panel[data-slot='sheet-content'] {
+    max-height: min(
+      42dvh,
+      calc(
+        100dvh - var(--options-top, 64px) -
+          max(12px, env(safe-area-inset-bottom))
+      )
+    );
+  }
+}

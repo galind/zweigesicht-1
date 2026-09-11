@@ -107,3 +107,9 @@ Evidence: `artifacts/browser/viewport-redesign/dock-followup/` (ignored). Previe
 Moved All parts out of Explore into its own dock button beside Explore and Dial & hands. Its pressed state identifies the parts spread; pressing again returns to the whole movement. The action closes any open panel. Portrait phones up to 430 px use two rows, keeping the three exploration choices together and separation, side and reset below. Enlarged text uses three rows.
 
 Verified lint, TypeScript and production build, plus all 35 mobile UX checks including stable All parts button bounds across scene states. Browser interaction confirmed direct spread entry, return to whole, Reset and removal from Explore. Compared seven viewport sizes from 320×568 to 1440×900, including tablet and landscape; no horizontal overflow or offscreen dock buttons. The 390×844 stage is now 390×680 (80.6% of screen height), retaining 48.3% more movement height than the original layout. Updated `docs/VIEWPORT_UI_REVIEW.md`. Local evidence: `artifacts/browser/viewport-redesign/all-parts-followup/` (ignored). Next action: user review.
+
+## Options by its corner button — 11 September 2026
+
+Options now opens at the top right, 12 px below its existing button. The anchor updates on resize and button size changes; safe-area edges and a scrollable height limit keep it onscreen. On phones the panel is capped at 42dvh. The movement controls retain their bottom popup placement. Existing keyboard focus, dismissal and reduced-motion behavior are preserved.
+
+Verified lint, TypeScript, production build and all 35 mobile UX checks, including camera/stage/state invariance and focus restoration. Desktop 1440×900 and portrait 390×844 visual checks confirm the 12 px trigger gap and safe horizontal bounds. Evidence: `artifacts/browser/viewport-redesign/options-corner/` (ignored). Next action: user review.
