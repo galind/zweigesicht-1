@@ -1,3 +1,8 @@
+import * as THREE from 'three';
+import {
+  DISPLAY_LAYERS,
+  displaySeparationOffsets,
+} from '../experience/explosion';
 import type { MovementViewer } from './MovementViewer';
 import { DIALS, fittedLeaves, displayHostPart } from '../experience/dials';
 import { ROOT, belongs, GROUPS } from '../experience/catalog';
@@ -86,20 +91,29 @@ export async function runDialChecks(v: MovementViewer) {
       v.patch({ separation: 1 });
       await settle(v);
       const leaves = visible();
-      const packetAligned = (['central', 'small'] as const).every((face) => {
-        const packet = leaves.filter((p) =>
-          belongs(p.source.id, DIALS.faces[face].rootId),
-        );
-        return (
-          !packet.length ||
-          packet.every(
-            (p) => p.offset.equals(packet[0].offset) && p.offset.length() > 0,
-          )
-        );
+      const layersClear = (['central', 'small'] as const).every((face) => {
+        const sign = face === 'central' ? 1 : -1;
+        let edge = -Infinity;
+        return DISPLAY_LAYERS[face].every((layer) => {
+          const boxes = leaves
+            .filter((p) => layer.includes(p.source.id))
+            .map((p) =>
+              p.mesh.geometry.boundingBox!.clone().applyMatrix4(p.mesh.matrix),
+            );
+          if (!boxes.length) return true;
+          const min = Math.min(
+            ...boxes.map((b) => sign * (sign === 1 ? b.min.z : b.max.z)),
+          );
+          const clear = min - edge >= 0.999;
+          edge = Math.max(
+            ...boxes.map((b) => sign * (sign === 1 ? b.max.z : b.min.z)),
+          );
+          return clear;
+        });
       });
       check(
-        `${label}: enabled dials and hands separate as aligned packets`,
-        before === prefs() && exact() && packetAligned,
+        `${label}: enabled individual dial/hand layers separate with 1 mm clearance`,
+        before === prefs() && exact() && layersClear,
       );
       v.patch({ separation: 0 });
       await settle(v);
@@ -117,6 +131,23 @@ export async function runDialChecks(v: MovementViewer) {
           packed.clipped.length === 0 &&
           exact(),
         packed,
+      );
+      check(
+        `${label}: every fitted inventory part faces forward and upright`,
+        leaves.every((p) => {
+          const sign = belongs(p.source.id, DIALS.faces.central.rootId)
+            ? 1
+            : -1;
+          const rotation = v.spread.get(p.source.id)!.rotation;
+          return (
+            new THREE.Vector3(0, 0, sign)
+              .applyQuaternion(rotation)
+              .distanceTo(new THREE.Vector3(0, 0, -1)) < 1e-9 &&
+            new THREE.Vector3(0, sign, 0)
+              .applyQuaternion(rotation)
+              .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
+          );
+        }),
       );
       if (leaves.length) {
         await v.select(leaves[0].source.id);
@@ -164,12 +195,24 @@ export async function runDialChecks(v: MovementViewer) {
     v.patch({ partSpread: 1 });
     await settle(v);
     check(
-      `${group.id}: retained display parts follow exact section hosts`,
+      `${group.id}: display layers compose with their section hosts`,
       before === prefs() &&
         visible().every(
           (p) =>
             p.offset.distanceTo(
-              v.renderParts.get(displayHostPart(p.source.id))!.offset,
+              v.renderParts
+                .get(displayHostPart(p.source.id))!
+                .offset.clone()
+                .add(
+                  new THREE.Vector3(
+                    0,
+                    0,
+                    group.id === 'display'
+                      ? (displaySeparationOffsets(v.parts).get(p.source.id) ??
+                          0)
+                      : 0,
+                  ),
+                ),
             ) < 1e-9,
         ),
     );

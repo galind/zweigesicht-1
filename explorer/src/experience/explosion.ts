@@ -1,4 +1,5 @@
 import { DIALS, displayFace, displayHostPart } from './dials';
+import handPoses from '../../../assets/authored/hand-display-poses.json';
 import complete from '../../../assets/derived/complete-separation.json';
 import authored from '../../../assets/authored/explosion.json';
 import { GROUPS, inMembers, type Part } from './catalog';
@@ -40,6 +41,59 @@ export function uncoverHost(id: string, group: string | null) {
   }
   return false;
 }
+/** Illustrative outward layers, not a mechanical release sequence. Repeated
+ * indices/screws retain their distinct XY seats on a shared axial layer. */
+export const DISPLAY_LAYERS = Object.fromEntries(
+  (['central', 'small'] as const).map((face) => {
+    const root = DIALS.faces[face].rootId;
+    const prefix = root + (face === 'central' ? '__0_1_1_22_' : '__0_1_1_2_');
+    const structure = (
+      face === 'central'
+        ? [[4], [5], [1], [23, 3, 7, 8, 11, 12, 13, 15, 16, 17, 19, 20, 21]]
+        : [[19], [28], [11, 17, 22], [3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 27]]
+    ).map((layer) => layer.map((n) => prefix + n));
+    const hands = (
+      face === 'central' ? ['hour', 'minute', 'seconds'] : ['hour', 'minute']
+    ).flatMap((role) => {
+      const records = handPoses.hands.filter(
+        (h) => h.face === face && h.role === role,
+      );
+      return [
+        [...new Set(records.map((h) => h.supportLeafId))],
+        records.map((h) => h.leafId),
+      ];
+    });
+    return [face, [...structure, ...hands]];
+  }),
+) as Record<'central' | 'small', string[][]>;
+
+export function displaySeparationOffsets(parts: Part[]) {
+  const byId = new Map(parts.map((p) => [p.id, p]));
+  const offsets = new Map<string, number>();
+  for (const face of ['central', 'small'] as const) {
+    const sign = face === 'central' ? 1 : -1;
+    let edge = -Infinity;
+    for (const layer of DISPLAY_LAYERS[face]) {
+      // Include all style variants so toggling hands cannot move the other layers.
+      const bounds = layer.flatMap((id) => {
+        const box = byId.get(id)?.boundsWorldMm;
+        return box ? [box] : [];
+      });
+      if (!bounds.length) continue;
+      const min = Math.min(
+        ...bounds.map((b) => sign * b[sign === 1 ? 0 : 1][2]),
+      );
+      const max = Math.max(
+        ...bounds.map((b) => sign * b[sign === 1 ? 1 : 0][2]),
+      );
+      const distance = Math.max(0, edge + complete.gapMm - min);
+      for (const id of layer) offsets.set(id, sign * distance);
+      edge = max + distance;
+    }
+  }
+  return offsets;
+}
+
 /** One evaluator owns all assembly presentation offsets. Source matrices are read only.
  * Fitted hand poses compose underneath presentation offsets; packing owns spread offsets.
  */
@@ -47,6 +101,7 @@ export function explosionOffsets(
   parts: Part[],
   state: ExplosionState,
 ): Map<string, Vec3> {
+  const displayOffsets = displaySeparationOffsets(parts);
   if (!state.group) {
     const progress = Math.max(0, Math.min(1, state.separation));
     const ids = new Set(parts.map((p) => p.id));
@@ -62,8 +117,8 @@ export function explosionOffsets(
       ...complete.parts.map((p) => p.boundsWorldMm[1][2] + p.offsetMm[2]),
     );
     for (const face of ['central', 'small'] as const) {
-      // Rigid display packets stay aligned, outside the movement's final
-      // envelope. This is presentation clearance, not a service sequence.
+      // Start each display outside the movement envelope, then separate its
+      // individual layers along its outward axis. Fitted XY remains unchanged.
       const structure = parts.filter(
         (p) =>
           DIALS.faces[face].structureLeafIds.includes(p.id) && p.boundsWorldMm,
@@ -79,7 +134,11 @@ export function explosionOffsets(
           : minZ - complete.gapMm - edge;
       for (const part of parts)
         if (!part.isAssembly && displayFace(part.id) === face)
-          result.set(part.id, [0, 0, z * progress]);
+          result.set(part.id, [
+            0,
+            0,
+            (z + (displayOffsets.get(part.id) ?? 0)) * progress,
+          ]);
     }
     return result;
   }
@@ -141,8 +200,16 @@ export function explosionOffsets(
   }
   for (const part of parts) {
     const proxy = displayHostPart(part.id);
-    if (!part.isAssembly && proxy !== part.id)
-      result.set(part.id, result.get(proxy) ?? [0, 0, 0]);
+    if (!part.isAssembly && proxy !== part.id) {
+      const offset = [...(result.get(proxy) ?? [0, 0, 0])] as Vec3;
+      const progress = Math.max(
+        state.separation,
+        state.group === 'display' ? state.partSpread : 0,
+      );
+      offset[2] +=
+        (displayOffsets.get(part.id) ?? 0) * Math.max(0, Math.min(1, progress));
+      result.set(part.id, offset);
+    }
   }
   return result;
 }

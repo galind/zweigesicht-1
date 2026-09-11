@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { displayFace } from './dials';
 import { ROOT, PREFIX, GROUPS, belongs, inMembers, type Part } from './catalog';
 
 /** Case-mounting fittings and the incompatible alternate setting spring.
@@ -57,16 +58,23 @@ export function makeSpread(
       .applyMatrix4(p.assembled);
     const size = sourceBox.getSize(new THREE.Vector3());
     const rotation = new THREE.Quaternion();
-    // Lay long axial parts across the inspection plane; retain original form/scale.
-    if (size.z > Math.max(size.x, size.y))
-      rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
-    else if (size.y < Math.min(size.x, size.z))
-      rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
-    else if (size.x < Math.min(size.y, size.z))
-      rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
-    rotation.premultiply(
-      new THREE.Quaternion().setFromEuler(new THREE.Euler(0.13, -0.1, 0)),
-    );
+    if (fitted.has(p.source.id)) {
+      // Inventory looks from -Z with -Y up. Show both authored display faces
+      // upright; thin/bent hands must not inherit the generic size heuristic.
+      if (displayFace(p.source.id) === 'central')
+        rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
+    } else {
+      // Lay long axial parts across the inspection plane; retain original form/scale.
+      if (size.z > Math.max(size.x, size.y))
+        rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+      else if (size.y < Math.min(size.x, size.z))
+        rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+      else if (size.x < Math.min(size.y, size.z))
+        rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+      rotation.premultiply(
+        new THREE.Quaternion().setFromEuler(new THREE.Euler(0.13, -0.1, 0)),
+      );
+    }
     const matrix = new THREE.Matrix4()
       .makeRotationFromQuaternion(rotation)
       .multiply(

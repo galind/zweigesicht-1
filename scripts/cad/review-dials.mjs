@@ -4,6 +4,8 @@ import fs from 'node:fs';
 export async function reviewDials({v, Viewer, THREE, initialState, load, sourceModules, ROOT, parts, results}) {
  const {DIALS,fittedLeaves}=load('explorer/src/experience/dials.ts');
  const {ROOT:movement,belongs}=load('explorer/src/experience/catalog.ts');
+ const {DISPLAY_LAYERS,displaySeparationOffsets}=load('explorer/src/experience/explosion.ts');
+ const layerOffsets=displaySeparationOffsets(parts);
  const fit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-cad/source-fit.json'));
  const poseAudit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-time/hand-pose-source-review.json'));
  const geometry = new Map([...v.renderParts].map(([id,p])=>[id,{geometry:p.mesh.geometry,matrix:p.assembled.clone()}]));
@@ -72,7 +74,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    for(const id of expected) {const p=controller.renderParts.get(id);assert.ok(p.mesh.visible);assert.equal(p.offset.x,0);assert.equal(p.offset.y,0);}
    for(const face of ['central','small']) {
     const packet=expected.filter(id=>belongs(id,DIALS.faces[face].rootId));
-    if(packet.length) assert.ok(packet.every(id=>controller.renderParts.get(id).offset.equals(controller.renderParts.get(packet[0]).offset)));
+    if(packet.length && separation>0) assert.ok(new Set(packet.map(id=>controller.renderParts.get(id).offset.z)).size>3, 'Display separates into multiple layers');
    }
   }
   assert.equal(controller.assemblyError('presentation'),0);
@@ -83,11 +85,14 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    const p=controller.renderParts.get(id),box=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);
    assert.ok(box.min.distanceTo(controller.spread.get(id).bounds.min)<1e-8);
    assert.ok(box.max.distanceTo(controller.spread.get(id).bounds.max)<1e-8);
+   const sign=belongs(id,DIALS.faces.central.rootId)?1:-1;
+   assert.ok(new THREE.Vector3(0,0,sign).applyQuaternion(controller.spread.get(id).rotation).distanceTo(new THREE.Vector3(0,0,-1))<1e-9);
+   assert.ok(new THREE.Vector3(0,sign,0).applyQuaternion(controller.spread.get(id).rotation).distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
    await controller.select(id);pose();assert.equal(controller.state.layout,'spread');
   }
   controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);assert.deepEqual(preferences(),prefs);
  }
- results.push({check:'all four visibility combinations preserve styles and side; enabled rigid packets separate/reassemble; all selected leaves packed at exact rendered bounds and selectable without leaving All parts',status:'pass'});
+ results.push({check:'all four visibility combinations preserve styles and side; enabled individual display layers separate/reassemble; all selected leaves face forward/upright and are packed at exact rendered bounds and selectable without leaving All parts',status:'pass'});
  await controller.configureDials({centralVisible:true,smallVisible:true});pose();
  for(const group of ['display','winding','energy','regulation','transmission','shock']) {
   controller.group(group);pose();
@@ -96,11 +101,52 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
   if(group==='display') {
    for(const id of controller.fitted) {assert.ok(controller.renderParts.get(id).mesh.visible);assert.equal(controller.renderParts.get(id).offset.length(),0,'Uncover must not lift retained display with barrel bridge');}
    controller.patch({partSpread:1});pose();
-   for(const id of controller.fitted) assert.equal(controller.renderParts.get(id).offset.z,belongs(id,DIALS.faces.central.rootId)?5:-6);
+   for(const id of controller.fitted) assert.equal(controller.renderParts.get(id).offset.z,(belongs(id,DIALS.faces.central.rootId)?5:-6)+(layerOffsets.get(id)??0));
   }
  }
  controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);
- results.push({check:'all six scopes preserve display preferences; Time display Uncover leaves both packets assembled and section separation follows +5/-6 mm hosts',status:'pass'});
+ results.push({check:'all six scopes preserve display preferences; Time display Uncover leaves both packets assembled and section separation adds individual layers to +5/-6 mm hosts',status:'pass'});
+ // Check actual rendered bounds for every supported pair, with partial/reversed travel.
+ for(const central of DIALS.faces.central.styles) for(const small of DIALS.faces.small.styles) {
+  controller.group(null);
+  await controller.configureDials({centralVisible:true,smallVisible:true,centralStyle:central.id,smallStyle:small.id});
+  for(const group of [null,'display']) {
+   controller.group(group);
+   for(const progress of [1,.25,.8,0,1]) {
+    controller.patch(group?{partSpread:progress}:{separation:progress});pose();
+    if(progress!==1) continue;
+    for(const face of ['central','small']) {
+     const sign=face==='central'?1:-1;let edge=-Infinity;
+     for(const layer of DISPLAY_LAYERS[face]) {
+      const boxes=layer.filter(id=>controller.fitted.has(id)).map(id=>{
+       const p=controller.renderParts.get(id);
+       return p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);
+      });
+      if(!boxes.length)continue;
+      const min=Math.min(...boxes.map(b=>sign*(sign===1?b.min.z:b.max.z)));
+      assert.ok(min-edge>=.999,'Individual display layers clear actual geometry');
+      edge=Math.max(...boxes.map(b=>sign*(sign===1?b.max.z:b.min.z)));
+      for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)
+       assert.ok(!boxes[i].intersectsBox(boxes[j]),'Shared marker/screw layer has distinct seats');
+     }
+    }
+   }
+   controller.patch({partSpread:0,separation:0,reveal:0});pose();assert.equal(controller.assemblyError('presentation'),0);
+  }
+  for(const aspect of [1.6,390/680]) {
+   controller.camera.aspect=aspect;controller.allParts();pose();
+   for(const id of controller.fitted) {
+    const p=controller.renderParts.get(id),placement=controller.spread.get(id),sign=belongs(id,DIALS.faces.central.rootId)?1:-1;
+    assert.ok(new THREE.Vector3(0,0,sign).applyQuaternion(placement.rotation).distanceTo(new THREE.Vector3(0,0,-1))<1e-9);
+    assert.ok(new THREE.Vector3(0,sign,0).applyQuaternion(placement.rotation).distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
+    const actual=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);
+    assert.ok(actual.min.distanceTo(placement.bounds.min)<1e-8&&actual.max.distanceTo(placement.bounds.max)<1e-8);
+    assert.ok(Math.abs(p.mesh.matrix.determinant()-p.assembled.determinant())<1e-9);
+   }
+   controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);
+  }
+ }
+ results.push({check:'all nine style pairs: actual display layers clear by >=0.999 mm in whole/section separation; shared marker/screw seats disjoint; desktop/mobile inventory faces every dial/hand forward and upright with exact packing and rigid reassembly',status:'pass'});
  controller.reduced=false;
  await controller.configureDials({centralVisible:false});controller.applyPose(.15);
  await controller.configureDials({centralVisible:true});controller.applyPose(.1);
