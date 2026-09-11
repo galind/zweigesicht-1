@@ -74,9 +74,6 @@ export function DialControls({
           />
           <span>Shock indicator</span>
         </label>
-        <p className="shock-description">
-          {state.shockIndicator ? 'Fitted' : 'Engraving plate'}
-        </p>
         <output aria-live="polite" className="dial-status">
           {state.shockError ||
             (state.shockLoading ? 'Loading engraving plate…' : '')}

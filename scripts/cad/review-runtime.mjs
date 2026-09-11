@@ -1088,6 +1088,17 @@ const replacement = shockModule.SHOCK_REPLACEMENT;
 const replacementScene = await shockModule.loadShockReplacement();
 v.parts = [...parts, replacement.part];
 v.ingest(replacementScene);
+const plateMaterial=v.renderParts.get(replacement.part.id).material;
+assert.equal(plateMaterial.name,'bridge');
+assert.equal(plateMaterial.defines?.FROST_RELIEF,undefined);
+assert.equal(plateMaterial.roughness,finishFor('', 'd_0_1_1_222').roughness);
+const plateShader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+plateMaterial.onBeforeCompile(plateShader);
+assert.equal(plateShader.uniforms.finishEngraved.value,1);
+assert.equal(plateShader.uniforms.finishFrosted.value,0);
+assert.equal(plateShader.uniforms.finishPattern.value,1);
+assert.equal(plateShader.uniforms.finishBrushDetail.value,2.6);
+
 v.state = {...initialState, phase:'whole'};
 v.history=[];v.ready=true;v.reduced=true;v.cameraUserOwned=true;
 v.retarget();v.applyPose(1);v.retargetVisibility();

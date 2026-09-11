@@ -1307,8 +1307,6 @@ canvas:focus-visible {
 
 .shock-option {
   margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid #ffffff20;
 }
 .shock-checkbox-label {
   display: flex;
@@ -1327,9 +1325,4 @@ canvas:focus-visible {
   background: #deddd8;
   border-color: #deddd8;
   color: #171717;
-}
-.shock-description {
-  margin: 0 0 4px 32px;
-  color: #aaa8a4;
-  font-size: 0.875rem;
 }
