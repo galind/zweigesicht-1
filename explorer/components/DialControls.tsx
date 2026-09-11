@@ -71,10 +71,5 @@ export function DialControls({
       )}
     </div>
   );
-  return (
-    <details className="inline-dials">
-      <summary>Dial &amp; hands</summary>
-      {controls}
-    </details>
-  );
+  return controls;
 }

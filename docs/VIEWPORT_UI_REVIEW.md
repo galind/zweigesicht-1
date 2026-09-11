@@ -4,13 +4,14 @@
 
 The movement owns a stable, full-width canvas between a single-line identity/history area and a single-row action dock. There is no permanent footer, affiliation block, separation slider, or empty selection region. Attribution and the independence statement are in About & sources.
 
-- **Explore:** the whole movement, six mechanisms, expandable dial/hand choices, and All parts.
+- **Explore:** the whole movement, six mechanisms, and All parts.
+- **Dial & hands:** a standalone dock button for display and hand-style choices.
 - **Separate:** assembly or section separation, a visible percentage, and contextual Uncover. In All parts this becomes Arrange, with Fit all and group framing.
 - **Switch side / Reset:** always in the dock; compact labelled icons on portrait phones, text on larger screens. Reset closes panels and restores the opening movement state.
 - **Selection:** a compact heading and Details near the top; component selection adds Isolate/Show context and Deselect.
 - **Options:** keyboard-equivalent camera controls, quality, source catalog, and About.
 
-Only one edge panel opens at a time. Desktop panels sit at the right edge; portrait phones and tablets use shallow bottom panels above the dock. Long descriptions scroll with their content, and Close stays visible. Portrait tablets use a two-column mechanism list. At 200% text the dock uses two rows and panels have more reading height.
+Only one edge panel opens at a time. All panels open above the bottom dock. Explore, Dial & hands and Separate align with their own trigger; reading/options panels align with the dock. Horizontal clamping keeps them inside the safe edges, and measured dock bounds maintain a 12-pixel gap after resizing or text enlargement. Long descriptions scroll with their content, and Close stays visible. Portrait tablets use a two-column mechanism list. At 200% text or widths below 370 pixels the dock uses two rows; enlarged text panels have more reading height.
 
 Panels are nonmodal: no full-screen backdrop, canvas remains available, and opening/closing UI does not resize the stage, move the camera, alter selection, or add history. Explicit scene actions (mechanism, side, separation, Reset) retain the existing framing behavior. A compact panel can overlap geometry at some zoom/orbit positions; closing it restores the unobstructed view immediately without undoing that framing.
 
@@ -26,7 +27,7 @@ Measured CSS-pixel stage bounds in Chromium viewport emulation (zero hardware sa
 | Tablet landscape 1024 × 768 | 1024 × 650 | 84.6% |
 | Phone portrait 390 × 844 | 390 × 728 | 86.3% |
 | Small phone 375 × 667 | 375 × 551 | 82.6% |
-| Compact phone 320 × 568 | 320 × 452 | 79.6% |
+| Compact phone 320 × 568 | 320 × 404 | 71.1% |
 | Phone landscape 844 × 390 | 844 × 272 | 69.7% |
 
 The captured previous 390 × 844 layout had a 378 × 458.53 stage (54.3% of viewport height). The new stage gains 58.8% height and 63.8% area. The circular movement remains width-constrained in portrait; the extra height provides inspection/orbit space and room for optional panels rather than changing the authored camera fit.
@@ -40,3 +41,7 @@ Local evidence is in ignored `artifacts/browser/viewport-redesign/`. Browser and
 Lint, TypeScript, production build, seven state tests, and 73 source/runtime checks pass. Production build retains the pre-existing large-chunk warning. Expected missing-asset fault injections in the CPU suite are recorded separately from unexpected browser errors.
 
 This is a local UI milestone, ready for user review. It does not grant CAD redistribution, public publication, mechanical correctness, human usability acceptance, or physical-device approval.
+
+## Follow-up after user review
+
+Popups now sit above the bottom dock and Dial & hands is standalone. The updated mobile suite passes 35 checks, including the new dial panel; desktop/phone/tablet placement checks confirm safe horizontal bounds and a 12 px dock gap. The 320 px layout uses two rows and its stage measurement above has been updated. Other original milestone verification remains recorded in the prior evidence, while follow-up screenshots and reports are under `artifacts/browser/viewport-redesign/dock-followup/`.

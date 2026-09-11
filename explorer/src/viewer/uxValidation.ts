@@ -76,6 +76,7 @@ export async function runUxChecks(v: MovementViewer) {
         '.options-trigger',
         '.explore-button',
         '.separate-trigger',
+        '.dial-trigger',
         '.side-slot',
       ].map((selector) => {
         const r = document.querySelector(selector)!.getBoundingClientRect();
@@ -90,6 +91,7 @@ export async function runUxChecks(v: MovementViewer) {
   for (const selector of [
     '.explore-button',
     '.separate-trigger',
+    '.dial-trigger',
     '.options-trigger',
   ]) {
     const trigger = document.querySelector<HTMLButtonElement>(selector)!;

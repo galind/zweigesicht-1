@@ -860,3 +860,164 @@ canvas:focus-visible {
   outline: 2px solid #eeece4;
   outline-offset: -3px;
 }
+
+/* Popups belong to the bottom action dock on every viewport. */
+.explorer-panel[data-slot='sheet-content'] {
+  inset: auto auto max(78px, calc(env(safe-area-inset-bottom) + 68px)) 50%;
+  transform: translateX(-50%);
+  width: min(
+    380px,
+    calc(
+      100vw - max(12px, env(safe-area-inset-left)) -
+        max(12px, env(safe-area-inset-right))
+    )
+  ) !important;
+  max-height: min(
+    520px,
+    calc(
+      100dvh - 150px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    )
+  );
+}
+@media (max-width: 700px) and (min-height: 501px) {
+  .action-dock .text-button {
+    padding: 8px 6px;
+  }
+  .action-dock > .text-button > svg:last-child:not(:first-child) {
+    display: none;
+  }
+  .action-dock .separate-trigger {
+    min-width: 74px;
+  }
+  .action-dock .dial-trigger {
+    width: 82px;
+    white-space: normal;
+  }
+  .explorer-panel[data-slot='sheet-content'] {
+    max-height: 28dvh;
+  }
+  .explorer-panel.dial-panel {
+    max-height: 34dvh;
+  }
+}
+@media (max-width: 369px) and (min-height: 501px) {
+  .action-dock {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: calc(100% - 24px);
+  }
+  .action-dock .side-slot {
+    grid-column: 1;
+    justify-content: center;
+  }
+  .action-dock .reset-button {
+    grid-column: 3;
+    justify-self: center;
+  }
+  .action-dock .dial-trigger {
+    width: auto;
+  }
+  .workspace {
+    bottom: calc(var(--bottom) + 104px);
+  }
+  .explorer-panel[data-slot='sheet-content'] {
+    bottom: max(126px, calc(env(safe-area-inset-bottom) + 116px));
+  }
+}
+@media (min-width: 701px) and (max-width: 999px) and (orientation: portrait) {
+  .explorer-panel[data-slot='sheet-content'] {
+    width: min(600px, calc(100vw - 24px)) !important;
+    max-height: 24dvh;
+  }
+}
+.text-enlarged .explorer-panel[data-slot='sheet-content'] {
+  bottom: max(142px, calc(env(safe-area-inset-bottom) + 132px));
+}
+@media (max-width: 700px) {
+  .text-enlarged .action-dock {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .text-enlarged .action-dock .text-button {
+    min-width: 0;
+    width: auto;
+    white-space: normal;
+  }
+  .text-enlarged .side-slot {
+    grid-column: 1;
+  }
+  .text-enlarged .reset-button {
+    grid-column: 3;
+  }
+  .text-enlarged .explorer-panel[data-slot='sheet-content'] {
+    max-height: 42dvh;
+  }
+}
+
+.explorer-panel[data-slot='sheet-content'] {
+  --popup-width: min(
+    380px,
+    calc(
+      100vw - max(12px, env(safe-area-inset-left)) -
+        max(12px, env(safe-area-inset-right))
+    )
+  );
+  width: var(--popup-width) !important;
+  left: clamp(
+    calc(var(--popup-width) / 2 + max(12px, env(safe-area-inset-left))),
+    var(--panel-anchor-x, 50vw),
+    calc(100vw - var(--popup-width) / 2 - max(12px, env(safe-area-inset-right)))
+  );
+}
+@media (min-width: 701px) and (max-width: 999px) and (orientation: portrait) {
+  .explorer-panel[data-slot='sheet-content'] {
+    --popup-width: min(600px, calc(100vw - 24px));
+  }
+}
+
+.explorer-panel[data-slot='sheet-content'],
+.text-enlarged .explorer-panel[data-slot='sheet-content'] {
+  bottom: var(
+    --panel-bottom,
+    max(78px, calc(env(safe-area-inset-bottom) + 68px))
+  );
+}
+@media (max-width: 700px) and (min-height: 501px) {
+  .action-dock .explore-button > svg,
+  .action-dock .separate-trigger > svg,
+  .action-dock .dial-trigger > svg {
+    display: none;
+  }
+  .action-dock .dial-trigger {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+}
+@media (max-width: 700px) {
+  .text-enlarged .action-dock .text-button {
+    overflow-wrap: anywhere;
+  }
+  .text-enlarged .dial-options [data-slot='toggle-group'] {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 700px) {
+  .text-enlarged .action-dock {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .text-enlarged .action-dock .explore-button {
+    grid-column: 1 / 4;
+  }
+  .text-enlarged .action-dock .dial-trigger {
+    grid-column: 4 / 7;
+  }
+  .text-enlarged .action-dock .separate-trigger {
+    grid-column: 1 / 4;
+  }
+  .text-enlarged .action-dock .side-slot {
+    grid-column: 4 / 5;
+  }
+  .text-enlarged .action-dock .reset-button {
+    grid-column: 6 / 7;
+  }
+}

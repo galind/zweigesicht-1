@@ -1,7 +1,13 @@
 'use client';
 import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import {
   ArrowLeft,
   ChevronDown,
@@ -83,6 +89,31 @@ export default function Home() {
     aboutButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const selectionFocus = useRef(false);
+  const panelAnchor = useRef<HTMLElement | null>(null);
+  const [panelX, setPanelX] = useState<number | null>(null);
+  const [panelBottom, setPanelBottom] = useState<number | null>(null);
+  const panelStyle = {
+    '--panel-anchor-x': panelX === null ? '50vw' : `${panelX}px`,
+    '--panel-bottom': panelBottom === null ? undefined : `${panelBottom}px`,
+  } as CSSProperties;
+  useEffect(() => {
+    const measure = () => {
+      const rect = panelAnchor.current?.getBoundingClientRect();
+      if (rect) setPanelX(rect.left + rect.width / 2);
+      const dockRect = document
+        .querySelector('.action-dock')
+        ?.getBoundingClientRect();
+      if (dockRect) setPanelBottom(window.innerHeight - dockRect.top + 12);
+    };
+    window.addEventListener('resize', measure);
+    const observer = new ResizeObserver(measure);
+    const dock = document.querySelector('.action-dock');
+    if (dock) observer.observe(dock);
+    return () => {
+      window.removeEventListener('resize', measure);
+      observer.disconnect();
+    };
+  }, []);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
@@ -90,6 +121,7 @@ export default function Home() {
     [about, setAbout] = useState(false),
     [explore, setExplore] = useState(false),
     [separate, setSeparate] = useState(false),
+    [dials, setDials] = useState(false),
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
     [inspect, setInspect] = useState(false),
@@ -188,6 +220,7 @@ export default function Home() {
         about ||
         explore ||
         separate ||
+        dials ||
         options ||
         details
       )
@@ -198,7 +231,7 @@ export default function Home() {
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [catalog, about, explore, separate, options, details]);
+  }, [catalog, about, explore, separate, dials, options, details]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
     setCatalog(false);
@@ -228,6 +261,7 @@ export default function Home() {
   const closePanels = () => {
     setExplore(false);
     setSeparate(false);
+    setDials(false);
     setOptions(false);
     setDetails(false);
     setCatalog(false);
@@ -236,6 +270,21 @@ export default function Home() {
   const openPanel = (update: (open: boolean) => void, open: boolean) => {
     if (open) {
       selectionFocus.current = false;
+      const selector =
+        update === setExplore
+          ? '.explore-button'
+          : update === setDials
+            ? '.dial-trigger'
+            : update === setSeparate
+              ? '.separate-trigger'
+              : '.action-dock';
+      panelAnchor.current = document.querySelector<HTMLElement>(selector);
+      const rect = panelAnchor.current?.getBoundingClientRect();
+      if (rect) setPanelX(rect.left + rect.width / 2);
+      const dockRect = document
+        .querySelector('.action-dock')
+        ?.getBoundingClientRect();
+      if (dockRect) setPanelBottom(window.innerHeight - dockRect.top + 12);
       closePanels();
     }
     update(open);
@@ -282,6 +331,8 @@ export default function Home() {
               Options
             </SheetTrigger>
             <SheetContent
+              side="bottom"
+              style={panelStyle}
               className="explorer-panel about-sheet"
               showOverlay={false}
               scrollContent
@@ -577,6 +628,8 @@ export default function Home() {
             Explore <ChevronDown aria-hidden="true" />
           </SheetTrigger>
           <SheetContent
+            side="bottom"
+            style={panelStyle}
             className="explorer-panel explore-panel"
             showOverlay={false}
             scrollContent
@@ -584,7 +637,7 @@ export default function Home() {
             <SheetHeader>
               <SheetTitle>Explore</SheetTitle>
               <SheetDescription>
-                Choose a mechanism or display.
+                Choose a mechanism or explore all parts.
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body explore-menu">
@@ -615,11 +668,6 @@ export default function Home() {
               ))}
 
               <div className="display-choices">
-                <DialControls
-                  state={s}
-                  viewer={() => viewer.current}
-                  available={available}
-                />
                 <button
                   className="text-button all-parts-button"
                   disabled={!available}
@@ -633,6 +681,38 @@ export default function Home() {
                   All parts
                 </button>
               </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+        <Sheet
+          modal={false}
+          open={dials}
+          onOpenChange={(open) => openPanel(setDials, open)}
+        >
+          <SheetTrigger
+            className="text-button dial-trigger"
+            disabled={!available}
+          >
+            <span>Dial &amp; hands</span>
+            <ChevronDown aria-hidden="true" />
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            style={panelStyle}
+            className="explorer-panel dial-panel"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>Dial &amp; hands</SheetTitle>
+              <SheetDescription>Choose a face and its hands.</SheetDescription>
+            </SheetHeader>
+            <div className="panel-body">
+              <DialControls
+                state={s}
+                viewer={() => viewer.current}
+                available={available}
+              />
             </div>
           </SheetContent>
         </Sheet>
@@ -653,6 +733,8 @@ export default function Home() {
             <ChevronDown aria-hidden="true" />
           </SheetTrigger>
           <SheetContent
+            side="bottom"
+            style={panelStyle}
             className="explorer-panel separation-panel"
             showOverlay={false}
             scrollContent
@@ -777,6 +859,8 @@ export default function Home() {
       </nav>
       <Sheet modal={false} open={details} onOpenChange={setDetails}>
         <SheetContent
+          side="bottom"
+          style={panelStyle}
           className="explorer-panel about-sheet"
           showOverlay={false}
           scrollContent
@@ -857,6 +941,8 @@ export default function Home() {
       </Sheet>
       <Sheet modal={false} open={catalog} onOpenChange={setCatalog}>
         <SheetContent
+          side="bottom"
+          style={panelStyle}
           className="explorer-panel catalog-sheet"
           showOverlay={false}
           scrollContent
@@ -935,6 +1021,8 @@ export default function Home() {
       </Sheet>
       <Sheet modal={false} open={about} onOpenChange={setAbout}>
         <SheetContent
+          side="bottom"
+          style={panelStyle}
           className="explorer-panel about-sheet"
           showOverlay={false}
           scrollContent
