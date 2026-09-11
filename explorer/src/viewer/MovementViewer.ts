@@ -709,14 +709,43 @@ export class MovementViewer {
     this.dialRequest = null;
     this.dialError = '';
   }
-  async configureDials(patch: Partial<DialPreferences> = {}) {
+  chooseDial(face: DialFace, visible: boolean, style?: string) {
+    return this.configureDials(
+      {
+        [face === 'central' ? 'centralVisible' : 'smallVisible']: visible,
+        ...(style
+          ? { [face === 'central' ? 'centralStyle' : 'smallStyle']: style }
+          : {}),
+      },
+      visible ? face : undefined,
+    );
+  }
+  async configureDials(patch: Partial<DialPreferences> = {}, focus?: DialFace) {
     if (!this.ready) return;
-    const next = resolveState(this.state, patch);
+    const focusAssembly = !!focus && this.state.layout === 'assembly';
+    const next = resolveState(this.state, {
+      ...patch,
+      ...(focus ? { part: null, isolated: false, phase: 'recovering' } : {}),
+      ...(focusAssembly
+        ? {
+            side: focus === 'central' ? 'front' : 'back',
+            // An unrelated section can suppress a requested display. Return to the
+            // whole view so choosing the dial always makes its face available.
+            ...(this.state.group && this.state.group !== 'display'
+              ? { group: null, partSpread: 0, reveal: 0 }
+              : {}),
+          }
+        : {}),
+    });
     const changed = [
       'centralVisible',
       'smallVisible',
       'centralStyle',
       'smallStyle',
+      'side',
+      'group',
+      'part',
+      'isolated',
     ].some(
       (key) =>
         next[key as keyof ExperienceState] !==
@@ -739,6 +768,12 @@ export class MovementViewer {
     // never restores an obsolete side, selection, layout or visibility choice.
     this.state = next;
     this.retarget();
+    if (focus) this.selectionGeneration++;
+    if (focusAssembly) {
+      this.restoringCamera = null;
+      this.cameraUserOwned = false;
+      this.fitPresentation();
+    }
     const leaves = fittedLeaves(next);
     if (!leaves.size) {
       this.emit();
@@ -775,7 +810,7 @@ export class MovementViewer {
     }
   }
   // Explicit single-face camera preset retained for inspection tooling.
-  // Visitor visibility/style controls use configureDials and never turn sides.
+  // Visitor controls use chooseDial to reveal a face without hiding its partner.
   async showDial(view: DialView, face?: DialFace, style?: string) {
     const generation = this.cameraGeneration;
     const pending = this.configureDials({

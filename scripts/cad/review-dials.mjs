@@ -178,6 +178,20 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  }
  controller.reset();pose();assert.equal(controller.assemblyError(),0);assert.deepEqual(preferences(),[false,false,'fine','lance']);
  results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset restores opening',status:'pass'});
+ controller.reduced=true;controller.reset();pose();
+ await controller.chooseDial('central',true);pose();
+ assert.equal(controller.state.side,'front');assert.deepEqual(preferences(),[true,false,'fine','lance']);
+ await controller.chooseDial('small',true,'pear');pose();
+ assert.equal(controller.state.side,'back');assert.deepEqual(preferences(),[true,true,'fine','pear']);
+ await controller.chooseDial('central',false);pose();assert.equal(controller.state.side,'back');
+ await controller.chooseDial('central',true,'lance');pose();assert.equal(controller.state.side,'front');assert.equal(controller.state.smallVisible,true);
+ controller.patch({separation:1});pose();await controller.chooseDial('small',true);pose();assert.equal(controller.state.separation,1);
+ controller.group('display');controller.patch({partSpread:1});pose();await controller.chooseDial('central',true);pose();assert.equal(controller.state.group,'display');assert.equal(controller.state.partSpread,1);
+ controller.group('energy');pose();const history=controller.history.length;await controller.chooseDial('central',true);pose();
+ assert.equal(controller.state.group,null);assert.equal(controller.state.side,'front');assert.equal(controller.state.smallVisible,true);assert.equal(controller.history.length,history+1);
+ controller.allParts();pose();await controller.select(DIALS.faces.small.structureLeafIds[0]);controller.patch({isolated:true});pose();await controller.chooseDial('central',true,'open-lance');pose();assert.equal(controller.state.isolated,false);assert.equal(controller.state.part,null);assert.equal(controller.state.layout,'spread');assert.equal(controller.state.side,'back');assert.equal(controller.state.smallVisible,true);
+ controller.reset();pose();assert.deepEqual(preferences(),[false,false,'fine','lance']);
+ results.push({check:'menu dial/style choices enable and face the selected display, preserve partner/style/separation, leave unrelated scopes, keep inventory and hide camera stable, and save one history entry',status:'pass'});
  let pending=[],loads=0,disposed=0;
  class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
  const {MovementViewer:Race}=sourceModules({loader:Loader})('explorer/src/viewer/MovementViewer.ts');
@@ -185,6 +199,8 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  let r=makeRace();let a=r.configureDials({centralVisible:true});let b=r.configureDials({smallVisible:true,smallStyle:'pear'});
  assert.equal(loads,1);r.group('display');r.patch({partSpread:.5});r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);
  assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);assert.equal(r.state.side,'front');assert.equal(r.state.smallStyle,'pear');assert.equal(r.state.group,'display');assert.equal(r.state.partSpread,.5);
+ r=makeRace();a=r.chooseDial('central',true);assert.equal(r.state.side,'front');b=r.chooseDial('small',true,'pear');assert.equal(r.state.side,'back');r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.side,'front');assert.deepEqual([r.state.centralVisible,r.state.smallVisible,r.state.smallStyle],[true,true,'pear']);
+ r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'back');assert.equal(r.state.centralVisible,false);
  r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'movement');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
  r=makeRace();a=r.configureDials({centralVisible:true});await r.configureDials({centralVisible:false});pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
  r=makeRace();a=r.configureDials({centralVisible:true,smallVisible:true});pending.shift().reject(Error('offline'));await a;assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);assert.equal(r.dialRequest.smallVisible,true);

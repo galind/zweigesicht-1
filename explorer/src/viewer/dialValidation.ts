@@ -269,6 +269,63 @@ export async function runDialChecks(v: MovementViewer) {
   );
   v.group(null);
   await settle(v);
+  v.reset();
+  await v.chooseDial('central', true);
+  await settle(v);
+  check(
+    'Menu enable turns to Three hands and shows its complete dial',
+    v.state.side === 'front' &&
+      exact() &&
+      v.state.centralVisible &&
+      !v.state.smallVisible,
+  );
+  await v.chooseDial('small', true, 'pear');
+  await settle(v);
+  check(
+    'Menu style choice enables Skeleton and faces it without hiding Three hands',
+    v.state.side === 'back' &&
+      exact() &&
+      v.state.centralVisible &&
+      v.state.smallVisible &&
+      v.state.smallStyle === 'pear',
+  );
+  await v.chooseDial('central', false);
+  await settle(v);
+  check(
+    'Hiding a dial keeps the camera side and its hand style',
+    v.state.side === 'back' &&
+      !v.state.centralVisible &&
+      v.state.centralStyle === 'fine',
+  );
+  v.group('energy');
+  await settle(v);
+  await v.chooseDial('central', true, 'lance');
+  await settle(v);
+  check(
+    'Menu dial choice leaves an unrelated scope so the selected face is visible',
+    v.state.group === null &&
+      v.state.phase === 'whole' &&
+      v.state.side === 'front' &&
+      exact() &&
+      v.state.smallVisible,
+  );
+  v.allParts();
+  await settle(v);
+  await v.select(DIALS.faces.central.structureLeafIds[0]);
+  v.patch({ isolated: true });
+  await settle(v);
+  await v.chooseDial('small', true, 'lance');
+  await settle(v);
+  check(
+    'Menu hand choice clears isolation and retains the face-on All parts layout',
+    v.state.layout === 'spread' &&
+      !v.state.isolated &&
+      !v.state.part &&
+      exact() &&
+      v.auditSpread().overlaps.length === 0,
+  );
+  v.group(null);
+  await settle(v);
   const warmed = v.stats();
   for (let i = 0; i < 12; i++) {
     void v.configureDials({

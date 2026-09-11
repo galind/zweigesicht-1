@@ -1,5 +1,5 @@
 'use client';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ChevronDown } from 'lucide-react';
 import { DIALS } from '@/src/experience/dials';
 import type {
   MovementViewer,
@@ -34,33 +34,28 @@ export function DialControls({
               aria-pressed={state[visibilityKey]}
               disabled={!available}
               onClick={() =>
-                void viewer()?.configureDials({
-                  [visibilityKey]: !state[visibilityKey],
-                })
+                void viewer()?.chooseDial(face, !state[visibilityKey])
               }
             >
+              <span className="dial-switch" aria-hidden="true" />
               <span>{label}</span>
-              <span className="dial-toggle-state" aria-hidden="true">
-                {state[visibilityKey] ? 'Shown' : 'Hidden'}
-                <span className="dial-switch" />
-              </span>
             </button>
-            <div className="dial-style-row">
-              <ToggleGroup
-                aria-label={`${label} hand styles`}
-                value={[state[styleKey]]}
+            <div className="dial-hand-select">
+              <select
+                aria-label={`${label} hand style`}
+                value={state[styleKey]}
                 disabled={!available}
-                onValueChange={(values) => {
-                  if (values[0])
-                    void viewer()?.configureDials({ [styleKey]: values[0] });
-                }}
+                onChange={(event) =>
+                  void viewer()?.chooseDial(face, true, event.target.value)
+                }
               >
                 {DIALS.faces[face].styles.map((hand) => (
-                  <ToggleGroupItem key={hand.id} value={hand.id}>
+                  <option key={hand.id} value={hand.id}>
                     {hand.label}
-                  </ToggleGroupItem>
+                  </option>
                 ))}
-              </ToggleGroup>
+              </select>
+              <ChevronDown aria-hidden="true" />
             </div>
           </section>
         );

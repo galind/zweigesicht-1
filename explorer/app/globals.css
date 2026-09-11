@@ -65,6 +65,7 @@ button:disabled {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
+select:focus-visible,
 summary:focus-visible,
 canvas:focus-visible {
   outline: 2px solid #eeece4;
@@ -322,54 +323,37 @@ canvas:focus-visible {
   margin: 3px;
   border: 1px solid #888;
 }
+.dial-panel [data-slot='sheet-header'] {
+  min-height: 56px;
+}
 .dial-options {
   min-width: 0;
 }
-.dial-options [data-slot='toggle-group'] {
-  width: 100%;
-  gap: 6px;
-  justify-content: flex-start;
-}
-.dial-options [data-slot='toggle-group-item'] {
-  border: 1px solid #ffffff20;
-  border-radius: 6px !important;
-  padding: 8px 11px;
-  font-size: 0.875rem;
-  flex: 1;
-}
-.dial-options [data-slot='toggle-group-item'][data-pressed] {
-  background: #deddd8;
-  color: #171717;
+.dial-face {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 8.5rem);
+  align-items: center;
+  gap: 12px;
 }
 .dial-face + .dial-face {
-  border-top: 1px solid #ffffff20;
-  margin-top: 16px;
-  padding-top: 12px;
+  margin-top: 8px;
 }
 .dial-visibility {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
+  gap: 10px;
+  min-width: 0;
   min-height: 44px;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   text-align: left;
   border-radius: 6px;
 }
-.dial-toggle-state {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.875rem;
-  color: #aaa8a4;
-}
 .dial-switch {
-  width: 32px;
-  height: 20px;
+  flex: 0 0 28px;
+  height: 18px;
   border: 1px solid #aaa8a4;
   border-radius: 12px;
-  padding: 3px;
+  padding: 2px;
 }
 .dial-switch::after {
   content: '';
@@ -384,17 +368,35 @@ canvas:focus-visible {
   border-color: #deddd8;
 }
 .dial-visibility[aria-pressed='true'] .dial-switch::after {
-  transform: translateX(12px);
+  transform: translateX(10px);
   background: #171717;
 }
-.dial-visibility[aria-pressed='true'] .dial-toggle-state {
-  color: #deddd8;
+.dial-hand-select {
+  position: relative;
+  min-width: 0;
 }
-.dial-style-row {
-  margin-top: 6px;
-}
-.dial-options [data-slot='toggle-group-item'] {
+.dial-hand-select select {
+  appearance: none;
+  width: 100%;
   min-height: 44px;
+  border: 1px solid #ffffff25;
+  border-radius: 6px;
+  padding: 8px 28px 8px 12px;
+  color: #eeece4;
+  background: #292929;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.dial-hand-select > svg {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: #aaa8a4;
+  pointer-events: none;
 }
 .dial-status {
   display: block;
@@ -1043,7 +1045,7 @@ canvas:focus-visible {
   .text-enlarged .action-dock .text-button {
     overflow-wrap: anywhere;
   }
-  .text-enlarged .dial-options [data-slot='toggle-group'] {
+  .text-enlarged .dial-face {
     display: grid;
     grid-template-columns: 1fr;
   }
