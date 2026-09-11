@@ -326,3 +326,12 @@ Verified lint, TypeScript and production build. Local browser review confirms th
 Corrected the reversed enamel assignment after user clarification: the 48 blind minute holes receive blue on their recessed floors and walls, while the perforated upper annulus is restored to silver. Exact d14 source faces 40–111 and 134–157 identify these recesses at local Z=.55–.7 mm; face 129 is no longer enamel. Applied hour markers and their through-bores retain their prior finish.
 
 Regenerated reversible annotations as `finish-surfaces-bd9958b41c29.bin`. Byte comparison confirms only d14 roles changed (10,647 values), with every normal and all other definitions byte-identical. Geometry, the softened brushing, white hand faces and dial control order remain unchanged. All 86 source/runtime checks and the production build pass. The corrected regression identifies the hole walls/floors by source geometry and explicitly protects the silver annulus. Browser review confirms blue recessed dots in the silver track; screenshot: ignored `artifacts/browser/dial-polish/blue-minute-holes.png`. Preview remains open on Skeleton at `http://127.0.0.1:4173/?inspect=1` for appearance review. Nothing published or pushed.
+
+
+## Crown-wheel blue and seconds stem — 11 September 2026
+
+Matched the Skeleton minute recesses to the Crown-wheel plate (d251 face 22): shared blue-metal source role, angle-dependent blue response, metalness 1 and roughness .055, with dial brushing and anisotropy excluded from the recesses. The silver annulus remains unchanged. This supersedes the earlier dark dielectric enamel interpretation of the dots.
+
+Clipped the Fine seconds neutral-face mask per fragment to the counterbalance's local 1.25 mm outer circle centered at (0,-5.5). This prevents interpolated source triangles from extending white up the adjoining stem. Existing white hour/minute faces, bushings, brushing midpoint and dial ordering are preserved.
+
+Verified all 86 source/runtime checks, lint, TypeScript and production build. Browser review confirms the blue stem and updated dots beside the Crown-wheel plate with no captured browser errors. Screenshots: ignored `artifacts/browser/dial-polish/seconds-blue-stem.png` and `crown-blue-minute-holes.png`. Source geometry and transforms are unchanged; no upload, publication or push. Preview remains at `http://127.0.0.1:4173/?inspect=1` for appearance review.

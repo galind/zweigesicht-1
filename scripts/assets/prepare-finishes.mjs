@@ -72,8 +72,9 @@ for(const id of ids) {
   // d30 face 6 follows the source blade bend; its circular lobe starts at Y=-4.25.
   if(id===30&&f.index===6&&input[i*10+1]<-4.25)role=2;
   // Skeleton minute dots: 48 blind-hole walls and floors, source Z=.55–.7.
+  // Share the Crown-wheel plate blue-metal role (d251 face 22).
   // The upper annulus (face 129) remains silver; applied hour-marker bores stay steel.
-  if(id===14&&((f.index>=40&&f.index<=111)||(f.index>=134&&f.index<=157)))role=11;
+  if(id===14&&((f.index>=40&&f.index<=111)||(f.index>=134&&f.index<=157)))role=4;
   // Exact source shank/under-head faces. Origins differ: d9/d107/d122/d180/
   // d181 place the head top near Z=0, unlike the shoulder-origin screws.
   // Never infer a head boundary from a shared zero-plane convention.

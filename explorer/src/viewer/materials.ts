@@ -171,6 +171,7 @@ uniform float finishSnailTurn;
 uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
+uniform float finishSecondsCounterweight;
 uniform float finishShockBlock;
 uniform float finishHeatBlue;
 uniform float finishBlackPolished;
@@ -369,6 +370,7 @@ export function createMaterial(
       finishRadius: { value: Math.max(radius, 0.01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
+      finishSecondsCounterweight: { value: definitionId === 'd_0_1_1_30' ? 1 : 0 },
       finishShockBlock: { value: definitionId === 'd_0_1_1_159' ? 1 : 0 },
       finishHeatBlue: {
         value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0,
@@ -426,6 +428,11 @@ outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * focusR
       /* glsl */ `
 #include <color_fragment>
 vec2 finishUv=vFinishPosition.xy;
+// Clip the interpolated neutral role at the actual counterweight circle;
+// long source triangles must not carry its white face up the stem.
+float finishSteelSeat=1.0-step(.2,abs(vFinishRole-2.0));
+if(finishSecondsCounterweight>.5)
+ finishSteelSeat*=1.0-step(1.25,length(finishUv-vec2(0.0,-5.5)));
 // Evaluate derivatives before source-role branches, including at mask edges.
 #ifdef FROST_RELIEF
 vec3 finishRelief=frostRelief(finishUv);
@@ -447,7 +454,7 @@ float finishBase=0.0;
 // The tight plane mask leaves the lower feet, chamfers and engraving separate.
 float finishSeat=finishCapSeat*finishFace*(1.0-smoothstep(.0001,.0003,abs(vFinishPosition.z+.3)));
 // Only separately audited source regions may cross metal/dielectric families.
-if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) diffuseColor.rgb=vec3(.546,.584,.631);
+if(finishEnabled>.5 && finishWholeBlue<.5 && finishSteelSeat>.5) diffuseColor.rgb=vec3(.546,.584,.631);
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) diffuseColor.rgb=vec3(.006);
 if(finishEnabled>.5 && abs(vFinishRole-4.0)<.2) diffuseColor.rgb=vec3(.018,.08,.24);
 if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.22,.002,.018);
@@ -461,12 +468,12 @@ float finishShockBlue=finishShockBlock*max(finishShockArms,1.0-smoothstep(1.05,1
 float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
 // The explicit shock-arm region wins over neutral/interpolated source roles.
 // Other parts and the central steel spine still have finishShockBlue == 0.
-if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=finishShockBlue;
+if(finishWholeBlue<.5 && finishSteelSeat>.5) finishBlueSurface=finishShockBlue;
 if(finishEnabled>.5 && finishBlueSurface>0.0) {
  float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);
  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78),finishBlueSurface);
 }
-if(finishEnabled>.5 && finishPattern>.5) {
+if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRole-4.0)<.2)) {
  if(finishPattern<1.5 || (finishPattern>3.5 && finishPattern<4.5) || finishPattern>5.5) {
   finishField=finishPattern<1.5?smoothstep(-.006,.001,vFinishPosition.z):1.0;
   #ifdef SOURCE_FINISH
@@ -533,6 +540,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
   diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.008,.03,.105),ink*.82);
  }
 }
+if(finishEnabled>.5 && finishPattern>5.5 && abs(vFinishRole-4.0)<.2) finishHeight=0.0;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) {
  diffuseColor.rgb=vec3(.008,.03,.105);
  finishHeight=0.0;
@@ -543,13 +551,13 @@ if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) {
       '#include <roughnessmap_fragment>',
       /* glsl */ `
 #include <roughnessmap_fragment>
-if(finishEnabled>.5 && finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) roughnessFactor=.2;
+if(finishEnabled>.5 && finishWholeBlue<.5 && finishSteelSeat>.5) roughnessFactor=.2;
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
 if(finishEnabled>.5 && abs(vFinishRole-3.0)<.2) roughnessFactor=.085;
-if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || abs(vFinishRole-2.0)>.2)) roughnessFactor=.13;
+if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || finishSteelSeat<.5)) roughnessFactor=.13;
 if(finishEnabled>.5 && finishShockBlock>.5) roughnessFactor=mix(roughnessFactor,.13,finishBlueSurface);
 if(finishEnabled>.5 && finishBlackPolished>.5) roughnessFactor=.055;
-if(finishEnabled>.5 && finishPattern>.5) {
+if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRole-4.0)<.2)) {
  float finishContrast=finishPattern>5.5 && finishBrushDetail>1.5?.12:.1;
  roughnessFactor=clamp(roughnessFactor+finishGrain*finishContrast,.09,.85);
  if(finishPattern<2.5 || (finishPattern>3.5 && finishPattern<4.5) || finishPattern>5.5) {
@@ -563,6 +571,8 @@ if(finishEnabled>.5 && finishPattern>.5) {
 if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=frostRoughness(finishRelief.z);
 #endif
 if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
+// Minute recesses share the Crown-wheel plate blue metal and polish.
+if(finishEnabled>.5 && finishPattern>5.5 && abs(vFinishRole-4.0)<.2) roughnessFactor=.055;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,
     );
@@ -610,6 +620,7 @@ tbn=mat3(finishT,normalize(cross(normal,finishT)),normal);
 #include <lights_physical_fragment>
 #ifdef USE_ANISOTROPY
 material.anisotropy*=finishFace*finishEnabled*(1.0-finishFrostMask);
+if(finishPattern>5.5 && abs(vFinishRole-4.0)<.2) material.anisotropy=0.0;
 if(finishPattern<1.5) material.anisotropy*=finishField;
 material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
 #endif
