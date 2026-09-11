@@ -1218,7 +1218,7 @@ canvas:focus-visible {
 .action-dock .reset-button {
   color: #aaa8a4;
 }
-@media (max-width: 780px) {
+@media (max-width: 820px) {
   .action-dock {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1231,6 +1231,7 @@ canvas:focus-visible {
     min-height: 44px;
     margin: 0;
     padding: 7px 5px;
+    gap: 6px;
     font-size: 0.8125rem;
     white-space: normal;
   }
@@ -1293,4 +1294,13 @@ canvas:focus-visible {
   .text-enlarged .action-dock .reset-button {
     grid-area: 3 / 2;
   }
+}
+
+/* One matching outline icon for every dock action, at every viewport size. */
+.action-dock .text-button > .dock-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  stroke-width: 1.7;
 }

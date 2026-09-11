@@ -13,6 +13,12 @@ import {
   ChevronDown,
   ChevronRight,
   ExternalLink,
+  Compass,
+  Layers,
+  LayoutGrid,
+  Clock3,
+  FlipHorizontal2,
+  RotateCcw,
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { loadingMessage } from '@/src/experience/loading';
@@ -611,7 +617,8 @@ export default function Home() {
             className="explore-button text-button"
             disabled={s.loadStage === 'recovering'}
           >
-            Explore
+            <Compass className="dock-icon" aria-hidden="true" />
+            <span>Explore</span>
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -658,7 +665,8 @@ export default function Home() {
             className="text-button separate-trigger"
             disabled={!available}
           >
-            {s.layout === 'spread' ? 'Arrange' : 'Separate'}
+            <Layers className="dock-icon" aria-hidden="true" />
+            <span>{s.layout === 'spread' ? 'Arrange' : 'Separate'}</span>
             {(group ? s.partSpread : s.separation) > 0 &&
               s.layout !== 'spread' && (
                 <span className="state-dot" aria-label="Separation active" />
@@ -767,7 +775,8 @@ export default function Home() {
             else viewer.current?.allParts();
           }}
         >
-          All parts
+          <LayoutGrid className="dock-icon" aria-hidden="true" />
+          <span>All parts</span>
         </button>
 
         <Sheet
@@ -779,6 +788,7 @@ export default function Home() {
             className="text-button dial-trigger"
             disabled={!available}
           >
+            <Clock3 className="dock-icon" aria-hidden="true" />
             <span>Dial &amp; hands</span>
           </SheetTrigger>
           <SheetContent
@@ -816,6 +826,7 @@ export default function Home() {
             aria-label={sideLabel}
             title={sideLabel}
           >
+            <FlipHorizontal2 className="dock-icon" aria-hidden="true" />
             <span>{sideLabel}</span>
           </button>
         </div>
@@ -830,6 +841,7 @@ export default function Home() {
             else set({ ...empty, loadStage: 'error', error: s.error });
           }}
         >
+          <RotateCcw className="dock-icon" aria-hidden="true" />
           <span>Reset view</span>
         </button>
       </nav>
