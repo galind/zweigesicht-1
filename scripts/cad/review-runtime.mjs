@@ -491,7 +491,43 @@ for(const part of [rubyPart,anisotropicPart,...[...v.renderParts.values()].filte
  assert.equal(shader.uniforms.finishEnabled,part.material.userData.finishEnabled);
  assert.equal((shader.fragmentShader.match(/#include <lights_physical_fragment>/g)||[]).length,1);
 }
-results.push({check:'Function/context gate transmission, Finish isolation preserves optics, Function selection highlights, and anisotropy toggles reuse program',status:'pass',scope:'actual CPU controller/hook state; not GLSL compile proof'});
+results.push({check:'authored surface and optical hooks retain physical lighting and reuse shader programs',status:'pass',scope:'actual CPU controller/hook state; not GLSL compile proof'});
+// Selection hierarchy must never rewrite physical materials or make context absent.
+const {GROUPS:emphasisGroups,inMembers:emphasisMember}=load('explorer/src/experience/catalog.ts');
+const {finishFor:emphasisFinish,EMPHASIS}=load('explorer/src/viewer/materials.ts');
+const {uncoverHost:emphasisCover}=load('explorer/src/experience/explosion.ts');
+for(const group of emphasisGroups) {
+ for(const reveal of [0,.49,.51,1]) {
+  v.state={...initialState,group:group.id,reveal};v.retarget();v.applyPose(10);v.retargetVisibility();
+  for(const p of v.renderParts.values()) {
+   if(!belongs(p.source.id,ROOT)||p.source.id===PREFIX+'66')continue;
+   const member=emphasisMember(p.source.id,group.members),context=emphasisMember(p.source.id,group.context);
+   const role=member?'member':context?'context':'surrounding';
+   assert.equal(p.material.userData.emphasisRole,role);
+   assert.deepEqual([...p.material.userData.emphasis.value.toArray()],[...EMPHASIS[role]]);
+   const finish=emphasisFinish(p.source.name,p.source.definitionId,p.source.id);
+   assert.equal(p.material.color.getHex(),finish.color);
+   assert.equal(p.material.metalness,finish.metalness);assert.equal(p.material.roughness,finish.roughness);
+   assert.equal(p.material.opacity,1);assert.equal(p.material.depthWrite,true);
+   if(member||!emphasisCover(p.source.id,group.id))assert.ok(p.mesh.visible,`${group.id}: unexplained missing ${p.source.id}`);
+  }
+ }
+}
+v.state={...initialState,group:'winding',part:PREFIX+'53'};v.retarget();
+const focusedSpring=v.renderParts.get(PREFIX+'53');
+assert.equal(focusedSpring.material.userData.emphasisRole,'selected');
+assert.equal(focusedSpring.material.userData.emphasis.value.y,EMPHASIS.selected[1]);
+const emphasisShader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
+focusedSpring.material.onBeforeCompile(emphasisShader,{});
+assert.equal(emphasisShader.uniforms.emphasis,focusedSpring.material.userData.emphasis);
+assert.match(emphasisShader.fragmentShader,/outgoingLight = outgoingLight \* emphasis.x/);
+assert.ok(emphasisShader.fragmentShader.indexOf('float focusRim')>emphasisShader.fragmentShader.indexOf('#include <lights_fragment_end>'));
+v.state={...initialState};v.retarget();v.applyPose(10);v.retargetVisibility();
+for(const p of v.renderParts.values()){
+ assert.equal(p.material.userData.emphasisRole,'whole');
+ assert.equal(p.material.userData.emphasis.value.x,1);assert.equal(p.material.userData.emphasis.value.y,0);
+}
+results.push({check:'all six emphasis groups preserve physical finishes, opaque depth, selected members and surrounding context across reveal threshold and reset',status:'pass'});
 const {StudioEnvironment}=load('explorer/src/viewer/StudioEnvironment.ts');
 const studio=new StudioEnvironment(),studioResources=[];
 studio.traverse(o=>{if(o instanceof THREE.Mesh){studioResources.push(o.geometry,o.material);assert.ok(o.material.color.r>1);assert.equal(o.material.side,THREE.DoubleSide)}});

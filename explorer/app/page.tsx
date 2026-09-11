@@ -600,13 +600,18 @@ export default function Home() {
                 sideOffset={12}
               >
                 <PopoverTitle>Inside the movement</PopoverTitle>
-                <button className="menu-link" onClick={() => chooseGroup(null)}>
+                <button
+                  className="menu-link"
+                  aria-pressed={!s.group && s.layout === 'assembly'}
+                  onClick={() => chooseGroup(null)}
+                >
                   Whole movement <ChevronRight aria-hidden="true" />
                 </button>
                 {GROUPS.map((g, i) => (
                   <button
                     className="menu-link"
                     key={g.id}
+                    aria-pressed={s.group === g.id}
                     onClick={() => chooseGroup(g.id)}
                   >
                     <span>

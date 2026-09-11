@@ -1,3 +1,12 @@
+import {
+  GROUPS,
+  ROOT,
+  PREFIX,
+  belongs,
+  inMembers,
+} from '../experience/catalog';
+import { uncoverHost } from '../experience/explosion';
+import { EMPHASIS, finishFor, type EmphasisRole } from './materials';
 import type { MovementViewer } from './MovementViewer';
 const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -49,6 +58,42 @@ export async function runBrowserChecks(v: MovementViewer) {
       name: `${id} keeps authored finishes on every visible part`,
       pass: unstyled.length === 0,
       details: unstyled.map((p) => p.source.id),
+    });
+  }
+  // Exercise the actual rendered materials after mechanism changes and orbit.
+  for (const group of GROUPS) {
+    v.group(group.id);
+    await settle(v);
+    v.orbit(0.35, 0.15);
+    v.scrub({ partSpread: 0.35 });
+    await settle(v);
+    const failures: string[] = [];
+    for (const p of v.renderParts.values()) {
+      const id = p.source.id;
+      if (!belongs(id, ROOT) || id === PREFIX + '66') continue;
+      const role: EmphasisRole = inMembers(id, group.members)
+        ? 'member'
+        : inMembers(id, group.context)
+          ? 'context'
+          : 'surrounding';
+      const finish = finishFor(p.source.name, p.source.definitionId, id);
+      if (
+        p.material.userData.emphasisRole !== role ||
+        p.material.userData.emphasis.value.x !== EMPHASIS[role][0] ||
+        p.material.userData.emphasis.value.y !== EMPHASIS[role][1] ||
+        p.material.color.getHex() !== finish.color ||
+        p.material.roughness !== finish.roughness ||
+        p.material.metalness !== finish.metalness ||
+        p.material.opacity !== 1 ||
+        !p.material.depthWrite ||
+        ((!uncoverHost(id, group.id) || role === 'member') && !p.mesh.visible)
+      )
+        failures.push(id);
+    }
+    checks.push({
+      name: `${group.id} preserves emphasis, physical finishes and context through orbit/separation`,
+      pass: !failures.length,
+      details: failures,
     });
   }
   v.reset();

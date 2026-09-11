@@ -16,7 +16,7 @@ The local implementation is ready for user and engineering review. Public releas
 
 ## Current interaction refinement
 
-Explore mechanism views now retain authored surface finishes on every visible part. Highlighting still controls emphasis, while visible context and covering parts remain dimmed without losing their material styling. Formatting, lint, TypeScript, seven state tests, the production build, and the real renderer interaction suite pass; the latter checks this contract across all six mechanisms.
+Explore now uses a shared emphasis hierarchy across all six groups. Authored finishes and opaque depth remain intact; active parts receive an edge accent, explanatory context stays readable, and surroundings are gently subdued. Only authored lifted covers retire from the scene. Mechanism framing includes the movement envelope, and the Explore menu marks the current section. See the 11 September emphasis milestone below.
 
 ## Frosting stability — 11 September 2026
 
@@ -40,3 +40,16 @@ Lint, TypeScript, production build, seven state tests and all 70 source/runtime 
 The indicator hand-lever spring block (d159) had narrow steel patches where interpolated source roles crossed the neutral-seat role inside its blue arms. The neutral-role override now preserves the explicit shock-arm blue mask, including its transition into the steel spine. All four arms retain blue across their narrow connections; the central spine and neutral seats on other parts remain steel. Geometry and source annotations are unchanged.
 
 The focused regression evaluates the actual shader assignment for blue arms, neutral steel and the transition. All 70 source/runtime checks, seven state tests, lint, TypeScript and the production build pass. Browser macro review checked the isolated part and assembly context across orbit angles; no browser/shader errors. Local evidence: `artifacts/browser/shock-arm-blue/`. The existing preview remains open on the corrected part for user review.
+
+
+## Explore emphasis — 11 September 2026
+
+Replaced the 10–16% base-color / matte-material overrides with emphasis applied after physical lighting. Active parts retain full lighting with a depth-respecting edge accent; context retains 90% lighting and surroundings 68%. Selected components receive a stronger accent and the existing selection box. Source finishes, face masks, geometry and optical parameters remain unchanged. Function/Finish was already retired; the single authored-finish view remains authoritative.
+
+Removed the blanket nonmember visibility cutoff at reveal 0.5. Only authored uncover hosts retire after moving clear; active members and explicitly selected parts remain visible. Camera framing now includes the assembled movement envelope, avoiding fragmented crops of retained surroundings. The Explore menu has an accessible, persistent selected-section marker. All six mechanism groups and contact shading were audited in `docs/EXPLORE_EMPHASIS_REVIEW.md`.
+
+Verified: lint, TypeScript, production build, seven state tests and all 71 source/runtime checks pass. New regressions protect physical material values, opaque depth, all six roles and visibility across reveal 0/0.49/0.51/1, selected-part precedence, shader placement and reset. The existing expected missing-asset fault injections still pass; build retains its existing large-chunk and Node deprecation warnings.
+
+Browser verification at 1440×900 and 390×844 covers all mechanisms, menu selection, orbit, section separation and reset. Each viewport passes 24 real-renderer checks, including interruption/Back, manual camera ownership, reduced motion, visibility restoration and resource stability. Mobile is desktop Chromium viewport/handler emulation, not physical-device certification. Evidence: `artifacts/browser/explore-emphasis/` (ignored). Local preview: `http://127.0.0.1:4173/?inspect=1`.
+
+Next action: user appearance review. Publication, CAD redistribution, expert mechanical review and physical-device gates remain unchanged; no deployment or upload was performed.

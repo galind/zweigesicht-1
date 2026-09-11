@@ -39,7 +39,12 @@ import {
   spreadMember,
   type SpreadPlacement,
 } from '../experience/spread';
-import { createMaterial, finishFor, setFinishEnabled } from './materials';
+import {
+  createMaterial,
+  finishFor,
+  setFinishEnabled,
+  setEmphasis,
+} from './materials';
 import {
   transferProgress,
   assetRequestUrl,
@@ -1152,6 +1157,9 @@ export class MovementViewer {
         ),
     );
     if (bounds.isEmpty()) return;
+    // Retained context must fit too; framing only the active wheels cropped the
+    // movement into disconnected fragments. Exclude covers travelling away.
+    bounds.union(this.assemblyBounds());
     this.frameBounds(bounds, new THREE.Vector3(0.22, 0.24, g.side).normalize());
   }
   allParts() {
@@ -1466,11 +1474,19 @@ export class MovementViewer {
       // in the scene keeps its authored finish, including muted context and
       // covers that are still visible while exploring a mechanism.
       setFinishEnabled(p.material, true);
-      if (group && !member && !selected) {
-        p.material.color.multiplyScalar(context ? 0.16 : 0.1);
-        p.material.metalness = 0.05;
-        p.material.roughness = 0.95;
-      }
+      setEmphasis(
+        p.material,
+        selected
+          ? 'selected'
+          : member
+            ? 'member'
+            : context
+              ? 'context'
+              : group
+                ? 'surrounding'
+                : 'whole',
+        group?.color,
+      );
       if (
         !previousTarget.equals(p.target) ||
         !previousRotation.equals(p.targetRotation)
@@ -1909,18 +1925,16 @@ export class MovementViewer {
     if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
     const group = GROUPS.find((g) => g.id === this.state.group);
     if (group) {
-      const member = inMembers(id, group.members),
-        context = inMembers(id, group.context);
+      // Reveal only removes authored covers after they have travelled clear.
+      // Never cull the rest of the movement at an arbitrary slider threshold.
       const obstruction = uncoverHost(id, this.state.group);
       if (
-        this.state.reveal > 0.5 &&
+        obstruction &&
+        p.offset.length() > 24 &&
         !selected &&
-        !member &&
-        !context &&
-        !obstruction
+        !inMembers(id, group.members)
       )
         visible = false;
-      if (obstruction && p.offset.length() > 24 && !selected) visible = false;
     }
     return visible;
   }

@@ -15,7 +15,12 @@ const profiles = {
   roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xbac1ca, metalness: 1, roughness: 0.055, pattern: 5 },
-  blackPolished: { color: 0xaeb6c0, metalness: 1, roughness: 0.055, pattern: 5 },
+  blackPolished: {
+    color: 0xaeb6c0,
+    metalness: 1,
+    roughness: 0.055,
+    pattern: 5,
+  },
   dialSilver: { color: 0xd5d8dc, metalness: 1, roughness: 0.25, pattern: 6 },
   blue: { color: 0x0b3768, metalness: 1, roughness: 0.13, pattern: 0 },
   spring: { color: 0x304f83, metalness: 1, roughness: 0.25, pattern: 0 },
@@ -37,12 +42,12 @@ const brushingDetail: Partial<Record<Finish, number>> = {
 // Authored frosting controls: grain frequency per mm and restrained roughness
 // contrast. Frost never perturbs normals; source face masks define placement.
 const frostingDetail = {
-  plate: { scale: 4, contrast: .16 },
-  mounting: { scale: 6, contrast: .13 },
+  plate: { scale: 4, contrast: 0.16 },
+  mounting: { scale: 6, contrast: 0.13 },
 };
 const screwDefinitions = [
-  9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191,
-  192, 201, 226, 253, 255,
+  9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191, 192,
+  201, 226, 253, 255,
 ];
 // Exact definition identity wins over source-name fallbacks. No geometry is modified.
 // Full movement coverage by source definition. Unknown physical processes remain
@@ -61,18 +66,18 @@ for (const [family, ids] of Object.entries({
   blue: screwDefinitions,
   steel: [
     53, 55, 57, 60, 61, 68, 72, 87, 88, 93, 95, 103, 113, 114, 117, 124, 126,
-    127, 129, 130, 135, 137, 142, 143, 144, 148, 149, 150, 151, 154,
-    157, 158, 159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188,
-    211, 214, 217, 220, 234, 235, 237, 242, 252, 254,
+    127, 129, 130, 135, 137, 142, 143, 144, 148, 149, 150, 151, 154, 157, 158,
+    159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188, 211, 214, 217,
+    220, 234, 235, 237, 242, 252, 254,
   ],
-  brass: [
-    94, 96, 115, 141, 187, 210, 213, 216, 233, 238, 243,
-  ],
+  brass: [94, 96, 115, 141, 187, 210, 213, 216, 233, 238, 243],
   gold: [118, 163, 179, 200, 206],
   satinGold: [121],
   roseGold: [100, 203, 207, 224],
   balance: [110, 111],
-  ruby: [101, 102, 106, 112, 128, 134, 155, 196, 197, 198, 199, 204, 205, 208, 231],
+  ruby: [
+    101, 102, 106, 112, 128, 134, 155, 196, 197, 198, 199, 204, 205, 208, 231,
+  ],
   sapphire: [67],
   diamond: [225],
   spring: [116],
@@ -83,10 +88,7 @@ for (const [family, ids] of Object.entries({
 // from enamel inserts and hands; name fallbacks conflated all three.
 for (const [family, ids] of Object.entries({
   dialSilver: [3, 14, 17, 26],
-  steel: [
-    5, 23, 27, 46, 48, 52, 54, 56, 59, 62, 70, 71, 73, 75, 76,
-    77, 256,
-  ],
+  steel: [5, 23, 27, 46, 48, 52, 54, 56, 59, 62, 70, 71, 73, 75, 76, 77, 256],
   blue: [
     7, 8, 11, 12, 13, 16, 18, 19, 24, 28, 29, 30, 31, 32, 34, 35, 38, 39, 41,
     42,
@@ -110,13 +112,17 @@ export function finishFor(
   // Exact source instances: rear-facing screws, hairspring stud screw, and
   // previously reviewed neutral fasteners. Shared screw definitions stay blue.
   if (
-    [11, 25, 33, 43, 44, 45, 48, 49, 50, 51, 52, 67, 68, 71, 72, 77, 78, 81, 82].some(
-      (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_${i}`,
-    ) || ['11', '12'].some(
+    [
+      11, 25, 33, 43, 44, 45, 48, 49, 50, 51, 52, 67, 68, 71, 72, 77, 78, 81,
+      82,
+    ].some((i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_${i}`) ||
+    ['11', '12'].some(
       (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_${i}`,
-    ) || [9, 20, 21, 24, 27, 32, 33].some(
+    ) ||
+    [9, 20, 21, 24, 27, 32, 33].some(
       (i) => instanceId === `p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_${i}`,
-    ) || instanceId === 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_7'
+    ) ||
+    instanceId === 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_7'
   ) {
     family = 'steel';
     assignment = 'source-instance';
@@ -228,6 +234,32 @@ export function setFinishEnabled(
   }
 }
 
+export type EmphasisRole =
+  | 'whole'
+  | 'selected'
+  | 'member'
+  | 'context'
+  | 'surrounding';
+// Applied after physical lighting: finishes, face masks, opacity and depth remain
+// authored. A view-dependent edge light identifies focus without x-ray geometry.
+export const EMPHASIS = {
+  whole: [1, 0],
+  selected: [1, 0.65],
+  member: [1, 0.45],
+  context: [0.9, 0],
+  surrounding: [0.68, 0],
+} as const;
+export function setEmphasis(
+  material: THREE.MeshStandardMaterial,
+  role: EmphasisRole,
+  color = '#e5b775',
+) {
+  const uniform = material.userData.emphasis as { value: THREE.Vector2 };
+  uniform.value.set(EMPHASIS[role][0], EMPHASIS[role][1]);
+  (material.userData.emphasisColor as { value: THREE.Color }).value.set(color);
+  material.userData.emphasisRole = role;
+}
+
 export function createMaterial(
   name: string,
   definitionId?: string,
@@ -238,13 +270,23 @@ export function createMaterial(
   // Bluing covers the entire screw, including the slot, underside and shaft.
   // Retain source face annotations as provenance, but override their CAD colors.
   // Instance-level steel assignments and neutral hand seats remain independent.
-  const wholeBlue = finish.family === 'blue' &&
+  const wholeBlue =
+    finish.family === 'blue' &&
     screwDefinitions.includes(Number(definitionId?.split('_').at(-1)));
   const material = new THREE.MeshPhysicalMaterial({
     color: finish.color,
     metalness: finish.metalness,
     roughness: finish.roughness,
-    anisotropy: finish.pattern === 1 ? 0.52 : finish.pattern === 2 ? 0.58 : finish.pattern === 4 ? 0.55 : finish.pattern === 6 ? 0.48 : 0,
+    anisotropy:
+      finish.pattern === 1
+        ? 0.52
+        : finish.pattern === 2
+          ? 0.58
+          : finish.pattern === 4
+            ? 0.55
+            : finish.pattern === 6
+              ? 0.48
+              : 0,
   });
   material.name = finish.family;
   if (geometry?.hasAttribute('sourceFinishNormal'))
@@ -281,37 +323,71 @@ export function createMaterial(
   // Kept for the existing catalog framing cache; never change source buffers.
   geometry?.computeBoundingBox();
   const bounds = geometry?.boundingBox;
-  const radius = bounds ? Math.max(Math.abs(bounds.min.x), Math.abs(bounds.max.x), Math.abs(bounds.min.y), Math.abs(bounds.max.y)) : 6;
+  const radius = bounds
+    ? Math.max(
+        Math.abs(bounds.min.x),
+        Math.abs(bounds.max.x),
+        Math.abs(bounds.min.y),
+        Math.abs(bounds.max.y),
+      )
+    : 6;
   // d105 screw axes are (+/-.75,-1.1), jewel axis (0,0): grain follows +Y.
-  const brushAxis = new THREE.Vector2(definitionId === 'd_0_1_1_105' ? 0 : 1, definitionId === 'd_0_1_1_105' ? 1 : 0);
+  const brushAxis = new THREE.Vector2(
+    definitionId === 'd_0_1_1_105' ? 0 : 1,
+    definitionId === 'd_0_1_1_105' ? 1 : 0,
+  );
   // d240 source placement rotates local X by 8 degrees from assembly horizontal.
   // Counter-rotate the grain and its reflection frame; keep the CAD pose intact.
-  if (definitionId === 'd_0_1_1_240') brushAxis.set(Math.cos(Math.PI * 8 / 180), -Math.sin(Math.PI * 8 / 180));
+  if (definitionId === 'd_0_1_1_240')
+    brushAxis.set(
+      Math.cos((Math.PI * 8) / 180),
+      -Math.sin((Math.PI * 8) / 180),
+    );
+  const emphasis = { value: new THREE.Vector2(1, 0) };
+  const emphasisColor = { value: new THREE.Color('#e5b775') };
+  material.userData.emphasis = emphasis;
+  material.userData.emphasisColor = emphasisColor;
+  material.userData.emphasisRole = 'whole';
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
   const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
-  const frost = finish.family === 'frosted' ? frostingDetail.plate : frostingDetail.mounting;
+  const frost =
+    finish.family === 'frosted'
+      ? frostingDetail.plate
+      : frostingDetail.mounting;
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
       finishBrushDetail: { value: brushingDetail[finish.family] ?? 1 },
       finishEnabled: enabled,
+      emphasis,
+      emphasisColor,
       finishEngraved: { value: etched ? 1 : 0 },
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
-      finishFrostDetail: { value: new THREE.Vector2(frost.scale, frost.contrast) },
+      finishFrostDetail: {
+        value: new THREE.Vector2(frost.scale, frost.contrast),
+      },
       finishFrosted: { value: finish.family === 'frosted' ? 1 : 0 },
       finishSnailing: { value: finish.family === 'barrel' ? 1 : 0 },
       // Right-hand drum/lid local XY has the opposite handedness to the left.
       // Reverse its source-local winding, preserving the left barrel's finish.
-      finishSnailTurn: { value: ['d_0_1_1_90', 'd_0_1_1_91'].includes(definitionId ?? '') ? -1.15 : 1.15 },
-      finishRadius: { value: Math.max(radius, .01) },
+      finishSnailTurn: {
+        value: ['d_0_1_1_90', 'd_0_1_1_91'].includes(definitionId ?? '')
+          ? -1.15
+          : 1.15,
+      },
+      finishRadius: { value: Math.max(radius, 0.01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
       finishShockBlock: { value: definitionId === 'd_0_1_1_159' ? 1 : 0 },
-      finishHeatBlue: { value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0 },
-      finishBlackPolished: { value: ['blackPolished', 'crown'].includes(finish.family) ? 1 : 0 },
+      finishHeatBlue: {
+        value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0,
+      },
+      finishBlackPolished: {
+        value: ['blackPolished', 'crown'].includes(finish.family) ? 1 : 0,
+      },
     });
     shader.vertexShader =
       'varying vec3 vFinishPosition;\nvarying vec3 vFinishNormal;\nvarying vec3 vFinishViewNormal;\nvarying vec3 vFinishX;\nvarying vec3 vFinishY;\nvarying float vFinishRole;\n#ifdef SOURCE_FINISH\nattribute vec3 sourceFinishNormal;\nattribute float sourceFinishRole;\n#endif\n' +
@@ -324,7 +400,19 @@ export function createMaterial(
           '#include <begin_vertex>',
           '#include <begin_vertex>\nvFinishPosition=position; vFinishNormal=normal; vFinishRole=0.0;\n#ifdef SOURCE_FINISH\nvFinishNormal=sourceFinishNormal; vFinishRole=sourceFinishRole;\n#endif\nvFinishViewNormal=normalize(normalMatrix*vFinishNormal);\nvFinishX=mat3(modelViewMatrix)*vec3(1,0,0); vFinishY=mat3(modelViewMatrix)*vec3(0,1,0);',
         );
-    shader.fragmentShader = declarations + surface + shader.fragmentShader;
+    shader.fragmentShader =
+      'uniform vec2 emphasis;\nuniform vec3 emphasisColor;\n' +
+      declarations +
+      surface +
+      shader.fragmentShader;
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <opaque_fragment>',
+      `
+float focusRim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 3.0);
+outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * (0.18 + 0.82 * focusRim);
+#include <opaque_fragment>
+`,
+    );
     if (finish.family === 'sapphire' || finish.family === 'diamond') {
       // r186 clears the transmission buffer white/alpha .5 on an alpha canvas.
       // That empty-space sentinel otherwise becomes a white disc. Replace only
@@ -526,7 +614,7 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   };
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v8'
-      : 'ml01-source-surface-v8';
+      ? 'ml01-source-surface-clear-v9'
+      : 'ml01-source-surface-v9';
   return material;
 }

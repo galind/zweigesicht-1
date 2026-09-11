@@ -1382,3 +1382,9 @@ h2 {
     display: none;
   }
 }
+
+.explore-menu .menu-link[aria-pressed='true'] {
+  background: rgba(229, 183, 117, 0.1);
+  box-shadow: inset 3px 0 #e5b775;
+  color: #f3d5a8;
+}
