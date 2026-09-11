@@ -82,6 +82,8 @@ const empty: ViewerSnapshot = {
   catalogLoading: false,
   dialRequest: null,
   dialError: '',
+  shockLoading: false,
+  shockError: '',
   spreadFocus: null,
   status: '',
   error: '',
@@ -645,20 +647,22 @@ export default function Home() {
               >
                 Whole movement <ChevronRight aria-hidden="true" />
               </button>
-              {GROUPS.map((g, i) => (
-                <button
-                  className="menu-link"
-                  key={g.id}
-                  aria-pressed={s.group === g.id}
-                  onClick={() => chooseGroup(g.id)}
-                >
-                  <span>
-                    <small>0{i + 1}</small>
-                    {g.technical}
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-              ))}
+              {GROUPS.filter((g) => g.id !== 'shock' || s.shockIndicator).map(
+                (g, i) => (
+                  <button
+                    className="menu-link"
+                    key={g.id}
+                    aria-pressed={s.group === g.id}
+                    onClick={() => chooseGroup(g.id)}
+                  >
+                    <span>
+                      <small>0{i + 1}</small>
+                      {g.technical}
+                    </span>
+                    <ChevronRight aria-hidden="true" />
+                  </button>
+                ),
+              )}
             </div>
           </SheetContent>
         </Sheet>

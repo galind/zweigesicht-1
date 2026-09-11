@@ -1304,3 +1304,32 @@ canvas:focus-visible {
   flex: 0 0 16px;
   stroke-width: 1.7;
 }
+
+.shock-option {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #ffffff20;
+}
+.shock-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+.shock-checkbox {
+  width: 20px;
+  height: 20px;
+  border-color: #aaa8a4;
+}
+.shock-checkbox[data-checked] {
+  background: #deddd8;
+  border-color: #deddd8;
+  color: #171717;
+}
+.shock-description {
+  margin: 0 0 4px 32px;
+  color: #aaa8a4;
+  font-size: 0.875rem;
+}

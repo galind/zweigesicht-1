@@ -1,3 +1,4 @@
+import shockReplacement from '../../../assets/authored/shock-replacement.json';
 import { DIALS, displayFace, displayHostPart } from './dials';
 import handPoses from '../../../assets/authored/hand-display-poses.json';
 import complete from '../../../assets/derived/complete-separation.json';
@@ -140,6 +141,11 @@ export function explosionOffsets(
             (z + (displayOffsets.get(part.id) ?? 0)) * progress,
           ]);
     }
+    if (ids.has(shockReplacement.part.id))
+      result.set(
+        shockReplacement.part.id,
+        result.get(shockReplacement.proxyPartId) ?? [0, 0, 0],
+      );
     return result;
   }
   const byId = new Map(parts.map((p) => [p.id, p]));
@@ -211,5 +217,10 @@ export function explosionOffsets(
       result.set(part.id, offset);
     }
   }
+  if (parts.some((p) => p.id === shockReplacement.part.id))
+    result.set(
+      shockReplacement.part.id,
+      result.get(shockReplacement.proxyPartId) ?? [0, 0, 0],
+    );
   return result;
 }

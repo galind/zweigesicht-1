@@ -47,3 +47,5 @@ npm audit
 ## Source and publication boundary
 
 Source/derived CAD, source imagery, caches, environments and dependencies are excluded from Git. The private SSH checkpoint contains project code, documentation and provenance only. Redistribution rights, human mechanical review, visitor comprehension, physical devices, thermal behavior and publication approval remain separate gates. No Site or CAD asset has been uploaded or deployed.
+
+The optional shock-indicator replacement uses the maker’s separate engraving-plate STEP. Its exact download URL/hash and ignored source path are in `assets/source-manifest/shock-replacement.json`. After retrieving that source, reproduce the local runtime asset and placement evidence with `.venv-cad/bin/python scripts/cad/prepare-shock-replacement.py`.

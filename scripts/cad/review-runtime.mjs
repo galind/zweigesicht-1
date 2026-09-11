@@ -1082,4 +1082,34 @@ await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,res
 const {reviewInventory}=await import('./review-inventory.mjs');
 await reviewInventory({v,Viewer,THREE,initialState,load,parts,results});
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Inventory must preserve source geometry bytes');
+// Exercise the actual replacement loader, geometry and mutually exclusive visibility.
+const shockModule = sourceModules({fetchImpl:modelFetch})('explorer/src/viewer/ShockReplacement.ts');
+const replacement = shockModule.SHOCK_REPLACEMENT;
+const replacementScene = await shockModule.loadShockReplacement();
+v.parts = [...parts, replacement.part];
+v.ingest(replacementScene);
+v.state = {...initialState, phase:'whole'};
+v.history=[];v.ready=true;v.reduced=true;v.cameraUserOwned=true;
+v.retarget();v.applyPose(1);v.retargetVisibility();
+assert.equal(v.renderParts.get(replacement.part.id).mesh.visible,false);
+const shockLeaves=[...v.renderParts.values()].filter(p=>belongs(p.source.id,PREFIX+'29'));
+assert.ok(shockLeaves.length>30);
+await v.chooseShockIndicator(false);v.applyPose(1);v.retargetVisibility();
+assert.equal(v.renderParts.get(replacement.part.id).mesh.visible,true);
+for(const p of shockLeaves) assert.equal(p.mesh.visible,replacement.retainedLeafIds.includes(p.source.id));
+v.reset();v.applyPose(1);assert.equal(v.state.shockIndicator,false);
+v.allParts();v.applyPose(1);v.retargetVisibility();
+assert.ok(v.spread.has(replacement.part.id));
+for(const p of shockLeaves)assert.equal(v.spread.has(p.source.id),replacement.retainedLeafIds.includes(p.source.id));
+await v.chooseShockIndicator(true);v.applyPose(1);v.retargetVisibility();
+assert.equal(v.spread.has(replacement.part.id),false);
+for(const p of shockLeaves)assert.ok(v.spread.has(p.source.id));
+const replacementOffsets=load('explorer/src/experience/explosion.ts').explosionOffsets;
+for(const separation of [0,.5,1]){
+ const offsets=replacementOffsets(v.parts,{separation,partSpread:0,reveal:0,group:null});
+ assert.deepEqual(offsets.get(replacement.part.id),offsets.get(replacement.proxyPartId));
+}
+const invalidLoader=sourceModules({fetchImpl:async()=>({ok:true,arrayBuffer:async()=>new Uint8Array([1,2,3]).buffer})})('explorer/src/viewer/ShockReplacement.ts');
+await assert.rejects(invalidLoader.loadShockReplacement(),/integrity mismatch/);
+results.push({check:'actual engraving-plate GLB: verified hash, exclusive module/plate with two retained screws, Reset preference, both All parts variants, source-host separation and corrupt asset rejection',status:'pass'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));
