@@ -287,6 +287,15 @@ assert.ok(!finishShaderFor(230).shader.uniforms.finishEngraved.value);
 assert.equal(finishShaderFor(219).shader.uniforms.finishEngraved.value,1);
 const shockBlockShader=finishShaderFor(159).shader;
 assert.equal(shockBlockShader.uniforms.finishShockBlock.value,1);
+// Exercise the actual neutral-role assignment: mixed source-role triangles can
+// interpolate through steel (role 2) even in the middle of an authored blue arm.
+const neutralBlueAssignment=shockBlockShader.fragmentShader.match(/if\(finishWholeBlue<\.5 && abs\(vFinishRole-2\.0\)<\.2\) finishBlueSurface=([^;]+);/);
+assert.ok(neutralBlueAssignment);
+const resolveNeutralBlue=new Function('finishShockBlue',`return ${neutralBlueAssignment[1]};`);
+assert.equal(resolveNeutralBlue(1),1,'Neutral-role arm fragments must remain fully blue');
+assert.equal(resolveNeutralBlue(0),0,'Central spine and other source steel seats must remain neutral');
+assert.equal(resolveNeutralBlue(.5),.5,'Preserve the authored transition into the spine');
+
 assert.equal(finishShaderFor(156).shader.uniforms.finishShockBlock.value,0);
 assert.match(shockBlockShader.fragmentShader,/vFinishRole-7\.0\)<\.2\) diffuseColor\.rgb=vec3\(\.22,\.002,\.018\)/);
 results.push({check:'cap grain follows actual screw bores; exact bridge bases and recesses replace blanket lower-Z frosting; four barrels retain handed fine snailing; crown wheel is circular brushed',status:'pass'});

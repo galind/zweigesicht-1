@@ -380,7 +380,9 @@ if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.22,.002,.
 float finishShockArms=step(vFinishPosition.y*.5,abs(vFinishPosition.x));
 float finishShockBlue=finishShockBlock*max(finishShockArms,1.0-smoothstep(1.05,1.45,vFinishPosition.y));
 float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
-if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=0.0;
+// The explicit shock-arm region wins over neutral/interpolated source roles.
+// Other parts and the central steel spine still have finishShockBlue == 0.
+if(finishWholeBlue<.5 && abs(vFinishRole-2.0)<.2) finishBlueSurface=finishShockBlue;
 if(finishEnabled>.5 && finishBlueSurface>0.0) {
  float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);
  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78),finishBlueSurface);
