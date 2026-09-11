@@ -82,9 +82,10 @@ for(const id of ids) {
   // BRep cones and oblique planar bands on reviewed bridges are modeled
   // chamfers/countersinks. Keep vertical walls and curved flanks satin.
   if(bridgeDefinitions.has(id)&&(f.type==='GeomAbs_Cone'||(plane&&Math.abs(f.planeNormal[2])>.12&&Math.abs(f.planeNormal[2])<.96))&&role===0)role=9;
-  // Restrict plate frosting to broad axial source faces. Small functional
-  // recesses and the separately identified inscription floors remain distinct.
-  if(id===195&&flat&&f.areaMm2>.4&&role===0)role=10;
+  // Broad axial fields and every coplanar island inside the plate lettering
+  // share frosting. Letter counters at Z=-2 mm must not depend on area;
+  // recessed strokes at Z=-1.9 mm and small functional recesses stay distinct.
+  if(id===195&&flat&&(f.areaMm2>.4||Math.abs(z+2)<.001)&&role===0)role=10;
   // User-approved enamel: actual recessed lettering and outlines only.
   if((id===99&&f.index>=129&&f.index<=247&&![219,223,227].includes(f.index))||(id===230&&f.index>=37&&f.index<=66))role=11;
   // Seven user-approved upper mounting pads, not the lower bridge bases.

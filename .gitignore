@@ -55,3 +55,7 @@ artifacts/cad-finishing-audit/
 # Final user-approved material annotations.
 !explorer/public/models/finish-surfaces-afd3394797bd.bin
 !explorer/public/models/finish-surfaces-afd3394797bd.bin.gz
+
+# Corrected main-plate letter counter annotations.
+!explorer/public/models/finish-surfaces-ce5d9d834cf7.bin
+!explorer/public/models/finish-surfaces-ce5d9d834cf7.bin.gz

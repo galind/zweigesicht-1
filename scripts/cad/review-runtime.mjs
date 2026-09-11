@@ -344,6 +344,23 @@ for(const [n,expected] of [[99,[28,30]],[222,[31,33]],[228,[49,50,52]]]){
 }
 for(const [id,data] of v.sourceSurfaces)if(!['d_0_1_1_99','d_0_1_1_222','d_0_1_1_228'].includes(id))for(let i=3;i<data.length;i+=4)assert.notEqual(data[i],12);
 results.push({check:'frosting matches exactly seven mounting pad faces on the three approved bridges; no other definition receives mounting frosting',status:'pass'});
+{
+ const roles=finishShaderFor(195).p.mesh.geometry.getAttribute('sourceFinishRole');
+ const base=path.join(ROOT,'artifacts/finishing-cad/sidecars/d_0_1_1_195');
+ const b=fs.readFileSync(base+'.bin'),raw=new Float32Array(b.buffer,b.byteOffset,b.length/4);
+ const meta=JSON.parse(fs.readFileSync(base+'.json')),counters=new Set();
+ for(let i=0;i<roles.count;i++){
+  const f=meta.faces[raw[i*10+9]-1],z=f.boundsLocalMm[0][2];
+  if(f.type!=='GeomAbs_Plane'||Math.abs(f.planeNormal[2])<=.999)continue;
+  if(Math.abs(z+2)<.001){
+   assert.equal(roles.getX(i),10,`Plate surface and letter counter face ${f.index} share frosting`);
+   if(f.index!==32)counters.add(f.index);
+  }else if(Math.abs(z+1.9)<.001)assert.equal(roles.getX(i),6,'Recessed letter strokes remain inscription floors');
+  else if(f.areaMm2<=.4)assert.equal(roles.getX(i),0,'Small functional recesses remain unfrosted');
+ }
+ assert.deepEqual([...counters].sort((a,b)=>a-b),[189,202,214,234,235,268,287,288,294]);
+ results.push({check:'all nine source letter counters share the plate frosting regardless of area; recessed strokes and small functional recesses retain distinct roles',status:'pass'});
+}
 for(const n of [195,99,222,228]){
  const {p,shader}=finishShaderFor(n),fragment=shader.fragmentShader;
  assert.equal(p.material.defines.FROST_RELIEF,1,'Reviewed frosting compiles physical relief');
