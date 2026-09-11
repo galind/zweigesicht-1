@@ -636,9 +636,7 @@ export default function Home() {
           >
             <SheetHeader>
               <SheetTitle>Explore</SheetTitle>
-              <SheetDescription>
-                Choose a mechanism or explore all parts.
-              </SheetDescription>
+              <SheetDescription>Choose a mechanism.</SheetDescription>
             </SheetHeader>
             <div className="panel-body explore-menu">
               <button
@@ -666,21 +664,6 @@ export default function Home() {
                   <ChevronRight aria-hidden="true" />
                 </button>
               ))}
-
-              <div className="display-choices">
-                <button
-                  className="text-button all-parts-button"
-                  disabled={!available}
-                  aria-pressed={s.layout === 'spread'}
-                  onClick={() => {
-                    setExplore(false);
-                    if (s.layout === 'spread') chooseGroup(null);
-                    else viewer.current?.allParts();
-                  }}
-                >
-                  All parts
-                </button>
-              </div>
             </div>
           </SheetContent>
         </Sheet>
@@ -716,6 +699,19 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
+        <button
+          className="text-button all-parts-button"
+          disabled={!available}
+          aria-pressed={s.layout === 'spread'}
+          onClick={() => {
+            closePanels();
+            if (s.layout === 'spread') chooseGroup(null);
+            else viewer.current?.allParts();
+          }}
+        >
+          All parts
+        </button>
+
         <Sheet
           modal={false}
           open={separate}

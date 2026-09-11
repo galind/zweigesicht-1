@@ -1021,3 +1021,63 @@ canvas:focus-visible {
     grid-column: 6 / 7;
   }
 }
+
+/* The three exploration modes are peers in the dock. */
+.action-dock .all-parts-button[aria-pressed='true'] {
+  background: #ffffff12;
+  color: white;
+}
+@media (max-width: 430px) and (min-height: 501px) {
+  .action-dock {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: calc(100% - var(--edge-left) - var(--edge-right));
+  }
+  .action-dock .explore-button {
+    grid-area: 1 / 1;
+  }
+  .action-dock .dial-trigger {
+    grid-area: 1 / 2;
+    width: auto;
+  }
+  .action-dock .all-parts-button {
+    grid-area: 1 / 3;
+  }
+  .action-dock .separate-trigger {
+    grid-area: 2 / 1;
+  }
+  .action-dock .side-slot {
+    grid-area: 2 / 2;
+    justify-content: center;
+  }
+  .action-dock .reset-button {
+    grid-area: 2 / 3;
+    justify-self: center;
+  }
+  .workspace {
+    bottom: calc(var(--bottom) + 104px);
+  }
+}
+@media (max-width: 700px) {
+  .text-enlarged .action-dock {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .text-enlarged .action-dock .explore-button {
+    grid-area: 1 / 1;
+  }
+  .text-enlarged .action-dock .dial-trigger {
+    grid-area: 1 / 2;
+  }
+  .text-enlarged .action-dock .all-parts-button {
+    grid-area: 2 / 1;
+  }
+  .text-enlarged .action-dock .separate-trigger {
+    grid-area: 2 / 2;
+  }
+  .text-enlarged .action-dock .side-slot {
+    grid-area: 3 / 1;
+  }
+  .text-enlarged .action-dock .reset-button {
+    grid-area: 3 / 2;
+  }
+}
