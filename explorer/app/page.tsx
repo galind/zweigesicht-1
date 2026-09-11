@@ -32,6 +32,12 @@ import { runInventoryChecks } from '@/src/viewer/inventoryValidation';
 import { runCameraChecks } from '@/src/viewer/cameraValidation';
 import { runBrowserChecks, startBenchmark } from '@/src/viewer/validation';
 import { captureMotion, type MotionCase } from '@/src/viewer/capture';
+import {
+  FROST_VIEWS,
+  frostReviewView,
+  recordFrostMotion,
+} from '@/src/viewer/frostReview';
+import { runFrostChecks } from '@/src/viewer/frostValidation';
 import { DialControls } from '@/components/DialControls';
 import { initialState } from '@/src/experience/state';
 import {
@@ -1046,6 +1052,38 @@ export default function Home() {
       {inspect && (
         <details className="inspection">
           <summary>Inspection tools</summary>
+          <button
+            onClick={() =>
+              viewer.current && setQa(runFrostChecks(viewer.current))
+            }
+          >
+            Run frost checks
+          </button>
+          {FROST_VIEWS.map((view) => (
+            <button
+              key={view}
+              onClick={async () => {
+                if (!viewer.current) return;
+                setQa({ running: true });
+                try {
+                  setQa(await frostReviewView(viewer.current, view));
+                } catch (error) {
+                  setQa({ error: String(error) });
+                }
+              }}
+            >
+              Frost {view}
+            </button>
+          ))}
+          <button
+            onClick={async () => {
+              if (!viewer.current) return;
+              setMotion({ running: true });
+              setMotion(await recordFrostMotion(viewer.current));
+            }}
+          >
+            Record frosting motion
+          </button>
           <button
             onClick={async () => {
               if (!viewer.current) return;

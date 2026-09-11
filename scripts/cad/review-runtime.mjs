@@ -344,25 +344,26 @@ for(const [n,expected] of [[99,[28,30]],[222,[31,33]],[228,[49,50,52]]]){
 }
 for(const [id,data] of v.sourceSurfaces)if(!['d_0_1_1_99','d_0_1_1_222','d_0_1_1_228'].includes(id))for(let i=3;i<data.length;i+=4)assert.notEqual(data[i],12);
 results.push({check:'frosting matches exactly seven mounting pad faces on the three approved bridges; no other definition receives mounting frosting',status:'pass'});
-assert.deepEqual(finishShaderFor(195).shader.uniforms.finishFrostDetail.value.toArray(),[4,.16]);
-for(const n of [99,222,228])assert.deepEqual(finishShaderFor(n).shader.uniforms.finishFrostDetail.value.toArray(),[6,.13]);
 for(const n of [195,99,222,228]){
- const {shader}=finishShaderFor(n),fragment=shader.fragmentShader;
- // The real compile hook must keep frosting out of the normal/anisotropy path,
- // including mounting masks on otherwise brushed materials. Pixel QA is separate.
- assert.match(fragment,/finishBlackPolished<\.5 && finishFrostMask<\.5/);
+ const {p,shader}=finishShaderFor(n),fragment=shader.fragmentShader;
+ assert.equal(p.material.defines.FROST_RELIEF,1,'Reviewed frosting compiles physical relief');
  assert.match(fragment,/material\.anisotropy\*=finishFace\*finishEnabled\*\(1\.0-finishFrostMask\)/);
- const heights=fragment.split('\n').filter(line=>line.includes('finishHeight='));
- assert.ok(heights.every(line=>!/(mountingFrost|finishFrostDetail|finishGrain)/.test(line)||line.includes('*.00022')), 'Frosting must never drive bump height');
- assert.match(fragment,/clamp\(\.49\+finishGrain\*finishFrostDetail\.y,\.43,\.57\)/);
- assert.ok(fragment.indexOf('float finishFrostGrain=finishFrost(finishUv)')<fragment.indexOf('if(finishEnabled>.5'), 'Frost derivatives must run before source-role branches');
- assert.match(fragment,/1\.0-smoothstep\(\.2,\.75,footprint\)/);
- assert.ok(!fragment.includes('sqrt(nearest)'), 'No sharp cellular ridges');
+ assert.ok(fragment.indexOf('vec3 finishRelief=frostRelief(finishUv)')<fragment.indexOf('if(finishEnabled>.5'), 'Footprint derivatives precede face-mask branches');
+ assert.match(fragment,/if\(finishEnabled>\.5 && finishFrostMask>\.5\) roughnessFactor=frostRoughness\(finishRelief.z\)/);
+ assert.match(fragment,/if\(finishEnabled>\.5 && finishFrostMask>\.5\) \{[\s\S]*?normal=normalize\(normal-frostGradient\)/);
+ assert.ok(!fragment.includes('finishFrostGrain')&&!fragment.includes('mountingFrost'),'Frosting does not modulate base color or borrow brushing heights');
+ assert.match(fragment,/vec2 q=positionMm\*/, 'Relief uses source millimetres');
+ const relief=fragment.slice(fragment.indexOf('uint frostHash'),fragment.indexOf('#endif',fragment.indexOf('uint frostHash')));
+ assert.ok(!/finishRadius|boundingBox|modelMatrix|time|texture2D/.test(relief),'No object-size normalization, moving coordinates, animated noise or tiled texture');
+ // No source geometry, bounds, occurrence, or family changes are needed to set
+ // the shared grain: the same evaluator is compiled for gold and steel alike.
+ assert.equal(shader.uniforms.finishRadius.value>0,true);
 }
-assert.equal(finishShaderFor(195).p.material.roughness,.49);
+for(const n of [105,120,133,147,152,153,156,165,219,230,240,251,114,159])
+ assert.equal(finishShaderFor(n).p.material.defines?.FROST_RELIEF,undefined,'Unrelated finishes do not execute frost relief');
 assert.equal(finishShaderFor(99).p.material.anisotropy,.52);
 assert.equal(finishShaderFor(251).p.material.roughness,.055);
-results.push({check:'plate and seven mounting pads retain filtered reflectance grain with bounded roughness, no frost normal perturbation or anisotropy; satin and polished responses remain distinct',status:'pass',scope:'actual shader hooks and source masks; temporal appearance requires browser review'});
+results.push({check:'source-millimetre relief reaches only the plate and seven exact pad masks, uses filtered normals and unresolved roughness without color noise, and preserves unrelated finishes',status:'pass',scope:'actual compile hooks and exact source masks; numeric GPU, visual and temporal checks are separate'});
 const mass=createMaterial('user-corrected jewel','d_0_1_1_155');
 assert.equal(mass.name,'ruby');assert.equal(mass.metalness,0);assert.equal(mass.transmission,.72);mass.dispose();
 for(const id of [99,230]){

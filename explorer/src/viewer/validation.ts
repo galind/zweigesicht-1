@@ -6,6 +6,7 @@ import {
   belongs,
   inMembers,
 } from '../experience/catalog';
+import { fittedLeaves, type DialPreferences } from '../experience/dials';
 import { uncoverHost } from '../experience/explosion';
 import { EMPHASIS, finishFor, type EmphasisRole } from './materials';
 import type { MovementViewer } from './MovementViewer';
@@ -25,6 +26,11 @@ async function settle(v: MovementViewer) {
 export async function runBrowserChecks(v: MovementViewer) {
   if (!v.ready) throw new Error('Movement not ready');
   const canvas = v.renderer.domElement;
+  const preferenceKeys = [
+    'centralVisible', 'smallVisible', 'centralStyle', 'smallStyle',
+  ] as const satisfies readonly (keyof DialPreferences)[];
+  const preferences = { ...v.state };
+  const dialCount = fittedLeaves(preferences).size;
   const checks: { name: string; pass: boolean; details?: unknown }[] = [];
   v.reset();
   await settle(v);
@@ -186,8 +192,8 @@ export async function runBrowserChecks(v: MovementViewer) {
   await settle(v);
   checks.push({
     name: '24 interrupted spread, section, reveal, selection, isolation and Reset sequences return exactly',
-    pass: v.assemblyError() === 0,
-    details: v.assemblyError(),
+    pass: v.assemblyError('presentation') === 0,
+    details: v.assemblyError('presentation'),
   });
   v.allParts();
   await settle(v);
@@ -195,8 +201,8 @@ export async function runBrowserChecks(v: MovementViewer) {
   checks.push({
     name: 'Spread membership, source scale and projected bounds are correct in the real renderer',
     pass:
-      spreadAudit.members === 216 &&
-      spreadAudit.visible === 216 &&
+      spreadAudit.members === 216 + dialCount &&
+      spreadAudit.visible === 216 + dialCount &&
       spreadAudit.overlaps.length === 0 &&
       spreadAudit.clipped.length === 0 &&
       spreadAudit.maxScaleError < 1e-9,
@@ -222,8 +228,8 @@ export async function runBrowserChecks(v: MovementViewer) {
     name: 'Reduced-motion destinations and exact return apply without interpolating',
     pass:
       !v.travel &&
-      v.assemblyError() === 0 &&
-      reducedSpread.visible === 216 &&
+      v.assemblyError('presentation') === 0 &&
+      reducedSpread.visible === 216 + dialCount &&
       reducedSpread.overlaps.length === 0,
   });
   v.reduced = preferredMotion;
@@ -250,9 +256,9 @@ export async function runBrowserChecks(v: MovementViewer) {
   v.patch({ separation: 0, partSpread: 0, reveal: 0 });
   await settle(v);
   checks.push({
-    name: 'Layer and component separation restore exact source matrices',
-    pass: v.assemblyError() === 0,
-    details: v.assemblyError(),
+    name: 'Layer and component separation restore exact movement and fitted dial matrices',
+    pass: v.assemblyError('presentation') === 0,
+    details: v.assemblyError('presentation'),
   });
   v.reset();
   await settle(v);
@@ -260,7 +266,11 @@ export async function runBrowserChecks(v: MovementViewer) {
     name: 'Reset restores all default movement parts and releases section fade state',
     pass:
       [...v.renderParts.values()].filter((p) => p.mesh.visible).length ===
-        222 && [...v.renderParts.values()].every((p) => !p.cutaway),
+        222 + dialCount && [...v.renderParts.values()].every((p) => !p.cutaway),
+  });
+  checks.push({
+    name: 'Navigation and Reset preserve both dial visibility and hand style preferences',
+    pass: preferenceKeys.every((key) => v.state[key] === preferences[key]),
   });
   const essential = [...v.renderParts.values()].filter((p) =>
     ['112', '114', '116', '126', '127', '128', '129', '130', '96'].some(

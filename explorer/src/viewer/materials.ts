@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { frostReliefGLSL } from './FrostedSurface';
 
 /** Authored surface interpretations of local maker references, not measured finishes. */
 const profiles = {
@@ -38,12 +39,6 @@ const brushingDetail: Partial<Record<Finish, number>> = {
   bridge: 2.6,
   brushedSteel: 1.65,
   warmPlate: 1.65,
-};
-// Authored frosting controls: grain frequency per mm and restrained roughness
-// contrast. Frost never perturbs normals; source face masks define placement.
-const frostingDetail = {
-  plate: { scale: 4, contrast: 0.16 },
-  mounting: { scale: 6, contrast: 0.13 },
 };
 const screwDefinitions = [
   9, 107, 122, 123, 136, 138, 139, 166, 168, 169, 170, 180, 181, 189, 191, 192,
@@ -171,7 +166,6 @@ uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
 uniform float finishFrosted;
-uniform vec2 finishFrostDetail;
 uniform float finishSnailing;
 uniform float finishSnailTurn;
 uniform float finishRadius;
@@ -194,17 +188,6 @@ float finishNoise(vec2 p) {
 float filteredFinishNoise(vec2 p) {
  float footprint=max(length(dFdx(p)),length(dFdy(p)));
  return (finishNoise(p)-.5)*(1.0-smoothstep(.4,1.8,footprint));
-}
-// Smooth source-local grain carries frosting in reflectance, never in normals.
-// Fade each octave before it becomes subpixel. Use unwarped coordinates so
-// filtering cannot vary with cellular boundaries or a noise-warp Jacobian.
-float finishFrostOctave(vec2 q) {
- float footprint=length(vec2(length(dFdx(q)),length(dFdy(q))));
- return (finishNoise(q)-.5)*(1.0-smoothstep(.2,.75,footprint));
-}
-float finishFrost(vec2 p) {
- vec2 q=p*finishFrostDetail.x;
- return finishFrostOctave(q)*.4+finishFrostOctave(mat2(.8,-.6,.6,.8)*q*2.0+vec2(17.3,9.2))*.6;
 }
 float finishBrush(vec2 p) {
  // A wider strand layer survives normal bridge framing, while the finer
@@ -293,6 +276,12 @@ export function createMaterial(
               : 0,
   });
   material.name = finish.family;
+  // Only materials with reviewed frosted regions compile the relief evaluator.
+  if (
+    finish.family === 'frosted' ||
+    ['d_0_1_1_99', 'd_0_1_1_222', 'd_0_1_1_228'].includes(definitionId ?? '')
+  )
+    material.defines = { ...material.defines, FROST_RELIEF: 1 };
   if (geometry?.hasAttribute('sourceFinishNormal'))
     material.defines = { ...material.defines, SOURCE_FINISH: 1 };
   if (finish.family === 'ruby') {
@@ -357,10 +346,6 @@ export function createMaterial(
   const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
-  const frost =
-    finish.family === 'frosted'
-      ? frostingDetail.plate
-      : frostingDetail.mounting;
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
@@ -370,9 +355,6 @@ export function createMaterial(
       emphasisColor,
       finishEngraved: { value: etched ? 1 : 0 },
       finishWholeBlue: { value: wholeBlue ? 1 : 0 },
-      finishFrostDetail: {
-        value: new THREE.Vector2(frost.scale, frost.contrast),
-      },
       finishFrosted: { value: finish.family === 'frosted' ? 1 : 0 },
       finishSnailing: { value: finish.family === 'barrel' ? 1 : 0 },
       // Right-hand drum/lid local XY has the opposite handedness to the left.
@@ -408,6 +390,7 @@ export function createMaterial(
       'uniform vec2 emphasis;\nuniform vec3 emphasisColor;\n' +
       declarations +
       surface +
+      frostReliefGLSL +
       shader.fragmentShader;
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <opaque_fragment>',
@@ -442,7 +425,9 @@ outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * focusR
 #include <color_fragment>
 vec2 finishUv=vFinishPosition.xy;
 // Evaluate derivatives before source-role branches, including at mask edges.
-float finishFrostGrain=finishFrost(finishUv);
+#ifdef FROST_RELIEF
+vec3 finishRelief=frostRelief(finishUv);
+#endif
 vec2 finishBrushUv=vec2(dot(finishUv,finishBrushAxis),dot(finishUv,vec2(-finishBrushAxis.y,finishBrushAxis.x)));
 float finishFacing=abs(normalize(vFinishNormal).z);
 float finishFace=smoothstep(.96,.999,finishFacing);
@@ -496,8 +481,7 @@ if(finishEnabled>.5 && finishPattern>.5) {
     : finishBrush(finishBrushUv)*finishBrushDetail;
   // Broad lower bases stay satin; only seven explicit mounting pads frost.
   finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
-  float mountingFrost=finishFrostMask*finishFrostGrain;
-  finishGrain=brushed*finishField+mountingFrost;
+  finishGrain=brushed*finishField;
   finishHeight=brushed*finishField*.00018;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
@@ -525,13 +509,11 @@ if(finishEnabled>.5 && finishPattern>.5) {
   #ifdef SOURCE_FINISH
   finishFrostMask=finishFrosted*(1.0-step(.2,abs(vFinishRole-10.0)));
   #endif
-  finishGrain=finishFrostGrain*finishFrostMask;
-  // Frost has no bump height: broad reflections retain the source normals.
+  // Frost relief is separate from brushing and never changes reflectance color.
  }
- // Resolved frost grain needs enough reflectance contrast to remain visible
- // without bump normals. Its subpixel fade still blends to the base metal.
+ // Authored brushing retains its reflectance response; frosting has no color noise.
  if(finishPattern<4.5 || finishPattern>5.5)
-  diffuseColor.rgb*=1.0+finishGrain*mix(.08,.26,finishFrostMask)*finishFace;
+  diffuseColor.rgb*=1.0+finishGrain*.08*finishFace;
  if(abs(vFinishRole-6.0)<.2) diffuseColor.rgb*=.62;
  // Existing recessed decoration on audited bridges. This is reversible surface
  // shading of source floors, never fabricated text, outlines or bevel geometry.
@@ -571,7 +553,9 @@ if(finishEnabled>.5 && finishPattern>.5) {
   roughnessFactor=mix(roughnessFactor,.075,finishBevel);
  }
 }
-if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=clamp(.49+finishGrain*finishFrostDetail.y,.43,.57);
+#ifdef FROST_RELIEF
+if(finishEnabled>.5 && finishFrostMask>.5) roughnessFactor=frostRoughness(finishRelief.z);
+#endif
 if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
 `,
@@ -584,6 +568,16 @@ if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
       '#include <normal_fragment_maps>',
       /* glsl */ `
 #include <normal_fragment_maps>
+#ifdef FROST_RELIEF
+if(finishEnabled>.5 && finishFrostMask>.5) {
+ // The unmasked analytic slope is projected only after the exact face mask.
+ // No screen derivative can sample a neighboring polished face's height.
+ vec3 frostX=normalize(vFinishX),frostY=normalize(vFinishY);
+ vec3 frostGradient=frostX*finishRelief.x+frostY*finishRelief.y;
+ frostGradient-=normal*dot(normal,frostGradient);
+ normal=normalize(normal-frostGradient);
+}
+#endif
 if(finishEnabled>.5 && finishPattern>.5 && finishBlackPolished<.5 && finishFrostMask<.5) {
  vec3 dx=dFdx(-vViewPosition),dy=dFdy(-vViewPosition);
  vec3 r1=cross(dy,normal),r2=cross(normal,dx);
@@ -618,7 +612,7 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
   };
   material.customProgramCacheKey = () =>
     ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v9'
-      : 'ml01-source-surface-v9';
+      ? 'ml01-source-surface-clear-v10'
+      : 'ml01-source-surface-v10';
   return material;
 }
