@@ -351,3 +351,8 @@ Verified lint, TypeScript, production build and all 87 source/runtime checks, in
 Following the supplied SJX reference and user request for a lighter, more electric blue, the fitted Skeleton inner insert now has its own cobalt lacquer treatment: sRGB #1265ee, metalness .15, roughness .18 and clearcoat. Removed its heat-blue shader routing, so it no longer darkens toward blue-black with the steel response. The minute holes, outer silver track, movement finishes, hands, rose-gold accents and satin washer are unchanged. This is an authored visual interpretation of the supplied photograph, not a measured coating.
 
 Verified lint, TypeScript, production build and all 87 source/runtime checks. Browser review confirms a visibly lighter electric ring; screenshot: ignored `artifacts/browser/dial-polish/electric-blue-inner-ring.png`. Geometry and surface annotations are unchanged. Preview remains open on Skeleton at `http://127.0.0.1:4173/?inspect=1` for appearance review. No upload, publication or push.
+
+
+## Slightly darker electric cobalt — 11 September 2026
+
+Darkened only the fitted Skeleton inner-ring base color from #1265ee to #1053d2 after user review. The electric-cobalt lacquer response and all other finishes are preserved. Lint, TypeScript and production build pass. Browser review confirms the darker shade; screenshot: ignored `artifacts/browser/dial-polish/darker-electric-blue.png`. Preview remains open on Skeleton for appearance review. No publication or push.
