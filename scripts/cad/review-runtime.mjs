@@ -842,7 +842,6 @@ results.push({check:'surface materials and controller operations preserve decode
 const {SurfaceOcclusion}=load('explorer/src/viewer/SurfaceOcclusion.ts');
 const aoScene=new THREE.Scene(),aoCamera=new THREE.PerspectiveCamera(33,1,.05,2000);
 const line=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial());aoScene.add(line);
-const fadingDial=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial());fadingDial.userData.dialFading=true;aoScene.add(fadingDial);
 const fadingCover=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial());fadingCover.userData.cutawayFading=true;aoScene.add(fadingCover);
 const ao=new SurfaceOcclusion(aoScene,aoCamera),pass=ao.pass;
 assert.ok(pass instanceof SSAOPass);assert.ok(pass.ssaoMaterial.fragmentShader.includes('1.0 - 0.24 * occlusion'));
@@ -852,11 +851,11 @@ aoCamera.far=700;aoCamera.aspect=.6;aoCamera.updateProjectionMatrix();
 let target=null,clearAlpha=.3,clearColor=new THREE.Color(0x123456),clears=0;
 const initialClear=clearColor.clone(),draws=[];
 const renderer={autoClear:true,getRenderTarget(){return target},getClearColor(out){return out.copy(clearColor)},getClearAlpha(){return clearAlpha},setClearColor(value,alpha){clearColor.set(value);if(alpha!==undefined)clearAlpha=alpha},setClearAlpha(value){clearAlpha=value},setRenderTarget(value){target=value},clear(){clears++},render(object){
- if(object===aoScene){assert.equal(line.visible,false);assert.equal(fadingDial.visible,false,'Fading dials must not cast solid contact silhouettes');assert.equal(fadingCover.visible,false,'Cutaway covers must not cast solid contact silhouettes');assert.equal(aoScene.overrideMaterial,pass.normalMaterial)}
+ if(object===aoScene){assert.equal(line.visible,false);assert.equal(fadingCover.visible,false,'Cutaway covers must not cast solid contact silhouettes');assert.equal(aoScene.overrideMaterial,pass.normalMaterial)}
  draws.push({target,material:object===aoScene?aoScene.overrideMaterial:object.material});
 }};
 ao.render(renderer);
-assert.equal(fadingDial.visible,true,'Contact pass must restore fading dial beauty visibility');
+assert.equal(fadingCover.visible,true,'Contact pass restores cutaway visibility');
 assert.deepEqual(draws.map(d=>d.target),[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTarget,null]);
 assert.deepEqual(draws.map(d=>d.material),[pass.normalMaterial,pass.ssaoMaterial,pass.blurMaterial,pass.copyMaterial]);
 assert.equal(clears,1);assert.equal(target,null);assert.equal(renderer.autoClear,true);assert.equal(clearAlpha,.3);assert.ok(clearColor.equals(initialClear));assert.equal(line.visible,true);assert.equal(aoScene.overrideMaterial,null);
@@ -866,12 +865,12 @@ assert.equal(pass.copyMaterial.uniforms.tDiffuse.value,pass.blurRenderTarget.tex
 const normalRender=renderer.render;
 renderer.render=()=>{throw Error('Injected normal-pass failure')};
 assert.throws(()=>ao.render(renderer),/Injected normal-pass failure/);
-assert.equal(fadingDial.visible,true,'Failed contact pass must restore fading dial beauty visibility');
+assert.equal(fadingCover.visible,true,'Failed contact pass restores cutaway visibility');
 assert.equal(target,null);assert.equal(renderer.autoClear,true);assert.equal(clearAlpha,.3);assert.ok(clearColor.equals(initialClear));assert.equal(line.visible,true);assert.equal(aoScene.overrideMaterial,null);
 line.visible=false;renderer.render=normalRender;ao.render(renderer);assert.equal(line.visible,false,'A failed pass must clear its visibility cache before retry');line.visible=true;
 results.push({check:'contact-pass exceptions restore render target, clear state, override material and line visibility before retry',status:'pass'});
-fadingDial.visible=false;ao.render(renderer);assert.equal(fadingDial.visible,false);fadingDial.geometry.dispose();fadingDial.material.dispose();aoScene.remove(fadingDial);
-results.push({check:'fading dials are excluded from solid contact depth and their original beauty visibility survives successful and failed passes',status:'pass'});
+fadingCover.visible=false;ao.render(renderer);assert.equal(fadingCover.visible,false);fadingCover.geometry.dispose();fadingCover.material.dispose();aoScene.remove(fadingCover);
+results.push({check:'fading cutaway parts are excluded from solid contact depth and their original beauty visibility survives successful and failed passes',status:'pass'});
 const resources=[pass.normalRenderTarget,pass.ssaoRenderTarget,pass.blurRenderTarget,pass.normalMaterial,pass.blurMaterial,pass.copyMaterial,pass.depthRenderMaterial,pass.noiseTexture,pass.ssaoMaterial,pass._fsQuad._mesh.geometry];
 const disposals=new Map(resources.map(r=>[r,0]));for(const r of resources)r.addEventListener('dispose',()=>disposals.set(r,disposals.get(r)+1));
 ao.dispose();for(const count of disposals.values())assert.equal(count,1,'Every contact-pass owned resource must be disposed once');line.geometry.dispose();line.material.dispose();

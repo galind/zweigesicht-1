@@ -78,6 +78,17 @@ export async function runDialChecks(v: MovementViewer) {
         centralStyle: 'lance',
         smallStyle: 'pear',
       });
+      check(
+        'Visibility toggle presents every enabled leaf at full opacity immediately',
+        exact() &&
+          visible().every(
+            (p) =>
+              p.material.opacity === 1 &&
+              !p.material.transparent &&
+              p.material.depthWrite &&
+              !p.motion,
+          ),
+      );
       await settle(v);
       const before = prefs();
       const label = `${Number(centralVisible)}${Number(smallVisible)}`;
@@ -237,7 +248,6 @@ export async function runDialChecks(v: MovementViewer) {
       'Interrupted section restoration and dial change preserve opaque material state',
       [...v.renderParts.values()].every(
         (p) =>
-          !p.dialFade &&
           !p.cutaway &&
           p.material.opacity === 1 &&
           !p.material.transparent &&
@@ -287,7 +297,6 @@ export async function runDialChecks(v: MovementViewer) {
     'Transitions release all fade flags and restore opaque materials',
     [...v.renderParts.values()].every(
       (p) =>
-        !p.dialFade &&
         !p.cutaway &&
         !p.material.transparent &&
         p.material.opacity === 1 &&

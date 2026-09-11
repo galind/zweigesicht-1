@@ -148,18 +148,33 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  }
  results.push({check:'all nine style pairs: actual display layers clear by >=0.999 mm in whole/section separation; shared marker/screw seats disjoint; desktop/mobile inventory faces every dial/hand forward and upright with exact packing and rigid reassembly',status:'pass'});
  controller.reduced=false;
+ controller.reset();pose();
+ for(const layout of ['assembly','spread']) {
+  if(layout==='spread')controller.allParts();
+  for(const enabled of [true,false,true,false]) {
+   await controller.configureDials({centralVisible:enabled,smallVisible:enabled});
+   const visible=[...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement));
+   assert.equal(visible.length,enabled?43:0,'Both complete displays switch in one update');
+   assert.ok(visible.every(p=>p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite&&!p.motion),'No leaf fade or stale hidden-pose arrival');
+   controller.applyPose(.016);controller.retargetVisibility();
+   assert.deepEqual(visible.map(p=>p.source.id).sort(),[...controller.fitted].sort());
+  }
+ }
+ controller.group(null);pose();
+ results.push({check:'normal-motion dial visibility toggles show/hide all 43 fitted leaves atomically at authored opacity, with no hidden-pose arrival animation in assembly or inventory',status:'pass'});
+ controller.reduced=false;
  await controller.configureDials({centralVisible:false});controller.applyPose(.15);
  await controller.configureDials({centralVisible:true});controller.applyPose(.1);
  controller.patch({separation:1});controller.applyPose(.2);
  controller.allParts();controller.applyPose(.1);controller.group(null);pose();
  assert.equal(controller.assemblyError('presentation'),0);
- assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&!p.mesh.userData.dialFading&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite));
+ assert.ok([...controller.renderParts.values()].every(p=>p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite));
  // Scope restoration owns opacity until it settles; dial style/toggle changes cannot capture temporary flags.
  for(const change of [{centralStyle:'fine'},{centralVisible:false},{smallStyle:'lance'}]) {
   controller.reduced=true;await controller.configureDials({centralVisible:true,smallVisible:true});controller.group('energy');pose();
   controller.reduced=false;controller.group(null);controller.applyPose(.1);
   await controller.configureDials(change);pose();
-  assert.ok([...controller.renderParts.values()].every(p=>!p.dialFade&&!p.cutaway&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite),'Interrupted section fade must restore original material state');
+  assert.ok([...controller.renderParts.values()].every(p=>!p.cutaway&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite),'Interrupted section fade must restore original material state');
  }
  controller.reset();pose();assert.equal(controller.assemblyError(),0);assert.deepEqual(preferences(),[false,false,'fine','lance']);
  results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset restores opening',status:'pass'});

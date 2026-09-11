@@ -60,14 +60,6 @@ type RenderPart = {
     transparent: boolean;
     depthWrite: boolean;
   };
-  dialFade?: {
-    from: number;
-    to: number;
-    elapsed: number;
-    opacity: number;
-    transparent: boolean;
-    depthWrite: boolean;
-  };
   motion?: {
     offset: THREE.Vector3;
     rotation: THREE.Quaternion;
@@ -1428,19 +1420,8 @@ export class MovementViewer {
       const previousTarget = p.target.clone(),
         previousRotation = p.targetRotation.clone();
       const id = p.source.id;
-      this.retargetDialFade(
-        p,
-        !!previousFitted?.has(id),
-        this.fitted.has(id),
-        !this.reduced &&
-          this.state.presentation === 'dials' &&
-          this.state.layout === 'assembly' &&
-          !selection &&
-          !group &&
-          !p.cutaway,
-      );
       p.displayMatrix =
-        (this.fitted.has(id) || !!p.dialFade) &&
+        this.fitted.has(id) &&
         !(selection && !belongs(selection, ROOT) && !this.fitted.has(selection))
           ? handDisplayMatrix(id, p.assembled)
           : undefined;
@@ -1468,7 +1449,7 @@ export class MovementViewer {
       ) {
         const enamel = p.material as THREE.MeshPhysicalMaterial;
         const fitted =
-          (this.fitted.has(id) || !!p.dialFade) &&
+          this.fitted.has(id) &&
           !(
             selection &&
             !belongs(selection, ROOT) &&
@@ -1535,59 +1516,15 @@ export class MovementViewer {
           duration: this.poseDuration ?? 0.85,
         };
       }
+      // A newly enabled complete display appears in place on the next frame.
+      // Do not animate it from a hidden part's stale assembly/inventory pose.
+      if (this.fitted.has(id) && !previousFitted?.has(id)) {
+        p.offset.copy(p.target);
+        p.rotation.copy(p.targetRotation);
+        p.motion = undefined;
+      }
     }
     this.needsRender = true;
-  }
-  restoreDialOpacity(p: RenderPart) {
-    const fade = p.dialFade;
-    if (!fade) return;
-    p.material.opacity = fade.opacity;
-    p.material.transparent = fade.transparent;
-    p.material.depthWrite = fade.depthWrite;
-    p.material.needsUpdate = true;
-    p.mesh.userData.dialFading = false;
-    p.dialFade = undefined;
-  }
-  retargetDialFade(
-    p: RenderPart,
-    wasFitted: boolean,
-    fitted: boolean,
-    animate: boolean,
-  ) {
-    if (!animate) {
-      this.restoreDialOpacity(p);
-      return;
-    }
-    if (wasFitted === fitted) return;
-    if (!fitted && !p.mesh.visible && !p.dialFade) return;
-    const previous = p.dialFade;
-    const opacity = previous?.opacity ?? p.material.opacity;
-    p.dialFade = {
-      from: previous ? p.material.opacity / opacity : wasFitted ? 1 : 0,
-      to: fitted ? 1 : 0,
-      elapsed: 0,
-      opacity,
-      transparent: previous?.transparent ?? p.material.transparent,
-      depthWrite: previous?.depthWrite ?? p.material.depthWrite,
-    };
-    p.material.opacity = opacity * p.dialFade.from;
-    p.material.transparent = true;
-    p.material.depthWrite = false;
-    p.material.needsUpdate = true;
-    p.mesh.userData.dialFading = true;
-  }
-  applyDialFade(p: RenderPart, dt: number) {
-    const fade = p.dialFade;
-    if (!fade) return false;
-    fade.elapsed += Math.max(0, dt);
-    const t = this.reduced ? 1 : Math.min(1, fade.elapsed / 0.42);
-    const eased = t * t * (3 - 2 * t);
-    p.material.opacity =
-      fade.opacity * THREE.MathUtils.lerp(fade.from, fade.to, eased);
-    if (t < 1) return true;
-    if (!fade.to) p.displayMatrix = undefined;
-    this.restoreDialOpacity(p);
-    return false;
   }
   applyPose(dt: number) {
     let moving = false;
@@ -1610,7 +1547,6 @@ export class MovementViewer {
       if (!moving) this.explosionTravel = undefined;
     }
     for (const p of this.renderParts.values()) {
-      moving = this.applyDialFade(p, dt) || moving;
       if (p.cutaway) {
         const fade = p.cutaway;
         fade.elapsed += Math.max(0, dt);
@@ -1746,7 +1682,7 @@ export class MovementViewer {
     );
     const hits = this.raycaster.intersectObjects(
       [...this.renderParts.values()]
-        .filter((p) => p.mesh.visible && p.dialFade?.to !== 0)
+        .filter((p) => p.mesh.visible)
         .map((p) => p.mesh),
       false,
     );
@@ -1976,9 +1912,7 @@ export class MovementViewer {
     const raw =
       !!selection && !belongs(selection, ROOT) && !this.fitted.has(selection);
     let visible =
-      belongs(id, ROOT) ||
-      selected ||
-      (!raw && (!!this.fitted?.has(id) || !!p.dialFade));
+      belongs(id, ROOT) || selected || (!raw && !!this.fitted?.has(id));
     if (id === PREFIX + '66' && !selected) visible = false;
     if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
     const group = GROUPS.find((g) => g.id === this.state.group);

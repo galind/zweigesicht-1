@@ -44,17 +44,15 @@ export class SurfaceOcclusion {
       if (
         object instanceof THREE.Line ||
         object instanceof THREE.Points ||
-        object.userData.dialFading ||
         object.userData.cutawayFading
       )
         visibility.push([object, object.visible]);
     });
     try {
       // The override normal material cannot represent alpha. Exclude fading
-      // dials/cutaway covers so they cannot leave an opaque ghost silhouette.
+      // cutaway parts so they cannot leave an opaque ghost silhouette.
       for (const [object] of visibility)
-        if (object.userData.dialFading || object.userData.cutawayFading)
-          object.visible = false;
+        if (object.userData.cutawayFading) object.visible = false;
       this.pass.render(
         renderer,
         this.pass.ssaoRenderTarget,
