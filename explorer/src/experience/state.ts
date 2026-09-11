@@ -84,3 +84,15 @@ export function damp(
     ? target
     : current + (target - current) * (1 - Math.exp(-Math.max(0, seconds) * 7));
 }
+
+/** Reset the view without changing the user's fitted display configuration. */
+export function resetViewState(state: ExperienceState): ExperienceState {
+  return resolveState(initialState, {
+    phase: 'recovering',
+    side: state.side,
+    centralVisible: state.centralVisible,
+    smallVisible: state.smallVisible,
+    centralStyle: state.centralStyle,
+    smallStyle: state.smallStyle,
+  });
+}

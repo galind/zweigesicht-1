@@ -34,6 +34,7 @@ import {
 } from '../experience/catalog';
 import {
   initialState,
+  resetViewState,
   resolveState,
   type ExperienceState,
 } from '../experience/state';
@@ -1059,11 +1060,15 @@ export class MovementViewer {
     this.cameraUserOwned = false;
     this.history = [];
     this.spreadFocus = null;
-    this.state = { ...initialState, phase: 'recovering' };
+    this.state = resetViewState(this.state);
     this.detailError = '';
     this.homeCamera();
     this.retarget();
     this.emit();
+    // Retained preferences may still need the shared catalog request. Invalidate
+    // old navigation intent, then reconcile loading against the reset view.
+    if ([...fittedLeaves(this.state)].some((id) => !this.renderParts.has(id)))
+      void this.configureDials();
   }
   homeCamera(immediate = false) {
     this.frameBounds(

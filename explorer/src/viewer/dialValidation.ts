@@ -168,6 +168,17 @@ export async function runDialChecks(v: MovementViewer) {
           v.state.layout === 'spread' && before === prefs(),
         );
       }
+      const resetSide = v.state.side;
+      v.reset();
+      await settle(v);
+      check(
+        `${label}: Reset keeps visibility/styles/side and reassembles from inventory`,
+        before === prefs() &&
+          v.state.side === resetSide &&
+          exact() &&
+          v.state.layout === 'assembly' &&
+          v.assemblyError('presentation') === 0,
+      );
       v.group(null);
       await settle(v);
       check(
@@ -269,6 +280,12 @@ export async function runDialChecks(v: MovementViewer) {
   );
   v.group(null);
   await settle(v);
+  await v.configureDials({
+    centralVisible: false,
+    smallVisible: false,
+    centralStyle: 'fine',
+    smallStyle: 'lance',
+  });
   v.reset();
   await v.chooseDial('central', true);
   await settle(v);
@@ -393,20 +410,22 @@ export async function runDialChecks(v: MovementViewer) {
       exact(),
   );
   const cancelled = v.configureDials({ centralVisible: true });
+  const resetPreferences = prefs();
+  const resetSide = v.state.side;
   v.reset();
   release();
   await cancelled;
   v.loadCatalog = loader;
   await settle(v);
   check(
-    'Reset cancels pending display intent and restores opening defaults',
-    !v.state.centralVisible &&
-      !v.state.smallVisible &&
-      v.state.centralStyle === 'fine' &&
-      v.state.smallStyle === 'lance' &&
-      v.state.side === 'back' &&
+    'Reset retains pending dial preferences and current side while reassembling',
+    prefs() === resetPreferences &&
+      v.state.side === resetSide &&
       v.state.layout === 'assembly' &&
-      v.assemblyError() === 0 &&
+      v.state.separation === 0 &&
+      v.state.partSpread === 0 &&
+      v.state.reveal === 0 &&
+      v.assemblyError('presentation') === 0 &&
       !v.dialRequest &&
       !v.dialError,
   );

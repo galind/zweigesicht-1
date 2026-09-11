@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {initialState,resolveState,damp} from '../explorer/src/experience/state.ts';
+import {initialState,resolveState,resetViewState,damp} from '../explorer/src/experience/state.ts';
 test('obsolete playback input cannot enter the static explorer state',()=>{
  const s=resolveState(initialState,{study:true,playing:true,time:12,speed:1});
  for(const key of ['study','playing','time','speed'])assert.equal(key in s,false);
@@ -37,5 +37,17 @@ test('obsolete appearance input is discarded from patches and historical state',
  for(const treatment of ['function','finish','unexpected',null]) {
   assert.equal('treatment' in resolveState(initialState,{treatment}),false);
   assert.equal('treatment' in resolveState({...initialState,treatment},{}),false);
+ }
+});
+
+test('Reset view preserves all dial combinations, styles and current side while clearing exploration',()=>{
+ for(const centralVisible of [false,true]) for(const smallVisible of [false,true]) for(const side of ['front','back']) {
+  const before=resolveState(initialState,{centralVisible,smallVisible,centralStyle:'open-lance',smallStyle:'pear',side,group:'display',part:'part',isolated:true,separation:1,partSpread:.8,reveal:1});
+  for(const layout of ['assembly','spread']) {
+   const reset=resetViewState({...before,layout});
+   for(const key of ['centralVisible','smallVisible','centralStyle','smallStyle','side'])assert.equal(reset[key],before[key]);
+   assert.equal(reset.layout,'assembly');assert.equal(reset.group,null);assert.equal(reset.part,null);assert.equal(reset.isolated,false);
+   assert.equal(reset.separation,0);assert.equal(reset.partSpread,0);assert.equal(reset.reveal,0);
+  }
  }
 });

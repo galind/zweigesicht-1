@@ -824,7 +824,7 @@ export default function Home() {
           className="text-button reset-button"
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
-          title="Restore the opening view and options"
+          title="Reassemble and recenter; keep dials and hands"
           onClick={() => {
             closePanels();
             if (viewer.current) viewer.current.reset();

@@ -176,9 +176,9 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
   await controller.configureDials(change);pose();
   assert.ok([...controller.renderParts.values()].every(p=>!p.cutaway&&p.material.opacity===1&&!p.material.transparent&&p.material.depthWrite),'Interrupted section fade must restore original material state');
  }
- controller.reset();pose();assert.equal(controller.assemblyError(),0);assert.deepEqual(preferences(),[false,false,'fine','lance']);
- results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset restores opening',status:'pass'});
- controller.reduced=true;controller.reset();pose();
+ const resetPrefs=preferences(),resetSide=controller.state.side;controller.reset();pose();assert.equal(controller.assemblyError('presentation'),0);assert.deepEqual(preferences(),resetPrefs);assert.equal(controller.state.side,resetSide);
+ results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset retains fitted preferences',status:'pass'});
+ controller.reduced=true;await controller.configureDials({centralVisible:false,smallVisible:false,centralStyle:'fine',smallStyle:'lance'});controller.reset();pose();
  await controller.chooseDial('central',true);pose();
  assert.equal(controller.state.side,'front');assert.deepEqual(preferences(),[true,false,'fine','lance']);
  await controller.chooseDial('small',true,'pear');pose();
@@ -190,7 +190,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  controller.group('energy');pose();const history=controller.history.length;await controller.chooseDial('central',true);pose();
  assert.equal(controller.state.group,null);assert.equal(controller.state.side,'front');assert.equal(controller.state.smallVisible,true);assert.equal(controller.history.length,history+1);
  controller.allParts();pose();await controller.select(DIALS.faces.small.structureLeafIds[0]);controller.patch({isolated:true});pose();await controller.chooseDial('central',true,'open-lance');pose();assert.equal(controller.state.isolated,false);assert.equal(controller.state.part,null);assert.equal(controller.state.layout,'spread');assert.equal(controller.state.side,'back');assert.equal(controller.state.smallVisible,true);
- controller.reset();pose();assert.deepEqual(preferences(),[false,false,'fine','lance']);
+ const beforeReset=preferences();controller.reset();pose();assert.deepEqual(preferences(),beforeReset);assert.equal(controller.assemblyError('presentation'),0);
  results.push({check:'menu dial/style choices enable and face the selected display, preserve partner/style/separation, leave unrelated scopes, keep inventory and hide camera stable, and save one history entry',status:'pass'});
  let pending=[],loads=0,disposed=0;
  class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
@@ -200,13 +200,25 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  assert.equal(loads,1);r.group('display');r.patch({partSpread:.5});r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);
  assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);assert.equal(r.state.side,'front');assert.equal(r.state.smallStyle,'pear');assert.equal(r.state.group,'display');assert.equal(r.state.partSpread,.5);
  r=makeRace();a=r.chooseDial('central',true);assert.equal(r.state.side,'front');b=r.chooseDial('small',true,'pear');assert.equal(r.state.side,'back');r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.side,'front');assert.deepEqual([r.state.centralVisible,r.state.smallVisible,r.state.smallStyle],[true,true,'pear']);
- r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'back');assert.equal(r.state.centralVisible,false);
- r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'movement');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
+ r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'front');assert.equal(r.state.centralVisible,true);
+ r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
  r=makeRace();a=r.configureDials({centralVisible:true});await r.configureDials({centralVisible:false});pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
  r=makeRace();a=r.configureDials({centralVisible:true,smallVisible:true});pending.shift().reject(Error('offline'));await a;assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);assert.equal(r.dialRequest.smallVisible,true);
  r.setSide('front');r.allParts();a=r.retryDials();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.layout,'spread');assert.equal(r.dialError,'');assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);
  r=makeRace();a=r.configureDials({centralVisible:true});r.cameraGeneration++;pending.shift().resolve({scene:{}});await a;assert.equal(r.framings,undefined);
  r=makeRace();a=r.configureDials({centralVisible:true});r.dead=true;pending.shift().resolve({scene:{}});await a;assert.equal(disposed,1);
+ // Reset during a genuinely incomplete load retains intent and reuses that load.
+ r=makeRace();r.renderParts=new Map(v.renderParts);
+ for(const id of DIALS.faces.central.structureLeafIds)r.renderParts.delete(id);
+ r.ingest=()=>{r.renderParts=new Map(v.renderParts)};
+ const loadsBefore=loads;a=r.chooseDial('central',true,'open-lance');r.patch({separation:1});r.reset();
+ assert.equal(loads,loadsBefore+1);assert.equal(r.state.centralVisible,true);assert.equal(r.state.centralStyle,'open-lance');assert.equal(r.state.separation,0);assert.equal(r.state.side,'front');
+ pending.shift().resolve({scene:{}});await a;await Promise.resolve();await Promise.resolve();
+ assert.equal(r.dialRequest,null);assert.equal(r.dialError,'');assert.equal(r.renderableDials().size,22);
+ r=makeRace();r.renderParts=new Map(v.renderParts);for(const id of DIALS.faces.central.structureLeafIds)r.renderParts.delete(id);
+ a=r.chooseDial('central',true);r.reset();pending.shift().reject(Error('offline at reset'));await a;await Promise.resolve();await Promise.resolve();assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);
+ r.ingest=()=>{r.renderParts=new Map(v.renderParts)};a=r.retryDials();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.centralVisible,true);assert.equal(r.dialError,'');
+ results.push({check:'Reset preserves dial intent during incomplete loading; single shared load resolves into assembled current face; failure stays retryable without clearing preferences',status:'pass'});
  // A missing leaf cannot silently report a complete display; a retry can ingest it.
  r=makeRace();r.renderParts=new Map(v.renderParts);const missing=DIALS.faces.central.structureLeafIds[0];const saved=r.renderParts.get(missing);r.renderParts.delete(missing);
  a=r.configureDials({centralVisible:true});pending.shift().resolve({scene:{}});await a;assert.ok(r.dialError);
