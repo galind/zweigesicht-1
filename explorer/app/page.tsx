@@ -13,8 +13,6 @@ import {
   ChevronDown,
   ChevronRight,
   ExternalLink,
-  FlipHorizontal2,
-  RotateCcw,
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { loadingMessage } from '@/src/experience/loading';
@@ -613,7 +611,7 @@ export default function Home() {
             className="explore-button text-button"
             disabled={s.loadStage === 'recovering'}
           >
-            Explore <ChevronDown aria-hidden="true" />
+            Explore
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -665,7 +663,6 @@ export default function Home() {
               s.layout !== 'spread' && (
                 <span className="state-dot" aria-label="Separation active" />
               )}
-            <ChevronDown aria-hidden="true" />
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -783,7 +780,6 @@ export default function Home() {
             disabled={!available}
           >
             <span>Dial &amp; hands</span>
-            <ChevronDown aria-hidden="true" />
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -820,7 +816,6 @@ export default function Home() {
             aria-label={sideLabel}
             title={sideLabel}
           >
-            <FlipHorizontal2 aria-hidden="true" />
             <span>{sideLabel}</span>
           </button>
         </div>
@@ -835,7 +830,6 @@ export default function Home() {
             else set({ ...empty, loadStage: 'error', error: s.error });
           }}
         >
-          <RotateCcw aria-hidden="true" />
           <span>Reset view</span>
         </button>
       </nav>

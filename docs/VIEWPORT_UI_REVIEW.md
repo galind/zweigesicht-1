@@ -57,3 +57,12 @@ The current opening and Reset preset uses normalized camera direction `(0.32, 0.
 The dock is ordered Explore, Separate, All parts, Dial & hands, Flip movement, Reset view. Desktop spacing groups inspection, display and recovery. Explore uses the same neutral treatment as its peers; open menus and active All parts use a consistent highlight. Reset is quieter. At 780 px and below, buttons occupy two rows of three in the same order; enlarged text uses three rows of two. Mobile retains text labels, popup chevrons and at least 44 px button heights. The movement workspace and popup clearance use the measured dock top, so wrapping labels cannot overlap the canvas. Earlier static stage dimensions in this document are historical measurements.
 
 Verification for this follow-up: nine state tests, 80 CPU/source/runtime checks, lint, TypeScript and production build pass. Browser evidence includes 19 desktop camera checks, 77 desktop dial checks and 49 mobile UX checks. Manual checks cover both separated displays and exact restoration, dial-facing resize inside Time display, 320 px/200% text, 740 px dock containment and 844 px landscape. Evidence: ignored `artifacts/browser/tilted-overview/`. Existing build warnings, physical-device and screen-reader limitations, appearance acceptance and mechanical/publication gates remain unchanged.
+
+
+### Level overview and text-only dock — user appearance follow-up
+
+After the user rejected the diagonal appearance, the overview changed to normalized `(0.22, 0, ±1)`: about 12° of sideways tilt with no vertical tilt. The stem stays horizontal and the movement upright. This supersedes the two-axis angle above. Dial choices still face straight on; Reset retains the configured displays and current side.
+
+All six bottom controls now use text without pictograms or chevrons. Popup expanded states, active backgrounds, the separation status dot, accessible names, focus styling and touch targets remain. This supersedes the icon/chevron treatment above; it does not change the dock order.
+
+Verified lint, TypeScript, production build, nine state tests, 80 CPU/runtime checks and 19 rendered camera checks. Manual desktop/mobile review confirms zero dock icons, at least 44 px targets and no horizontal overflow at 390 and 320 px. Evidence: ignored `artifacts/browser/level-overview/`. Angle acceptance remains with the user.

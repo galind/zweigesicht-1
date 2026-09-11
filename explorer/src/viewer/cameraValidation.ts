@@ -50,10 +50,11 @@ export async function runCameraChecks(v: MovementViewer) {
   check(
     'Opening uses the tilted overview',
     opening.state.viewAngle === 'overview' &&
+      Math.abs(opening.position.y - opening.target.y) < 1e-8 &&
       Math.abs(
         (opening.position.x - opening.target.x) /
           (opening.position.z - opening.target.z) +
-          0.32,
+          0.22,
       ) < 1e-8,
   );
   for (const face of ['central', 'small'] as const) {
@@ -114,7 +115,7 @@ export async function runCameraChecks(v: MovementViewer) {
       Math.abs(
         (v.camera.position.x - v.controls.target.x) /
           (v.camera.position.z - v.controls.target.z) -
-          0.32,
+          0.22,
       ) < 1e-8,
   );
   let maxNdc = 0;
@@ -192,7 +193,7 @@ export async function runCameraChecks(v: MovementViewer) {
       Math.abs(
         (v.camera.position.x - v.controls.target.x) /
           Math.abs(v.camera.position.z - v.controls.target.z) -
-          0.32,
+          0.22,
       ) < 1e-8,
   );
   return { checks, views, viewport: [v.host.clientWidth, v.host.clientHeight] };

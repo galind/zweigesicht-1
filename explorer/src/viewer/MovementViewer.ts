@@ -1092,8 +1092,8 @@ export class MovementViewer {
   }
   assemblyDirection() {
     return new THREE.Vector3(
-      this.state.viewAngle === 'face' ? 0 : 0.32,
       this.state.viewAngle === 'face' ? 0 : 0.22,
+      0,
       this.state.side === 'front' ? 1 : -1,
     ).normalize();
   }
