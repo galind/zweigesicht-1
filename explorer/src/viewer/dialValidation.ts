@@ -157,6 +157,12 @@ export async function runDialChecks(v: MovementViewer) {
       check(
         `${label}: every fitted inventory part faces forward and upright`,
         leaves.every((p) => {
+          if (p.source.name.startsWith('010-'))
+            return (
+              new THREE.Vector3(0, 1, 0)
+                .transformDirection(p.mesh.matrix)
+                .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
+            );
           const sign = belongs(p.source.id, DIALS.faces.central.rootId)
             ? 1
             : -1;

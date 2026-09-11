@@ -102,6 +102,7 @@ export async function reviewInventory({v: source, Viewer, THREE, initialState, l
   for(const [id,p]of v.renderParts)if(v.spread.has(id)&&p.source.name.startsWith('010-')){
     const head=new THREE.Vector3(0,0,1).transformDirection(p.mesh.matrix);
     assert.ok(head.distanceTo(new THREE.Vector3(0,0,-1))<1e-8,'Actual screw slotted-head source axis points forward');
+    assert.ok(new THREE.Vector3(0,1,0).transformDirection(p.mesh.matrix).distanceTo(new THREE.Vector3(0,-1,0))<1e-8,'Every movement and fitted screw slot is upright');
   }
   const coupling=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_97');
   assert.ok(new THREE.Vector3(0,0,1).transformDirection(coupling.mesh.matrix).distanceTo(new THREE.Vector3(0,0,-1))<1e-8,'Actual toothed coupling face is not edge-on');

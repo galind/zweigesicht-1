@@ -25,7 +25,7 @@ The review decoded the existing local overview and catalog GLBs and inspected pa
 | Source family / definition | Forward decision and evidence |
 | --- | --- |
 | Broad plates, bridges, flat wheels, springs and forks | Remove arbitrary tilt; retain source world XY roll. Paired source-mesh views establish broad recognizable faces, without asserting a universal mechanical front. |
-| `010-` screws, including horizontal d201/d226 | Map the assembled local +Z axis to inventory -Z. Actual slot geometry distinguishes the head from the shank end; size does not decide orientation. Slot roll remains a presentation convention. |
+| `010-` screws, including horizontal d201/d226 | Map the assembled local +Z axis to inventory -Z and local +Y to -Y, so every screw slot is vertical, including the three Skeleton dial screws. The source slot walls have ±local X normals in all 20 reviewed screw definitions. Actual slot geometry distinguishes the head from the shank end; size does not decide orientation. This consistent slot roll is a presentation convention. |
 | Coupling wheel d97 | World Y rotation -π/2 exposes its toothed face; identity showed the thin edge because the source axis is world X. |
 | Toothed pinions d93/d137/d234/d237/d242 | Retain face-on identity despite long shafts; recognizable teeth take precedence over the old size-based side view. |
 | Winding stem d143 and sliding clutch d144 | Retain the existing world XY profile, exposing stepped source geometry. |

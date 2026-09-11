@@ -86,8 +86,13 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    assert.ok(box.min.distanceTo(controller.spread.get(id).bounds.min)<1e-8);
    assert.ok(box.max.distanceTo(controller.spread.get(id).bounds.max)<1e-8);
    const sign=belongs(id,DIALS.faces.central.rootId)?1:-1;
+   if(p.source.name.startsWith('010-')) {
+    assert.ok(new THREE.Vector3(0,1,0).transformDirection(p.mesh.matrix).distanceTo(new THREE.Vector3(0,-1,0))<1e-9,'Fitted screw slots upright');
+    assert.ok(new THREE.Vector3(0,0,1).transformDirection(p.mesh.matrix).distanceTo(new THREE.Vector3(0,0,-1))<1e-9,'Fitted screw heads forward');
+   } else {
    assert.ok(new THREE.Vector3(0,0,sign).applyQuaternion(controller.spread.get(id).rotation).distanceTo(new THREE.Vector3(0,0,-1))<1e-9);
    assert.ok(new THREE.Vector3(0,sign,0).applyQuaternion(controller.spread.get(id).rotation).distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
+   }
    await controller.select(id);pose();assert.equal(controller.state.layout,'spread');
   }
   controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);assert.deepEqual(preferences(),prefs);
@@ -138,7 +143,8 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    for(const id of controller.fitted) {
     const p=controller.renderParts.get(id),placement=controller.spread.get(id),sign=belongs(id,DIALS.faces.central.rootId)?1:-1;
     assert.ok(new THREE.Vector3(0,0,sign).applyQuaternion(placement.rotation).distanceTo(new THREE.Vector3(0,0,-1))<1e-9);
-    assert.ok(new THREE.Vector3(0,sign,0).applyQuaternion(placement.rotation).distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
+    const upright=p.source.name.startsWith('010-')?new THREE.Vector3(0,1,0).transformDirection(p.mesh.matrix):new THREE.Vector3(0,sign,0).applyQuaternion(placement.rotation);
+    assert.ok(upright.distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
     const actual=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);
     assert.ok(actual.min.distanceTo(placement.bounds.min)<1e-8&&actual.max.distanceTo(placement.bounds.max)<1e-8);
     assert.ok(Math.abs(p.mesh.matrix.determinant()-p.assembled.determinant())<1e-9);

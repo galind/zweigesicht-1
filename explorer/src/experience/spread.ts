@@ -194,7 +194,19 @@ export function makeSpreadSlots(
 /** Forward presentation is independent of the accepted packing measurements. */
 export function forwardRotation(p: SpreadInput, fitted: Set<string>) {
   const rotation = new THREE.Quaternion();
-  if (fitted.has(p.source.id)) {
+  if (p.source.name.startsWith('010-')) {
+    // Source slot walls have +/-local X normals: local Y runs along the slot.
+    // Cancel occurrence roll, then face the head (-Z) with its slot upright (-Y).
+    rotation
+      .setFromRotationMatrix(p.assembled)
+      .invert()
+      .premultiply(
+        new THREE.Quaternion().setFromAxisAngle(
+          new THREE.Vector3(1, 0, 0),
+          Math.PI,
+        ),
+      );
+  } else if (fitted.has(p.source.id)) {
     if (displayFace(p.source.id) === 'central')
       rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
   } else if (p.source.definitionId === 'd_0_1_1_97') {
@@ -207,10 +219,6 @@ export function forwardRotation(p: SpreadInput, fitted: Set<string>) {
   ) {
     // Source-reviewed axial profiles: a pin/staff has no unique visual front.
     rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
-  } else if (p.source.name.startsWith('010-')) {
-    // The source slotted head is +local Z, including horizontal mounting screws.
-    const head = new THREE.Vector3(0, 0, 1).transformDirection(p.assembled);
-    rotation.setFromUnitVectors(head, new THREE.Vector3(0, 0, -1));
   }
   return rotation;
 }
