@@ -103,7 +103,6 @@ export function finishFor(
   let family = /^d_0_1_1_\d+$/.test(definitionId ?? '')
     ? definitions[Number(definitionId!.split('_').at(-1))]
     : undefined;
-  if (definitionId === 'd_external_ml01_gravurplatte') family = 'bridge';
   let assignment = family ? 'source-definition' : 'catalog-fallback';
   // Exact source instances: rear-facing screws, hairspring stud screw, and
   // previously reviewed neutral fasteners. Shared screw definitions stay blue.
@@ -345,19 +344,14 @@ export function createMaterial(
   material.userData.emphasisRole = 'whole';
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
-  // The separate engraving plate has the same local Z=0 face and Z=-.1
-  // recessed decoration as the bridges; use their brushing, bevel and ink response.
-  const etched =
-    definitionId === 'd_external_ml01_gravurplatte' ||
-    [99, 219, 222, 228].includes(Number(definitionId?.split('_').at(-1)));
+  const etched = [99, 219, 222, 228].includes(
+    Number(definitionId?.split('_').at(-1)),
+  );
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
       finishBrushDetail: {
-        value:
-          definitionId === 'd_0_1_1_26'
-            ? 1.7
-            : (brushingDetail[finish.family] ?? 1),
+        value: definitionId === 'd_0_1_1_26' ? 1.7 : (brushingDetail[finish.family] ?? 1),
       },
       finishEnabled: enabled,
       emphasis,
@@ -376,9 +370,7 @@ export function createMaterial(
       finishRadius: { value: Math.max(radius, 0.01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
-      finishSecondsCounterweight: {
-        value: definitionId === 'd_0_1_1_30' ? 1 : 0,
-      },
+      finishSecondsCounterweight: { value: definitionId === 'd_0_1_1_30' ? 1 : 0 },
       finishShockBlock: { value: definitionId === 'd_0_1_1_159' ? 1 : 0 },
       finishHeatBlue: {
         value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0,

@@ -1,5 +1,4 @@
 'use client';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDown } from 'lucide-react';
 import { DIALS } from '@/src/experience/dials';
 import type {
@@ -61,33 +60,6 @@ export function DialControls({
           </section>
         );
       })}
-      <section className="shock-option" aria-label="Shock indicator option">
-        <label className="shock-checkbox-label" htmlFor="shock-indicator">
-          <Checkbox
-            id="shock-indicator"
-            className="shock-checkbox"
-            checked={state.shockIndicator}
-            disabled={!available}
-            onCheckedChange={(checked) =>
-              void viewer()?.chooseShockIndicator(checked)
-            }
-          />
-          <span>Shock indicator</span>
-        </label>
-        <output aria-live="polite" className="dial-status">
-          {state.shockError ||
-            (state.shockLoading ? 'Loading engraving plate…' : '')}
-        </output>
-        {state.shockError && (
-          <button
-            className="tool"
-            disabled={state.shockLoading}
-            onClick={() => void viewer()?.chooseShockIndicator(false)}
-          >
-            Retry engraving plate
-          </button>
-        )}
-      </section>
       <output aria-live="polite" className="dial-status">
         {state.dialError || (state.dialRequest ? 'Loading dials…' : '')}
       </output>

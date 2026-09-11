@@ -9,7 +9,6 @@ export type Phase =
 export interface ExperienceState {
   phase: Phase;
   presentation: 'movement' | 'dials'; // Derived summary; visibility belongs to each face.
-  shockIndicator: boolean;
   centralVisible: boolean;
   smallVisible: boolean;
   centralStyle: string;
@@ -29,7 +28,6 @@ export interface ExperienceState {
 export const initialState: ExperienceState = {
   phase: 'loading',
   presentation: 'movement',
-  shockIndicator: true,
   centralVisible: false,
   smallVisible: false,
   centralStyle: configurations.defaults.central,
@@ -59,12 +57,6 @@ export function resolveState(
       delete (next as unknown as Record<string, unknown>)[key];
   next.inventoryBack = next.layout === 'spread' && next.inventoryBack === true;
   next.viewAngle = next.viewAngle === 'face' ? 'face' : 'overview';
-  next.shockIndicator = next.shockIndicator !== false;
-  if (!next.shockIndicator && next.group === 'shock') {
-    next.group = null;
-    next.reveal = 0;
-    next.partSpread = 0;
-  }
   next.centralVisible = next.centralVisible === true;
   next.smallVisible = next.smallVisible === true;
   next.presentation =
@@ -104,7 +96,6 @@ export function resetViewState(state: ExperienceState): ExperienceState {
   return resolveState(initialState, {
     phase: 'recovering',
     side: state.side,
-    shockIndicator: state.shockIndicator,
     centralVisible: state.centralVisible,
     smallVisible: state.smallVisible,
     centralStyle: state.centralStyle,

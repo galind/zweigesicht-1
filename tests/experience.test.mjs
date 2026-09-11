@@ -71,13 +71,3 @@ test('inventory flip state is independent of assembly side and clears on exit/Re
   assert.equal(resetViewState(back).inventoryBack,false);assert.equal(resetViewState(back).side,side);
  }
 });
-test('shock indicator defaults on and its alternative survives Reset and navigation',()=>{
- assert.equal(initialState.shockIndicator,true);
- let state=resolveState(initialState,{shockIndicator:false,group:'shock',reveal:1,partSpread:1});
- assert.equal(state.group,null);assert.equal(state.reveal,0);assert.equal(state.partSpread,0);
- for(const patch of [{centralVisible:true},{smallVisible:true},{layout:'spread'},{side:'front'},{separation:1}]) {
-  state=resolveState(state,patch);assert.equal(state.shockIndicator,false);
- }
- assert.equal(resetViewState(state).shockIndicator,false);
- assert.equal(resetViewState(resolveState(state,{shockIndicator:true})).shockIndicator,true);
-});

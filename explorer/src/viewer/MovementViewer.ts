@@ -1,8 +1,3 @@
-import {
-  SHOCK_REPLACEMENT,
-  shockVariantMember,
-  loadShockReplacement,
-} from './ShockReplacement';
 import { focusRole, focusCover } from '../experience/emphasis';
 import { explosionOffsets, uncoverHost } from '../experience/explosion';
 import {
@@ -100,8 +95,6 @@ export interface ViewerSnapshot extends ExperienceState {
   catalogLoading: boolean;
   dialRequest: DialPreferences | null;
   dialError: string;
-  shockLoading: boolean;
-  shockError: string;
   status: string;
   error: string;
   detailError: string;
@@ -182,9 +175,6 @@ export class MovementViewer {
   cameraUserOwned = false;
   dialRequest: ViewerSnapshot['dialRequest'] = null;
   dialError = '';
-  shockLoading = false;
-  shockError = '';
-  shockPending: Promise<void> | null = null;
   dialGeneration = 0;
   fitted = new Set<string>();
   catalogLoaded = false;
@@ -273,8 +263,6 @@ export class MovementViewer {
       catalogLoading: !!this.catalogPending,
       dialRequest: this.dialRequest,
       dialError: this.dialError,
-      shockLoading: this.shockLoading,
-      shockError: this.shockError,
       spreadFocus: this.spreadFocus,
       status: this.status,
       error: this.error,
@@ -507,9 +495,7 @@ export class MovementViewer {
         .catch(() => null);
       if (this.dead || generation !== this.loadGeneration) return;
       this.manifest = manifest;
-      this.parts = this.renderParts.has(SHOCK_REPLACEMENT.part.id)
-        ? [...manifest.instances, SHOCK_REPLACEMENT.part]
-        : manifest.instances;
+      this.parts = manifest.instances;
       this.sourceSurfaceError = '';
       if (
         paths &&
@@ -739,62 +725,6 @@ export class MovementViewer {
     this.emit();
     return this.catalogPending;
   }
-  shockVariantMember(id: string) {
-    // Keep the fitted module until its replacement has loaded successfully.
-    const indicator =
-      this.state.shockIndicator !== false ||
-      !this.renderParts.has(SHOCK_REPLACEMENT.part.id);
-    return shockVariantMember(id, indicator);
-  }
-  async chooseShockIndicator(enabled: boolean) {
-    if (!this.ready) return;
-    if (enabled !== this.state.shockIndicator) this.save();
-    this.selectionGeneration++;
-    const outgoing =
-      this.state.part && !shockVariantMember(this.state.part, enabled);
-    this.state = resolveState(this.state, {
-      shockIndicator: enabled,
-      ...(outgoing ? { part: null, isolated: false, phase: 'whole' } : {}),
-    });
-    this.shockError = '';
-    this.retarget();
-    this.emit();
-    await this.ensureShockReplacement();
-  }
-  async ensureShockReplacement() {
-    if (
-      this.state.shockIndicator !== false ||
-      this.renderParts.has(SHOCK_REPLACEMENT.part.id)
-    )
-      return;
-    if (this.shockPending) return this.shockPending;
-    this.shockLoading = true;
-    this.emit();
-    this.shockPending = (async () => {
-      try {
-        const scene = await loadShockReplacement();
-        if (this.dead) {
-          this.disposeObject(scene);
-          return;
-        }
-        if (!this.parts.some((p) => p.id === SHOCK_REPLACEMENT.part.id))
-          this.parts = [...this.parts, SHOCK_REPLACEMENT.part];
-        this.ingest(scene);
-        this.retarget();
-        if (this.state.layout === 'spread' && !this.cameraUserOwned)
-          this.frameSpread();
-      } catch {
-        if (!this.dead && !this.state.shockIndicator)
-          this.shockError =
-            'Engraving plate could not load. The shock indicator is still shown.';
-      } finally {
-        this.shockLoading = false;
-        this.shockPending = null;
-        if (!this.dead) this.emit();
-      }
-    })();
-    return this.shockPending;
-  }
   cancelDialRequest() {
     this.dialGeneration = (this.dialGeneration ?? 0) + 1;
     this.dialRequest = null;
@@ -1006,9 +936,7 @@ export class MovementViewer {
             )
           : (belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66') ||
             this.fitted.has(p.source.id);
-    const points = this.targetPoints(
-      (p) => this.shockVariantMember(p.source.id) && include(p),
-    );
+    const points = this.targetPoints(include);
     const bounds = new THREE.Box3().setFromPoints(points);
     if (bounds.isEmpty()) return;
     const progress = this.state.separation;
@@ -1106,7 +1034,6 @@ export class MovementViewer {
     if (this.history.length > 12) this.history.shift();
   }
   group(id: string | null) {
-    if (id === 'shock' && !this.state.shockIndicator) return;
     if (!this.ready) {
       this.state = { ...this.state, group: id };
       this.emit();
@@ -1319,14 +1246,12 @@ export class MovementViewer {
   rebuildSpread() {
     const fitted = this.renderableDials();
     this.spread = makeSpread(
-      [...this.renderParts.values()]
-        .filter((p) => this.shockVariantMember(p.source.id))
-        .map((p) => ({
-          ...p,
-          assembled: fitted.has(p.source.id)
-            ? (handDisplayMatrix(p.source.id, p.assembled) ?? p.assembled)
-            : p.assembled,
-        })),
+      [...this.renderParts.values()].map((p) => ({
+        ...p,
+        assembled: fitted.has(p.source.id)
+          ? (handDisplayMatrix(p.source.id, p.assembled) ?? p.assembled)
+          : p.assembled,
+      })),
       this.camera.aspect,
       fitted,
     );
@@ -1471,10 +1396,6 @@ export class MovementViewer {
   }
   async select(id: string) {
     if (!this.ready) return;
-    if (!shockVariantMember(id, this.state.shockIndicator)) {
-      await this.chooseShockIndicator(id !== SHOCK_REPLACEMENT.part.id);
-      if (this.shockError) return;
-    }
     const part = this.parts.find((p) => p.id === id);
     if (!part) return;
     const request = ++this.selectionGeneration;
@@ -1547,7 +1468,6 @@ export class MovementViewer {
       await this.select(retry.id);
   }
   retarget() {
-    if (this.ready && !this.shockError) void this.ensureShockReplacement();
     // Fold the actually displayed inventory turn into each departing pose before
     // starting the ordinary assembly transition; interruption cannot snap back.
     if (this.inventoryApplied && this.state.layout !== 'spread') {
@@ -1694,12 +1614,7 @@ export class MovementViewer {
       // in the scene keeps its authored finish, including muted context and
       // covers that are still visible while exploring a mechanism.
       setFinishEnabled(p.material, true);
-      const scopeId =
-        id === SHOCK_REPLACEMENT.part.id
-          ? SHOCK_REPLACEMENT.proxyPartId
-          : this.fitted.has(id)
-            ? displayHostPart(id)
-            : id;
+      const scopeId = this.fitted.has(id) ? displayHostPart(id) : id;
       const emphasis =
         selection && belongs(id, selection)
           ? 'selected'
@@ -2170,7 +2085,6 @@ export class MovementViewer {
     const id = p.source.id,
       selection = this.state.part;
     const selected = !!selection && belongs(id, selection);
-    if (!this.shockVariantMember(id)) return false;
     if (this.state.layout === 'spread')
       return this.spread.has(id) && (!this.state.isolated || selected);
     if (this.state.isolated) return selected;
@@ -2185,12 +2099,7 @@ export class MovementViewer {
     if (group) {
       // Retained covers retire after travelling clear. Unrelated assemblies
       // use the independent section fade, regardless of the reveal slider.
-      const scopeId =
-        id === SHOCK_REPLACEMENT.part.id
-          ? SHOCK_REPLACEMENT.proxyPartId
-          : this.fitted.has(id)
-            ? displayHostPart(id)
-            : id;
+      const scopeId = this.fitted.has(id) ? displayHostPart(id) : id;
       const obstruction = uncoverHost(scopeId, this.state.group);
 
       if (
