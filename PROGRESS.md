@@ -297,3 +297,7 @@ Hand slots now reserve the actual upright blade bounds, preventing long minute h
 Verified lint, TypeScript, production build, all 10 state tests and 85 source/runtime checks. Coverage includes all nine style pairs at desktop/portrait aspects, upright blade landmarks, full-turn clearance, fixed turn centers, exact double flip and exact reassembly. The actual browser inventory suite passes all 22 warm-catalog checks. Visual review covers Fine/Lance, Lance/Broad lance and Open lance/Pear configurations, a 390×844 viewport, and forward/back open-lance close-ups. Mobile remains viewport emulation. Existing build warnings remain; CPU missing-asset errors are expected fault injections.
 
 Evidence: ignored `artifacts/browser/upright-hands/` (screenshots, browser report and verification logs). Local preview remains `http://127.0.0.1:4173/?inspect=1`, open in All parts with both dials enabled. Next action: user appearance review. No publication, push or CAD redistribution occurred.
+
+## Flip icon orientation — 11 September 2026
+
+Rotated the existing Flip movement dock icon 90° so its two directional halves sit at the top and bottom, as requested. The button label, size, accessibility and flip behavior are unchanged. Lint and TypeScript pass; the actual local preview confirms the new orientation. Screenshot: ignored `artifacts/browser/flip-icon/rotated.png`. Next action: user visual review.

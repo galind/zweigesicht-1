@@ -828,7 +828,11 @@ export default function Home() {
             aria-label={sideLabel}
             title={sideLabel}
           >
-            <FlipHorizontal2 className="dock-icon" aria-hidden="true" />
+            <FlipHorizontal2
+              className="dock-icon"
+              style={{ transform: 'rotate(90deg)' }}
+              aria-hidden="true"
+            />
             <span>{sideLabel}</span>
           </button>
         </div>
