@@ -1,6 +1,9 @@
 import * as THREE from 'three';
+import handPoses from '../../../assets/authored/hand-display-poses.json';
 import { displayFace } from './dials';
 import { ROOT, PREFIX, GROUPS, belongs, inMembers, type Part } from './catalog';
+
+const hands = new Map(handPoses.hands.map((hand) => [hand.leafId, hand]));
 
 /** Case-mounting fittings and the incompatible alternate setting spring.
  * These remain in the accepted assembly and/or optional source catalog. */
@@ -64,6 +67,8 @@ export function makeSpreadSlots(
       // upright; thin/bent hands must not inherit the generic size heuristic.
       if (displayFace(p.source.id) === 'central')
         rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
+      // Upright blades need their full height reserved in the display group.
+      if (hands.has(p.source.id)) rotation.copy(forwardRotation(p, fitted));
     } else {
       // Lay long axial parts across the inspection plane; retain original form/scale.
       if (size.z > Math.max(size.x, size.y))
@@ -209,6 +214,22 @@ export function forwardRotation(p: SpreadInput, fitted: Set<string>) {
   } else if (fitted.has(p.source.id)) {
     if (displayFace(p.source.id) === 'central')
       rotation.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
+    const hand = hands.get(p.source.id);
+    if (hand) {
+      // Use the reviewed bore-to-tip landmarks, including bent and off-axis
+      // blades. Keep the outward face and align the projected blade to -Y.
+      const direction = new THREE.Vector3()
+        .fromArray(hand.tipLandmarkLocalMm)
+        .sub(new THREE.Vector3().fromArray(hand.boreLocalMm))
+        .transformDirection(p.assembled)
+        .applyQuaternion(rotation);
+      rotation.premultiply(
+        new THREE.Quaternion().setFromAxisAngle(
+          new THREE.Vector3(0, 0, 1),
+          -Math.PI / 2 - Math.atan2(direction.y, direction.x),
+        ),
+      );
+    }
   } else if (p.source.definitionId === 'd_0_1_1_97') {
     rotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
   } else if (

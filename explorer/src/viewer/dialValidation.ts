@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import handPoses from '../../../assets/authored/hand-display-poses.json';
 import {
   DISPLAY_LAYERS,
   displaySeparationOffsets,
@@ -163,6 +164,15 @@ export async function runDialChecks(v: MovementViewer) {
                 .transformDirection(p.mesh.matrix)
                 .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
             );
+          const hand = handPoses.hands.find((h) => h.leafId === p.source.id);
+          if (hand) {
+            const direction = new THREE.Vector3()
+              .fromArray(hand.tipLandmarkLocalMm)
+              .sub(new THREE.Vector3().fromArray(hand.boreLocalMm))
+              .transformDirection(p.mesh.matrix);
+            return new THREE.Vector3(direction.x, direction.y, 0)
+              .normalize().distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9;
+          }
           const sign = belongs(p.source.id, DIALS.faces.central.rootId)
             ? 1
             : -1;

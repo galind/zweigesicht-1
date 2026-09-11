@@ -14,9 +14,9 @@ Resizing uses the existing responsive slot arrangement and camera-ownership poli
 
 ## Preserving the accepted arrangement
 
-`makeSpreadSlots` retains the prior layout calculation unchanged: source membership, exclusions, functional grouping, sort order, shelf sizes, 16% plus 1.6 mm padding, group spacing, and responsive column choice. Its historical size-based rotations and tilt are used **only to reproduce those accepted measurements**, never to orient the new presentation.
+`makeSpreadSlots` retains the prior layout calculation for non-hand parts: source membership, exclusions, functional grouping, sort order, shelf sizes, 16% plus 1.6 mm padding, group spacing, and responsive column choice. Its historical size-based rotations and tilt are used **only to reproduce those accepted measurements**, never to orient the new presentation. Following the upright-hand request, hand slots instead use the aligned blade bounds so their full height is reserved; the display group repacks with the same padding and source scale.
 
-The new forward rotations align each source/fitted bounds center with that exact prior slot center. Source identities, vertices/indices, occurrence transforms, unit scale, and authored finishes are unchanged. The frame envelope includes a symmetric Y-turn sweep, so initial framing accommodates both sides and Flip requires no refit. Actual geometry and even conservative swept bounds fit their old padded slots. User-selected close-ups or manual zoom/pan can intentionally crop the inventory; the no-clipping checks refer to the fitted inventory overview.
+The new forward rotations align each source/fitted bounds center with its packed slot center. Source identities, vertices/indices, occurrence transforms, unit scale, and authored finishes are unchanged. The frame envelope includes a symmetric Y-turn sweep, so initial framing accommodates both sides and Flip requires no refit. Actual geometry and even conservative swept bounds fit their padded slots. User-selected close-ups or manual zoom/pan can intentionally crop the inventory; the no-clipping checks refer to the fitted inventory overview.
 
 ## Source geometry review and decisions
 
@@ -30,9 +30,9 @@ The review decoded the existing local overview and catalog GLBs and inspected pa
 | Toothed pinions d93/d137/d234/d237/d242 | Retain face-on identity despite long shafts; recognizable teeth take precedence over the old size-based side view. |
 | Winding stem d143 and sliding clutch d144 | Retain the existing world XY profile, exposing stepped source geometry. |
 | Plain axial profiles d87/d103/d112/d113/d117/d124/d127/d135/d148/d149/d150/d157/d158/d160/d162/d163/d177/d184/d200/d214/d220 | Explicit world Y rotation π/2 presents informative pin/staff/arbor profiles. These parts have no uniquely established visual front. |
-| Three hands dial and all fitted hands/supports | World X rotation π. Actual d27 guilloché lies on source world +Z; the same convention keeps the logo and numeral orientation upright. |
-| Skeleton dial and all fitted hands/supports | Identity, except the explicitly upright screws above. Actual d14/d21 outward ring/enamel geometry faces world -Z. |
-| All hand styles | Retain the existing fitted 10:10:00 bearings and source-specific corrections. Upright means the display face convention, not rotating every blade to twelve o'clock. Thin/bent hands never inherit a bounding-size quarter-turn. |
+| Three hands dial and fitted supports | World X rotation π. Actual d27 guilloché lies on source world +Z; the same convention keeps the logo and numeral orientation upright. |
+| Skeleton dial and fitted supports | Identity, except the explicitly upright screws above. Actual d14/d21 outward ring/enamel geometry faces world -Z. |
+| All hand styles | In All parts, rotate the reviewed bore-to-tip direction to screen up (-Y), preserving the outward face and original blade bend. Applies to all 15 hands across the three styles on each dial. Use the actual aligned bounds for hand packing. Both flip endpoints point up; the shared Y turn retains vertical alignment with natural bend depth visible during travel. Returning to assembly restores the fitted 10:10:00 display. |
 
 Symmetric wheels, washers, jewels, bearings and structural counterbores can be ambiguous. The chosen forward view is an inspection convention. No expert mechanical front classification is claimed.
 
@@ -47,3 +47,8 @@ Verified: lint, TypeScript, production build, 10 state tests and all 84 source/r
 Browser verification and screenshots are local under `artifacts/browser/inventory-flip/` (ignored), including forward/back inventories with both dials, correct reassembly, and source review contact sheets in `source-review/`. Run the local `?inspect=1` preview's **Run inventory checks** for the actual-renderer suite. CPU checks run with `node scripts/cad/review-runtime.mjs`; state tests with `node --test tests/experience.test.mjs`.
 
 Mobile browser evidence uses Chromium viewport emulation, not a physical phone or cross-GPU certification. Presentation clearance is not a collision-free mechanical disassembly claim. Human appearance acceptance, expert mechanical review, source/CAD redistribution permission, physical-device qualification and publication remain open gates. No site or CAD asset was uploaded, published or redistributed.
+
+
+### Upright hand follow-up — 11 September 2026
+
+Supersedes the prior fitted-bearing inventory convention: all hand blades now point upward, with hand-specific packing bounds. The existing full-turn clearance and reassembly suite passes for all nine style pairs at desktop and portrait aspects; reviewed landmark directions now explicitly verify every blade. All 85 source/runtime checks, 10 state tests, lint, TypeScript and production build pass. Browser inventory checks pass 22/22 with the catalog already loaded. Visual screenshots and the browser report are under ignored `artifacts/browser/upright-hands/`, including 390×844 open-lance forward/back close-ups. These results supplement the original verification above.

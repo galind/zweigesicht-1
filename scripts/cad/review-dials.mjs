@@ -5,6 +5,13 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  const {DIALS,fittedLeaves}=load('explorer/src/experience/dials.ts');
  const {ROOT:movement,belongs}=load('explorer/src/experience/catalog.ts');
  const {DISPLAY_LAYERS,displaySeparationOffsets}=load('explorer/src/experience/explosion.ts');
+ const handRecords=JSON.parse(fs.readFileSync(ROOT+'/assets/authored/hand-display-poses.json')).hands;
+ const handUp=p=>{
+  const hand=handRecords.find(h=>h.leafId===p.source.id);
+  if(!hand)return null;
+  const delta=new THREE.Vector3().fromArray(hand.tipLandmarkLocalMm).sub(new THREE.Vector3().fromArray(hand.boreLocalMm)).transformDirection(p.mesh.matrix);
+  return new THREE.Vector3(delta.x,delta.y,0).normalize();
+ };
  const layerOffsets=displaySeparationOffsets(parts);
  const fit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-cad/source-fit.json'));
  const poseAudit=JSON.parse(fs.readFileSync(ROOT+'/artifacts/dial-time/hand-pose-source-review.json'));
@@ -91,7 +98,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
     assert.ok(new THREE.Vector3(0,1,0).transformDirection(p.mesh.matrix).distanceTo(new THREE.Vector3(0,0,1))<1e-9,'Fitted screw side profile faces viewer');
    } else {
    assert.ok(new THREE.Vector3(0,0,sign).applyQuaternion(controller.spread.get(id).rotation).distanceTo(new THREE.Vector3(0,0,-1))<1e-9);
-   assert.ok(new THREE.Vector3(0,sign,0).applyQuaternion(controller.spread.get(id).rotation).distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
+   assert.ok((handUp(p)??new THREE.Vector3(0,sign,0).applyQuaternion(controller.spread.get(id).rotation)).distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
    }
    await controller.select(id);pose();assert.equal(controller.state.layout,'spread');
   }
@@ -143,7 +150,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    for(const id of controller.fitted) {
     const p=controller.renderParts.get(id),placement=controller.spread.get(id),sign=belongs(id,DIALS.faces.central.rootId)?1:-1;
     if(!p.source.name.startsWith('010-')) assert.ok(new THREE.Vector3(0,0,sign).applyQuaternion(placement.rotation).distanceTo(new THREE.Vector3(0,0,-1))<1e-9);
-    const upright=p.source.name.startsWith('010-')?new THREE.Vector3(0,0,1).transformDirection(p.mesh.matrix):new THREE.Vector3(0,sign,0).applyQuaternion(placement.rotation);
+    const upright=p.source.name.startsWith('010-')?new THREE.Vector3(0,0,1).transformDirection(p.mesh.matrix):(handUp(p)??new THREE.Vector3(0,sign,0).applyQuaternion(placement.rotation));
     assert.ok(upright.distanceTo(new THREE.Vector3(0,-1,0))<1e-9);
     const actual=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);
     assert.ok(actual.min.distanceTo(placement.bounds.min)<1e-8&&actual.max.distanceTo(placement.bounds.max)<1e-8);

@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 
 /** Actual decoded source geometry; no renderer or fabricated shape fixtures. */
 export async function reviewInventory({v: source, Viewer, THREE, initialState, load, parts, results}) {
   const {makeSpreadSlots, forwardRotation}=load('explorer/src/experience/spread.ts');
   const {DIALS}=load('explorer/src/experience/dials.ts');
+  const handRecords=JSON.parse(fs.readFileSync(new URL('../../assets/authored/hand-display-poses.json',import.meta.url))).hands;
   const {handDisplayMatrix}=load('explorer/src/viewer/HandDisplayPose.ts');
   const v=Object.assign(Object.create(Viewer.prototype),{
     state:{...initialState,phase:'whole'}, ready:true, parts, renderParts:source.renderParts,
@@ -23,6 +25,14 @@ export async function reviewInventory({v: source, Viewer, THREE, initialState, l
   const center=p=>p.mesh.geometry.boundingBox.getCenter(new THREE.Vector3()).applyMatrix4(p.mesh.matrix);
   const close=(a,b,label)=>assert.ok(Math.max(...a.elements.map((x,i)=>Math.abs(x-b.elements[i])))<1e-9,label);
   const audit=()=>{const a=v.auditSpread();assert.equal(a.overlaps.length,0,JSON.stringify(a.overlaps));assert.equal(a.clipped.length,0,JSON.stringify(a.clipped));assert.ok(a.maxScaleError<1e-9);};
+  const auditHands=()=>{
+    for(const hand of handRecords)if(v.fitted.has(hand.leafId)){
+      const matrix=v.renderParts.get(hand.leafId).mesh.matrix;
+      const direction=new THREE.Vector3().fromArray(hand.tipLandmarkLocalMm).sub(new THREE.Vector3().fromArray(hand.boreLocalMm)).transformDirection(matrix);
+      assert.ok(direction.y<-.98,'Every blade stays upright through the full flip: '+hand.leafId);
+      if(v.inventoryAngle===0||v.inventoryAngle===Math.PI)assert.ok(Math.abs(direction.x)<1e-8,'Blade points exactly up at each endpoint: '+hand.leafId);
+    }
+  };
   const configuration=()=>JSON.stringify([v.state.side,v.state.centralVisible,v.state.smallVisible,v.state.centralStyle,v.state.smallStyle,v.state.part]);
   for(const aspect of [1440/788,390/680]) for(const central of DIALS.faces.central.styles) for(const small of DIALS.faces.small.styles){
     v.reset();await v.configureDials({centralVisible:true,smallVisible:true,centralStyle:central.id,smallStyle:small.id});pose();
@@ -31,19 +41,19 @@ export async function reviewInventory({v: source, Viewer, THREE, initialState, l
     const slots=makeSpreadSlots(inputs,aspect,v.fitted), forward=matrices();
     const centers=new Map([...v.spread].map(([id])=>[id,center(v.renderParts.get(id))]));
     for(const p of inputs)if(slots.has(p.source.id)){
-      assert.ok(centers.get(p.source.id).distanceTo(slots.get(p.source.id).bounds.getCenter(new THREE.Vector3()))<1e-8,'Legacy slot center preserved');
+      assert.ok(centers.get(p.source.id).distanceTo(slots.get(p.source.id).bounds.getCenter(new THREE.Vector3()))<1e-8,'Packed slot center preserved');
       const swept=v.spread.get(p.source.id).sweptBounds.getSize(new THREE.Vector3());
       const old=slots.get(p.source.id).bounds.getSize(new THREE.Vector3());
-      assert.ok(swept.x<=old.x*1.16+1.6+1e-8&&swept.y<=old.y*1.16+1.6+1e-8,'Both endpoints and full turn fit original padded slot: '+p.source.id);
+      assert.ok(swept.x<=old.x*1.16+1.6+1e-8&&swept.y<=old.y*1.16+1.6+1e-8,'Both endpoints and full turn fit padded slot: '+p.source.id);
       assert.ok(v.spread.get(p.source.id).rotation.equals(forwardRotation(p,v.fitted)));
     }
-    audit();
+    audit();auditHands();
     const sample=[...v.spread.keys()][0];await v.select(sample);v.frameSpread();pose();
     const camera=v.camera.matrixWorld.clone(),target=v.controls.target.clone(),prefs=configuration();
     v.reduced=false;v.flipMovement();pose(0);
     for(const [id,m]of forward)close(v.renderParts.get(id).mesh.matrix,m,'No flip-start jump');
     for(let i=0;i<17;i++){
-      pose(.05);audit();
+      pose(.05);audit();auditHands();
       for(const [id,c]of centers)assert.ok(center(v.renderParts.get(id)).distanceTo(c)<1e-8,'Fixed presentation center throughout turn');
     }
     pose(.1);
@@ -63,7 +73,7 @@ export async function reviewInventory({v: source, Viewer, THREE, initialState, l
     pose(1);assert.equal(v.assemblyError('presentation'),0);
     v.reduced=true;
   }
-  results.push({check:'all nine style pairs at desktop/mobile aspects: exact legacy slot centers/order, face poses, 17 swept frames without overlap/clipping, rigid 180-degree endpoints, bit-exact double flip, rapid reversal continuity, stable selection/camera and continuous exact reassembly',status:'pass'});
+  results.push({check:'all nine style pairs at desktop/mobile aspects: exact packed slot centers, upright hand blades, face poses, 17 swept frames without overlap/clipping, rigid 180-degree endpoints, bit-exact double flip, rapid reversal continuity, stable selection/camera and continuous exact reassembly',status:'pass'});
   for(const side of ['front','back']){
     v.reset();v.setSide(side);pose();v.allParts();pose();assert.equal(v.state.side,side);assert.equal(v.state.inventoryBack,false);
     v.reduced=false;v.flipMovement();pose(.25);const angle=v.inventoryAngle;
