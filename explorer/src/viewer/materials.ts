@@ -12,7 +12,7 @@ const profiles = {
   barrel: { color: 0xd2a079, metalness: 1, roughness: 0.3, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
   gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
-  satinGold: { color: 0xd8b572, metalness: 1, roughness: 0.31, pattern: 2 },
+  satinGold: { color: 0xd8b572, metalness: 1, roughness: 0.31, pattern: 0 },
   roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xbac1ca, metalness: 1, roughness: 0.055, pattern: 5 },
@@ -88,7 +88,7 @@ for (const [family, ids] of Object.entries({
     7, 8, 11, 12, 13, 16, 18, 19, 24, 28, 29, 30, 31, 32, 34, 35, 38, 39, 41,
     42,
   ],
-  gold: [25, 36],
+  roseGold: [25, 36],
   enamel: [4, 21],
   rubber: [44, 47, 66, 78],
   leather: [50, 63, 64, 80, 81, 82],
@@ -172,6 +172,7 @@ uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
 uniform float finishSecondsCounterweight;
+uniform float finishFittedRingBlue;
 uniform float finishShockBlock;
 uniform float finishHeatBlue;
 uniform float finishBlackPolished;
@@ -297,7 +298,7 @@ export function createMaterial(
   if (finish.family === 'enamel') {
     material.ior = 1.53;
     // Raw catalog enamel retains its source-color inspection. The fitted blue
-    // chapter ring supplies the translucent optical target in retarget().
+    // inner ring receives the Crown-wheel blue-metal target in retarget().
     material.transmission = 0;
     material.thickness = 0.35;
     material.attenuationColor.setHex(0x063b9a);
@@ -344,6 +345,8 @@ export function createMaterial(
   material.userData.emphasisRole = 'whole';
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
+  const fittedRingBlue = { value: 0 };
+  material.userData.fittedRingBlue = fittedRingBlue;
   const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
@@ -354,6 +357,7 @@ export function createMaterial(
         value: definitionId === 'd_0_1_1_26' ? 1.7 : (brushingDetail[finish.family] ?? 1),
       },
       finishEnabled: enabled,
+      finishFittedRingBlue: fittedRingBlue,
       emphasis,
       emphasisColor,
       finishEngraved: { value: etched ? 1 : 0 },
@@ -465,7 +469,7 @@ if(finishEnabled>.5 && abs(vFinishRole-7.0)<.2) diffuseColor.rgb=vec3(.22,.002,.
 // wedge. Evaluate per fragment so interpolated face roles cannot leave gaps.
 float finishShockArms=step(vFinishPosition.y*.5,abs(vFinishPosition.x));
 float finishShockBlue=finishShockBlock*max(finishShockArms,1.0-smoothstep(1.05,1.45,vFinishPosition.y));
-float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
+float finishBlueSurface=max(max(max(finishHeatBlue,finishFittedRingBlue),1.0-step(.2,abs(vFinishRole-4.0))),finishShockBlue);
 // The explicit shock-arm region wins over neutral/interpolated source roles.
 // Other parts and the central steel spine still have finishShockBlue == 0.
 if(finishWholeBlue<.5 && finishSteelSeat>.5) finishBlueSurface=finishShockBlue;
@@ -556,7 +560,7 @@ if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
 if(finishEnabled>.5 && abs(vFinishRole-3.0)<.2) roughnessFactor=.085;
 if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || finishSteelSeat<.5)) roughnessFactor=.13;
 if(finishEnabled>.5 && finishShockBlock>.5) roughnessFactor=mix(roughnessFactor,.13,finishBlueSurface);
-if(finishEnabled>.5 && finishBlackPolished>.5) roughnessFactor=.055;
+if(finishEnabled>.5 && (finishBlackPolished>.5 || finishFittedRingBlue>.5)) roughnessFactor=.055;
 if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRole-4.0)<.2)) {
  float finishContrast=finishPattern>5.5 && finishBrushDetail>1.5?.12:.1;
  roughnessFactor=clamp(roughnessFactor+finishGrain*finishContrast,.09,.85);

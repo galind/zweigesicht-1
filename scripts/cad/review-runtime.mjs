@@ -90,9 +90,9 @@ for(const n of [14,24,28,30]) {
    const [lo,hi]=face.boundsLocalMm;
    const minuteHole=Math.abs(lo[2]-.55)<1e-8 && hi[2]<=.70000001
     && (face.type==='GeomAbs_Plane'||face.type==='GeomAbs_Cylinder') && face.areaMm2<.1;
-   assert.equal(role===4,minuteHole,'Only minute recess floors/walls receive blue enamel');
-   if(role===4)affected++;
-   if(face.index===129)assert.notEqual(role,4,'Visible ring face remains silver');
+   assert.equal(role===11,minuteHole,'Only minute recess floors/walls receive blue enamel');
+   if(role===11)affected++;
+   if(face.index===129)assert.notEqual(role,11,'Visible ring face remains silver');
   }
   else if(n===30) {
    assert.equal(role===2,face.index===6 && raw[i*10+1]<-4.25);
@@ -257,6 +257,15 @@ const finishShaderFor=(n)=>{
  const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
  p.material.onBeforeCompile(shader,{});return {p,shader};
 };
+for(const id of [25,36]) {
+ const a=finishShaderFor(id).p.material,b=finishShaderFor(100).p.material;
+ assert.equal(a.name,'roseGold');assert.ok(a.color.equals(b.color));
+ assert.equal(a.metalness,b.metalness);assert.equal(a.roughness,b.roughness);
+}
+assert.equal(finishShaderFor(121).shader.uniforms.finishPattern.value,0);
+assert.equal(finishShaderFor(121).p.material.anisotropy,0);
+assert.equal(finishShaderFor(121).p.material.roughness,.31);
+results.push({check:'three-hander indices/logo share chaton rose gold; thin washer has satin roughness without brushing or anisotropy',status:'pass'});
 for(const suffix of ['54__0_1_1_194_11','54__0_1_1_194_12']){
  const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
  assert.equal(p.source.definitionId,'d_0_1_1_201');

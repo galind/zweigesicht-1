@@ -335,3 +335,12 @@ Matched the Skeleton minute recesses to the Crown-wheel plate (d251 face 22): sh
 Clipped the Fine seconds neutral-face mask per fragment to the counterbalance's local 1.25 mm outer circle centered at (0,-5.5). This prevents interpolated source triangles from extending white up the adjoining stem. Existing white hour/minute faces, bushings, brushing midpoint and dial ordering are preserved.
 
 Verified all 86 source/runtime checks, lint, TypeScript and production build. Browser review confirms the blue stem and updated dots beside the Crown-wheel plate with no captured browser errors. Screenshots: ignored `artifacts/browser/dial-polish/seconds-blue-stem.png` and `crown-blue-minute-holes.png`. Source geometry and transforms are unchanged; no upload, publication or push. Preview remains at `http://127.0.0.1:4173/?inspect=1` for appearance review.
+
+
+## Inner dial ring, rose-gold accents and satin washer — 11 September 2026
+
+Corrected the blue target after user clarification: the fitted Skeleton inner four-segment insert (d21) now shares the Crown-wheel plate's angle-dependent blue-metal response and .055 polish. Its former transmission/clearcoat are removed in the fitted presentation. Raw catalog red remains available outside the fitted display. The d14 minute holes return to their prior dark dielectric blue, and the silver minute-track face remains silver. The previous seconds-stem clipping correction is preserved.
+
+Three hands five-minute indices (d25, all 12 occurrences) and applied logo (d36) now share the chatons' exact roseGold profile. Thin washer d121 retains .31 satin roughness and its gold color, with procedural brushing and anisotropy disabled. Geometry, transforms, softened dial brushing and control order are unchanged.
+
+Verified lint, TypeScript, production build and all 87 source/runtime checks, including added exact chaton-profile and unbrushed washer coverage. Browser review covers both assembled dial faces and the isolated Thin washer; screenshots under ignored `artifacts/browser/dial-polish/`: `inner-ring-crown-blue.png`, `rose-gold-indices-logo.png`, `satin-thin-washer.png`. Preview remains `http://127.0.0.1:4173/?inspect=1` on Skeleton for user appearance review. No upload, publication or push.

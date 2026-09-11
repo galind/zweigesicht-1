@@ -1593,13 +1593,16 @@ export class MovementViewer {
             !this.fitted.has(selection)
           );
         enamel.color.setHex(fitted ? 0x062e78 : finish.color);
-        enamel.transmission = fitted ? 0.58 : 0;
+        (enamel.userData.fittedRingBlue as { value: number }).value = fitted ? 1 : 0;
+        enamel.metalness = fitted ? 1 : finish.metalness;
+        enamel.roughness = fitted ? 0.055 : finish.roughness;
+        enamel.transmission = 0;
         enamel.userData.finishTransmission = enamel.transmission;
         enamel.ior = 1.53;
         enamel.thickness = 0.35;
         enamel.attenuationColor.setHex(0x063b9a);
         enamel.attenuationDistance = 0.65;
-        enamel.clearcoat = fitted ? 1 : 0;
+        enamel.clearcoat = 0;
         enamel.clearcoatRoughness = 0.035;
         // The supplied carrier and enamel share coplanar outward faces.
         // Depth bias resolves their source overlap without moving either mesh.
