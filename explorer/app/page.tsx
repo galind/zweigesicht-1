@@ -875,7 +875,12 @@ export default function Home() {
           </a>
           .
         </span>{' '}
-        <span>Made by Guillem Galindo</span>
+        <span>
+          Made by{' '}
+          <a href="https://guillemgalindo.com" target="_blank" rel="noopener noreferrer">
+            Guillem Galindo
+          </a>
+        </span>
       </footer>
       <Sheet modal={false} open={details} onOpenChange={setDetails}>
         <SheetContent

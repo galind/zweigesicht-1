@@ -369,3 +369,7 @@ At the user's request, reverted the complete optional shock-indicator/engraving-
 ## Visible independence notice and author credit — 11 September 2026
 
 Moved the independence notice from About & sources to a centered footer beneath the action dock, followed by “Made by Guillem Galindo”. Marco Lang links to the maker's website. The author website URL is pending user input, so the author name is currently plain text. Measured footer height reserves space beneath the menu and viewport; popup anchors update when it wraps. Verified lint, TypeScript, production build and desktop/390×844 browser layout (8 px footer/menu gap, no horizontal overflow). Mobile screenshot: ignored `artifacts/browser/page-credit/mobile.png`. Next action: add the user's supplied website URL and verify its link. No publication or push.
+
+## Author website linked — 11 September 2026
+
+Linked the visible Guillem Galindo credit to the user-supplied `https://guillemgalindo.com`, using the footer's existing link styling and new-tab behavior. This completes the pending footer URL. Lint and TypeScript pass.
