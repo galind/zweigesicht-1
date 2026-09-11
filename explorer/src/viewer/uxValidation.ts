@@ -1,6 +1,6 @@
 import { Vector2 } from 'three';
 import type { MovementViewer } from './MovementViewer';
-import { ROOT, belongs } from '../experience/catalog';
+import { ROOT, belongs, partLabel } from '../experience/catalog';
 const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 async function settle(v: MovementViewer) {
@@ -84,6 +84,41 @@ export async function runUxChecks(v: MovementViewer) {
         return [selector, [r.x, r.y, r.width, r.height]];
       }),
     );
+  v.reset();
+  await settle(v);
+  for (const label of ['Balance bridge', 'Third wheel', 'Setting lever', 'Dial ring', 'Screw', 'Regulation support']) {
+    const part = v.parts.find((p) => partLabel(p) === label)!;
+    await v.select(part.id);
+    await settle(v);
+    const strip = document.querySelector<HTMLElement>('.focus-strip')!;
+    const trigger = strip.querySelector<HTMLButtonElement>('[aria-controls="component-details"]')!;
+    const stage = JSON.stringify(rects());
+    const position = v.camera.position.clone(), target = v.controls.target.clone();
+    trigger.click();
+    await sleep(300);
+    const panel = document.querySelector<HTMLElement>('#component-details')!;
+    const provenance = panel.querySelector<HTMLDetailsElement>('.technical-provenance')!;
+    const primary = strip.innerText + panel.innerText;
+    checks.push({
+      name: `${label}: inline explanation and optional panel hide CAD identity by default`,
+      pass: !!strip.querySelector('.component-caption')?.textContent &&
+        trigger.textContent?.trim() === 'About part' && !provenance.open &&
+        ![part.id, part.definitionId, part.sourceInstanceId, part.name].some((id) => primary.includes(id)) &&
+        !/\b\d+(?::\d+){2,}/.test(primary) &&
+        stage === JSON.stringify(rects()) &&
+        position.distanceTo(v.camera.position) < 1e-8 && target.distanceTo(v.controls.target) < 1e-8,
+    });
+    provenance.querySelector('summary')!.click();
+    checks.push({name: `${label}: provenance remains available on request`, pass: provenance.open && provenance.innerText.includes(part.sourceInstanceId)});
+    panel.querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!.click();
+    await sleep(300);
+    checks.push({name: `${label}: dismissal restores focus`, pass: document.activeElement === trigger});
+    trigger.click();
+    await sleep(300);
+    checks.push({name: `${label}: reopening collapses provenance`, pass: !document.querySelector<HTMLDetailsElement>('.technical-provenance')!.open});
+    document.querySelector<HTMLButtonElement>('#component-details [data-slot="sheet-close"]')!.click();
+    await sleep(300);
+  }
   v.reset();
   await settle(v);
   const baseline = rects();

@@ -589,8 +589,9 @@ export default function Home() {
                   className="text-button"
                   onClick={() => openPanel(setDetails, !details)}
                   aria-expanded={details}
+                  aria-controls="component-details"
                 >
-                  Details
+                  {selected ? 'About part' : 'About mechanism'}
                 </button>
               )}
               {selected && (
@@ -605,6 +606,9 @@ export default function Home() {
               )}
             </div>
           </div>
+          <p className="component-caption">
+            {selected ? partDetail(selected) : group?.caption}
+          </p>
           {selected && (
             <div className="selected-summary">
               <button
@@ -862,6 +866,7 @@ export default function Home() {
           side="bottom"
           style={panelStyle}
           className="explorer-panel about-sheet"
+          id="component-details"
           showOverlay={false}
           scrollContent
           finalFocus={() =>
@@ -883,16 +888,20 @@ export default function Home() {
           <div className="about-copy">
             {selected ? (
               <>
-                <h3>Source identity</h3>
-                <p>{selected.name}</p>
-                <p className="source-id">{selected.sourceInstanceId}</p>
-                <p>{category(selected)}</p>
-                {selected.definitionId === 'd_0_1_1_256' && (
-                  <p>
-                    The support’s role and intended visibility remain
-                    unresolved.
-                  </p>
-                )}
+                <p className="secondary">
+                  Part of {partIndex.get(selected.id)?.context}
+                </p>
+                <details className="technical-provenance" key={selected.id}>
+                  <summary>Technical provenance</summary>
+                  <p>These references identify this instance in the original CAD assembly.</p>
+                  <dl>
+                    <dt>Source name</dt>
+                    <dd lang="de">{selected.name}</dd>
+                    <dt>CAD instance</dt>
+                    <dd className="source-id">{selected.sourceInstanceId}</dd>
+                  </dl>
+                  <p>{category(selected)}</p>
+                </details>
               </>
             ) : (
               group && (
@@ -925,8 +934,7 @@ export default function Home() {
                         <span>
                           {partLabel(p)}
                           <small>
-                            {partIndex.get(p.id)?.context} ·{' '}
-                            {partIndex.get(p.id)?.reference}
+                            {partIndex.get(p.id)?.context}
                           </small>
                         </span>{' '}
                         <ChevronRight aria-hidden="true" />

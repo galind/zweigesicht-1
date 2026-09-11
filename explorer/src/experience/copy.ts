@@ -1,4 +1,4 @@
-import type { Part } from './catalog';
+import { partLabel, type Part } from './catalog';
 const maker = 'https://www.marcolangwatches.com/en/watches/';
 const cad = 'https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/';
 const facts: Record<string, string[]> = {
@@ -56,5 +56,37 @@ const roles: Record<string, string> = {
     'Balance shock protection, separate from the optional impact indicator.',
 };
 export function partDetail(p: Part) {
-  return roles[p.definitionId.replace('d_0_1_1_', '')] || null;
+  const exact = roles[p.definitionId.replace('d_0_1_1_', '')];
+  if (exact) return exact;
+  if (p.definitionId === 'd_0_1_1_256')
+    return 'A support included with the regulating components; its precise role and intended visibility are still unresolved.';
+  const label = partLabel(p);
+  // Explain only the role supported by the readable identity. Never substitute
+  // an import address or an unreviewed mechanical claim for missing copy.
+  const families: [RegExp, string][] = [
+    [/Balance bridge/i, 'Supports the balance assembly above the main plate, holding its upper bearing in position.'],
+    [/bridge/i, 'Supports and locates the components beneath it within the movement.'],
+    [/Setting lever/i, 'Part of the mechanism that switches between winding the watch and setting the hands.'],
+    [/Winding stem/i, 'Connects the crown to the winding and hand-setting mechanism.'],
+    [/Sliding coupling|Coupling lever|Coupling wheel/i, 'Part of the coupling that selects the winding or hand-setting connection.'],
+    [/Hand-setting/i, 'Part of the mechanism that transfers crown input to the hands during time setting.'],
+    [/wheel|pinion/i, 'Part of a geared connection that transfers rotation through the watch.'],
+    [/Dial|index|marker|GMT ring/i, 'Part of the display face, providing a reference for reading the hands.'],
+    [/Minute hand|Hour hand|Seconds hand/i, 'Points to the corresponding time scale on the dial.'],
+    [/screw|locking pin|screw bar/i, 'Secures adjoining components in their assembled positions.'],
+    [/jewel|diamond|bearing/i, 'Part of a bearing or setting that supports a moving component.'],
+    [/spring/i, 'An elastic component associated with its surrounding mechanism.'],
+    [/Main.plate/i, 'The structural base that locates and supports the movement’s mechanisms.'],
+    [/Barrel|Mainspring/i, 'Part of the assembly that stores and delivers energy to the movement.'],
+    [/Indicator/i, 'Part of the optional mechanism for recording and resetting impact indications.'],
+    [/Sapphire crystal/i, 'A transparent cover over the watch display.'],
+    [/Gasket/i, 'A seal between adjoining case components.'],
+    [/Case|Crown guard/i, 'Part of the enclosure that houses and protects the movement.'],
+    [/Strap|Buckle|Lug/i, 'Part of the attachment that holds the watch on the wrist.'],
+    [/washer|spacer/i, 'A small component that separates or seats adjoining parts.'],
+  ];
+  return families.find(([pattern]) => pattern.test(label))?.[1] ??
+    (p.isAssembly
+      ? 'A group of components shown together in their assembled relationship.'
+      : 'Its shape and assembly position can be explored here; a more specific role has not yet been documented.');
 }

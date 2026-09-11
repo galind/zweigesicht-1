@@ -816,6 +816,16 @@ assert.ok(frameFixture.travel.fromUp.equals(frameFixture.camera.up),'Resize must
 results.push({check:'resize during selected-part camera travel rebases from the resized displayed pose without a following-frame snap',status:'pass'});
 
 const {partLabel,buildPartIndex,matchesPart}=load('explorer/src/experience/catalog.ts');
+const {partDetail}=load('explorer/src/experience/copy.ts');
+for(const p of parts){
+ const copy=partLabel(p)+' '+partDetail(p);
+ assert.ok(partDetail(p)?.length>20,p.id+' needs explanatory copy');
+ for(const id of [p.id,p.definitionId,p.sourceInstanceId])assert.ok(!copy.includes(id),'Primary copy exposes '+id);
+ assert.ok(!/\b\d+(?::\d+){2,}/.test(copy),'Primary copy contains a CAD address');
+}
+assert.match(partDetail(parts.find(p=>partLabel(p)==='Balance bridge')),/upper bearing/);
+assert.match(partDetail({definitionId:'unknown',name:'0:1:1:221:1',isAssembly:false}),/not yet been documented/);
+results.push({check:'all 426 component names and explanations omit internal identities; unknown roles remain explicit',status:'pass'});
 const searchIndex=buildPartIndex(parts);
 assert.equal(new Set([...searchIndex.values()].map(p=>p.reference)).size,parts.length);
 for(const p of parts){const entry=searchIndex.get(p.id);for(const query of [partLabel(p),p.name,p.id,p.sourceInstanceId,p.definitionId,entry.reference])assert.ok(matchesPart(entry.search,query),p.id+' must remain findable by '+query);}
