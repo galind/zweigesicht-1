@@ -78,7 +78,7 @@ for(const entry of sidecarReport.definitions){
  }
  assert.deepEqual(roles,entry.roles);
 }
-// Dial polish stays confined to the counterweight face and perforated annulus.
+// Dial polish stays confined to the counterweight face and recessed minute holes.
 for(const n of [14,24,28,30]) {
  const id=`d_0_1_1_${n}`,base=path.join(ROOT,`artifacts/finishing-cad/sidecars/${id}`);
  const meta=JSON.parse(fs.readFileSync(base+'.json')),bytes=fs.readFileSync(base+'.bin');
@@ -86,7 +86,14 @@ for(const n of [14,24,28,30]) {
  let affected=0;
  for(let i=0;i<meta.vertexCount;i++) {
   const face=meta.faces[raw[i*10+9]-1],role=data[i*4+3];
-  if(n===14) { assert.equal(role===11,face.index===129); if(role===11)affected++; }
+  if(n===14) {
+   const [lo,hi]=face.boundsLocalMm;
+   const minuteHole=Math.abs(lo[2]-.55)<1e-8 && hi[2]<=.70000001
+    && (face.type==='GeomAbs_Plane'||face.type==='GeomAbs_Cylinder') && face.areaMm2<.1;
+   assert.equal(role===11,minuteHole,'Only minute recess floors/walls receive blue enamel');
+   if(role===11)affected++;
+   if(face.index===129)assert.notEqual(role,11,'Visible ring face remains silver');
+  }
   else if(n===30) {
    assert.equal(role===2,face.index===6 && raw[i*10+1]<-4.25);
    if(role===2) { assert.ok(raw[i*10+8]>.99,'Counterweight outward face only'); affected++; }
@@ -98,7 +105,7 @@ for(const n of [14,24,28,30]) {
  }
  assert.ok(affected>0);
 }
-results.push({check:'seconds counterweight white outward face, unchanged hour/minute steel faces, and exact skeleton minute annulus enamel mask',status:'pass'});
+results.push({check:'seconds counterweight white outward face, unchanged hour/minute steel faces, and exact skeleton minute-hole enamel mask',status:'pass'});
 // Independent spatial guard for the top-origin screw regression discovered in
 // the final macro. Preserve original region identity independently of the
 // whole-screw bluing override in the material shader.

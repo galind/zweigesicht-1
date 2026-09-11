@@ -319,3 +319,10 @@ Preview: `http://127.0.0.1:4173/?inspect=1`, left on Three hands with Fine hands
 Softened the stronger d26 circular brushing after user review: grain strength is 1.7 instead of 2.4, relief amplitude is halved, and color/roughness contrast is reduced from .18 to .12. The filtered circular detail remains visible between the original faint finish and the stronger proposal. Skeleton now appears before Three hands in Dial & hands, with each dial's existing hand options intact. White bushings, the seconds counterbalance face and blue Skeleton minute track are preserved.
 
 Verified lint, TypeScript and production build. Local browser review confirms the softer finish and Skeleton-first panel order. Screenshot: ignored `artifacts/browser/dial-polish/midpoint-and-order.png`. Preview remains `http://127.0.0.1:4173/?inspect=1` for user appearance review. No publication, push or source-asset changes.
+
+
+## Skeleton minute-hole correction — 11 September 2026
+
+Corrected the reversed enamel assignment after user clarification: the 48 blind minute holes receive blue on their recessed floors and walls, while the perforated upper annulus is restored to silver. Exact d14 source faces 40–111 and 134–157 identify these recesses at local Z=.55–.7 mm; face 129 is no longer enamel. Applied hour markers and their through-bores retain their prior finish.
+
+Regenerated reversible annotations as `finish-surfaces-bd9958b41c29.bin`. Byte comparison confirms only d14 roles changed (10,647 values), with every normal and all other definitions byte-identical. Geometry, the softened brushing, white hand faces and dial control order remain unchanged. All 86 source/runtime checks and the production build pass. The corrected regression identifies the hole walls/floors by source geometry and explicitly protects the silver annulus. Browser review confirms blue recessed dots in the silver track; screenshot: ignored `artifacts/browser/dial-polish/blue-minute-holes.png`. Preview remains open on Skeleton at `http://127.0.0.1:4173/?inspect=1` for appearance review. Nothing published or pushed.
