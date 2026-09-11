@@ -1,16 +1,13 @@
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
+import { homepageMetadata, websiteSchema } from '@/src/content/seo';
 import './globals.css';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
 };
-export const metadata: Metadata = {
-  title: 'Zweigesicht-1 · Marco Lang',
-  description:
-    'Explore the construction of the Marco Lang ml-01 movement in real CAD.',
-};
+export const metadata: Metadata = homepageMetadata;
 export default function RootLayout({
   children,
 }: {
@@ -19,6 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         {children}
         <Analytics />
       </body>

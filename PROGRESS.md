@@ -399,3 +399,27 @@ The optical boundary is a separate computed shading representation. It is not ad
 Verified lint, TypeScript, production build and all 88 CPU source/runtime checks. Added 96 independent ray intersections against the actual STL; optical exits agree within 0.003 mm and original position/normal buffers remain byte-identical. Existing selection, recovery integrity, exact reassembly and inventory checks pass. Browser review covers isolated axial, mounted axial/oblique, manual orbit, Reset and 390×844 viewport emulation, with no browser/shader errors. Screenshots were reviewed in this task; CPU evidence is ignored under `artifacts/browser/diamond-facets/runtime-checks.log`. Existing build warnings remain.
 
 Local preview remains `http://127.0.0.1:4173/`, focused on the diamond. Next action: user appearance review. No push, upload or deployment; publication and redistribution gates remain unchanged.
+
+## Minimal homepage SEO — 12 September 2026
+
+Reduced PR #1 on `codex/seo-technical-reference` to the original viewer with technical homepage SEO. Kept the requested title/description, canonical `https://zweigesicht-1.com/`, Open Graph/X cards, robots, homepage-only sitemap, and concise WebSite/WebApplication JSON-LD. One existing 1200×900 movement render remains solely for social sharing, with its source/hash record.
+
+Removed all four editorial routes, below-viewer reference content, specification tables, SEO navigation, two extra renders, fragment-view handling and SEO-specific scrolling/interaction changes. Viewer code, styles and routing configuration otherwise match `origin/main`. The visible heading remains Zweigesicht-1 / ml–01; the final cleanup keeps the semantic H1 simply “Zweigesicht-1”. About & sources is 193 words, covering the maker/watch/calibre, public CAD, construction, authored rendering and independence while preserving useful existing limitations and controls.
+
+The existing About dialog portal does not render its children in initial HTML, even with keepMounted, because it creates its DOM container on the client. Its core paragraph is shared with the server-rendered WebApplication description instead. No duplicate visible or hidden article was introduced; the full panel still requires JavaScript. Initial HTML includes the metadata, H1, schema and existing maker/author links. Google indexing/ranking is not claimed.
+
+Verified lint, TypeScript, production build and Vercel build; HTTP checks against the built server cover exact metadata, query canonical, one H1, schema, robots/sitemap, the social image, and removed route/image 404s. Desktop (1280×720) and emulated phone (390×844) browser review confirms original layout, no document overflow, concise About copy, scrollable panel/source link and reachable Close. Evidence is ignored under `artifacts/browser/seo-reduced/`. Existing build warnings remain. No CAD geometry, materials or state-machine changes.
+
+Next action: review the reduced PR #1 targeting main. Temporary production validation server is stopped after verification; restart with `cd explorer && npm run build && ./node_modules/.bin/vinext start --port 4187 --hostname 127.0.0.1`. Public release gates remain unchanged; no manual deployment is part of this revision.
+
+## Homepage SEO final cleanup — 12 September 2026
+
+Shortened the shared homepage/Open Graph/X/WebSite title to “Marco Lang Zweigesicht-1 — Interactive ML-01 Movement”, added Guillem Galindo (`https://guillemgalindo.com`) as the WebApplication creator using a Person object, and removed the hidden H1 prefix. Updated the existing SEO checks for the title, exact plain H1 and creator. About copy, metadata description, layout, viewer behavior and all other SEO scope are unchanged.
+
+Verified the existing SEO HTTP checks against a temporary production server, lint, TypeScript and production build; all pass with the existing build warnings. Work was isolated from the current viewer-work checkout. Next action: review updated PR #1 targeting main; temporary validation server stopped, with no manual deployment.
+
+## SEO branch rebased onto main — 12 September 2026
+
+Consolidated PR #1’s three SEO commits into their identical final minimal patch, then rebased onto `origin/main` at `5c521c4`. This avoids replaying the obsolete editorial expansion. Resolved the progress-log conflict by retaining both main’s layout/diamond milestones and the SEO milestones. Main’s CSS, diamond optics, materials and runtime checks are byte-identical; homepage changes remain limited to the approved About copy.
+
+Verified lint, TypeScript, production build, existing SEO HTTP checks and all 10 state tests. Temporary production server stopped after verification. Next action: review the updated PR #1; reduced scope, plain H1, short title and author attribution remain intact.

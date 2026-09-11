@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-11",
+  "status": "Prepared locally; publication remains subject to project release gates",
+  "images": [
+    {
+      "path": "explorer/public/images/marco-lang-ml01-movement.webp",
+      "sha256": "bd10451480c5896958285a6087aa0258af775394f672eb2a010e617d6b92ef30",
+      "bytes": 52226,
+      "width": 1200,
+      "height": 900,
+      "source": "Local renderer viewport capture; cropped to remove interface, 11 September 2026",
+      "view": "movement",
+      "classification": "Project reconstruction; authored finishes, not a photograph",
+      "source_geometry_manifest": "assets/source-manifest/sources.json"
+    }
+  ]
+}
