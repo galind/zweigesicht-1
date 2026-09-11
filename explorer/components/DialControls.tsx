@@ -17,7 +17,7 @@ export function DialControls({
 }) {
   return (
     <div className="dial-options">
-      {(['central', 'small'] as const).map((face) => {
+      {(['small', 'central'] as const).map((face) => {
         const label = face === 'central' ? 'Three hands' : 'Skeleton';
         const visibilityKey =
           face === 'central' ? 'centralVisible' : 'smallVisible';

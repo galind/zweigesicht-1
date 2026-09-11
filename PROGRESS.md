@@ -312,3 +312,10 @@ Source-face evidence identifies d30 face 6 as the outward bent counterweight/ste
 Verified lint, TypeScript, production build and all 86 CPU/source/runtime checks. Added a focused regression for the exact annulus and counterbalance masks, plus preservation of hour/minute white source faces. Actual browser review covers straight and oblique views, zoom, both sides, and 390×844 viewport emulation; no captured browser errors or warnings. Local screenshots, annotation diff and verification logs are under ignored `artifacts/browser/dial-polish/`. Existing production build warnings remain.
 
 Preview: `http://127.0.0.1:4173/?inspect=1`, left on Three hands with Fine hands. Next action: user appearance review. Phone review is viewport emulation; mechanical/device/release gates remain unchanged. Nothing was uploaded, published or pushed.
+
+
+## Dial brushing midpoint and control order — 11 September 2026
+
+Softened the stronger d26 circular brushing after user review: grain strength is 1.7 instead of 2.4, relief amplitude is halved, and color/roughness contrast is reduced from .18 to .12. The filtered circular detail remains visible between the original faint finish and the stronger proposal. Skeleton now appears before Three hands in Dial & hands, with each dial's existing hand options intact. White bushings, the seconds counterbalance face and blue Skeleton minute track are preserved.
+
+Verified lint, TypeScript and production build. Local browser review confirms the softer finish and Skeleton-first panel order. Screenshot: ignored `artifacts/browser/dial-polish/midpoint-and-order.png`. Preview remains `http://127.0.0.1:4173/?inspect=1` for user appearance review. No publication, push or source-asset changes.
