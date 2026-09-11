@@ -365,3 +365,7 @@ Darkened the fitted Skeleton inner ring one further step, from #1053d2 to #0e47b
 ## Shock-option experiment reverted — 11 September 2026
 
 At the user's request, reverted the complete optional shock-indicator/engraving-plate feature and its finish/menu follow-up (47a6679 and 04b5861). Application, tests and asset configuration match the preceding b770f56 checkpoint. The original shock module and Dial & hands menu are restored. Downloaded CAD remains local and ignored; its provenance remains in Git history. Lint, TypeScript, production build and all 10 state tests pass. No push or publication.
+
+## Visible independence notice and author credit — 11 September 2026
+
+Moved the independence notice from About & sources to a centered footer beneath the action dock, followed by “Made by Guillem Galindo”. Marco Lang links to the maker's website. The author website URL is pending user input, so the author name is currently plain text. Measured footer height reserves space beneath the menu and viewport; popup anchors update when it wraps. Verified lint, TypeScript, production build and desktop/390×844 browser layout (8 px footer/menu gap, no horizontal overflow). Mobile screenshot: ignored `artifacts/browser/page-credit/mobile.png`. Next action: add the user's supplied website URL and verify its link. No publication or push.

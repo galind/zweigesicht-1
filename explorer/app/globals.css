@@ -417,7 +417,9 @@ canvas:focus-visible {
   --edge-left: max(12px, env(safe-area-inset-left));
   --edge-right: max(12px, env(safe-area-inset-right));
   --top: max(8px, env(safe-area-inset-top));
-  --bottom: max(10px, env(safe-area-inset-bottom));
+  --bottom: calc(
+    max(10px, env(safe-area-inset-bottom)) + var(--footer-height, 40px) + 8px
+  );
   position: relative;
   width: 100%;
   height: 100dvh;
@@ -1303,4 +1305,27 @@ canvas:focus-visible {
   height: 16px;
   flex: 0 0 16px;
   stroke-width: 1.7;
+}
+
+.page-credit {
+  position: absolute;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  left: var(--edge-left);
+  right: var(--edge-right);
+  text-align: center;
+  color: #aaa8a4;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  z-index: 3;
+}
+.page-credit span {
+  display: inline-block;
+}
+.page-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.page-credit a:hover {
+  color: #eee;
 }

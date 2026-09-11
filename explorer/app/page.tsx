@@ -93,6 +93,17 @@ const empty: ViewerSnapshot = {
   stats: {},
 };
 export default function Home() {
+  const footerRef = useRef<HTMLElement>(null);
+  const [footerHeight, setFooterHeight] = useState(40);
+  useEffect(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
+    const observer = new ResizeObserver(() =>
+      setFooterHeight(footer.getBoundingClientRect().height),
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
   const catalogButton = useRef<HTMLButtonElement>(null),
     optionsButton = useRef<HTMLButtonElement>(null),
     aboutButton = useRef<HTMLButtonElement>(null),
@@ -126,7 +137,7 @@ export default function Home() {
       window.removeEventListener('resize', measure);
       observer.disconnect();
     };
-  }, []);
+  }, [footerHeight]);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
@@ -295,6 +306,7 @@ export default function Home() {
     viewer.current?.patch(v);
   return (
     <main
+      style={{ '--footer-height': `${footerHeight}px` } as CSSProperties}
       className={
         'explorer' +
         (group || selected || s.layout === 'spread' ? ' has-focus' : '')
@@ -851,6 +863,20 @@ export default function Home() {
           <span>Reset view</span>
         </button>
       </nav>
+      <footer ref={footerRef} className="page-credit">
+        <span>
+          Independent project. Not affiliated with{' '}
+          <a
+            href="https://www.marcolangwatches.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Marco Lang
+          </a>
+          .
+        </span>{' '}
+        <span>Made by Guillem Galindo</span>
+      </footer>
       <Sheet modal={false} open={details} onOpenChange={setDetails}>
         <SheetContent
           side="bottom"
@@ -1007,7 +1033,6 @@ export default function Home() {
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
-            <p>Independent project. Not affiliated with Marco Lang.</p>
             <p>
               The overview shows the movement without the case, straps or
               alternate dial designs. The catalog retains every imported part.
