@@ -7,7 +7,7 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 export const metadata: Metadata = {
-  title: 'Zweigesicht · Marco Lang',
+  title: 'Zweigesicht-1 · Marco Lang',
   description:
     'Explore the construction of the Marco Lang ml-01 movement in real CAD.',
 };

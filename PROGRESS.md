@@ -1,4 +1,4 @@
-# Zweigesicht — current state
+# Zweigesicht-1 — current state
 
 ## Accepted model
 
@@ -373,3 +373,9 @@ Moved the independence notice from About & sources to a centered footer beneath 
 ## Author website linked — 11 September 2026
 
 Linked the visible Guillem Galindo credit to the user-supplied `https://guillemgalindo.com`, using the footer's existing link styling and new-tab behavior. This completes the pending footer URL. Lint and TypeScript pass.
+
+## Zweigesicht-1 naming and main checkpoint — 11 September 2026
+
+Standardized the authored watch name to Zweigesicht-1 in the visible heading, browser metadata, readable source-assembly label, project headings and local review-gallery headings. Exact CAD source names, download URLs, asset filenames and exporter identity remain unchanged for provenance/reproducibility. Preserved the user's final period on the footer credit.
+
+Included the current manifest-referenced finish annotations `finish-surfaces-bd9958b41c29.bin` and gzip so the Git checkpoint reproduces the accepted local appearance. SHA-256 matches the manifest, and gzip decompresses to identical bytes. No new CAD geometry or original download is included. Verified lint, TypeScript, production build, 10 state tests and all 87 source/runtime checks; browser heading/title confirmed. SSH fetch of origin/main succeeded; this checkpoint and the preceding local commits are ready for the user-requested push to main. Public website publication remains separate.

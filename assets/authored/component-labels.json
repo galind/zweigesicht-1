@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "evidence": ["explorer/public/models/assembly-manifest.json", "docs/SOURCE_AND_MECHANISMS.md", "docs/appearance/ledger.json"],
   "definitions": {
-    "1": "Zweigesicht source assembly",
+    "1": "Zweigesicht-1 source assembly",
     "3": "Dial ring", "4": "Dial ring", "5": "Applied dot marker",
     "14": "Dial ring", "17": "Dial ring", "21": "Dial ring",
     "23": "Dial transition ring", "25": "Five-minute index",

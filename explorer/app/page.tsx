@@ -314,7 +314,7 @@ export default function Home() {
     >
       <header className="topbar">
         <div className="identity">
-          <h1>Zweigesicht</h1>
+          <h1>Zweigesicht-1</h1>
           <span>ml–01</span>
         </div>
         <nav className="global-actions" aria-label="View history and options">
@@ -877,9 +877,13 @@ export default function Home() {
         </span>{' '}
         <span>
           Made by{' '}
-          <a href="https://guillemgalindo.com" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://guillemgalindo.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Guillem Galindo
-          </a>
+          </a>.
         </span>
       </footer>
       <Sheet modal={false} open={details} onOpenChange={setDetails}>

@@ -59,3 +59,7 @@ artifacts/cad-finishing-audit/
 # Corrected main-plate letter counter annotations.
 !explorer/public/models/finish-surfaces-ce5d9d834cf7.bin
 !explorer/public/models/finish-surfaces-ce5d9d834cf7.bin.gz
+
+# Current verified dial surface annotations.
+!explorer/public/models/finish-surfaces-bd9958b41c29.bin
+!explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz
