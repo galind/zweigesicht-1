@@ -1,0 +1,1338 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "units": {
+    "length": "mm",
+    "angle": "rad",
+    "time": "s",
+    "signedDeltaRatio": "rad/rad"
+  },
+  "angleFrame": "right-handed STEP WORLD +Z; do not infer sign from local axis or viewing side",
+  "status": "M0 evidence graph; not executable motion parameters",
+  "warning": "Unresolved edges enumerate hypotheses or missing paths, not certified topology. CAD parent edges are not mechanical edges. Ratchet I/II names are association candidates. All absolute directions and phases remain open.",
+  "nodes": [
+    {
+      "id": "balance",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_6",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_7",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_8",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_2"
+      ],
+      "role": "rigid shaft; geometry-supported membership"
+    },
+    {
+      "id": "pallet",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_4",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6"
+      ],
+      "role": "rigid shaft; geometry-supported membership"
+    },
+    {
+      "id": "escape",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_3"
+      ],
+      "role": "rigid shaft; geometry-supported membership"
+    },
+    {
+      "id": "seconds",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2"
+      ],
+      "role": "rigid shaft; geometry-supported membership"
+    },
+    {
+      "id": "third",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2"
+      ],
+      "role": "rigid shaft; geometry-supported membership"
+    },
+    {
+      "id": "minute",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_3"
+      ],
+      "role": "rigid shaft; geometry-supported membership"
+    },
+    {
+      "id": "barrel-II",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_2"
+      ],
+      "role": "drum + candidate rigid cover, coupling unverified"
+    },
+    {
+      "id": "arbor-II",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3"
+      ],
+      "role": "independent arbor"
+    },
+    {
+      "id": "spring-II",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_4"
+      ],
+      "role": "deforming mainspring"
+    },
+    {
+      "id": "ratchet-II",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15"
+      ],
+      "role": "ratchet candidate"
+    },
+    {
+      "id": "barrel-I",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2"
+      ],
+      "role": "drum + candidate rigid cover, coupling unverified"
+    },
+    {
+      "id": "arbor-I",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_3"
+      ],
+      "role": "independent arbor"
+    },
+    {
+      "id": "spring-I",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4"
+      ],
+      "role": "deforming mainspring"
+    },
+    {
+      "id": "ratchet-I",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_14"
+      ],
+      "role": "ratchet candidate"
+    },
+    {
+      "id": "upstream",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4"
+      ],
+      "role": "barrel-to-center intermediate"
+    },
+    {
+      "id": "coupling",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5"
+      ],
+      "role": "coupling wheel; series/mode role unresolved"
+    },
+    {
+      "id": "hairspring",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_3"
+      ],
+      "role": "nonplanar deforming ribbon"
+    },
+    {
+      "id": "stud-pin",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_4",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_5",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_4"
+      ],
+      "role": "fixed terminal candidates; duplicate stud instances retained"
+    },
+    {
+      "id": "frame",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_1"
+      ],
+      "role": "fixed supporting frame"
+    },
+    {
+      "id": "front-cannon",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "front-change",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "front-hour",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "rear-transfer",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "rear-cannon",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "rear-change",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "rear-hour",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2"
+      ],
+      "role": "motion works shaft candidate; do not merge concentric shafts"
+    },
+    {
+      "id": "central-hour",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6"
+      ],
+      "role": "all fitted style alternatives; activate selected style only"
+    },
+    {
+      "id": "central-minute",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2"
+      ],
+      "role": "all fitted style alternatives; activate selected style only"
+    },
+    {
+      "id": "central-seconds",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+        "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9"
+      ],
+      "role": "all fitted style alternatives; activate selected style only"
+    },
+    {
+      "id": "small-hour",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2"
+      ],
+      "role": "all fitted style alternatives; activate selected style only"
+    },
+    {
+      "id": "small-minute",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+        "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2"
+      ],
+      "role": "all fitted style alternatives; activate selected style only"
+    },
+    {
+      "id": "keyless",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_27",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_28",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_30",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_30__0_1_1_171_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_31",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_47",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_70",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_70__0_1_1_247_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_74",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_76",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_80"
+      ],
+      "role": "conditional winding/setting and click"
+    },
+    {
+      "id": "conditional-springs",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_32__0_1_1_175_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_53",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_66",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_69__0_1_1_245_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_76"
+      ],
+      "role": "stop/setting/click spring attachment candidates"
+    },
+    {
+      "id": "shock",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_4",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_5",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_6",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_11",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_12",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_29__0_1_1_145_13"
+      ],
+      "role": "shock/reset candidate subgraph"
+    },
+    {
+      "id": "shock-bearings",
+      "instanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_4",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_13__0_1_1_202_5",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_3",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_4",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_2__0_1_1_202_5"
+      ],
+      "role": "balance shock protection; compliance unresolved"
+    }
+  ],
+  "edges": [
+    {
+      "id": "R01",
+      "from": "arbor-II",
+      "to": "spring-II",
+      "kind": "inner spring attachment",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R02",
+      "from": "spring-II",
+      "to": "barrel-II",
+      "kind": "outer spring attachment / torque",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R03",
+      "from": "ratchet-II",
+      "to": "arbor-II",
+      "kind": "coaxial candidate coupling",
+      "status": "assumption",
+      "evidence": "E-CAD",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R04",
+      "from": "arbor-I",
+      "to": "spring-I",
+      "kind": "inner spring attachment",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R05",
+      "from": "spring-I",
+      "to": "barrel-I",
+      "kind": "outer spring attachment / torque",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R06",
+      "from": "ratchet-I",
+      "to": "arbor-I",
+      "kind": "coaxial candidate coupling",
+      "status": "assumption",
+      "evidence": "E-CAD",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R07",
+      "from": "barrel-I",
+      "to": "barrel-II",
+      "kind": "series energy relation only; intervening drum/arbor/ratchet connections unknown",
+      "status": "unresolved",
+      "evidence": "E-MECH",
+      "unknown": "U-BARREL",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R08",
+      "from": "barrel-I",
+      "to": "upstream",
+      "kind": "direct external mesh rejected: center-distance mismatch 3.436086 mm",
+      "status": "rejected candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-UPSTREAM",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R09",
+      "from": "barrel-II",
+      "to": "upstream",
+      "kind": "external mesh candidate 85/96, spacing 7.95 mm",
+      "status": "geometry-supported candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-UPSTREAM",
+      "signedDeltaRatio": -3.076923076923077,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R10",
+      "from": "upstream",
+      "to": "minute",
+      "kind": "external mesh candidate 96/93",
+      "status": "geometry-supported candidate",
+      "evidence": "E-ANIMATION",
+      "unknown": "U-UPSTREAM",
+      "signedDeltaRatio": -2.1666666666666665,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R11",
+      "from": "minute",
+      "to": "third",
+      "kind": "external mesh",
+      "status": "geometry-supported ratio",
+      "evidence": "E-MECH",
+      "unknown": "U-TRAIN",
+      "signedDeltaRatio": -6.4,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R12",
+      "from": "third",
+      "to": "seconds",
+      "kind": "external mesh",
+      "status": "geometry-supported ratio",
+      "evidence": "E-MECH",
+      "unknown": "U-TRAIN",
+      "signedDeltaRatio": -9.375,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R13",
+      "from": "seconds",
+      "to": "escape",
+      "kind": "external mesh",
+      "status": "geometry-supported ratio",
+      "evidence": "E-MECH",
+      "unknown": "U-TRAIN",
+      "signedDeltaRatio": -9.0,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R14",
+      "from": "escape",
+      "to": "pallet",
+      "kind": "alternating lock/unlock/impulse/drop",
+      "status": "unresolved",
+      "evidence": "E-MECH",
+      "unknown": "U-ESC",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R15",
+      "from": "pallet",
+      "to": "balance",
+      "kind": "fork/impulse jewel and roller/safety contacts",
+      "status": "unresolved",
+      "evidence": "E-MECH",
+      "unknown": "U-ESC",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R16",
+      "from": "balance",
+      "to": "hairspring",
+      "kind": "rotating inner terminal at collet 115",
+      "status": "geometry-supported terminal center",
+      "evidence": "E-MECH",
+      "unknown": "U-SPRING",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R17",
+      "from": "hairspring",
+      "to": "stud-pin",
+      "kind": "fixed outer terminal; exact host occurrence unresolved",
+      "status": "geometry-supported terminal center",
+      "evidence": "E-MECH",
+      "unknown": "U-SPRING",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R18",
+      "from": "stud-pin",
+      "to": "frame",
+      "kind": "fixed anchorage",
+      "status": "assumption",
+      "evidence": "E-CAD",
+      "unknown": "U-SPRING",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R19",
+      "from": "minute",
+      "to": "front-cannon",
+      "kind": "friction/cannon coupling",
+      "status": "assumption",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": null,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R20",
+      "from": "front-cannon",
+      "to": "front-change",
+      "kind": "external 12/36",
+      "status": "geometry-supported candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": -0.3333333333333333,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R21",
+      "from": "front-change",
+      "to": "front-hour",
+      "kind": "external 10/40",
+      "status": "geometry-supported candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": -0.25,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R22",
+      "from": "front-change",
+      "to": "rear-transfer",
+      "kind": "external 36/36",
+      "status": "geometry-supported candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": -1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R23",
+      "from": "rear-transfer",
+      "to": "rear-change",
+      "kind": "coaxial shaft connection 214 to 215; attachment unverified",
+      "status": "assumption",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": 1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R24",
+      "from": "rear-change",
+      "to": "rear-cannon",
+      "kind": "external 24/8",
+      "status": "geometry-supported candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": -3.0,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R25",
+      "from": "rear-change",
+      "to": "rear-hour",
+      "kind": "external 8/32",
+      "status": "geometry-supported candidate",
+      "evidence": "E-PROBE",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": -0.25,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R26",
+      "from": "front-hour",
+      "to": "central-hour",
+      "kind": "coaxial fitted support/blade; upstream coupling not certified",
+      "status": "fit-supported, drive-assumed",
+      "evidence": "E-HANDS",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": 1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R27",
+      "from": "front-cannon",
+      "to": "central-minute",
+      "kind": "coaxial fitted support/blade; upstream coupling not certified",
+      "status": "fit-supported, drive-assumed",
+      "evidence": "E-HANDS",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": 1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R28",
+      "from": "seconds",
+      "to": "central-seconds",
+      "kind": "coaxial fitted support/blade; upstream coupling not certified",
+      "status": "fit-supported, drive-assumed",
+      "evidence": "E-HANDS",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": 1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R29",
+      "from": "rear-hour",
+      "to": "small-hour",
+      "kind": "coaxial fitted support/blade; upstream coupling not certified",
+      "status": "fit-supported, drive-assumed",
+      "evidence": "E-HANDS",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": 1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R30",
+      "from": "rear-cannon",
+      "to": "small-minute",
+      "kind": "coaxial fitted support/blade; upstream coupling not certified",
+      "status": "fit-supported, drive-assumed",
+      "evidence": "E-HANDS",
+      "unknown": "U-DISPLAY",
+      "signedDeltaRatio": 1,
+      "condition": "normal running",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R31",
+      "from": "keyless",
+      "to": "ratchet-I",
+      "kind": "winding transmission endpoint candidate",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-MODES",
+      "signedDeltaRatio": null,
+      "condition": "winding",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R32",
+      "from": "keyless",
+      "to": "coupling",
+      "kind": "sliding/engagement mode",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-MODES",
+      "signedDeltaRatio": null,
+      "condition": "winding/setting",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R33",
+      "from": "keyless",
+      "to": "front-cannon",
+      "kind": "setting drive and friction release",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-MODES",
+      "signedDeltaRatio": null,
+      "condition": "setting",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R34",
+      "from": "conditional-springs",
+      "to": "keyless",
+      "kind": "spring terminals, detents and stop contact",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-MODES",
+      "signedDeltaRatio": null,
+      "condition": "winding/setting",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R35",
+      "from": "conditional-springs",
+      "to": "balance",
+      "kind": "possible stop action 178; verify actual contact",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-MODES",
+      "signedDeltaRatio": null,
+      "condition": "setting",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R36",
+      "from": "shock",
+      "to": "frame",
+      "kind": "flexures 159/161, moving forks, reset and stops",
+      "status": "unresolved",
+      "evidence": "E-CAD",
+      "unknown": "U-SHOCK",
+      "signedDeltaRatio": null,
+      "condition": "shock/reset",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    },
+    {
+      "id": "R37",
+      "from": "shock-bearings",
+      "to": "balance",
+      "kind": "bearing support / conditional elastic response",
+      "status": "assumption",
+      "evidence": "E-CAD",
+      "unknown": "U-SHOCK",
+      "signedDeltaRatio": null,
+      "condition": "normal support / shock",
+      "phase": "unresolved unless static attachment",
+      "reviewStatus": "external review open"
+    }
+  ],
+  "shafts": {
+    "balance": {
+      "assemblyInstanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1",
+      "sourceAssemblyDefinition": "0:1:1:109",
+      "shaftDefinition": "0:1:1:113",
+      "pivotWorldMm": [
+        0,
+        -10,
+        -2.65
+      ],
+      "axisWorld": [
+        0,
+        0,
+        1
+      ],
+      "axisEvidence": "coaxial shaft geometry and XCAF world placement",
+      "rigidMembershipEvidence": "named source subassembly; source mechanical constraints not imported",
+      "additionalRigidInstanceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_2"
+      ],
+      "excludeRigidDefinitionIds": [
+        "0:1:1:116",
+        "0:1:1:117",
+        "0:1:1:118"
+      ],
+      "amplitudeDegrees": null
+    },
+    "pallet": {
+      "assemblyInstanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13",
+      "sourceAssemblyDefinition": "0:1:1:125",
+      "shaftDefinition": "0:1:1:127",
+      "pivotWorldMm": [
+        -0.999949089450934,
+        -7.0657025,
+        -1.56
+      ],
+      "axisWorld": [
+        0,
+        0,
+        1
+      ],
+      "axisEvidence": "coaxial shaft geometry and XCAF world placement",
+      "rigidMembershipEvidence": "named source subassembly; source mechanical constraints not imported"
+    },
+    "escape": {
+      "assemblyInstanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62",
+      "sourceAssemblyDefinition": "0:1:1:232",
+      "shaftDefinition": "0:1:1:234",
+      "pivotWorldMm": [
+        -1.99989817890187,
+        -4.131405,
+        -4.14
+      ],
+      "axisWorld": [
+        0,
+        0,
+        1
+      ],
+      "axisEvidence": "coaxial shaft geometry and XCAF world placement",
+      "rigidMembershipEvidence": "named source subassembly; source mechanical constraints not imported"
+    },
+    "seconds": {
+      "assemblyInstanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65",
+      "sourceAssemblyDefinition": "0:1:1:241",
+      "shaftDefinition": "0:1:1:242",
+      "pivotWorldMm": [
+        0,
+        0,
+        -4.31
+      ],
+      "axisWorld": [
+        0,
+        0,
+        1
+      ],
+      "axisEvidence": "coaxial shaft geometry and XCAF world placement",
+      "rigidMembershipEvidence": "named source subassembly; source mechanical constraints not imported"
+    },
+    "third": {
+      "assemblyInstanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63",
+      "sourceAssemblyDefinition": "0:1:1:236",
+      "shaftDefinition": "0:1:1:237",
+      "pivotWorldMm": [
+        3.17046045103862,
+        -3.61722,
+        -3.21
+      ],
+      "axisWorld": [
+        0,
+        0,
+        1
+      ],
+      "axisEvidence": "coaxial shaft geometry and XCAF world placement",
+      "rigidMembershipEvidence": "named source subassembly; source mechanical constraints not imported"
+    },
+    "minute": {
+      "assemblyInstanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3",
+      "sourceAssemblyDefinition": "0:1:1:92",
+      "shaftDefinition": "0:1:1:93",
+      "pivotWorldMm": [
+        0,
+        0,
+        -2.98
+      ],
+      "axisWorld": [
+        0,
+        0,
+        1
+      ],
+      "axisEvidence": "coaxial shaft geometry and XCAF world placement",
+      "rigidMembershipEvidence": "named source subassembly; source mechanical constraints not imported"
+    }
+  },
+  "toothCounts": {
+    "85": {
+      "teeth": 80,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "90": {
+      "teeth": 80,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "93": {
+      "teeth": 12,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "94": {
+      "teeth": 64,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "96": {
+      "teeth": 26,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "233": {
+      "teeth": 20,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "234": {
+      "teeth": 9,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "237": {
+      "teeth": 10,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "238": {
+      "teeth": 75,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "242": {
+      "teeth": 8,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    },
+    "243": {
+      "teeth": 81,
+      "evidence": "BRep edge-tip angular clusters at three radial thresholds; see tooth-count-evidence.json",
+      "confidence": "geometric corroboration; not manual tooth-by-tooth expert review"
+    }
+  },
+  "springGeometry": {
+    "definitionLabel": "0:1:1:116",
+    "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_3",
+    "boundsLocalMm": [
+      -3.2003001,
+      -3.2485001,
+      -0.2150001,
+      3.2967001,
+      3.1521001,
+      0.4650001000640949
+    ],
+    "terminalCenters": {
+      "inner": {
+        "localMm": [
+          -0.34816776114306935,
+          -0.3545473704971322,
+          -0.1075
+        ],
+        "worldMm": [
+          0.41668742107478446,
+          -10.270732748192483,
+          -3.2475000000000085
+        ]
+      },
+      "outer": {
+        "localMm": [
+          0.9850000000000008,
+          -1.7060700454553457,
+          0.3575
+        ],
+        "worldMm": [
+          -0.592150813057326,
+          -11.878897925539214,
+          -3.7125000000000083
+        ]
+      }
+    },
+    "ribbonThicknessMm": 0.035,
+    "ribbonHeightMm": 0.215,
+    "lowerCoilZLocalMm": [
+      -0.215,
+      0
+    ],
+    "raisedOvercoilZLocalMm": [
+      0.25,
+      0.465
+    ]
+  },
+  "fittedHands": [
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+      "face": "central",
+      "role": "hour",
+      "boreLocalMm": [
+        4.1335207826009906e-16,
+        5.1698788481779456e-23,
+        0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -1.59377719355369e-14,
+        0.0599632742307175
+      ],
+      "boreRadiusMm": 0.9,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "supportSeatRadiusMm": 0.905
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+      "face": "central",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.800000000000125,
+        -3.545073320592567e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        13.9,
+        0.0,
+        -0.520207590811592
+      ],
+      "boreRadiusMm": 0.7,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "supportSeatRadiusMm": 0.705
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+      "face": "central",
+      "role": "seconds",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.092961170786472e-15,
+        15.6,
+        -0.6792930865007475
+      ],
+      "boreRadiusMm": 0.5,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "supportSeatRadiusMm": 0.505
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+      "face": "central",
+      "role": "hour",
+      "boreLocalMm": [
+        4.1335207826009857e-16,
+        5.169868731036836e-23,
+        0.20000000000000007
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -2.71050543121376e-16,
+        0.0989100773929625
+      ],
+      "boreRadiusMm": 0.9,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "supportSeatRadiusMm": 0.905
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+      "face": "central",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.879999999999999,
+        -2.2929061773065002e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        13.82,
+        2.71050543121376e-17,
+        -0.58258360731897
+      ],
+      "boreRadiusMm": 0.7,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "supportSeatRadiusMm": 0.705
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+      "face": "central",
+      "role": "seconds",
+      "boreLocalMm": [
+        -7.573064690121713e-29,
+        -1.0097419586828951e-28,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.09296117078647e-15,
+        15.59999999999995,
+        -0.6792930865007341
+      ],
+      "boreRadiusMm": 0.5,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "supportSeatRadiusMm": 0.505
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+      "face": "small",
+      "role": "hour",
+      "boreLocalMm": [
+        7.803706661347034e-17,
+        7.926878801015953e-17,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.0,
+        -2.05320786414442e-14,
+        0.075
+      ],
+      "boreRadiusMm": 0.495,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "supportSeatRadiusMm": 0.5
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+      "face": "small",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.5028571428571419,
+        3.7754066583194543e-16,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        8.000000000001325,
+        -1.898435873540726e-12,
+        -0.7454597403324354
+      ],
+      "boreRadiusMm": 0.345,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "supportSeatRadiusMm": 0.35
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+      "face": "small",
+      "role": "hour",
+      "boreLocalMm": [
+        -5.613629608853484e-16,
+        1.424372481491419e-13,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.1,
+        -2.03287907341032e-14,
+        0.09
+      ],
+      "boreRadiusMm": 0.495,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+      "supportSeatRadiusMm": 0.5
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+      "face": "small",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.4900000000000007,
+        -2.9879002550229324e-17,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        8.000000000001496,
+        -2.13455092710204e-12,
+        -0.745459740332473
+      ],
+      "boreRadiusMm": 0.345,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+      "supportSeatRadiusMm": 0.35
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+      "face": "small",
+      "role": "hour",
+      "boreLocalMm": [
+        3.436830123220337e-16,
+        3.5251725047287415e-16,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.02858828879521,
+        -1.35525271560688e-17,
+        0.075
+      ],
+      "boreRadiusMm": 0.495,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "supportSeatRadiusMm": 0.5
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+      "face": "small",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.4899999999999996,
+        1.4705716940123503e-16,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        7.98897646530028,
+        3.70351821982908e-12,
+        -0.7436705389678004
+      ],
+      "boreRadiusMm": 0.345,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "supportSeatRadiusMm": 0.35
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+      "face": "central",
+      "role": "hour",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -1.35525271560688e-17,
+        0.095
+      ],
+      "boreRadiusMm": 0.9,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "supportSeatRadiusMm": 0.905
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+      "face": "central",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.799999999999629,
+        3.851472193143742e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        14.00000000000015,
+        -2.632457276166345e-13,
+        -0.755201390450395
+      ],
+      "boreRadiusMm": 0.7,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "supportSeatRadiusMm": 0.705
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+      "face": "central",
+      "role": "seconds",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.09296117078647e-15,
+        15.59999999999995,
+        -0.6792930865007341
+      ],
+      "boreRadiusMm": 0.5,
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "supportSeatRadiusMm": 0.505
+    }
+  ],
+  "parameterProvenance": {
+    "shafts": "E-MECH: analytic cylinders/XCAF, mm; geometry-supported, no external review",
+    "toothCounts": "E-MECH: radial BRep clusters, count unit teeth; geometric corroboration",
+    "springGeometry": "E-MECH: source edges and terminals, mm; terminal orientation/constraint still open",
+    "fittedHands": "E-HANDS: analytic bores and cached tip landmarks, mm; fit reviewed, drive unverified",
+    "signedDeltaRatio": "Dimensionless follower/driver angle ratio derived from stated tooth counts for candidate external meshes, or assumed rigid hand coupling. No phase/absolute sign acceptance."
+  }
+}
