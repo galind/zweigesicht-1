@@ -1,6 +1,6 @@
 # M1 implementation brief and readiness — v1
 
-**Ready for an isolated deterministic foundation, when separately authorized. Not started.** M0 does not provide an accepted contact cycle, elastic solution or complete energy graph. M1 should make those future solutions testable without changing the accepted visitor experience.
+**M1 completed 13 September 2026: [verification report](M1_REPORT.md).** The brief below records the M0-authored implementation boundary and acceptance criteria. M0 does not provide an accepted contact cycle, elastic solution or complete energy graph. M1 should make those future solutions testable without changing the accepted visitor experience.
 
 Read [M0 evidence](M0_EVIDENCE.md), [unknowns](UNKNOWNS.md), [tolerances](TOLERANCES.md), the current project instructions and [M1 in the plan](../RUNNING_MOVEMENT_PLAN.md#m1--build-the-motion-foundation). Reconcile the working tree before editing. Preserve the current viewer, both independent display preferences, all styles, source identities and immutable fitted/source bases.
 

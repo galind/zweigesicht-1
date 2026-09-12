@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "baseUrl": "../../..",
+    "paths": {
+      "three": [
+        "explorer/node_modules/@types/three"
+      ],
+      "three/*": [
+        "explorer/node_modules/@types/three/*"
+      ],
+      "three/addons/*": [
+        "explorer/node_modules/@types/three/examples/jsm/*"
+      ]
+    }
+  },
+  "include": [
+    "*.ts"
+  ]
+}

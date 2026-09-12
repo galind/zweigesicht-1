@@ -1,6 +1,6 @@
 # Running movement — future work blocks
 
-Prepared 12 September 2026; M0 evidence checkpoint completed later that day at the user’s request. M1–M8 are not started. This document does not reopen the accepted static-explorer scope or authorize implementation beyond the active task, publication, source redistribution, or contacting external reviewers.
+Prepared 12 September 2026; M0 evidence checkpoint completed later that day at the user’s request. M1 isolated foundation completed 13 September; M2–M8 are not started. This document does not reopen the accepted static-explorer scope or authorize implementation beyond the active task, publication, source redistribution, or contacting external reviewers.
 
 ## Intended outcome
 
@@ -25,7 +25,7 @@ The original plan performed no new research. The completed [M0 checkpoint](runni
 | Block | Reviewable output | Dependency | Current status |
 | --- | --- | --- | --- |
 | M0 — Evidence and coverage | Source-linked motion inventory, graph, unknowns and proposed validation tolerances | Current repository and local CAD | Complete — evidence checkpoint; external tolerance agreement pending |
-| M1 — Motion foundation | Deterministic evaluator and isolated inspection harness | M0 | Not started |
+| M1 — Motion foundation | Deterministic evaluator and isolated inspection harness | M0 | Complete — isolated experiments; no connected operating claim |
 | M2 — Escapement cycle | Complete rigid-part cycle with contact evidence | M1 | Not started |
 | M3 — Hairspring | Constrained deformation over the chosen amplitude | M1; shared amplitude/phase contract with M2 | Not started |
 | M4 — Regulation proof | Balance, spring and escapement running together in context | M2 + M3 | Not started |
@@ -55,6 +55,8 @@ M4 is the decisive feasibility checkpoint. Review the hardest mechanism with all
 **Resume prompt:** “Start M0 in docs/RUNNING_MOVEMENT_PLAN.md. Reuse the current CAD and audit, produce the coverage/unknowns records, and report readiness for M1.”
 
 ## M1 — Build the motion foundation
+
+**Status: complete — 13 September 2026.** [Verification report and launch guide](running-movement/M1_REPORT.md). Pure timestamp evaluation, explicit unresolved contracts, 365 immutable source/fitted bases, 47 leaf-only rigid owners and a separate local catalog harness are implemented. All nine foundation test groups, six real-renderer captures, 88 existing source/runtime checks, 10 state tests, M0 verification, lint/type/build and visual inspection pass. Computed cross-runtime matrix error ≤3.33e-16; same-runtime source/fitted restoration and repeat seeking are exact. M2/M3 are not started. This establishes numerical/inspection readiness only; all contact, amplitude, phase, coupling and deformation questions remain open.
 
 **Work:** Add a local development harness with one mechanical clock, direct timestamp evaluation, pause, seek and phase inspection. Preserve immutable source and fitted-display bases. Define composition of mechanical motion, deformation and presentation transforms, including the corrected Lance seconds-hand placement. Apply a shaft delta once to each rigid member.
 
@@ -144,4 +146,4 @@ Commit each coherent verified checkpoint after inspecting status and the staged 
 
 Do not attach firm calendar promises to these blocks yet. M0 should estimate the first proof; M4 should revise the remaining effort using actual contact/deformation results and reviewer availability. The earlier “several weeks” assessment is a rough planning judgment, not a delivery commitment. External review waiting time is separate from implementation effort.
 
-**Next executable action, when separately authorized:** M1 only, following the [implementation brief](running-movement/M1_BRIEF.md). Build the isolated deterministic foundation with explicit unresolved states; preserve the viewer. M0 is complete. No M1 implementation or recurring task is started by this checkpoint.
+**Next executable action, when separately authorized:** a bounded M2 source-rest escapement contact/local-precision audit, following the [M1 readiness assessment](running-movement/M1_REPORT.md#m2m3-readiness-and-next-recommended-experiment). Do not select amplitude/phase or start spring deformation from the independent fixtures. M0 and M1 are complete; M2/M3 have not begun, and M4 remains the complete regulation feasibility checkpoint.
