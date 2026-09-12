@@ -1,4 +1,6 @@
 'use client';
+
+import { aboutDescription } from '@/src/content/about';
 import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import {
@@ -1026,11 +1028,11 @@ export default function Home() {
           <SheetHeader>
             <SheetTitle>A study of the ml–01</SheetTitle>
             <SheetDescription>
-              Explore the original Marco Lang CAD at rest, with authored
-              materials and construction reveals.
+              An interactive exploration of Calibre ML-01.
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
+            <p>{aboutDescription}</p>
             <p>
               The overview shows the movement without the case, straps or
               alternate dial designs. The catalog retains every imported part.
@@ -1047,11 +1049,6 @@ export default function Home() {
               Four balance eccentrics contain untessellated faces. An
               overlapping setting-spring alternative is hidden in the assembled
               view.
-            </p>
-            <p>
-              Finishes follow maker photography and macro references. Surface
-              response and lighting are authored, with separate CAD-derived
-              shading corrections; no missing geometry has been invented.
             </p>
             <p>
               Separation and All parts travel are authored presentations, not
