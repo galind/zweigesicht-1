@@ -957,6 +957,27 @@ const gem=recovered.children[0],stl=fs.readFileSync(path.join(modelsDir,'diamond
 assert.equal(gem.geometry.attributes.position.count,1640*3);
 for(let face=0;face<1640;face++)for(let vertex=0;vertex<3;vertex++)for(let axis=0;axis<3;axis++)
  assert.equal(gem.geometry.attributes.position.getComponent(face*3+vertex,axis),stl.readFloatLE(84+face*50+12+vertex*12+axis*4));
+// Optical planes must follow the original convex STL, including its tiny girdle facets.
+const gemPositions=Buffer.from(gem.geometry.attributes.position.array.buffer).toString('hex');
+const gemNormals=Buffer.from(gem.geometry.attributes.normal.array.buffer).toString('hex');
+const {diamondBoundary}=load('explorer/src/viewer/DiamondOptics.ts');
+const boundary=diamondBoundary(gem.geometry);
+const opticalMesh=new THREE.Mesh(gem.geometry,new THREE.MeshBasicMaterial({side:THREE.BackSide}));
+opticalMesh.updateMatrixWorld(true);
+for(let i=0;i<96;i++) {
+ const z=1-2*(i+.5)/96,angle=i*Math.PI*(3-Math.sqrt(5));
+ const direction=new THREE.Vector3(Math.sqrt(1-z*z)*Math.cos(angle),Math.sqrt(1-z*z)*Math.sin(angle),z);
+ const ray=new THREE.Raycaster(boundary.center,direction);
+ const hits=ray.intersectObject(opticalMesh);
+ assert.ok(hits.length,'The maker diamond must enclose the optical origin');
+ const distance=Math.min(...boundary.planes.filter(p=>p.x*direction.x+p.y*direction.y+p.z*direction.z>1e-5)
+  .map(p=>p.w/(p.x*direction.x+p.y*direction.y+p.z*direction.z)));
+ assert.ok(Math.abs(distance-hits[0].distance)<.003,'Optical exits must match actual STL ray intersections within 3 microns');
+}
+assert.equal(Buffer.from(gem.geometry.attributes.position.array.buffer).toString('hex'),gemPositions);
+assert.equal(Buffer.from(gem.geometry.attributes.normal.array.buffer).toString('hex'),gemNormals);
+opticalMesh.material.dispose();
+results.push({check:'diamond optical boundary matches 96 actual STL ray exits without changing source vertices or normals',status:'pass',planes:boundary.planes.length});
 const sourceGem=parts.find(p=>p.id===recovery.DIAMOND_ID);
 assert.equal(sourceGem.triangles,0);assert.equal(sourceGem.boundsWorldMm,null);
 const oldCount=v.renderParts.size;v.ingest(recovered);assert.equal(v.renderParts.size,oldCount+1);

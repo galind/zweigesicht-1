@@ -1,5 +1,10 @@
 import * as THREE from 'three';
 import { frostReliefGLSL } from './FrostedSurface';
+import {
+  diamondBoundary,
+  diamondOpticsGLSL,
+  diamondLightGLSL,
+} from './DiamondOptics';
 
 /** Authored surface interpretations of local maker references, not measured finishes. */
 const profiles = {
@@ -277,6 +282,13 @@ export function createMaterial(
               : 0,
   });
   material.name = finish.family;
+  const diamond =
+    finish.family === 'diamond' && geometry ? diamondBoundary(geometry) : null;
+  if (diamond)
+    material.defines = {
+      ...material.defines,
+      DIAMOND_PLANES: diamond.planes.length,
+    };
   // Only materials with reviewed frosted regions compile the relief evaluator.
   if (
     finish.family === 'frosted' ||
@@ -306,8 +318,8 @@ export function createMaterial(
     material.clearcoatRoughness = 0.035;
   }
   if (finish.family === 'sapphire' || finish.family === 'diamond') {
-    // Authored optical emulation; source geometry is retained. Single-layer
-    // transmission cannot reproduce a diamond's internal multiple reflections.
+    // Authored optical emulation; diamond adds bounded internal facet rays below.
+    // Sapphire retains the single-layer screen-space transmission treatment.
     material.ior = finish.family === 'diamond' ? 2.417 : 1.76;
     material.transmission = finish.family === 'diamond' ? 0.92 : 0.98;
     material.thickness = finish.family === 'diamond' ? 1.26 : 1;
@@ -348,10 +360,24 @@ export function createMaterial(
     Number(definitionId?.split('_').at(-1)),
   );
   material.onBeforeCompile = (shader) => {
+    if (diamond) {
+      shader.uniforms.diamondCenter = { value: diamond.center };
+      shader.uniforms.diamondPlanes = { value: diamond.planes };
+      shader.vertexShader =
+        'varying vec3 vDiamondZ;\n' +
+        shader.vertexShader.replace(
+          '#include <begin_vertex>',
+          '#include <begin_vertex>\nvDiamondZ=mat3(modelViewMatrix)*vec3(0,0,1);',
+        );
+      shader.fragmentShader = diamondOpticsGLSL + shader.fragmentShader;
+    }
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
       finishBrushDetail: {
-        value: definitionId === 'd_0_1_1_26' ? 1.7 : (brushingDetail[finish.family] ?? 1),
+        value:
+          definitionId === 'd_0_1_1_26'
+            ? 1.7
+            : (brushingDetail[finish.family] ?? 1),
       },
       finishEnabled: enabled,
       emphasis,
@@ -370,7 +396,9 @@ export function createMaterial(
       finishRadius: { value: Math.max(radius, 0.01) },
       finishBrushAxis: { value: brushAxis },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
-      finishSecondsCounterweight: { value: definitionId === 'd_0_1_1_30' ? 1 : 0 },
+      finishSecondsCounterweight: {
+        value: definitionId === 'd_0_1_1_30' ? 1 : 0,
+      },
       finishShockBlock: { value: definitionId === 'd_0_1_1_159' ? 1 : 0 },
       finishHeatBlue: {
         value: finish.family === 'blue' || finish.family === 'spring' ? 1 : 0,
@@ -399,6 +427,7 @@ export function createMaterial(
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <opaque_fragment>',
       `
+${diamond ? diamondLightGLSL : ''}
 float focusRim = pow(1.0 - abs(dot(normalize(normal), normalize(vViewPosition))), 3.0);
 outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * focusRim;
 #include <opaque_fragment>
@@ -628,8 +657,10 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
     );
   };
   material.customProgramCacheKey = () =>
-    ['sapphire', 'diamond'].includes(finish.family)
-      ? 'ml01-source-surface-clear-v10'
-      : 'ml01-source-surface-v11';
+    diamond
+      ? `ml01-diamond-facets-v1-${diamond.planes.length}`
+      : ['sapphire', 'diamond'].includes(finish.family)
+        ? 'ml01-source-surface-clear-v10'
+        : 'ml01-source-surface-v11';
   return material;
 }
