@@ -94,16 +94,6 @@ const empty: ViewerSnapshot = {
 };
 export default function Home() {
   const footerRef = useRef<HTMLElement>(null);
-  const [footerHeight, setFooterHeight] = useState(40);
-  useEffect(() => {
-    const footer = footerRef.current;
-    if (!footer) return;
-    const observer = new ResizeObserver(() =>
-      setFooterHeight(footer.getBoundingClientRect().height),
-    );
-    observer.observe(footer);
-    return () => observer.disconnect();
-  }, []);
   const catalogButton = useRef<HTMLButtonElement>(null),
     optionsButton = useRef<HTMLButtonElement>(null),
     aboutButton = useRef<HTMLButtonElement>(null),
@@ -132,12 +122,13 @@ export default function Home() {
     const observer = new ResizeObserver(measure);
     const dock = document.querySelector('.action-dock');
     if (dock) observer.observe(dock);
+    if (footerRef.current) observer.observe(footerRef.current);
     if (optionsButton.current) observer.observe(optionsButton.current);
     return () => {
       window.removeEventListener('resize', measure);
       observer.disconnect();
     };
-  }, [footerHeight]);
+  }, []);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
@@ -306,7 +297,6 @@ export default function Home() {
     viewer.current?.patch(v);
   return (
     <main
-      style={{ '--footer-height': `${footerHeight}px` } as CSSProperties}
       className={
         'explorer' +
         (group || selected || s.layout === 'spread' ? ' has-focus' : '')
@@ -501,7 +491,6 @@ export default function Home() {
       <section
         className="workspace"
         aria-label="Movement explorer"
-        style={{ bottom: panelBottom ?? undefined }}
       >
         <div
           className="stage"

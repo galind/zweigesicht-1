@@ -412,23 +412,27 @@ canvas:focus-visible {
   color: #f3d5a8;
 }
 
-/* The canvas has one stable rectangle. Opening UI never resizes its renderer. */
+/* Size the stage, dock and credit together, before hydration or the first frame.
+   Popup measurements only position popups; they never resize the stage. */
 .explorer {
   --edge-left: max(12px, env(safe-area-inset-left));
   --edge-right: max(12px, env(safe-area-inset-right));
   --top: max(8px, env(safe-area-inset-top));
-  --bottom: calc(
-    max(10px, env(safe-area-inset-bottom)) + var(--footer-height, 40px) + 8px
-  );
+  --bottom: max(10px, env(safe-area-inset-bottom));
   position: relative;
   width: 100%;
   height: 100dvh;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  padding-top: calc(var(--top) + 44px);
+  padding-bottom: var(--bottom);
   overflow: hidden;
   background: radial-gradient(ellipse at 50% 44%, #272727, #181818 55%, #111);
 }
 .workspace {
-  position: absolute;
-  inset: calc(var(--top) + 44px) 0 calc(var(--bottom) + 56px);
+  position: relative;
+  min-height: 0;
+  margin-bottom: 12px;
 }
 .stage {
   position: absolute;
@@ -505,10 +509,9 @@ canvas:focus-visible {
   padding: 10px;
 }
 .action-dock {
-  position: absolute;
-  bottom: var(--bottom);
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  justify-self: center;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -958,9 +961,6 @@ canvas:focus-visible {
   .action-dock .dial-trigger {
     width: auto;
   }
-  .workspace {
-    bottom: calc(var(--bottom) + 104px);
-  }
   .explorer-panel[data-slot='sheet-content'] {
     bottom: max(126px, calc(env(safe-area-inset-bottom) + 116px));
   }
@@ -1094,9 +1094,6 @@ canvas:focus-visible {
   .action-dock .reset-button {
     grid-area: 2 / 3;
     justify-self: center;
-  }
-  .workspace {
-    bottom: calc(var(--bottom) + 104px);
   }
 }
 @media (max-width: 700px) {
@@ -1271,9 +1268,6 @@ canvas:focus-visible {
     width: 12px;
     height: 12px;
   }
-  .workspace {
-    bottom: calc(var(--bottom) + 104px);
-  }
   .text-enlarged .action-dock {
     width: calc(100% - var(--edge-left) - var(--edge-right));
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1308,10 +1302,8 @@ canvas:focus-visible {
 }
 
 .page-credit {
-  position: absolute;
-  bottom: max(10px, env(safe-area-inset-bottom));
-  left: var(--edge-left);
-  right: var(--edge-right);
+  margin-left: var(--edge-left);
+  margin-right: var(--edge-right);
   text-align: center;
   color: #aaa8a4;
   font-size: 0.8125rem;
