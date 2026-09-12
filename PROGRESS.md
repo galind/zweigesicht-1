@@ -1,6 +1,16 @@
 # Zweigesicht-1 — current state
 
 
+## M2 escapement audit — 13 September 2026
+
+**M2 incomplete; verified audit and bounded experiments delivered.** Work remained on clean-start `codex/running-movement` from M1 `d13654f`. [M2 report](docs/running-movement/M2_REPORT.md) and [scalar evidence](docs/running-movement/M2_EVIDENCE.json) record 18 definitions/24 occurrences, 26 source-rest pairs and unchanged M0 tolerances. Impulse jewel 112 penetrates body 126: stable common volume 0.004108 mm³, independently corroborated interior boundary margin 0.04954 mm. Body/banking-pin occurrence 9 intersects, but local 0.00217–0.00421 mm topology tolerances make its depth inconclusive at the 0.001 mm budget. Escape/jewel-4 source gap 0.0009678 mm remains inside the ambiguity band. No operating amplitude, direction, phase, bank endpoints or alignment correction accepted.
+
+The isolated harness adds source-centered ±5 µm monitored-travel sensitivity, macro cameras, annotated key poses and a refined escape tip/plane threshold. All essential rigid contacts and the actual undeformed hairspring remain visible in the explicit contact cutaway; balance experiments expose ~0.00175684 mm inner-center mismatch. No full two-half-cycle model, connected timing or deformation was fabricated. Two annotated WebM recordings (17.31/17.34 s wall time for 16 s inspection sequences) remain local under `artifacts/mechanics/running-movement/m2/`.
+
+Verification: 243 BRep sensitivity poses with refinement and travel bounds, four analytic-solid method tests, 12 JS numerical groups, 11 renderer captures, 88 existing source/runtime checks, ten state tests, M0 hashes/inventory, harness lint/TypeScript/build and whitespace pass. Renderer computed error ≤3.33e-16; repeated seeking and raw restoration exact. AI visual inspection and recorded evidence are distinct from external mechanical acceptance. Visitor code/assets, appearance and independent dial behavior are unchanged.
+
+Launch: `./explorer/node_modules/.bin/vite --config scripts/mechanics/harness/vite.config.mjs`, then `http://127.0.0.1:4188/`; existing loopback server reused. Next: evidence-based source assembly alignment investigation for 112/114 versus 126, plus bank-face precision reconciliation before any operating search. M3/M4 not begun; shared amplitude and all spring readiness gaps remain open. Local checkpoint only; no push, merge, deployment, CAD redistribution or external contact.
+
 ## M1 motion foundation complete — 13 September 2026
 
 Completed the isolated [M1 motion foundation](docs/running-movement/M1_REPORT.md) on `codex/running-movement`, starting from clean M0 `05e2882`. The pure evaluator records explicit world-mm/+Z-radian provenance, 11 independent shaft fixtures/47 uniquely owned leaves, all 37 unresolved/rejected graph relationships, three undeformed spring handles and unset operating parameters. It never executes the retired cycle or claims connected operation. All 365 source/fitted bases are immutable; the existing Lance correction is reused once. Presentation transforms stay separate; raw inspection restores exact source matrices and returns to the saved paused operating pose.

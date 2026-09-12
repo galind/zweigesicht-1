@@ -1,9 +1,15 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M1 · Motion foundation experiment</title>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M2 · Escapement source audit</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#151a20;color:#edf0f5;font:14px system-ui}main{display:grid;grid-template-columns:minmax(320px,1fr) 360px;height:100vh}#stage{min-height:420px;position:relative}canvas{display:block;width:100%;height:100%}aside{padding:18px;overflow:auto;background:#222932}h1{font-size:20px;margin-top:0}p{line-height:1.5}.warning{color:#ffce86}label{display:block;margin:12px 0}input,select,button{font:inherit;padding:10px;color:inherit;background:#303b48;border:1px solid #6c7a8a;border-radius:4px;max-width:100%}input[type=number],select{width:100%}button{cursor:pointer;margin:3px 0;min-height:44px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px}summary{cursor:pointer;padding:10px 0}#caption{position:absolute;bottom:12px;left:12px;right:12px;background:#151a20dc;padding:10px;pointer-events:none}#error{color:#ff9999} @media(max-width:760px){main{display:block;height:auto}#stage{height:55vh}aside{overflow:visible}}
 </style><main><section id="stage" aria-label="Actual source CAD inspection"><div id="caption">Loading local catalog…</div></section><aside>
-<h1>M1 · Motion foundation</h1><p class="warning">Independent transform experiment. No connected running watch, accepted contact cycle or spring deformation. Moving a shaft may intersect or disconnect its stationary neighbors.</p>
-<label>Operating state<select id="mode"><option value="sourceRest">Source rest / fitted bases</option><option value="fixture">Independent shaft experiment</option><option value="connected">Connected operation — unresolved</option></select></label>
+<h1>M2 · Escapement source audit</h1><p class="warning">Independent transform experiment. No connected running watch, accepted contact cycle or spring deformation. Moving a shaft may intersect or disconnect its stationary neighbors.</p>
+<p class="warning">M2 incomplete: source jewel/body penetration and unresolved banking precision. Lock, unlocking, impulse and drop phases are unassigned.</p>
+<label>Audit shaft<select id="auditShaft"><option>balance</option><option>pallet</option><option>escape</option></select></label>
+<button id="auditStart">Start source-centered sensitivity</button>
+<label>Annotated inspection pose<select id="auditKey"></select></label><button id="auditSeek">Inspect key pose</button>
+<label><input id="auditFocus" type="checkbox"> Contact context cutaway (plates omitted; rigid contact parts and source spring retained)</label>
+<p id="auditAnnotation"></p><button id="record">Record 16 s sensitivity to local artifacts</button><p id="recordStatus"></p>
+<label>Operating state<select id="mode"><option value="audit">M2 source sensitivity (not operating)</option><option value="sourceRest" selected>Source rest / fitted bases</option><option value="fixture">Independent shaft experiment</option><option value="connected">Connected operation — unresolved</option></select></label>
 <label>Experimental shaft<select id="shaft"></select></label>
 <label>Fixture rate (turn/s, world +Z)<input id="rate" type="number" value="0.025" step="0.005"></label>
 <label>Initial phase (turns, source/fitted relative)<input id="phase" type="number" value="0" step="0.01"></label>
@@ -13,9 +19,9 @@
 <button id="raw">Enter raw source inspection</button>
 <label>Three hands style<select id="central"></select></label><label>Skeleton style<select id="small"></select></label>
 <label><input id="centralVisible" type="checkbox"> Show Three hands blades/supports</label><label><input id="smallVisible" type="checkbox"> Show Skeleton blades/supports</label>
-<label>Camera<select id="camera"><option value="regulation">Regulation close-up</option><option value="whole">Whole movement</option><option value="central">Three hands</option><option value="small">Skeleton</option></select></label>
+<label>Camera<select id="camera"><option value="regulation">Regulation close-up</option><option value="impulse">Impulse jewel / body macro</option><option value="bank">Body / banking pin macro</option><option value="escape-contact">Escape / pallet jewel macro</option><option value="whole">Whole movement</option><option value="central">Three hands</option><option value="small">Skeleton</option></select></label>
 <label><input id="lift" type="checkbox"> Lift covers 12 mm (presentation only)</label>
-<p>Springs, roller, impulse jewel, both pallet jewels and upstream wheel remain present. Covers can obstruct them; orbit or lift covers to inspect. Selected hand blades/supports are fixtures; dial surfaces are outside this harness view. This is diagnostic source shading.</p>
+<p>Full context retains all movement leaves. The contact cutaway retains balance, roller, impulse jewel, both pallet jewels, body, safety, banking pins and undeformed hairspring; it omits surrounding plates and trains from view. Covers can obstruct them; orbit or lift covers to inspect. Selected hand blades/supports are fixtures; dial surfaces are outside this harness view. This is diagnostic source shading.</p>
 <details><summary>Pose evidence</summary><button id="capture">Capture pose evidence</button><pre id="poseEvidence"></pre></details>
 <p id="error" role="alert"></p><pre id="status"></pre><details><summary>Provenance, unresolved edges and deformation handles</summary><pre id="diagnostics"></pre></details>
 </aside></main><script type="module" src="/main.ts"></script></html>

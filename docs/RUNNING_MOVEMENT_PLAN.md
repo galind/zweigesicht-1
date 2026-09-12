@@ -1,6 +1,6 @@
 # Running movement — future work blocks
 
-Prepared 12 September 2026; M0 evidence checkpoint completed later that day at the user’s request. M1 isolated foundation completed 13 September; M2–M8 are not started. This document does not reopen the accepted static-explorer scope or authorize implementation beyond the active task, publication, source redistribution, or contacting external reviewers.
+Prepared 12 September 2026; M0 evidence checkpoint completed later that day at the user’s request. M1 isolated foundation completed 13 September; M2 source audit and bounded experiments delivered 13 September; M2 remains incomplete. M3–M8 are not started. This document does not reopen the accepted static-explorer scope or authorize implementation beyond the active task, publication, source redistribution, or contacting external reviewers.
 
 ## Intended outcome
 
@@ -26,7 +26,7 @@ The original plan performed no new research. The completed [M0 checkpoint](runni
 | --- | --- | --- | --- |
 | M0 — Evidence and coverage | Source-linked motion inventory, graph, unknowns and proposed validation tolerances | Current repository and local CAD | Complete — evidence checkpoint; external tolerance agreement pending |
 | M1 — Motion foundation | Deterministic evaluator and isolated inspection harness | M0 | Complete — isolated experiments; no connected operating claim |
-| M2 — Escapement cycle | Complete rigid-part cycle with contact evidence | M1 | Not started |
+| M2 — Escapement cycle | Complete rigid-part cycle with contact evidence | M1 | Incomplete — source penetration and banking precision blockers; audit delivered |
 | M3 — Hairspring | Constrained deformation over the chosen amplitude | M1; shared amplitude/phase contract with M2 | Not started |
 | M4 — Regulation proof | Balance, spring and escapement running together in context | M2 + M3 | Not started |
 | M5 — Train and barrels | Connected energy-to-escapement motion | M4; M0 graph | Not started |
@@ -65,6 +65,8 @@ M4 is the decisive feasibility checkpoint. Review the hardest mechanism with all
 **Acceptance:** Identical timestamps yield identical poses after seeking, frame-rate changes and pause/resume. No accumulated transform drift or doubled rotations. Source inspection restores exact source bases; fitted displays restore their reviewed fitted bases. Invalid time is handled explicitly. A harness demonstration is labeled an experiment, not a complete running watch.
 
 ## M2 — Solve the rigid escapement cycle
+
+**Status: incomplete — 13 September 2026.** [M2 audit and verification report](running-movement/M2_REPORT.md), [source-linked scalar evidence](running-movement/M2_EVIDENCE.json). Source impulse jewel 112/body 126 penetration is corroborated; banking-pin intersection precision and source-rest lock interpretation remain unresolved. Delivered 26 source-rest comparisons, 243 bounded sensitivity poses, refined geometric threshold, retained-contact harness and recordings. No operating cycle, accepted amplitude/phase/banks or alignment correction. Numerical/renderer checks pass for this bounded scope; both operating half-cycles and mechanical acceptance remain unfulfilled. M3/M4 were not begun.
 
 **Work:** Establish balance, roller/impulse jewel, fork, pallet jewels, safety parts and escape-wheel relationships. Determine running direction, banking limits, phase and the sequence of lock, unlocking, impulse and drop. Resolve source-pose alignment explicitly instead of applying an arbitrary initial balance jump.
 
@@ -146,4 +148,4 @@ Commit each coherent verified checkpoint after inspecting status and the staged 
 
 Do not attach firm calendar promises to these blocks yet. M0 should estimate the first proof; M4 should revise the remaining effort using actual contact/deformation results and reviewer availability. The earlier “several weeks” assessment is a rough planning judgment, not a delivery commitment. External review waiting time is separate from implementation effort.
 
-**Next executable action, when separately authorized:** a bounded M2 source-rest escapement contact/local-precision audit, following the [M1 readiness assessment](running-movement/M1_REPORT.md#m2m3-readiness-and-next-recommended-experiment). Do not select amplitude/phase or start spring deformation from the independent fixtures. M0 and M1 are complete; M2/M3 have not begun, and M4 remains the complete regulation feasibility checkpoint.
+**Next executable action, when separately authorized:** reconcile source assembly alignment of impulse jewel 112/roller 114 against body 126, and establish reliable banking faces 41/42 against pin 200 before searching for a full cycle. See [M2 readiness and blockers](running-movement/M2_REPORT.md#acceptance-and-m3m4-readiness). M0/M1 are complete; M2 is incomplete, M3 has not begun, and M4 remains the complete regulation feasibility checkpoint.

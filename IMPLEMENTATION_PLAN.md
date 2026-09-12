@@ -2,7 +2,7 @@
 
 Current scope decision, 9 September 2026: running/timing has been removed under the user-authorized static-explorer outcome. See `docs/ANIMATION_REVIEW.md` and `PROGRESS.md`. Playback ambitions and acceptance tasks below are historical planning, not remaining work for this local deliverable.
 
-Future-work planning, 12 September 2026: [Running movement work blocks](docs/RUNNING_MOVEMENT_PLAN.md) defines the proposed evidence, regulation proof, full-chain implementation and qualification sequence. M0 evidence/coverage is now complete in [the evidence checkpoint](docs/running-movement/M0_EVIDENCE.md); M1 is complete as an isolated inspection foundation in [its verification report](docs/running-movement/M1_REPORT.md); M2–M8 remain not started. No playback integration has been added to the accepted static scope.
+Future-work planning, 12 September 2026: [Running movement work blocks](docs/RUNNING_MOVEMENT_PLAN.md) defines the proposed evidence, regulation proof, full-chain implementation and qualification sequence. M0 evidence/coverage is now complete in [the evidence checkpoint](docs/running-movement/M0_EVIDENCE.md); M1 is complete as an isolated inspection foundation in [its verification report](docs/running-movement/M1_REPORT.md); M2 has delivered a source-rest audit and bounded experiments but remains incomplete because of source penetration and banking precision blockers; see [M2 report](docs/running-movement/M2_REPORT.md). M3–M8 remain not started. No playback integration has been added to the accepted static scope.
 
 Prepared 8 September 2026. The implementation work described here is complete for the local static-explorer scope. The release gates and technical constraints below remain the authoritative checklist for any future public release.
 

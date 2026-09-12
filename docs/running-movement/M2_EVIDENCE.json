@@ -1,0 +1,4827 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "status": "M2 incomplete \u2014 source-rest penetration and banking precision unresolved",
+  "units": "STEP world mm, mm\u00b3; right-handed +Z radians; row-major matrices on column vectors",
+  "tolerances": {
+    "ambiguityMm": 0.001,
+    "distanceConvergenceMm": 0.0002,
+    "surfaceTravelMm": 0.0005,
+    "eventTimeSeconds": 1e-05
+  },
+  "method": "BRep face/boundary tolerances, validity, refined trimmed-shape distance, non-destructive common at three fuzz values, oriented incident face normals and independent inside/boundary-distance witness. Face indices are 1-based unique TopExp order for the hash-locked cached importer result.",
+  "definitions": [
+    {
+      "definition": 110,
+      "valid": true,
+      "maxTopologyToleranceMm": 0.0036796511537853,
+      "faceCount": 155,
+      "facesOverBudget": [
+        4,
+        5,
+        7,
+        8,
+        11,
+        13,
+        15,
+        18,
+        19,
+        23,
+        24,
+        26,
+        27,
+        33,
+        34,
+        36,
+        37,
+        41,
+        42,
+        44,
+        45,
+        51,
+        52,
+        54,
+        55,
+        59,
+        60,
+        62,
+        63,
+        69,
+        70,
+        72,
+        73,
+        77,
+        78,
+        80,
+        81,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        97,
+        98,
+        101,
+        102,
+        103,
+        104,
+        105,
+        107,
+        108,
+        111,
+        112,
+        115,
+        116,
+        117,
+        118,
+        119,
+        121,
+        122,
+        125,
+        126,
+        129,
+        130,
+        131,
+        132,
+        133,
+        135,
+        136,
+        139,
+        140,
+        143,
+        144
+      ]
+    },
+    {
+      "definition": 111,
+      "valid": false,
+      "maxTopologyToleranceMm": 1e-07,
+      "faceCount": 23,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 112,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-07,
+      "faceCount": 4,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 113,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 22,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 114,
+      "valid": true,
+      "maxTopologyToleranceMm": 0.000721382656254723,
+      "faceCount": 16,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 115,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 17,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 126,
+      "valid": true,
+      "maxTopologyToleranceMm": 0.00440397260811991,
+      "faceCount": 100,
+      "facesOverBudget": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        29,
+        30,
+        31,
+        32,
+        40,
+        41,
+        42,
+        43,
+        59,
+        60,
+        63,
+        77,
+        78,
+        83,
+        84,
+        94,
+        97,
+        98,
+        99,
+        100
+      ]
+    },
+    {
+      "definition": 127,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 15,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 128,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-07,
+      "faceCount": 10,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 129,
+      "valid": true,
+      "maxTopologyToleranceMm": 0.00120688780799371,
+      "faceCount": 17,
+      "facesOverBudget": [
+        2,
+        3,
+        9,
+        12,
+        14
+      ]
+    },
+    {
+      "definition": 130,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 11,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 133,
+      "valid": true,
+      "maxTopologyToleranceMm": 0.0015813120286783,
+      "faceCount": 53,
+      "facesOverBudget": [
+        10,
+        11,
+        12,
+        13,
+        21,
+        30,
+        32,
+        34,
+        36
+      ]
+    },
+    {
+      "definition": 135,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 3,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 195,
+      "valid": true,
+      "maxTopologyToleranceMm": 0.0091652147870678,
+      "faceCount": 548,
+      "facesOverBudget": [
+        31,
+        32,
+        36,
+        37,
+        49,
+        52,
+        57,
+        69,
+        70,
+        71,
+        72,
+        74,
+        76,
+        77,
+        78,
+        79,
+        138,
+        140,
+        141,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297,
+        298,
+        299,
+        300,
+        301,
+        302,
+        303,
+        304,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323,
+        324,
+        325,
+        326,
+        327,
+        355,
+        356,
+        357,
+        358,
+        359,
+        360,
+        373,
+        375,
+        377,
+        378,
+        379,
+        384,
+        385,
+        386,
+        473,
+        482
+      ]
+    },
+    {
+      "definition": 200,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 7,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 233,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 287,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 234,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 63,
+      "facesOverBudget": []
+    },
+    {
+      "definition": 235,
+      "valid": true,
+      "maxTopologyToleranceMm": 1e-05,
+      "faceCount": 10,
+      "facesOverBudget": []
+    }
+  ],
+  "experimentalEvent": {
+    "kind": "source escape/jewel4 sensitivity threshold, not accepted unlocking/impulse/drop",
+    "sourceVertexWorldMm": [
+      -0.15784315833784857,
+      -5.8836146848552,
+      -1.8700000000000068
+    ],
+    "jewelFace": {
+      "face": 4,
+      "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+      "normalWorld": [
+        -0.3596244132000181,
+        -0.9330971446910246,
+        -1.892090856021597e-32
+      ],
+      "faceAndBoundaryToleranceMm": 1e-07
+    },
+    "sourceSignedGapMm": 0.0009678335527448722,
+    "analyticZeroBracketsRad": [
+      [
+        0.00041198738044592834,
+        0.00041199257221169244
+      ],
+      [
+        0.0004119899763288104,
+        0.00041199257221169244
+      ]
+    ],
+    "brepDistance1e7ThresholdBracketsRad": [
+      [
+        0.0004119458463198154,
+        0.00041195103808557953
+      ],
+      [
+        0.00041194844220269745,
+        0.00041195103808557953
+      ]
+    ],
+    "limitations": "Analytic point-plane oracle tracks one original tip against one original jewel plane; finite-face containment comes from separate BRep measurements. No global contact sequence, banking, balance timing or physical event time.",
+    "neighbors": [
+      {
+        "angleRad": 0.0003694263844308608,
+        "analyticVertexPlaneGapMm": 0.00010000175106144323,
+        "distanceMm": 0.00010000175106250332,
+        "common": [
+          {
+            "fuzzyMm": 1e-07,
+            "volumeMm3": 0.0,
+            "solids": 0,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 5e-08,
+            "volumeMm3": 0.0,
+            "solids": 0,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 1e-08,
+            "volumeMm3": 0.0,
+            "solids": 0,
+            "valid": true
+          }
+        ],
+        "classification": "numerically inconclusive"
+      },
+      {
+        "angleRad": 0.00041199127427025143,
+        "analyticVertexPlaneGapMm": 2.6312312894922335e-09,
+        "distanceMm": 2.631231188935053e-09,
+        "common": [
+          {
+            "fuzzyMm": 1e-07,
+            "volumeMm3": 0.0,
+            "solids": 0,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 5e-08,
+            "volumeMm3": 0.0,
+            "solids": 0,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 1e-08,
+            "volumeMm3": 0.0,
+            "solids": 0,
+            "valid": true
+          }
+        ],
+        "classification": "numerically inconclusive"
+      },
+      {
+        "angleRad": 0.00045455616410964206,
+        "analyticVertexPlaneGapMm": -9.99982488527828e-05,
+        "distanceMm": 2.7755575615628914e-17,
+        "common": [
+          {
+            "fuzzyMm": 1e-07,
+            "volumeMm3": 8.66716423264761e-08,
+            "solids": 1,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 5e-08,
+            "volumeMm3": 8.66716423264761e-08,
+            "solids": 1,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 1e-08,
+            "volumeMm3": 8.66716423264761e-08,
+            "solids": 1,
+            "valid": true
+          }
+        ],
+        "classification": "intersection detected; depth corroboration required"
+      },
+      {
+        "angleRad": 0.0013609902444693077,
+        "analyticVertexPlaneGapMm": -0.002229969185409772,
+        "distanceMm": 0.0,
+        "common": [
+          {
+            "fuzzyMm": 1e-07,
+            "volumeMm3": 9.926205433719108e-06,
+            "solids": 1,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 5e-08,
+            "volumeMm3": 9.926205433719108e-06,
+            "solids": 1,
+            "valid": true
+          },
+          {
+            "fuzzyMm": 1e-08,
+            "volumeMm3": 9.926205433719108e-06,
+            "solids": 1,
+            "valid": true
+          }
+        ],
+        "classification": "numerically inconclusive"
+      }
+    ]
+  },
+  "occurrences": [
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_1",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:1",
+      "definition": "110",
+      "name": "ml01 Unruhreif",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.4858898235962961,
+          0.8740200680336582,
+          8.75995236788978e-22,
+          8.26704156520197e-16
+        ],
+        [
+          0.8740200680336582,
+          -0.4858898235962961,
+          6.80057909011231e-22,
+          -10.0
+        ],
+        [
+          1.0200214309754157e-21,
+          4.3520419901073005e-22,
+          -1.0,
+          -3.390000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:2",
+      "definition": "111",
+      "name": "ml01 Unruhexcenter",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          -0.8651816381650821,
+          0.5014586054521204,
+          8.75995236788978e-22,
+          -2.3322711532622193
+        ],
+        [
+          0.5014586054521204,
+          0.865181638165082,
+          6.80057909011231e-22,
+          -14.19529632656156
+        ],
+        [
+          -4.1687410331044005e-22,
+          1.0276489655883581e-21,
+          -1.0,
+          -2.9400000000000066
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:3",
+      "definition": "111",
+      "name": "ml01 Unruhexcenter",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.8651816381650819,
+          -0.5014586054521207,
+          8.75995236788978e-22,
+          2.3322711532622225
+        ],
+        [
+          -0.5014586054521207,
+          -0.8651816381650819,
+          6.80057909011231e-22,
+          -5.804703673438441
+        ],
+        [
+          4.1687410331043962e-22,
+          -1.0276489655883583e-21,
+          -1.0,
+          -2.9400000000000066
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:4",
+      "definition": "111",
+      "name": "ml01 Unruhexcenter",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          -0.5014586054521205,
+          -0.865181638165082,
+          8.75995236788978e-22,
+          4.195296326561561
+        ],
+        [
+          -0.865181638165082,
+          0.5014586054521205,
+          6.80057909011231e-22,
+          -12.33227115326222
+        ],
+        [
+          -1.0276489655883581e-21,
+          -4.1687410331043995e-22,
+          -1.0,
+          -2.9400000000000066
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:5",
+      "definition": "111",
+      "name": "ml01 Unruhexcenter",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.5014586054521205,
+          0.865181638165082,
+          8.75995236788978e-22,
+          -4.195296326561558
+        ],
+        [
+          0.8651816381650819,
+          -0.5014586054521206,
+          6.80057909011231e-22,
+          -7.667728846737779
+        ],
+        [
+          1.0276489655883581e-21,
+          4.1687410331043986e-22,
+          -1.0,
+          -2.9400000000000066
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_6",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:6",
+      "definition": "112",
+      "name": "Ellipse 35",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          -0.9591548397633204,
+          0.2828815889353694,
+          -1.9774647666543203e-21,
+          -0.1966027043100812
+        ],
+        [
+          -0.28288158893536935,
+          -0.9591548397633206,
+          -5.511750341984363e-22,
+          -9.333387386364492
+        ],
+        [
+          -2.052612170853496e-21,
+          3.0726173646739616e-23,
+          1.0,
+          -1.729999999999977
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_7",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:7",
+      "definition": "113",
+      "name": "ml01 Unruhwelle",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.4858898235962961,
+          0.8740200680336582,
+          8.75995236788978e-22,
+          8.267035082837218e-16
+        ],
+        [
+          0.8740200680336582,
+          -0.4858898235962961,
+          6.80057909011231e-22,
+          -10.0
+        ],
+        [
+          1.0200214309754157e-21,
+          4.3520419901073005e-22,
+          -1.0,
+          -2.650000000000009
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_8",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:1/0:1:1:109:8",
+      "definition": "114",
+      "name": "ml01 Doppelrolle",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.9591548397633203,
+          0.28288158893537,
+          8.75995236788978e-22,
+          8.267031228458176e-16
+        ],
+        [
+          0.2828815889353701,
+          -0.9591548397633203,
+          6.80057909011231e-22,
+          -10.0
+        ],
+        [
+          1.0325909328449265e-21,
+          -4.0447791026476415e-22,
+          -1.0,
+          -2.210000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_2",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:7/0:1:1:108:2",
+      "definition": "115",
+      "name": "ml01 Spiralrolle",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "balance",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.9548387541830804,
+          0.2971244747746359,
+          8.75995236788978e-22,
+          7.944918553135283e-16
+        ],
+        [
+          0.29712447477463594,
+          -0.9548387541830805,
+          6.80057909011231e-22,
+          -10.0
+        ],
+        [
+          1.0384960495971996e-21,
+          -3.890660219766266e-22,
+          -1.0,
+          -3.1400000000000077
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:13/0:1:1:125:1",
+      "definition": "126",
+      "name": "ml01 Ankerk\u00f6rper Niv20.5",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "pallet",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.43717556223965126,
+          -0.8993761881328886,
+          0.0,
+          -0.999949089450934
+        ],
+        [
+          -0.8993761881328886,
+          -0.43717556223965126,
+          0.0,
+          -7.0657025
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -1.910000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_2",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:13/0:1:1:125:2",
+      "definition": "127",
+      "name": "ml01 Ankerwelle",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "pallet",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.43717556223965126,
+          -0.8993761881328886,
+          0.0,
+          -0.999949089450934
+        ],
+        [
+          -0.8993761881328886,
+          -0.43717556223965126,
+          0.0,
+          -7.0657025
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -1.5600000000000072
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_3",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:13/0:1:1:125:3",
+      "definition": "128",
+      "name": "030-27x100x57\u00b0x30",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "pallet",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          -0.5195196239905013,
+          -0.8544585187642337,
+          -2.8140077149901784e-18,
+          -4.223179843816507
+        ],
+        [
+          -0.8544585187642337,
+          0.5195196239905013,
+          1.358949428855611e-17,
+          -6.921308346187283
+        ],
+        [
+          -1.0149726930556599e-17,
+          9.464461826953368e-18,
+          -1.0,
+          -1.910000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_4",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:13/0:1:1:125:4",
+      "definition": "128",
+      "name": "030-27x100x57\u00b0x30",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "pallet",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.43717556223965287,
+          -0.8993761881328878,
+          -1.2949324178099577e-17,
+          -0.99553787575339
+        ],
+        [
+          -0.8993761881328878,
+          -0.43717556223965287,
+          4.990791296899658e-18,
+          -7.065136843507572
+        ],
+        [
+          -1.0149726930556618e-17,
+          9.464461826953362e-18,
+          -1.0,
+          -1.910000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:13/0:1:1:125:5",
+      "definition": "129",
+      "name": "ml01 Ankerh\u00f6rnchen",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "pallet",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.45580226365457627,
+          -0.8900810617282926,
+          0.0,
+          -0.999949089450934
+        ],
+        [
+          -0.8900810617282926,
+          -0.45580226365457627,
+          0.0,
+          -7.0657025
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -1.5400000000000071
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:13/0:1:1:125:6",
+      "definition": "130",
+      "name": "ml01 Messer Niv20.5",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "pallet",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.43717556223965126,
+          -0.8993761881328886,
+          0.0,
+          -0.12559796497163145
+        ],
+        [
+          -0.8993761881328886,
+          -0.43717556223965126,
+          0.0,
+          -8.864454876265778
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -1.910000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:16/0:1:1:132:1",
+      "definition": "133",
+      "name": "ml01 Ankerbr\u00fccke",
+      "node_kind": "leaf",
+      "motion_class": "fixed",
+      "condition": "normal running",
+      "motion_owner": "frame",
+      "evidence": "E-CAD",
+      "confidence": "assembly-role assumption",
+      "review_status": "external review open",
+      "rationale": "Support/fastener/dial structure at rest in normal running; fitting and conditional compliance need review where relevant.",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.9465475806451612,
+          0.32256422240352706,
+          0.0,
+          -0.999949089450935
+        ],
+        [
+          0.32256422240352706,
+          -0.9465475806451612,
+          0.0,
+          -7.0657025
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -2.390000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_3",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:16/0:1:1:132:3",
+      "definition": "135",
+      "name": "020-40x80",
+      "node_kind": "leaf",
+      "motion_class": "fixed",
+      "condition": "normal running",
+      "motion_owner": "frame",
+      "evidence": "E-CAD",
+      "confidence": "assembly-role assumption",
+      "review_status": "external review open",
+      "rationale": "Support/fastener/dial structure at rest in normal running; fitting and conditional compliance need review where relevant.",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          1.0,
+          -1.3526143635632714e-17,
+          0.0,
+          1.3426214745477831
+        ],
+        [
+          -1.3526143635632714e-17,
+          1.0,
+          0.0,
+          -7.429519971662271
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.9902041028867337
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_4",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:16/0:1:1:132:4",
+      "definition": "135",
+      "name": "020-40x80",
+      "node_kind": "leaf",
+      "motion_class": "fixed",
+      "condition": "normal running",
+      "motion_owner": "frame",
+      "evidence": "E-CAD",
+      "confidence": "assembly-role assumption",
+      "review_status": "external review open",
+      "rationale": "Support/fastener/dial structure at rest in normal running; fitting and conditional compliance need review where relevant.",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          1.0,
+          -1.3526143635632714e-17,
+          0.0,
+          -2.632878364161894
+        ],
+        [
+          -1.3526143635632714e-17,
+          1.0,
+          0.0,
+          -8.784289705757084
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.9902041028867337
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:54/0:1:1:194:1",
+      "definition": "195",
+      "name": "ml01 Grundplatine",
+      "node_kind": "leaf",
+      "motion_class": "fixed",
+      "condition": "normal running",
+      "motion_owner": "frame",
+      "evidence": "E-CAD",
+      "confidence": "assembly-role assumption",
+      "review_status": "external review open",
+      "rationale": "Support/fastener/dial structure at rest in normal running; fitting and conditional compliance need review where relevant.",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.600000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_8",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:54/0:1:1:194:8",
+      "definition": "200",
+      "name": "020-40x135 ms",
+      "node_kind": "leaf",
+      "motion_class": "fixed",
+      "condition": "normal running",
+      "motion_owner": "frame",
+      "evidence": "E-CAD",
+      "confidence": "assembly-role assumption",
+      "review_status": "external review open",
+      "rationale": "Support/fastener/dial structure at rest in normal running; fitting and conditional compliance need review where relevant.",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.9999998719908788,
+          -0.0005059824366254739,
+          0.0,
+          -1.12432692545919
+        ],
+        [
+          0.0005059824366254739,
+          0.9999998719908788,
+          0.0,
+          -9.27385334491751
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.3456854249492478
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_9",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:54/0:1:1:194:9",
+      "definition": "200",
+      "name": "020-40x135 ms",
+      "node_kind": "leaf",
+      "motion_class": "fixed",
+      "condition": "normal running",
+      "motion_owner": "frame",
+      "evidence": "E-CAD",
+      "confidence": "assembly-role assumption",
+      "review_status": "external review open",
+      "rationale": "Support/fastener/dial structure at rest in normal running; fitting and conditional compliance need review where relevant.",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.9999967256496326,
+          0.002559040838565899,
+          0.0,
+          0.446942058411781
+        ],
+        [
+          -0.002559040838565899,
+          0.9999967256496326,
+          0.0,
+          -8.73839673572765
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.345685424949247
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:62/0:1:1:232:1",
+      "definition": "233",
+      "name": "ml01 Gangrad Niv20.5",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "escape",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.7200701832672411,
+          0.6939012402132468,
+          0.0,
+          -1.9998981789018702
+        ],
+        [
+          0.6939012402132468,
+          -0.7200701832672411,
+          0.0,
+          -4.131405
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -1.8700000000000068
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_2",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:62/0:1:1:232:2",
+      "definition": "234",
+      "name": "ml01 Gangtrieb z9 m0,102",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "escape",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.9237280213470686,
+          0.3830490080632376,
+          0.0,
+          -1.9998981789018702
+        ],
+        [
+          0.3830490080632376,
+          -0.9237280213470686,
+          0.0,
+          -4.131405
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -4.140000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "instance_id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_3",
+      "source_instance_id": "0:1:1:1/0:1:1:1:4/0:1:1:83:62/0:1:1:232:3",
+      "definition": "235",
+      "name": "ml01 Butzen Gangrad",
+      "node_kind": "leaf",
+      "motion_class": "continuously-driven",
+      "condition": "normal running",
+      "motion_owner": "escape",
+      "evidence": "E-MECH",
+      "confidence": "geometry-supported",
+      "review_status": "external review open",
+      "rationale": "Recorded rigid shaft member; cycle/sign/contact still open (U-ESC/U-TRAIN).",
+      "source_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "source_sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+      "worldTransform": [
+        [
+          0.8426072919792857,
+          0.5385285057481499,
+          5.719555550721376e-17,
+          -1.9998981789018702
+        ],
+        [
+          0.53852850574815,
+          -0.8426072919792856,
+          -1.2814562853090537e-16,
+          -4.131405
+        ],
+        [
+          -2.081668171172166e-17,
+          1.3877787807814481e-16,
+          -1.0,
+          -2.270000000000008
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "sourceRestPairs": [
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_3",
+      "role": "escape / pallet jewel",
+      "distanceRefinementMm": [
+        0.09335439763576259,
+        0.09335439763576259,
+        0.09335439763576259
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 2,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1.0000000000000003e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -2.465368021837401,
+            -6.694433805738009,
+            -1.7783575080212288
+          ],
+          "bWorldMm": [
+            -2.5538346586712484,
+            -6.72424483935384,
+            -1.7783575080212288
+          ],
+          "aFaces": [
+            {
+              "face": 195,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.9476429506729241,
+                -0.3193318619241021,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 250,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.22384195102666823,
+                -0.4470959415612877,
+                0.8660254037844389
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 7,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9476429506729304,
+                0.3193318619240836,
+                1.672883939521639e-18
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -2.4653680218373992,
+            -6.694433805738009,
+            -1.8700000000000068
+          ],
+          "bWorldMm": [
+            -2.5538346586712484,
+            -6.72424483935384,
+            -1.8700000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 27,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000003e-05
+            },
+            {
+              "face": 195,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.9476429506729241,
+                -0.3193318619241021,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 7,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9476429506729304,
+                0.3193318619240836,
+                1.672883939521639e-18
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_4",
+      "role": "escape / pallet jewel",
+      "distanceRefinementMm": [
+        0.0009678335527448721,
+        0.0009678335527448721,
+        0.0009678335527448721
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 2,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1.0000000000000003e-05,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.15784315833784857,
+            -5.8836146848552,
+            -1.8700000000000068
+          ],
+          "bWorldMm": [
+            -0.15749510176436732,
+            -5.882711602130597,
+            -1.8700000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 27,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000003e-05
+            },
+            {
+              "face": 226,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.3555248078794748,
+                0.9346668449144127,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 235,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.9865584249939999,
+                -0.16340891674984687,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.3596244132000181,
+                -0.9330971446910246,
+                -1.892090856021597e-32
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -0.15784315833784857,
+            -5.8836146848552,
+            -1.7900000000000065
+          ],
+          "bWorldMm": [
+            -0.15749510176436732,
+            -5.882711602130597,
+            -1.7900000000000065
+          ],
+          "aFaces": [
+            {
+              "face": 226,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.3555248078794748,
+                0.9346668449144127,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 235,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.9865584249939999,
+                -0.16340891674984687,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 253,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.49327921249699835,
+                -0.08170445837492304,
+                0.8660254037844395
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.3596244132000181,
+                -0.9330971446910246,
+                -1.892090856021597e-32
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "role": "roller / fork / safety",
+      "distanceRefinementMm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.004108035687554458,
+          "solids": 1,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.004108035687554458,
+          "solids": 1,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.004108035687554458,
+          "solids": 1,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-07,
+      "classification": "penetration corroborated",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.13472448268820925,
+            -9.28028742270048,
+            -1.810000000000007
+          ],
+          "bWorldMm": [
+            -0.13472448268820925,
+            -9.28028742270048,
+            -1.810000000000007
+          ],
+          "aFaces": [],
+          "bFaces": [
+            {
+              "face": 34,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.8993761881328884,
+                0.4371755622396515,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 35,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.8993761881328869,
+                0.4371755622396547,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 61,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ],
+      "interiorCheck": {
+        "interiorWorldMm": [
+          -0.18523124656587733,
+          -9.38778063710075,
+          -1.8595434741184735
+        ],
+        "insideChecks": [
+          {
+            "states": [
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN"
+            ],
+            "boundaryDistanceMm": 0.11038832572933396,
+            "nearestFace": 2,
+            "nearestFaceBoundaryToleranceMm": 1e-07,
+            "wholeShapeToleranceMm": 1e-07,
+            "boundaryWorldMm": [
+              -0.2164580715481064,
+              -9.28190114022409,
+              -1.8595434741184735
+            ]
+          },
+          {
+            "states": [
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN"
+            ],
+            "boundaryDistanceMm": 0.0495434741184666,
+            "nearestFace": 61,
+            "nearestFaceBoundaryToleranceMm": 1e-07,
+            "wholeShapeToleranceMm": 0.00440397260811991,
+            "boundaryWorldMm": [
+              -0.18523124656587733,
+              -9.38778063710075,
+              -1.810000000000007
+            ]
+          }
+        ],
+        "interiorBallRadiusMm": 0.0495434741184666,
+        "meaning": "Interior ball radius is a lower bound on overlap thickness evidence, not global minimum translation to separate.",
+        "classification": "penetration corroborated"
+      }
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_8",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "role": "roller / fork / safety",
+      "distanceRefinementMm": [
+        0.12035178368115408,
+        0.12035178368115408,
+        0.12035178368115408
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 0.004205942637,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.14612576291908,
+            -9.653096382003998,
+            -1.690000000000007
+          ],
+          "bWorldMm": [
+            -0.14764912458039442,
+            -9.644028239719926,
+            -1.810000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 8,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                8.75995236788978e-22,
+                6.80057909011231e-22,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 16,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.16566909588033146,
+                0.9861813984608478,
+                5.255351208687491e-22
+              ],
+              "faceAndBoundaryToleranceMm": 0.000721382656254723
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 32,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.16566909588032983,
+                -0.9861813984608482,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.004205942637
+            },
+            {
+              "face": 61,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "role": "roller / fork / safety",
+      "distanceRefinementMm": [
+        2.011680532213547,
+        2.011680532213547,
+        2.011680532213547
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1.0000000000000002e-07,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.33593750475725026,
+            -9.317138966808628,
+            -1.729999999999977
+          ],
+          "bWorldMm": [
+            -0.9009405333235547,
+            -7.4014066939171625,
+            -1.490000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 2,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.2828815889353695,
+                0.9591548397633204,
+                -3.072617364673987e-23
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -1.9774647666543203e-21,
+                -5.511750341984363e-22,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.2828815889353693,
+                -0.9591548397633204,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.2000274898090251,
+                -0.6782248914045406,
+                -0.7071067811865472
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "role": "roller / fork / safety",
+      "distanceRefinementMm": [
+        0.08999999999996988,
+        0.08999999999996988,
+        0.08999999999996988
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.052814422097298835,
+            -9.233638051036895,
+            -1.729999999999977
+          ],
+          "bWorldMm": [
+            -0.052814422097298835,
+            -9.233638051036895,
+            -1.640000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.821647326930181,
+                0.5699962018719846,
+                1.9389463156799058e-21
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 2,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.2828815889353695,
+                0.9591548397633204,
+                -3.072617364673987e-23
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -1.9774647666543203e-21,
+                -5.511750341984363e-22,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -0.02163658819408454,
+            -9.329943811001069,
+            -1.729999999999977
+          ],
+          "bWorldMm": [
+            -0.02163658819408455,
+            -9.329943811001069,
+            -1.640000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9998063778056951,
+                0.01967757350527666,
+                1.9879276728367525e-21
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -1.9774647666543203e-21,
+                -5.511750341984363e-22,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 7,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.8993761881328886,
+                -0.43717556223965126,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_8",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "role": "roller / fork / safety",
+      "distanceRefinementMm": [
+        1.8436105879496356,
+        1.8436105879496356,
+        1.8436105879496356
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.3225642224035266,
+            -9.053452419354839,
+            -2.070000000000007
+          ],
+          "bWorldMm": [
+            -0.8870516116096994,
+            -7.396994153225807,
+            -1.490000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.32256422240352745,
+                0.9465475806451612,
+                3.611424460891574e-22
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 13,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.22808734902969863,
+                0.6693102129899101,
+                0.7071067811865517
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.3225642224035277,
+                -0.946547580645161,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.22808734902970024,
+                -0.669310212989914,
+                -0.7071067811865472
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_8",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "role": "roller / fork / safety",
+      "distanceRefinementMm": [
+        0.023020980998082013,
+        0.023020980998082013,
+        0.023020980998082013
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 0.000721382656254723,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            0.16341259841888822,
+            -9.527457596952413,
+            -1.6400000000000068
+          ],
+          "bWorldMm": [
+            0.17093643506498568,
+            -9.50570081758972,
+            -1.640000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.32682519683777406,
+                0.9450848060951729,
+                9.290097127638784e-22
+              ],
+              "faceAndBoundaryToleranceMm": 0.000721382656254723
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 8,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.32682519683777467,
+                -0.9450848060951726,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            0.16341259841888822,
+            -9.527457596952413,
+            -1.510000000000007
+          ],
+          "bWorldMm": [
+            0.1709364350649857,
+            -9.50570081758972,
+            -1.510000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.32682519683777406,
+                0.9450848060951729,
+                9.290097127638784e-22
+              ],
+              "faceAndBoundaryToleranceMm": 0.000721382656254723
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 6,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 8,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.32682519683777467,
+                -0.9450848060951726,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_8",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.5292804894032666,
+        0.5292804894032666,
+        0.5292804894032666
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.4101296715222577,
+            -9.126298898379249,
+            -1.8744875032894168
+          ],
+          "bWorldMm": [
+            -0.928463395770819,
+            -9.233387584847884,
+            -1.8744875032894166
+          ],
+          "aFaces": [],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9793176484418559,
+                0.20232880034813064,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_9",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 2.8550728338906035e-05,
+          "solids": 1,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 2.8550728338906035e-05,
+          "solids": 1,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 2.8550728338906035e-05,
+          "solids": 1,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 0.00420594263700004,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            0.27654907891535374,
+            -8.833989942380217,
+            -1.740000000000007
+          ],
+          "bWorldMm": [
+            0.27654907891535374,
+            -8.833989942380217,
+            -1.740000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 41,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.8993761881328886,
+                0.43717556223965126,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.00420594263700004
+            },
+            {
+              "face": 42,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.8993761881328923,
+                0.43717556223964343,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.00217097927512713
+            }
+          ],
+          "bFaces": []
+        }
+      ],
+      "interiorCheck": {
+        "interiorWorldMm": [
+          0.27417660403246324,
+          -8.834033380595793,
+          -1.8102469431631643
+        ],
+        "insideChecks": [
+          {
+            "states": [
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN"
+            ],
+            "boundaryDistanceMm": 0.0021494115900231167,
+            "nearestFace": 42,
+            "nearestFaceBoundaryToleranceMm": 0.00217097927512713,
+            "wholeShapeToleranceMm": 0.00440397260811991,
+            "boundaryWorldMm": [
+              0.2761034284090273,
+              -8.833080848178914,
+              -1.8102469431631643
+            ]
+          },
+          {
+            "states": [
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN",
+              "TopAbs_State.TopAbs_IN"
+            ],
+            "boundaryDistanceMm": 0.002530331269515083,
+            "nearestFace": 3,
+            "nearestFaceBoundaryToleranceMm": 1e-05,
+            "wholeShapeToleranceMm": 1e-05,
+            "boundaryWorldMm": [
+              0.2719628269277648,
+              -8.83525884673739,
+              -1.8102469431631647
+            ]
+          }
+        ],
+        "interiorBallRadiusMm": 0.0021494115900231167,
+        "meaning": "Interior ball radius is a lower bound on overlap thickness evidence, not global minimum translation to separate.",
+        "classification": "intersection detected; precision-inconclusive depth"
+      }
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.08999999999999964,
+        0.08999999999999964,
+        0.08999999999999964
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 29,
+      "witnessesTruncated": true,
+      "localToleranceMm": 0.00420594263700004,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -2.331347671576479,
+            -7.798326354522479,
+            -1.910000000000007
+          ],
+          "bWorldMm": [
+            -2.331347671576479,
+            -7.798326354522479,
+            -2.0000000000000067
+          ],
+          "aFaces": [
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.9792262626255172,
+                -0.20277062554635927,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.00116613003084433
+            },
+            {
+              "face": 16,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.20277062554635927,
+                0.9792262626255172,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 60,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.00420594263700004
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 20,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -2.2571968194669543,
+            -7.967470957533921,
+            -1.910000000000007
+          ],
+          "bWorldMm": [
+            -2.2571968194669543,
+            -7.967470957533921,
+            -2.0000000000000067
+          ],
+          "aFaces": [
+            {
+              "face": 60,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.00420594263700004
+            },
+            {
+              "face": 90,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.18510307709046275,
+                -0.6824491562392342,
+                -0.7071067811865474
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 91,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.18510307709045978,
+                -0.6824491562392344,
+                -0.7071067811865478
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 20,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_3",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.976530744366187,
+        0.976530744366187,
+        0.976530744366187
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            0.825946049322464,
+            -6.372509518825076,
+            -1.860000000000007
+          ],
+          "bWorldMm": [
+            1.2547911432624483,
+            -7.249837382337906,
+            -1.860000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 52,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.4391516564266743,
+                -0.8984129466218239,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 68,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.31052711422860585,
+                -0.6352738868620799,
+                -0.7071067811865472
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.4391516564266736,
+                0.8984129466218241,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            0.825946049322464,
+            -6.372509518825076,
+            -1.740000000000007
+          ],
+          "bWorldMm": [
+            1.2547911432624483,
+            -7.249837382337906,
+            -1.7400000000000069
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 52,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.4391516564266743,
+                -0.8984129466218239,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.4391516564266736,
+                0.8984129466218241,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_4",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.5356865519105252,
+        0.5356865519105252,
+        0.5356865519105252
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -2.505801176587329,
+            -8.05966146240734,
+            -1.740000000000007
+          ],
+          "bWorldMm": [
+            -2.598331807005302,
+            -8.587295961215217,
+            -1.7400000000000069
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 21,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.1727327857829585,
+                -0.9849687227093348,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.1727327857829585,
+                0.9849687227093349,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -2.505801176587329,
+            -8.05966146240734,
+            -1.860000000000007
+          ],
+          "bWorldMm": [
+            -2.598331807005302,
+            -8.587295961215217,
+            -1.860000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 21,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.1727327857829585,
+                -0.9849687227093348,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 92,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.12214052416037317,
+                -0.6964780630844223,
+                -0.707106781186548
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.1727327857829585,
+                0.9849687227093349,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_1",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.294393951763632,
+        0.294393951763632,
+        0.294393951763632
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 4,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            0.9819139243415393,
+            -5.951097341958975,
+            -1.740000000000007
+          ],
+          "bWorldMm": [
+            1.265608848189566,
+            -5.8724526408159825,
+            -1.740000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 54,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9636574465898122,
+                0.2671410219940085,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 130,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9636574465898118,
+                -0.2671410219940094,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            0.9819139243415393,
+            -5.951097341958975,
+            -1.860000000000007
+          ],
+          "bWorldMm": [
+            1.265608848189566,
+            -5.8724526408159825,
+            -1.860000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 54,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9636574465898122,
+                0.2671410219940085,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 66,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.681408715224569,
+                0.1888972281850676,
+                -0.707106781186548
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 130,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9636574465898118,
+                -0.2671410219940094,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_8",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        1.665008512081827,
+        1.665008512081827,
+        1.665008512081827
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -1.019632232610359,
+            -7.415148595807874,
+            -1.490000000000007
+          ],
+          "bWorldMm": [
+            -1.1130794150823757,
+            -9.074169861598726,
+            -1.5956854249492478
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.05623755188407167,
+                -0.9984174165939245,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.039765954294557614,
+                -0.7059877257283186,
+                -0.7071067811865474
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.05623755188407218,
+                0.9984174165939247,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Torus",
+              "normalWorld": [
+                0.037491701256048164,
+                0.6656116110626175,
+                0.7453559924999289
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_9",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        1.6650085120818212,
+        1.6650085120818212,
+        1.6650085120818212
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.7709744866318553,
+            -7.330411077994453,
+            -1.490000000000007
+          ],
+          "bWorldMm": [
+            0.31609942822945025,
+            -8.58713469115939,
+            -1.595685424949247
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.6542131509116532,
+                -0.7563102228412931,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.46259855535104816,
+                -0.5347920872517877,
+                -0.7071067811865472
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.6542131509116517,
+                0.7563102228412945,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Torus",
+              "normalWorld": [
+                -0.43614210060776665,
+                0.5042068152275283,
+                0.7453559924999316
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.4599999999999995,
+        0.4599999999999995,
+        0.4599999999999995
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 4,
+      "witnessesTruncated": false,
+      "localToleranceMm": 0.0012068878079937102,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -1.5245081136685028,
+            -6.287410906606234,
+            -1.5400000000000071
+          ],
+          "bWorldMm": [
+            -1.524508113668503,
+            -6.287410906606234,
+            -2.0000000000000067
+          ],
+          "aFaces": [
+            {
+              "face": 9,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.0012068878079937102
+            },
+            {
+              "face": 13,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.5076258658647752,
+                -0.4922560109384511,
+                -0.707106781186548
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.714430701435556,
+                0.6997062046647146,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.000580662966412734
+            },
+            {
+              "face": 20,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -1.3140920157853357,
+            -6.657610326791472,
+            -1.5400000000000071
+          ],
+          "bWorldMm": [
+            -1.3140920157853357,
+            -6.657610326791472,
+            -2.0000000000000067
+          ],
+          "aFaces": [
+            {
+              "face": 9,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.0012068878079937102
+            },
+            {
+              "face": 13,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.6826689831400692,
+                -0.1842906928157339,
+                -0.7071067811865479
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 20,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 49,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.4313254242191087,
+                -0.5603198893687492,
+                0.7071067811865467
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_3",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        1.8246311479225177,
+        1.8246311479225177,
+        1.8246311479225177
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.6540952762494199,
+            -7.11941599824739,
+            -1.490000000000007
+          ],
+          "bWorldMm": [
+            1.144990724146918,
+            -7.398826544092334,
+            -1.6104082057734628
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9881537520043258,
+                -0.15346713784968313,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.6987302188971889,
+                -0.1085176538628019,
+                -0.7071067811865472
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 2,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Sphere",
+              "normalWorld": [
+                -0.19763075040086533,
+                0.030693427569936257,
+                0.9797958971132712
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.988153752004326,
+                0.15346713784968102,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_4",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        1.8246311479225186,
+        1.8246311479225186,
+        1.8246311479225186
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -1.241032463854454,
+            -7.3194322904981055,
+            -1.490000000000007
+          ],
+          "bWorldMm": [
+            -2.495116435931311,
+            -8.63930125404388,
+            -1.6104082057734628
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.6888096411529141,
+                -0.7249422585660142,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 15,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.48706196820589825,
+                -0.5126115870007203,
+                -0.7071067811865472
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 2,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Sphere",
+              "normalWorld": [
+                0.137761928230583,
+                0.14498845171320354,
+                0.9797958971132712
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.6888096411529128,
+                0.7249422585660154,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_5",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.17000000000000037,
+        0.17000000000000037,
+        0.17000000000000037
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 4,
+      "witnessesTruncated": false,
+      "localToleranceMm": 0.0012068878079937102,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -2.0260568161183485,
+            -5.621892875333,
+            -1.3700000000000072
+          ],
+          "bWorldMm": [
+            -2.0260568161183485,
+            -5.621892875333,
+            -1.2000000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.5360860475853895,
+                0.8441633429522247,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.0012068878079937102
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.5360860475853829,
+                0.844163342952229,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000002e-07
+            },
+            {
+              "face": 8,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000003e-05
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 125,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.06499131010438e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -2.18265810909839,
+            -6.14309783122547,
+            -1.3700000000000072
+          ],
+          "bWorldMm": [
+            -2.18265810909839,
+            -6.14309783122547,
+            -1.2000000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 8,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.0000000000000003e-05
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 125,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.06499131010438e-05
+            },
+            {
+              "face": 135,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.7884726797649693,
+                -0.6150697791830194,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.06499131010438e-05
+            },
+            {
+              "face": 545,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.4241536143471426,
+                -0.5657682488760489,
+                -0.7071067811865366
+              ],
+              "faceAndBoundaryToleranceMm": 1.06499131010438e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_8",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.6893825284165676,
+        0.6893825284165676,
+        0.6893825284165676
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.30140079436429157,
+            -8.93651988287464,
+            -1.640000000000007
+          ],
+          "bWorldMm": [
+            -0.9392713155721792,
+            -9.197995443223972,
+            -1.6400000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9252780494350535,
+                -0.3792895084676908,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9252780494350529,
+                0.37928950846769227,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -0.3014007943642917,
+            -8.93651988287464,
+            -1.5956854249492478
+          ],
+          "bWorldMm": [
+            -0.9392713155721792,
+            -9.197995443223972,
+            -1.5956854249492478
+          ],
+          "aFaces": [
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9252780494350537,
+                -0.3792895084676906,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9252780494350529,
+                0.37928950846769227,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Torus",
+              "normalWorld": [
+                0.6168520329566995,
+                0.25285967231179385,
+                0.7453559924999323
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_9",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.19625313062857808,
+        0.19625313062857808,
+        0.19625313062857808
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            0.05995772549642989,
+            -8.823600430547828,
+            -1.640000000000007
+          ],
+          "bWorldMm": [
+            0.2516202789717166,
+            -8.781401415430757,
+            -1.640000000000007
+          ],
+          "aFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9766088972003228,
+                0.21502339851553207,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9766088972003214,
+                -0.21502339851553878,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            0.05995772549642994,
+            -8.823600430547828,
+            -1.595685424949247
+          ],
+          "bWorldMm": [
+            0.25162027897171657,
+            -8.781401415430757,
+            -1.595685424949247
+          ],
+          "aFaces": [
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.976608897200323,
+                0.2150233985155312,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9766088972003214,
+                -0.21502339851553878,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Torus",
+              "normalWorld": [
+                -0.6510725981335449,
+                -0.14334893234369192,
+                0.7453559924999323
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_1",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.9730579547471159,
+        0.9730579547471159,
+        0.9730579547471159
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 1,
+      "witnessesTruncated": false,
+      "localToleranceMm": 0.0015813120286783,
+      "classification": "numerically inconclusive",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.21746464021660217,
+            -8.715506851843045,
+            -1.740000000000007
+          ],
+          "bWorldMm": [
+            -0.7097014751609558,
+            -7.917418710331968,
+            -2.0000000000000067
+          ],
+          "aFaces": [
+            {
+              "face": 1,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 4,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.5249524299712616,
+                0.8511315681299031,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.5780893238777184,
+                -0.8159734883062086,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.0015813120286783
+            },
+            {
+              "face": 12,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.04047832126387125,
+                -0.9991804168955969,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 0.00158131202867684
+            },
+            {
+              "face": 20,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_3",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        1.6629750371186154,
+        1.6629750371186154,
+        1.6629750371186154
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            0.010283713307426556,
+            -8.731653635653853,
+            -1.640000000000007
+          ],
+          "bWorldMm": [
+            1.19958812899088,
+            -7.569310751253772,
+            -1.6400000000000072
+          ],
+          "aFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.715166727784515,
+                0.6989538979575043,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.7151667277845143,
+                -0.6989538979575051,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            0.010283713307426723,
+            -8.731653635653853,
+            -1.6104082057734628
+          ],
+          "bWorldMm": [
+            1.19958812899088,
+            -7.569310751253772,
+            -1.6104082057734628
+          ],
+          "aFaces": [
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.7151667277845157,
+                0.6989538979575036,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 2,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Sphere",
+              "normalWorld": [
+                -0.1430333455569031,
+                -0.1397907795915013,
+                0.9797958971132713
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.7151667277845143,
+                -0.6989538979575051,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_16__0_1_1_132_4",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        2.118561630641426,
+        2.118561630641426,
+        2.118561630641426
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 3,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.31550092371390515,
+            -8.858383116971288,
+            -1.640000000000007
+          ],
+          "bWorldMm": [
+            -2.432980512854237,
+            -8.790681031330234,
+            -1.6400000000000072
+          ],
+          "aFaces": [
+            {
+              "face": 5,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                -0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9994892565382834,
+                0.031956627865740904,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9994892565382832,
+                -0.03195662786574782,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            -0.31550092371390503,
+            -8.858383116971288,
+            -1.6104082057734628
+          ],
+          "bWorldMm": [
+            -2.432980512854237,
+            -8.790681031330234,
+            -1.6104082057734628
+          ],
+          "aFaces": [
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.9994892565382834,
+                0.031956627865740904,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 2,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Sphere",
+              "normalWorld": [
+                0.199897851307657,
+                -0.0063913255731496395,
+                0.9797958971132711
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            },
+            {
+              "face": 3,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9994892565382832,
+                -0.03195662786574782,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "a": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_13__0_1_1_125_6",
+      "b": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1",
+      "role": "fixed support / banking candidate",
+      "distanceRefinementMm": [
+        0.31000000000000005,
+        0.31000000000000005,
+        0.31000000000000005
+      ],
+      "distanceSpreadMm": 0.0,
+      "common": [
+        {
+          "fuzzyMm": 1e-07,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 5e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        },
+        {
+          "fuzzyMm": 1e-08,
+          "volumeMm3": 0.0,
+          "solids": 0,
+          "valid": true
+        }
+      ],
+      "witnessCount": 2,
+      "witnessesTruncated": false,
+      "localToleranceMm": 1.06499131010438e-05,
+      "classification": "separation",
+      "witnesses": [
+        {
+          "aWorldMm": [
+            -0.2873602262423464,
+            -8.964119166904828,
+            -1.510000000000007
+          ],
+          "bWorldMm": [
+            -0.2873602262423464,
+            -8.964119166904828,
+            -1.2000000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 6,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                -0.8513803224774477,
+                -0.5245488981002604,
+                -0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 125,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.06499131010438e-05
+            },
+            {
+              "face": 463,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                0.18901801359932213,
+                -0.6813752200770167,
+                -0.7071067811865219
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        },
+        {
+          "aWorldMm": [
+            0.05403469946153569,
+            -8.926358881537176,
+            -1.510000000000007
+          ],
+          "bWorldMm": [
+            0.05403469946153575,
+            -8.926358881537176,
+            -1.2000000000000068
+          ],
+          "aFaces": [
+            {
+              "face": 6,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                -0.0,
+                0.0,
+                1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            },
+            {
+              "face": 11,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cylinder",
+              "normalWorld": [
+                0.9454350759640366,
+                -0.32581055405998766,
+                0.0
+              ],
+              "faceAndBoundaryToleranceMm": 1e-07
+            }
+          ],
+          "bFaces": [
+            {
+              "face": 125,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Plane",
+              "normalWorld": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "faceAndBoundaryToleranceMm": 1.06499131010438e-05
+            },
+            {
+              "face": 463,
+              "type": "GeomAbs_SurfaceType.GeomAbs_Cone",
+              "normalWorld": [
+                -0.035542606891748985,
+                -0.7062129445821387,
+                -0.7071067811865218
+              ],
+              "faceAndBoundaryToleranceMm": 1e-05
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "shaft": "balance",
+      "radiusBoundMm": 1.4142277045087193,
+      "extentRad": 0.003535498550947227,
+      "extentDerivation": "0.005 mm / monitored XY radius bound; symmetric independent source perturbation only",
+      "maxSurfaceTravelPerFineIntervalMm": 0.000125,
+      "maxCoarseRefinementDifferenceMm": 0.0,
+      "sampleCount": 81,
+      "ranges": {
+        "impulse-body": [
+          0.0,
+          0.0
+        ],
+        "roller-safety": [
+          0.02302098099808159,
+          0.023020980998083362
+        ]
+      },
+      "interpretation": "Symmetric 5 \u00b5m monitored travel sensitivity only; not either operating half-cycle. No event times or acceptance implied."
+    },
+    {
+      "shaft": "pallet",
+      "radiusBoundMm": 3.2609612179867074,
+      "extentRad": 0.0015332902373757643,
+      "extentDerivation": "0.005 mm / monitored XY radius bound; symmetric independent source perturbation only",
+      "maxSurfaceTravelPerFineIntervalMm": 0.000125,
+      "maxCoarseRefinementDifferenceMm": 0.0,
+      "sampleCount": 81,
+      "ranges": {
+        "escape-jewel3": [
+          0.0920958150882949,
+          0.09460975113685292
+        ],
+        "escape-jewel4": [
+          0.00041649139636783,
+          0.0015224808195778983
+        ],
+        "impulse-body": [
+          0.0,
+          0.0
+        ],
+        "roller-safety": [
+          0.020098661996298377,
+          0.025937548680278994
+        ],
+        "body-pin8": [
+          0.5260031281455443,
+          0.5325573784617809
+        ],
+        "body-pin9": [
+          0.0,
+          0.0
+        ]
+      },
+      "interpretation": "Symmetric 5 \u00b5m monitored travel sensitivity only; not either operating half-cycle. No event times or acceptance implied."
+    },
+    {
+      "shaft": "escape",
+      "radiusBoundMm": 3.673795620739115,
+      "extentRad": 0.0013609902444693077,
+      "extentDerivation": "0.005 mm / monitored XY radius bound; symmetric independent source perturbation only",
+      "maxSurfaceTravelPerFineIntervalMm": 0.000125,
+      "maxCoarseRefinementDifferenceMm": 0.0,
+      "sampleCount": 81,
+      "ranges": {
+        "escape-jewel3": [
+          0.09024981069926641,
+          0.09645646006133322
+        ],
+        "escape-jewel4": [
+          0.0,
+          0.004163834872040212
+        ]
+      },
+      "interpretation": "Symmetric 5 \u00b5m monitored travel sensitivity only; not either operating half-cycle. No event times or acceptance implied."
+    }
+  ],
+  "operatingParameters": {
+    "amplitude": null,
+    "direction": null,
+    "phase": null,
+    "bankingLimits": null,
+    "sourceToOperatingAlignment": null
+  },
+  "reviewStatus": "Numerical engineering evidence; no external mechanical acceptance",
+  "inputHashes": {
+    "artifacts/mechanics/running-movement/m2/source-rest.json": "05debeecba969aaaeb0fbeec2bc6810859b66a1c42a6aba8300b4123e061228c",
+    "artifacts/mechanics/running-movement/m2/experiments.json": "07762ea667e19066a0e8898ff956d91a02c14c5dd283c217004fad7399a457e5",
+    "artifacts/mechanics/running-movement/m2/event.json": "cb8954619efc50ed3e221f6d5649f57c8a6dc395537f79212c24f023f2caa97b",
+    "artifacts/mechanics/running-movement/m2/brep-cache/manifest.json": "aa664a86a30cb0263bb411cca3e8301bc9dd1d3d614a82a1e56a029c2befb050",
+    "docs/running-movement/TOLERANCES.md": "6292338df5f4efc460a159320e4e8ee4e8dc9faa0b40d5f0a675790bd26a7e32",
+    "scripts/mechanics/m2_audit.py": "fc5b59dffadcd14c108ac3c3e0d847e7b2e40d7733e68574ad8ecf3331bddeb5",
+    "scripts/mechanics/m2_experiments.py": "a1f1a649d838d10cfea6caa785f223be08a20b5b5b5a81c966c43c059ab45e6f",
+    "scripts/mechanics/m2_event.py": "46718b3b98578b45341c30cae99ab08883e78713f552b61f84ffe98ec1d21cef"
+  }
+}
