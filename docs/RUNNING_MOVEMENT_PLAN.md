@@ -1,6 +1,6 @@
 # Running movement — future work blocks
 
-Prepared 12 September 2026 at the user's request. Status: planning only; every implementation block below is not started. This document is the starting point for future running-movement work. It does not reopen the completed static-explorer scope or authorize implementation, publication, source redistribution, or contacting external reviewers today.
+Prepared 12 September 2026; M0 evidence checkpoint completed later that day at the user’s request. M1–M8 are not started. This document does not reopen the accepted static-explorer scope or authorize implementation beyond the active task, publication, source redistribution, or contacting external reviewers.
 
 ## Intended outcome
 
@@ -18,13 +18,13 @@ The proposed method is deterministic, prescribed mechanical animation supported 
 - [Hand pose review](HAND_TIME_REVIEW.md) and [independent dial review](INDEPENDENT_DIALS_REVIEW.md): fitted hand bases, bore axes, style corrections and current display semantics. The earlier exclusive-dial behavior is superseded by independent display preferences.
 - Existing mechanical probes under `scripts/mechanics/`. Check their inputs and reproducibility before relying on old local output.
 
-No new mechanical research has been performed for this planning document. Source findings below refer to the recorded project investigations; future work must verify their applicability to the current assets.
+The original plan performed no new research. The completed [M0 checkpoint](running-movement/M0_EVIDENCE.md) reconciles the current 426-instance catalog and source hash, rechecks historical counts and extends bounded CAD evidence for the upstream transmission and both displays. Recorded measurements remain distinct from unverified operating behavior.
 
 ## Sequence and checkpoints
 
 | Block | Reviewable output | Dependency | Current status |
 | --- | --- | --- | --- |
-| M0 — Evidence and coverage | Source-linked motion inventory, unknowns and agreed validation tolerances | Current repository and local CAD | Not started |
+| M0 — Evidence and coverage | Source-linked motion inventory, graph, unknowns and proposed validation tolerances | Current repository and local CAD | Complete — evidence checkpoint; external tolerance agreement pending |
 | M1 — Motion foundation | Deterministic evaluator and isolated inspection harness | M0 | Not started |
 | M2 — Escapement cycle | Complete rigid-part cycle with contact evidence | M1 | Not started |
 | M3 — Hairspring | Constrained deformation over the chosen amplitude | M1; shared amplitude/phase contract with M2 | Not started |
@@ -41,6 +41,10 @@ Recommended order: M0 → M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8. M
 M4 is the decisive feasibility checkpoint. Review the hardest mechanism with all essential components present before investing in full-chain implementation. A failed checkpoint should identify a concrete geometry, reference or modeling problem and the next experiment to resolve it.
 
 ## M0 — Establish the mechanical evidence and coverage
+
+**Completed 12 September 2026:** [M0 evidence and findings](running-movement/M0_EVIDENCE.md), [426-instance inventory](running-movement/coverage.csv), [35-node/37-edge graph](running-movement/graph.json), [unknowns/review register](running-movement/UNKNOWNS.md), [proposed tolerances](running-movement/TOLERANCES.md), and [concrete M1 brief](running-movement/M1_BRIEF.md). All instances are classified or explicitly unresolved (13 leaves and 45 mixed/unproven assemblies). Fifteen fresh geometric tooth-count checks and nine axis-distance checks support candidate upstream/display paths; series-barrel operation, escapement contacts and constrained spring deformation remain unresolved. Source topology tolerances exceed the proposed 0.001 mm budget in several definitions, requiring local precision review.
+
+**Verification:** source hash and preflight/catalog ID/transform reconciliation, regenerated historical counts, fresh bounded STEP probe, coverage regeneration check, graph/style/reference and independent ratio checks, local links and whitespace pass. Commands and scalar evidence are in the M0 report. Tolerances are proposals, not reviewer-approved values. No viewer changes, M1 implementation or push.
 
 **Work:** Reconcile the current source/catalog with the historical audit. Map each relevant instance to fixed, continuously driven, conditionally driven, deforming, or unresolved. Record shafts, rigid members, pivots, axis conventions, tooth counts, mesh types, couplings and operating conditions. Distinguish CAD hierarchy from mechanical connections. Include both barrels, their connecting transmission, both display trains, all supported hand variants and spring attachments.
 
@@ -140,4 +144,4 @@ Commit each coherent verified checkpoint after inspecting status and the staged 
 
 Do not attach firm calendar promises to these blocks yet. M0 should estimate the first proof; M4 should revise the remaining effort using actual contact/deformation results and reviewer availability. The earlier “several weeks” assessment is a rough planning judgment, not a delivery commitment. External review waiting time is separate from implementation effort.
 
-**Next executable action, when the user resumes:** M0 only. Produce the evidence/coverage checkpoint and a concrete M1 brief. No implementation or recurring task is started by this document.
+**Next executable action, when separately authorized:** M1 only, following the [implementation brief](running-movement/M1_BRIEF.md). Build the isolated deterministic foundation with explicit unresolved states; preserve the viewer. M0 is complete. No M1 implementation or recurring task is started by this checkpoint.

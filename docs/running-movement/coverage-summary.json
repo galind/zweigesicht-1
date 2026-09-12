@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "instances": 426,
+  "leaves": 365,
+  "assemblies": 61,
+  "classes": {
+    "unresolved": 58,
+    "fixed": 257,
+    "continuously-driven": 73,
+    "conditionally-driven": 26,
+    "deforming": 12
+  },
+  "leafClasses": {
+    "fixed": 257,
+    "continuously-driven": 61,
+    "unresolved": 13,
+    "conditionally-driven": 22,
+    "deforming": 12
+  },
+  "graphNodes": 35,
+  "graphEdges": 37,
+  "fittedHandBlades": 15,
+  "fittedSupports": 7,
+  "inputSha256": {
+    "assets/source-manifest/sources.json": "68eb5d53d63ba6de3e3c6d15dad29040dfd0034caf25614f4d13bf4f41fb6c82",
+    "explorer/public/models/assembly-manifest.json": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+    "artifacts/preflight/assembly-inventory.json": "7d745ffea623f4369ae8d44c641a4aaa6b1ceafd0a549427d6e2aee69f87ec51",
+    "assets/authored/motion-evidence.json": "ff7720f10dae54352b1e65fa989babb8e61c17d246c4e3e9e64f1c6f43f6c85f",
+    "assets/authored/hand-display-poses.json": "ebf959c13d85191a4305898bc2863fe202a9247469bfad13bee7c92e8280454b",
+    "assets/authored/dial-configurations.json": "9f3b8bfdd84c4f4a388cccdce15434569d3e1b5c549069e6b5c4df8ef788ed4b"
+  }
+}

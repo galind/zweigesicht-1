@@ -1,0 +1,1011 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "reviewStatus": "Engineering geometry verified; mechanical acceptance open",
+  "definitions": [
+    {
+      "definition": 85,
+      "name": "ml01 Federhaustrommel II z80 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 80
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 80
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 80
+        }
+      ],
+      "maxTopologyToleranceMm": 0.002291751679161063,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_1",
+          "pointWorldMm": [
+            -6.199999999999988,
+            8.1,
+            -4.290000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 4
+    },
+    {
+      "definition": 86,
+      "name": "ml01 Federhausdeckel II",
+      "counts": [],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_2",
+          "pointWorldMm": [
+            -6.1999999999999895,
+            8.100000000000001,
+            -4.290000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 2
+    },
+    {
+      "definition": 87,
+      "name": "ml01 Federkern1",
+      "counts": [],
+      "maxTopologyToleranceMm": 3.0836674620977477e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3",
+          "pointWorldMm": [
+            -6.1999999999999895,
+            8.100000000000001,
+            -3.350000000000008
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_3",
+          "pointWorldMm": [
+            6.199999999999998,
+            8.1,
+            -3.350000000000747
+          ],
+          "localZWorld": [
+            6.4677129298632895e-18,
+            -1.1459895599801694e-18,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 11
+    },
+    {
+      "definition": 88,
+      "name": "ml01 Zugfeder_h1,6_s0,145_l290",
+      "counts": [],
+      "maxTopologyToleranceMm": 1e-07,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_4",
+          "pointWorldMm": [
+            -6.199999999999989,
+            8.100000000000001,
+            -3.940000000000006
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4",
+          "pointWorldMm": [
+            6.199999999999998,
+            8.100000000000001,
+            -4.050000000000747
+          ],
+          "localZWorld": [
+            -6.4895686903001445e-18,
+            1.1410532088764914e-18,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 4
+    },
+    {
+      "definition": 90,
+      "name": "ml01 Federhaustrommel I z80 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 80
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 80
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 80
+        }
+      ],
+      "maxTopologyToleranceMm": 0.002291751679161063,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+          "pointWorldMm": [
+            6.2,
+            8.1,
+            -2.100000000000747
+          ],
+          "localZWorld": [
+            6.47960342714905e-18,
+            -1.14155539878141e-18,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 4
+    },
+    {
+      "definition": 91,
+      "name": "ml01 Federhausdeckel",
+      "counts": [],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2",
+          "pointWorldMm": [
+            6.1999999999999975,
+            8.100000000000001,
+            -2.100000000000747
+          ],
+          "localZWorld": [
+            6.47960342714905e-18,
+            -1.14155539878141e-18,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 2
+    },
+    {
+      "definition": 93,
+      "name": "ml01 Minutentrieb z12 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 12
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 12
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 12
+        }
+      ],
+      "maxTopologyToleranceMm": 0.003023561251746374,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+          "pointWorldMm": [
+            0.0,
+            0.0,
+            -2.9800000000000066
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 20
+    },
+    {
+      "definition": 96,
+      "name": "ml01 ÜFHMinRad z26 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 26
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 26
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 26
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
+          "pointWorldMm": [
+            -2.6790503757237,
+            0.972208354384323,
+            -2.070000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 3
+    },
+    {
+      "definition": 97,
+      "name": "ml01 Kupplungsrad z17 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 17
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 17
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 17
+        }
+      ],
+      "maxTopologyToleranceMm": 0.003888257341606538,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5",
+          "pointWorldMm": [
+            14.2002356932679,
+            -1.39463862767957e-15,
+            -2.500000000000007
+          ],
+          "localZWorld": [
+            -1.0,
+            -5.0783828048525e-21,
+            -1.13666000890641e-20
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 4
+    },
+    {
+      "definition": 116,
+      "name": "ml01 Spirale mit Rolle",
+      "counts": [],
+      "maxTopologyToleranceMm": 0.00843096254428944,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_3",
+          "pointWorldMm": [
+            9.905109843242797e-16,
+            -10.0,
+            -3.3550000000000084
+          ],
+          "localZWorld": [
+            8.75995236788978e-22,
+            6.80057909011231e-22,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 3
+    },
+    {
+      "definition": 117,
+      "name": "ml01 Klötzchen",
+      "counts": [],
+      "maxTopologyToleranceMm": 0.00416016621879015,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_4",
+          "pointWorldMm": [
+            0.10530558741712946,
+            -11.967183451856705,
+            -4.040000000000007
+          ],
+          "localZWorld": [
+            1.0420708350555774e-21,
+            8.47819517422544e-22,
+            -1.0
+          ]
+        },
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_4",
+          "pointWorldMm": [
+            9.769962616701378e-15,
+            -12.094999999999999,
+            -4.100000000000008
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 1
+    },
+    {
+      "definition": 118,
+      "name": "020-30x80 kon ms",
+      "counts": [],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_5",
+          "pointWorldMm": [
+            0.15029850244407644,
+            -11.966384954905434,
+            -3.6964280412809396
+          ],
+          "localZWorld": [
+            0.9998425561535723,
+            0.017744376694914826,
+            -8.326583892236629e-17
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 0
+    },
+    {
+      "definition": 131,
+      "name": "ml01 Sperrrad z62 m0,20",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 62
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 62
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 62
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_14",
+          "pointWorldMm": [
+            6.20387182362031,
+            8.10591683883909,
+            -0.9999999999998159
+          ],
+          "localZWorld": [
+            -3.07198699813042e-18,
+            1.85705868939039e-18,
+            -1.0
+          ]
+        },
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15",
+          "pointWorldMm": [
+            -6.2,
+            8.1,
+            -1.000000000000008
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 10
+    },
+    {
+      "definition": 137,
+      "name": "ml01 Viertelrohr1 z12 m0,177",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 12
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 12
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 12
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+          "pointWorldMm": [
+            0.0,
+            -2.27682456221956e-15,
+            -1.070000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 8
+    },
+    {
+      "definition": 141,
+      "name": "ml01 Stundenrad1 z40 m0,17",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 40
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 40
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 40
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+          "pointWorldMm": [
+            0.0,
+            0.0,
+            -0.700000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 1
+    },
+    {
+      "definition": 183,
+      "name": "ml01 Viertelrohr2 z8 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 8
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 8
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 8
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+          "pointWorldMm": [
+            -4.63553877842402e-15,
+            7.39999999999999,
+            -5.3600000000000065
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 1
+    },
+    {
+      "definition": 184,
+      "name": "ml01 Welle Viertelrohr2",
+      "counts": [],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+          "pointWorldMm": [
+            -5.5076741685162385e-15,
+            7.3999999999999915,
+            -5.3600000000000065
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 5
+    },
+    {
+      "definition": 187,
+      "name": "ml01 Stundenrad2 z32 m0,12",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 32
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 32
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 32
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+          "pointWorldMm": [
+            -4.67706903509508e-15,
+            7.39999999999999,
+            -5.590000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 33
+    },
+    {
+      "definition": 210,
+      "name": "ml01 Wechselrad1 z36 m0,177",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 36
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 36
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 36
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+          "pointWorldMm": [
+            4.24287382474019,
+            0.246011600000001,
+            -1.2000000000000068
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 37
+    },
+    {
+      "definition": 211,
+      "name": "ml01 Wechseltrieb1 z10 m0,17",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 10
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 10
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 10
+        }
+      ],
+      "maxTopologyToleranceMm": 0.001372532641430835,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+          "pointWorldMm": [
+            4.24287382474019,
+            0.2460116000000001,
+            -1.4500000000000068
+          ],
+          "localZWorld": [
+            0.0,
+            -0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 12
+    },
+    {
+      "definition": 213,
+      "name": "ml01 Wechselrad2 z36 m0,177",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 36
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 36
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 36
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+          "pointWorldMm": [
+            1.24009950124815e-15,
+            5.0,
+            -1.150000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 37
+    },
+    {
+      "definition": 214,
+      "name": "ml01 Zeigerwerkswelle2",
+      "counts": [],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+          "pointWorldMm": [
+            1.213244030842087e-15,
+            5.000000000000003,
+            -3.450000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 4
+    },
+    {
+      "definition": 216,
+      "name": "ml01 Wechselrad3 z 24 m0,15",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 24
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 24
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 24
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+          "pointWorldMm": [
+            1.29742652452144e-15,
+            5.0,
+            -5.100000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 25
+    },
+    {
+      "definition": 217,
+      "name": "ml01 Wechseltrieb3 z8 m0,12",
+      "counts": [
+        {
+          "radiusFraction": 0.985,
+          "tipClusters": 8
+        },
+        {
+          "radiusFraction": 0.97,
+          "tipClusters": 8
+        },
+        {
+          "radiusFraction": 0.95,
+          "tipClusters": 8
+        }
+      ],
+      "maxTopologyToleranceMm": 1e-05,
+      "axisCandidates": [
+        {
+          "instanceId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+          "pointWorldMm": [
+            1.2705710541153772e-15,
+            5.000000000000003,
+            -5.680000000000007
+          ],
+          "localZWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "axialCylindersAtLocalXYZero": 9
+    }
+  ],
+  "pairs": [
+    {
+      "definitionPair": [
+        85,
+        96
+      ],
+      "teeth": [
+        80,
+        26
+      ],
+      "moduleMmFromSourceName": 0.15,
+      "axisDistanceMm": 7.949999999999998,
+      "nominalDistanceMm": 7.949999999999999,
+      "residualMm": -8.881784197001252e-16,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        90,
+        96
+      ],
+      "teeth": [
+        80,
+        26
+      ],
+      "moduleMmFromSourceName": 0.15,
+      "axisDistanceMm": 11.386085776857112,
+      "nominalDistanceMm": 7.949999999999999,
+      "residualMm": 3.4360857768571123,
+      "screening": "rejected direct external pair",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        96,
+        93
+      ],
+      "teeth": [
+        26,
+        12
+      ],
+      "moduleMmFromSourceName": 0.15,
+      "axisDistanceMm": 2.8499999999999948,
+      "nominalDistanceMm": 2.85,
+      "residualMm": -5.329070518200751e-15,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        137,
+        210
+      ],
+      "teeth": [
+        12,
+        36
+      ],
+      "moduleMmFromSourceName": 0.177,
+      "axisDistanceMm": 4.250000000000002,
+      "nominalDistanceMm": 4.247999999999999,
+      "residualMm": 0.0020000000000024443,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        211,
+        141
+      ],
+      "teeth": [
+        10,
+        40
+      ],
+      "moduleMmFromSourceName": 0.17,
+      "axisDistanceMm": 4.250000000000001,
+      "nominalDistanceMm": 4.25,
+      "residualMm": 8.881784197001252e-16,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        210,
+        213
+      ],
+      "teeth": [
+        36,
+        36
+      ],
+      "moduleMmFromSourceName": 0.177,
+      "axisDistanceMm": 6.372,
+      "nominalDistanceMm": 6.372,
+      "residualMm": 0.0,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        137,
+        213
+      ],
+      "teeth": [
+        12,
+        36
+      ],
+      "moduleMmFromSourceName": 0.177,
+      "axisDistanceMm": 5.000000000000003,
+      "nominalDistanceMm": 4.247999999999999,
+      "residualMm": 0.7520000000000033,
+      "screening": "rejected direct external pair",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        216,
+        183
+      ],
+      "teeth": [
+        24,
+        8
+      ],
+      "moduleMmFromSourceName": 0.15,
+      "axisDistanceMm": 2.3999999999999897,
+      "nominalDistanceMm": 2.4,
+      "residualMm": -1.021405182655144e-14,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    },
+    {
+      "definitionPair": [
+        217,
+        187
+      ],
+      "teeth": [
+        8,
+        32
+      ],
+      "moduleMmFromSourceName": 0.12,
+      "axisDistanceMm": 2.399999999999987,
+      "nominalDistanceMm": 2.4,
+      "residualMm": -1.2878587085651816e-14,
+      "screening": "candidate",
+      "method": "Local XY zero corroborated by axial cylinders, transformed by XCAF; XY Euclidean distance versus module*(z1+z2)/2. Z engagement and tooth phase unverified.",
+      "confidence": "geometric screening, not contact proof",
+      "reviewStatus": "external review open"
+    }
+  ],
+  "historicalCountsRecomputedFromCache": {
+    "85": [
+      80,
+      80,
+      80
+    ],
+    "90": [
+      80,
+      80,
+      80
+    ],
+    "93": [
+      12,
+      12,
+      12
+    ],
+    "94": [
+      64,
+      64,
+      64
+    ],
+    "96": [
+      26,
+      26,
+      26
+    ],
+    "233": [
+      20,
+      20,
+      20
+    ],
+    "234": [
+      9,
+      9,
+      9
+    ],
+    "237": [
+      10,
+      10,
+      10
+    ],
+    "238": [
+      75,
+      75,
+      75
+    ],
+    "242": [
+      8,
+      8,
+      8
+    ],
+    "243": [
+      81,
+      81,
+      81
+    ]
+  },
+  "derivation": "m0_probe.py samples unique BRep edges at approximately .008 mm spacing (cap 2500), uses 98.5/97/95% radial tip clusters; no source-name counts in algorithm. Geometry topology tolerances are maximum face/edge/vertex tolerance, not measured physical error or a local contact uncertainty bound. All lengths mm, directions unitless, counts teeth. Axis placement origins are candidates only; zero axial cylinders (118) does not establish an axis.",
+  "inputHashes": {
+    "scripts/mechanics/m0_probe.py": "a59238916b97840ab4126daf27c7001989a74a204664eb5573d3190b3e0c0a1f",
+    "artifacts/mechanics/running-movement/m0/cad-probe.json": "83230d855687a29b6ed86e374fbceeb04c62ed93a8a1b5cedfdabea8fcb67e4f",
+    "artifacts/mechanics/source-geometry.json": "e7fac4b25e729509834e246f7d64f32ddd23df69655aae0feabc20fd9e6f1117",
+    "scripts/mechanics/probe.py": "e0cf7181ac95b8686aaee48870dee00e98c1ac3b9f33c27eaea75cf67d5048f7",
+    "assets/authored/motion-evidence.json": "ff7720f10dae54352b1e65fa989babb8e61c17d246c4e3e9e64f1c6f43f6c85f"
+  }
+}
