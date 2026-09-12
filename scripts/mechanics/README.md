@@ -31,9 +31,3 @@ The scripts write only under ignored `artifacts/mechanics/`:
 - `source-mechanics-evidence.png`: local review plot for the escape wheel and hairspring geometry.
 
 The outputs retain explicit warnings: tooth counts are geometric corroboration rather than expert tooth-by-tooth review; sparse zero distance can mean contact or overlap; source labels do not prove meshing; the escapement cycle and balance amplitude are illustrative; and the hairspring deformation proposal is not approved for connected motion.
-
-## M0 extension — 12 September 2026
-
-See [M0 evidence](../../docs/running-movement/M0_EVIDENCE.md) for the completed inventory, graph and limitations. `m0_probe.py` verifies the source hash and inspects 24 bounded definitions, writing only ignored `artifacts/mechanics/running-movement/m0/cad-probe.json`. `m0_summarize.py` writes scalar evidence to `docs/running-movement/probe-summary.json` and recomputes the eleven historical counts from the existing edge cache. It does not rewrite the retired motion parameters.
-
-`m0_inventory.py` contains explicit source-specific coverage/graph mappings and generates the CSV, graph and coverage summary. `--check` detects stale outputs without writing them. `m0_verify.py` checks census, hashes, graph references, fitted style membership, independent path ratios and local links. Use the existing `.venv-cad/bin/python` for the probe/reduction and ordinary Python 3 for inventory/verification. No script implements M1 or edits viewer assets.
