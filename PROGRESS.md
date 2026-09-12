@@ -1,5 +1,11 @@
 # Zweigesicht-1 — current state
 
+## Future running-movement plan — 12 September 2026
+
+Prepared [RUNNING_MOVEMENT_PLAN.md](docs/RUNNING_MOVEMENT_PLAN.md) at the user's request for later work. It defines M0–M8: evidence/coverage, deterministic foundation, escapement, hairspring, integrated regulation proof, train/barrels, both displays, explorer integration and whole-movement qualification. Winding/setting and shock/reset are separate deferred extensions. Every implementation block is not started; the accepted static runtime is unchanged.
+
+The plan reuses the historical mechanical evidence while preserving the animation review's findings and current independent-dial/fitted-hand behavior. Each block has dependencies, deliverables and acceptance criteria; M4 is the decisive complete-regulation checkpoint. Future entry point: M0 evidence/coverage only, when requested. Documentation links and whitespace checked; no runtime tests are needed for this documentation-only change. No push, implementation, scheduled task or deployment.
+
 ## Accepted model
 
 The model and experience are accepted on `main` at commit `548620a` (11 September 2026). The accepted appearance checkpoint is `d0132e2`. All 70 source/runtime checks, lint, TypeScript, and the production build passed at delivery. The hash-verified annotation payload `finish-surfaces-afd3394797bd.bin` and its gzip match the approved local preview; geometry is unchanged.

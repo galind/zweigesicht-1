@@ -2,6 +2,8 @@
 
 Current scope decision, 9 September 2026: running/timing has been removed under the user-authorized static-explorer outcome. See `docs/ANIMATION_REVIEW.md` and `PROGRESS.md`. Playback ambitions and acceptance tasks below are historical planning, not remaining work for this local deliverable.
 
+Future-work planning, 12 September 2026: [Running movement work blocks](docs/RUNNING_MOVEMENT_PLAN.md) defines the proposed evidence, regulation proof, full-chain implementation and qualification sequence. It is documentation for later work; no running implementation has started or been added to the accepted static scope.
+
 Prepared 8 September 2026. The implementation work described here is complete for the local static-explorer scope. The release gates and technical constraints below remain the authoritative checklist for any future public release.
 
 Execution update, 11 September 2026: the real-CAD explorer, full geometry audit, assembly rendering, interaction work, and local verification are complete and accepted. Follow PROGRESS.md for the current state. Deployment and redistribution remain subject to the corresponding release gates.
