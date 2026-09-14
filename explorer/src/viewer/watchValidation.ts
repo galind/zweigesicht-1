@@ -145,14 +145,14 @@ export async function runWatchChecks(v: MovementViewer) {
     centralStyle: 'fine',
     centralFinish: 'rose-gold',
   });
-  const blades = Object.values(DIALS.faces.central.styles[0].handLeafIds);
+  const handPacket = DIALS.faces.central.styles[0].leafIds;
   check(
-    'Rose finish targets exactly the three Fine blades; support seats unchanged',
+    'Rose finish targets exactly the three Fine blades and their three bushings',
     [...v.renderParts]
       .filter(([, p]) => p.material.userData.configurationOverride.value === 1)
       .map(([id]) => id)
       .sort()
-      .join() === blades.sort().join(),
+      .join() === [...handPacket].sort().join(),
   );
   for (const separation of [0, 0.15, 0.5, 1, 0.4, 0]) {
     v.patch({ separation });

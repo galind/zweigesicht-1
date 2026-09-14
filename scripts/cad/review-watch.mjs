@@ -14,6 +14,8 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  for(const material of WATCH.caseMaterials) for(const caseVisible of [false,true]) for(const dialsVisible of [false,true]) for(const shape of DIALS.faces.central.styles){
   await c.configureWatch({caseVisible,caseMaterial:material.id,dialsVisible,centralStyle:shape.id,centralFinish:'rose-gold'});pose();
   assert.equal(c.fittedCase.size,caseVisible?41:0);assert.equal(c.state.centralFinish,shape.id==='fine'&&material.id!=='steel'?'rose-gold':'blued-steel');
+  const bushings=DIALS.faces.central.styles[0].supportLeafIds;
+  for(const id of bushings){const p=c.renderParts.get(id);assert.match(p.source.name,/Zeigerbuchse/);assert.equal(p.material.color.getHex(),dialsVisible&&shape.id==='fine'&&material.id!=='steel'?0xd9ab94:base.get(id).color);}
   for(const [id,p]of c.renderParts){assert.equal(p.mesh.geometry,base.get(id).geometry);assert.equal(p.material,base.get(id).material);if(belongs(id,movement)||DIALS.faces.central.structureLeafIds.includes(id))assert.equal(p.material.color.getHex(),base.get(id).color);}
  }
  results.push({check:'case and hand presets retain geometry/material identity and never recolor movement, dial markers, structure or logo; unsupported combinations normalize',status:'pass'});

@@ -1720,11 +1720,10 @@ export class MovementViewer {
       const roseHand =
         this.fitted.has(id) &&
         this.state.centralFinish === 'rose-gold' &&
-        Object.values(
-          DIALS.faces.central.styles.find(
-            (style) => style.id === this.state.centralStyle,
-          )!.handLeafIds,
-        ).includes(id) &&
+        // A fitted hand packet includes the blades and their three bushings.
+        DIALS.faces.central.styles
+          .find((style) => style.id === this.state.centralStyle)!
+          .leafIds.includes(id) &&
         !(
           selection &&
           !belongs(selection, ROOT) &&

@@ -54,6 +54,8 @@ The crown's M background is frosted on original d46 face 468 (5.828602 mm² at l
 
 Verification: 14 state tests, 96 CPU source/runtime checks, TypeScript, lint and production build pass. All 307 browser checks pass: 179 watch, 55 dial, 20 inventory and 53 interface checks. Reports and screenshots are recorded in ignored `artifacts/browser/watch-refinement/`. Desktop visual review covers both fitted faces, the turn, steel/rose-gold/platinum Fine hands and the crown close-up. A 320×740 CSS viewport at 200% text has no horizontal overflow; the linked finish and live announcement are correct, and Escape restores Configure focus after dismissal. Existing physical-device, mechanical and release-gate limitations remain. No push, merge or deployment.
 
+Bushing follow-up: the three fitted central Zeigerbuchse parts (d34/d38/d41) now share the Fine blades’ gold override on rose-gold/platinum configurations. Source names confirm the scope. Switching to steel or another shape restores their original blue finish, and hidden displays stay hidden. Fresh verification: 96 CPU checks (including all case/shape/visibility bushing combinations), TypeScript, lint and build pass; browser visual review covers rose gold, platinum and steel restoration. Updated screenshots are `platinum-matched-bushings.png` and `rose-matched-bushings.png` in the refinement evidence directory.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
