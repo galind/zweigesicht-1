@@ -18,6 +18,8 @@ Fresh verification: 11 state tests, 89 CPU source/runtime checks, TypeScript, li
 
 Watch copy reuses the project's maker-attributed facts; the maker's CAD and main pages were checked. The watch specification page timed out during this work, so no new dimensions or unverified sketch values were added. Physical-device and representative accessibility review remain outstanding. Next implementation action: user review of the local redesign. No push or deployment is authorized or performed.
 
+Layout correction after user feedback: the canvas now fills the entire viewport, with the identity, side navigation and bottom controls floating over it. Removed reserved layout space, surface borders and shadows; the translucent tint matches the empty background and reveals its blur over geometry. Keyboard focus indicators remain visible. Fresh checks for this CSS revision: lint and production build pass; browser inspection confirms a 1440×900 desktop canvas and 390×844 mobile canvas both start at (0, 0), About does not resize the canvas, and mobile controls remain within the viewport without horizontal overflow at normal and 200% text. Updated desktop/mobile captures are `overlay-desktop.png` and `overlay-mobile.png` in the existing ignored evidence directory. Awaiting local user review; no push or deployment.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
