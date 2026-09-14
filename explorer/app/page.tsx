@@ -29,6 +29,7 @@ import {
   type ViewerSnapshot,
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
+import { runWatchChecks } from '@/src/viewer/watchValidation';
 import { runDialChecks } from '@/src/viewer/dialValidation';
 import { runInventoryChecks } from '@/src/viewer/inventoryValidation';
 import { runCameraChecks } from '@/src/viewer/cameraValidation';
@@ -40,7 +41,7 @@ import {
   recordFrostMotion,
 } from '@/src/viewer/frostReview';
 import { runFrostChecks } from '@/src/viewer/frostValidation';
-import { DialControls } from '@/components/DialControls';
+import { ConfigurationControls } from '@/components/ConfigurationControls';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
@@ -85,6 +86,10 @@ const empty: ViewerSnapshot = {
   catalogLoading: false,
   dialRequest: null,
   dialError: '',
+  caseRequest: false,
+  caseError: '',
+  caseEffective: false,
+  configurationNotice: '',
   spreadFocus: null,
   status: '',
   error: '',
@@ -642,7 +647,7 @@ export default function Home() {
             disabled={!available}
           >
             <Clock3 className="dock-icon" aria-hidden="true" />
-            <span>Dials &amp; hands</span>
+            <span>Configure</span>
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -652,13 +657,14 @@ export default function Home() {
             scrollContent
           >
             <SheetHeader>
-              <SheetTitle>Dials &amp; hands</SheetTitle>
+              <SheetTitle>Watch configuration</SheetTitle>
               <SheetDescription className="sr-only">
-                Show or hide both dials together. Choose hands for each.
+                Configure the case, materials and both dials. Choose hands for
+                each.
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
-              <DialControls
+              <ConfigurationControls
                 state={s}
                 viewer={() => viewer.current}
                 available={available}
@@ -687,7 +693,7 @@ export default function Home() {
           className="text-button reset-button"
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
-          title="Return to the straight-on view; keep dials and hands"
+          title="Return to the straight-on view; keep watch configuration"
           onClick={() => {
             closePanels();
             if (viewer.current) viewer.current.reset();
@@ -1011,8 +1017,9 @@ export default function Home() {
         <div className="about-copy">
           <p>{aboutDescription}</p>
           <p>
-            The overview shows the movement without the case, straps or
-            alternate dial designs. The catalog retains every imported part.
+            The watch opens as an exposed movement. Configure adds the case,
+            both crystals and your chosen dials and hands. Straps and alternate
+            source placements remain available in the complete CAD catalog.
           </p>
           <p>
             The mechanism is shown in its source pose. Reveal and separation
@@ -1023,8 +1030,10 @@ export default function Home() {
             {s.stats.recoveredDiamond
               ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
               : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
-            Four balance eccentrics contain untessellated faces. An overlapping
-            setting-spring alternative is hidden in the assembled view.
+            The local case view recovers one omitted lug face by meshing its
+            original CAD surface separately. Four balance eccentrics contain
+            untessellated faces. An overlapping setting-spring alternative is
+            hidden in the assembled view.
           </p>
           <p>
             Separation and All parts travel are authored presentations, not
@@ -1162,6 +1171,20 @@ export default function Home() {
             }}
           >
             Run dial checks
+          </button>
+          <button
+            onClick={async () => {
+              if (viewer.current) {
+                setQa({ running: true });
+                try {
+                  setQa(await runWatchChecks(viewer.current));
+                } catch (error) {
+                  setQa({ error: String(error) });
+                }
+              }
+            }}
+          >
+            Run watch checks
           </button>
           <button
             onClick={async () => {

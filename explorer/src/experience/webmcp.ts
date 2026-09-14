@@ -1,3 +1,4 @@
+import { WATCH, type WatchPreferences } from './watch';
 import type { MovementViewer } from '../viewer/MovementViewer';
 import { type DialPreferences } from './dials';
 import { GROUPS } from './catalog';
@@ -29,6 +30,13 @@ export function registerMovementTools(viewer: MovementViewer) {
       inventoryBack: s.inventoryBack,
       presentation: s.presentation,
       dialsVisible: s.dialsVisible,
+      caseVisible: s.caseVisible,
+      caseMaterial: s.caseMaterial,
+      centralFinish: s.centralFinish,
+      caseEffective: s.caseEffective,
+      caseRequest: s.caseRequest,
+      caseError: s.caseError,
+      configurationNotice: s.configurationNotice,
       centralStyle: s.centralStyle,
       smallStyle: s.smallStyle,
       dialRequest: s.dialRequest,
@@ -69,6 +77,37 @@ export function registerMovementTools(viewer: MovementViewer) {
     return state();
   };
   const tools: Tool[] = [
+    {
+      name: 'configure_watch',
+      description:
+        'Configure case visibility/material, shared dials and independent hand shapes. Rose gold Three hands requires Fine; other shapes normalize to blued steel with feedback. Case temporarily hides in Focus, All parts and raw CAD inspection. Reset retains configuration.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          caseVisible: { type: 'boolean' },
+          caseMaterial: {
+            type: 'string',
+            enum: WATCH.caseMaterials.map((m) => m.id),
+          },
+          centralFinish: { type: 'string', enum: ['blued-steel', 'rose-gold'] },
+          dialsVisible: { type: 'boolean' },
+          centralStyle: {
+            type: 'string',
+            enum: ['fine', 'lance', 'open-lance'],
+          },
+          smallStyle: {
+            type: 'string',
+            enum: ['lance', 'broad-lance', 'pear'],
+          },
+        },
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false },
+      execute: async (input) => {
+        await viewer.configureWatch(input as Partial<WatchPreferences>);
+        return settle();
+      },
+    },
     {
       name: 'configure_dials',
       description:

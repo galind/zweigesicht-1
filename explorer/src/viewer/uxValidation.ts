@@ -26,7 +26,7 @@ export async function runUxChecks(v: MovementViewer) {
       dockButtons
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
-      'Separate|Focus|All parts|Dials & hands|Flip movement|Reset view',
+      'Separate|Focus|All parts|Configure|Flip movement|Reset view',
   });
   checks.push({
     name: 'Dock controls retain touch targets',

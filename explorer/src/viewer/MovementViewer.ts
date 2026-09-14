@@ -1,3 +1,14 @@
+import { loadCaseRecovery, recoverCaseSurfaces } from './CaseRecovery';
+import {
+  WATCH,
+  WATCH_KEYS,
+  CASE_LEAVES,
+  CASE_CRYSTALS,
+  caseModeVisible,
+  requestedWatchLeaves,
+  validateWatchPatch,
+  type WatchPreferences,
+} from '../experience/watch';
 import { focusRole, focusCover } from '../experience/emphasis';
 import { explosionOffsets, uncoverHost } from '../experience/explosion';
 import {
@@ -96,6 +107,10 @@ export interface ViewerSnapshot extends ExperienceState {
   catalogLoading: boolean;
   dialRequest: DialPreferences | null;
   dialError: string;
+  caseRequest: boolean;
+  caseError: string;
+  caseEffective: boolean;
+  configurationNotice: string;
   status: string;
   error: string;
   detailError: string;
@@ -177,6 +192,10 @@ export class MovementViewer {
   cameraUserOwned = false;
   dialRequest: ViewerSnapshot['dialRequest'] = null;
   dialError = '';
+  caseRequest = false;
+  caseError = '';
+  configurationNotice = '';
+  fittedCase = new Set<string>();
   dialGeneration = 0;
   fitted = new Set<string>();
   catalogLoaded = false;
@@ -265,6 +284,10 @@ export class MovementViewer {
       catalogLoading: !!this.catalogPending,
       dialRequest: this.dialRequest,
       dialError: this.dialError,
+      caseRequest: this.caseRequest,
+      caseError: this.caseError,
+      caseEffective: this.caseEffective(),
+      configurationNotice: this.configurationNotice,
       spreadFocus: this.spreadFocus,
       status: this.status,
       error: this.error,
@@ -692,21 +715,39 @@ export class MovementViewer {
   async loadCatalog() {
     if (this.catalogLoaded) return;
     if (this.catalogPending) return this.catalogPending;
-    const forDials = !!this.dialRequest;
+    const forDials = !!this.dialRequest || this.caseRequest;
     const selectionRequest = this.selectionGeneration;
     this.detailError = '';
-    this.status = this.dialRequest ? '' : 'Loading source catalog…';
+    this.status =
+      this.dialRequest || this.caseRequest ? '' : 'Loading source catalog…';
     this.emit();
     this.catalogPending = (async () => {
       try {
-        const gltf = await new GLTFLoader()
-          .setMeshoptDecoder(MeshoptDecoder)
-          .loadAsync(assetRequestUrl(this.paths.catalog));
+        // Await both before ingesting: failure cannot leave a partial case.
+        const results = await Promise.allSettled([
+          new GLTFLoader()
+            .setMeshoptDecoder(MeshoptDecoder)
+            .loadAsync(assetRequestUrl(this.paths.catalog)),
+          loadCaseRecovery(),
+        ]);
+        const [model, recovery] = results;
+        if (model.status === 'rejected' || recovery.status === 'rejected') {
+          if (model.status === 'fulfilled')
+            this.disposeObject(model.value.scene);
+          throw new Error('Catalog or case surface could not load');
+        }
+        const gltf = model.value;
         if (this.dead) {
           this.disposeObject(gltf.scene);
           return;
         }
-        this.ingest(gltf.scene);
+        try {
+          recoverCaseSurfaces(gltf.scene, recovery.value);
+          this.ingest(gltf.scene);
+        } catch (error) {
+          this.disposeObject(gltf.scene);
+          throw error;
+        }
         this.catalogLoaded = true;
         this.status = '';
         this.retarget();
@@ -734,6 +775,8 @@ export class MovementViewer {
     this.dialGeneration = (this.dialGeneration ?? 0) + 1;
     this.dialRequest = null;
     this.dialError = '';
+    this.caseRequest = false;
+    this.caseError = '';
   }
   chooseDial(face: DialFace, visible: boolean, style?: string) {
     return this.configureDials(
@@ -748,6 +791,13 @@ export class MovementViewer {
   }
   async configureDials(patch: Partial<DialPreferences> = {}, focus?: DialFace) {
     validateDialPatch(patch);
+    return this.configureWatch(patch, focus);
+  }
+  async configureWatch(
+    patch: Partial<WatchPreferences> = {},
+    focus?: DialFace,
+  ) {
+    validateWatchPatch(patch);
     if (!this.ready) return;
     const focusAssembly = !!focus && this.state.layout === 'assembly';
     const next = resolveState(this.state, {
@@ -765,7 +815,17 @@ export class MovementViewer {
           }
         : {}),
     });
+    const caseToggle =
+      patch.caseVisible !== undefined &&
+      next.caseVisible !== this.state.caseVisible;
+    this.configurationNotice =
+      (patch.centralFinish ?? this.state.centralFinish) !== next.centralFinish
+        ? 'This hand shape uses blued steel. Rose gold is available with Fine.'
+        : '';
     const changed = [
+      'caseVisible',
+      'caseMaterial',
+      'centralFinish',
       'centralVisible',
       'smallVisible',
       'centralStyle',
@@ -784,8 +844,8 @@ export class MovementViewer {
     // A selected outgoing blade/dial must not override its visibility toggle.
     if (
       next.part &&
-      this.fitted.has(next.part) &&
-      !fittedLeaves(next).has(next.part)
+      (this.fitted.has(next.part) || CASE_LEAVES.has(next.part)) &&
+      !requestedWatchLeaves(next).has(next.part)
     ) {
       next.part = null;
       next.isolated = false;
@@ -798,29 +858,39 @@ export class MovementViewer {
     this.state = next;
     this.retarget();
     if (focus) this.selectionGeneration++;
-    if (focusAssembly) {
+    if (focusAssembly || caseToggle) {
       this.restoringCamera = null;
       this.cameraUserOwned = false;
       this.fitPresentation();
     }
-    const leaves = fittedLeaves(next);
+    const leaves = requestedWatchLeaves(next);
     if (!leaves.size) {
       this.emit();
       return;
     }
-    this.dialRequest = {
-      dialsVisible: next.dialsVisible,
-      centralVisible: next.centralVisible,
-      smallVisible: next.smallVisible,
-      centralStyle: next.centralStyle,
-      smallStyle: next.smallStyle,
-    };
+    this.caseRequest =
+      next.caseVisible &&
+      [...CASE_LEAVES].some((id) => !this.renderParts.has(id));
+    this.dialRequest = next.dialsVisible
+      ? {
+          dialsVisible: next.dialsVisible,
+          centralVisible: next.centralVisible,
+          smallVisible: next.smallVisible,
+          centralStyle: next.centralStyle,
+          smallStyle: next.smallStyle,
+        }
+      : null;
     this.emit();
     try {
       await this.loadCatalog();
       if (this.dead || request !== this.dialGeneration) return;
-      if ([...fittedLeaves(this.state)].some((id) => !this.renderParts.has(id)))
-        throw new Error('Incomplete display geometry');
+      if (
+        [...requestedWatchLeaves(this.state)].some(
+          (id) => !this.renderParts.has(id),
+        )
+      )
+        throw new Error('Incomplete watch geometry');
+      this.caseRequest = false;
       this.dialRequest = null;
       this.retarget();
       if (this.state.layout === 'spread' && !this.cameraUserOwned)
@@ -834,7 +904,11 @@ export class MovementViewer {
       this.emit();
     } catch {
       if (!this.dead && request === this.dialGeneration) {
-        this.dialError = 'Dials could not load. Try again.';
+        this.caseRequest = false;
+        if (this.state.caseVisible)
+          this.caseError = 'Case could not load. Try again.';
+        if (this.state.dialsVisible)
+          this.dialError = 'Dials could not load. Try again.';
         this.emit();
       }
     }
@@ -862,8 +936,8 @@ export class MovementViewer {
     this.fitPresentation();
   }
   async retryDials() {
-    if (this.dialError) this.catalogLoaded = false;
-    await this.configureDials();
+    if (this.dialError || this.caseError) this.catalogLoaded = false;
+    await this.configureWatch();
   }
   frameDials() {
     this.homeCamera();
@@ -871,23 +945,15 @@ export class MovementViewer {
   }
   patch(patch: Partial<ExperienceState>) {
     const dialPatch = Object.fromEntries(
-      Object.entries(patch).filter(([key]) =>
-        [
-          'dialsVisible',
-          'centralVisible',
-          'smallVisible',
-          'centralStyle',
-          'smallStyle',
-        ].includes(key),
-      ),
+      Object.entries(patch).filter(([key]) => WATCH_KEYS.includes(key)),
     );
     if (Object.keys(dialPatch).length) {
-      validateDialPatch(dialPatch);
+      validateWatchPatch(dialPatch);
       const rest = Object.fromEntries(
         Object.entries(patch).filter(([key]) => !(key in dialPatch)),
       );
       if (Object.keys(rest).length) this.patch(rest);
-      void this.configureDials(dialPatch);
+      void this.configureWatch(dialPatch);
       return;
     }
     this.selectionGeneration++;
@@ -960,7 +1026,8 @@ export class MovementViewer {
               group.members,
             )
           : (belongs(p.source.id, ROOT) && p.source.id !== PREFIX + '66') ||
-            this.fitted.has(p.source.id);
+            this.fitted.has(p.source.id) ||
+            (this.caseEffective() && CASE_LEAVES.has(p.source.id));
     const points = this.targetPoints(include);
     const bounds = new THREE.Box3().setFromPoints(points);
     if (bounds.isEmpty()) return;
@@ -1112,8 +1179,12 @@ export class MovementViewer {
     this.emit();
     // History restores intent, including a display whose earlier load failed.
     // Reuse an in-flight catalog request and keep its error/retry observable.
-    if ([...fittedLeaves(this.state)].some((id) => !this.renderParts.has(id)))
-      void this.configureDials();
+    if (
+      [...requestedWatchLeaves(this.state)].some(
+        (id) => !this.renderParts.has(id),
+      )
+    )
+      void this.configureWatch();
   }
   reset() {
     this.cancelDialRequest();
@@ -1129,8 +1200,12 @@ export class MovementViewer {
     this.emit();
     // Retained preferences may still need the shared catalog request. Invalidate
     // old navigation intent, then reconcile loading against the reset view.
-    if ([...fittedLeaves(this.state)].some((id) => !this.renderParts.has(id)))
-      void this.configureDials();
+    if (
+      [...requestedWatchLeaves(this.state)].some(
+        (id) => !this.renderParts.has(id),
+      )
+    )
+      void this.configureWatch();
   }
   homeCamera(immediate = false) {
     this.frameBounds(
@@ -1168,9 +1243,10 @@ export class MovementViewer {
   assemblyBounds() {
     // One immutable envelope for bare movement and either display, available
     // before optional meshes load. Fitted hand tips stay inside the dial rings.
-    const structures = new Set(
-      Object.values(DIALS.faces).flatMap((face) => face.structureLeafIds),
-    );
+    const structures = new Set([
+      ...Object.values(DIALS.faces).flatMap((face) => face.structureLeafIds),
+      ...(caseModeVisible(this.state) ? CASE_LEAVES : []),
+    ]);
     const bounds = new THREE.Box3();
     for (const p of this.parts) {
       if (p.isAssembly || !p.boundsWorldMm || p.id === PREFIX + '66') continue;
@@ -1255,6 +1331,15 @@ export class MovementViewer {
     // plate. Whole-movement framing made small mechanisms impossible to read.
     bounds.expandByScalar(2.5);
     this.frameBounds(bounds, new THREE.Vector3(0.22, 0.24, g.side).normalize());
+  }
+  caseEffective() {
+    const selection = this.state.part;
+    return (
+      caseModeVisible(this.state) &&
+      !this.state.isolated &&
+      [...CASE_LEAVES].every((id) => this.renderParts.has(id)) &&
+      !(selection && !belongs(selection, ROOT) && !this.fitted?.has(selection))
+    );
   }
   renderableDials() {
     const preferences = this.state ?? initialState;
@@ -1522,7 +1607,9 @@ export class MovementViewer {
         };
     }
     const previousFitted = this.fitted;
+    const previousCase = this.fittedCase;
     this.fitted = this.renderableDials();
+    this.fittedCase = this.caseEffective() ? new Set(CASE_LEAVES) : new Set();
     if (this.state.layout === 'spread') this.rebuildSpread();
     if (this.controls) {
       const spread = this.state.layout === 'spread';
@@ -1580,11 +1667,20 @@ export class MovementViewer {
       const id = p.source.id;
       p.displayMatrix =
         this.fitted.has(id) &&
-        !(selection && !belongs(selection, ROOT) && !this.fitted.has(selection))
+        !(
+          selection &&
+          !belongs(selection, ROOT) &&
+          !this.fitted.has(selection) &&
+          !this.fittedCase?.has(selection)
+        )
           ? handDisplayMatrix(id, p.assembled)
           : undefined;
       p.targetRotation.identity();
-      p.target.fromArray(explosion.get(id) ?? [0, 0, 0]);
+      p.target.fromArray(
+        CASE_LEAVES.has(id) && !this.fittedCase.has(id)
+          ? [0, 0, 0]
+          : (explosion.get(id) ?? [0, 0, 0]),
+      );
       if (this.state.layout === 'spread') {
         const placement = this.spread.get(id);
         if (placement) {
@@ -1602,6 +1698,46 @@ export class MovementViewer {
       p.material.metalness = finish.metalness;
       p.material.roughness = finish.roughness;
       p.material.emissive.setHex(0);
+      const roseHand =
+        this.fitted.has(id) &&
+        this.state.centralFinish === 'rose-gold' &&
+        Object.values(
+          DIALS.faces.central.styles.find(
+            (style) => style.id === this.state.centralStyle,
+          )!.handLeafIds,
+        ).includes(id) &&
+        !(
+          selection &&
+          !belongs(selection, ROOT) &&
+          !this.fitted.has(selection) &&
+          !this.fittedCase.has(selection)
+        );
+      p.material.userData.configurationOverride.value = roseHand ? 1 : 0;
+      if (roseHand) p.material.color.setHex(0xd9ab94);
+      if (
+        this.fittedCase.has(id) &&
+        WATCH.caseMaterialDefinitions.includes(p.source.definitionId)
+      ) {
+        const preset = WATCH.caseMaterials.find(
+          (m) => m.id === this.state.caseMaterial,
+        )!;
+        p.material.color.set(preset.color);
+        p.material.metalness = 1;
+        p.material.roughness = preset.roughness;
+      }
+      if (CASE_CRYSTALS.has(id)) {
+        const crystal = p.material as THREE.MeshPhysicalMaterial;
+        const fitted = this.fittedCase.has(id);
+        // Thin transparent reflection avoids two opposing transmission buffers
+        // occluding each other. Both source shells remain intact and pick-through.
+        crystal.transmission = fitted ? 0 : 0.98;
+        crystal.userData.finishTransmission = crystal.transmission;
+        if (crystal.transparent !== fitted) crystal.needsUpdate = true;
+        crystal.transparent = fitted;
+        crystal.opacity = fitted ? 0.12 : 1;
+        crystal.depthWrite = !fitted;
+        crystal.side = THREE.FrontSide;
+      }
       if (
         DIALS.presentationOverrides.some((override) => override.leafId === id)
       ) {
@@ -1679,7 +1815,10 @@ export class MovementViewer {
       }
       // A newly enabled complete display appears in place on the next frame.
       // Do not animate it from a hidden part's stale assembly/inventory pose.
-      if (this.fitted.has(id) && !previousFitted?.has(id)) {
+      if (
+        (this.fitted.has(id) && !previousFitted?.has(id)) ||
+        (this.fittedCase.has(id) && !previousCase?.has(id))
+      ) {
         p.offset.copy(p.target);
         p.rotation.copy(p.targetRotation);
         p.motion = undefined;
@@ -1743,7 +1882,11 @@ export class MovementViewer {
       }
       if (staged) {
         p.motion = undefined;
-        p.offset.fromArray(staged.get(p.source.id) ?? [0, 0, 0]);
+        p.offset.fromArray(
+          CASE_LEAVES.has(p.source.id) && !this.fittedCase.has(p.source.id)
+            ? [0, 0, 0]
+            : (staged.get(p.source.id) ?? [0, 0, 0]),
+        );
         p.rotation.copy(p.targetRotation);
       } else if (p.motion && !this.reduced) {
         p.motion.elapsed += Math.max(0, dt);
@@ -1879,7 +2022,7 @@ export class MovementViewer {
     );
     const hits = this.raycaster.intersectObjects(
       [...this.renderParts.values()]
-        .filter((p) => p.mesh.visible)
+        .filter((p) => p.mesh.visible && !CASE_CRYSTALS.has(p.source.id))
         .map((p) => p.mesh),
       false,
     );
@@ -2111,9 +2254,14 @@ export class MovementViewer {
     if (this.state.isolated) return selected;
     // A raw external selection replaces fitted display overlays until Back.
     const raw =
-      !!selection && !belongs(selection, ROOT) && !this.fitted.has(selection);
+      !!selection &&
+      !belongs(selection, ROOT) &&
+      !this.fitted.has(selection) &&
+      !this.fittedCase?.has(selection);
     let visible =
-      belongs(id, ROOT) || selected || (!raw && !!this.fitted?.has(id));
+      belongs(id, ROOT) ||
+      selected ||
+      (!raw && (!!this.fitted?.has(id) || !!this.fittedCase?.has(id)));
     if (id === PREFIX + '66' && !selected) visible = false;
     if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
     const group = GROUPS.find((g) => g.id === this.state.group);

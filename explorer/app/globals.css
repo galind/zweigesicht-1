@@ -1072,3 +1072,11 @@ canvas:focus-visible {
     grid-column: auto;
   }
 }
+
+.case-material,
+.hand-finish {
+  margin-top: 12px;
+}
+.case-material + .dial-note {
+  margin-bottom: 12px;
+}

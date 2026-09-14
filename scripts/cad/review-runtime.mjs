@@ -34,7 +34,7 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
    if(id.startsWith('.')){const p=path.resolve(path.dirname(file),id);return fs.existsSync(p+'.ts')?load(p+'.ts'):require(p)}
    return require(path.join(ROOT,'explorer/node_modules',id));
   };
-  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,Float32Array,Uint8Array,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
+  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,Float32Array,Uint8Array,TextDecoder,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
   cache.set(file,module.exports);return module.exports;
  };
 }
@@ -848,6 +848,12 @@ for(const state of [
 }
 results.push({check:'viewport resize preserves Reset overview with visible dials and exact selected face inside Time display',status:'pass'});
 
+function caseFixtureScene(){
+ const scene=new THREE.Scene(), geometry=new THREE.BufferGeometry();
+ geometry.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,1,0,0,0,1,0],3));geometry.setIndex([0,1,2]);geometry.computeVertexNormals();
+ const material=new THREE.MeshStandardMaterial();material.name='d_0_1_1_54';
+ const mesh=new THREE.Mesh(geometry,material);mesh.name='case-recovery-fixture';scene.add(mesh);return scene;
+}
 const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
 Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
 const preserved=JSON.stringify(catalogFixture.state);
@@ -856,7 +862,7 @@ assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalo
 pending[idx].reject(Error('Optional catalog unavailable'));await failedSelection;
 assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalogFixture.catalogPending,null);assert.ok(catalogFixture.detailError);
 idx=pending.length;const obsoleteSelection=catalogFixture.select(externalParts[1].id);
-catalogFixture.patch({treatment:'function'});pending[idx].resolve({scene:{}});await obsoleteSelection;
+catalogFixture.patch({treatment:'function'});pending[idx].resolve({scene:caseFixtureScene()});await obsoleteSelection;
 assert.equal(catalogFixture.state.part,null);assert.equal('treatment' in catalogFixture.state,false);assert.equal(catalogFixture.saves,0);assert.equal(catalogFixture.catalogLoaded,true);
 results.push({check:'optional catalog failure preserves pose/state/history; retry succeeds and intervening navigation cancels obsolete selection',status:'pass'});
 // Background dismissal cancels successful, failing and retrying optional selections.
@@ -865,7 +871,7 @@ for (const fails of [false,true]) {
  const pendingSelection=catalogFixture.select(externalParts[1].id);
  const stateBefore={...catalogFixture.state},savesBefore=catalogFixture.saves;
  catalogFixture.deselect();
- if(fails)pending[idx].reject(Error('Dismissed request'));else pending[idx].resolve({scene:{}});
+ if(fails)pending[idx].reject(Error('Dismissed request'));else pending[idx].resolve({scene:caseFixtureScene()});
  await pendingSelection;
  assert.equal(JSON.stringify(catalogFixture.state),JSON.stringify(stateBefore));assert.equal(catalogFixture.saves,savesBefore);
  assert.equal(catalogFixture.catalogRetry,undefined);assert.equal(catalogFixture.detailError,'');
@@ -873,7 +879,7 @@ for (const fails of [false,true]) {
 results.push({check:'empty-space dismissal invalidates pending selection success/failure without adding history or stale retry',status:'pass'});
 catalogFixture.catalogLoaded=false;idx=pending.length;const secondFailure=catalogFixture.select(externalParts[2].id);
 pending[idx].reject(Error('Retry fixture'));await secondFailure;
-idx=pending.length;const targetedRetry=catalogFixture.retryCatalog();pending[idx].resolve({scene:{}});await targetedRetry;
+idx=pending.length;const targetedRetry=catalogFixture.retryCatalog();pending[idx].resolve({scene:caseFixtureScene()});await targetedRetry;
 assert.equal(catalogFixture.state.part,externalParts[2].id);assert.equal(catalogFixture.saves,1);
 catalogFixture.catalogLoaded=false;idx=pending.length;const disposedCatalog=catalogFixture.loadCatalog();catalogFixture.dead=true;
 const disposedCatalogScenes=[];catalogFixture.disposeObject=o=>disposedCatalogScenes.push(o);const disposedScene={id:'disposed-catalog'};
@@ -1099,8 +1105,10 @@ results.push({check:'out-and-back drags, pinch release orders, cancellation, rig
 const {reviewExplosion}=await import('./review-explosion.mjs');
 reviewExplosion({v,THREE,initialState,load,ROOT,parts,results});
 const {reviewDials}=await import('./review-dials.mjs');
-await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results});
+await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results,modelFetch,caseFixtureScene});
 const {reviewInventory}=await import('./review-inventory.mjs');
 await reviewInventory({v,Viewer,THREE,initialState,load,parts,results});
+const {reviewWatch}=await import('./review-watch.mjs');
+await reviewWatch({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results,modelFetch,caseFixtureScene,parse});
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Inventory must preserve source geometry bytes');
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

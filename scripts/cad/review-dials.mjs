@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 /** Invoked by review-runtime: actual decoded catalog meshes + controller source. */
-export async function reviewDials({v, Viewer, THREE, initialState, load, sourceModules, ROOT, parts, results}) {
+export async function reviewDials({v, Viewer, THREE, initialState, load, sourceModules, ROOT, parts, results, modelFetch, caseFixtureScene}) {
  const {DIALS,fittedLeaves}=load('explorer/src/experience/dials.ts');
  const {ROOT:movement,belongs}=load('explorer/src/experience/catalog.ts');
  const {DISPLAY_LAYERS,displaySeparationOffsets}=load('explorer/src/experience/explosion.ts');
@@ -224,35 +224,35 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  results.push({check:'hidden hand changes never reveal either dial; choices persist; generic patches share loading path; invalid/conflicting API input leaves state/history untouched',status:'pass'});
  let pending=[],loads=0,disposed=0;
  class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
- const {MovementViewer:Race}=sourceModules({loader:Loader})('explorer/src/viewer/MovementViewer.ts');
+ const {MovementViewer:Race}=sourceModules({loader:Loader,fetchImpl:modelFetch})('explorer/src/viewer/MovementViewer.ts');
  const makeRace=()=>Object.assign(make(Race),{catalogLoaded:false,ingest(){},disposeObject(){disposed++}});
  let r=makeRace();let a=r.configureDials({centralVisible:true});let b=r.configureDials({smallVisible:true,smallStyle:'pear'});
- assert.equal(loads,1);r.group('display');r.patch({partSpread:.5});r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);
+ assert.equal(loads,1);r.group('display');r.patch({partSpread:.5});r.setSide('front');pending.shift().resolve({scene:caseFixtureScene()});await Promise.all([a,b]);
  assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);assert.equal(r.state.side,'front');assert.equal(r.state.smallStyle,'pear');assert.equal(r.state.group,'display');assert.equal(r.state.partSpread,.5);
- r=makeRace();a=r.chooseDial('central',true);assert.equal(r.state.side,'front');b=r.chooseDial('small',true,'pear');assert.equal(r.state.side,'back');r.setSide('front');pending.shift().resolve({scene:{}});await Promise.all([a,b]);assert.equal(r.state.side,'front');assert.deepEqual([r.state.centralVisible,r.state.smallVisible,r.state.smallStyle],[true,true,'pear']);
- r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.side,'front');assert.equal(r.state.centralVisible,true);assert.equal(r.state.viewAngle,'overview');
- r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
+ r=makeRace();a=r.chooseDial('central',true);assert.equal(r.state.side,'front');b=r.chooseDial('small',true,'pear');assert.equal(r.state.side,'back');r.setSide('front');pending.shift().resolve({scene:caseFixtureScene()});await Promise.all([a,b]);assert.equal(r.state.side,'front');assert.deepEqual([r.state.centralVisible,r.state.smallVisible,r.state.smallStyle],[true,true,'pear']);
+ r=makeRace();a=r.chooseDial('central',true);r.reset();pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(r.state.side,'front');assert.equal(r.state.centralVisible,true);assert.equal(r.state.viewAngle,'overview');
+ r=makeRace();a=r.showDial('central');r.reset();pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(r.state.presentation,'dials');assert.equal(r.state.side,'back');assert.equal(r.dialRequest,null);
  r=makeRace();a=r.configureDials({centralVisible:true});await r.configureDials({centralVisible:false});pending.shift().reject(Error('cancelled'));await a;assert.equal(r.dialError,'');assert.ok(!r.detailError);
  r=makeRace();a=r.configureDials({centralVisible:true,smallVisible:true});pending.shift().reject(Error('offline'));await a;assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);assert.equal(r.dialRequest.smallVisible,true);
- r.setSide('front');r.allParts();a=r.retryDials();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.layout,'spread');assert.equal(r.dialError,'');assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);
- r=makeRace();a=r.configureDials({centralVisible:true});r.cameraGeneration++;pending.shift().resolve({scene:{}});await a;assert.equal(r.framings,undefined);
- r=makeRace();a=r.configureDials({centralVisible:true});r.dead=true;pending.shift().resolve({scene:{}});await a;assert.equal(disposed,1);
+ r.setSide('front');r.allParts();a=r.retryDials();pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(r.state.layout,'spread');assert.equal(r.dialError,'');assert.equal(r.state.centralVisible,true);assert.equal(r.state.smallVisible,true);
+ r=makeRace();a=r.configureDials({centralVisible:true});r.cameraGeneration++;pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(r.framings,undefined);
+ r=makeRace();a=r.configureDials({centralVisible:true});r.dead=true;pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(disposed,1);
  // Reset during a genuinely incomplete load retains intent and reuses that load.
  r=makeRace();r.renderParts=new Map(v.renderParts);
  for(const id of DIALS.faces.central.structureLeafIds)r.renderParts.delete(id);
  r.ingest=()=>{r.renderParts=new Map(v.renderParts)};
  const loadsBefore=loads;a=r.chooseDial('central',true,'open-lance');r.patch({separation:1});r.reset();
  assert.equal(loads,loadsBefore+1);assert.equal(r.state.centralVisible,true);assert.equal(r.state.centralStyle,'open-lance');assert.equal(r.state.separation,0);assert.equal(r.state.side,'front');
- pending.shift().resolve({scene:{}});await a;await Promise.resolve();await Promise.resolve();
+ pending.shift().resolve({scene:caseFixtureScene()});await a;await Promise.resolve();await Promise.resolve();
  assert.equal(r.dialRequest,null);assert.equal(r.dialError,'');assert.equal(r.renderableDials().size,43);
  r=makeRace();r.renderParts=new Map(v.renderParts);for(const id of DIALS.faces.central.structureLeafIds)r.renderParts.delete(id);
  a=r.chooseDial('central',true);r.reset();pending.shift().reject(Error('offline at reset'));await a;await Promise.resolve();await Promise.resolve();assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);
- r.ingest=()=>{r.renderParts=new Map(v.renderParts)};a=r.retryDials();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.centralVisible,true);assert.equal(r.dialError,'');
+ r.ingest=()=>{r.renderParts=new Map(v.renderParts)};a=r.retryDials();pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(r.state.centralVisible,true);assert.equal(r.dialError,'');
  results.push({check:'Reset preserves dial intent during incomplete loading; single shared load resolves into assembled current face; failure stays retryable without clearing preferences',status:'pass'});
  // A missing leaf cannot silently report a complete display; a retry can ingest it.
  r=makeRace();r.renderParts=new Map(v.renderParts);const missing=DIALS.faces.central.structureLeafIds[0];const saved=r.renderParts.get(missing);r.renderParts.delete(missing);
- a=r.configureDials({centralVisible:true});pending.shift().resolve({scene:{}});await a;assert.ok(r.dialError);assert.equal(r.renderableDials().size,0,'Missing leaf hides BOTH packets');assert.equal(r.fitted.size,0);
- a=r.retryDials();r.renderParts.set(missing,saved);pending.shift().resolve({scene:{}});await a;assert.equal(r.dialError,'');
+ a=r.configureDials({centralVisible:true});pending.shift().resolve({scene:caseFixtureScene()});await a;assert.ok(r.dialError);assert.equal(r.renderableDials().size,0,'Missing leaf hides BOTH packets');assert.equal(r.fitted.size,0);
+ a=r.retryDials();r.renderParts.set(missing,saved);pending.shift().resolve({scene:caseFixtureScene()});await a;assert.equal(r.dialError,'');
  // Back after failure must reconcile restored preferences with missing geometry.
  r=makeRace();r.renderParts=new Map([...v.renderParts].filter(([id])=>belongs(id,movement)));
  a=r.configureDials({centralVisible:true});pending.shift().reject(Error('offline'));await a;

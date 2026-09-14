@@ -1,3 +1,4 @@
+import { CASE_LEAVES, caseOffset } from './watch';
 import { DIALS, displayFace, displayHostPart } from './dials';
 import handPoses from '../../../assets/authored/hand-display-poses.json';
 import complete from '../../../assets/derived/complete-separation.json';
@@ -140,6 +141,7 @@ export function explosionOffsets(
             (z + (displayOffsets.get(part.id) ?? 0)) * progress,
           ]);
     }
+    for (const id of CASE_LEAVES) result.set(id, caseOffset(id, progress));
     return result;
   }
   const byId = new Map(parts.map((p) => [p.id, p]));

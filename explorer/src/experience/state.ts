@@ -1,3 +1,4 @@
+import watch from '../../../assets/authored/watch-configurations.json' with { type: 'json' };
 import configurations from '../../../assets/authored/dial-configurations.json' with { type: 'json' };
 export type Phase =
   | 'loading'
@@ -9,6 +10,9 @@ export type Phase =
 export interface ExperienceState {
   phase: Phase;
   presentation: 'movement' | 'dials'; // Derived from shared dial visibility.
+  caseVisible: boolean;
+  caseMaterial: string;
+  centralFinish: string;
   dialsVisible: boolean;
   // Compatibility snapshots; always equal to dialsVisible.
   centralVisible: boolean;
@@ -30,6 +34,9 @@ export interface ExperienceState {
 export const initialState: ExperienceState = {
   phase: 'loading',
   presentation: 'movement',
+  caseVisible: false,
+  caseMaterial: 'steel',
+  centralFinish: 'blued-steel',
   dialsVisible: false,
   centralVisible: false,
   smallVisible: false,
@@ -53,7 +60,7 @@ export function resolveState(
   previous: ExperienceState,
   patch: Partial<ExperienceState>,
 ): ExperienceState {
-  const next = { ...previous, ...patch };
+  const next = { ...initialState, ...previous, ...patch };
   // Discard obsolete or unknown state fields, including historical playback input.
   for (const key of Object.keys(next))
     if (!(key in initialState))
@@ -79,6 +86,15 @@ export function resolveState(
     )
       next[key] = configurations.defaults[face];
   }
+  next.caseVisible = next.caseVisible === true;
+  if (
+    !watch.caseMaterials.some((material) => material.id === next.caseMaterial)
+  )
+    next.caseMaterial = 'steel';
+  const finishes =
+    watch.handFinishes[next.centralStyle as keyof typeof watch.handFinishes];
+  if (!finishes.includes(next.centralFinish))
+    next.centralFinish = 'blued-steel';
   next.separation = clamp(next.separation);
   next.partSpread = clamp(next.partSpread);
   next.reveal = clamp(next.reveal);
@@ -107,6 +123,9 @@ export function resetViewState(state: ExperienceState): ExperienceState {
   return resolveState(initialState, {
     phase: 'recovering',
     side: state.side,
+    caseVisible: state.caseVisible,
+    caseMaterial: state.caseMaterial,
+    centralFinish: state.centralFinish,
     dialsVisible: state.centralVisible && state.smallVisible,
     centralStyle: state.centralStyle,
     smallStyle: state.smallStyle,

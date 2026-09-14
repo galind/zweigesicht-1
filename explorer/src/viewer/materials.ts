@@ -356,6 +356,8 @@ export function createMaterial(
   material.userData.emphasisRole = 'whole';
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
+  const configurationOverride = { value: 0 };
+  material.userData.configurationOverride = configurationOverride;
   const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
@@ -380,6 +382,7 @@ export function createMaterial(
             : (brushingDetail[finish.family] ?? 1),
       },
       finishEnabled: enabled,
+      configurationOverride,
       emphasis,
       emphasisColor,
       finishEngraved: { value: etched ? 1 : 0 },
@@ -419,7 +422,7 @@ export function createMaterial(
           '#include <begin_vertex>\nvFinishPosition=position; vFinishNormal=normal; vFinishRole=0.0;\n#ifdef SOURCE_FINISH\nvFinishNormal=sourceFinishNormal; vFinishRole=sourceFinishRole;\n#endif\nvFinishViewNormal=normalize(normalMatrix*vFinishNormal);\nvFinishX=mat3(modelViewMatrix)*vec3(1,0,0); vFinishY=mat3(modelViewMatrix)*vec3(0,1,0);',
         );
     shader.fragmentShader =
-      'uniform vec2 emphasis;\nuniform vec3 emphasisColor;\n' +
+      'uniform float configurationOverride;\nuniform vec2 emphasis;\nuniform vec3 emphasisColor;\n' +
       declarations +
       surface +
       frostReliefGLSL +
@@ -498,7 +501,7 @@ float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))
 // The explicit shock-arm region wins over neutral/interpolated source roles.
 // Other parts and the central steel spine still have finishShockBlue == 0.
 if(finishWholeBlue<.5 && finishSteelSeat>.5) finishBlueSurface=finishShockBlue;
-if(finishEnabled>.5 && finishBlueSurface>0.0) {
+if(finishEnabled>.5 && configurationOverride<.5 && finishBlueSurface>0.0) {
  float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);
  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78),finishBlueSurface);
 }

@@ -86,3 +86,20 @@ test('shared toggle wins over legacy snapshots and hidden styles stay hidden',()
   assert.equal(restored.dialsVisible,centralVisible&&smallVisible);
  }
 });
+
+test('watch defaults migrate old state and preserve configuration on Reset',()=>{
+ const legacy={...initialState};delete legacy.caseVisible;delete legacy.caseMaterial;delete legacy.centralFinish;
+ const migrated=resolveState(legacy,{});assert.equal(migrated.caseVisible,false);assert.equal(migrated.caseMaterial,'steel');assert.equal(migrated.centralFinish,'blued-steel');
+ for(const caseVisible of [false,true]) for(const caseMaterial of ['steel','rose-gold','platinum']) {
+  const s=resolveState(initialState,{caseVisible,caseMaterial,centralStyle:'fine',centralFinish:'rose-gold',side:'front',group:'energy',layout:'spread'});
+  const reset=resetViewState(s);for(const key of ['caseVisible','caseMaterial','centralFinish','side'])assert.equal(reset[key],s[key]);
+  assert.equal(reset.dialsVisible,false);assert.equal(reset.group,null);assert.equal(reset.layout,'assembly');
+ }
+});
+test('unsupported hand combinations and malformed configuration normalize deterministically',()=>{
+ const rose=resolveState(initialState,{centralFinish:'rose-gold'});assert.equal(rose.centralFinish,'rose-gold');
+ for(const centralStyle of ['lance','open-lance']) {
+  const s=resolveState(rose,{centralStyle});assert.equal(s.centralFinish,'blued-steel');assert.equal(s.centralStyle,centralStyle);assert.equal(s.dialsVisible,false);
+ }
+ const invalid=resolveState(initialState,{caseVisible:'yes',caseMaterial:'unknown',centralFinish:'unknown'});assert.equal(invalid.caseVisible,false);assert.equal(invalid.caseMaterial,'steel');assert.equal(invalid.centralFinish,'blued-steel');
+});
