@@ -30,6 +30,10 @@ Verification for this revision: 11 state tests, 89 CPU runtime checks, TypeScrip
 
 Follow-up simplification: removed Previous view from Focus and restored Separate’s original regular text and icon styling. Its first position supplies priority without extra visual weight. Updated the existing UX expectation; TypeScript, lint and targeted browser inspection pass (seven Focus choices, matching control text weight/color, and visual review).
 
+## Next prepared goal
+
+Prepared [Watch configuration](docs/WATCH_CONFIGURATION_GOAL.md) at the user’s request. The next implementation would replace Dials & hands with Configure, adding a fitted case/crystal toggle, supported case materials and Three hands material choices. The user clarified that “sticks” means the hands, not hour markers. Source case geometry is present; fitted occurrence selection and material compatibility require the documented audit. This turn prepares the goal only; implementation has not started.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
