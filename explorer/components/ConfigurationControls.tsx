@@ -68,36 +68,26 @@ export function ConfigurationControls({
         />
         <span>Show both dials</span>
       </label>
-      <div className="hand-choices">
-        {(['central', 'small'] as const).map((face) => {
-          const label = face === 'central' ? 'Three hands' : 'Skeleton';
-          const styleKey = face === 'central' ? 'centralStyle' : 'smallStyle';
-          return (
-            <label className="dial-face" key={face}>
-              <span>{label}</span>
-              <div className="dial-hand-select">
-                <select
-                  aria-label={`${label} hand style`}
-                  value={state[styleKey]}
-                  disabled={!available}
-                  onChange={(event) =>
-                    void viewer()?.configureDials({
-                      [styleKey]: event.target.value,
-                    })
-                  }
-                >
-                  {DIALS.faces[face].styles.map((hand) => (
-                    <option key={hand.id} value={hand.id}>
-                      {hand.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown aria-hidden="true" />
-              </div>
-            </label>
-          );
-        })}
-      </div>
+      <label className="dial-face">
+        <span>Skeleton</span>
+        <div className="dial-hand-select">
+          <select
+            aria-label="Skeleton hand style"
+            value={state.smallStyle}
+            disabled={!available}
+            onChange={(event) =>
+              void viewer()?.configureDials({ smallStyle: event.target.value })
+            }
+          >
+            {DIALS.faces.small.styles.map((hand) => (
+              <option key={hand.id} value={hand.id}>
+                {hand.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown aria-hidden="true" />
+        </div>
+      </label>
       <label className="dial-face hand-finish">
         <span>Three hands material</span>
         <div className="dial-hand-select">

@@ -58,6 +58,8 @@ Bushing follow-up: the three fitted central Zeigerbuchse parts (d34/d38/d41) now
 
 Polish and lug-hardware follow-up: fitted gold hands and bushings now use polished gold throughout (authored roughness 0.075), overriding the source-white seconds counterweight and other surface color roles. Lug screw bars d55 and their d53 end screws match the selected case material. All d53/d57 lug screws already followed their attachments; the four ring-mounted d72 locking pins now accompany the outward flip arc and return to their immutable source seats. Fresh verification: 97 CPU checks, 184 browser watch checks, TypeScript, lint and production build pass. Coverage includes complete gold surface override, scoped bar finishes, pin motion and reversal continuity, exact endpoints, loading/retry and resource reuse. Visual captures and `polish-hardware-checks.json` are in the existing refinement evidence directory. The motion remains illustrative; no source geometry, push or deployment changes.
 
+Menu simplification: removed the Three hands shape selector from Configure and gave the Skeleton selector its own row. Existing configuration state and API support remain available. Updated the panel description. TypeScript, lint and targeted browser inspection pass.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

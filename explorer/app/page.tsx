@@ -659,8 +659,7 @@ export default function Home() {
             <SheetHeader>
               <SheetTitle>Watch configuration</SheetTitle>
               <SheetDescription className="sr-only">
-                Configure the case, materials and both dials. Choose hands for
-                each.
+                Configure the case, materials and both dials.
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
