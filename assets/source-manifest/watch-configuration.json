@@ -21,7 +21,7 @@
   ],
   "caseEvidence": "Gallery labels stainless steel, rose gold and platinum versions. Pictured body, two circular backs, crown and lugs agree with the SS assembly silhouette. The same SS source geometry is used for authored visual finish presets; no alternate alloy geometry, measured reflectance or offer/order compatibility is claimed.",
   "handEvidence": "Fine straight central hands pictured in blue (steel watch) and rose (rose-gold and platinum watches). Blue source assignments also support retained Lance/Open lance. No rose-gold evidence for those two shapes: selector disables it and changing shape normalizes to blue with live feedback. Skeleton finishes unchanged.",
-  "scope": "Case color applies only to exterior d46/d48/d54/d56/d68/d70/d71; fasteners, rods, locks, tube, corrector, seals and crystals retain baseline materials. Fine hand finish targets three blades and their three fitted central bushings d34/d38/d41, excluding Skeleton supports, markers and logo. Fine colors follow case material by explicit user direction; this is not an order configurator.",
+  "scope": "Case color applies only to exterior d46/d48/d53/d54/d55/d56/d68/d70/d71; remaining fasteners, locks, tube, corrector, seals and crystals retain baseline materials. Fine hand finish targets three blades and their three fitted central bushings d34/d38/d41, excluding Skeleton supports, markers and logo. Fine colors follow case material by explicit user direction; this is not an order configurator.",
   "occurrences": "Complete source packets 1,2,3,6,7,8 plus d51 lugs under 4 and 9. Matching orientation with both lug rods on source negative Z; exclude reverse-face alternatives 5/10 and all leather/buckles. No transforms changed.",
   "d54": {
     "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
@@ -74,6 +74,13 @@
       "exclusions": "Raised M planes at X=3.5, bevels, rim and knurling",
       "probe": "scripts/cad/crown_finish_probe.py"
     },
-    "bushings": "15 September 2026: explicit user direction extends the gold hand color to the three fitted central Zeigerbuchse bushings on rose-gold/platinum Fine configurations."
+    "bushings": "15 September 2026: explicit user direction extends the gold hand color to the three fitted central Zeigerbuchse bushings on rose-gold/platinum Fine configurations.",
+    "polishedHandsAndLugHardware": {
+      "date": "2026-09-15",
+      "authority": "Explicit user correction",
+      "goldFinish": "The fitted gold hand packet overrides all source-color roles, including the white seconds counterweight, with polished gold (authored roughness 0.075, metalness 1).",
+      "caseBars": "d55 Schraubsteg bars and d53 end screws match the selected case material. Only fitted case instances receive this override.",
+      "flipHardware": "All d53/d57 attachment screws already travel with the 18-leaf lug packets. Four d72 Riegelstift fest instances on the middle ring now accompany the outward clearing arc and return to their original seats; no new CAD pose or mechanical sequence is claimed."
+    }
   }
 }

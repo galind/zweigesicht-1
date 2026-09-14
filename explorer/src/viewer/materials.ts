@@ -586,6 +586,14 @@ if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) {
  diffuseColor.rgb=vec3(.008,.03,.105);
  finishHeight=0.0;
 }
+// The fitted gold packet is polished throughout, including the source-white
+// seconds counterweight and neutral hub faces. Source roles remain intact.
+if(finishEnabled>.5 && configurationOverride>.5) {
+ diffuseColor.rgb=diffuse;
+ finishHeight=0.0;
+ finishGrain=0.0;
+ finishFrostMask=0.0;
+}
 `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
@@ -615,11 +623,12 @@ if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 // Minute recesses share the Crown-wheel plate blue metal and polish.
 if(finishEnabled>.5 && finishPattern>5.5 && abs(vFinishRole-4.0)<.2) roughnessFactor=.055;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
+if(finishEnabled>.5 && configurationOverride>.5) roughnessFactor=roughness;
 `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <metalnessmap_fragment>',
-      '#include <metalnessmap_fragment>\nif(finishEnabled>.5 && (abs(vFinishRole-5.0)<.2 || abs(vFinishRole-11.0)<.2)) metalnessFactor=0.0;',
+      '#include <metalnessmap_fragment>\nif(finishEnabled>.5 && (abs(vFinishRole-5.0)<.2 || abs(vFinishRole-11.0)<.2)) metalnessFactor=0.0;\nif(finishEnabled>.5 && configurationOverride>.5) metalnessFactor=metalness;',
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <normal_fragment_maps>',

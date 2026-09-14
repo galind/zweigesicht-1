@@ -1,4 +1,4 @@
-import { caseDisplayMatrix, CASE_LUGS } from './CasePose';
+import { caseDisplayMatrix, CASE_LUGS, CASE_LOCKING_PINS } from './CasePose';
 import * as THREE from 'three';
 import { MovementViewer } from './MovementViewer';
 import { WATCH, CASE_LEAVES, CASE_CRYSTALS } from '../experience/watch';
@@ -281,6 +281,13 @@ export async function runWatchChecks(v: MovementViewer) {
   }
   v.flipMovement();
   await pause(160);
+  check(
+    'Four locking pins travel during the lug flip',
+    [...CASE_LOCKING_PINS].every((id) => {
+      const p = v.renderParts.get(id)!;
+      return !p.mesh.matrix.equals(p.assembled);
+    }),
+  );
   v.flipMovement();
   await settle(v);
   check(
@@ -290,12 +297,30 @@ export async function runWatchChecks(v: MovementViewer) {
       !v.caseTravel &&
       v.caseEffective(),
   );
+  check(
+    'Locking pins return to their exact seats after flip reversal',
+    [...CASE_LOCKING_PINS].every((id) => {
+      const p = v.renderParts.get(id)!;
+      return p.mesh.matrix.equals(p.assembled);
+    }),
+  );
   for (const caseMaterial of ['steel', 'rose-gold', 'platinum']) {
     await v.configureWatch({
       caseMaterial,
       centralStyle: 'fine',
       centralFinish: 'blued-steel',
     });
+    check(
+      `Fine packet finish is fully polished for ${caseMaterial}`,
+      DIALS.faces.central.styles[0].leafIds.every((id) => {
+        const m = v.renderParts.get(id)!.material;
+        return caseMaterial === 'steel'
+          ? m.userData.configurationOverride.value === 0
+          : m.userData.configurationOverride.value === 1 &&
+              m.roughness === 0.075 &&
+              m.metalness === 1;
+      }),
+    );
     check(
       `Fine hands follow ${caseMaterial}`,
       v.state.centralFinish ===

@@ -16,6 +16,9 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
   assert.equal(c.fittedCase.size,caseVisible?41:0);assert.equal(c.state.centralFinish,shape.id==='fine'&&material.id!=='steel'?'rose-gold':'blued-steel');
   const bushings=DIALS.faces.central.styles[0].supportLeafIds;
   for(const id of bushings){const p=c.renderParts.get(id);assert.match(p.source.name,/Zeigerbuchse/);assert.equal(p.material.color.getHex(),dialsVisible&&shape.id==='fine'&&material.id!=='steel'?0xd9ab94:base.get(id).color);}
+  const gold=dialsVisible&&shape.id==='fine'&&material.id!=='steel';
+  for(const id of DIALS.faces.central.styles[0].leafIds){const p=c.renderParts.get(id);if(gold){assert.equal(p.material.roughness,.075);assert.equal(p.material.metalness,1);assert.equal(p.material.userData.configurationOverride.value,1);}}
+  for(const r of WATCH.leaves.filter(p=>['d_0_1_1_53','d_0_1_1_55'].includes(p.definitionId))){assert.equal(c.renderParts.get(r.id).material.color.getHex(),caseVisible?new THREE.Color(material.color).getHex():base.get(r.id).color);}
   for(const [id,p]of c.renderParts){assert.equal(p.mesh.geometry,base.get(id).geometry);assert.equal(p.material,base.get(id).material);if(belongs(id,movement)||DIALS.faces.central.structureLeafIds.includes(id))assert.equal(p.material.color.getHex(),base.get(id).color);}
  }
  results.push({check:'case and hand presets retain geometry/material identity and never recolor movement, dial markers, structure or logo; unsupported combinations normalize',status:'pass'});
@@ -25,7 +28,7 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  await c.configureWatch({caseVisible:true,dialsVisible:true});pose();
  const missing=[...CASE_CRYSTALS][0],saved=c.renderParts.get(missing);c.renderParts.delete(missing);pose();assert.equal(c.fittedCase.size,0);assert.equal(c.fitted.size,43);assert.equal(c.caseEffective(),false);c.renderParts.set(missing,saved);pose();assert.equal(c.fittedCase.size,41);
  results.push({check:'incomplete case suppresses every case piece while preserving complete dials; restored geometry reveals one complete case',status:'pass'});
- const {caseDisplayMatrix,CASE_LUGS}=load('explorer/src/viewer/CasePose.ts');
+ const {caseDisplayMatrix,CASE_LUGS,CASE_LOCKING_PINS}=load('explorer/src/viewer/CasePose.ts');
  for(const record of WATCH.leaves.filter(p=>p.oppositeWorldTransform)) {
   const alternate=parts.find(p=>p.id===record.oppositeSourceId);
   assert.equal(alternate.definitionId,record.definitionId);
@@ -42,6 +45,24 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  c.state={...c.state,part:id};pose();assert.equal(c.caseEffective(),true);assert.equal(c.fittedCase.size,41);assert.ok([...CASE_LEAVES].every(id=>c.renderParts.get(id).mesh.visible));
  c.state={...c.state,part:null};pose();
  results.push({check:'opposite lug matrices match all 18 alternate source occurrences; reduced-motion endpoints and interrupted flip stay continuous; fitted selection retains complete case',status:'pass'});
+ assert.equal(CASE_LOCKING_PINS.size,4);
+ for(const id of CASE_LOCKING_PINS){const p=c.renderParts.get(id);assert.equal(p.source.definitionId,'d_0_1_1_72');
+  const original=p.assembled.clone();
+  for(const endpoint of [0,1])assert.ok(caseDisplayMatrix(id,p.assembled,endpoint).equals(original));
+  const middle=caseDisplayMatrix(id,p.assembled,.5);assert.ok(Math.abs(middle.elements[13]-original.elements[13]-Math.sign(original.elements[13])*8)<1e-10);assert.ok(p.assembled.equals(original));
+ }
+ c.reduced=false;c.state={...c.state,side:'front'};c.retarget();c.applyPose(.2);
+ const movingPins=new Map([...CASE_LOCKING_PINS].map(id=>[id,c.renderParts.get(id).mesh.matrix.clone()]));
+ for(const [id,matrix]of movingPins)assert.ok(!matrix.equals(c.renderParts.get(id).assembled));
+ c.state={...c.state,side:'back'};c.retarget();c.applyPose(0);
+ for(const [id,matrix]of movingPins)assert.ok(matrix.equals(c.renderParts.get(id).mesh.matrix));
+ c.applyPose(2);for(const id of CASE_LOCKING_PINS)assert.ok(c.renderParts.get(id).mesh.matrix.equals(c.renderParts.get(id).assembled));
+ c.reduced=true;
+ const seconds=c.renderParts.get(DIALS.faces.central.styles[0].handLeafIds.seconds);
+ const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};seconds.material.onBeforeCompile(shader,{});
+ assert.ok(shader.fragmentShader.indexOf('diffuseColor.rgb=diffuse;')>shader.fragmentShader.indexOf('diffuseColor.rgb=vec3(.546,.584,.631)'));
+ assert.ok(shader.fragmentShader.includes('configurationOverride>.5) roughnessFactor=roughness'));
+ results.push({check:'gold packet overrides source-white surfaces and polish; fitted lug bars match case; four locking pins travel with the clearing arc, reverse continuously and return to original seats',status:'pass'});
  const geometries=new Set([...c.renderParts.values()].map(p=>p.mesh.geometry));
  const recovery=sourceModules({fetchImpl:modelFetch})('explorer/src/viewer/CaseRecovery.ts');const patch=await recovery.loadCaseRecovery();
  const scene=(await parse('catalog.glb')).scene;const original=[];scene.traverse(n=>{if(n.isMesh&&n.material.name==='d_0_1_1_54')original.push(n)});

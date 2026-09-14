@@ -17,12 +17,27 @@ const lugs = new Map(
     ]),
 );
 export const CASE_LUGS = new Set(lugs.keys());
+export const CASE_LOCKING_PINS = new Set(
+  WATCH.lugPresentation.lockingPinLeafIds,
+);
 /** Source endpoints; the clearing arc is presentation, not a mechanical procedure. */
 export function caseDisplayMatrix(
   id: string,
   assembled: THREE.Matrix4,
   turn: number,
 ) {
+  // Ring-mounted pins retain their source seat at both endpoints. During the
+  // illustrative turn they follow the corresponding attachment's clearing arc.
+  if (CASE_LOCKING_PINS.has(id) && turn > 0 && turn < 1) {
+    const sign = Math.sign(assembled.elements[13]);
+    return new THREE.Matrix4()
+      .makeTranslation(
+        0,
+        sign * WATCH.lugPresentation.clearanceMm * Math.sin(Math.PI * turn),
+        0,
+      )
+      .multiply(assembled);
+  }
   const lug = lugs.get(id);
   if (!lug || turn === 0) return assembled;
   if (turn === 1) return lug.opposite;

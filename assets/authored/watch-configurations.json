@@ -2261,7 +2261,9 @@
     "d_0_1_1_56",
     "d_0_1_1_68",
     "d_0_1_1_70",
-    "d_0_1_1_71"
+    "d_0_1_1_71",
+    "d_0_1_1_53",
+    "d_0_1_1_55"
   ],
   "caseMaterials": [
     {
@@ -2320,6 +2322,13 @@
     ],
     "durationSeconds": 0.85,
     "clearanceMm": 8,
-    "description": "Both complete attachment packets withdraw outward, turn about Y and return to exact opposite source occurrence matrices. Illustrative reconfiguration, not a service procedure."
+    "description": "Both complete attachment packets withdraw outward, turn about Y and return to exact opposite source occurrence matrices. Illustrative reconfiguration, not a service procedure.",
+    "lockingPinLeafIds": [
+      "p_0_1_1_1__0_1_1_1_3__0_1_1_43_7__0_1_1_69_3",
+      "p_0_1_1_1__0_1_1_1_3__0_1_1_43_7__0_1_1_69_4",
+      "p_0_1_1_1__0_1_1_1_3__0_1_1_43_7__0_1_1_69_5",
+      "p_0_1_1_1__0_1_1_1_3__0_1_1_43_7__0_1_1_69_6"
+    ],
+    "lockingPinMotion": "The four ring-mounted locking pins accompany the outward clearing arc and return to their immutable source seats. They do not change side or receive the attachment rotation."
   }
 }

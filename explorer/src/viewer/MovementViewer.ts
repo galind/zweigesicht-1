@@ -1731,7 +1731,11 @@ export class MovementViewer {
           ![...this.fittedCase].some((id) => belongs(id, selection))
         );
       p.material.userData.configurationOverride.value = roseHand ? 1 : 0;
-      if (roseHand) p.material.color.setHex(0xd9ab94);
+      if (roseHand) {
+        p.material.color.setHex(0xd9ab94);
+        p.material.metalness = 1;
+        p.material.roughness = 0.075;
+      }
       if (
         this.fittedCase.has(id) &&
         WATCH.caseMaterialDefinitions.includes(p.source.definitionId)
