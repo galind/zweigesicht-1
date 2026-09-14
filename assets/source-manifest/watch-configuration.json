@@ -56,5 +56,23 @@
       "sha256": "c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2"
     }
   },
-  "redistribution": "All downloaded/reference and recovered geometry remain local ignored files; no new CAD payload is committed or published."
+  "redistribution": "All downloaded/reference and recovered geometry remain local ignored files; no new CAD payload is committed or published.",
+  "userRefinement": {
+    "date": "2026-09-14",
+    "authority": "Explicit project-owner feedback; visual configuration rule, not a new manufacturer ordering claim.",
+    "fineHandsByCase": {
+      "steel": "blued-steel",
+      "rose-gold": "rose-gold",
+      "platinum": "rose-gold"
+    },
+    "lugs": "Skeleton is default main face; both attachment packets must turn opposite the main face. All 18 alternate occurrence transforms audited against source, same definition IDs. Upper child 4 uses opposite child 10; lower child 9 uses opposite child 5.",
+    "crownFrost": {
+      "definitionId": "d_0_1_1_46",
+      "sourceFace": 468,
+      "areaMm2": 5.828602376499894,
+      "plane": "local X=3.4 mm",
+      "exclusions": "Raised M planes at X=3.5, bevels, rim and knurling",
+      "probe": "scripts/cad/crown_finish_probe.py"
+    }
+  }
 }

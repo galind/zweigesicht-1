@@ -176,6 +176,7 @@ uniform float finishSnailTurn;
 uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
+uniform float finishCrownField;
 uniform float finishSecondsCounterweight;
 uniform float finishShockBlock;
 uniform float finishHeatBlue;
@@ -292,7 +293,9 @@ export function createMaterial(
   // Only materials with reviewed frosted regions compile the relief evaluator.
   if (
     finish.family === 'frosted' ||
-    ['d_0_1_1_99', 'd_0_1_1_222', 'd_0_1_1_228'].includes(definitionId ?? '')
+    ['d_0_1_1_46', 'd_0_1_1_99', 'd_0_1_1_222', 'd_0_1_1_228'].includes(
+      definitionId ?? '',
+    )
   )
     material.defines = { ...material.defines, FROST_RELIEF: 1 };
   if (geometry?.hasAttribute('sourceFinishNormal'))
@@ -398,6 +401,7 @@ export function createMaterial(
       },
       finishRadius: { value: Math.max(radius, 0.01) },
       finishBrushAxis: { value: brushAxis },
+      finishCrownField: { value: definitionId === 'd_0_1_1_46' ? 1 : 0 },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
       finishSecondsCounterweight: {
         value: definitionId === 'd_0_1_1_30' ? 1 : 0,
@@ -459,7 +463,7 @@ outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * focusR
       '#include <color_fragment>',
       /* glsl */ `
 #include <color_fragment>
-vec2 finishUv=vFinishPosition.xy;
+vec2 finishUv=finishCrownField>.5 ? vFinishPosition.yz : vFinishPosition.xy;
 // Clip the interpolated neutral role at the actual counterweight circle;
 // long source triangles must not carry its white face up the stem.
 float finishSteelSeat=1.0-step(.2,abs(vFinishRole-2.0));
@@ -481,6 +485,11 @@ float finishGrain=0.0;
 float finishHeight=0.0;
 float finishField=1.0;
 float finishFrostMask=finishFrosted;
+// Original d46 face 468: recessed M background, local X=3.4 mm.
+// Raised lettering at X=3.5 and the rim/knurling keep their polished finish.
+finishFrostMask=max(finishFrostMask,finishCrownField
+  * step(.999,abs(normalize(vFinishNormal).x))
+  * (1.0-smoothstep(.0001,.0003,abs(vFinishPosition.x-3.4))));
 float finishBase=0.0;
 // Audited d99 face 54 is the only flat source plane at Z=-.3 mm.
 // The tight plane mask leaves the lower feet, chamfers and engraving separate.
@@ -621,6 +630,7 @@ if(finishEnabled>.5 && finishFrostMask>.5) {
  // The unmasked analytic slope is projected only after the exact face mask.
  // No screen derivative can sample a neighboring polished face's height.
  vec3 frostX=normalize(vFinishX),frostY=normalize(vFinishY);
+ if(finishCrownField>.5){ frostX=normalize(vFinishY); frostY=normalize(cross(vFinishX,vFinishY)); }
  vec3 frostGradient=frostX*finishRelief.x+frostY*finishRelief.y;
  frostGradient-=normal*dot(normal,frostGradient);
  normal=normalize(normal-frostGradient);

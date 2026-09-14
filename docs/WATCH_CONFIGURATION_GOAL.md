@@ -60,3 +60,7 @@ Likely starting points: `explorer/app/page.tsx`, `explorer/app/globals.css`, `ex
 - Run relevant state tests, CPU runtime checks, TypeScript, lint and production build; extend focused tests for configuration normalization, material isolation, visibility/loading races and effective-mode behavior. Re-run affected dial, inventory and browser UX suites.
 - Inspect desktop and mobile layouts, 200% text, keyboard focus/dismissal, touch targets, static fallback and quality settings. Compare case/crystal/hand appearance with maker references; preserve the quiet overlay layout.
 - Deliver a concise result, screenshots of case off/on and verified material/hand variations, tests run and remaining evidence/source limitations. No running-watch simulation, invented material claims or unrelated redesign.
+
+## Accepted refinement — 14 September 2026
+
+Skeleton remains the main opening face, with the fitted lugs pointing toward the opposite face. Flip animates both attachment packets to the opposite source placements. Fine hands follow case material: blue for steel, gold for rose gold and platinum. Frost only the recessed background behind the crown M. Ordinary fitted case selection retains the configured watch and its finishes; isolation is explicit. These later user instructions supersede independent Fine finish selection and raw behavior for fitted case selections above.

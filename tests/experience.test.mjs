@@ -97,9 +97,21 @@ test('watch defaults migrate old state and preserve configuration on Reset',()=>
  }
 });
 test('unsupported hand combinations and malformed configuration normalize deterministically',()=>{
- const rose=resolveState(initialState,{centralFinish:'rose-gold'});assert.equal(rose.centralFinish,'rose-gold');
+ const rose=resolveState(initialState,{caseMaterial:'rose-gold',centralFinish:'rose-gold'});assert.equal(rose.centralFinish,'rose-gold');
  for(const centralStyle of ['lance','open-lance']) {
   const s=resolveState(rose,{centralStyle});assert.equal(s.centralFinish,'blued-steel');assert.equal(s.centralStyle,centralStyle);assert.equal(s.dialsVisible,false);
  }
  const invalid=resolveState(initialState,{caseVisible:'yes',caseMaterial:'unknown',centralFinish:'unknown'});assert.equal(invalid.caseVisible,false);assert.equal(invalid.caseMaterial,'steel');assert.equal(invalid.centralFinish,'blued-steel');
+});
+
+test('Fine hand finish follows case through hidden choices, overrides and restoration',()=>{
+ for(const caseMaterial of ['steel','rose-gold','platinum']) for(const caseVisible of [true,false]) {
+  const expected=caseMaterial==='steel'?'blued-steel':'rose-gold';
+  for(const centralFinish of ['blued-steel','rose-gold']) {
+   const s=resolveState(initialState,{caseMaterial,caseVisible,centralFinish,centralStyle:'fine'});
+   assert.equal(s.centralFinish,expected);assert.equal(resetViewState(s).centralFinish,expected);
+   const lance=resolveState(s,{centralStyle:'lance'});assert.equal(lance.centralFinish,'blued-steel');
+   assert.equal(resolveState(lance,{centralStyle:'fine'}).centralFinish,expected);
+  }
+ }
 });

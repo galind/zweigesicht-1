@@ -1,3 +1,4 @@
+import { caseDisplayMatrix, CASE_LUGS } from './CasePose';
 import * as THREE from 'three';
 import { MovementViewer } from './MovementViewer';
 import { WATCH, CASE_LEAVES, CASE_CRYSTALS } from '../experience/watch';
@@ -139,7 +140,11 @@ export async function runWatchChecks(v: MovementViewer) {
       v.state.centralFinish === 'blued-steel' &&
       !!v.configurationNotice,
   );
-  await v.configureWatch({ centralStyle: 'fine', centralFinish: 'rose-gold' });
+  await v.configureWatch({
+    caseMaterial: 'rose-gold',
+    centralStyle: 'fine',
+    centralFinish: 'rose-gold',
+  });
   const blades = Object.values(DIALS.faces.central.styles[0].handLeafIds);
   check(
     'Rose finish targets exactly the three Fine blades; support seats unchanged',
@@ -178,10 +183,12 @@ export async function runWatchChecks(v: MovementViewer) {
   }
   await settle(v);
   check(
-    'Rapid separation reversal returns every case occurrence to exact source matrix',
+    'Rapid separation reversal returns every case occurrence to exact fitted matrix',
     [...CASE_LEAVES].every((id) => {
       const p = v.renderParts.get(id)!;
-      return p.mesh.matrix.equals(p.assembled);
+      return p.mesh.matrix.equals(
+        caseDisplayMatrix(id, p.assembled, v.state.side === 'back' ? 1 : 0),
+      );
     }),
   );
   for (const group of GROUPS) {
@@ -212,18 +219,21 @@ export async function runWatchChecks(v: MovementViewer) {
       v.state.side === 'back' &&
       [...CASE_LEAVES].every((id) => {
         const p = v.renderParts.get(id)!;
-        return p.mesh.matrix.equals(p.assembled);
+        return p.mesh.matrix.equals(
+          caseDisplayMatrix(id, p.assembled, v.state.side === 'back' ? 1 : 0),
+        );
       }),
   );
   const crystal = [...CASE_CRYSTALS][0];
   await v.select(crystal);
   await settle(v);
   check(
-    'Explicit crystal inspection remains available with raw appearance',
+    'Explicit fitted crystal selection retains transparent configured watch',
     v.renderParts.get(crystal)!.mesh.visible &&
-      !v.caseEffective() &&
+      v.caseEffective() &&
+      visibleCase().length === 41 &&
       v.state.part === crystal &&
-      !v.renderParts.get(crystal)!.material.transparent,
+      v.renderParts.get(crystal)!.material.transparent,
   );
   v.patch({ isolated: true });
   await settle(v);
@@ -251,11 +261,47 @@ export async function runWatchChecks(v: MovementViewer) {
   await v.select(sourceCase);
   await settle(v);
   check(
-    'Raw lug selection temporarily hides configured case',
-    !v.caseEffective() && visibleCase().length === 1,
+    'Fitted lug selection retains the configured case',
+    v.caseEffective() && visibleCase().length === 41,
   );
   v.reset();
   await settle(v);
+  for (const side of ['front', 'back'] as const) {
+    v.setSide(side);
+    await settle(v);
+    check(
+      `Flip ${side} uses exact opposite lug endpoints`,
+      [...CASE_LUGS].every((id) => {
+        const p = v.renderParts.get(id)!;
+        return p.mesh.matrix.equals(
+          caseDisplayMatrix(id, p.assembled, side === 'back' ? 1 : 0),
+        );
+      }),
+    );
+  }
+  v.flipMovement();
+  await pause(160);
+  v.flipMovement();
+  await settle(v);
+  check(
+    'Rapid flip reversal settles without changing case preference',
+    v.state.side === 'back' &&
+      v.caseTurn === 1 &&
+      !v.caseTravel &&
+      v.caseEffective(),
+  );
+  for (const caseMaterial of ['steel', 'rose-gold', 'platinum']) {
+    await v.configureWatch({
+      caseMaterial,
+      centralStyle: 'fine',
+      centralFinish: 'blued-steel',
+    });
+    check(
+      `Fine hands follow ${caseMaterial}`,
+      v.state.centralFinish ===
+        (caseMaterial === 'steel' ? 'blued-steel' : 'rose-gold'),
+    );
+  }
   const loader = v.loadCatalog.bind(v);
   let release!: () => void;
   v.loadCatalog = () =>

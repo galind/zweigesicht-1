@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 14 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
+Updated 15 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
 
 ## Implemented
 
@@ -43,6 +43,16 @@ The existing asynchronous catalog loader coalesces case and dial requests, retai
 Verification: 13 state tests, 95 CPU source/runtime checks, TypeScript, lint and production build pass. Browser suites pass 301 checks: 173 watch checks (including 144 enabled case/dial/hand combinations on both faces), 55 dial, 20 inventory and 53 interface checks. Coverage includes failure/retry, last-intent loading races, six Focus groups, raw crystal/lug selection, isolation, separation/reversal, Reset, resource reuse/idle rendering, shader scoping and WebGL recovery. A real six-second catalog-delay check retains the latest hidden-case/platinum intent and uses one catalog request. Unmount disposal and corrupt recovery are checked in CPU fixtures. Browser dimensions were 1280×720 on desktop; exact-size embedded frames provided 390×844 and 320×740 phone CSS viewports after the browser viewport override did not apply. Checks confirm full-viewport canvas, no horizontal overflow, >=44 px controls, 200% text, scrollable options, Escape/focus return and no-3D fallback. This is viewport emulation, not physical-device review. One focus-return assertion failed during concurrent interaction with another tab; the isolated rerun passed all 53 interface checks, and both traces are retained. Local asset preparation reproduced the recovery hash without changing committed CAD payloads.
 
 Screenshots and reports are local in ignored `artifacts/browser/watch-configuration/`; source recovery and CPU reports are in ignored `artifacts/case-cad/`. Remaining limits: alloy appearances reuse the SS geometry and authored optical values; a full maker ordering/compatibility matrix was not established, and the detailed watch page timed out. Transparent crystal reflections and separation paths are presentation approximations. Physical-device, representative accessibility/human usability, mechanical review and publication/redistribution release gates remain outstanding. Ready for local user review. No push, merge or deployment was performed.
+
+## Watch refinement — 15 September 2026
+
+Addressed the follow-up review on `codex/quiet-movement-redesign`. Skeleton stays the default main face, now with the lugs turned toward the opposite face. Flip reconfigures both complete attachment packets along an eased outward turn and lands at the exact opposite source occurrences. All 18 mappings use the same definition IDs; no new geometry or alternate duplicates are displayed. Rapid reversals continue from the displayed pose, reduced motion snaps, and separation remains independent. The clearing arc is illustrative, not a service sequence.
+
+Fine hands now follow the case material even while hidden: blue for steel, gold for rose gold/platinum. UI, API, history and Reset use the same normalization. The material field explains its case-dependent value. This rule follows explicit user direction, recorded separately from manufacturer evidence. Selecting a fitted case part retains the complete configured watch and its finishes; isolation remains an explicit action. Unfitted CAD entries retain source inspection behavior.
+
+The crown's M background is frosted on original d46 face 468 (5.828602 mm² at local X=3.4). Raised M faces at X=3.5, rim and knurling remain smooth. A reproducible source probe and recorded scope accompany the shader change.
+
+Verification: 14 state tests, 96 CPU source/runtime checks, TypeScript, lint and production build pass. All 307 browser checks pass: 179 watch, 55 dial, 20 inventory and 53 interface checks. Reports and screenshots are recorded in ignored `artifacts/browser/watch-refinement/`. Desktop visual review covers both fitted faces, the turn, steel/rose-gold/platinum Fine hands and the crown close-up. A 320×740 CSS viewport at 200% text has no horizontal overflow; the linked finish and live announcement are correct, and Escape restores Configure focus after dismissal. Existing physical-device, mechanical and release-gate limitations remain. No push, merge or deployment.
 
 ## Domain and repository checkpoint
 

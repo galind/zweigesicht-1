@@ -95,6 +95,10 @@ export function resolveState(
     watch.handFinishes[next.centralStyle as keyof typeof watch.handFinishes];
   if (!finishes.includes(next.centralFinish))
     next.centralFinish = 'blued-steel';
+  // Fine hands follow the selected case, including while the case is hidden.
+  if (next.centralStyle === 'fine')
+    next.centralFinish =
+      next.caseMaterial === 'steel' ? 'blued-steel' : 'rose-gold';
   next.separation = clamp(next.separation);
   next.partSpread = clamp(next.partSpread);
   next.reveal = clamp(next.reveal);

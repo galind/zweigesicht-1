@@ -1,3 +1,4 @@
+import { caseDisplayMatrix } from './CasePose';
 import { loadCaseRecovery, recoverCaseSurfaces } from './CaseRecovery';
 import {
   WATCH,
@@ -163,6 +164,8 @@ export class MovementViewer {
   restoringCamera: Saved | null = null;
   spread = new Map<string, SpreadPlacement>();
   spreadFocus: string | null = null;
+  caseTurn = 1;
+  caseTravel?: { from: number; to: number; elapsed: number };
   inventoryAngle = 0;
   inventoryTravel?: { from: number; to: number; elapsed: number };
   inventoryApplied = false;
@@ -820,7 +823,9 @@ export class MovementViewer {
       next.caseVisible !== this.state.caseVisible;
     this.configurationNotice =
       (patch.centralFinish ?? this.state.centralFinish) !== next.centralFinish
-        ? 'This hand shape uses blued steel. Rose gold is available with Fine.'
+        ? next.centralStyle === 'fine'
+          ? 'Fine hands follow the case: blue for steel, gold for rose gold and platinum.'
+          : 'This hand shape uses blued steel.'
         : '';
     const changed = [
       'caseVisible',
@@ -1338,7 +1343,12 @@ export class MovementViewer {
       caseModeVisible(this.state) &&
       !this.state.isolated &&
       [...CASE_LEAVES].every((id) => this.renderParts.has(id)) &&
-      !(selection && !belongs(selection, ROOT) && !this.fitted?.has(selection))
+      !(
+        selection &&
+        !belongs(selection, ROOT) &&
+        !this.fitted?.has(selection) &&
+        ![...CASE_LEAVES].some((id) => belongs(id, selection))
+      )
     );
   }
   renderableDials() {
@@ -1610,6 +1620,13 @@ export class MovementViewer {
     const previousCase = this.fittedCase;
     this.fitted = this.renderableDials();
     this.fittedCase = this.caseEffective() ? new Set(CASE_LEAVES) : new Set();
+    const caseTo = this.state.side === 'back' ? 1 : 0;
+    if (!this.fittedCase.size || !previousCase?.size || this.reduced) {
+      this.caseTurn = caseTo;
+      this.caseTravel = undefined;
+    } else if ((this.caseTravel?.to ?? this.caseTurn) !== caseTo) {
+      this.caseTravel = { from: this.caseTurn, to: caseTo, elapsed: 0 };
+    }
     if (this.state.layout === 'spread') this.rebuildSpread();
     if (this.controls) {
       const spread = this.state.layout === 'spread';
@@ -1671,10 +1688,12 @@ export class MovementViewer {
           selection &&
           !belongs(selection, ROOT) &&
           !this.fitted.has(selection) &&
-          !this.fittedCase?.has(selection)
+          ![...(this.fittedCase ?? [])].some((id) => belongs(id, selection))
         )
           ? handDisplayMatrix(id, p.assembled)
-          : undefined;
+          : this.fittedCase.has(id)
+            ? caseDisplayMatrix(id, p.assembled, caseTo)
+            : undefined;
       p.targetRotation.identity();
       p.target.fromArray(
         CASE_LEAVES.has(id) && !this.fittedCase.has(id)
@@ -1710,7 +1729,7 @@ export class MovementViewer {
           selection &&
           !belongs(selection, ROOT) &&
           !this.fitted.has(selection) &&
-          !this.fittedCase.has(selection)
+          ![...this.fittedCase].some((id) => belongs(id, selection))
         );
       p.material.userData.configurationOverride.value = roseHand ? 1 : 0;
       if (roseHand) p.material.color.setHex(0xd9ab94);
@@ -1747,7 +1766,8 @@ export class MovementViewer {
           !(
             selection &&
             !belongs(selection, ROOT) &&
-            !this.fitted.has(selection)
+            !this.fitted.has(selection) &&
+            ![...this.fittedCase].some((id) => belongs(id, selection))
           );
         // Dedicated electric cobalt lacquer, independent of heat-blued steel.
         enamel.color.setHex(fitted ? 0x0e47ba : finish.color);
@@ -1829,6 +1849,20 @@ export class MovementViewer {
   applyPose(dt: number) {
     let moving = false;
     const temp = new THREE.Matrix4();
+    if (this.caseTravel) {
+      const turn = this.caseTravel;
+      turn.elapsed += Math.max(0, dt);
+      const t = this.reduced
+        ? 1
+        : Math.min(1, turn.elapsed / WATCH.lugPresentation.durationSeconds);
+      this.caseTurn = THREE.MathUtils.lerp(
+        turn.from,
+        turn.to,
+        t * t * (3 - 2 * t),
+      );
+      moving = t < 1 || moving;
+      if (t === 1) this.caseTravel = undefined;
+    }
     if (this.inventoryTravel && (!this.inventoryEntering || this.reduced)) {
       const turn = this.inventoryTravel;
       turn.elapsed += Math.max(0, dt);
@@ -1838,8 +1872,8 @@ export class MovementViewer {
         turn.to,
         t * t * (3 - 2 * t),
       );
-      moving = t < 1;
-      if (!moving) this.inventoryTravel = undefined;
+      moving = t < 1 || moving;
+      if (t === 1) this.inventoryTravel = undefined;
     }
     const flip = new THREE.Matrix4().makeRotationY(this.inventoryAngle ?? 0);
     let staged: Map<string, [number, number, number]> | undefined;
@@ -1856,8 +1890,8 @@ export class MovementViewer {
           travel.from[key] + (travel.to[key] - travel.from[key]) * eased;
       staged = explosionOffsets(this.parts, displayed);
       this.displayedExplosionState = displayed;
-      moving = t < 1;
-      if (!moving) this.explosionTravel = undefined;
+      moving = t < 1 || moving;
+      if (t === 1) this.explosionTravel = undefined;
     }
     for (const p of this.renderParts.values()) {
       if (p.cutaway) {
@@ -1901,7 +1935,11 @@ export class MovementViewer {
         p.offset.copy(p.target);
         p.rotation.copy(p.targetRotation);
       }
-      p.mesh.matrix.copy(p.displayMatrix ?? p.assembled);
+      p.mesh.matrix.copy(
+        this.fittedCase?.has(p.source.id)
+          ? caseDisplayMatrix(p.source.id, p.assembled, this.caseTurn)
+          : (p.displayMatrix ?? p.assembled),
+      );
       if (p.rotation.angleTo(new THREE.Quaternion()) > 0) {
         temp.makeTranslation(-p.center.x, -p.center.y, -p.center.z);
         p.mesh.matrix.premultiply(temp);
@@ -2248,7 +2286,13 @@ export class MovementViewer {
   partVisible(p: RenderPart) {
     const id = p.source.id,
       selection = this.state.part;
-    const selected = !!selection && belongs(id, selection);
+    const fittedCaseSelection =
+      !!selection &&
+      [...(this.fittedCase ?? [])].some((leaf) => belongs(leaf, selection));
+    const selected =
+      !!selection &&
+      belongs(id, selection) &&
+      (!fittedCaseSelection || this.fittedCase.has(id));
     if (this.state.layout === 'spread')
       return this.spread.has(id) && (!this.state.isolated || selected);
     if (this.state.isolated) return selected;
@@ -2257,7 +2301,7 @@ export class MovementViewer {
       !!selection &&
       !belongs(selection, ROOT) &&
       !this.fitted.has(selection) &&
-      !this.fittedCase?.has(selection);
+      ![...(this.fittedCase ?? [])].some((id) => belongs(id, selection));
     let visible =
       belongs(id, ROOT) ||
       selected ||

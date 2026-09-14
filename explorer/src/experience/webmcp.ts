@@ -80,7 +80,7 @@ export function registerMovementTools(viewer: MovementViewer) {
     {
       name: 'configure_watch',
       description:
-        'Configure case visibility/material, shared dials and independent hand shapes. Rose gold Three hands requires Fine; other shapes normalize to blued steel with feedback. Case temporarily hides in Focus, All parts and raw CAD inspection. Reset retains configuration.',
+        'Configure case visibility/material, shared dials and independent hand shapes. Fine hands follow the case: blue for steel, gold for rose gold and platinum. Other shapes use blued steel. Case temporarily hides in Focus, All parts and unfitted CAD inspection. Reset retains configuration.',
       inputSchema: {
         type: 'object',
         properties: {

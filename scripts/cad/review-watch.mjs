@@ -13,7 +13,7 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  const base=new Map([...c.renderParts].map(([id,p])=>[id,{color:p.material.color.getHex(),geometry:p.mesh.geometry,material:p.material}]));
  for(const material of WATCH.caseMaterials) for(const caseVisible of [false,true]) for(const dialsVisible of [false,true]) for(const shape of DIALS.faces.central.styles){
   await c.configureWatch({caseVisible,caseMaterial:material.id,dialsVisible,centralStyle:shape.id,centralFinish:'rose-gold'});pose();
-  assert.equal(c.fittedCase.size,caseVisible?41:0);assert.equal(c.state.centralFinish,shape.id==='fine'?'rose-gold':'blued-steel');
+  assert.equal(c.fittedCase.size,caseVisible?41:0);assert.equal(c.state.centralFinish,shape.id==='fine'&&material.id!=='steel'?'rose-gold':'blued-steel');
   for(const [id,p]of c.renderParts){assert.equal(p.mesh.geometry,base.get(id).geometry);assert.equal(p.material,base.get(id).material);if(belongs(id,movement)||DIALS.faces.central.structureLeafIds.includes(id))assert.equal(p.material.color.getHex(),base.get(id).color);}
  }
  results.push({check:'case and hand presets retain geometry/material identity and never recolor movement, dial markers, structure or logo; unsupported combinations normalize',status:'pass'});
@@ -23,6 +23,23 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  await c.configureWatch({caseVisible:true,dialsVisible:true});pose();
  const missing=[...CASE_CRYSTALS][0],saved=c.renderParts.get(missing);c.renderParts.delete(missing);pose();assert.equal(c.fittedCase.size,0);assert.equal(c.fitted.size,43);assert.equal(c.caseEffective(),false);c.renderParts.set(missing,saved);pose();assert.equal(c.fittedCase.size,41);
  results.push({check:'incomplete case suppresses every case piece while preserving complete dials; restored geometry reveals one complete case',status:'pass'});
+ const {caseDisplayMatrix,CASE_LUGS}=load('explorer/src/viewer/CasePose.ts');
+ for(const record of WATCH.leaves.filter(p=>p.oppositeWorldTransform)) {
+  const alternate=parts.find(p=>p.id===record.oppositeSourceId);
+  assert.equal(alternate.definitionId,record.definitionId);
+  assert.deepEqual(JSON.parse(JSON.stringify(record.oppositeWorldTransform)),alternate.worldTransform);
+ }
+ for(const side of ['front','back']){
+  c.state={...c.state,side};pose();
+  for(const id of CASE_LUGS){const p=c.renderParts.get(id);assert.ok(p.mesh.matrix.equals(caseDisplayMatrix(id,p.assembled,side==='back'?1:0)));}
+ }
+ c.reduced=false;c.state={...c.state,side:'front'};c.retarget();c.applyPose(.2);
+ const id=[...CASE_LUGS][0],p=c.renderParts.get(id),intermediate=p.mesh.matrix.clone();assert.ok(c.caseTurn>0&&c.caseTurn<1);
+ c.state={...c.state,side:'back'};c.retarget();c.applyPose(0);assert.ok(p.mesh.matrix.equals(intermediate));c.applyPose(2);assert.equal(c.caseTravel,undefined);assert.equal(c.caseTurn,1);
+ c.reduced=true;
+ c.state={...c.state,part:id};pose();assert.equal(c.caseEffective(),true);assert.equal(c.fittedCase.size,41);assert.ok([...CASE_LEAVES].every(id=>c.renderParts.get(id).mesh.visible));
+ c.state={...c.state,part:null};pose();
+ results.push({check:'opposite lug matrices match all 18 alternate source occurrences; reduced-motion endpoints and interrupted flip stay continuous; fitted selection retains complete case',status:'pass'});
  const geometries=new Set([...c.renderParts.values()].map(p=>p.mesh.geometry));
  const recovery=sourceModules({fetchImpl:modelFetch})('explorer/src/viewer/CaseRecovery.ts');const patch=await recovery.loadCaseRecovery();
  const scene=(await parse('catalog.glb')).scene;const original=[];scene.traverse(n=>{if(n.isMesh&&n.material.name==='d_0_1_1_54')original.push(n)});

@@ -104,7 +104,7 @@ export function ConfigurationControls({
           <select
             aria-label="Three hands material"
             value={state.centralFinish}
-            disabled={!available}
+            disabled={!available || state.centralStyle === 'fine'}
             aria-describedby="hand-material-note"
             onChange={(event) =>
               void viewer()?.configureWatch({
@@ -121,9 +121,9 @@ export function ConfigurationControls({
         </div>
       </label>
       <p className="dial-note" id="hand-material-note">
-        Rose gold is verified for Fine hands. Other shapes retain blued steel.
-        Shapes and materials are remembered while hidden; Reset keeps your
-        configuration.
+        Fine hands follow the case: blue for steel, gold for rose gold and
+        platinum. Other shapes retain blued steel. Shapes and materials are
+        remembered while hidden; Reset keeps your configuration.
       </p>
       <output aria-live="polite" className="dial-status">
         {state.configurationNotice}
