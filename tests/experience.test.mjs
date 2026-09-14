@@ -21,11 +21,11 @@ test('dial defaults and independent preferences normalize unknown style IDs',()=
  const small=resolveState(s,{side:'back',smallStyle:'broad-lance'});assert.equal(small.centralStyle,'open-lance');
  const invalid=resolveState(small,{centralStyle:'obsolete',smallStyle:'obsolete'});assert.equal(invalid.centralStyle,'fine');assert.equal(invalid.smallStyle,'lance');
 });
-test('all four dial combinations survive navigation and separation with styles retained',()=>{
+test('legacy combinations normalize to shared visibility through navigation',()=>{
  for(const centralVisible of [false,true]) for(const smallVisible of [false,true]) {
   const s=resolveState(initialState,{centralVisible,smallVisible,centralStyle:'open-lance',smallStyle:'pear'});
   for(const patch of [{side:'front'},{side:'back'},{layout:'spread'},{group:'display'},{group:'energy'},{separation:1},{partSpread:1},{reveal:1},{separation:0},{part:'catalog-part',isolated:true}]) {
-   const next=resolveState(s,patch);assert.equal(next.centralVisible,centralVisible);assert.equal(next.smallVisible,smallVisible);
+   const next=resolveState(s,patch);assert.equal(next.dialsVisible,centralVisible && smallVisible);assert.equal(next.centralVisible,next.dialsVisible);assert.equal(next.smallVisible,next.dialsVisible);
    assert.equal(next.centralStyle,'open-lance');assert.equal(next.smallStyle,'pear');
   }
  }
@@ -69,5 +69,20 @@ test('inventory flip state is independent of assembly side and clears on exit/Re
   assert.equal(resolveState(back,{inventoryBack:false}).side,side);
   assert.equal(resolveState(back,{layout:'assembly'}).inventoryBack,false);
   assert.equal(resetViewState(back).inventoryBack,false);assert.equal(resetViewState(back).side,side);
+ }
+});
+
+
+test('shared toggle wins over legacy snapshots and hidden styles stay hidden',()=>{
+ let state=resolveState(initialState,{centralStyle:'open-lance',smallStyle:'pear'});
+ assert.equal(state.dialsVisible,false);
+ state=resolveState(state,{dialsVisible:true});
+ assert.equal(state.centralVisible,true);assert.equal(state.smallVisible,true);
+ state=resolveState(state,{dialsVisible:false});
+ assert.equal(state.centralStyle,'open-lance');assert.equal(state.smallStyle,'pear');
+ assert.equal(state.centralVisible,false);assert.equal(state.smallVisible,false);
+ for(const centralVisible of [true,false]) for(const smallVisible of [true,false]) {
+  const restored=resolveState({...state,centralVisible,smallVisible},{});
+  assert.equal(restored.dialsVisible,centralVisible&&smallVisible);
  }
 });

@@ -2,7 +2,7 @@
 
 Local real-CAD explorer for Marco Lang's ml–01 movement. Open **http://127.0.0.1:4173/** while the local development server is running.
 
-The movement opens fully assembled. Reveal six functional groups, configure both dials and their hands, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
+The movement opens fully assembled. Reveal six functional groups, show or hide both dials together and choose their hands independently, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
 
 See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 

@@ -28,8 +28,7 @@ export function registerMovementTools(viewer: MovementViewer) {
       layout: s.layout,
       inventoryBack: s.inventoryBack,
       presentation: s.presentation,
-      centralVisible: s.centralVisible,
-      smallVisible: s.smallVisible,
+      dialsVisible: s.dialsVisible,
       centralStyle: s.centralStyle,
       smallStyle: s.smallStyle,
       dialRequest: s.dialRequest,
@@ -73,12 +72,11 @@ export function registerMovementTools(viewer: MovementViewer) {
     {
       name: 'configure_dials',
       description:
-        'Set independent Three hands (central) and Skeleton (small) visibility and hand styles without changing side or separation.',
+        'Show or hide both dials together. Set independent Three hands (central) and Skeleton (small) hand styles without revealing hidden dials or changing side or separation.',
       inputSchema: {
         type: 'object',
         properties: {
-          centralVisible: { type: 'boolean' },
-          smallVisible: { type: 'boolean' },
+          dialsVisible: { type: 'boolean' },
           centralStyle: {
             type: 'string',
             enum: ['fine', 'lance', 'open-lance'],

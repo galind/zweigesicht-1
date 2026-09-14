@@ -17,49 +17,52 @@ export function DialControls({
 }) {
   return (
     <div className="dial-options">
-      {(['small', 'central'] as const).map((face) => {
-        const label = face === 'central' ? 'Three hands' : 'Skeleton';
-        const visibilityKey =
-          face === 'central' ? 'centralVisible' : 'smallVisible';
-        const styleKey = face === 'central' ? 'centralStyle' : 'smallStyle';
-        return (
-          <section
-            className="dial-face"
-            key={face}
-            aria-label={`${label} display`}
-          >
-            <button
-              className="dial-visibility"
-              type="button"
-              aria-pressed={state[visibilityKey]}
-              disabled={!available}
-              onClick={() =>
-                void viewer()?.chooseDial(face, !state[visibilityKey])
-              }
-            >
-              <span className="dial-switch" aria-hidden="true" />
+      <label className="dial-visibility">
+        <input
+          type="checkbox"
+          checked={state.dialsVisible}
+          disabled={!available}
+          onChange={(event) =>
+            void viewer()?.configureDials({
+              dialsVisible: event.target.checked,
+            })
+          }
+        />
+        <span>Show both dials</span>
+      </label>
+      <div className="hand-choices">
+        {(['central', 'small'] as const).map((face) => {
+          const label = face === 'central' ? 'Three hands' : 'Skeleton';
+          const styleKey = face === 'central' ? 'centralStyle' : 'smallStyle';
+          return (
+            <label className="dial-face" key={face}>
               <span>{label}</span>
-            </button>
-            <div className="dial-hand-select">
-              <select
-                aria-label={`${label} hand style`}
-                value={state[styleKey]}
-                disabled={!available}
-                onChange={(event) =>
-                  void viewer()?.chooseDial(face, true, event.target.value)
-                }
-              >
-                {DIALS.faces[face].styles.map((hand) => (
-                  <option key={hand.id} value={hand.id}>
-                    {hand.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown aria-hidden="true" />
-            </div>
-          </section>
-        );
-      })}
+              <div className="dial-hand-select">
+                <select
+                  aria-label={`${label} hand style`}
+                  value={state[styleKey]}
+                  disabled={!available}
+                  onChange={(event) =>
+                    void viewer()?.configureDials({
+                      [styleKey]: event.target.value,
+                    })
+                  }
+                >
+                  {DIALS.faces[face].styles.map((hand) => (
+                    <option key={hand.id} value={hand.id}>
+                      {hand.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown aria-hidden="true" />
+              </div>
+            </label>
+          );
+        })}
+      </div>
+      <p className="dial-note">
+        Hand choices are remembered while the dials are hidden.
+      </p>
       <output aria-live="polite" className="dial-status">
         {state.dialError || (state.dialRequest ? 'Loading dials…' : '')}
       </output>

@@ -1,5 +1,6 @@
 'use client';
 
+import { InformationRail } from '@/components/InformationRail';
 import { aboutDescription } from '@/src/content/about';
 import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
@@ -17,7 +18,6 @@ import {
   ExternalLink,
   Compass,
   Layers,
-  LayoutGrid,
   Clock3,
   FlipHorizontal2,
   RotateCcw,
@@ -95,24 +95,18 @@ const empty: ViewerSnapshot = {
   stats: {},
 };
 export default function Home() {
-  const footerRef = useRef<HTMLElement>(null);
-  const catalogButton = useRef<HTMLButtonElement>(null),
-    optionsButton = useRef<HTMLButtonElement>(null),
-    aboutButton = useRef<HTMLButtonElement>(null),
+  const exploreButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const selectionFocus = useRef(false);
   const panelAnchor = useRef<HTMLElement | null>(null);
   const [panelX, setPanelX] = useState<number | null>(null);
   const [panelBottom, setPanelBottom] = useState<number | null>(null);
-  const [optionsTop, setOptionsTop] = useState(64);
   const panelStyle = {
     '--panel-anchor-x': panelX === null ? '50vw' : `${panelX}px`,
     '--panel-bottom': panelBottom === null ? undefined : `${panelBottom}px`,
   } as CSSProperties;
   useEffect(() => {
     const measure = () => {
-      const optionsRect = optionsButton.current?.getBoundingClientRect();
-      if (optionsRect) setOptionsTop(optionsRect.bottom + 12);
       const rect = panelAnchor.current?.getBoundingClientRect();
       if (rect) setPanelX(rect.left + rect.width / 2);
       const dockRect = document
@@ -124,8 +118,6 @@ export default function Home() {
     const observer = new ResizeObserver(measure);
     const dock = document.querySelector('.action-dock');
     if (dock) observer.observe(dock);
-    if (footerRef.current) observer.observe(footerRef.current);
-    if (optionsButton.current) observer.observe(optionsButton.current);
     return () => {
       window.removeEventListener('resize', measure);
       observer.disconnect();
@@ -135,7 +127,7 @@ export default function Home() {
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
     [catalog, setCatalog] = useState(false),
-    [about, setAbout] = useState(false),
+    [about, setAbout] = useState<'menu' | 'different' | 'specs' | null>(null),
     [explore, setExplore] = useState(false),
     [separate, setSeparate] = useState(false),
     [dials, setDials] = useState(false),
@@ -271,7 +263,7 @@ export default function Home() {
     setOptions(false);
     setDetails(false);
     setCatalog(false);
-    setAbout(false);
+    setAbout(null);
   };
   const openPanel = (update: (open: boolean) => void, open: boolean) => {
     if (open) {
@@ -309,191 +301,8 @@ export default function Home() {
           <h1>Zweigesicht-1</h1>
           <span>ml–01</span>
         </div>
-        <nav className="global-actions" aria-label="View history and options">
-          <button
-            className="text-button back-button"
-            aria-label="Back"
-            title="Previous view"
-            disabled={!available || !s.canBack}
-            onClick={() => {
-              viewer.current?.back();
-              host.current?.querySelector('canvas')?.focus();
-            }}
-          >
-            <ArrowLeft aria-hidden="true" />
-          </button>
-          <Sheet
-            modal={false}
-            open={options}
-            onOpenChange={(open) => {
-              if (open) selectionFocus.current = false;
-              openPanel(setOptions, open);
-            }}
-          >
-            <SheetTrigger
-              ref={optionsButton}
-              className="text-button options-trigger"
-            >
-              Options
-            </SheetTrigger>
-            <SheetContent
-              side="top"
-              style={{ '--options-top': `${optionsTop}px` } as CSSProperties}
-              className="explorer-panel about-sheet options-panel"
-              showOverlay={false}
-              scrollContent
-              finalFocus={() =>
-                selectionFocus.current
-                  ? (host.current?.querySelector('canvas') ?? false)
-                  : optionsButton.current
-              }
-            >
-              <SheetHeader>
-                <SheetTitle>View options</SheetTitle>
-                <SheetDescription>
-                  Camera, quality and sources.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="about-copy">
-                <p>
-                  Drag to orbit. Pinch or scroll to zoom. Tap a component to
-                  inspect it. Tap empty space to deselect. In All parts, drag to
-                  pan.
-                </p>
-                <fieldset
-                  className="alternative-controls"
-                  aria-label="Camera controls"
-                  disabled={!available}
-                >
-                  {s.layout !== 'spread' && (
-                    <>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.orbit(-0.25, 0)}
-                      >
-                        Orbit left
-                      </button>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.orbit(0.25, 0)}
-                      >
-                        Orbit right
-                      </button>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.orbit(0, -0.2)}
-                      >
-                        Tilt up
-                      </button>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.orbit(0, 0.2)}
-                      >
-                        Tilt down
-                      </button>
-                    </>
-                  )}
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.zoom(0.8)}
-                  >
-                    Zoom in
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.zoom(1.25)}
-                  >
-                    Zoom out
-                  </button>
-                  {s.layout === 'spread' && (
-                    <>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.pan(-0.15, 0)}
-                      >
-                        Pan left
-                      </button>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.pan(0.15, 0)}
-                      >
-                        Pan right
-                      </button>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.pan(0, -0.15)}
-                      >
-                        Pan up
-                      </button>
-                      <button
-                        className="tool"
-                        onClick={() => viewer.current?.pan(0, 0.15)}
-                      >
-                        Pan down
-                      </button>
-                    </>
-                  )}
-                </fieldset>
-                <p className="secondary">
-                  On the movement: arrow keys orbit (pan in All parts), + / −
-                  zoom, Home resets, Escape deselects. All components are also
-                  available in the catalog.
-                </p>
-                <div className="quality-control">
-                  <label htmlFor="render-quality">Rendering quality</label>
-                  <Select
-                    value={s.quality}
-                    disabled={!available}
-                    onValueChange={(v) =>
-                      patch({ quality: v as 'auto' | 'high' | 'low' })
-                    }
-                  >
-                    <SelectPrimitive.Trigger
-                      className="tool quality-trigger"
-                      id="render-quality"
-                      aria-label="Rendering quality"
-                    >
-                      <SelectValue>
-                        {s.quality === 'auto'
-                          ? 'Automatic'
-                          : s.quality === 'high'
-                            ? 'High'
-                            : 'Lightweight'}
-                      </SelectValue>
-                      <ChevronDown aria-hidden="true" />
-                    </SelectPrimitive.Trigger>
-                    <SelectContent>
-                      <SelectItem value="auto">Automatic</SelectItem>
-                      <SelectItem value="high">High</SelectItem>
-                      <SelectItem value="low">Lightweight</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <button
-                  ref={catalogButton}
-                  className="menu-link"
-                  onClick={() => openPanel(setCatalog, true)}
-                  disabled={!s.parts.length}
-                >
-                  Source catalog <ChevronRight aria-hidden="true" />
-                </button>
-                <button
-                  ref={aboutButton}
-                  className="menu-link"
-                  onClick={() => openPanel(setAbout, true)}
-                >
-                  About & sources <ChevronRight aria-hidden="true" />
-                </button>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </nav>
       </header>
-      <section
-        className="workspace"
-        aria-label="Movement explorer"
-      >
+      <section className="workspace" aria-label="Movement explorer">
         <div
           className="stage"
           ref={host}
@@ -623,6 +432,7 @@ export default function Home() {
           onOpenChange={(open) => openPanel(setExplore, open)}
         >
           <SheetTrigger
+            ref={exploreButton}
             className="explore-button text-button"
             disabled={s.loadStage === 'recovering'}
           >
@@ -662,6 +472,44 @@ export default function Home() {
                   <ChevronRight aria-hidden="true" />
                 </button>
               ))}
+              <button
+                className="menu-link all-parts-button"
+                disabled={!available}
+                aria-pressed={s.layout === 'spread'}
+                onClick={() => {
+                  closePanels();
+                  if (s.layout === 'spread') chooseGroup(null);
+                  else viewer.current?.allParts();
+                }}
+              >
+                <span>All parts</span>
+              </button>{' '}
+              <button
+                className="menu-link"
+                aria-label="Back"
+                title="Previous view"
+                disabled={!available || !s.canBack}
+                onClick={() => {
+                  closePanels();
+                  viewer.current?.back();
+                  host.current?.querySelector('canvas')?.focus();
+                }}
+              >
+                Previous view <ArrowLeft aria-hidden="true" />
+              </button>{' '}
+              <button
+                className="menu-link"
+                disabled={!s.parts.length}
+                onClick={() => openPanel(setCatalog, true)}
+              >
+                Source catalog <ChevronRight aria-hidden="true" />
+              </button>
+              <button
+                className="menu-link"
+                onClick={() => openPanel(setOptions, true)}
+              >
+                View options <ChevronRight aria-hidden="true" />
+              </button>
             </div>
           </SheetContent>
         </Sheet>
@@ -675,7 +523,7 @@ export default function Home() {
             disabled={!available}
           >
             <Layers className="dock-icon" aria-hidden="true" />
-            <span>{s.layout === 'spread' ? 'Arrange' : 'Separate'}</span>
+            <span>Separate</span>
             {(group ? s.partSpread : s.separation) > 0 &&
               s.layout !== 'spread' && (
                 <span className="state-dot" aria-label="Separation active" />
@@ -774,19 +622,6 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
-        <button
-          className="text-button all-parts-button"
-          disabled={!available}
-          aria-pressed={s.layout === 'spread'}
-          onClick={() => {
-            closePanels();
-            if (s.layout === 'spread') chooseGroup(null);
-            else viewer.current?.allParts();
-          }}
-        >
-          <LayoutGrid className="dock-icon" aria-hidden="true" />
-          <span>All parts</span>
-        </button>
 
         <Sheet
           modal={false}
@@ -798,7 +633,7 @@ export default function Home() {
             disabled={!available}
           >
             <Clock3 className="dock-icon" aria-hidden="true" />
-            <span>Dial &amp; hands</span>
+            <span>Dials &amp; hands</span>
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -808,9 +643,9 @@ export default function Home() {
             scrollContent
           >
             <SheetHeader>
-              <SheetTitle>Dial &amp; hands</SheetTitle>
+              <SheetTitle>Dials &amp; hands</SheetTitle>
               <SheetDescription className="sr-only">
-                Show either dial, or both. Choose hands for each.
+                Show or hide both dials together. Choose hands for each.
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
@@ -836,7 +671,7 @@ export default function Home() {
               style={{ transform: 'rotate(90deg)' }}
               aria-hidden="true"
             />
-            <span>{sideLabel}</span>
+            <span>Flip</span>
           </button>
         </div>
         <button
@@ -854,29 +689,155 @@ export default function Home() {
           <span>Reset view</span>
         </button>
       </nav>
-      <footer ref={footerRef} className="page-credit">
-        <span>
-          Independent project. Not affiliated with{' '}
-          <a
-            href="https://www.marcolangwatches.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Marco Lang
-          </a>
-          .
-        </span>{' '}
-        <span>
-          Made by{' '}
-          <a
-            href="https://guillemgalindo.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Guillem Galindo
-          </a>.
-        </span>
-      </footer>
+      <Sheet
+        modal={false}
+        open={options}
+        onOpenChange={(open) => {
+          if (open) selectionFocus.current = false;
+          openPanel(setOptions, open);
+        }}
+      >
+        <SheetContent
+          side="top"
+          style={panelStyle}
+          className="explorer-panel about-sheet"
+          showOverlay={false}
+          scrollContent
+          finalFocus={() =>
+            selectionFocus.current
+              ? (host.current?.querySelector('canvas') ?? false)
+              : exploreButton.current
+          }
+        >
+          <SheetHeader>
+            <SheetTitle>View options</SheetTitle>
+            <SheetDescription>Camera, quality and sources.</SheetDescription>
+          </SheetHeader>
+          <div className="about-copy">
+            <p>
+              Drag to orbit. Pinch or scroll to zoom. Tap a component to inspect
+              it. Tap empty space to deselect. In All parts, drag to pan.
+            </p>
+            <fieldset
+              className="alternative-controls"
+              aria-label="Camera controls"
+              disabled={!available}
+            >
+              {s.layout !== 'spread' && (
+                <>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.orbit(-0.25, 0)}
+                  >
+                    Orbit left
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.orbit(0.25, 0)}
+                  >
+                    Orbit right
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.orbit(0, -0.2)}
+                  >
+                    Tilt up
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.orbit(0, 0.2)}
+                  >
+                    Tilt down
+                  </button>
+                </>
+              )}
+              <button
+                className="tool"
+                onClick={() => viewer.current?.zoom(0.8)}
+              >
+                Zoom in
+              </button>
+              <button
+                className="tool"
+                onClick={() => viewer.current?.zoom(1.25)}
+              >
+                Zoom out
+              </button>
+              {s.layout === 'spread' && (
+                <>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.pan(-0.15, 0)}
+                  >
+                    Pan left
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.pan(0.15, 0)}
+                  >
+                    Pan right
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.pan(0, -0.15)}
+                  >
+                    Pan up
+                  </button>
+                  <button
+                    className="tool"
+                    onClick={() => viewer.current?.pan(0, 0.15)}
+                  >
+                    Pan down
+                  </button>
+                </>
+              )}
+            </fieldset>
+            <p className="secondary">
+              On the movement: arrow keys orbit (pan in All parts), + / − zoom,
+              Home resets, Escape deselects. All components are also available
+              in the catalog.
+            </p>
+            <div className="quality-control">
+              <label htmlFor="render-quality">Rendering quality</label>
+              <Select
+                value={s.quality}
+                disabled={!available}
+                onValueChange={(v) =>
+                  patch({ quality: v as 'auto' | 'high' | 'low' })
+                }
+              >
+                <SelectPrimitive.Trigger
+                  className="tool quality-trigger"
+                  id="render-quality"
+                  aria-label="Rendering quality"
+                >
+                  <SelectValue>
+                    {s.quality === 'auto'
+                      ? 'Automatic'
+                      : s.quality === 'high'
+                        ? 'High'
+                        : 'Lightweight'}
+                  </SelectValue>
+                  <ChevronDown aria-hidden="true" />
+                </SelectPrimitive.Trigger>
+                <SelectContent>
+                  <SelectItem value="auto">Automatic</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="low">Lightweight</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <button
+              className="menu-link"
+              onClick={() => openPanel(setCatalog, true)}
+              disabled={!s.parts.length}
+            >
+              Source catalog <ChevronRight aria-hidden="true" />
+            </button>
+          </div>
+        </SheetContent>
+      </Sheet>
       <Sheet modal={false} open={details} onOpenChange={setDetails}>
         <SheetContent
           side="bottom"
@@ -946,7 +907,7 @@ export default function Home() {
           finalFocus={() =>
             selectionFocus.current
               ? (host.current?.querySelector('canvas') ?? false)
-              : optionsButton.current
+              : exploreButton.current
           }
         >
           <SheetHeader>
@@ -1016,60 +977,51 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <Sheet modal={false} open={about} onOpenChange={setAbout}>
-        <SheetContent
-          side="bottom"
-          style={panelStyle}
-          className="explorer-panel about-sheet"
-          showOverlay={false}
-          scrollContent
-          finalFocus={optionsButton}
-        >
-          <SheetHeader>
-            <SheetTitle>A study of the ml–01</SheetTitle>
-            <SheetDescription>
-              An interactive exploration of Calibre ML-01.
-            </SheetDescription>
-          </SheetHeader>
-          <div className="about-copy">
-            <p>{aboutDescription}</p>
-            <p>
-              The overview shows the movement without the case, straps or
-              alternate dial designs. The catalog retains every imported part.
-            </p>
-            <p>
-              The mechanism is shown in its source pose. Reveal and separation
-              controls expose its construction; they do not simulate a running
-              watch.
-            </p>
-            <p>
-              {s.stats.recoveredDiamond
-                ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
-                : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
-              Four balance eccentrics contain untessellated faces. An
-              overlapping setting-spring alternative is hidden in the assembled
-              view.
-            </p>
-            <p>
-              Separation and All parts travel are authored presentations, not
-              service procedures. All parts contains the active movement’s
-              physical components at their original relative scale; case parts
-              and incompatible alternatives remain in the source catalog.
-            </p>
-            <a
-              href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Marco Lang · Original CAD <ExternalLink aria-hidden="true" />
-            </a>
-            <p>
-              Drag to orbit; pinch or scroll to zoom. All mechanisms, components
-              and view controls are also available through keyboard navigation.
-            </p>
-          </div>
-        </SheetContent>
-      </Sheet>
+      <InformationRail
+        panel={about}
+        onPanelChange={(panel) => {
+          if (panel) closePanels();
+          setAbout(panel);
+        }}
+      >
+        <div className="about-copy">
+          <p>{aboutDescription}</p>
+          <p>
+            The overview shows the movement without the case, straps or
+            alternate dial designs. The catalog retains every imported part.
+          </p>
+          <p>
+            The mechanism is shown in its source pose. Reveal and separation
+            controls expose its construction; they do not simulate a running
+            watch.
+          </p>
+          <p>
+            {s.stats.recoveredDiamond
+              ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
+              : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
+            Four balance eccentrics contain untessellated faces. An overlapping
+            setting-spring alternative is hidden in the assembled view.
+          </p>
+          <p>
+            Separation and All parts travel are authored presentations, not
+            service procedures. All parts contains the active movement’s
+            physical components at their original relative scale; case parts and
+            incompatible alternatives remain in the source catalog.
+          </p>
+          <a
+            href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Marco Lang · Original CAD <ExternalLink aria-hidden="true" />
+          </a>
+          <p>
+            Drag to orbit; pinch or scroll to zoom. All mechanisms, components
+            and view controls are also available through keyboard navigation.
+          </p>
+        </div>{' '}
+      </InformationRail>
+
       <pre id="viewer-diagnostics" hidden>
         {JSON.stringify({ ...s, parts: undefined })}
       </pre>
@@ -1212,6 +1164,22 @@ export default function Home() {
             }}
           >
             Benchmark 5 minutes
+          </button>
+          <button
+            disabled={s.catalogLoaded || !available}
+            onClick={async () => {
+              const v = viewer.current;
+              if (!v) return;
+              const path = v.paths.catalog;
+              v.paths.catalog = '/models/intentionally-missing-dials.glb';
+              try {
+                await v.configureDials({ dialsVisible: true });
+              } finally {
+                v.paths.catalog = path;
+              }
+            }}
+          >
+            Test dial failure
           </button>
           <button
             disabled={s.catalogLoaded}

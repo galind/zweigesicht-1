@@ -8,7 +8,9 @@ export type Phase =
   | 'recovering';
 export interface ExperienceState {
   phase: Phase;
-  presentation: 'movement' | 'dials'; // Derived summary; visibility belongs to each face.
+  presentation: 'movement' | 'dials'; // Derived from shared dial visibility.
+  dialsVisible: boolean;
+  // Compatibility snapshots; always equal to dialsVisible.
   centralVisible: boolean;
   smallVisible: boolean;
   centralStyle: string;
@@ -28,6 +30,7 @@ export interface ExperienceState {
 export const initialState: ExperienceState = {
   phase: 'loading',
   presentation: 'movement',
+  dialsVisible: false,
   centralVisible: false,
   smallVisible: false,
   centralStyle: configurations.defaults.central,
@@ -57,10 +60,18 @@ export function resolveState(
       delete (next as unknown as Record<string, unknown>)[key];
   next.inventoryBack = next.layout === 'spread' && next.inventoryBack === true;
   next.viewAngle = next.viewAngle === 'face' ? 'face' : 'overview';
-  next.centralVisible = next.centralVisible === true;
-  next.smallVisible = next.smallVisible === true;
-  next.presentation =
-    next.centralVisible || next.smallVisible ? 'dials' : 'movement';
+  // Migrate old face-specific intent into one switch. Conflicting historical
+  // preferences close both displays; a legacy single-field action toggles both.
+  const legacy = ['centralVisible', 'smallVisible'] as const;
+  const supplied = legacy.filter((key) => key in patch);
+  next.dialsVisible =
+    'dialsVisible' in patch
+      ? patch.dialsVisible === true
+      : supplied.length
+        ? supplied.every((key) => patch[key] === true)
+        : previous.centralVisible === true && previous.smallVisible === true;
+  next.centralVisible = next.smallVisible = next.dialsVisible;
+  next.presentation = next.dialsVisible ? 'dials' : 'movement';
   for (const face of ['central', 'small'] as const) {
     const key = face === 'central' ? 'centralStyle' : 'smallStyle';
     if (
@@ -96,8 +107,7 @@ export function resetViewState(state: ExperienceState): ExperienceState {
   return resolveState(initialState, {
     phase: 'recovering',
     side: state.side,
-    centralVisible: state.centralVisible,
-    smallVisible: state.smallVisible,
+    dialsVisible: state.centralVisible && state.smallVisible,
     centralStyle: state.centralStyle,
     smallStyle: state.smallStyle,
   });

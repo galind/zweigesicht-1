@@ -52,8 +52,15 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
     html,
     /<table\b|#view=|Technical specifications|Technical reference|reference-nav/i,
   );
-  assert.ok(html.includes('href="https://www.marcolangwatches.com/"'));
-  assert.ok(html.includes('href="https://guillemgalindo.com"'));
+  assert.ok(
+    html.includes('href="https://www.marcolangwatches.com/en/main-page/"'),
+  );
+  assert.ok(
+    html.includes(
+      'href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/"',
+    ),
+  );
+  assert.doesNotMatch(html, /<footer\b/i);
   const schema = JSON.parse(
     raw.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1],
   );
@@ -83,7 +90,7 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
     );
   }
   console.log(
-    `PASS ${path}: initial metadata, H1, schema and existing links; no editorial expansion`,
+    `PASS ${path}: initial metadata, H1, schema and maker links; no footer`,
   );
 }
 const robots = await get('/robots.txt');

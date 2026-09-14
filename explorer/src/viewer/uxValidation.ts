@@ -26,7 +26,7 @@ export async function runUxChecks(v: MovementViewer) {
       dockButtons
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
-      'Explore|Separate|All parts|Dial & hands|Flip movement|Reset view',
+      'Explore|Separate|Dials & hands|Flip movement|Reset view',
   });
   checks.push({
     name: 'Dock controls retain touch targets',
@@ -86,13 +86,10 @@ export async function runUxChecks(v: MovementViewer) {
     Object.fromEntries(
       [
         '.stage',
-        '.back-button',
         '.reset-button',
-        '.options-trigger',
         '.explore-button',
         '.separate-trigger',
         '.dial-trigger',
-        '.all-parts-button',
         '.side-slot',
       ].map((selector) => {
         const r = document.querySelector(selector)!.getBoundingClientRect();
@@ -143,7 +140,6 @@ export async function runUxChecks(v: MovementViewer) {
     '.explore-button',
     '.separate-trigger',
     '.dial-trigger',
-    '.options-trigger',
   ]) {
     const trigger = document.querySelector<HTMLButtonElement>(selector)!;
     const position = v.camera.position.clone(),
@@ -175,6 +171,41 @@ export async function runUxChecks(v: MovementViewer) {
       pass: document.activeElement === trigger,
     });
   }
+
+  const explore = document.querySelector<HTMLButtonElement>('.explore-button')!;
+  explore.click();
+  await sleep(300);
+  const menu = [
+    ...document.querySelectorAll<HTMLButtonElement>('.explore-menu button'),
+  ];
+  checks.push({
+    name: 'Explore retains inventory, source catalog, history and view options',
+    pass: [
+      'All parts',
+      'Source catalog',
+      'Previous view',
+      'View options',
+    ].every((label) =>
+      menu.some((button) => button.textContent?.includes(label)),
+    ),
+  });
+  menu.find((button) => button.textContent?.trim() === 'View options')!.click();
+  await sleep(300);
+  checks.push({
+    name: 'Contextual options retain keyboard camera and quality controls without reframing',
+    pass:
+      !!document.querySelector('.alternative-controls') &&
+      !!document.querySelector('#render-quality') &&
+      JSON.stringify(rects()) === JSON.stringify(baseline),
+  });
+  document
+    .querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!
+    .click();
+  await sleep(300);
+  checks.push({
+    name: 'Contextual options return focus to Explore',
+    pass: document.activeElement === explore,
+  });
 
   for (const mode of [
     'whole',

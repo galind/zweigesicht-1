@@ -3,6 +3,7 @@ import { explosionOffsets, uncoverHost } from '../experience/explosion';
 import {
   DIALS,
   fittedLeaves,
+  validateDialPatch,
   displayHostPart,
   type DialView,
   type DialFace,
@@ -742,6 +743,7 @@ export class MovementViewer {
     );
   }
   async configureDials(patch: Partial<DialPreferences> = {}, focus?: DialFace) {
+    validateDialPatch(patch);
     if (!this.ready) return;
     const focusAssembly = !!focus && this.state.layout === 'assembly';
     const next = resolveState(this.state, {
@@ -803,6 +805,7 @@ export class MovementViewer {
       return;
     }
     this.dialRequest = {
+      dialsVisible: next.dialsVisible,
       centralVisible: next.centralVisible,
       smallVisible: next.smallVisible,
       centralStyle: next.centralStyle,
@@ -832,13 +835,11 @@ export class MovementViewer {
       }
     }
   }
-  // Explicit single-face camera preset retained for inspection tooling.
-  // Visitor controls use chooseDial to reveal a face without hiding its partner.
+  // Camera preset changes the viewed face; visibility always applies to both.
   async showDial(view: DialView, face?: DialFace, style?: string) {
     const generation = this.cameraGeneration;
     const pending = this.configureDials({
-      centralVisible: view === 'central',
-      smallVisible: view === 'small',
+      dialsVisible: view !== 'movement',
       ...(face && style
         ? { [face === 'central' ? 'centralStyle' : 'smallStyle']: style }
         : {}),
@@ -865,6 +866,26 @@ export class MovementViewer {
     if (this.travel) this.travel.duration = 1.05;
   }
   patch(patch: Partial<ExperienceState>) {
+    const dialPatch = Object.fromEntries(
+      Object.entries(patch).filter(([key]) =>
+        [
+          'dialsVisible',
+          'centralVisible',
+          'smallVisible',
+          'centralStyle',
+          'smallStyle',
+        ].includes(key),
+      ),
+    );
+    if (Object.keys(dialPatch).length) {
+      validateDialPatch(dialPatch);
+      const rest = Object.fromEntries(
+        Object.entries(patch).filter(([key]) => !(key in dialPatch)),
+      );
+      if (Object.keys(rest).length) this.patch(rest);
+      void this.configureDials(dialPatch);
+      return;
+    }
     this.selectionGeneration++;
     this.state = resolveState(this.state, {
       ...patch,
@@ -1234,13 +1255,9 @@ export class MovementViewer {
   renderableDials() {
     const preferences = this.state ?? initialState;
     const result = fittedLeaves(preferences);
-    for (const face of ['central', 'small'] as const) {
-      const packet = [...result].filter((id) =>
-        belongs(id, DIALS.faces[face].rootId),
-      );
-      if (packet.some((id) => !this.renderParts.has(id)))
-        for (const id of packet) result.delete(id);
-    }
+    // One incomplete packet suppresses both faces, including after history,
+    // reload, partial catalog ingestion or a failed optional-asset request.
+    if ([...result].some((id) => !this.renderParts.has(id))) result.clear();
     return result;
   }
   rebuildSpread() {

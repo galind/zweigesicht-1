@@ -4,9 +4,19 @@ Updated 14 September 2026. This file summarizes the checkout. Earlier milestone 
 
 ## Implemented
 
-The real-CAD static explorer includes all 426 source hierarchy instances, six functional groups, component inspection/isolation, complete separation, All parts, both independent dial/hand configurations and authored finishes. Running-watch simulation was removed by user decision. Reset preserves the current side and dial preferences.
+The real-CAD static explorer includes all 426 source hierarchy instances, six functional groups, component inspection/isolation, complete separation, All parts, shared dial visibility with independent hand configurations and authored finishes. Running-watch simulation was removed by user decision. Reset preserves the current side and dial preferences.
 
 Later refinements include straight-on opening/Reset, independent inventory flipping, upright screw and hand presentation, revised frosting and dial finishes, diamond internal-facet shading, stable loading layout, visible author/independence credit and minimal homepage SEO. Maintenance constraints are in [CAD notes](docs/CAD_NOTES.md) and [runtime architecture](docs/LOCAL_ARCHITECTURE.md).
+
+## Quiet interface redesign — 14 September 2026
+
+Implemented the approved glass-rail sketch around the existing 3D viewer. Small identity, four maker/information links, compact bottom controls and on-demand watch/specification panels replace the prominent controls and footer. Phones use About; Explore retains All parts, source catalog, history, keyboard camera controls and quality. Author credit, source links, independence and source-geometry limitations remain discoverable in About.
+
+Both dials open hidden and share one toggle throughout UI, controller, restored state and WebMCP. Hand choices remain independent and remembered while hidden. Complete-pair geometry gating prevents a persistent half-shown display after partial loading or failure. Reset still preserves side and dial preferences. No geometry, authored finishes, static construction behavior or deployment assets changed.
+
+Fresh verification: 11 state tests, 89 CPU source/runtime checks, TypeScript, lint, production build and SEO/HTTP checks pass. Browser suites pass 129 checks: 57 dial checks (including loading failure/retry, rapid changes, separation, Reset and WebGL recovery), 22 inventory checks and 50 interface checks (including component selection/isolation, stable framing and contextual-panel focus). Desktop (1440×900) and phone (390×844 and 320×740) browser checks cover quiet navigation, keyboard dismissal/focus, 200% text, touch targets, hidden style changes, visible dial failure/retry, WebMCP and no-3D descriptions/retry. Local screenshots and numeric evidence are in ignored `artifacts/browser/quiet-redesign/`.
+
+Watch copy reuses the project's maker-attributed facts; the maker's CAD and main pages were checked. The watch specification page timed out during this work, so no new dimensions or unverified sketch values were added. Physical-device and representative accessibility review remain outstanding. Next implementation action: user review of the local redesign. No push or deployment is authorized or performed.
 
 ## Domain and repository checkpoint
 

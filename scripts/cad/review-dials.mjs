@@ -32,11 +32,11 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
      await controller.showDial(face);
      controller.applyPose(0);controller.retargetVisibility();
      const external=[...controller.renderParts.values()].filter(p=>p.mesh.visible&&!belongs(p.source.id,movement));
-     const count=face==='central'?22:21;
+     const count=43;
      assert.equal(external.length,count);assert.equal(new Set(external.map(p=>p.source.id)).size,count);
      assert.deepEqual(external.map(p=>p.source.id).sort(),[...fittedLeaves(controller.state)].sort());
-     assert.ok(external.every(p=>belongs(p.source.id,DIALS.faces[face].rootId)), 'No opposite-face leaves');
-     assert.equal(external.filter(p=>/Sek_Zeiger/.test(p.source.name)).length,face==='central'?1:0);
+     assert.ok(['central','small'].every(f=>external.some(p=>belongs(p.source.id,DIALS.faces[f].rootId))), 'Both dial packets');
+     assert.equal(external.filter(p=>/Sek_Zeiger/.test(p.source.name)).length,1);
      const selected=face==='central'?central:small;
      for(const id of selected.supportLeafIds)assert.ok(external.some(p=>p.source.id===id));
      assert.equal(Object.keys(selected.handLeafIds).length,face==='central'?3:2);
@@ -50,7 +50,8 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
          const bore=fit.occurrences[p.source.id].cylinders.find(c=>Math.abs(c.radiusMm-record.boreRadiusMm)<1e-7);
          const localBore=new THREE.Vector3().fromArray(bore.originWorldMm).applyMatrix4(p.assembled.clone().invert());
          const presentedBore=localBore.clone().applyMatrix4(p.mesh.matrix);
-         const [x,y]=DIALS.faces[face].axleWorldXYMm;
+         const actualFace=belongs(p.source.id,DIALS.faces.central.rootId)?'central':'small';
+         const [x,y]=DIALS.faces[actualFace].axleWorldXYMm;
          assert.ok(Math.hypot(presentedBore.x-x,presentedBore.y-y)<1e-8, 'Rendered bore on correct arbor');
          const vertices=p.mesh.geometry.getAttribute('position');let farthest=new THREE.Vector3(),radius=-1;
          for(let i=0;i<vertices.count;i++){
@@ -59,7 +60,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
            if(r>radius){radius=r;farthest=point;}
          }
          const tip=farthest.applyMatrix4(p.mesh.matrix).sub(presentedBore);
-         const angle=Math.atan2(tip.x,tip.y*(face==='central'?1:-1));
+         const angle=Math.atan2(tip.x,tip.y*(actualFace==='central'?1:-1));
          const target=THREE.MathUtils.degToRad({hour:305,minute:60,seconds:0}[record.role]);
          assert.ok(Math.abs(Math.atan2(Math.sin(angle-target),Math.cos(angle-target)))<1e-4,'Actual decoded blade points to 10:10:00');
          for(const i of [2,6,10,14])assert.equal(p.mesh.matrix.elements[i],p.assembled.elements[i],'No source Z change');
@@ -68,10 +69,11 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
      }
    }
  }
- results.push({check:'all nine remembered style pairs on each face: exactly 22 central or 21 small leaves, no opposite dial, complete supports, source geometry and matrices unchanged',status:'pass'});
+ results.push({check:'all nine remembered style pairs on each face: exactly 43 fitted leaves across both dials, complete supports, source geometry and matrices unchanged',status:'pass'});
  const pose=()=>{controller.applyPose(1);controller.retargetVisibility();};
  const preferences=()=>[controller.state.centralVisible,controller.state.smallVisible,controller.state.centralStyle,controller.state.smallStyle];
- for(const centralVisible of [false,true]) for(const smallVisible of [false,true]) {
+ for(const dialsVisible of [false,true]) {
+  const centralVisible=dialsVisible, smallVisible=dialsVisible;
   controller.reset();
   await controller.configureDials({centralVisible,smallVisible,centralStyle:'lance',smallStyle:'pear'});pose();
   const expected=[...fittedLeaves(controller.state)];const prefs=preferences();
@@ -104,7 +106,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
   }
   controller.group(null);pose();assert.equal(controller.assemblyError('presentation'),0);assert.deepEqual(preferences(),prefs);
  }
- results.push({check:'all four visibility combinations preserve styles and side; enabled individual display layers separate/reassemble; all selected leaves face forward/upright and are packed at exact rendered bounds and selectable without leaving All parts',status:'pass'});
+ results.push({check:'both shared visibility states preserve styles and side; enabled individual display layers separate/reassemble; all selected leaves face forward/upright and are packed at exact rendered bounds and selectable without leaving All parts',status:'pass'});
  await controller.configureDials({centralVisible:true,smallVisible:true});pose();
  for(const group of ['display','winding','energy','regulation','transmission','shock']) {
   controller.group(group);pose();
@@ -193,7 +195,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  results.push({check:'rapid visibility reversals and interrupted assembly/spread/reassembly clear fades, restore exact fitted poses and material flags; Reset retains fitted preferences',status:'pass'});
  controller.reduced=true;await controller.configureDials({centralVisible:false,smallVisible:false,centralStyle:'fine',smallStyle:'lance'});controller.reset();pose();
  await controller.chooseDial('central',true);pose();assert.equal(controller.state.viewAngle,'face');
- assert.equal(controller.state.side,'front');assert.deepEqual(preferences(),[true,false,'fine','lance']);
+ assert.equal(controller.state.side,'front');assert.deepEqual(preferences(),[true,true,'fine','lance']);
  await controller.chooseDial('small',true,'pear');pose();
  assert.equal(controller.state.side,'back');assert.deepEqual(preferences(),[true,true,'fine','pear']);
  await controller.chooseDial('central',false);pose();assert.equal(controller.state.side,'back');
@@ -205,6 +207,21 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  const inventoryAssemblySide=controller.state.side;controller.allParts();pose();await controller.select(DIALS.faces.small.structureLeafIds[0]);controller.patch({isolated:true});pose();await controller.chooseDial('central',true,'open-lance');pose();assert.equal(controller.state.isolated,false);assert.equal(controller.state.part,null);assert.equal(controller.state.layout,'spread');assert.equal(controller.state.side,inventoryAssemblySide);assert.equal(controller.state.smallVisible,true);
  const beforeReset=preferences();controller.reset();pose();assert.deepEqual(preferences(),beforeReset);assert.equal(controller.assemblyError('presentation'),0);
  results.push({check:'menu dial/style choices enable and face the selected display, preserve partner/style/separation, leave unrelated scopes, keep inventory and hide camera stable, and save one history entry',status:'pass'});
+
+ await controller.configureDials({dialsVisible:false});pose();
+ for(const patch of [{centralStyle:'fine'},{smallStyle:'pear'}]) {
+  await controller.configureDials(patch);pose();
+  assert.equal(controller.state.dialsVisible,false);assert.equal(controller.fitted.size,0);
+ }
+ await controller.configureDials({dialsVisible:true});pose();
+ assert.equal(controller.state.centralStyle,'fine');assert.equal(controller.state.smallStyle,'pear');assert.equal(controller.fitted.size,43);
+ const unchanged=JSON.stringify(controller.state),historySize=controller.history.length;
+ for(const invalid of [{dialsVisible:'yes'},{centralVisible:true,smallVisible:false},{smallStyle:'unknown'},{extra:true},null]) {
+  await assert.rejects(controller.configureDials(invalid));assert.equal(JSON.stringify(controller.state),unchanged);assert.equal(controller.history.length,historySize);
+ }
+ controller.patch({dialsVisible:false});pose();assert.equal(controller.fitted.size,0);
+ controller.patch({dialsVisible:true});await Promise.resolve();pose();assert.equal(controller.fitted.size,43);
+ results.push({check:'hidden hand changes never reveal either dial; choices persist; generic patches share loading path; invalid/conflicting API input leaves state/history untouched',status:'pass'});
  let pending=[],loads=0,disposed=0;
  class Loader{setMeshoptDecoder(){return this}loadAsync(){loads++;return new Promise((resolve,reject)=>pending.push({resolve,reject}))}}
  const {MovementViewer:Race}=sourceModules({loader:Loader})('explorer/src/viewer/MovementViewer.ts');
@@ -227,14 +244,14 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  const loadsBefore=loads;a=r.chooseDial('central',true,'open-lance');r.patch({separation:1});r.reset();
  assert.equal(loads,loadsBefore+1);assert.equal(r.state.centralVisible,true);assert.equal(r.state.centralStyle,'open-lance');assert.equal(r.state.separation,0);assert.equal(r.state.side,'front');
  pending.shift().resolve({scene:{}});await a;await Promise.resolve();await Promise.resolve();
- assert.equal(r.dialRequest,null);assert.equal(r.dialError,'');assert.equal(r.renderableDials().size,22);
+ assert.equal(r.dialRequest,null);assert.equal(r.dialError,'');assert.equal(r.renderableDials().size,43);
  r=makeRace();r.renderParts=new Map(v.renderParts);for(const id of DIALS.faces.central.structureLeafIds)r.renderParts.delete(id);
  a=r.chooseDial('central',true);r.reset();pending.shift().reject(Error('offline at reset'));await a;await Promise.resolve();await Promise.resolve();assert.equal(r.state.centralVisible,true);assert.ok(r.dialError);
  r.ingest=()=>{r.renderParts=new Map(v.renderParts)};a=r.retryDials();pending.shift().resolve({scene:{}});await a;assert.equal(r.state.centralVisible,true);assert.equal(r.dialError,'');
  results.push({check:'Reset preserves dial intent during incomplete loading; single shared load resolves into assembled current face; failure stays retryable without clearing preferences',status:'pass'});
  // A missing leaf cannot silently report a complete display; a retry can ingest it.
  r=makeRace();r.renderParts=new Map(v.renderParts);const missing=DIALS.faces.central.structureLeafIds[0];const saved=r.renderParts.get(missing);r.renderParts.delete(missing);
- a=r.configureDials({centralVisible:true});pending.shift().resolve({scene:{}});await a;assert.ok(r.dialError);
+ a=r.configureDials({centralVisible:true});pending.shift().resolve({scene:{}});await a;assert.ok(r.dialError);assert.equal(r.renderableDials().size,0,'Missing leaf hides BOTH packets');assert.equal(r.fitted.size,0);
  a=r.retryDials();r.renderParts.set(missing,saved);pending.shift().resolve({scene:{}});await a;assert.equal(r.dialError,'');
  // Back after failure must reconcile restored preferences with missing geometry.
  r=makeRace();r.renderParts=new Map([...v.renderParts].filter(([id])=>belongs(id,movement)));
@@ -250,7 +267,7 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
  assert.ok(frontBox.min.z-movementBox.max.z>=.999);assert.ok(movementBox.min.z-rearBox.max.z>=.999);
  controller.reset();pose();
  results.push({check:'fitted dial packet endpoints clear the actual transformed movement envelope by at least 0.999 mm; no collision-free service-path claim',status:'pass'});
- results.push({check:'actual async controller: single shared load, latest independent intent, navigation during load, reset/hide cancellation, failure/retry in spread, missing-leaf retry, manual camera ownership and disposal',status:'pass'});
+ results.push({check:'actual async controller: single shared load, latest shared visibility intent, navigation during load, reset/hide cancellation, failure/retry in spread, missing-leaf retry, manual camera ownership and disposal',status:'pass'});
  // Verify XCAF-derived checks came from the exact protected STEP.
  assert.equal(fit.sourceSha256,DIALS.source.sha256);
  assert.equal(Object.values(fit.checks).length,50);assert.ok(Object.values(fit.checks).every(Boolean));

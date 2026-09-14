@@ -82,138 +82,140 @@ export async function runDialChecks(v: MovementViewer) {
   }
   v.reset();
   await settle(v);
-  for (const centralVisible of [false, true])
-    for (const smallVisible of [false, true]) {
-      await v.configureDials({
-        centralVisible,
-        smallVisible,
-        centralStyle: 'lance',
-        smallStyle: 'pear',
-      });
-      check(
-        'Visibility toggle presents every enabled leaf at full opacity immediately',
-        exact() &&
-          visible().every(
-            (p) =>
-              p.material.opacity === 1 &&
-              !p.material.transparent &&
-              p.material.depthWrite &&
-              !p.motion,
-          ),
-      );
-      await settle(v);
-      const before = prefs();
-      const label = `${Number(centralVisible)}${Number(smallVisible)}`;
-      check(`${label}: exact enabled leaves and independent styles`, exact());
-      v.setSide(v.state.side === 'front' ? 'back' : 'front');
-      await settle(v);
-      check(
-        `${label}: side switch retains visibility and styles`,
-        before === prefs() && exact(),
-      );
-      v.patch({ separation: 1 });
-      await settle(v);
-      const leaves = visible();
-      const layersClear = (['central', 'small'] as const).every((face) => {
-        const sign = face === 'central' ? 1 : -1;
-        let edge = -Infinity;
-        return DISPLAY_LAYERS[face].every((layer) => {
-          const boxes = leaves
-            .filter((p) => layer.includes(p.source.id))
-            .map((p) =>
-              p.mesh.geometry.boundingBox!.clone().applyMatrix4(p.mesh.matrix),
-            );
-          if (!boxes.length) return true;
-          const min = Math.min(
-            ...boxes.map((b) => sign * (sign === 1 ? b.min.z : b.max.z)),
+  for (const dialsVisible of [false, true]) {
+    const centralVisible = dialsVisible,
+      smallVisible = dialsVisible;
+    await v.configureDials({
+      centralVisible,
+      smallVisible,
+      centralStyle: 'lance',
+      smallStyle: 'pear',
+    });
+    check(
+      'Visibility toggle presents every enabled leaf at full opacity immediately',
+      exact() &&
+        visible().every(
+          (p) =>
+            p.material.opacity === 1 &&
+            !p.material.transparent &&
+            p.material.depthWrite &&
+            !p.motion,
+        ),
+    );
+    await settle(v);
+    const before = prefs();
+    const label = `${Number(centralVisible)}${Number(smallVisible)}`;
+    check(`${label}: exact enabled leaves and independent styles`, exact());
+    v.setSide(v.state.side === 'front' ? 'back' : 'front');
+    await settle(v);
+    check(
+      `${label}: side switch retains visibility and styles`,
+      before === prefs() && exact(),
+    );
+    v.patch({ separation: 1 });
+    await settle(v);
+    const leaves = visible();
+    const layersClear = (['central', 'small'] as const).every((face) => {
+      const sign = face === 'central' ? 1 : -1;
+      let edge = -Infinity;
+      return DISPLAY_LAYERS[face].every((layer) => {
+        const boxes = leaves
+          .filter((p) => layer.includes(p.source.id))
+          .map((p) =>
+            p.mesh.geometry.boundingBox!.clone().applyMatrix4(p.mesh.matrix),
           );
-          const clear = min - edge >= 0.999;
-          edge = Math.max(
-            ...boxes.map((b) => sign * (sign === 1 ? b.max.z : b.min.z)),
-          );
-          return clear;
-        });
+        if (!boxes.length) return true;
+        const min = Math.min(
+          ...boxes.map((b) => sign * (sign === 1 ? b.min.z : b.max.z)),
+        );
+        const clear = min - edge >= 0.999;
+        edge = Math.max(
+          ...boxes.map((b) => sign * (sign === 1 ? b.max.z : b.min.z)),
+        );
+        return clear;
       });
-      check(
-        `${label}: enabled individual dial/hand layers separate with 1 mm clearance`,
-        before === prefs() && exact() && layersClear,
-      );
-      v.patch({ separation: 0 });
-      await settle(v);
-      check(
-        `${label}: reassembly restores exact fitted matrices`,
-        exact() && v.assemblyError('presentation') === 0 && before === prefs(),
-      );
-      v.allParts();
-      await settle(v);
-      const packed = v.auditSpread();
-      check(
-        `${label}: All parts includes every enabled leaf without overlap or clipping`,
-        v.spread.size === 216 + fittedLeaves(v.state).size &&
-          packed.overlaps.length === 0 &&
-          packed.clipped.length === 0 &&
-          exact(),
-        packed,
-      );
-      check(
-        `${label}: every fitted inventory part faces forward and upright`,
-        leaves.every((p) => {
-          if (p.source.name.startsWith('010-'))
-            return (
-              new THREE.Vector3(0, 0, 1)
-                .transformDirection(p.mesh.matrix)
-                .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
-            );
-          const hand = handPoses.hands.find((h) => h.leafId === p.source.id);
-          if (hand) {
-            const direction = new THREE.Vector3()
-              .fromArray(hand.tipLandmarkLocalMm)
-              .sub(new THREE.Vector3().fromArray(hand.boreLocalMm))
-              .transformDirection(p.mesh.matrix);
-            return new THREE.Vector3(direction.x, direction.y, 0)
-              .normalize().distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9;
-          }
-          const sign = belongs(p.source.id, DIALS.faces.central.rootId)
-            ? 1
-            : -1;
-          const rotation = v.spread.get(p.source.id)!.rotation;
+    });
+    check(
+      `${label}: enabled individual dial/hand layers separate with 1 mm clearance`,
+      before === prefs() && exact() && layersClear,
+    );
+    v.patch({ separation: 0 });
+    await settle(v);
+    check(
+      `${label}: reassembly restores exact fitted matrices`,
+      exact() && v.assemblyError('presentation') === 0 && before === prefs(),
+    );
+    v.allParts();
+    await settle(v);
+    const packed = v.auditSpread();
+    check(
+      `${label}: All parts includes every enabled leaf without overlap or clipping`,
+      v.spread.size === 216 + fittedLeaves(v.state).size &&
+        packed.overlaps.length === 0 &&
+        packed.clipped.length === 0 &&
+        exact(),
+      packed,
+    );
+    check(
+      `${label}: every fitted inventory part faces forward and upright`,
+      leaves.every((p) => {
+        if (p.source.name.startsWith('010-'))
           return (
-            new THREE.Vector3(0, 0, sign)
-              .applyQuaternion(rotation)
-              .distanceTo(new THREE.Vector3(0, 0, -1)) < 1e-9 &&
-            new THREE.Vector3(0, sign, 0)
-              .applyQuaternion(rotation)
+            new THREE.Vector3(0, 0, 1)
+              .transformDirection(p.mesh.matrix)
               .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
           );
-        }),
-      );
-      if (leaves.length) {
-        await v.select(leaves[0].source.id);
-        await settle(v);
-        check(
-          `${label}: selecting fitted inventory part retains layout and styles`,
-          v.state.layout === 'spread' && before === prefs(),
+        const hand = handPoses.hands.find((h) => h.leafId === p.source.id);
+        if (hand) {
+          const direction = new THREE.Vector3()
+            .fromArray(hand.tipLandmarkLocalMm)
+            .sub(new THREE.Vector3().fromArray(hand.boreLocalMm))
+            .transformDirection(p.mesh.matrix);
+          return (
+            new THREE.Vector3(direction.x, direction.y, 0)
+              .normalize()
+              .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
+          );
+        }
+        const sign = belongs(p.source.id, DIALS.faces.central.rootId) ? 1 : -1;
+        const rotation = v.spread.get(p.source.id)!.rotation;
+        return (
+          new THREE.Vector3(0, 0, sign)
+            .applyQuaternion(rotation)
+            .distanceTo(new THREE.Vector3(0, 0, -1)) < 1e-9 &&
+          new THREE.Vector3(0, sign, 0)
+            .applyQuaternion(rotation)
+            .distanceTo(new THREE.Vector3(0, -1, 0)) < 1e-9
         );
-      }
-      const resetSide = v.state.side;
-      v.reset();
+      }),
+    );
+    if (leaves.length) {
+      await v.select(leaves[0].source.id);
       await settle(v);
       check(
-        `${label}: Reset keeps visibility/styles/side and reassembles from inventory`,
-        before === prefs() &&
-          v.state.side === resetSide &&
-          v.state.viewAngle === 'overview' &&
-          exact() &&
-          v.state.layout === 'assembly' &&
-          v.assemblyError('presentation') === 0,
-      );
-      v.group(null);
-      await settle(v);
-      check(
-        `${label}: return from All parts restores fitted pose`,
-        v.assemblyError('presentation') === 0 && exact() && before === prefs(),
+        `${label}: selecting fitted inventory part retains layout and styles`,
+        v.state.layout === 'spread' && before === prefs(),
       );
     }
+    const resetSide = v.state.side;
+    v.reset();
+    await settle(v);
+    check(
+      `${label}: Reset keeps visibility/styles/side and reassembles from inventory`,
+      before === prefs() &&
+        v.state.side === resetSide &&
+        v.state.viewAngle === 'overview' &&
+        exact() &&
+        v.state.layout === 'assembly' &&
+        v.assemblyError('presentation') === 0,
+    );
+    v.group(null);
+    await settle(v);
+    check(
+      `${label}: return from All parts restores fitted pose`,
+      v.assemblyError('presentation') === 0 && exact() && before === prefs(),
+    );
+  }
   await v.configureDials({ centralVisible: true, smallVisible: true });
   await settle(v);
   for (const face of ['central', 'small'] as const)
@@ -323,7 +325,7 @@ export async function runDialChecks(v: MovementViewer) {
       faceOn() &&
       exact() &&
       v.state.centralVisible &&
-      !v.state.smallVisible,
+      v.state.smallVisible,
   );
   await v.chooseDial('small', true, 'pear');
   await settle(v);
@@ -377,7 +379,7 @@ export async function runDialChecks(v: MovementViewer) {
   for (let i = 0; i < 12; i++) {
     void v.configureDials({
       centralVisible: !!(i % 2),
-      smallVisible: !!(i % 3),
+      smallVisible: !!(i % 2),
       centralStyle: i % 2 ? 'lance' : 'open-lance',
     });
     v.patch({ separation: i % 2 });
@@ -423,7 +425,7 @@ export async function runDialChecks(v: MovementViewer) {
       };
     });
   const pending = v.configureDials({
-    centralVisible: false,
+    centralVisible: true,
     smallVisible: true,
   });
   v.setSide('front');
@@ -435,7 +437,7 @@ export async function runDialChecks(v: MovementViewer) {
     'Loading completion preserves newer side and separation',
     v.state.side === 'front' &&
       v.state.separation === 0.65 &&
-      !v.state.centralVisible &&
+      v.state.centralVisible &&
       v.state.smallVisible &&
       exact(),
   );
@@ -470,6 +472,7 @@ export async function runDialChecks(v: MovementViewer) {
   v.patch({ separation: 0.5 });
   await settle(v);
   const recoveryPrefs = prefs();
+  const surfaceCount = v.sourceSurfaces?.size;
   const extension = v.renderer.getContext().getExtension('WEBGL_lose_context');
   if (extension) {
     extension.loseContext();
@@ -483,7 +486,7 @@ export async function runDialChecks(v: MovementViewer) {
       prefs() === recoveryPrefs &&
         v.state.separation === 0.5 &&
         exact() &&
-        v.sourceSurfaces?.size === 58,
+        v.sourceSurfaces?.size === surfaceCount,
     );
   }
   await v.load();
