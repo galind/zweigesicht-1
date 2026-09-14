@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { aboutDescription } from './about';
 
-export const ORIGIN = 'https://zweigesicht-1.com';
+export const ORIGIN = 'https://zweigesicht-1.guillemgalindo.com';
 const title = 'Marco Lang Zweigesicht-1 — Interactive ML-01 Movement';
 const description =
   "Explore Marco Lang's Zweigesicht-1 and Calibre ML-01 in an interactive 3D movement viewer. Inspect its components, construction and movement architecture.";
