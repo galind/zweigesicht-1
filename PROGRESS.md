@@ -30,7 +30,13 @@ Verification for this revision: 11 state tests, 89 CPU runtime checks, TypeScrip
 
 Follow-up simplification: removed Previous view from Focus and restored Separate’s original regular text and icon styling. Its first position supplies priority without extra visual weight. Updated the existing UX expectation; TypeScript, lint and targeted browser inspection pass (seven Focus choices, matching control text weight/color, and visual review).
 
-## Next prepared goal
+## Watch configuration — implementation in progress
+
+Verified branch `codex/quiet-movement-redesign` and clean starting checkout. The fitted-case audit selects 41 physical leaves: source packets 1/2/3/6/7/8 and the matching d51 attachments under children 4/9; alternate attachments, all leather and buckles are excluded. Original occurrence matrices are recorded in `assets/authored/watch-configurations.json`. Maker references and hashes, material scope and compatibility decisions are in `assets/source-manifest/watch-configuration.json`.
+
+The d54 probe identifies missing face 1 (28.357985 mm²). Independent tessellation of that original planar face at 0.03 mm yields 34 triangles and 28.227462 mm² (0.46% area difference), preserving original wires and surface. The local recovery sidecar is hash checked and remains ignored; source STEP and existing GLBs are unchanged. The probe and asset preparation reproduce it. Fine hands support blue and rose-gold appearances; Lance/Open lance retain blue, Skeleton remains unchanged. Case alloy choices are authored appearances of the SS geometry, not additional alloy models. Browser inspection of the first fitted steel and rose-gold rendering is complete; broader implementation verification remains underway. No push or deployment.
+
+## Original prepared goal
 
 Prepared [Watch configuration](docs/WATCH_CONFIGURATION_GOAL.md) at the user’s request. The next implementation would replace Dials & hands with Configure, adding a fitted case/crystal toggle, supported case materials and Three hands material choices. The user clarified that “sticks” means the hands, not hour markers. Source case geometry is present; fitted occurrence selection and material compatibility require the documented audit. This turn prepares the goal only; implementation has not started.
 

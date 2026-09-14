@@ -63,3 +63,6 @@ artifacts/cad-finishing-audit/
 # Current verified dial surface annotations.
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz
+
+# Local fitted-case source recovery and reference evidence.
+artifacts/case-cad/
