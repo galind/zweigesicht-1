@@ -12,9 +12,13 @@ Later refinements include straight-on opening/Reset, independent inventory flipp
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
 
-The last recorded domain check on 14 September confirmed attachment and ownership verification on Vercel project `zweigesicht-1` (`prj_Z2S8IQ88PypFXHg6JktpE2CJMoju`), with external DNS still pending. Required record: CNAME host `zweigesicht-1`, value `4e9bb417d6b08f83.vercel-dns-017.com.`. Existing domains were retained. Live DNS and deployment state have not been rechecked during this documentation cleanup.
+On 14 September, Vercel confirmed valid configuration for `zweigesicht-1.guillemgalindo.com` on project `zweigesicht-1` (`prj_Z2S8IQ88PypFXHg6JktpE2CJMoju`); a fresh HTTPS check returned 200.
 
-Next domain action: verify the external DNS record and Vercel cutover status, then complete any remaining authorized metadata deployment. The repository contains Vercel configuration; older blanket statements that nothing has ever been deployed are not a reliable current status.
+At the user's request, connected `zweigesicht-1.com`, `thesevenspheres.com` and both `www` variants to that project and published a dashboard CDN routing rule, `Redirect watch domains to Marco Lang` (`01e4b6ab-ca8b-4eda-a001-adf5f2d20dda`). It matches path `^/.*$` only when the host matches `^(www\.)?(zweigesicht-1\.com|thesevenspheres\.com)$`, returning 301 to `https://www.marcolangwatches.com/`. This rule lives in Vercel's dashboard, not the repository configuration; the explorer hostname is excluded.
+
+Zweigesicht retains its Vercel nameservers. Seven Spheres retains Namecheap BasicDNS: changed its parking CNAME `www` to `4e9bb417d6b08f83.vercel-dns-017.com.` and replaced the apex parking redirect with A `@` → `216.198.79.1`, both TTL 30 minutes. Mail settings were retained.
+
+Verification around 18:38 UTC: all four redirect hostnames show Valid Configuration in Vercel. Both Zweigesicht addresses returned HTTPS 301 to the destination using ordinary DNS. Both Seven Spheres addresses passed certificate validation and returned the same 301 using curl `--resolve` to the configured Vercel IP; ordinary local DNS still reached the old endpoint or timed out. Next domain action: recheck Seven Spheres through ordinary DNS after propagation. No site build or CAD deployment was performed for these redirects.
 
 ## Verification and limits
 
