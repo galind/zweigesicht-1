@@ -499,7 +499,7 @@ export default function Home() {
                   ? 'Fit the spread or focus on a group.'
                   : group
                     ? group.technical
-                    : 'Space the assembly to see its construction.'}
+                    : 'Open the movement, then adjust the space between its parts.'}
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
@@ -524,6 +524,25 @@ export default function Home() {
                 </>
               ) : (
                 <>
+                  <button
+                    className="separation-action"
+                    disabled={!available}
+                    onClick={() => {
+                      const value =
+                        (group ? s.partSpread : s.separation) > 0 ? 0 : 1;
+                      viewer.current?.patch(
+                        group ? { partSpread: value } : { separation: value },
+                      );
+                      setSeparate(false);
+                    }}
+                  >
+                    <Layers aria-hidden="true" />
+                    {(group ? s.partSpread : s.separation) > 0
+                      ? 'Reassemble'
+                      : group
+                        ? 'Separate section'
+                        : 'Separate movement'}
+                  </button>
                   <div className="slider-heading">
                     <span id="separation-label">
                       {group ? 'Separate section' : 'Separate'}
@@ -1120,20 +1139,26 @@ export default function Home() {
           >
             Run UX checks
           </button>
-          {(['scrub', 'spread', 'interrupt', 'dials'] as MotionCase[]).map(
-            (kind) => (
-              <button
-                key={kind}
-                onClick={async () => {
-                  if (!viewer.current) return;
-                  setMotion({ running: true });
-                  setMotion(await captureMotion(viewer.current, kind));
-                }}
-              >
-                Record {kind}
-              </button>
-            ),
-          )}
+          {(
+            [
+              'separate',
+              'scrub',
+              'spread',
+              'interrupt',
+              'dials',
+            ] as MotionCase[]
+          ).map((kind) => (
+            <button
+              key={kind}
+              onClick={async () => {
+                if (!viewer.current) return;
+                setMotion({ running: true });
+                setMotion(await captureMotion(viewer.current, kind));
+              }}
+            >
+              Record {kind}
+            </button>
+          ))}
           <pre id="motion-report" hidden>
             {JSON.stringify(motion)}
           </pre>

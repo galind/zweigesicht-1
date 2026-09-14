@@ -748,7 +748,7 @@ results.push({check:'unknown or invalid transfer totals remain indeterminate; me
 const tickField=viewerClass.members.find(n=>ts.isPropertyDeclaration(n)&&n.name.getText(viewerSource)==='tick');
 const tickModule={exports:{}};
 const tickCode=ts.transpileModule('module.exports=function(){return '+tickField.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
-vm.runInNewContext(tickCode,{module:tickModule,THREE,performance,console,requestAnimationFrame:()=>1,document:{hidden:false}});
+vm.runInNewContext(tickCode,{module:tickModule,THREE,...load('explorer/src/experience/motion.ts'),performance,console,requestAnimationFrame:()=>1,document:{hidden:false}});
 const renderOrder=[];
 const frameFixture={dead:false,contextLost:false,lastFrame:0,lastNotify:1e9,benchmark:null,needsRender:true,presentationMoving:false,travel:null,ready:false,awaitingFirstFrame:true,loadStart:performance.now(),frameIntervals:[],renderCount:0,
  state:{...initialState,phase:'whole'},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
@@ -1067,6 +1067,26 @@ for(let i=0;i<24;i++) {
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
 results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
+v.reset();v.applyPose(10);v.cameraUserOwned=true;v.travel=null;v.reduced=false;
+v.patch({separation:1});assert.equal(v.explosionTravel.duration,1.25);
+v.patch({separation:0});v.applyPose(1.5);
+assert.equal(v.assemblyError(),0,'Opening reversed before its first frame must never open later');
+for(const hz of [30,60,120]){
+ v.reset();v.applyPose(10);v.patch({separation:1});
+ let previous=0;
+ for(let i=0;i<Math.ceil(1.25*hz)+1;i++){
+  v.applyPose(1/hz);
+  const progress=v.displayedExplosionState.separation;
+  assert.ok(progress>=previous && progress<=1,'Opening must be monotonic at every refresh rate');previous=progress;
+ }
+ assert.equal(v.displayedExplosionState.separation,1);assert.equal(v.explosionTravel,undefined);
+ v.patch({separation:0});assert.equal(v.explosionTravel.duration,1.05);v.applyPose(.35);
+ const displayed=new Map([...v.renderParts].map(([id,p])=>[id,p.offset.clone()]));
+ v.patch({separation:1});v.applyPose(0);
+ for(const [id,offset] of displayed)assert.ok(v.renderParts.get(id).offset.distanceTo(offset)<1e-10,'Reversal must start at the displayed pose');
+ v.applyPose(2);v.patch({separation:0});v.applyPose(2);assert.equal(v.assemblyError(),0);
+}
+results.push({check:'Separate opens in 1.25 s and closes in 1.05 s at 30/60/120 Hz; immediate and mid-flight reversals preserve poses and exact endpoints',status:'pass'});
 v.reset();v.applyPose(1);v.cameraUserOwned=true;v.travel=null;
 v.scrub({separation:.8});const probe=[...v.renderParts.values()].find(p=>p.target.length()>1);
 const displayed=probe.offset.clone();v.applyPose(0);assert.ok(probe.offset.equals(displayed));

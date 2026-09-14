@@ -60,6 +60,14 @@ Polish and lug-hardware follow-up: fitted gold hands and bushings now use polish
 
 Menu simplification: removed the Three hands shape selector from Configure and gave the Skeleton selector its own row. Existing configuration state and API support remain available. Updated the panel description. TypeScript, lint and targeted browser inspection pass.
 
+## Motion refinement — 15 September 2026
+
+Separate now includes a one-click Separate movement / Reassemble action beside the retained precision slider; focused sections have the same control. The one-click action dismisses the panel and returns focus to Separate so the full animation stays visible; slider adjustments keep the panel open. Full opening takes 1.25 seconds and closing 1.05 seconds, with proportionally shorter partial moves. Camera and parts share the same easing and duration. A bounded quintic curve softens acceleration and braking across separation, camera navigation, Flip/lug turns, All parts and cutaway fades. Direct slider input uses an immediate-response ease-out and retains its 75 ms settling window. Panels use a 6 px lift with 180 ms entrance / 120 ms exit; hover feedback is restrained. No looping or overshooting motion was added.
+
+Fixed cancellation before the first separation frame and made interpolated state land exactly on its requested endpoint. Reduced-motion preference changes are observed live and snap active movement to its destination; the listener is removed on disposal. Original geometry, separation paths, authored finishes and source transforms remain unchanged.
+
+Verification: 16 state/motion tests, 98 CPU runtime checks, TypeScript, lint and production build pass. New CPU coverage checks monotonic motion at 30/60/120 Hz, exact endpoints, immediate cancellation and interrupted reversal. Browser separation checks pass all 8 assertions (both faces, intermediate poses, six Focus sections, viewport containment, reduced motion, camera ownership, resource reuse and idle rendering); watch checks pass all 184 assertions, inventory checks pass all 20 and interface checks pass all 53. Visual review includes sampled real opening/closing frames, a 390×844 phone viewport and 320×740 at 200% text. The new action and keyboard slider remain reachable in the scrolling panel with no horizontal overflow. One watch run was interrupted by hot reload during development; the subsequent stable run passed all 184 checks. Physical-device and human motion-preference review remain outstanding. Ready for local user review. No push or deployment.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

@@ -1,3 +1,4 @@
+import { MOTION, motionEase } from '../experience/motion';
 import { caseDisplayMatrix } from './CasePose';
 import { loadCaseRecovery, recoverCaseSurfaces } from './CaseRecovery';
 import {
@@ -170,7 +171,12 @@ export class MovementViewer {
   inventoryTravel?: { from: number; to: number; elapsed: number };
   inventoryApplied = false;
   inventoryEntering = false;
-  reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+  reduced = this.motionPreference.matches;
+  onMotionPreference = (event: MediaQueryListEvent) => {
+    this.reduced = event.matches;
+    this.invalidate();
+  };
   travel: {
     position: THREE.Vector3;
     target: THREE.Vector3;
@@ -181,7 +187,7 @@ export class MovementViewer {
     elapsed?: number;
     duration?: number;
   } | null = null;
-  poseDuration = 0.85;
+  poseDuration: number = MOTION.navigate;
   needsRender = true;
   lastFrame = 0;
   lastNotify = 0;
@@ -275,6 +281,7 @@ export class MovementViewer {
       this.onContextRestored,
     );
     document.addEventListener('visibilitychange', this.onVisibility);
+    this.motionPreference.addEventListener('change', this.onMotionPreference);
     void this.load();
     this.frame = requestAnimationFrame(this.tick);
   }
@@ -968,19 +975,34 @@ export class MovementViewer {
         ? { viewAngle: 'overview' }
         : {}),
     });
-    this.retarget();
-    if (
-      this.ready &&
-      this.state.layout === 'assembly' &&
-      ('separation' in patch || 'partSpread' in patch)
-    )
-      this.fitPresentation();
+    const duration = this.poseDuration ?? MOTION.navigate;
+    const separating = 'separation' in patch || 'partSpread' in patch;
+    // Share one clock with the camera. Small adjustments take proportionally
+    // less time; direct slider input keeps its short response window.
+    if (separating && duration !== MOTION.scrub) {
+      const key = this.state.group ? 'partSpread' : 'separation';
+      const from = this.displayedExplosionState?.[key] ?? 0;
+      const distance = Math.abs(this.state[key] - from);
+      const full = this.state[key] > from ? MOTION.separate : MOTION.assemble;
+      this.poseDuration = full * (0.45 + 0.55 * distance);
+    }
+    try {
+      this.retarget();
+      if (this.ready && this.state.layout === 'assembly' && separating)
+        this.fitPresentation();
+    } finally {
+      this.poseDuration = duration;
+    }
     this.emit();
   }
   scrub(patch: Partial<ExperienceState>) {
-    this.poseDuration = 0.075;
-    this.patch(patch);
-    this.poseDuration = 0.85;
+    const duration = this.poseDuration;
+    this.poseDuration = MOTION.scrub;
+    try {
+      this.patch(patch);
+    } finally {
+      this.poseDuration = duration;
+    }
   }
   targetBounds(include: (p: RenderPart) => boolean) {
     const bounds = new THREE.Box3();
@@ -1672,6 +1694,7 @@ export class MovementViewer {
         duration: this.poseDuration ?? 0.85,
       };
     } else if (
+      !changed ||
       previous?.group !== this.state.group ||
       previous?.layout !== this.state.layout
     ) {
@@ -1858,11 +1881,7 @@ export class MovementViewer {
       const t = this.reduced
         ? 1
         : Math.min(1, turn.elapsed / WATCH.lugPresentation.durationSeconds);
-      this.caseTurn = THREE.MathUtils.lerp(
-        turn.from,
-        turn.to,
-        t * t * (3 - 2 * t),
-      );
+      this.caseTurn = THREE.MathUtils.lerp(turn.from, turn.to, motionEase(t));
       moving = t < 1 || moving;
       if (t === 1) this.caseTravel = undefined;
     }
@@ -1873,7 +1892,7 @@ export class MovementViewer {
       this.inventoryAngle = THREE.MathUtils.lerp(
         turn.from,
         turn.to,
-        t * t * (3 - 2 * t),
+        motionEase(t),
       );
       moving = t < 1 || moving;
       if (t === 1) this.inventoryTravel = undefined;
@@ -1886,11 +1905,13 @@ export class MovementViewer {
       const t = this.reduced
         ? 1
         : Math.min(1, travel.elapsed / travel.duration);
-      const eased = t * t * (3 - 2 * t);
+      const eased = motionEase(t, travel.duration === MOTION.scrub);
       const displayed = { ...travel.to };
       for (const key of ['separation', 'partSpread', 'reveal'] as const)
         displayed[key] =
-          travel.from[key] + (travel.to[key] - travel.from[key]) * eased;
+          t === 1
+            ? travel.to[key]
+            : travel.from[key] + (travel.to[key] - travel.from[key]) * eased;
       staged = explosionOffsets(this.parts, displayed);
       this.displayedExplosionState = displayed;
       moving = t < 1 || moving;
@@ -1900,11 +1921,11 @@ export class MovementViewer {
       if (p.cutaway) {
         const fade = p.cutaway;
         fade.elapsed += Math.max(0, dt);
-        const t = this.reduced ? 1 : Math.min(1, fade.elapsed / 0.28);
+        const t = this.reduced ? 1 : Math.min(1, fade.elapsed / MOTION.fade);
         fade.level = THREE.MathUtils.lerp(
           fade.from,
           fade.target,
-          t * t * (3 - 2 * t),
+          motionEase(t),
         );
         const fading = t < 1 && fade.from !== fade.target;
         const transparent = fading || fade.transparent;
@@ -1928,7 +1949,7 @@ export class MovementViewer {
       } else if (p.motion && !this.reduced) {
         p.motion.elapsed += Math.max(0, dt);
         const t = Math.min(1, p.motion.elapsed / p.motion.duration);
-        const eased = t * t * (3 - 2 * t);
+        const eased = motionEase(t, p.motion.duration === MOTION.scrub);
         p.offset.lerpVectors(p.motion.offset, p.target, eased);
         p.rotation.slerpQuaternions(p.motion.rotation, p.targetRotation, eased);
         if (t < 1) moving = true;
@@ -2185,7 +2206,7 @@ export class MovementViewer {
       const t = this.reduced
         ? 1
         : Math.min(1, travel.elapsed / (travel.duration ?? 0.85));
-      const a = t * t * (3 - 2 * t);
+      const a = motionEase(t, travel.duration === MOTION.scrub);
       const from = travel.fromPosition.clone().sub(travel.fromTarget),
         to = travel.position.clone().sub(travel.target);
       const distance = THREE.MathUtils.lerp(from.length(), to.length(), a);
@@ -2374,6 +2395,10 @@ export class MovementViewer {
     cancelAnimationFrame(this.frame);
     this.observer.disconnect();
     document.removeEventListener('visibilitychange', this.onVisibility);
+    this.motionPreference?.removeEventListener(
+      'change',
+      this.onMotionPreference,
+    );
     this.controls.dispose();
     this.disposeObject(this.root);
     this.selectionBox.geometry.dispose();
