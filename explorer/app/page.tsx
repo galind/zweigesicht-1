@@ -12,7 +12,6 @@ import {
   type CSSProperties,
 } from 'react';
 import {
-  ArrowLeft,
   ChevronDown,
   ChevronRight,
   ExternalLink,
@@ -616,19 +615,6 @@ export default function Home() {
                   <ChevronRight aria-hidden="true" />
                 </button>
               ))}
-              <button
-                className="menu-link"
-                aria-label="Back"
-                title="Previous view"
-                disabled={!available || !s.canBack}
-                onClick={() => {
-                  closePanels();
-                  viewer.current?.back();
-                  host.current?.querySelector('canvas')?.focus();
-                }}
-              >
-                Previous view <ArrowLeft aria-hidden="true" />
-              </button>{' '}
             </div>
           </SheetContent>
         </Sheet>

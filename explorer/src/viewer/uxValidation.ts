@@ -179,11 +179,13 @@ export async function runUxChecks(v: MovementViewer) {
     ...document.querySelectorAll<HTMLButtonElement>('.explore-menu button'),
   ];
   checks.push({
-    name: 'Focus contains sections and history, with inventory and settings elsewhere',
+    name: 'Focus contains section choices without auxiliary navigation',
     pass:
-      menu.some((button) => button.textContent?.includes('Previous view')) &&
+      menu.some((button) => button.textContent?.includes('Whole movement')) &&
       !menu.some((button) =>
-        /All parts|Source catalog|View options/.test(button.textContent ?? ''),
+        /Previous view|All parts|Source catalog|View options/.test(
+          button.textContent ?? '',
+        ),
       ),
   });
   document.querySelector<HTMLButtonElement>('.about-toggle')!.click();

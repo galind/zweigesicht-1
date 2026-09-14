@@ -28,6 +28,8 @@ All parts exposes Find a component. Search defaults to physical components inclu
 
 Verification for this revision: 11 state tests, 89 CPU runtime checks, TypeScript, lint and production build pass. All 53 browser UX checks pass, including new scope/filter and focus-return checks. Manual desktop/mobile verification covers the direct All parts action, component search and assembly selection, About/settings, and 200% text without horizontal overflow. Desktop/mobile captures are `controls-desktop.png` and `controls-mobile.png` in the existing ignored evidence directory. Physical-device review remains outstanding. Ready for local user review; no push or deployment.
 
+Follow-up simplification: removed Previous view from Focus and restored Separate’s original regular text and icon styling. Its first position supplies priority without extra visual weight. Updated the existing UX expectation; TypeScript, lint and targeted browser inspection pass (seven Focus choices, matching control text weight/color, and visual review).
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
