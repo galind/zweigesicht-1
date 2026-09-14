@@ -1,5 +1,11 @@
 # Zweigesicht-1 — current state
 
+## Custom domain migration — 14 September 2026
+
+At the user's request, attached `zweigesicht-1.guillemgalindo.com` to the existing Vercel project `zweigesicht-1` (`prj_Z2S8IQ88PypFXHg6JktpE2CJMoju`). Vercel confirms attachment and ownership verification; DNS configuration is pending at the external provider (nameservers `dns1.registrar-servers.com` and `dns2.registrar-servers.com`). Required record: CNAME host `zweigesicht-1`, value `4e9bb417d6b08f83.vercel-dns-017.com.`. Existing domains were retained while DNS is pending.
+
+Updated the shared SEO origin and existing SEO checks to the new domain, covering canonical, social image URLs, structured data, robots and sitemap. Lint, TypeScript and the full existing HTTP SEO check pass against a temporary local development server. No deployment or push performed. Next action: add the external DNS record, rerun Vercel domain verification, and publish the matching metadata update when completing the cutover. This domain attachment does not certify mechanical or device review gates.
+
 ## Accepted model
 
 The model and experience are accepted on `main` at commit `548620a` (11 September 2026). The accepted appearance checkpoint is `d0132e2`. All 70 source/runtime checks, lint, TypeScript, and the production build passed at delivery. The hash-verified annotation payload `finish-surfaces-afd3394797bd.bin` and its gzip match the approved local preview; geometry is unchanged.
