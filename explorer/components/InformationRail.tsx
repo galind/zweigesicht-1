@@ -20,10 +20,12 @@ export function InformationRail({
   panel,
   onPanelChange,
   children,
+  onViewerSettings,
 }: {
   panel: Panel;
   onPanelChange: (panel: Panel) => void;
   children: ReactNode;
+  onViewerSettings: () => void;
 }) {
   const mobileTrigger = useRef<HTMLButtonElement>(null);
   const differentTrigger = useRef<HTMLButtonElement>(null);
@@ -107,6 +109,7 @@ export function InformationRail({
           showOverlay={false}
           scrollContent
           finalFocus={() =>
+            lastPanel === 'menu' ||
             window.matchMedia('(max-width: 1000px)').matches
               ? mobileTrigger.current
               : lastPanel === 'specs'
@@ -133,6 +136,15 @@ export function InformationRail({
           {contentPanel === 'menu' ? (
             <nav className="information-menu" aria-label="About Zweigesicht-1">
               {links(true)}
+              <section className="viewer-help">
+                <h3>Using the viewer</h3>
+                <button
+                  className="viewer-settings-link"
+                  onClick={onViewerSettings}
+                >
+                  Viewer settings <ChevronRight aria-hidden="true" />
+                </button>
+              </section>
             </nav>
           ) : (
             <div className="about-copy">

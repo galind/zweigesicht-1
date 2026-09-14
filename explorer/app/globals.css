@@ -1026,3 +1026,57 @@ canvas:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+.action-dock .separate-trigger {
+  color: var(--foreground);
+  font-weight: 650;
+}
+.action-dock .separate-trigger .dock-icon {
+  opacity: 1;
+  stroke-width: 2;
+}
+.about-toggle {
+  display: flex;
+}
+.viewer-help {
+  margin-top: 20px;
+}
+.viewer-help h3 {
+  padding: 0 10px;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.catalog-scope {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin: 0 16px;
+  font-size: 0.8125rem;
+}
+.catalog-scope input {
+  accent-color: var(--foreground);
+  width: 16px;
+  height: 16px;
+}
+.catalog-scope + .secondary {
+  margin: 0 16px 12px;
+  font-size: 0.75rem;
+}
+@media (max-width: 600px) {
+  .action-dock {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .action-dock .reset-button {
+    grid-column: auto;
+  }
+}
+@media (max-width: 1000px) {
+  .text-enlarged .action-dock {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .text-enlarged .action-dock .reset-button {
+    grid-column: auto;
+  }
+}

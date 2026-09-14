@@ -20,6 +20,14 @@ Watch copy reuses the project's maker-attributed facts; the maker's CAD and main
 
 Layout correction after user feedback: the canvas now fills the entire viewport, with the identity, side navigation and bottom controls floating over it. Removed reserved layout space, surface borders and shadows; the translucent tint matches the empty background and reveals its blur over geometry. Keyboard focus indicators remain visible. Fresh checks for this CSS revision: lint and production build pass; browser inspection confirms a 1440×900 desktop canvas and 390×844 mobile canvas both start at (0, 0), About does not resize the canvas, and mobile controls remain within the viewport without horizontal overflow at normal and 200% text. Updated desktop/mobile captures are `overlay-desktop.png` and `overlay-mobile.png` in the existing ignored evidence directory. Awaiting local user review; no push or deployment.
 
+## Control hierarchy refinement — 14 September 2026
+
+Separate now leads the bottom controls with stronger text/icon emphasis, followed by Focus, a standalone All parts toggle, Dials & hands and Flip; Reset stays secondary. Focus contains section choices and Previous view. About is available at every width; its Using the viewer section opens Viewer settings for camera controls and rendering quality.
+
+All parts exposes Find a component. Search defaults to physical components included in the current view (including occluded components), using renderer visibility from the snapshot. Include all CAD entries expands to the full hierarchy. Results distinguish parts, assemblies containing displayed parts, and entries not shown, while retaining source names, IDs and exception categories. Selecting an entry retains existing loading, inspection and isolation behavior.
+
+Verification for this revision: 11 state tests, 89 CPU runtime checks, TypeScript, lint and production build pass. All 53 browser UX checks pass, including new scope/filter and focus-return checks. Manual desktop/mobile verification covers the direct All parts action, component search and assembly selection, About/settings, and 200% text without horizontal overflow. Desktop/mobile captures are `controls-desktop.png` and `controls-mobile.png` in the existing ignored evidence directory. Physical-device review remains outstanding. Ready for local user review; no push or deployment.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

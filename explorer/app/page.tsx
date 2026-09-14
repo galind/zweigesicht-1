@@ -16,7 +16,8 @@ import {
   ChevronDown,
   ChevronRight,
   ExternalLink,
-  Compass,
+  ScanSearch,
+  Grid2X2,
   Layers,
   Clock3,
   FlipHorizontal2,
@@ -44,7 +45,8 @@ import { DialControls } from '@/components/DialControls';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
-  ROOT,
+  category,
+  belongs,
   inMembers,
   partLabel,
   buildPartIndex,
@@ -89,6 +91,7 @@ const empty: ViewerSnapshot = {
   error: '',
   detailError: '',
   parts: [],
+  visiblePartIds: [],
   canBack: false,
   catalogLoaded: false,
   benchmarkResult: null,
@@ -137,11 +140,29 @@ export default function Home() {
     [qa, setQa] = useState<unknown>(null);
   const [motion, setMotion] = useState<unknown>(null);
   const [catalogQuery, setCatalogQuery] = useState('');
+  const [includeAllCad, setIncludeAllCad] = useState(false);
+  const visibleParts = useMemo(
+    () => new Set(s.visiblePartIds),
+    [s.visiblePartIds],
+  );
   const partIndex = useMemo(() => buildPartIndex(s.parts), [s.parts]);
   const catalogParts = useMemo(
-    () => s.parts.filter((p) => p.id !== 'p_0_1_1_1'),
-    [s.parts],
+    () =>
+      s.parts.filter(
+        (p) =>
+          p.id !== 'p_0_1_1_1' &&
+          (includeAllCad || (!p.isAssembly && visibleParts.has(p.id))),
+      ),
+    [s.parts, includeAllCad, visibleParts],
   );
+  const componentStatus = (p: Part) => {
+    const visibility = visibleParts.has(p.id)
+      ? 'In current view'
+      : p.isAssembly && s.visiblePartIds.some((id) => belongs(id, p.id))
+        ? 'Contains displayed parts'
+        : 'Not shown';
+    return `${p.isAssembly ? 'Assembly' : 'Part'} · ${visibility} · ${category(p)}`;
+  };
   const available = s.ready && !s.error && s.loadStage === 'ready';
   useEffect(() => {
     if (!host.current) return;
@@ -397,6 +418,18 @@ export default function Home() {
                     : 'All parts'}
             </h2>
             <div className="focus-actions">
+              {s.layout === 'spread' && (
+                <button
+                  className="text-button find-component-button"
+                  onClick={() => {
+                    setIncludeAllCad(false);
+                    setCatalogQuery('');
+                    openPanel(setCatalog, true);
+                  }}
+                >
+                  Find a component
+                </button>
+              )}
               {group && !selected && (
                 <button
                   ref={detailButton}
@@ -426,93 +459,6 @@ export default function Home() {
         </section>
       )}
       <nav className="action-dock" aria-label="Movement controls">
-        <Sheet
-          modal={false}
-          open={explore}
-          onOpenChange={(open) => openPanel(setExplore, open)}
-        >
-          <SheetTrigger
-            ref={exploreButton}
-            className="explore-button text-button"
-            disabled={s.loadStage === 'recovering'}
-          >
-            <Compass className="dock-icon" aria-hidden="true" />
-            <span>Explore</span>
-          </SheetTrigger>
-          <SheetContent
-            side="bottom"
-            style={panelStyle}
-            className="explorer-panel explore-panel"
-            showOverlay={false}
-            scrollContent
-          >
-            <SheetHeader>
-              <SheetTitle>Explore</SheetTitle>
-              <SheetDescription>Choose a mechanism.</SheetDescription>
-            </SheetHeader>
-            <div className="panel-body explore-menu">
-              <button
-                className="menu-link"
-                aria-pressed={!s.group && s.layout === 'assembly'}
-                onClick={() => chooseGroup(null)}
-              >
-                Whole movement <ChevronRight aria-hidden="true" />
-              </button>
-              {GROUPS.map((g, i) => (
-                <button
-                  className="menu-link"
-                  key={g.id}
-                  aria-pressed={s.group === g.id}
-                  onClick={() => chooseGroup(g.id)}
-                >
-                  <span>
-                    <small>0{i + 1}</small>
-                    {g.technical}
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-              ))}
-              <button
-                className="menu-link all-parts-button"
-                disabled={!available}
-                aria-pressed={s.layout === 'spread'}
-                onClick={() => {
-                  closePanels();
-                  if (s.layout === 'spread') chooseGroup(null);
-                  else viewer.current?.allParts();
-                }}
-              >
-                <span>All parts</span>
-              </button>{' '}
-              <button
-                className="menu-link"
-                aria-label="Back"
-                title="Previous view"
-                disabled={!available || !s.canBack}
-                onClick={() => {
-                  closePanels();
-                  viewer.current?.back();
-                  host.current?.querySelector('canvas')?.focus();
-                }}
-              >
-                Previous view <ArrowLeft aria-hidden="true" />
-              </button>{' '}
-              <button
-                className="menu-link"
-                disabled={!s.parts.length}
-                onClick={() => openPanel(setCatalog, true)}
-              >
-                Source catalog <ChevronRight aria-hidden="true" />
-              </button>
-              <button
-                className="menu-link"
-                onClick={() => openPanel(setOptions, true)}
-              >
-                View options <ChevronRight aria-hidden="true" />
-              </button>
-            </div>
-          </SheetContent>
-        </Sheet>
         <Sheet
           modal={false}
           open={separate}
@@ -622,6 +568,83 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
+        <Sheet
+          modal={false}
+          open={explore}
+          onOpenChange={(open) => openPanel(setExplore, open)}
+        >
+          <SheetTrigger
+            ref={exploreButton}
+            className="explore-button text-button"
+            disabled={s.loadStage === 'recovering'}
+          >
+            <ScanSearch className="dock-icon" aria-hidden="true" />
+            <span>Focus</span>
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            style={panelStyle}
+            className="explorer-panel explore-panel"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>Focus</SheetTitle>
+              <SheetDescription>
+                Choose a part of the movement.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="panel-body explore-menu">
+              <button
+                className="menu-link"
+                aria-pressed={!s.group && s.layout === 'assembly'}
+                onClick={() => chooseGroup(null)}
+              >
+                Whole movement <ChevronRight aria-hidden="true" />
+              </button>
+              {GROUPS.map((g, i) => (
+                <button
+                  className="menu-link"
+                  key={g.id}
+                  aria-pressed={s.group === g.id}
+                  onClick={() => chooseGroup(g.id)}
+                >
+                  <span>
+                    <small>0{i + 1}</small>
+                    {g.technical}
+                  </span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+              ))}
+              <button
+                className="menu-link"
+                aria-label="Back"
+                title="Previous view"
+                disabled={!available || !s.canBack}
+                onClick={() => {
+                  closePanels();
+                  viewer.current?.back();
+                  host.current?.querySelector('canvas')?.focus();
+                }}
+              >
+                Previous view <ArrowLeft aria-hidden="true" />
+              </button>{' '}
+            </div>
+          </SheetContent>
+        </Sheet>
+        <button
+          className="text-button all-parts-button"
+          disabled={!available}
+          aria-pressed={s.layout === 'spread'}
+          onClick={() => {
+            closePanels();
+            if (s.layout === 'spread') chooseGroup(null);
+            else viewer.current?.allParts();
+          }}
+        >
+          <Grid2X2 className="dock-icon" aria-hidden="true" />
+          <span>All parts</span>
+        </button>
 
         <Sheet
           modal={false}
@@ -706,12 +729,14 @@ export default function Home() {
           finalFocus={() =>
             selectionFocus.current
               ? (host.current?.querySelector('canvas') ?? false)
-              : exploreButton.current
+              : document.querySelector<HTMLButtonElement>('.about-toggle')
           }
         >
           <SheetHeader>
-            <SheetTitle>View options</SheetTitle>
-            <SheetDescription>Camera, quality and sources.</SheetDescription>
+            <SheetTitle>Viewer settings</SheetTitle>
+            <SheetDescription>
+              Camera controls and rendering quality.
+            </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
             <p>
@@ -794,8 +819,8 @@ export default function Home() {
             </fieldset>
             <p className="secondary">
               On the movement: arrow keys orbit (pan in All parts), + / − zoom,
-              Home resets, Escape deselects. All components are also available
-              in the catalog.
+              Home resets, Escape deselects. Use All parts to find and inspect
+              individual components.
             </p>
             <div className="quality-control">
               <label htmlFor="render-quality">Rendering quality</label>
@@ -827,14 +852,6 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
-
-            <button
-              className="menu-link"
-              onClick={() => openPanel(setCatalog, true)}
-              disabled={!s.parts.length}
-            >
-              Source catalog <ChevronRight aria-hidden="true" />
-            </button>
           </div>
         </SheetContent>
       </Sheet>
@@ -907,17 +924,32 @@ export default function Home() {
           finalFocus={() =>
             selectionFocus.current
               ? (host.current?.querySelector('canvas') ?? false)
-              : exploreButton.current
+              : (document.querySelector<HTMLButtonElement>(
+                  '.find-component-button',
+                ) ??
+                document.querySelector<HTMLButtonElement>('.all-parts-button'))
           }
         >
           <SheetHeader>
-            <SheetTitle>Source catalog</SheetTitle>
+            <SheetTitle>Find a component</SheetTitle>
             <SheetDescription>
-              365 parts and 61 subassemblies, including case parts, alternatives
-              and entries with no geometry. Additional geometry loads when
-              selected.
+              {includeAllCad
+                ? 'All CAD entries, including assemblies, hidden parts, alternatives and entries without geometry. Selecting an entry may load additional geometry.'
+                : 'Components included in the current view, including those covered by other parts.'}
             </SheetDescription>
           </SheetHeader>
+          <label className="catalog-scope">
+            <input
+              type="checkbox"
+              checked={includeAllCad}
+              onChange={(event) => setIncludeAllCad(event.target.checked)}
+            />
+            Include all CAD entries
+          </label>
+          <output className="secondary">
+            {catalogParts.length}{' '}
+            {includeAllCad ? 'CAD entries' : 'components in current view'}
+          </output>
           <div className="catalog-search">
             <Combobox
               items={catalogParts}
@@ -932,13 +964,14 @@ export default function Home() {
               }}
             >
               <ComboboxInput
-                placeholder="Find a part or assembly…"
-                aria-label="Search all source parts"
+                placeholder="Search components…"
+                aria-label="Search components"
                 showTrigger={false}
               />
               <ComboboxContent>
                 <ComboboxEmpty>
-                  No matching parts. Try an English name, source name or ID.
+                  No matching components. Try another name or include all CAD
+                  entries.
                 </ComboboxEmpty>
                 <ComboboxList>
                   {(p: Part) => (
@@ -949,6 +982,7 @@ export default function Home() {
                           {partIndex.get(p.id)?.context} ·{' '}
                           {partIndex.get(p.id)?.reference}
                         </small>
+                        <small>{componentStatus(p)}</small>
                         <small lang="de">{p.name}</small>
                       </span>
                     </ComboboxItem>
@@ -958,8 +992,10 @@ export default function Home() {
             </Combobox>
           </div>
           <div className="catalog-index">
-            {s.parts
-              .filter((p) => p.parentId === ROOT || p.parentId === 'p_0_1_1_1')
+            {catalogParts
+              .filter((p) =>
+                matchesPart(partIndex.get(p.id)?.search ?? '', catalogQuery),
+              )
               .map((p) => (
                 <button
                   key={p.id}
@@ -969,6 +1005,7 @@ export default function Home() {
                   <span>
                     {partLabel(p)}
                     <small>{partIndex.get(p.id)?.reference}</small>
+                    <small>{componentStatus(p)}</small>
                     <small lang="de">{p.name}</small>
                   </span>
                   <ChevronRight aria-hidden="true" />
@@ -978,6 +1015,7 @@ export default function Home() {
         </SheetContent>
       </Sheet>
       <InformationRail
+        onViewerSettings={() => openPanel(setOptions, true)}
         panel={about}
         onPanelChange={(panel) => {
           if (panel) closePanels();

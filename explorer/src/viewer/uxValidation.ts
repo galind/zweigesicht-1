@@ -26,7 +26,7 @@ export async function runUxChecks(v: MovementViewer) {
       dockButtons
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
-      'Explore|Separate|Dials & hands|Flip movement|Reset view',
+      'Separate|Focus|All parts|Dials & hands|Flip movement|Reset view',
   });
   checks.push({
     name: 'Dock controls retain touch targets',
@@ -179,17 +179,16 @@ export async function runUxChecks(v: MovementViewer) {
     ...document.querySelectorAll<HTMLButtonElement>('.explore-menu button'),
   ];
   checks.push({
-    name: 'Explore retains inventory, source catalog, history and view options',
-    pass: [
-      'All parts',
-      'Source catalog',
-      'Previous view',
-      'View options',
-    ].every((label) =>
-      menu.some((button) => button.textContent?.includes(label)),
-    ),
+    name: 'Focus contains sections and history, with inventory and settings elsewhere',
+    pass:
+      menu.some((button) => button.textContent?.includes('Previous view')) &&
+      !menu.some((button) =>
+        /All parts|Source catalog|View options/.test(button.textContent ?? ''),
+      ),
   });
-  menu.find((button) => button.textContent?.trim() === 'View options')!.click();
+  document.querySelector<HTMLButtonElement>('.about-toggle')!.click();
+  await sleep(300);
+  document.querySelector<HTMLButtonElement>('.viewer-settings-link')!.click();
   await sleep(300);
   checks.push({
     name: 'Contextual options retain keyboard camera and quality controls without reframing',
@@ -203,8 +202,52 @@ export async function runUxChecks(v: MovementViewer) {
     .click();
   await sleep(300);
   checks.push({
-    name: 'Contextual options return focus to Explore',
-    pass: document.activeElement === explore,
+    name: 'Viewer settings return focus to About',
+    pass: document.activeElement === document.querySelector('.about-toggle'),
+  });
+
+  document.querySelector<HTMLButtonElement>('.all-parts-button')!.click();
+  await settle(v);
+  await sleep(300);
+  document.querySelector<HTMLButtonElement>('.find-component-button')!.click();
+  await sleep(300);
+  const currentIds = [...document.querySelectorAll('.catalog-index button')];
+  checks.push({
+    name: 'Component finder defaults to displayed physical parts',
+    pass:
+      currentIds.length === v.snapshot().visiblePartIds.length &&
+      currentIds.length > 0 &&
+      currentIds.every((button) =>
+        button.textContent?.includes('Part · In current view'),
+      ),
+  });
+  const scope = document.querySelector<HTMLInputElement>(
+    '.catalog-scope input',
+  )!;
+  scope.click();
+  await sleep(300);
+  const allEntries = [...document.querySelectorAll('.catalog-index button')];
+  checks.push({
+    name: 'All CAD scope includes labeled assemblies and hidden entries',
+    pass:
+      allEntries.length ===
+        v.parts.filter((p) => p.id !== 'p_0_1_1_1').length &&
+      allEntries.some((button) =>
+        button.textContent?.includes('Assembly · Not shown'),
+      ) &&
+      allEntries.some((button) =>
+        button.textContent?.includes('Part · Not shown'),
+      ),
+  });
+  document
+    .querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!
+    .click();
+  await sleep(300);
+  checks.push({
+    name: 'Component finder restores focus to its All parts entry point',
+    pass:
+      document.activeElement ===
+      document.querySelector('.find-component-button'),
   });
 
   for (const mode of [

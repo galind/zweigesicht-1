@@ -100,6 +100,7 @@ export interface ViewerSnapshot extends ExperienceState {
   error: string;
   detailError: string;
   parts: Part[];
+  visiblePartIds: string[];
   canBack: boolean;
   catalogLoaded: boolean;
   benchmarkResult: unknown;
@@ -269,6 +270,9 @@ export class MovementViewer {
       error: this.error,
       detailError: this.detailError,
       parts: this.parts,
+      visiblePartIds: [...this.renderParts.values()]
+        .filter((p) => this.partVisible(p))
+        .map((p) => p.source.id),
       canBack: !!this.history.length,
       catalogLoaded: this.catalogLoaded,
       benchmarkResult: this.benchmark?.result,
