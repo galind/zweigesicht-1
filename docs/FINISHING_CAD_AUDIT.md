@@ -1,5 +1,7 @@
 # Source appearance and surface fidelity audit
 
+> Historical source audit. The Function-mode integration proposal below is retired; later appearance work is indexed in [README.md](README.md#appearance).
+
 9 September 2026. Read-only audit of the verified original STEP, existing XCAF importer, tessellation cache, uncompressed GLBs, and the pre-refinement application material path. No source shapes, runtime geometry, placements, or original assets were changed. The source contains considerably more surface identity than the runtime manifest exposes, including modeled decorative grooves and lettering.
 
 ## Reproduce and evidence
@@ -135,4 +137,4 @@ Use explicit local axes and origins. Screws 9/136/169/226 have Z-aligned source 
 
 Keep surface-category assignment and optional analytic shading-normal override separate from the original geometry attributes; make Function mode bypass decorative treatment. Source purple groove/text groups can become dark or recessed satin regions only where maker imagery supports that interpretation. Preserve sides, seats and countersinks rather than making every nonhorizontal surface mirror-polished. Filter procedural detail according to projected footprint and keep millimetre-scale coordinates explicit. Numeric roughness, metalness, color, grain spacing and anisotropy remain authored choices, not measured material properties.
 
-This audit supplies source evidence and reversible data, not visual acceptance. Lead-owned browser comparisons and runtime validation must determine whether the integrated treatment improves actual close-ups and remains stable through both sides, reveals, selection and catalog loading.
+This audit supplies source evidence and reversible data, not visual acceptance. Browser comparisons and runtime validation determine whether the integrated treatment improves actual close-ups and remains stable through both sides, reveals, selection and catalog loading.

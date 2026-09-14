@@ -1,6 +1,6 @@
 # Local movement explorer
 
-The application lives in `explorer/`, generated with the prescribed Sites 0.3.0 scaffold and Shadcn add-on. It uses React/TypeScript and a framework-independent Three.js scene controller. Local Vite configuration deliberately omits hosted bindings and account tooling. No Site is registered. Deployment is deferred.
+The application lives in `explorer/`. It uses React/TypeScript, vinext/Vite and a framework-independent Three.js scene controller. `explorer/vite.config.ts` configures local CAD middleware and enables Nitro when a build preset is supplied. The root `vercel.json` selects the Vercel build; current domain status is in [PROGRESS.md](../PROGRESS.md).
 
 ## Source and asset boundary
 
@@ -22,4 +22,4 @@ A browser render proves runtime geometry and interaction, not finished-watch fid
 
 `scripts/prepare_local_assets.py` writes a compact source manifest and content-hashed overview/catalog URLs. The loopback-only Vite middleware serves prepared gzip bodies; GLTFLoader uses the bundled Meshopt decoder, with no remote decoder dependency. The catalog coalesces optional loads, retains existing movement mesh identity, and frees discarded catalog geometry. Renderer context restoration recreates the PMREM environment in addition to normal geometry restoration.
 
-`?inspect=1` exposes local QA tools. The optional WebMCP interface calls the same visible controller actions, validates input before mutation and unregisters on unmount. `?no3d=1` and `?text=200` are explicit controlled test modes. No server database, account registration, publishing or Site cloud lifecycle is required.
+`?inspect=1` exposes local QA tools. The optional WebMCP interface calls the same visible controller actions, validates input before mutation and unregisters on unmount. `?no3d=1` and `?text=200` are explicit controlled test modes. The viewer needs no database or visitor account.

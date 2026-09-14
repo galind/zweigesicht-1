@@ -1,19 +1,17 @@
-# Agent working agreement
+# Project working agreement
 
-Read `PROGRESS.md`, `IMPLEMENTATION_PLAN.md`, and `UNATTENDED_RUN.md` before making changes.
+Use [PROGRESS.md](PROGRESS.md) for current status and [docs/README.md](docs/README.md) to find relevant technical evidence. Historical plans and review reports are context, not an execution backlog.
 
-## Git history
+## Git
 
-- Commit each coherent, verified milestone with a short descriptive message.
-- Inspect `git status` and the staged diff before every commit.
-- Stage only files owned by the current task. Never overwrite, discard, amend, rebase, or fold in another agent's unrelated work.
-- Keep generated caches, virtual environments, dependency directories, secrets, and original CAD downloads out of Git.
-- Update `PROGRESS.md` whenever a commit changes the project's verified state or next action.
-- Do not force-push. Push completed checkpoints to the configured SSH remote when the active task authorizes it.
+- Preserve unrelated work. Stage only task-owned files; inspect status and the staged diff before committing.
+- Commit coherent, verified milestones with short descriptive messages. Update `PROGRESS.md` when the verified state or next action changes.
+- Use `git` over the configured SSH remote. Push when authorized; never force-push.
+- Use the connected GitHub app for PRs and API actions. Never use `gh`, including authentication or checks. If SSH or the app is unavailable, report that exact blocker.
 
 ## Project safeguards
 
-- Preserve source URLs and hashes in `assets/source-manifest/`.
-- Keep generated assets separate from hand-authored overrides.
-- Do not claim mechanical correctness without recorded evidence and review.
-- Do not publish the site or redistribute source/derived CAD until the corresponding release gates are cleared.
+- Keep secrets, dependencies, environments, caches and original CAD downloads out of Git.
+- Preserve source URLs and hashes in `assets/source-manifest/`, and keep generated assets separate from hand-authored overrides.
+- Support mechanical claims with recorded evidence and review.
+- Publish the site or redistribute source/derived CAD only after the corresponding [release gates](docs/RELEASE_GATES.md) are cleared.

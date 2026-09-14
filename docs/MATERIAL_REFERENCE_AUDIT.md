@@ -1,5 +1,7 @@
 # Material reference audit
 
+> Historical material checkpoint. Later corrections and diamond recovery are in [COMPONENT_APPEARANCE_AUDIT.md](COMPONENT_APPEARANCE_AUDIT.md); subsequent appearance milestones are in [September history](history/2026-09.md).
+
 Prepared 9 September 2026 from `explorer/src/viewer/materials.ts`, `assets/generated/assembly-manifest.json`, and the local maker references `Front_2_Werk.png` and `shockindication5.png`. This is a visual family/texture audit. The maker images do not supply calibrated color, roughness, anisotropy, coating thickness, alloy assay, or reflectance values; numerical material values remain authored and unverified.
 
 This report began against the earlier name-only material regex and was reconciled after the lead added exact definition assignments and procedural finishes. Statements below distinguish the **initial mapping** from the **current implementation**. Exact definition identity now wins, and name rules are fallbacks.

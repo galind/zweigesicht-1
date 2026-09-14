@@ -65,7 +65,7 @@ Browser integration evidence is recorded in `artifacts/browser/interaction-check
 
 These are local in-app browser integration checks, not a cold-network or complete startup benchmark. The reported encoded GLB bodies exclude application JavaScript, the bundled decoder, manifest/routes, fonts, CSS, reference imagery, HTTP overhead and cache effects. The browser evidence used a desktop Chrome user agent on this Mac and does not establish phone GPU, sustained thermal, memory, bandwidth or latency performance. Its short timing samples are retained as diagnostics only; `benchmark` is still null in the cited artifacts.
 
-The catalog contains the complete exterior envelope: its decoded world bounds are approximately `[-26.2723,-134.7297,-10.5505]` to `[26.2791,134.7297,5.5505]` mm. Keep it optional and do not use its strap-sized bounds for initial movement framing. The overview's complete bounds remain exactly those of the raw movement. Reuse the lead's authored movement camera and exclusions.
+The catalog contains the complete exterior envelope: its decoded world bounds are approximately `[-26.2723,-134.7297,-10.5505]` to `[26.2791,134.7297,5.5505]` mm. Keep it optional and do not use its strap-sized bounds for initial movement framing. The overview's complete bounds remain exactly those of the raw movement. The authored movement camera and exclusions use movement bounds.
 
 ## Reproduction and remaining gates
 

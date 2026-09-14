@@ -1,5 +1,7 @@
 # Authored mechanism-group validation
 
+> Historical audit of the initial candidate groups, not an outstanding task list. Later membership and visibility evidence is in [EXPLORE_EMPHASIS_REVIEW.md](EXPLORE_EMPHASIS_REVIEW.md).
+
 Validated 9 September 2026 against `assets/authored/mechanisms.json`, `artifacts/preflight/assembly-inventory.json`, `artifacts/analysis/mechanism-group-candidates.json`, and the stable-ID implementation in `scripts/cad/export_assembly.py`. This review changes no application or authored asset.
 
 ## Identity and reference integrity

@@ -1,6 +1,8 @@
 # ml-01 source and mechanism map
 
-Prepared 9 September 2026 from the verified local STEP provenance and the XCAF inventory. This is a source-led candidate map, not a mechanically reviewed bill of motion. The lead/CAD agent must reconcile the `source_path` values below to final exported runtime IDs.
+> Historical candidate map. Later source validation is in [CAD_AUDIT.md](CAD_AUDIT.md); running motion was removed in [ANIMATION_REVIEW.md](ANIMATION_REVIEW.md).
+
+Prepared 9 September 2026 from the verified local STEP provenance and the XCAF inventory. This is a source-led candidate map, not a mechanically reviewed bill of motion. Source paths below are candidate identities; the exported manifest records runtime IDs.
 
 ## Evidence boundary
 
@@ -129,6 +131,6 @@ Treat the first implementation as a static, step-through reveal until pivots and
 12. CAD dimensions/units, accumulated transforms, visible omissions, variant correctness, and correspondence with the maker's two reference views still require the planned assembled render audit.
 13. Source CAD is explicitly presented without a guarantee of complete correctness; any inferred connection needs recorded geometry evidence and mechanical review before being called faithful.
 
-## Handoff rule
+## Mapping evidence
 
-Use the JSON artifact as a candidate functional graph layered over the source assembly tree. Do not turn these groups into runtime IDs by string rewriting alone. The lead/CAD agent should export a source-path-to-runtime-ID table, confirm each candidate visually, resolve alternate configurations, and then record each accepted motion edge with axis, pivot, ratio/curve, phase, operating mode, evidence, and review status.
+Use the JSON artifact as a candidate functional graph layered over the source assembly tree. Do not turn these groups into runtime IDs by string rewriting alone. A validated mapping needs a source-path-to-runtime-ID table, visual confirmation and resolved alternatives. Any future motion edge needs an axis, pivot, ratio/curve, phase, operating mode, evidence and review status.

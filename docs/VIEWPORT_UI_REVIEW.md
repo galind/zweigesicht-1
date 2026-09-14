@@ -1,5 +1,7 @@
 # Movement-first explorer UI — 11 September 2026
 
+> Checkpoint history, including superseded layouts. Subsequent icon, credit and loading-layout changes are recorded in [September history](history/2026-09.md); this is not a current UI specification.
+
 ## Information architecture
 
 The movement owns a stable, full-width canvas between a single-line identity/history area and a compact action dock. There is no permanent footer, affiliation block, separation slider, or empty selection region. Attribution and the independence statement are in About & sources.

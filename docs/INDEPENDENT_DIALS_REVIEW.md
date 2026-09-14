@@ -1,5 +1,7 @@
 # Independent dials — local implementation review
 
+> Checkpoint history. The tilted-camera follow-up below was superseded by the straight-on opening/Reset decision in [VIEWPORT_UI_REVIEW.md](VIEWPORT_UI_REVIEW.md#straight-on-opening-and-reset--accepted-composition-follow-up).
+
 11 September 2026. This extends the accepted static explorer; it is not a mechanical simulation or service sequence.
 
 ## Controls and state

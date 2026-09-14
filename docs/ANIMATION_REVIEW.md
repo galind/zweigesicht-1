@@ -8,7 +8,7 @@ The inspected baseline is commit `215be75c3a6fcdb29acaa1af2952b716d25ee7c7` with
 
 ## Evidence and method
 
-The actual existing `http://127.0.0.1:4173/` website was opened and inspected **before source edits**. Read AGENTS, PROGRESS, IMPLEMENTATION_PLAN, UNATTENDED_RUN, mechanical and implementation reviews, finishing/material implementation reviews and the local architecture. Traced the controller, clock/evaluator, state, UI, WebMCP, mechanism membership, source manifest and retained mechanical evidence. Reused the original source and prepared assets; no geometry generation or reacquisition.
+The actual existing `http://127.0.0.1:4173/` website was opened and inspected **before source edits**. Reviewed the project instructions and the mechanical, implementation, finishing/material and architecture records available at that checkpoint. Traced the controller, clock/evaluator, state, UI, WebMCP, mechanism membership, source manifest and retained mechanical evidence. Reused the original source and prepared assets; no geometry generation or reacquisition.
 
 All screenshots and machine evidence remain ignored/local under `artifacts/browser/animation-review/`. The original code snapshots and a 365-leaf inventory with full source IDs, original world matrices, animation assignments and timing omissions are preserved there. `evidence-manifest.json` records file hashes. This is engineering and browser evidence, not watchmaker certification.
 

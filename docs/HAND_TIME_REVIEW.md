@@ -1,5 +1,7 @@
 # Static 10:10 hand presentation
 
+> Historical fitting review. Independent visibility and Reset behavior were later revised in [INDEPENDENT_DIALS_REVIEW.md](INDEPENDENT_DIALS_REVIEW.md); the bore and static hand-angle evidence remains relevant.
+
 9 September 2026. User follow-up sets all fitted styles to **10:10:00**, with central seconds at 12. Movement/Dial A/Dial B remain exclusive choices. No ticking, playback or time-setting control is introduced.
 
 | Display | Supported styles |
