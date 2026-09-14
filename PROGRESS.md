@@ -1,12 +1,12 @@
 # Current project status
 
-Updated 14 September 2026. This file summarizes the checkout; detailed milestone evidence is in [September history](docs/history/2026-09.md).
+Updated 14 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
 
 ## Implemented
 
 The real-CAD static explorer includes all 426 source hierarchy instances, six functional groups, component inspection/isolation, complete separation, All parts, both independent dial/hand configurations and authored finishes. Running-watch simulation was removed by user decision. Reset preserves the current side and dial preferences.
 
-Later refinements include straight-on opening/Reset, independent inventory flipping, upright screw and hand presentation, revised frosting and dial finishes, diamond internal-facet shading, stable loading layout, visible author/independence credit and minimal homepage SEO. Technical findings and checkpoint-specific limitations are indexed in [docs](docs/README.md).
+Later refinements include straight-on opening/Reset, independent inventory flipping, upright screw and hand presentation, revised frosting and dial finishes, diamond internal-facet shading, stable loading layout, visible author/independence credit and minimal homepage SEO. Maintenance constraints are in [CAD notes](docs/CAD_NOTES.md) and [runtime architecture](docs/LOCAL_ARCHITECTURE.md).
 
 ## Domain and repository checkpoint
 
@@ -18,12 +18,12 @@ Next domain action: verify the external DNS record and Vercel cutover status, th
 
 ## Verification and limits
 
-Previously recorded checks include lint, TypeScript, production and Vercel builds, SEO HTTP checks, 10 state tests and 88 CPU source/runtime checks across the relevant milestones. Their exact scope and dates are in the history; these are not fresh test results for every subsequent commit. Browser evidence includes desktop Chromium and mobile viewport emulation, not physical-phone certification.
+Previously recorded checks include lint, TypeScript, production and Vercel builds, SEO HTTP checks, 10 state tests and 88 CPU source/runtime checks across the relevant milestones. Their exact scope and dates are in Git history; these are not fresh test results for every subsequent commit. Browser evidence includes desktop Chromium and mobile viewport emulation, not physical-phone certification.
 
 Mechanical contact/deformation fidelity, remaining source/variant exceptions, physical-device and human usability review, redistribution rights and publication approval remain subject to the [release gates](docs/RELEASE_GATES.md). Authored finishes and separation paths are visual interpretations, not measured materials or service instructions.
 
-## Documentation cleanup — 14 September 2026
+## Documentation consolidation — 14 September 2026
 
-Removed the completed implementation plan and unattended-run brief, including model recommendations, delegation rules, staffing estimates and obsolete Sites requirements. Reduced root instructions to project safeguards and Git policy; retained technical reports and moved detailed progress records into history. Updated the README and architecture description against the checkout and added a documentation index and consolidated release gates.
+Reduced `docs/` from 24 Markdown files to three: runtime architecture, CAD maintenance notes and release gates. Removed completed reviews, the duplicate generated ledger, the documentation index and the archived progress copy; Git preserves them at `e5c890f`. Source manifests, authored data and detailed JSON evidence are retained. The ledger generator now emits only its JSON record; evidence-page links point to retained files.
 
-Validation: documentation diff, local Markdown links and references to removed root files checked. No application code or assets changed; runtime suites were not rerun for this documentation-only milestone.
+Validation: local documentation/evidence links, script syntax and staged diff checked. No viewer behavior or assets changed; runtime suites were not rerun.

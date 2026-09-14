@@ -18,8 +18,8 @@ def figure(name, caption):
 
 body = '''<h1>Component appearance — visual evidence</h1>
 <p>9 September 2026 · Local review only · Original maker CAD</p>
-<p><a href="../../../docs/COMPONENT_APPEARANCE_AUDIT.md">Audit and limitations</a> ·
-<a href="../../../docs/appearance/LEDGER.md">365-instance ledger</a> ·
+<p><a href="../../../docs/CAD_NOTES.md">Audit and limitations</a> ·
+<a href="../../../docs/appearance/ledger.json">365-instance ledger</a> ·
 <a href="evidence-manifest.json">File hashes</a></p>
 <p>55 verified, 287 inferred, 23 unresolved assignments. Verification concerns visible
 identity and material family, not every concealed surface or measured finish.</p>
@@ -52,7 +52,7 @@ contained goal text only; no missing image is claimed as reviewed.</p>
 <a href="../../../assets/reference/finishing/sjx-movement-detail-4.jpg">SJX macro 4</a> ·
 <a href="../../../assets/reference/finishing/sjx-movement-detail-5.jpg">SJX macro 5</a> ·
 <a href="../../../assets/source-manifest/component-appearance-references.json">Maker component URLs, attributions and hashes</a> ·
-<a href="../../../docs/FINISHING_REFERENCES.md">Existing reference index</a></p>
+<a href="../../../assets/source-manifest/finishing-references.json">Existing reference index</a></p>
 <h2>Measured evidence</h2><p>29 CPU source/asset checks and four state tests pass. Six
 real-browser checks pass: exact reassembly, interrupted reveals, visibility, stable
 resources and zero idle redraws. Graphics recovery retains the recovered diamond and

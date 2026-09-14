@@ -1,6 +1,6 @@
 # Release gates
 
-These preserve the project's existing publication and evidence boundaries. A historical plan, successful build or deployment configuration does not clear a gate.
+These preserve the project's publication and evidence boundaries. Existing authorizations remain valid, including the tracked private-deployment payload exceptions in `.gitignore`. A build alone does not establish new redistribution rights or mechanical certification.
 
 | Gate | Evidence needed |
 | --- | --- |
@@ -12,4 +12,4 @@ These preserve the project's existing publication and evidence boundaries. A his
 | Deployment qualification | Verified deployed asset paths, compression, caching, failure recovery, direct navigation and domain/metadata configuration. |
 | Publication approval | Explicit authorization to publish the site and distribute the included assets, after the applicable gates above are cleared. |
 
-See [current status](../PROGRESS.md) for outstanding actions and [the documentation index](README.md) for existing evidence. No new review or permission is established by this cleanup.
+See [current status](../PROGRESS.md) for outstanding actions and [CAD notes](CAD_NOTES.md) for source constraints and existing evidence.

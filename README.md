@@ -4,7 +4,7 @@ Local real-CAD explorer for Marco Lang's ml–01 movement. Open **http://127.0.0
 
 The movement opens fully assembled. Reveal six functional groups, configure both dials and their hands, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
 
-See [current status](PROGRESS.md), [architecture and technical evidence](docs/README.md), and [release gates](docs/RELEASE_GATES.md).
+See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
 ## Run the prepared checkout
 
@@ -29,7 +29,7 @@ node scripts/assets/verify-three.mjs
 python3 scripts/prepare_local_assets.py
 ```
 
-A new checkout needs the pinned `explorer/` and `scripts/assets/` dependencies, the recorded original sources, and the preflight CAD environment before those commands can run. Clean-machine reproduction has not been claimed. See [asset report](docs/ASSET_REPORT.md) for optimization details.
+A new checkout needs the pinned `explorer/` and `scripts/assets/` dependencies, the recorded original sources, and the preflight CAD environment before those commands can run. Clean-machine reproduction has not been claimed. See [CAD maintenance notes](docs/CAD_NOTES.md) for optimization details.
 
 ## Verify
 
@@ -48,4 +48,4 @@ npm run build
 
 The repository has a Vercel build configuration (`vercel.json`, `npm run build:vercel` in `explorer/`). Domain cutover status is recorded in [PROGRESS.md](PROGRESS.md).
 
-Original CAD, generated runtime models, source imagery, caches and environments remain outside Git. Source provenance is under `assets/source-manifest/`; hand-authored overrides are under `assets/authored/`. Publication and redistribution remain subject to the [release gates](docs/RELEASE_GATES.md).
+Original CAD, source imagery, caches and environments remain outside Git. Most generated assets are local; explicitly approved runtime payloads are tracked through the exceptions in `.gitignore`. Source provenance is under `assets/source-manifest/`; hand-authored overrides are under `assets/authored/`. Publication and redistribution remain subject to the [release gates](docs/RELEASE_GATES.md).

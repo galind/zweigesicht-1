@@ -1,6 +1,6 @@
 # Project working agreement
 
-Use [PROGRESS.md](PROGRESS.md) for current status and [docs/README.md](docs/README.md) to find relevant technical evidence. Historical plans and review reports are context, not an execution backlog.
+Use [PROGRESS.md](PROGRESS.md) for current status and the [README](README.md) for setup and technical references.
 
 ## Git
 

@@ -4,7 +4,7 @@ The application lives in `explorer/`. It uses React/TypeScript, vinext/Vite and 
 
 ## Source and asset boundary
 
-Original STEP files remain in ignored `assets/source-originals/`. The conversion pipeline writes ignored `assets/generated/`. Runtime files are copied into ignored `explorer/public/models/`; no CAD binary belongs in a commit or checkpoint push. Screenshot/reference evidence is also local-only. Provenance, authored parameter files, source extraction scripts and textual audit reports can be versioned.
+Original STEP files remain in ignored `assets/source-originals/`. The conversion pipeline writes ignored `assets/generated/`. Runtime files are copied into `explorer/public/models/`; `.gitignore` lists the explicitly approved deployment payloads that are tracked, with other generated files excluded. Screenshot/reference evidence is also local-only. Provenance, authored parameter files, source extraction scripts and textual audit reports can be versioned.
 
 Stable source IDs use full XCAF paths. Runtime node IDs encode colons as underscores and path separators as double underscores, prefixed `p_`. Definitions are separately reusable. Source assembly transforms retain millimetres and source axes. The renderer does not infer transforms from part names or recenter individual geometry. Source placements are immutable; presentation translations are composed outside the unchanged source matrix.
 
@@ -18,8 +18,10 @@ A browser render proves runtime geometry and interaction, not finished-watch fid
 
 `MovementViewer` owns immutable source matrices, presentation offsets, cameras, shared geometries and resource lifetime. React receives periodic snapshots and sends discrete intent; it does not own per-frame mesh transforms. Source geometry remains millimetres throughout the offline and browser pipeline. The camera uses source negative Y as up for the default negative Z maker-reference view.
 
-`assets/authored/mechanisms.json` owns groups, source membership, obstructions, focus and presentation parameters. Running/timing was removed after `ANIMATION_REVIEW.md`: no clock, mechanical evaluator, timing state, controls or WebMCP timing settings remain. Each mesh receives `T(presentationOffset) × assembledWorld`; camera/reveal damping still runs when needed and returns exactly to the original pose. Unknown/obsolete state fields are discarded. `motion-evidence.json` retains historical research only and is not imported by the runtime. The inspection benchmark now covers assembled orbit, revealed mechanism orbit and separated orbit.
+`assets/authored/mechanisms.json` owns groups, source membership, obstructions, focus and presentation parameters. Running/timing was removed by user decision: no clock, mechanical evaluator, timing state, controls or WebMCP timing settings remain. Each mesh receives `T(presentationOffset) × assembledWorld`; camera/reveal damping still runs when needed and returns exactly to the original pose. Unknown/obsolete state fields are discarded. `motion-evidence.json` retains historical research only and is not imported by the runtime. The inspection benchmark now covers assembled orbit, revealed mechanism orbit and separated orbit.
 
 `scripts/prepare_local_assets.py` writes a compact source manifest and content-hashed overview/catalog URLs. The loopback-only Vite middleware serves prepared gzip bodies; GLTFLoader uses the bundled Meshopt decoder, with no remote decoder dependency. The catalog coalesces optional loads, retains existing movement mesh identity, and frees discarded catalog geometry. Renderer context restoration recreates the PMREM environment in addition to normal geometry restoration.
 
 `?inspect=1` exposes local QA tools. The optional WebMCP interface calls the same visible controller actions, validates input before mutation and unregisters on unmount. `?no3d=1` and `?text=200` are explicit controlled test modes. The viewer needs no database or visitor account.
+
+Source exceptions, fitting and material evidence are summarized in [CAD_NOTES.md](CAD_NOTES.md).
