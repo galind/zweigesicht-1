@@ -1,6 +1,6 @@
 # UI review — bottom
 
-Reviewed 15 September 2026. Recommendations based on the desktop interface and a 390 px mobile viewport, updated for the subsequent Disassemble naming and hand-material cleanup. This document records proposals; it does not authorize or claim their implementation.
+Reviewed 15 September 2026. Recommendations based on the desktop interface and a 390 px mobile viewport, updated for the subsequent Disassemble naming and hand-material cleanup. The original recommendations below are retained as the review record; the implementation status and resolved behavior are recorded here.
 
 Scope: bottom navigation, Disassemble, Focus, All parts and its component finder, Configure, Flip and Reset view. Header actions and contextual mechanism information are covered in [UI review — top](UI_REVIEW_TOP.md).
 
@@ -12,13 +12,27 @@ Scope: bottom navigation, Disassemble, Focus, All parts and its component finder
 - Remove repeated labels and decorative numbering from Disassemble and Focus.
 - Make component results readable by showing their name and location first.
 
-## Already implemented after the review
+## Implementation — 15 September 2026
+
+Implemented the bottom review after user approval. Flip and camera rotation retain their existing behavior, following the decision to keep Flip.
+
+- Configure now has continuous Case and Dials & hands groups, including the restored Three hands selector (Fine, Lance, Open lance). Hand material remains absent and automatic finishes are preserved.
+- Disassemble and Focus use 320 px desktop panels, Configure 360 px and the component finder 420 px, constrained to phone margins. Headings and close controls remain accessible while the body scrolls.
+- Active modes share a persistent highlight; an underline independently identifies an open panel. Focus remains active after its menu closes. Reset uses the same label size as its neighbors, with secondary color and desktop spacing.
+- Focus uses checkmarks without decorative numbering or action chevrons. In All parts it provides Fit all and the existing inventory group-framing choices.
+- Resolved All parts behavior: Disassemble explains that the parts are laid out and offers Reassemble, returning to the whole assembled movement while preserving configuration and assembly side. Toggling All parts off and Reset remain available.
+- Disassemble uses a single heading, mechanism context, Spacing and Move covers aside labels, with aligned percentages and adjacent operating instructions.
+- The finder has search, scope, one filtered count and one results list. Names and assembly locations lead; only exceptions and assembly distinctions add status text. CAD IDs, original names and locations remain searchable, with source metadata accessible through the selected component’s Details action.
+
+Verification and remaining review limits are recorded in [PROGRESS.md](../PROGRESS.md).
+
+## Completed before this implementation
 
 - Separate has been renamed Disassemble in the navigation and related controls.
 - The hand-material field and its material explanation have been removed entirely.
 - The persistence note now reads “Your choices are kept when you reset the view.”
 
-The Three hands shape selector remains absent. Fine, Lance and Open lance are still supported internally. Restoring that selector was recommended in the follow-up discussion and remains a proposal.
+The Three hands shape selector was absent at review time and is now restored by the implementation above.
 
 ## 1. Bottom navigation
 

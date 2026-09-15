@@ -1427,6 +1427,7 @@ export class MovementViewer {
       distance * Math.min(1, this.camera.aspect),
       new THREE.Vector3(0, 0, -1),
     );
+    this.emit();
   }
   pan(dx: number, dy: number) {
     this.manual();

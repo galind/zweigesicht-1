@@ -157,6 +157,22 @@ export function buildPartIndex(parts: Part[]) {
         ancestry.push(parent);
         parent = parent.parentId ? byId.get(parent.parentId) : undefined;
       }
+      const context = ancestry[0] ? partLabel(ancestry[0]) : 'Complete source';
+      const mechanism = GROUPS.find((g) => inMembers(p.id, g.members));
+      const parentLocation = context.replace(
+        /^Barrel assembly (\d+)$/,
+        'Barrel $1',
+      );
+      const location = [
+        ...new Set(
+          [
+            mechanism?.technical,
+            parentLocation === 'Movement assembly' && mechanism
+              ? undefined
+              : parentLocation,
+          ].filter(Boolean),
+        ),
+      ].join(' · ');
       const segments = p.sourceInstanceId.split('/');
       let length = 1;
       while (
@@ -169,10 +185,12 @@ export function buildPartIndex(parts: Part[]) {
         p.id,
         {
           reference,
-          context: ancestry[0] ? partLabel(ancestry[0]) : 'Complete source',
+          context,
+          location,
           search: normalizeSearch(
             [
               partLabel(p),
+              location,
               p.name,
               p.id,
               p.sourceInstanceId,

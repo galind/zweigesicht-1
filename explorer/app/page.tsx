@@ -15,6 +15,7 @@ import {
 import {
   ChevronDown,
   ChevronRight,
+  Check,
   ArrowUp,
   ArrowDown,
   ArrowLeft,
@@ -62,14 +63,6 @@ import {
 import { SPREAD_GROUPS } from '@/src/experience/spread';
 import { factsFor } from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxContent,
-  ComboboxList,
-  ComboboxItem,
-  ComboboxEmpty,
-} from '@/components/ui/combobox';
 import {
   Sheet,
   SheetTrigger,
@@ -169,13 +162,14 @@ export default function Home() {
       ),
     [s.parts, includeAllCad, visibleParts],
   );
+  const filteredParts = catalogParts.filter((p) =>
+    matchesPart(partIndex.get(p.id)?.search ?? '', catalogQuery),
+  );
   const componentStatus = (p: Part) => {
-    const visibility = visibleParts.has(p.id)
-      ? 'In current view'
-      : p.isAssembly && s.visiblePartIds.some((id) => belongs(id, p.id))
-        ? 'Contains displayed parts'
-        : 'Not shown';
-    return `${p.isAssembly ? 'Assembly' : 'Part'} · ${visibility} · ${category(p)}`;
+    if (visibleParts.has(p.id)) return p.isAssembly ? 'Assembly' : '';
+    if (p.isAssembly && s.visiblePartIds.some((id) => belongs(id, p.id)))
+      return 'Assembly · Contains displayed parts';
+    return p.isAssembly ? 'Assembly · Not shown' : 'Not shown';
   };
   const available = s.ready && !s.error && s.loadStage === 'ready';
   useEffect(() => {
@@ -337,6 +331,10 @@ export default function Home() {
         part: null,
         phase: id ? 'mechanism' : 'whole',
       }));
+  };
+  const chooseSpreadGroup = (name?: string) => {
+    viewer.current?.frameSpread(name);
+    setExplore(false);
   };
   const sideLabel = 'Flip movement';
   const closePanels = () => {
@@ -531,7 +529,7 @@ export default function Home() {
                   Find a component
                 </button>
               )}
-              {group && !selected && (
+              {(group || selected) && (
                 <button
                   ref={detailButton}
                   className="text-button"
@@ -556,7 +554,7 @@ export default function Home() {
           </div>
           {selected && (
             <p className="component-location">
-              {partIndex.get(selected.id)?.context}
+              {partIndex.get(selected.id)?.location}
             </p>
           )}
         </section>
@@ -570,13 +568,13 @@ export default function Home() {
           <SheetTrigger
             className="text-button separate-trigger"
             disabled={!available}
+            aria-pressed={
+              s.layout === 'spread' ||
+              (group ? s.partSpread > 0 || s.reveal > 0 : s.separation > 0)
+            }
           >
             <Layers className="dock-icon" aria-hidden="true" />
             <span>Disassemble</span>
-            {(group ? s.partSpread : s.separation) > 0 &&
-              s.layout !== 'spread' && (
-                <span className="state-dot" aria-label="Disassembly active" />
-              )}
           </SheetTrigger>
           <SheetContent
             side="bottom"
@@ -586,41 +584,31 @@ export default function Home() {
             scrollContent
           >
             <SheetHeader>
-              <SheetTitle>
+              <SheetTitle>Disassemble</SheetTitle>
+              <SheetDescription
+                className={
+                  group || s.layout === 'spread' ? undefined : 'sr-only'
+                }
+              >
                 {s.layout === 'spread'
-                  ? 'Arrange parts'
-                  : group
-                    ? 'Disassemble section'
-                    : 'Disassemble movement'}
-              </SheetTitle>
-              <SheetDescription>
-                {s.layout === 'spread'
-                  ? 'Fit the spread or focus on a group.'
+                  ? 'The parts are laid out individually. Reassemble to return to the movement.'
                   : group
                     ? group.technical
-                    : 'Open the movement, then adjust the space between its parts.'}
+                    : 'Adjust the space between the movement parts.'}
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
               {s.layout === 'spread' ? (
-                <>
-                  <button
-                    className="menu-link"
-                    onClick={() => viewer.current?.frameSpread()}
-                  >
-                    Fit all
-                  </button>
-                  {SPREAD_GROUPS.map((name) => (
-                    <button
-                      className="menu-link"
-                      key={name}
-                      onClick={() => viewer.current?.frameSpread(name)}
-                    >
-                      {name}
-                      <ChevronRight aria-hidden="true" />
-                    </button>
-                  ))}
-                </>
+                <button
+                  className="separation-action"
+                  onClick={() => {
+                    chooseGroup(null);
+                    setSeparate(false);
+                  }}
+                >
+                  <Layers aria-hidden="true" />
+                  Reassemble
+                </button>
               ) : (
                 <>
                   <button
@@ -643,9 +631,7 @@ export default function Home() {
                         : 'Disassemble movement'}
                   </button>
                   <div className="slider-heading">
-                    <span id="separation-label">
-                      {group ? 'Disassemble section' : 'Disassemble'}
-                    </span>
+                    <span id="separation-label">Spacing</span>
                     <output>
                       {Math.round((group ? s.partSpread : s.separation) * 100)}%
                     </output>
@@ -667,13 +653,12 @@ export default function Home() {
                   {group && (
                     <>
                       <p className="control-instruction">
-                        Disassemble section spaces its components. Uncover moves
-                        the covers aside; connected parts stay dimmed.
+                        Connected parts stay dimmed.
                         {group.id === 'regulation' &&
-                          ' The balance bridge and its screws fade to expose the spring. Lower Uncover to restore them.'}
+                          ' The balance bridge and screws fade to expose the spring; slide back to restore them.'}
                       </p>
                       <div className="slider-heading">
-                        <span id="uncover-label">Uncover section</span>
+                        <span id="uncover-label">Move covers aside</span>
                         <output>{Math.round(s.reveal * 100)}%</output>
                       </div>
                       <Slider
@@ -704,6 +689,7 @@ export default function Home() {
           <SheetTrigger
             ref={exploreButton}
             className="explore-button text-button"
+            aria-pressed={s.layout === 'spread' ? !!s.spreadFocus : !!s.group}
             disabled={s.loadStage === 'recovering'}
           >
             <ScanSearch className="dock-icon" aria-hidden="true" />
@@ -718,32 +704,58 @@ export default function Home() {
           >
             <SheetHeader>
               <SheetTitle>Focus</SheetTitle>
-              <SheetDescription>
-                Choose a part of the movement.
+              <SheetDescription className="sr-only">
+                {s.layout === 'spread'
+                  ? 'Frame a group of parts.'
+                  : 'Focus on a mechanism.'}
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body explore-menu">
-              <button
-                className="menu-link"
-                aria-pressed={!s.group && s.layout === 'assembly'}
-                onClick={() => chooseGroup(null)}
-              >
-                Whole movement <ChevronRight aria-hidden="true" />
-              </button>
-              {GROUPS.map((g, i) => (
-                <button
-                  className="menu-link"
-                  key={g.id}
-                  aria-pressed={s.group === g.id}
-                  onClick={() => chooseGroup(g.id)}
-                >
-                  <span>
-                    <small>0{i + 1}</small>
-                    {g.technical}
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-              ))}
+              {s.layout === 'spread' ? (
+                <>
+                  <button
+                    className="menu-link"
+                    aria-pressed={!s.spreadFocus}
+                    onClick={() => chooseSpreadGroup()}
+                  >
+                    <span>Fit all</span>
+                    {!s.spreadFocus && <Check aria-hidden="true" />}
+                  </button>
+                  {SPREAD_GROUPS.map((name) => (
+                    <button
+                      className="menu-link"
+                      key={name}
+                      aria-pressed={s.spreadFocus === name}
+                      onClick={() => chooseSpreadGroup(name)}
+                    >
+                      <span>{name}</span>
+                      {s.spreadFocus === name && <Check aria-hidden="true" />}
+                    </button>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <button
+                    className="menu-link"
+                    aria-pressed={!s.group}
+                    onClick={() => chooseGroup(null)}
+                  >
+                    <span>Whole movement</span>
+                    {!s.group && <Check aria-hidden="true" />}
+                  </button>
+                  {GROUPS.map((g) => (
+                    <button
+                      className="menu-link"
+                      key={g.id}
+                      aria-pressed={s.group === g.id}
+                      onClick={() => chooseGroup(g.id)}
+                    >
+                      <span>{g.technical}</span>
+                      {s.group === g.id && <Check aria-hidden="true" />}
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -781,7 +793,7 @@ export default function Home() {
             scrollContent
           >
             <SheetHeader>
-              <SheetTitle>Watch configuration</SheetTitle>
+              <SheetTitle>Configure</SheetTitle>
               <SheetDescription className="sr-only">
                 Configure the case, materials and both dials.
               </SheetDescription>
@@ -1031,56 +1043,79 @@ export default function Home() {
           }
         >
           <SheetHeader>
-            <SheetTitle>{group?.technical}</SheetTitle>
+            <SheetTitle>
+              {selected ? partLabel(selected) : group?.technical}
+            </SheetTitle>
             <SheetDescription className="sr-only">
-              Mechanism information and components
+              {selected
+                ? 'Component location and CAD references'
+                : 'Mechanism information and components'}
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
-            {group && (
-              <>
-                <p>{group.caption}</p>
-                <ul className="detail-facts">
-                  {mechanismFacts.map((fact) => (
-                    <li key={fact.text}>{fact.text}</li>
-                  ))}
-                </ul>
-                <div
-                  className="watch-sources mechanism-sources"
-                  aria-label="Mechanism sources"
-                >
-                  <span>Sources</span>
-                  {mechanismSources.map((source) => (
-                    <a
-                      key={source.url}
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${source.attribution}, opens in a new tab`}
-                    >
-                      {source.attribution}
-                    </a>
-                  ))}
-                </div>
-                <h3>Components</h3>
-                <div className="catalog-index">
-                  {[...memberSections].map(([id, section]) => (
-                    <section key={id} aria-label={section.label}>
-                      <h4>{section.label}</h4>
-                      {section.parts.map((part) => (
-                        <button
-                          key={part.id}
-                          disabled={!available}
-                          onClick={() => selectPart(part.id)}
-                        >
-                          <span>{partLabel(part)}</span>
-                          <ChevronRight aria-hidden="true" />
-                        </button>
-                      ))}
-                    </section>
-                  ))}
-                </div>
-              </>
+            {selected ? (
+              <div className="component-source-details">
+                <p>{partIndex.get(selected.id)?.location}</p>
+                <p>{category(selected)}</p>
+                <dl>
+                  <dt>Original name</dt>
+                  <dd lang="de">{selected.name}</dd>
+                  <dt>CAD instance</dt>
+                  <dd>{selected.sourceInstanceId}</dd>
+                  <dt>Definition</dt>
+                  <dd>{selected.definitionId}</dd>
+                  <dt>Viewer ID</dt>
+                  <dd>{selected.id}</dd>
+                  <dt>Type</dt>
+                  <dd>{selected.isAssembly ? 'Assembly' : 'Physical part'}</dd>
+                </dl>
+              </div>
+            ) : (
+              group && (
+                <>
+                  <p>{group.caption}</p>
+                  <ul className="detail-facts">
+                    {mechanismFacts.map((fact) => (
+                      <li key={fact.text}>{fact.text}</li>
+                    ))}
+                  </ul>
+                  <div
+                    className="watch-sources mechanism-sources"
+                    aria-label="Mechanism sources"
+                  >
+                    <span>Sources</span>
+                    {mechanismSources.map((source) => (
+                      <a
+                        key={source.url}
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${source.attribution}, opens in a new tab`}
+                      >
+                        {source.attribution}
+                      </a>
+                    ))}
+                  </div>
+                  <h3>Components</h3>
+                  <div className="catalog-index">
+                    {[...memberSections].map(([id, section]) => (
+                      <section key={id} aria-label={section.label}>
+                        <h4>{section.label}</h4>
+                        {section.parts.map((part) => (
+                          <button
+                            key={part.id}
+                            disabled={!available}
+                            onClick={() => selectPart(part.id)}
+                          >
+                            <span>{partLabel(part)}</span>
+                            <ChevronRight aria-hidden="true" />
+                          </button>
+                        ))}
+                      </section>
+                    ))}
+                  </div>
+                </>
+              )
             )}
           </div>
         </SheetContent>
@@ -1103,85 +1138,67 @@ export default function Home() {
         >
           <SheetHeader>
             <SheetTitle>Find a component</SheetTitle>
-            <SheetDescription>
-              {includeAllCad
-                ? 'All CAD entries, including assemblies, hidden parts, alternatives and entries without geometry. Selecting an entry may load additional geometry.'
-                : 'Components included in the current view, including those covered by other parts.'}
+            <SheetDescription className="sr-only">
+              Search by name, location or CAD reference.
             </SheetDescription>
           </SheetHeader>
-          <label className="catalog-scope">
-            <input
-              type="checkbox"
-              checked={includeAllCad}
-              onChange={(event) => setIncludeAllCad(event.target.checked)}
-            />
-            Include all CAD entries
-          </label>
-          <output className="secondary">
-            {catalogParts.length}{' '}
-            {includeAllCad ? 'CAD entries' : 'components in current view'}
-          </output>
-          <div className="catalog-search">
-            <Combobox
-              items={catalogParts}
-              inputValue={catalogQuery}
-              onInputValueChange={setCatalogQuery}
-              itemToStringLabel={(p: Part) => partLabel(p)}
-              filter={(p: Part, query: string) =>
-                matchesPart(partIndex.get(p.id)?.search ?? '', query)
-              }
-              onValueChange={(p: Part | null) => {
-                if (p) selectPart(p.id);
-              }}
-            >
-              <ComboboxInput
+          <div className="panel-body component-finder">
+            <label className="catalog-search">
+              <span className="sr-only">Search components</span>
+              <input
+                type="search"
+                value={catalogQuery}
+                onChange={(event) => setCatalogQuery(event.target.value)}
                 placeholder="Search components…"
-                aria-label="Search components"
-                showTrigger={false}
               />
-              <ComboboxContent>
-                <ComboboxEmpty>
-                  No matching components. Try another name or include all CAD
-                  entries.
-                </ComboboxEmpty>
-                <ComboboxList>
-                  {(p: Part) => (
-                    <ComboboxItem key={p.id} value={p} disabled={!available}>
-                      <span>
-                        {partLabel(p)}
-                        <small>
-                          {partIndex.get(p.id)?.context} ·{' '}
-                          {partIndex.get(p.id)?.reference}
-                        </small>
-                        <small>{componentStatus(p)}</small>
-                        <small lang="de">{p.name}</small>
-                      </span>
-                    </ComboboxItem>
-                  )}
-                </ComboboxList>
-              </ComboboxContent>
-            </Combobox>
-          </div>
-          <div className="catalog-index">
-            {catalogParts
-              .filter((p) =>
-                matchesPart(partIndex.get(p.id)?.search ?? '', catalogQuery),
-              )
-              .map((p) => (
+            </label>
+            <label className="catalog-scope">
+              <input
+                type="checkbox"
+                checked={includeAllCad}
+                onChange={(event) => setIncludeAllCad(event.target.checked)}
+              />
+              Include all CAD entries
+            </label>
+            <p className="catalog-scope-note">
+              {includeAllCad
+                ? 'Includes assemblies, hidden parts and alternatives. Selection may load geometry.'
+                : 'Parts in the current view, including those covered by other parts.'}
+            </p>
+            <output
+              className="catalog-count"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {filteredParts.length}{' '}
+              {filteredParts.length === 1 ? 'result' : 'results'}
+            </output>
+            <div className="catalog-index">
+              {filteredParts.map((p) => (
                 <button
                   key={p.id}
                   disabled={!available}
+                  data-part-id={p.id}
                   onClick={() => selectPart(p.id)}
                 >
                   <span>
                     {partLabel(p)}
-                    <small>{partIndex.get(p.id)?.reference}</small>
-                    <small>{componentStatus(p)}</small>
-                    <small lang="de">{p.name}</small>
+                    <small>{partIndex.get(p.id)?.location}</small>
+                    {componentStatus(p) && (
+                      <small className="component-status">
+                        {componentStatus(p)}
+                      </small>
+                    )}
                   </span>
-                  <ChevronRight aria-hidden="true" />
                 </button>
               ))}
+              {!filteredParts.length && (
+                <p className="catalog-empty">
+                  No matching components. Try another name or include all CAD
+                  entries.
+                </p>
+              )}
+            </div>
           </div>
         </SheetContent>
       </Sheet>

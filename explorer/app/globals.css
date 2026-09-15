@@ -645,22 +645,10 @@ canvas:focus-visible {
 .side-slot {
   display: flex;
 }
-.action-dock [aria-expanded='true'],
-.menu-link[aria-pressed='true'] {
+.action-dock [aria-expanded='true'] {
   text-decoration: underline;
   text-underline-offset: 5px;
   background: transparent;
-}
-.state-dot {
-  position: absolute;
-  bottom: 3px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #cbb58e;
-}
-.separate-trigger {
-  position: relative;
 }
 .separation-action {
   display: flex;
@@ -1448,5 +1436,163 @@ canvas:focus-visible {
     justify-content: flex-start;
     text-align: left;
     overflow-wrap: anywhere;
+  }
+}
+
+/* Bottom review: compact controls, readable lists and distinct mode states. */
+.action-dock .text-button {
+  font-size: 0.875rem;
+  position: relative;
+}
+.action-dock [aria-pressed='true'] {
+  background: #cbb58e18;
+  color: #e4d6bd;
+  box-shadow: inset 0 -2px #cbb58e;
+}
+.explore-menu .menu-link[aria-pressed='true'] {
+  color: #e4d6bd;
+  background: #cbb58e0d;
+  text-decoration: none;
+}
+.explorer-panel.separation-panel[data-slot='sheet-content'],
+.explorer-panel.explore-panel[data-slot='sheet-content'] {
+  --popup-width: min(320px, calc(100vw - 32px));
+}
+.explorer-panel.dial-panel[data-slot='sheet-content'] {
+  --popup-width: min(360px, calc(100vw - 32px));
+}
+.explorer-panel.catalog-sheet[data-slot='sheet-content'] {
+  --popup-width: min(420px, calc(100vw - 32px));
+}
+.explorer-panel[data-side='bottom'][data-slot='sheet-content'] {
+  left: clamp(
+    calc(var(--popup-width) / 2 + 16px),
+    var(--panel-anchor-x, 50vw),
+    calc(100vw - var(--popup-width) / 2 - 16px)
+  );
+  background: #1b1b1b !important;
+  max-height: calc(100dvh - var(--panel-bottom, 90px) - 16px);
+}
+.explorer-panel[data-side='bottom'] [data-slot='sheet-header'] {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #1b1b1b;
+}
+.explorer-panel[data-side='bottom'] [data-slot='sheet-title'] {
+  font: 500 1.125rem/1.4 var(--font-sans);
+}
+.separation-action {
+  font-size: 0.875rem;
+}
+.slider-heading {
+  gap: 12px;
+}
+.slider-heading > span {
+  min-width: 0;
+}
+.slider-heading output {
+  flex-shrink: 0;
+  min-width: 4ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #aaa8a4;
+}
+.configuration-group {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.configuration-group + .configuration-group {
+  margin-top: 24px;
+}
+.configuration-group legend {
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+.configuration-group .case-material {
+  margin: 0;
+}
+.configuration-group .dial-face {
+  font-size: 0.875rem;
+}
+.configuration-group .dial-note {
+  margin: 0;
+}
+.component-finder .catalog-search {
+  display: block;
+  padding: 0;
+}
+.component-finder .catalog-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #ffffff20;
+  border-radius: 5px;
+  background: #292929;
+  color: #eeece4;
+  font: inherit;
+}
+.component-finder .catalog-scope {
+  margin: 8px 0 0;
+}
+.catalog-scope-note,
+.catalog-count,
+.catalog-empty {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #aaa8a4;
+}
+.catalog-scope-note {
+  margin: 0 0 12px;
+}
+.catalog-count {
+  display: block;
+  margin-bottom: 4px;
+}
+.component-finder .catalog-index {
+  padding: 0;
+}
+.component-finder .catalog-index small {
+  margin-top: 3px;
+}
+.component-status {
+  font-style: italic;
+}
+.component-source-details dt {
+  margin-top: 16px;
+  color: #aaa8a4;
+}
+.component-source-details dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .action-dock {
+    grid-auto-rows: minmax(44px, auto);
+  }
+  .action-dock .text-button {
+    font-size: 0.8125rem;
+    width: 100%;
+    height: 100%;
+  }
+  .action-dock .side-slot {
+    height: 100%;
+  }
+  .action-dock .reset-button {
+    justify-self: stretch;
+  }
+}
+@media (max-width: 1000px) {
+  .text-enlarged .action-dock .text-button {
+    font-size: 0.8125rem;
+    width: 100%;
+  }
+  .text-enlarged .action-dock .reset-button {
+    justify-self: stretch;
   }
 }

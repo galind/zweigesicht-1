@@ -18,76 +18,112 @@ export function ConfigurationControls({
 }) {
   return (
     <div className="dial-options">
-      <label className="dial-visibility">
-        <input
-          type="checkbox"
-          checked={state.caseVisible}
-          disabled={!available}
-          onChange={(event) =>
-            void viewer()?.configureWatch({ caseVisible: event.target.checked })
-          }
-        />
-        <span>Show case</span>
-      </label>
-      <label className="dial-face case-material">
-        <span>Case material</span>
-        <div className="dial-hand-select">
-          <select
-            aria-label="Case material"
-            value={state.caseMaterial}
+      <fieldset className="configuration-group">
+        <legend>Case</legend>
+        <label className="dial-visibility">
+          <input
+            type="checkbox"
+            checked={state.caseVisible}
             disabled={!available}
             onChange={(event) =>
               void viewer()?.configureWatch({
-                caseMaterial: event.target.value,
+                caseVisible: event.target.checked,
               })
             }
-          >
-            {WATCH.caseMaterials.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown aria-hidden="true" />
-        </div>
-      </label>
-      <p className="dial-note">
-        Case includes both crystals and fittings. It is temporarily hidden in
-        Focus and All parts, and during raw CAD inspection.
-      </p>
-      <label className="dial-visibility">
-        <input
-          type="checkbox"
-          checked={state.dialsVisible}
-          disabled={!available}
-          onChange={(event) =>
-            void viewer()?.configureDials({
-              dialsVisible: event.target.checked,
-            })
-          }
-        />
-        <span>Show both dials</span>
-      </label>
-      <label className="dial-face">
-        <span>Skeleton</span>
-        <div className="dial-hand-select">
-          <select
-            aria-label="Skeleton hand style"
-            value={state.smallStyle}
+          />
+          <span>Show case</span>
+        </label>
+        <label className="dial-face case-material">
+          <span>Case material</span>
+          <div className="dial-hand-select">
+            <select
+              aria-label="Case material"
+              value={state.caseMaterial}
+              disabled={!available}
+              onChange={(event) =>
+                void viewer()?.configureWatch({
+                  caseMaterial: event.target.value,
+                })
+              }
+            >
+              {WATCH.caseMaterials.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown aria-hidden="true" />
+          </div>
+        </label>
+        {state.caseVisible &&
+          !state.caseEffective &&
+          !state.caseRequest &&
+          !state.caseError && (
+            <p className="dial-note">
+              The case is temporarily hidden in this view.
+            </p>
+          )}
+      </fieldset>
+      <fieldset className="configuration-group">
+        <legend>Dials &amp; hands</legend>
+        <label className="dial-visibility">
+          <input
+            type="checkbox"
+            checked={state.dialsVisible}
             disabled={!available}
             onChange={(event) =>
-              void viewer()?.configureDials({ smallStyle: event.target.value })
+              void viewer()?.configureDials({
+                dialsVisible: event.target.checked,
+              })
             }
-          >
-            {DIALS.faces.small.styles.map((hand) => (
-              <option key={hand.id} value={hand.id}>
-                {hand.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown aria-hidden="true" />
-        </div>
-      </label>
+          />
+          <span>Show both dials</span>
+        </label>
+        <label className="dial-face">
+          <span>Skeleton hands</span>
+          <div className="dial-hand-select">
+            <select
+              aria-label="Skeleton hand style"
+              value={state.smallStyle}
+              disabled={!available}
+              onChange={(event) =>
+                void viewer()?.configureDials({
+                  smallStyle: event.target.value,
+                })
+              }
+            >
+              {DIALS.faces.small.styles.map((hand) => (
+                <option key={hand.id} value={hand.id}>
+                  {hand.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown aria-hidden="true" />
+          </div>
+        </label>
+        <label className="dial-face">
+          <span>Three hands</span>
+          <div className="dial-hand-select">
+            <select
+              aria-label="Three hands style"
+              value={state.centralStyle}
+              disabled={!available}
+              onChange={(event) =>
+                void viewer()?.configureDials({
+                  centralStyle: event.target.value,
+                })
+              }
+            >
+              {DIALS.faces.central.styles.map((hand) => (
+                <option key={hand.id} value={hand.id}>
+                  {hand.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown aria-hidden="true" />
+          </div>
+        </label>
+      </fieldset>
       <p className="dial-note">
         Your choices are kept when you reset the view.
       </p>
