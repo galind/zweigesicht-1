@@ -1,7 +1,7 @@
 'use client';
 
-import { InformationRail } from '@/components/InformationRail';
-import { aboutDescription } from '@/src/content/about';
+import { InformationPanel } from '@/components/InformationPanel';
+import { aboutDescription, makerUrl } from '@/src/content/about';
 import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import {
@@ -134,7 +134,7 @@ export default function Home() {
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
     [catalog, setCatalog] = useState(false),
-    [about, setAbout] = useState<'menu' | 'different' | 'specs' | null>(null),
+    [about, setAbout] = useState(false),
     [explore, setExplore] = useState(false),
     [separate, setSeparate] = useState(false),
     [dials, setDials] = useState(false),
@@ -288,7 +288,7 @@ export default function Home() {
     setOptions(false);
     setDetails(false);
     setCatalog(false);
-    setAbout(null);
+    setAbout(false);
   };
   const openPanel = (update: (open: boolean) => void, open: boolean) => {
     if (open) {
@@ -324,7 +324,15 @@ export default function Home() {
       <header className="topbar">
         <div className="identity">
           <h1>Zweigesicht-1</h1>
-          <span>ml–01</span>
+          <a
+            className="maker-credit"
+            href={makerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="A watch by Marco Lang — official website, opens in a new tab"
+          >
+            A watch by Marco Lang
+          </a>
         </div>
       </header>
       <section className="workspace" aria-label="Movement explorer">
@@ -1024,12 +1032,12 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <InformationRail
+      <InformationPanel
         onViewerSettings={() => openPanel(setOptions, true)}
-        panel={about}
-        onPanelChange={(panel) => {
-          if (panel) closePanels();
-          setAbout(panel);
+        open={about}
+        onOpenChange={(open) => {
+          if (open) closePanels();
+          setAbout(open);
         }}
       >
         <div className="about-copy">
@@ -1071,7 +1079,7 @@ export default function Home() {
             and view controls are also available through keyboard navigation.
           </p>
         </div>{' '}
-      </InformationRail>
+      </InformationPanel>
 
       <pre id="viewer-diagnostics" hidden>
         {JSON.stringify({ ...s, parts: undefined })}

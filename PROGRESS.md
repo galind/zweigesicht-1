@@ -68,6 +68,14 @@ Fixed cancellation before the first separation frame and made interpolated state
 
 Verification: 16 state/motion tests, 98 CPU runtime checks, TypeScript, lint and production build pass. New CPU coverage checks monotonic motion at 30/60/120 Hz, exact endpoints, immediate cancellation and interrupted reversal. Browser separation checks pass all 8 assertions (both faces, intermediate poses, six Focus sections, viewport containment, reduced motion, camera ownership, resource reuse and idle rendering); watch checks pass all 184 assertions, inventory checks pass all 20 and interface checks pass all 53. Visual review includes sampled real opening/closing frames, a 390×844 phone viewport and 320×740 at 200% text. The new action and keyboard slider remain reachable in the scrolling panel with no horizontal overflow. One watch run was interrupted by hot reload during development; the subsequent stable run passed all 184 checks. Physical-device and human motion-preference review remain outstanding. Ready for local user review. No push or deployment.
 
+## Information simplification — 15 September 2026
+
+Removed the middle-right link rail. A single About the watch action opens directly to the existing maker-attributed watch features, with a short introduction and expandable movement specifications. Original CAD, watch sources, independent-viewer credit and geometry limitations, and Viewer settings remain accessible in the panel footer. The identity now includes a linked A watch by Marco Lang credit. The obsolete menu/specification page state and rail styles are removed; the component is now InformationPanel.
+
+The reading panel remains scrollable and leaves the full-viewport canvas in place. Header and contextual-panel spacing accommodates the maker credit, phone widths and enlarged text. Escape restores About focus; opening Viewer settings gives its scroll area focus without the outgoing panel stealing it.
+
+Verification: 16 state/motion tests, CPU source/runtime checks, TypeScript, lint and production build pass. All 53 existing browser interface checks pass. Targeted browser review covers desktop, 390×844 and 320×740 at 200% text, specifications expansion, keyboard dismissal, settings handoff and no horizontal overflow. Phone checks are viewport emulation; physical-device and representative accessibility review remain outstanding. Ready for local review; no push or publication. Existing release gates remain applicable.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
