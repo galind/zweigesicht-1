@@ -98,6 +98,12 @@ Settings now sits beside Reset in the bottom controls. It contains the existing 
 
 Verification: 16 state/motion tests, 98 CPU source/runtime checks, TypeScript, lint, production build and SEO/HTTP checks pass. All 53 browser interface checks pass after updating their Settings entry/focus expectations. Visual and keyboard review covers 1440×900 desktop, 390×844 phone, and 320×740 at 200% text: no reading-area horizontal overflow, reachable sources, fixed close control, mobile focus containment, Escape/focus return, four visible fact rows and no accordion elements. Phone checks use viewport emulation; physical-device and representative accessibility review remain outstanding. Ready for local review; no push or publication.
 
+### Settings in the header — 15 September 2026
+
+Moved Settings next to Learn about the watch in a shared top-right navigation group. Its panel now opens below that group; phone and enlarged-text layouts place both actions below the identity with clearance above Settings and contextual information. The bottom dock returns to Separate, Focus, All parts, Configure, Flip and Reset, with the original compact phone grid. Switching between the two header panels transfers keyboard focus into the new panel; dismissal returns it to the corresponding trigger.
+
+Verification: TypeScript, lint, production build and all 53 browser interface checks pass. Targeted keyboard and DOM layout checks cover desktop, 390×844 phone and 320×740 at 200% text, including panel clearance, no horizontal overflow, settings scrolling and focus restoration. Browser pointer/screenshot coordinates were inconsistent with the emulated viewport during this run, so interactions used the supported keyboard API and geometry assertions. No push or publication.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

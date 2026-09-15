@@ -17,8 +17,10 @@ import {
 export function InformationPanel({
   open,
   onOpenChange,
+  restoreFocus = true,
 }: {
   open: boolean;
+  restoreFocus?: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
   const trigger = useRef<HTMLButtonElement>(null);
@@ -47,7 +49,7 @@ export function InformationPanel({
           className="explorer-panel information-panel"
           showOverlay={mobile}
           scrollContent
-          finalFocus={trigger}
+          finalFocus={() => (restoreFocus ? trigger.current : false)}
         >
           <SheetHeader>
             <SheetTitle>Zweigesicht–1</SheetTitle>

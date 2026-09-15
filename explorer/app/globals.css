@@ -627,7 +627,7 @@ canvas:focus-visible {
   z-index: 3;
 }
 .topbar,
-.about-toggle,
+.header-actions,
 .action-dock {
   /* The tint matches the empty canvas exactly; only geometry reveals the glass. */
   background: var(--overlay-tint);
@@ -637,15 +637,8 @@ canvas:focus-visible {
   -webkit-backdrop-filter: blur(12px);
   box-shadow: none;
 }
-.dock-utilities {
-  display: flex;
-  justify-content: center;
-  gap: 4px;
+.action-dock .reset-button {
   margin-left: 12px;
-}
-.action-dock .reset-button,
-.action-dock .settings-trigger {
-  margin-left: 0;
   color: #aaa8a4;
   font-size: 0.75rem;
 }
@@ -698,12 +691,17 @@ canvas:focus-visible {
     border-color: rgb(203 181 142 / 38%);
   }
 }
-.about-toggle {
-  display: inline-flex;
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   position: absolute;
   top: var(--top);
   right: var(--edge-right);
   z-index: 3;
+}
+.header-actions .settings-trigger {
+  color: #aaa8a4;
 }
 .explorer-panel[data-slot='sheet-content'] {
   /* A small lift keeps attention on the movement behind the panel. */
@@ -751,6 +749,14 @@ canvas:focus-visible {
   background: #1b1b1b !important;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+}
+.explorer-panel.settings-panel[data-slot='sheet-content'] {
+  top: max(80px, calc(env(safe-area-inset-top) + 64px));
+  right: 20px;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  max-height: min(520px, calc(100dvh - 112px));
 }
 .information-panel [data-slot='sheet-header'] {
   position: sticky;
@@ -936,13 +942,25 @@ canvas:focus-visible {
     --edge-right: max(16px, env(safe-area-inset-right));
   }
   .topbar {
-    max-width: calc(100% - 150px);
+    max-width: calc(100% - 32px);
   }
   .identity {
     padding-inline: 0;
   }
-  .about-toggle {
-    max-width: 125px;
+  .header-actions {
+    top: 104px;
+    left: var(--edge-left);
+  }
+  .header-actions .about-toggle {
+    flex: 1;
+  }
+  .header-actions .settings-trigger {
+    flex-shrink: 0;
+  }
+  .explorer-panel.settings-panel[data-slot='sheet-content'] {
+    top: 164px;
+    right: 12px;
+    max-height: calc(100dvh - 164px - var(--panel-bottom, 120px));
   }
   .action-dock {
     bottom: max(12px, env(safe-area-inset-bottom));
@@ -974,7 +992,7 @@ canvas:focus-visible {
     max-height: min(44dvh, calc(100dvh - var(--panel-bottom, 120px) - 64px));
   }
   .focus-strip {
-    top: 108px;
+    top: 164px;
     left: 12px;
     max-width: calc(100% - 24px);
   }
@@ -1016,8 +1034,23 @@ canvas:focus-visible {
   .text-enlarged .identity h1 {
     font-size: 0.75rem;
   }
+  .text-enlarged .header-actions {
+    top: 128px;
+    left: var(--edge-left);
+  }
+  .text-enlarged .header-actions .about-toggle {
+    flex: 1;
+  }
+  .text-enlarged .header-actions .settings-trigger {
+    flex-shrink: 0;
+  }
+  .text-enlarged .explorer-panel.settings-panel[data-slot='sheet-content'] {
+    top: 244px;
+    right: 12px;
+    max-height: calc(100dvh - 244px - var(--panel-bottom, 180px));
+  }
   .text-enlarged .focus-strip {
-    top: 220px;
+    top: 244px;
   }
   .text-enlarged .maker-credit {
     font-size: 0.75rem;
@@ -1025,7 +1058,7 @@ canvas:focus-visible {
 }
 @media (prefers-reduced-transparency: reduce) {
   .topbar,
-  .about-toggle,
+  .header-actions,
   .action-dock,
   .explorer-panel[data-slot='sheet-content'] {
     background: #181818 !important;
@@ -1035,7 +1068,7 @@ canvas:focus-visible {
 }
 @supports not (backdrop-filter: blur(1px)) {
   .topbar,
-  .about-toggle,
+  .header-actions,
   .action-dock,
   .explorer-panel[data-slot='sheet-content'] {
     background: #181818 !important;
@@ -1070,19 +1103,10 @@ canvas:focus-visible {
 }
 @media (max-width: 600px) {
   .action-dock {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .action-dock > * {
-    grid-column: span 2;
-  }
-  .action-dock > .dial-trigger,
-  .action-dock > .side-slot {
-    grid-column: span 3;
-  }
-  .action-dock .dock-utilities {
-    grid-column: 1 / -1;
-    margin: 0;
-    gap: 16px;
+  .action-dock .reset-button {
+    grid-column: auto;
   }
   .explorer-panel.information-panel[data-slot='sheet-content'],
   .text-enlarged .explorer-panel.information-panel[data-slot='sheet-content'] {
@@ -1119,14 +1143,8 @@ canvas:focus-visible {
   .text-enlarged .action-dock {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .text-enlarged .action-dock > * {
+  .text-enlarged .action-dock .reset-button {
     grid-column: auto;
-  }
-  .text-enlarged .action-dock .dock-utilities {
-    grid-column: 1 / -1;
-    flex-wrap: wrap;
-    margin: 0;
-    gap: 12px;
   }
 }
 

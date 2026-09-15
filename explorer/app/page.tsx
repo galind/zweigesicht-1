@@ -717,30 +717,20 @@ export default function Home() {
             <span>Flip</span>
           </button>
         </div>
-        <div className="dock-utilities">
-          <button
-            className="text-button reset-button"
-            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-            aria-label="Reset view"
-            title="Return to the straight-on view; keep watch configuration"
-            onClick={() => {
-              closePanels();
-              if (viewer.current) viewer.current.reset();
-              else set({ ...empty, loadStage: 'error', error: s.error });
-            }}
-          >
-            <RotateCcw className="dock-icon" aria-hidden="true" />
-            <span>Reset view</span>
-          </button>
-          <button
-            className="text-button settings-trigger"
-            aria-expanded={options}
-            aria-controls="viewer-settings"
-            onClick={() => openPanel(setOptions, !options)}
-          >
-            Settings
-          </button>
-        </div>
+        <button
+          className="text-button reset-button"
+          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+          aria-label="Reset view"
+          title="Return to the straight-on view; keep watch configuration"
+          onClick={() => {
+            closePanels();
+            if (viewer.current) viewer.current.reset();
+            else set({ ...empty, loadStage: 'error', error: s.error });
+          }}
+        >
+          <RotateCcw className="dock-icon" aria-hidden="true" />
+          <span>Reset view</span>
+        </button>
       </nav>
       <Sheet
         modal={false}
@@ -753,14 +743,16 @@ export default function Home() {
         <SheetContent
           side="top"
           style={panelStyle}
-          className="explorer-panel about-sheet"
+          className="explorer-panel about-sheet settings-panel"
           id="viewer-settings"
           showOverlay={false}
           scrollContent
           finalFocus={() =>
-            selectionFocus.current
-              ? (host.current?.querySelector('canvas') ?? false)
-              : document.querySelector<HTMLButtonElement>('.settings-trigger')
+            about
+              ? false
+              : selectionFocus.current
+                ? (host.current?.querySelector('canvas') ?? false)
+                : document.querySelector<HTMLButtonElement>('.settings-trigger')
           }
         >
           <SheetHeader>
@@ -1082,13 +1074,24 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <InformationPanel
-        open={about}
-        onOpenChange={(open) => {
-          if (open) closePanels();
-          setAbout(open);
-        }}
-      />
+      <nav className="header-actions" aria-label="Information and settings">
+        <InformationPanel
+          open={about}
+          restoreFocus={!options}
+          onOpenChange={(open) => {
+            if (open) closePanels();
+            setAbout(open);
+          }}
+        />
+        <button
+          className="text-button settings-trigger"
+          aria-expanded={options}
+          aria-controls="viewer-settings"
+          onClick={() => openPanel(setOptions, !options)}
+        >
+          Settings
+        </button>
+      </nav>
 
       <pre id="viewer-diagnostics" hidden>
         {JSON.stringify({ ...s, parts: undefined })}
