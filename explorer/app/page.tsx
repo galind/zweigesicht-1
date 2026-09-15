@@ -483,10 +483,10 @@ export default function Home() {
             disabled={!available}
           >
             <Layers className="dock-icon" aria-hidden="true" />
-            <span>Separate</span>
+            <span>Disassemble</span>
             {(group ? s.partSpread : s.separation) > 0 &&
               s.layout !== 'spread' && (
-                <span className="state-dot" aria-label="Separation active" />
+                <span className="state-dot" aria-label="Disassembly active" />
               )}
           </SheetTrigger>
           <SheetContent
@@ -501,8 +501,8 @@ export default function Home() {
                 {s.layout === 'spread'
                   ? 'Arrange parts'
                   : group
-                    ? 'Separate section'
-                    : 'Separate movement'}
+                    ? 'Disassemble section'
+                    : 'Disassemble movement'}
               </SheetTitle>
               <SheetDescription>
                 {s.layout === 'spread'
@@ -550,12 +550,12 @@ export default function Home() {
                     {(group ? s.partSpread : s.separation) > 0
                       ? 'Reassemble'
                       : group
-                        ? 'Separate section'
-                        : 'Separate movement'}
+                        ? 'Disassemble section'
+                        : 'Disassemble movement'}
                   </button>
                   <div className="slider-heading">
                     <span id="separation-label">
-                      {group ? 'Separate section' : 'Separate'}
+                      {group ? 'Disassemble section' : 'Disassemble'}
                     </span>
                     <output>
                       {Math.round((group ? s.partSpread : s.separation) * 100)}%
@@ -911,7 +911,7 @@ export default function Home() {
                 </ul>
                 <p className="secondary">
                   Other mechanisms are hidden; connected parts stay dimmed. In
-                  Separate, Uncover moves this section’s covers aside. Separate
+                  Disassemble, Uncover moves this section’s covers aside. Disassemble
                   section spaces its own components.
                   {group.id === 'regulation' &&
                     ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}

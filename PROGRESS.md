@@ -131,3 +131,9 @@ Mechanical contact/deformation fidelity, remaining source/variant exceptions, ph
 Reduced `docs/` from 24 Markdown files to three: runtime architecture, CAD maintenance notes and release gates. Removed completed reviews, the duplicate generated ledger, the documentation index and the archived progress copy; Git preserves them at `e5c890f`. Source manifests, authored data and detailed JSON evidence are retained. The ledger generator now emits only its JSON record; evidence-page links point to retained files.
 
 Validation: local documentation/evidence links, script syntax and staged diff checked. No viewer behavior or assets changed; runtime suites were not rerun.
+
+### Disassemble naming and hand-material cleanup — 15 September 2026
+
+Renamed the Separate entry and its related panel/action/slider copy to Disassemble, retaining Reassemble and the existing behavior. Removed the hand-material field entirely and reduced its explanatory note to configuration persistence. The Skeleton style selector remains; Three hands still supports Fine, Lance and Open lance internally, but its previously removed shape selector has not been restored.
+
+Verification: TypeScript, lint and production build pass. Targeted browser inspection confirms the renamed controls and absence of the material field; the bottom controls fit at 320×740 without horizontal overflow. No push or publication.

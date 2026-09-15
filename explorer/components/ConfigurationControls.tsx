@@ -88,32 +88,8 @@ export function ConfigurationControls({
           <ChevronDown aria-hidden="true" />
         </div>
       </label>
-      <label className="dial-face hand-finish">
-        <span>Three hands material</span>
-        <div className="dial-hand-select">
-          <select
-            aria-label="Three hands material"
-            value={state.centralFinish}
-            disabled={!available || state.centralStyle === 'fine'}
-            aria-describedby="hand-material-note"
-            onChange={(event) =>
-              void viewer()?.configureWatch({
-                centralFinish: event.target.value,
-              })
-            }
-          >
-            <option value="blued-steel">Blued steel</option>
-            <option value="rose-gold" disabled={state.centralStyle !== 'fine'}>
-              Rose gold{state.centralStyle !== 'fine' ? ' · Fine only' : ''}
-            </option>
-          </select>
-          <ChevronDown aria-hidden="true" />
-        </div>
-      </label>
-      <p className="dial-note" id="hand-material-note">
-        Fine hands follow the case: blue for steel, gold for rose gold and
-        platinum. Other shapes retain blued steel. Shapes and materials are
-        remembered while hidden; Reset keeps your configuration.
+      <p className="dial-note">
+        Your choices are kept when you reset the view.
       </p>
       <output aria-live="polite" className="dial-status">
         {state.configurationNotice}

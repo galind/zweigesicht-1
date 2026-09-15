@@ -1142,8 +1142,7 @@ canvas:focus-visible {
   }
 }
 
-.case-material,
-.hand-finish {
+.case-material {
   margin-top: 12px;
 }
 .case-material + .dial-note {
