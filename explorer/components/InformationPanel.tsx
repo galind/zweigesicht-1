@@ -104,21 +104,6 @@ export function InformationPanel({
               </nav>
               <details className="viewer-credit">
                 <summary>About this independent viewer</summary>
-                <p>
-                  Created by{' '}
-                  <a
-                    href="https://guillemgalindo.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Guillem Galindo
-                  </a>{' '}
-                  using{' '}
-                  <a href={cadUrl} target="_blank" rel="noopener noreferrer">
-                    Marco Lang’s CAD
-                  </a>
-                  . Not affiliated with Marco Lang.
-                </p>
                 {children}
               </details>
               <button

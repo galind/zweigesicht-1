@@ -55,11 +55,8 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
   assert.ok(
     html.includes('href="https://www.marcolangwatches.com/en/main-page/"'),
   );
-  assert.ok(
-    html.includes(
-      'href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/"',
-    ),
-  );
+  assert.ok(html.includes('Learn about the watch'));
+  // CAD links are inside the reading panel, mounted only when opened.
   assert.doesNotMatch(html, /<footer\b/i);
   const schema = JSON.parse(
     raw.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1],
@@ -69,11 +66,7 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
     ['WebSite', 'WebApplication'],
   );
   assert.equal(schema['@graph'][0].name, title);
-  assert.deepEqual(schema['@graph'][1].creator, {
-    '@type': 'Person',
-    name: 'Guillem Galindo',
-    url: 'https://guillemgalindo.com',
-  });
+  assert.equal(schema['@graph'][1].creator, undefined);
   const summary = schema['@graph'][1].description;
   for (const term of [
     'Marco Lang',

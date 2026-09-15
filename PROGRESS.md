@@ -82,6 +82,12 @@ Renamed the trigger to Learn about the watch. Increased reading-panel clearance 
 
 Content review recommendation (not yet implemented): lead with how the two faces can be worn by changing strap attachments, merge the repeated two-face introduction, retain concise explanations of the twin barrels and optional shock indicator, and connect those explanations to existing viewer actions. Keep technical specifications collapsed. Consolidate source links and viewer attribution, move operating instructions to viewer help, and retain detailed geometry exceptions in a secondary model-notes disclosure. On phones, a taller reading sheet would offer more useful reading space than the current panel above the visible controls. Maker facts were checked against https://www.marcolangwatches.com/en/watches/ on this date. No publication.
 
+### Marco-focused attribution — 15 September 2026
+
+Removed the personal creator credit and personal-site link from the reading panel, and removed the WebApplication creator entry from structured metadata. Marco Lang’s watch/CAD attribution and the independent-viewer explanation remain. The configured canonical hostname is unchanged. Updated the existing SEO check to match the absent creator and the reading-panel entry introduced by the earlier rail removal.
+
+Verification: TypeScript, lint, production build and SEO/HTTP checks pass. Browser inspection of the expanded viewer information confirms no personal name or personal-site link, with Marco’s attribution retained. Committed locally; no push or publication. The proposed continuous reading layout is still a recommendation, not an implemented change.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.
