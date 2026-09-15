@@ -104,6 +104,8 @@ Moved Settings next to Learn about the watch in a shared top-right navigation gr
 
 Verification: TypeScript, lint, production build and all 53 browser interface checks pass. Targeted keyboard and DOM layout checks cover desktop, 390×844 phone and 320×740 at 200% text, including panel clearance, no horizontal overflow, settings scrolling and focus restoration. Browser pointer/screenshot coordinates were inconsistent with the emulated viewport during this run, so interactions used the supported keyboard API and geometry assertions. No push or publication.
 
+Settings emphasis follow-up: removed its muted-color override so both header actions share the same color, 13 px font size and 400 font weight. Computed browser styles confirm the match; lint and production build pass. Saved locally; no publication.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

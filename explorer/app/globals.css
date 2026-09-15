@@ -700,9 +700,6 @@ canvas:focus-visible {
   right: var(--edge-right);
   z-index: 3;
 }
-.header-actions .settings-trigger {
-  color: #aaa8a4;
-}
 .explorer-panel[data-slot='sheet-content'] {
   /* A small lift keeps attention on the movement behind the panel. */
   transition-property: opacity, translate;
