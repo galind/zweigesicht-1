@@ -144,6 +144,7 @@ export default function Home() {
   const [s, set] = useState<ViewerSnapshot>(empty),
     [catalog, setCatalog] = useState(false),
     [about, setAbout] = useState(false),
+    [acknowledgements, setAcknowledgements] = useState(false),
     [explore, setExplore] = useState(false),
     [separate, setSeparate] = useState(false),
     [dials, setDials] = useState(false),
@@ -293,6 +294,7 @@ export default function Home() {
         event.defaultPrevented ||
         catalog ||
         about ||
+        acknowledgements ||
         explore ||
         separate ||
         dials ||
@@ -306,11 +308,21 @@ export default function Home() {
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [catalog, about, explore, separate, dials, options, details]);
+  }, [
+    catalog,
+    about,
+    acknowledgements,
+    explore,
+    separate,
+    dials,
+    options,
+    details,
+  ]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
     setCatalog(false);
     setOptions(false);
+    setAcknowledgements(false);
     setDetails(false);
     void viewer.current?.select(id);
   };
@@ -332,6 +344,7 @@ export default function Home() {
     setSeparate(false);
     setDials(false);
     setOptions(false);
+    setAcknowledgements(false);
     setDetails(false);
     setCatalog(false);
     setAbout(false);
@@ -378,21 +391,29 @@ export default function Home() {
             href={makerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="By Marco Lang — official website, opens in a new tab"
+            aria-label="by Marco Lang — official website, opens in a new tab"
           >
-            By Marco Lang
+            by Marco Lang
           </a>
         </div>
         <nav className="header-actions" aria-label="Information and settings">
           <InformationPanel
             style={panelStyle}
             open={about}
-            restoreFocus={!options}
+            restoreFocus={!options && !acknowledgements}
             onOpenChange={(open) => {
               if (open) closePanels();
               setAbout(open);
             }}
           />
+          <button
+            className="text-button acknowledgements-trigger"
+            aria-expanded={acknowledgements}
+            aria-controls="acknowledgements"
+            onClick={() => openPanel(setAcknowledgements, !acknowledgements)}
+          >
+            Acknowledgements
+          </button>
           <button
             className="text-button settings-trigger"
             aria-expanded={options}
@@ -808,6 +829,40 @@ export default function Home() {
       </nav>
       <Sheet
         modal={false}
+        open={acknowledgements}
+        onOpenChange={(open) => openPanel(setAcknowledgements, open)}
+      >
+        <SheetContent
+          side="top"
+          style={panelStyle}
+          className="explorer-panel settings-panel acknowledgements-panel"
+          id="acknowledgements"
+          showOverlay={false}
+          scrollContent
+          finalFocus={() =>
+            about ||
+            options ||
+            explore ||
+            separate ||
+            dials ||
+            details ||
+            catalog
+              ? false
+              : selectionFocus.current
+                ? (host.current?.querySelector('canvas') ?? false)
+                : document.querySelector<HTMLButtonElement>(
+                    '.acknowledgements-trigger',
+                  )
+          }
+        >
+          <SheetHeader>
+            <SheetTitle>Acknowledgements</SheetTitle>
+            <SheetDescription>Coming soon.</SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+      <Sheet
+        modal={false}
         open={options}
         onOpenChange={(open) => {
           if (open) selectionFocus.current = false;
@@ -822,7 +877,7 @@ export default function Home() {
           showOverlay={false}
           scrollContent
           finalFocus={() =>
-            about
+            about || acknowledgements
               ? false
               : selectionFocus.current
                 ? (host.current?.querySelector('canvas') ?? false)

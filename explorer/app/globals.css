@@ -1159,6 +1159,7 @@ canvas:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 0 24px;
   background: none;
   backdrop-filter: none;
@@ -1420,4 +1421,32 @@ canvas:focus-visible {
 }
 .focus-actions {
   flex-shrink: 0;
+}
+
+/* Three header entries reflow together without crowding their labels. */
+@media (max-width: 600px) {
+  .header-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 4px;
+  }
+  .header-actions .about-toggle {
+    grid-column: 1 / -1;
+  }
+  .header-actions .acknowledgements-trigger {
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+@media (max-width: 1000px) {
+  .text-enlarged .header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .text-enlarged .header-actions .text-button {
+    justify-content: flex-start;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
 }
