@@ -171,3 +171,10 @@ The component finder now has search, scope, one filtered count and one results l
 Verification: 16 state/motion tests, CPU source/runtime checks, TypeScript, lint, production build and SEO/HTTP checks pass. Browser suites pass 59 interface checks (including the relocated Focus choices, persistent active states and Reassemble return) and 182 watch checks, covering configuration combinations, automatic finishes, lug flipping, recovery and geometry/resource preservation. The watch suite used an already-loaded catalog; a separate cold browser check verifies visible dial failure and successful Retry dials. Targeted browser review covers 1280×720 desktop, 390×844 phone, and 320×740 at 200% text: no horizontal overflow, equal dock targets, scrollable controls, reachable close buttons, keyboard slider changes, hidden configuration choices retained through Reset, CAD-name/ID search, empty results, selected source details, inventory flip styling and no-3D mechanism descriptions. Final spacing/copy refinements passed lint/build and targeted enlarged-text review. Evidence is local in ignored `artifacts/browser/bottom-review/`.
 
 Ready for local user review. Phone checks use viewport emulation; physical-device and representative accessibility review remain outstanding. No push or publication.
+
+
+### Branch deployment — 15 September 2026
+
+At the user’s request, pushed `codex/quiet-movement-redesign` over SSH; GitHub reported a pending Vercel deployment for `57a098d`. Deployment packaging review found that the required 2,105-byte case recovery sidecar was still ignored and omitted from Vercel’s asset allowlist. Included that existing runtime sidecar and retained it during output pruning, with its SHA-256 verified against the loader and source record (`c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2`). Original CAD downloads remain excluded. The requested deployment does not establish mechanical certification or physical-device review.
+
+Validation: `build:vercel` passes and the pruned deployment output retains the recovery sidecar with its exact recorded hash. Pushing the packaging correction triggers a replacement branch preview.

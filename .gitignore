@@ -66,3 +66,6 @@ artifacts/cad-finishing-audit/
 
 # Local fitted-case source recovery and reference evidence.
 artifacts/case-cad/
+
+# Required fitted-case runtime sidecar for the requested branch deployment.
+!explorer/public/models/case-lug-recovery.json
