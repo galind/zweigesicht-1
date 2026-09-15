@@ -626,7 +626,7 @@ canvas:focus-visible {
   padding: 4px;
   z-index: 3;
 }
-.topbar,
+.identity,
 .header-actions,
 .action-dock {
   /* The tint matches the empty canvas exactly; only geometry reveals the glass. */
@@ -1051,7 +1051,7 @@ canvas:focus-visible {
   }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .topbar,
+  .identity,
   .header-actions,
   .action-dock,
   .explorer-panel[data-slot='sheet-content'] {
@@ -1061,7 +1061,7 @@ canvas:focus-visible {
   }
 }
 @supports not (backdrop-filter: blur(1px)) {
-  .topbar,
+  .identity,
   .header-actions,
   .action-dock,
   .explorer-panel[data-slot='sheet-content'] {
@@ -1170,15 +1170,20 @@ canvas:focus-visible {
   pointer-events: auto;
 }
 .identity {
-  padding: 0;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  max-width: 100%;
+  padding: 0 12px;
 }
 .identity h1 {
   line-height: 1.4;
-  padding-top: 9px;
+  padding-top: 0;
 }
 .maker-credit {
   min-height: 44px;
-  margin-top: -9px;
+  margin-top: 0;
 }
 .header-actions,
 .text-enlarged .header-actions {
