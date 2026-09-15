@@ -76,6 +76,12 @@ The reading panel remains scrollable and leaves the full-viewport canvas in plac
 
 Verification: 16 state/motion tests, CPU source/runtime checks, TypeScript, lint and production build pass. All 53 existing browser interface checks pass. Targeted browser review covers desktop, 390×844 and 320×740 at 200% text, specifications expansion, keyboard dismissal, settings handoff and no horizontal overflow. Phone checks are viewport emulation; physical-device and representative accessibility review remain outstanding. Ready for local review; no push or publication. Existing release gates remain applicable.
 
+### Learning entry and content review — 15 September 2026
+
+Renamed the trigger to Learn about the watch. Increased reading-panel clearance for the longer label, including the 320×740 enlarged-text layout. TypeScript, lint and production build pass; targeted browser review confirms the exact label and no header/panel overlap or horizontal overflow at 200% text.
+
+Content review recommendation (not yet implemented): lead with how the two faces can be worn by changing strap attachments, merge the repeated two-face introduction, retain concise explanations of the twin barrels and optional shock indicator, and connect those explanations to existing viewer actions. Keep technical specifications collapsed. Consolidate source links and viewer attribution, move operating instructions to viewer help, and retain detailed geometry exceptions in a secondary model-notes disclosure. On phones, a taller reading sheet would offer more useful reading space than the current panel above the visible controls. Maker facts were checked against https://www.marcolangwatches.com/en/watches/ on this date. No publication.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

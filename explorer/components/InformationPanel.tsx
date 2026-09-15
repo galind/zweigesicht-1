@@ -40,7 +40,7 @@ export function InformationPanel({
           onOpenChange(!open);
         }}
       >
-        About the watch
+        Learn about the watch
       </button>
       <Sheet modal={false} open={open} onOpenChange={onOpenChange}>
         <SheetContent
