@@ -1157,7 +1157,7 @@ canvas:focus-visible {
 .topbar {
   right: var(--edge-right);
   display: flex;
-  align-items: flex-start;
+  align-items: baseline;
   justify-content: space-between;
   gap: 0 24px;
   background: none;
@@ -1171,22 +1171,27 @@ canvas:focus-visible {
 }
 .identity {
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
   gap: 0 12px;
   max-width: 100%;
   padding: 0 12px;
 }
 .identity h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
   line-height: 1.4;
   padding-top: 0;
 }
 .maker-credit {
   min-height: 44px;
   margin-top: 0;
+  font-size: 0.8125rem;
+  color: #c4c2be;
 }
 .header-actions,
 .text-enlarged .header-actions {
+  align-items: baseline;
   position: static;
   flex-wrap: wrap;
   flex-shrink: 0;
@@ -1366,10 +1371,7 @@ canvas:focus-visible {
   }
   .header-actions .about-toggle {
     justify-content: flex-start;
-    padding-left: 0;
-  }
-  .header-actions .settings-trigger {
-    padding-right: 0;
+    text-align: left;
   }
   .explorer-panel.settings-panel[data-slot='sheet-content'],
   .text-enlarged .explorer-panel.settings-panel[data-slot='sheet-content'] {
