@@ -822,9 +822,6 @@ canvas:focus-visible {
   color: inherit;
   text-decoration: none;
 }
-.model-notes {
-  margin-top: 28px;
-}
 .explorer-panel .sheet-scroll-area {
   min-height: 0;
   overflow: auto;

@@ -106,6 +106,8 @@ Verification: TypeScript, lint, production build and all 53 browser interface ch
 
 Settings emphasis follow-up: removed its muted-color override so both header actions share the same color, 13 px font size and 400 font weight. Computed browser styles confirm the match; lint and production build pass. Saved locally; no publication.
 
+Settings copy follow-up: removed the entire About the model section and its heading, source link and unused styling from Settings. The panel now contains camera instructions/controls and rendering quality. Source and geometry records remain in the repository; structured metadata retains the independent-viewer description. TypeScript, lint, production build and targeted browser inspection pass. No publication.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

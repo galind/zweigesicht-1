@@ -1,7 +1,7 @@
 'use client';
 
 import { InformationPanel } from '@/components/InformationPanel';
-import { aboutDescription, makerUrl } from '@/src/content/about';
+import { makerUrl } from '@/src/content/about';
 import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import {
@@ -758,7 +758,7 @@ export default function Home() {
           <SheetHeader>
             <SheetTitle>Viewer settings</SheetTitle>
             <SheetDescription>
-              Camera controls, rendering quality and model notes.
+              Camera controls and rendering quality.
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
@@ -875,43 +875,6 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
-            <section className="model-notes">
-              <h3>About the model</h3>
-              <p>{aboutDescription}</p>
-              <p>
-                The watch opens as an exposed movement. Configure adds the case,
-                both crystals and your chosen dials and hands. Straps and
-                alternate source placements remain available in the complete CAD
-                catalog.
-              </p>
-              <p>
-                The mechanism is shown in its source pose. Reveal and separation
-                controls expose its construction; they do not simulate a running
-                watch.
-              </p>
-              <p>
-                {s.stats.recoveredDiamond
-                  ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
-                  : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
-                The local case view recovers one omitted lug face by meshing its
-                original CAD surface separately. Four balance eccentrics contain
-                untessellated faces. An overlapping setting-spring alternative
-                is hidden in the assembled view.
-              </p>
-              <p>
-                Separation and All parts travel are authored presentations, not
-                service procedures. All parts contains the active movement’s
-                physical components at their original relative scale; case parts
-                and incompatible alternatives remain in the source catalog.
-              </p>
-              <a
-                href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Marco Lang · Original CAD <ExternalLink aria-hidden="true" />
-              </a>
-            </section>
           </div>
         </SheetContent>
       </Sheet>
