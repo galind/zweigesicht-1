@@ -137,3 +137,7 @@ Validation: local documentation/evidence links, script syntax and staged diff ch
 Renamed the Separate entry and its related panel/action/slider copy to Disassemble, retaining Reassemble and the existing behavior. Removed the hand-material field entirely and reduced its explanatory note to configuration persistence. The Skeleton style selector remains; Three hands still supports Fine, Lance and Open lance internally, but its previously removed shape selector has not been restored.
 
 Verification: TypeScript, lint and production build pass. Targeted browser inspection confirms the renamed controls and absence of the material field; the bottom controls fit at 320×740 without horizontal overflow. No push or publication.
+
+### UI review split — 15 September 2026
+
+Recorded the general UI analysis in [top UI review](docs/UI_REVIEW_TOP.md) and [bottom UI review](docs/UI_REVIEW_BOTTOM.md), each with a summary, detailed recommendations and priorities. The bottom review incorporates the completed Disassemble rename and removal of the material field; restoring the Three hands shape selector remains a proposal. Documentation only; links and diff checked, with no UI changes or runtime tests required.
