@@ -88,6 +88,16 @@ Removed the personal creator credit and personal-site link from the reading pane
 
 Verification: TypeScript, lint, production build and SEO/HTTP checks pass. Browser inspection of the expanded viewer information confirms no personal name or personal-site link, with Marco’s attribution retained. Committed locally; no push or publication. The proposed continuous reading layout is still a recommendation, not an implemented change.
 
+## Continuous watch reading panel — 15 September 2026
+
+Implemented the approved cleanup, superseding the earlier content-review recommendations. Learn about the watch now opens one Marco-focused reading surface: the watch name and maker, two concise paragraphs about the reversible faces and optional shock indicator, four always-visible facts, and one source line. Both accordions, repeated headings, extra specification rows and the in-panel settings link are removed. Copy follows the maker watch page checked earlier on this date; source links remain available and no personal credit returns.
+
+The panel has a solid dark background, 16 px body text, aligned spacing and one divider. Its header and close button remain in place during scrolling. Desktop uses a 420 px side panel; phones use a nearly full-height modal sheet covering the controls, with keyboard focus contained until dismissal. Enlarged phone text stacks fact labels above values. Opening and closing the reading surface preserves canvas dimensions and watch state.
+
+Settings now sits beside Reset in the bottom controls. It contains the existing camera and rendering controls followed by plain model-note sections, retaining independence, source attribution and geometry limitations without nested disclosures. Closing it returns focus to Settings. Phone controls arrange the five primary actions above the secondary Reset/Settings row.
+
+Verification: 16 state/motion tests, 98 CPU source/runtime checks, TypeScript, lint, production build and SEO/HTTP checks pass. All 53 browser interface checks pass after updating their Settings entry/focus expectations. Visual and keyboard review covers 1440×900 desktop, 390×844 phone, and 320×740 at 200% text: no reading-area horizontal overflow, reachable sources, fixed close control, mobile focus containment, Escape/focus return, four visible fact rows and no accordion elements. Phone checks use viewport emulation; physical-device and representative accessibility review remain outstanding. Ready for local review; no push or publication.
+
 ## Domain and repository checkpoint
 
 The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (custom domain), through `3a889f4`. Canonical and social metadata use `https://zweigesicht-1.guillemgalindo.com/`.

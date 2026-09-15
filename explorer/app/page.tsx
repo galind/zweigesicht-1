@@ -300,7 +300,9 @@ export default function Home() {
             ? '.dial-trigger'
             : update === setSeparate
               ? '.separate-trigger'
-              : '.action-dock';
+              : update === setOptions
+                ? '.settings-trigger'
+                : '.action-dock';
       panelAnchor.current = document.querySelector<HTMLElement>(selector);
       const rect = panelAnchor.current?.getBoundingClientRect();
       if (rect) setPanelX(rect.left + rect.width / 2);
@@ -715,20 +717,30 @@ export default function Home() {
             <span>Flip</span>
           </button>
         </div>
-        <button
-          className="text-button reset-button"
-          disabled={s.loadStage === 'recovering' || (!available && !s.group)}
-          aria-label="Reset view"
-          title="Return to the straight-on view; keep watch configuration"
-          onClick={() => {
-            closePanels();
-            if (viewer.current) viewer.current.reset();
-            else set({ ...empty, loadStage: 'error', error: s.error });
-          }}
-        >
-          <RotateCcw className="dock-icon" aria-hidden="true" />
-          <span>Reset view</span>
-        </button>
+        <div className="dock-utilities">
+          <button
+            className="text-button reset-button"
+            disabled={s.loadStage === 'recovering' || (!available && !s.group)}
+            aria-label="Reset view"
+            title="Return to the straight-on view; keep watch configuration"
+            onClick={() => {
+              closePanels();
+              if (viewer.current) viewer.current.reset();
+              else set({ ...empty, loadStage: 'error', error: s.error });
+            }}
+          >
+            <RotateCcw className="dock-icon" aria-hidden="true" />
+            <span>Reset view</span>
+          </button>
+          <button
+            className="text-button settings-trigger"
+            aria-expanded={options}
+            aria-controls="viewer-settings"
+            onClick={() => openPanel(setOptions, !options)}
+          >
+            Settings
+          </button>
+        </div>
       </nav>
       <Sheet
         modal={false}
@@ -742,18 +754,19 @@ export default function Home() {
           side="top"
           style={panelStyle}
           className="explorer-panel about-sheet"
+          id="viewer-settings"
           showOverlay={false}
           scrollContent
           finalFocus={() =>
             selectionFocus.current
               ? (host.current?.querySelector('canvas') ?? false)
-              : document.querySelector<HTMLButtonElement>('.about-toggle')
+              : document.querySelector<HTMLButtonElement>('.settings-trigger')
           }
         >
           <SheetHeader>
             <SheetTitle>Viewer settings</SheetTitle>
             <SheetDescription>
-              Camera controls and rendering quality.
+              Camera controls, rendering quality and model notes.
             </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
@@ -870,6 +883,43 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
+            <section className="model-notes">
+              <h3>About the model</h3>
+              <p>{aboutDescription}</p>
+              <p>
+                The watch opens as an exposed movement. Configure adds the case,
+                both crystals and your chosen dials and hands. Straps and
+                alternate source placements remain available in the complete CAD
+                catalog.
+              </p>
+              <p>
+                The mechanism is shown in its source pose. Reveal and separation
+                controls expose its construction; they do not simulate a running
+                watch.
+              </p>
+              <p>
+                {s.stats.recoveredDiamond
+                  ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
+                  : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
+                The local case view recovers one omitted lug face by meshing its
+                original CAD surface separately. Four balance eccentrics contain
+                untessellated faces. An overlapping setting-spring alternative
+                is hidden in the assembled view.
+              </p>
+              <p>
+                Separation and All parts travel are authored presentations, not
+                service procedures. All parts contains the active movement’s
+                physical components at their original relative scale; case parts
+                and incompatible alternatives remain in the source catalog.
+              </p>
+              <a
+                href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Marco Lang · Original CAD <ExternalLink aria-hidden="true" />
+              </a>
+            </section>
           </div>
         </SheetContent>
       </Sheet>
@@ -1033,53 +1083,12 @@ export default function Home() {
         </SheetContent>
       </Sheet>
       <InformationPanel
-        onViewerSettings={() => openPanel(setOptions, true)}
         open={about}
         onOpenChange={(open) => {
           if (open) closePanels();
           setAbout(open);
         }}
-      >
-        <div className="about-copy">
-          <p>{aboutDescription}</p>
-          <p>
-            The watch opens as an exposed movement. Configure adds the case,
-            both crystals and your chosen dials and hands. Straps and alternate
-            source placements remain available in the complete CAD catalog.
-          </p>
-          <p>
-            The mechanism is shown in its source pose. Reveal and separation
-            controls expose its construction; they do not simulate a running
-            watch.
-          </p>
-          <p>
-            {s.stats.recoveredDiamond
-              ? 'The diamond is recovered from the maker’s separate component STL; its assembly STEP entry is empty.'
-              : 'The assembly STEP diamond is empty; its separate maker STL has not loaded.'}{' '}
-            The local case view recovers one omitted lug face by meshing its
-            original CAD surface separately. Four balance eccentrics contain
-            untessellated faces. An overlapping setting-spring alternative is
-            hidden in the assembled view.
-          </p>
-          <p>
-            Separation and All parts travel are authored presentations, not
-            service procedures. All parts contains the active movement’s
-            physical components at their original relative scale; case parts and
-            incompatible alternatives remain in the source catalog.
-          </p>
-          <a
-            href="https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Marco Lang · Original CAD <ExternalLink aria-hidden="true" />
-          </a>
-          <p>
-            Drag to orbit; pinch or scroll to zoom. All mechanisms, components
-            and view controls are also available through keyboard navigation.
-          </p>
-        </div>{' '}
-      </InformationPanel>
+      />
 
       <pre id="viewer-diagnostics" hidden>
         {JSON.stringify({ ...s, parts: undefined })}

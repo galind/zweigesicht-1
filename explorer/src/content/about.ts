@@ -6,27 +6,14 @@ export const makerUrl = 'https://www.marcolangwatches.com/en/main-page/';
 export const cadUrl =
   'https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/';
 export const watchSourceUrl = 'https://www.marcolangwatches.com/en/watches/';
-// Reused from the maker-attributed facts in experience/copy.ts. No sketch values.
-export const watchFeatures = [
-  {
-    title: 'Two faces, one movement',
-    text: 'One side displays hours, minutes and central seconds. The other offers hours and minutes with a view into the movement.',
-  },
-  {
-    title: 'Energy in tandem',
-    text: 'Two barrels connected in series give the ML–01 a stated power reserve of 70 hours.',
-  },
-  {
-    title: 'A record of impact',
-    text: 'An optional, resettable shock indicator records impacts in four directions along the X and Y axes.',
-  },
+// Maker facts verified against watchSourceUrl on 15 September 2026.
+export const watchParagraphs = [
+  'Two faces share one movement. One displays hours, minutes and central seconds; the other reveals the mechanism beneath its hours and minutes. Either face can be worn outward by changing the strap attachments.',
+  'An optional shock indicator records impacts in four directions. Its hands retain the reading until the wearer resets it.',
 ];
 export const movementSpecs = [
-  ['Displays', 'Hours, minutes, central seconds · reverse hours & minutes'],
-  ['Barrels', 'Two, in series'],
+  ['Calibre', 'ML–01'],
   ['Power reserve', '70 hours'],
-  ['Balance frequency', '3 Hz'],
-  ['Hairspring', 'Breguet'],
-  ['Regulation', 'Eccentric adjustment'],
-  ['Setting', 'Seconds stop'],
+  ['Frequency', '3 Hz'],
+  ['Barrels', 'Two, connected in series'],
 ];

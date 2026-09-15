@@ -1,6 +1,5 @@
 'use client';
-import { useRef, type ReactNode } from 'react';
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -11,23 +10,26 @@ import {
 import {
   cadUrl,
   watchSourceUrl,
-  watchFeatures,
+  watchParagraphs,
   movementSpecs,
 } from '@/src/content/about';
 
 export function InformationPanel({
   open,
   onOpenChange,
-  children,
-  onViewerSettings,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  children: ReactNode;
-  onViewerSettings: () => void;
 }) {
   const trigger = useRef<HTMLButtonElement>(null);
-  const openingSettings = useRef(false);
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 600px)');
+    const update = () => setMobile(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
   return (
     <>
       <button
@@ -35,86 +37,57 @@ export function InformationPanel({
         className="about-toggle text-button"
         aria-expanded={open}
         aria-controls="watch-information"
-        onClick={() => {
-          openingSettings.current = false;
-          onOpenChange(!open);
-        }}
+        onClick={() => onOpenChange(!open)}
       >
         Learn about the watch
       </button>
-      <Sheet modal={false} open={open} onOpenChange={onOpenChange}>
+      <Sheet modal={mobile} open={open} onOpenChange={onOpenChange}>
         <SheetContent
           id="watch-information"
           className="explorer-panel information-panel"
-          showOverlay={false}
+          showOverlay={mobile}
           scrollContent
-          finalFocus={() => (openingSettings.current ? false : trigger.current)}
+          finalFocus={trigger}
         >
           <SheetHeader>
-            <SheetTitle>Two ways to look at time.</SheetTitle>
-            <SheetDescription>
-              Zweigesicht–1 by Marco Lang. Two faces share a single movement,
-              Calibre ML–01.
-            </SheetDescription>
+            <SheetTitle>Zweigesicht–1</SheetTitle>
+            <SheetDescription>By Marco Lang</SheetDescription>
           </SheetHeader>
-          <div className="about-copy">
-            {watchFeatures.map(({ title, text }) => (
-              <section key={title}>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </section>
+          <div className="watch-reading">
+            {watchParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
-            <details className="watch-specifications">
-              <summary>Movement specifications</summary>
-              <p className="secondary">Reported by Marco Lang.</p>
-              <table className="movement-specs">
-                <caption className="sr-only">
-                  Calibre ML–01 specifications
-                </caption>
-                <tbody>
-                  {movementSpecs.map(([label, value]) => (
-                    <tr key={label}>
-                      <th scope="row">{label}</th>
-                      <td>{value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </details>
-            <footer className="information-footer">
-              <nav className="information-sources" aria-label="Watch sources">
-                <a
-                  href={watchSourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Watch details <ExternalLink aria-hidden="true" />
-                  <span className="sr-only">
-                    {' '}
-                    — Marco Lang, opens in a new tab
-                  </span>
-                </a>
-                <a href={cadUrl} target="_blank" rel="noopener noreferrer">
-                  Original CAD files <ExternalLink aria-hidden="true" />
-                  <span className="sr-only">
-                    {' '}
-                    — Marco Lang, opens in a new tab
-                  </span>
-                </a>
-              </nav>
-              <details className="viewer-credit">
-                <summary>About this independent viewer</summary>
-                {children}
-              </details>
-              <button
-                className="viewer-settings-link menu-link"
-                onClick={() => {
-                  openingSettings.current = true;
-                  onViewerSettings();
-                }}
+            <table className="watch-facts">
+              <caption className="sr-only">
+                Movement specifications reported by Marco Lang
+              </caption>
+              <tbody>
+                {movementSpecs.map(([label, value]) => (
+                  <tr key={label}>
+                    <th scope="row">{label}</th>
+                    <td>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <footer className="watch-sources" aria-label="Watch sources">
+              <a
+                href={watchSourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Marco Lang — watch details, opens in a new tab"
               >
-                Viewer settings <ChevronRight aria-hidden="true" />
-              </button>
+                Marco Lang
+              </a>
+              <span aria-hidden="true">·</span>
+              <a
+                href={cadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Original CAD — Marco Lang’s files, opens in a new tab"
+              >
+                Original CAD
+              </a>
             </footer>
           </div>
         </SheetContent>

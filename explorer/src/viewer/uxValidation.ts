@@ -26,7 +26,7 @@ export async function runUxChecks(v: MovementViewer) {
       dockButtons
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
-      'Separate|Focus|All parts|Configure|Flip movement|Reset view',
+      'Separate|Focus|All parts|Configure|Flip movement|Reset view|Settings',
   });
   checks.push({
     name: 'Dock controls retain touch targets',
@@ -188,9 +188,7 @@ export async function runUxChecks(v: MovementViewer) {
         ),
       ),
   });
-  document.querySelector<HTMLButtonElement>('.about-toggle')!.click();
-  await sleep(300);
-  document.querySelector<HTMLButtonElement>('.viewer-settings-link')!.click();
+  document.querySelector<HTMLButtonElement>('.settings-trigger')!.click();
   await sleep(300);
   checks.push({
     name: 'Contextual options retain keyboard camera and quality controls without reframing',
@@ -204,8 +202,9 @@ export async function runUxChecks(v: MovementViewer) {
     .click();
   await sleep(300);
   checks.push({
-    name: 'Viewer settings return focus to About',
-    pass: document.activeElement === document.querySelector('.about-toggle'),
+    name: 'Viewer settings return focus to Settings',
+    pass:
+      document.activeElement === document.querySelector('.settings-trigger'),
   });
 
   document.querySelector<HTMLButtonElement>('.all-parts-button')!.click();
