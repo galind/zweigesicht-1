@@ -4,6 +4,8 @@ Reviewed 15 September 2026. Recommendations based on the desktop interface and a
 
 Scope: watch identity, Learn about the watch, Settings, and the contextual information shown below the identity. Mechanism details belong here because they are opened from that context, although their current panel appears near the bottom. Bottom controls and component search are covered in [UI review — bottom](UI_REVIEW_BOTTOM.md).
 
+Implementation status: completed locally on 15 September 2026; verification and remaining review limits are recorded in [PROGRESS.md](../PROGRESS.md#top-interface-improvements--15-september-2026). The observations below describe the interface before these changes.
+
 ## Summary
 
 - Tighten the identity and mobile header to give the watch more space.

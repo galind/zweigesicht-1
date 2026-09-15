@@ -6,6 +6,7 @@ import { runUxChecks } from '@/src/viewer/uxValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -14,7 +15,12 @@ import {
 import {
   ChevronDown,
   ChevronRight,
-  ExternalLink,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  Plus,
+  Minus,
   ScanSearch,
   Grid2X2,
   Layers,
@@ -106,9 +112,12 @@ export default function Home() {
     detailButton = useRef<HTMLButtonElement>(null);
   const selectionFocus = useRef(false);
   const panelAnchor = useRef<HTMLElement | null>(null);
+  const [topBounds, setTopBounds] = useState({ header: 88, context: 150 });
   const [panelX, setPanelX] = useState<number | null>(null);
   const [panelBottom, setPanelBottom] = useState<number | null>(null);
   const panelStyle = {
+    '--header-bottom': `${topBounds.header}px`,
+    '--context-bottom': `${topBounds.context}px`,
     '--panel-anchor-x': panelX === null ? '50vw' : `${panelX}px`,
     '--panel-bottom': panelBottom === null ? undefined : `${panelBottom}px`,
   } as CSSProperties;
@@ -237,6 +246,43 @@ export default function Home() {
     members = s.parts.filter(
       (p) => !p.isAssembly && group && inMembers(p.id, group.members),
     );
+  const memberSections = new Map<string, { label: string; parts: Part[] }>();
+  for (const part of members) {
+    const key = part.parentId ?? 'root';
+    const label = (partIndex.get(part.id)?.context ?? 'Components').replace(
+      /^Barrel assembly (\d+)$/,
+      'Barrel $1',
+    );
+    if (!memberSections.has(key)) memberSections.set(key, { label, parts: [] });
+    memberSections.get(key)!.parts.push(part);
+  }
+  const mechanismFacts = group ? factsFor(group.id) : [];
+  const mechanismSources = [
+    ...new Map(mechanismFacts.map((fact) => [fact.url, fact])).values(),
+  ];
+  useLayoutEffect(() => {
+    const header = document.querySelector('.topbar');
+    const context = document.querySelector('.focus-strip');
+    const measure = () => {
+      const headerBottom = header?.getBoundingClientRect().bottom ?? 88;
+      const contextBottom =
+        context?.getBoundingClientRect().bottom ?? headerBottom;
+      setTopBounds((previous) =>
+        previous.header === headerBottom && previous.context === contextBottom
+          ? previous
+          : { header: headerBottom, context: contextBottom },
+      );
+    };
+    const observer = new ResizeObserver(measure);
+    if (header) observer.observe(header);
+    if (context) observer.observe(context);
+    window.addEventListener('resize', measure);
+    measure();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, [group, selected, s.layout, topBounds.header]);
   useEffect(() => {
     queueMicrotask(() => setDetails(false));
   }, [s.part, s.group]);
@@ -318,6 +364,7 @@ export default function Home() {
     viewer.current?.patch(v);
   return (
     <main
+      style={panelStyle}
       className={
         'explorer' +
         (group || selected || s.layout === 'spread' ? ' has-focus' : '')
@@ -331,11 +378,30 @@ export default function Home() {
             href={makerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="A watch by Marco Lang — official website, opens in a new tab"
+            aria-label="By Marco Lang — official website, opens in a new tab"
           >
-            A watch by Marco Lang
+            By Marco Lang
           </a>
         </div>
+        <nav className="header-actions" aria-label="Information and settings">
+          <InformationPanel
+            style={panelStyle}
+            open={about}
+            restoreFocus={!options}
+            onOpenChange={(open) => {
+              if (open) closePanels();
+              setAbout(open);
+            }}
+          />
+          <button
+            className="text-button settings-trigger"
+            aria-expanded={options}
+            aria-controls="viewer-settings"
+            onClick={() => openPanel(setOptions, !options)}
+          >
+            Settings
+          </button>
+        </nav>
       </header>
       <section className="workspace" aria-label="Movement explorer">
         <div
@@ -452,7 +518,7 @@ export default function Home() {
                   aria-expanded={details}
                   aria-controls="component-details"
                 >
-                  About mechanism
+                  Details
                 </button>
               )}
               {selected && (
@@ -467,8 +533,10 @@ export default function Home() {
               )}
             </div>
           </div>
-          {group && !selected && (
-            <p className="component-caption">{group.caption}</p>
+          {selected && (
+            <p className="component-location">
+              {partIndex.get(selected.id)?.context}
+            </p>
           )}
         </section>
       )}
@@ -577,6 +645,12 @@ export default function Home() {
                   />
                   {group && (
                     <>
+                      <p className="control-instruction">
+                        Disassemble section spaces its components. Uncover moves
+                        the covers aside; connected parts stay dimmed.
+                        {group.id === 'regulation' &&
+                          ' The balance bridge and its screws fade to expose the spring. Lower Uncover to restore them.'}
+                      </p>
                       <div className="slider-heading">
                         <span id="uncover-label">Uncover section</span>
                         <output>{Math.round(s.reveal * 100)}%</output>
@@ -757,94 +831,11 @@ export default function Home() {
         >
           <SheetHeader>
             <SheetTitle>Viewer settings</SheetTitle>
-            <SheetDescription>
-              Camera controls and rendering quality.
+            <SheetDescription className="sr-only">
+              Adjust rendering quality and move the camera.
             </SheetDescription>
           </SheetHeader>
-          <div className="about-copy">
-            <p>
-              Drag to orbit. Pinch or scroll to zoom. Tap a component to inspect
-              it. Tap empty space to deselect. In All parts, drag to pan.
-            </p>
-            <fieldset
-              className="alternative-controls"
-              aria-label="Camera controls"
-              disabled={!available}
-            >
-              {s.layout !== 'spread' && (
-                <>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.orbit(-0.25, 0)}
-                  >
-                    Orbit left
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.orbit(0.25, 0)}
-                  >
-                    Orbit right
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.orbit(0, -0.2)}
-                  >
-                    Tilt up
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.orbit(0, 0.2)}
-                  >
-                    Tilt down
-                  </button>
-                </>
-              )}
-              <button
-                className="tool"
-                onClick={() => viewer.current?.zoom(0.8)}
-              >
-                Zoom in
-              </button>
-              <button
-                className="tool"
-                onClick={() => viewer.current?.zoom(1.25)}
-              >
-                Zoom out
-              </button>
-              {s.layout === 'spread' && (
-                <>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.pan(-0.15, 0)}
-                  >
-                    Pan left
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.pan(0.15, 0)}
-                  >
-                    Pan right
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.pan(0, -0.15)}
-                  >
-                    Pan up
-                  </button>
-                  <button
-                    className="tool"
-                    onClick={() => viewer.current?.pan(0, 0.15)}
-                  >
-                    Pan down
-                  </button>
-                </>
-              )}
-            </fieldset>
-            <p className="secondary">
-              On the movement: arrow keys orbit (pan in All parts), + / − zoom,
-              Home resets, Escape deselects. Use All parts to find and inspect
-              individual components.
-            </p>
+          <div className="about-copy settings-copy">
             <div className="quality-control">
               <label htmlFor="render-quality">Rendering quality</label>
               <Select
@@ -875,14 +866,106 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
+            <fieldset className="alternative-controls" disabled={!available}>
+              <legend>Camera controls</legend>
+              <div className="camera-pad">
+                {[
+                  {
+                    name: s.layout === 'spread' ? 'Pan up' : 'Tilt up',
+                    direction: 'up',
+                    Icon: ArrowUp,
+                    x: 0,
+                    y: -1,
+                  },
+                  {
+                    name: s.layout === 'spread' ? 'Pan left' : 'Orbit left',
+                    direction: 'left',
+                    Icon: ArrowLeft,
+                    x: -1,
+                    y: 0,
+                  },
+                  {
+                    name: s.layout === 'spread' ? 'Pan right' : 'Orbit right',
+                    direction: 'right',
+                    Icon: ArrowRight,
+                    x: 1,
+                    y: 0,
+                  },
+                  {
+                    name: s.layout === 'spread' ? 'Pan down' : 'Tilt down',
+                    direction: 'down',
+                    Icon: ArrowDown,
+                    x: 0,
+                    y: 1,
+                  },
+                ].map(({ name, direction, Icon, x, y }) => (
+                  <button
+                    key={direction}
+                    className={`tool camera-${direction}`}
+                    aria-label={name}
+                    title={name}
+                    onClick={() =>
+                      s.layout === 'spread'
+                        ? viewer.current?.pan(x * 0.15, y * 0.15)
+                        : viewer.current?.orbit(x * 0.25, y * 0.2)
+                    }
+                  >
+                    <Icon aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+              <div className="camera-zoom">
+                <button
+                  className="tool"
+                  aria-label="Zoom in"
+                  title="Zoom in"
+                  onClick={() => viewer.current?.zoom(0.8)}
+                >
+                  <Plus aria-hidden="true" />
+                </button>
+                <button
+                  className="tool"
+                  aria-label="Zoom out"
+                  title="Zoom out"
+                  onClick={() => viewer.current?.zoom(1.25)}
+                >
+                  <Minus aria-hidden="true" />
+                </button>
+              </div>
+            </fieldset>
+            <h3>Gestures and shortcuts</h3>
+            <p className="camera-mode">
+              {s.layout === 'spread'
+                ? 'All parts · pan'
+                : 'Assembled view · orbit'}
+              . Keyboard shortcuts work when the movement has focus.
+            </p>
+            <dl className="gesture-list">
+              <div>
+                <dt>{s.layout === 'spread' ? 'Pan' : 'Orbit'}</dt>
+                <dd>Drag or arrow keys</dd>
+              </div>
+              <div>
+                <dt>Zoom</dt>
+                <dd>Pinch, scroll or + / −</dd>
+              </div>
+              <div>
+                <dt>Select</dt>
+                <dd>Tap a part; tap empty space or Escape to deselect</dd>
+              </div>
+              <div>
+                <dt>Reset</dt>
+                <dd>Home or Reset view</dd>
+              </div>
+            </dl>
           </div>
         </SheetContent>
       </Sheet>
       <Sheet modal={false} open={details} onOpenChange={setDetails}>
         <SheetContent
-          side="bottom"
+          side="top"
           style={panelStyle}
-          className="explorer-panel about-sheet"
+          className="explorer-panel about-sheet mechanism-panel"
           id="component-details"
           showOverlay={false}
           scrollContent
@@ -894,42 +977,52 @@ export default function Home() {
         >
           <SheetHeader>
             <SheetTitle>{group?.technical}</SheetTitle>
-            <SheetDescription>{group?.caption}</SheetDescription>
+            <SheetDescription className="sr-only">
+              Mechanism information and components
+            </SheetDescription>
           </SheetHeader>
           <div className="about-copy">
             {group && (
               <>
+                <p>{group.caption}</p>
                 <ul className="detail-facts">
-                  {factsFor(group.id).map((f) => (
-                    <li key={f.text}>
-                      {f.text}{' '}
-                      <a href={f.url} target="_blank" rel="noreferrer">
-                        {f.attribution} <ExternalLink aria-hidden="true" />
-                      </a>
-                    </li>
+                  {mechanismFacts.map((fact) => (
+                    <li key={fact.text}>{fact.text}</li>
                   ))}
                 </ul>
-                <p className="secondary">
-                  Other mechanisms are hidden; connected parts stay dimmed. In
-                  Disassemble, Uncover moves this section’s covers aside. Disassemble
-                  section spaces its own components.
-                  {group.id === 'regulation' &&
-                    ' The balance bridge and its screws fade out to expose the spring. Lower Uncover to restore them.'}
-                </p>
+                <div
+                  className="watch-sources mechanism-sources"
+                  aria-label="Mechanism sources"
+                >
+                  <span>Sources</span>
+                  {mechanismSources.map((source) => (
+                    <a
+                      key={source.url}
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${source.attribution}, opens in a new tab`}
+                    >
+                      {source.attribution}
+                    </a>
+                  ))}
+                </div>
                 <h3>Components</h3>
                 <div className="catalog-index">
-                  {members.map((p) => (
-                    <button
-                      key={p.id}
-                      disabled={!available}
-                      onClick={() => selectPart(p.id)}
-                    >
-                      <span>
-                        {partLabel(p)}
-                        <small>{partIndex.get(p.id)?.context}</small>
-                      </span>{' '}
-                      <ChevronRight aria-hidden="true" />
-                    </button>
+                  {[...memberSections].map(([id, section]) => (
+                    <section key={id} aria-label={section.label}>
+                      <h4>{section.label}</h4>
+                      {section.parts.map((part) => (
+                        <button
+                          key={part.id}
+                          disabled={!available}
+                          onClick={() => selectPart(part.id)}
+                        >
+                          <span>{partLabel(part)}</span>
+                          <ChevronRight aria-hidden="true" />
+                        </button>
+                      ))}
+                    </section>
                   ))}
                 </div>
               </>
@@ -1037,24 +1130,6 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <nav className="header-actions" aria-label="Information and settings">
-        <InformationPanel
-          open={about}
-          restoreFocus={!options}
-          onOpenChange={(open) => {
-            if (open) closePanels();
-            setAbout(open);
-          }}
-        />
-        <button
-          className="text-button settings-trigger"
-          aria-expanded={options}
-          aria-controls="viewer-settings"
-          onClick={() => openPanel(setOptions, !options)}
-        >
-          Settings
-        </button>
-      </nav>
 
       <pre id="viewer-diagnostics" hidden>
         {JSON.stringify({ ...s, parts: undefined })}

@@ -1148,3 +1148,264 @@ canvas:focus-visible {
 .case-material + .dial-note {
   margin-bottom: 12px;
 }
+
+/* Top review: content-sized header and contextual reading surfaces. */
+.explorer {
+  --edge-left: max(24px, env(safe-area-inset-left));
+  --edge-right: max(24px, env(safe-area-inset-right));
+}
+.topbar {
+  right: var(--edge-right);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0 24px;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+}
+.identity,
+.header-actions {
+  pointer-events: auto;
+}
+.identity {
+  padding: 0;
+}
+.identity h1 {
+  line-height: 1.4;
+  padding-top: 9px;
+}
+.maker-credit {
+  min-height: 44px;
+  margin-top: -9px;
+}
+.header-actions,
+.text-enlarged .header-actions {
+  position: static;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  max-width: 100%;
+}
+.header-actions .text-button {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+.focus-strip,
+.text-enlarged .focus-strip {
+  top: calc(var(--header-bottom, 88px) + 12px);
+  left: var(--edge-left);
+  max-width: min(420px, calc(100% - var(--edge-left) - var(--edge-right)));
+}
+.component-location {
+  margin: 0 8px 8px 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #aaa8a4;
+  overflow-wrap: anywhere;
+}
+.explorer-panel.information-panel[data-slot='sheet-content'],
+.explorer-panel.settings-panel[data-slot='sheet-content'],
+.text-enlarged .explorer-panel.settings-panel[data-slot='sheet-content'] {
+  top: calc(var(--header-bottom, 88px) + 12px);
+  right: max(24px, env(safe-area-inset-right));
+  max-height: calc(100dvh - var(--header-bottom, 88px) - 36px);
+}
+.explorer-panel.settings-panel[data-slot='sheet-content'] {
+  --popup-width: min(360px, calc(100vw - 32px));
+  background: #1b1b1b !important;
+}
+.explorer-panel.mechanism-panel[data-slot='sheet-content'] {
+  --popup-width: min(420px, calc(100vw - 32px));
+  top: calc(var(--context-bottom, 150px) + 8px);
+  left: max(24px, env(safe-area-inset-left));
+  bottom: auto;
+  transform: none;
+  max-height: calc(100dvh - var(--context-bottom, 150px) - 24px);
+  background: #1b1b1b !important;
+}
+.explorer-panel [data-slot='sheet-header'] {
+  padding: 20px 20px 12px !important;
+}
+.information-panel [data-slot='sheet-header'],
+.settings-panel [data-slot='sheet-header'],
+.mechanism-panel [data-slot='sheet-header'] {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #1b1b1b;
+}
+.explorer-panel [data-slot='sheet-title'] {
+  overflow-wrap: anywhere;
+}
+.explorer-panel.settings-panel [data-slot='sheet-title'] {
+  font: 500 1.125rem/1.4 var(--font-sans);
+}
+.explorer-panel [data-slot='sheet-close'],
+.explorer-panel.information-panel [data-slot='sheet-close'] {
+  top: 10px;
+  right: 10px;
+}
+.watch-reading {
+  padding: 8px 20px 20px;
+}
+.explorer-panel.mechanism-panel .about-copy {
+  font-size: 0.9375rem;
+}
+.explorer-panel .about-copy .catalog-index {
+  padding: 0;
+}
+.catalog-index h4 {
+  margin: 20px 0 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #aaa8a4;
+}
+.mechanism-panel .detail-facts li {
+  margin-bottom: 8px;
+}
+.mechanism-sources {
+  margin-top: 20px;
+  margin-bottom: 24px;
+  gap: 0 12px;
+}
+.control-instruction {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #aaa8a4;
+  margin: 8px 0 16px;
+}
+.settings-copy .quality-control {
+  margin: 4px 0 24px;
+  font-size: 0.875rem;
+}
+.settings-copy .alternative-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 0 0 24px;
+}
+.alternative-controls legend {
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+  color: #d6d4d0;
+}
+.camera-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 4px;
+}
+.camera-up {
+  grid-area: 1 / 2;
+}
+.camera-left {
+  grid-area: 2 / 1;
+}
+.camera-right {
+  grid-area: 2 / 3;
+}
+.camera-down {
+  grid-area: 3 / 2;
+}
+.camera-zoom {
+  display: grid;
+  gap: 8px;
+}
+.alternative-controls .tool {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+.explorer-panel .settings-copy h3 {
+  font: 500 0.875rem/1.5 var(--font-sans);
+}
+.settings-copy .camera-mode {
+  font-size: 0.875rem;
+  color: #aaa8a4;
+}
+.gesture-list {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.gesture-list > div {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr);
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid #ffffff14;
+}
+.gesture-list dt {
+  color: #eeece4;
+}
+.gesture-list dd {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .explorer {
+    --edge-left: max(16px, env(safe-area-inset-left));
+    --edge-right: max(16px, env(safe-area-inset-right));
+    --top: max(8px, env(safe-area-inset-top));
+  }
+  .topbar {
+    flex-direction: column;
+  }
+  .identity h1 {
+    padding-top: 0;
+  }
+  .header-actions {
+    width: 100%;
+  }
+  .header-actions .about-toggle {
+    justify-content: flex-start;
+    padding-left: 0;
+  }
+  .header-actions .settings-trigger {
+    padding-right: 0;
+  }
+  .explorer-panel.settings-panel[data-slot='sheet-content'],
+  .text-enlarged .explorer-panel.settings-panel[data-slot='sheet-content'] {
+    right: max(16px, env(safe-area-inset-right));
+    max-height: calc(100dvh - var(--header-bottom, 120px) - 28px);
+  }
+  .explorer-panel.mechanism-panel[data-slot='sheet-content'] {
+    left: max(16px, env(safe-area-inset-left));
+  }
+  .explorer-panel.information-panel[data-slot='sheet-content'],
+  .text-enlarged .explorer-panel.information-panel[data-slot='sheet-content'] {
+    top: max(12px, env(safe-area-inset-top));
+    right: 12px;
+    max-height: none;
+  }
+  .watch-reading {
+    padding: 8px 20px 20px;
+  }
+  .text-enlarged .gesture-list > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
+@media (max-width: 1000px) {
+  .text-enlarged .topbar {
+    flex-direction: column;
+  }
+  .text-enlarged .header-actions {
+    width: 100%;
+    flex-shrink: 1;
+  }
+}
+.focus-strip {
+  width: max-content;
+}
+.focus-title {
+  flex-wrap: nowrap;
+}
+.focus-title h2 {
+  flex: 1 1 auto;
+}
+.focus-actions {
+  flex-shrink: 0;
+}

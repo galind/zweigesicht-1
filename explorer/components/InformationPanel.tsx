@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -18,7 +18,9 @@ export function InformationPanel({
   open,
   onOpenChange,
   restoreFocus = true,
+  style,
 }: {
+  style?: CSSProperties;
   open: boolean;
   restoreFocus?: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,6 +47,7 @@ export function InformationPanel({
       </button>
       <Sheet modal={mobile} open={open} onOpenChange={onOpenChange}>
         <SheetContent
+          style={style}
           id="watch-information"
           className="explorer-panel information-panel"
           showOverlay={mobile}
