@@ -4,7 +4,7 @@
       "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_28",
       "material": "enamel-blue",
       "scope": "fitted-dials",
-      "sourceInterpretation": "Original d21 remains explicitly red in the raw catalog. Blue fitted enamel follows maker dial-II prose and REF-MAKER-01.",
+      "sourceInterpretation": "Raw d21 retains its existing red catalog appearance; the later fresh XCAF audit reports blue body colors despite its red source name. Fitted translucent blue vitreous enamel follows maker dial-II prose; current decisions are in material-review.json.",
       "depthBiasReason": "Source carrier d14 and enamel d21 share outward Z=-5.7 mm and overlap by 3.477922 mm3. Use fitted-instance material depth bias, preserving all geometry and transforms.",
       "sourceAssignment": {
         "color": 7086129,
@@ -15,12 +15,16 @@
         "assignment": "source-definition"
       },
       "presentation": {
-        "color": "#062e78",
+        "color": 935866,
+        "metalness": 0,
+        "roughness": 0.065,
         "transmission": 0.58,
         "ior": 1.53,
-        "thicknessMm": 0.35,
-        "attenuationColor": "#063b9a",
-        "attenuationDistanceMm": 0.65,
+        "thickness": 0.35,
+        "attenuationColor": 408474,
+        "attenuationDistance": 0.65,
+        "clearcoat": 1,
+        "clearcoatRoughness": 0.035,
         "polygonOffset": {
           "factor": -1,
           "units": -1
@@ -30,12 +34,45 @@
     }
   ],
   "schemaVersion": 1,
-  "date": "2026-09-10",
+  "date": "2026-09-22",
+  "materialReview": "assets/authored/material-review.json",
+  "historicalAudit": {
+    "path": "docs/appearance/cad-finishing-audit.json",
+    "meaning": "Historical source/reference investigation and browser-review snapshot. Runtime values, approval status and correction locks in this snapshot are not the current material specification. Its source geometry evidence remains available; current assignments are generated in docs/appearance/ledger.json.",
+    "supersededClaims": [
+      {
+        "id": "USER-STEEL-2026-09-10",
+        "scope": [
+          "d_0_1_1_155"
+        ],
+        "current": "Shock cylinder is ruby. The steel pinion/hub decisions in the same historical lock remain valid."
+      },
+      {
+        "id": "USER-ECCENTRIC",
+        "scope": [
+          "d_0_1_1_111"
+        ],
+        "current": "Gold weights now independent of balance rim; explicitly approved 2026-09-22."
+      },
+      {
+        "id": "USER-RUBY-HUE",
+        "scope": "ruby family",
+        "current": "Slightly pinker magenta ruby requested 2026-09-22; optical behavior retained."
+      },
+      {
+        "id": "fitted enamel",
+        "scope": [
+          "d_0_1_1_21"
+        ],
+        "current": "Translucent vitreous enamel restored 2026-09-22. Raw catalog keeps its existing red appearance. Historical source name says red, but the later fresh XCAF audit reports blue body colors; neither source color establishes composition."
+      }
+    ]
+  },
   "baseline": "00ae9d3f3e441c1a7d2559e5b500b99ac4f5567b",
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "runtimeAnnotations": {
-    "file": "/models/finish-surfaces-afd3394797bd.bin",
-    "sha256": "afd3394797bde7102750e86c5ceb2f06ec7a329c1a1549789e004cf25be064e0",
+    "file": "/models/finish-surfaces-bd9958b41c29.bin",
+    "sha256": "bd9958b41c2916f67c4689e5285cb94a7079e89b813e1b9afee05956faa0ab70",
     "roles": {
       "0": "normal-based conservative surface",
       "1": "source main plane",
@@ -51,8 +88,8 @@
       "11": "user-approved recessed enamel",
       "12": "user-approved bridge screw mounting pad frosting"
     },
-    "materialSourceSha256": "b2cdf3711e32a8e65428d092f84b5d2b5318835ef4bb72d116b53bec2e4510cd",
-    "packagerSourceSha256": "4e42d1006371a514e26c33f051f0f968aa589b2a728dce21e5cd1b5f0193ac78"
+    "materialSourceSha256": "a7484b53b6cfc65961e893194f4816830d41ce748d8e098e8c1a1cdbb4f28fb8",
+    "packagerSourceSha256": "e81226b8dbe710f0b4176077c699ddcf12acc0ffb7c823551d981004aac4426f"
   },
   "coverage": {
     "leafDefinitions": 202,
@@ -60,12 +97,12 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 89,
-      "inferred": 264,
+      "verified": 92,
+      "inferred": 261,
       "unresolved": 12
     },
-    "changedFamilyInstances": 102,
-    "annotatedDefinitions": 58
+    "changedFamilyInstances": 107,
+    "annotatedDefinitions": 59
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
   "definitions": [
@@ -418,8 +455,8 @@
       "name": "ZB Ring 18 nur Emaille rot",
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Source-named red enamel variant",
-      "surfaceReview": "Red glossy dielectric appearance; optional red CAD variant is not silently recolored to the photographed blue production dial. Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.",
+      "intendedMaterial": "Raw catalog red enamel appearance",
+      "surfaceReview": "Red glossy raw-catalog rendering retained; the fitted d21 presentation is separately overridden. The source name and later XCAF body-color evidence disagree. Fitted d21 uses translucent blue vitreous enamel. Raw catalog red presentation is retained. The historical name says red, but the later fresh XCAF audit reports blue d21 body colors; the source name does not establish color or composition.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 7086129,
@@ -1070,6 +1107,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Solid-silver dial carrier appearance",
+      "materialReview": {
+        "physicalMaterial": "Solid silver dial-II carrier",
+        "surfaceFinish": "Retained satin finish",
+        "renderingApproximation": "Separate silver-colored metallic carrier; optical response unmeasured",
+        "evidence": "maker"
+      },
       "surfaceReview": "Four-segment metal carrier; enamel insert is separate d21. Prior whole-blue enamel was unsupported. Fine circular satin on the visible carrier field; source-dark markings remain separate. Numerical response authored.",
       "evidence": "Maker dial-II material description; source d14 pale metal",
       "assignment": {
@@ -1902,8 +1945,14 @@
       "name": "ZB Ring 18 Emaille rot 4segmentig",
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Source-named red enamel variant",
-      "surfaceReview": "Red glossy dielectric appearance; optional red CAD variant is not silently recolored to the photographed blue production dial. Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.",
+      "intendedMaterial": "Raw catalog red enamel appearance",
+      "materialReview": {
+        "physicalMaterial": "Blue vitreous grand-feu enamel in fitted dial II",
+        "surfaceFinish": "Glossy, translucent",
+        "renderingApproximation": "FITTED_BLUE_ENAMEL shared runtime values; approximate screen-space transmission. Raw catalog keeps its existing red presentation despite the fresh XCAF blue-body evidence. No geometry changes.",
+        "evidence": "maker; scoped fitted-display approval 2026-09-22"
+      },
+      "surfaceReview": "Red glossy raw-catalog rendering retained; the fitted d21 presentation is separately overridden. The source name and later XCAF body-color evidence disagree. Fitted d21 uses translucent blue vitreous enamel. Raw catalog red presentation is retained. The historical name says red, but the later fresh XCAF audit reports blue d21 body colors; the source name does not establish color or composition.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
         "color": 7086129,
@@ -2163,15 +2212,15 @@
       "name": "ml01 5min Index",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -13542,7 +13591,12 @@
         "missingFaces": 0,
         "degenerateTriangles": 0
       },
-      "annotation": null
+      "annotation": {
+        "byteOffset": 2225712,
+        "vertexCount": 1168,
+        "sourceSidecarSha256": "7ca863cb162d2218d8e7297fa193414f79ede00a66fa1a60963d1777bbc3f640",
+        "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_30.json"
+      }
     },
     {
       "id": "d_0_1_1_31",
@@ -13781,7 +13835,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 2225712,
+        "byteOffset": 2244400,
         "vertexCount": 1350,
         "sourceSidecarSha256": "e824fd968ff0afb54f975e2fbf2b372c4e3e48a9f6786f6286f55b6b7809abc4",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_34.json"
@@ -13896,15 +13950,15 @@
       "name": "ml Logo",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -14126,7 +14180,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 2247312,
+        "byteOffset": 2266000,
         "vertexCount": 1390,
         "sourceSidecarSha256": "953d8c9ff351f85291b0604817f24d05de121b712862e4deda94b55a5a01f699",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_38.json"
@@ -14319,7 +14373,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 2269552,
+        "byteOffset": 2288240,
         "vertexCount": 1492,
         "sourceSidecarSha256": "6353760de3555269ff5fd2aaefaa23b2d04129c5c37c9471a2cba05ee83ee8c4",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_41.json"
@@ -19425,7 +19479,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 2293424,
+        "byteOffset": 2312112,
         "vertexCount": 25144,
         "sourceSidecarSha256": "15efcd7b067ce4d4252d5a40b30b408f0321fdf524776a2afa89633620c7eca7",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_85.json"
@@ -19505,7 +19559,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 2695728,
+        "byteOffset": 2714416,
         "vertexCount": 1364,
         "sourceSidecarSha256": "1f005aba579cf4fca4240fbd1246e4fb8edcb8990b1e5972965e0da8e022a265",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_86.json"
@@ -20598,7 +20652,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 2717552,
+        "byteOffset": 2736240,
         "vertexCount": 25136,
         "sourceSidecarSha256": "bdc1f402a017d15541615cc2493436a744f9b235b756ad8de1078e50cec541f1",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_90.json"
@@ -20678,7 +20732,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3119728,
+        "byteOffset": 3138416,
         "vertexCount": 1364,
         "sourceSidecarSha256": "044a8458b15f3e3b035b1adb5a2bfc95c862c769581e11d69dba7fe0d5b2f7db",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_91.json"
@@ -20868,15 +20922,21 @@
       "name": "ml01 Minutenrad z64 m0,13",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -21396,17 +21456,23 @@
     {
       "id": "d_0_1_1_96",
       "name": "ml01 ۆHMinRad z26 m0,15",
-      "status": "inferred",
-      "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -22120,7 +22186,7 @@
         "degenerateTriangles": 123
       },
       "annotation": {
-        "byteOffset": 3141552,
+        "byteOffset": 3160240,
         "vertexCount": 12580,
         "sourceSidecarSha256": "91ce2f9c5339e23a5fb09a636397a26222af0db35d944d5daee3fd20a80ddff5",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_99.json"
@@ -22199,10 +22265,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -22268,10 +22340,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -22487,7 +22565,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3342832,
+        "byteOffset": 3361520,
         "vertexCount": 2436,
         "sourceSidecarSha256": "e78ae255f89338a2e57547f7542d363ea59037611cbbbe7e5e3dae179b7899a4",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_105.json"
@@ -22499,10 +22577,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -22611,7 +22695,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 3381808,
+        "byteOffset": 3400496,
         "vertexCount": 587,
         "sourceSidecarSha256": "c0eb68972b333403fd03d0c6e2a05a3390e733e4cf423f279490cb23618c9625",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_107.json"
@@ -22623,6 +22707,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm balance rim; alloy unresolved",
+      "materialReview": {
+        "physicalMaterial": "Unresolved balance-rim alloy",
+        "surfaceFinish": "Retained smooth metal",
+        "renderingApproximation": "Existing warm balance profile retained; color does not establish alloy",
+        "evidence": "Existing evidence ledger; no steel conversion authorized"
+      },
       "surfaceReview": "Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
@@ -22835,7 +22925,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3391200,
+        "byteOffset": 3409888,
         "vertexCount": 6996,
         "sourceSidecarSha256": "8dce246a440235db4f99f9fa8a2a2bd48b75df9717de8d9355242cf6a15976c3",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_110.json"
@@ -22846,15 +22936,21 @@
       "name": "ml01 Unruhexcenter",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm balance rim; alloy unresolved",
-      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
-      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
+      "intendedMaterial": "Gold eccentric weights; karat unspecified",
+      "materialReview": {
+        "physicalMaterial": "Gold; karat unspecified",
+        "surfaceFinish": "Polished",
+        "renderingApproximation": "Dedicated gold assignment independent of rim; authored hue and roughness",
+        "evidence": "maker; user approval 2026-09-22"
+      },
+      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
+      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
       "assignment": {
-        "color": 13016451,
+        "color": 14202226,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "balance",
+        "family": "gold",
         "assignment": "source-definition"
       },
       "source": {
@@ -22921,7 +23017,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3503136,
+        "byteOffset": 3521824,
         "vertexCount": 711,
         "sourceSidecarSha256": "edf9eaab3d7d8be46667d3ca1d761b32f9e912abac77f174d51ca26dc78bd7e8",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_111.json"
@@ -22933,10 +23029,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -23069,7 +23171,7 @@
         "degenerateTriangles": 2
       },
       "annotation": {
-        "byteOffset": 3514512,
+        "byteOffset": 3533200,
         "vertexCount": 3461,
         "sourceSidecarSha256": "bfc101f69a99f9da90542430e592d65d5ae5db473a780c89132c289392ee124d",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_113.json"
@@ -23155,6 +23257,12 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
+      "materialReview": {
+        "physicalMaterial": "Unresolved hairspring-collet alloy",
+        "surfaceFinish": "Retained circular satin",
+        "renderingApproximation": "Legacy brass profile is a warm appearance only",
+        "evidence": "Existing source/reference audit"
+      },
       "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
@@ -23230,6 +23338,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Blue hairspring",
+      "materialReview": {
+        "physicalMaterial": "Blued metallic hairspring; exact alloy unspecified",
+        "surfaceFinish": "Retained heat-blued appearance",
+        "renderingApproximation": "Spring profile retained; supplier name does not establish Nivarox alloy composition",
+        "evidence": "maker"
+      },
       "surfaceReview": "Smooth thin blued-metal appearance; retained Breguet overcoil geometry.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
@@ -23568,7 +23682,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3569888,
+        "byteOffset": 3588576,
         "vertexCount": 1930,
         "sourceSidecarSha256": "3fbe428bffd3fe988f6eaae54326f9481278db9f5e1c17b879973f21a89607b7",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_120.json"
@@ -23586,7 +23700,7 @@
         "color": 14202226,
         "metalness": 1,
         "roughness": 0.31,
-        "pattern": 2,
+        "pattern": 0,
         "family": "satinGold",
         "assignment": "source-definition"
       },
@@ -23691,7 +23805,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 3600768,
+        "byteOffset": 3619456,
         "vertexCount": 716,
         "sourceSidecarSha256": "1bcca64e77d4c314cf8b8a90b3e0d0ee7b8ad2abba436530121f13e8622130a2",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_122.json"
@@ -23751,7 +23865,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 3612224,
+        "byteOffset": 3630912,
         "vertexCount": 682,
         "sourceSidecarSha256": "e5adb3804266e8ee5a690d41c180af505a358ae07b9da3d58811b1a28729b363",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_123.json"
@@ -24055,10 +24169,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -24655,7 +24775,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3623136,
+        "byteOffset": 3641824,
         "vertexCount": 12130,
         "sourceSidecarSha256": "13ee542733b426156baecdea8665b3d74f960175eb4579fa044a6b95b71d0fff",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_131.json"
@@ -24772,7 +24892,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3817216,
+        "byteOffset": 3835904,
         "vertexCount": 3432,
         "sourceSidecarSha256": "83627157e19e7b96a9a3f9754d57b3cbd95ee80334ddfff6cc04a3201e0f83e9",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_133.json"
@@ -24784,10 +24904,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -24963,7 +25089,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 3872128,
+        "byteOffset": 3890816,
         "vertexCount": 722,
         "sourceSidecarSha256": "92c3f70985214ef8e602b37881027a89676e735768e023ebefcd22a8bb8b9586",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_136.json"
@@ -25169,7 +25295,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 3883680,
+        "byteOffset": 3902368,
         "vertexCount": 722,
         "sourceSidecarSha256": "fcdeb66d27ecd5e93e3ea57a5b9fac8a957e4b3cf4e25e688521b1fbcac0c9a6",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_138.json"
@@ -25252,7 +25378,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 3895232,
+        "byteOffset": 3913920,
         "vertexCount": 734,
         "sourceSidecarSha256": "442942c8a8f438cb5af9f62096486904badc048e493983d69e7ee9b1e2218d4b",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_139.json"
@@ -25261,17 +25387,23 @@
     {
       "id": "d_0_1_1_141",
       "name": "ml01 Stundenrad1 z40 m0,17",
-      "status": "inferred",
-      "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -26047,7 +26179,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 3906976,
+        "byteOffset": 3925664,
         "vertexCount": 6080,
         "sourceSidecarSha256": "cd35720bd5596651fa5ab09dd87f68e9ab20154b8f3ecb428469b65473e2fbc4",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_147.json"
@@ -26583,10 +26715,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate. Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate. Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "User correction 2026-09-10 explicitly supersedes earlier steel instruction; USER-FINISH-2026-09-10-02",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -26639,7 +26777,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 4004256,
+        "byteOffset": 4022944,
         "vertexCount": 416,
         "sourceSidecarSha256": "00dcdb3737ef045dfe6ad48eab596ce340865306ef2f3af47c6b9220789d255f",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_155.json"
@@ -26833,7 +26971,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 4010912,
+        "byteOffset": 4029600,
         "vertexCount": 8359,
         "sourceSidecarSha256": "a6c6807992f480b3351c47ca5e916a8fab7bc7b5074f5cb141b4b506bbf568f8",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_156.json"
@@ -27289,7 +27427,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 4144656,
+        "byteOffset": 4163344,
         "vertexCount": 7018,
         "sourceSidecarSha256": "5ddabfe88b106e34df300031079753d98f7b714f09d7de9f88a0dbf4bb538551",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_159.json"
@@ -27734,7 +27872,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 4256944,
+        "byteOffset": 4275632,
         "vertexCount": 1478,
         "sourceSidecarSha256": "16d1820eb7b5c80d08b0eaa07c7e006b9048d1a8e95fdef8b4743d36238ec2f1",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_165.json"
@@ -27817,7 +27955,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4280592,
+        "byteOffset": 4299280,
         "vertexCount": 689,
         "sourceSidecarSha256": "12588db03f1d9360f6e66aea264f38b36fd8f526289e7037041c262e28383733",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_166.json"
@@ -28072,7 +28210,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4291616,
+        "byteOffset": 4310304,
         "vertexCount": 681,
         "sourceSidecarSha256": "431018c9d33546ca8d5b1657db21b9a76ebc8748c66bdd6c43dfeaf4f74352ea",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_168.json"
@@ -28136,7 +28274,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4302512,
+        "byteOffset": 4321200,
         "vertexCount": 718,
         "sourceSidecarSha256": "5d6271f3071d43a2b0bc2783bc5887289f6a603b89364b855f65aa6e7845d5e9",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_169.json"
@@ -28219,7 +28357,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4314000,
+        "byteOffset": 4332688,
         "vertexCount": 718,
         "sourceSidecarSha256": "7238bd111a5d5c113ca57f7e94ff53bc8cc6f65c2f8334f9cebabd26729341f5",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_170.json"
@@ -29063,7 +29201,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4325488,
+        "byteOffset": 4344176,
         "vertexCount": 1383,
         "sourceSidecarSha256": "da43d81bdcc238b194e702828ddb0ea397e8011861807044f152a02e80adf6dd",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_180.json"
@@ -29123,7 +29261,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4347616,
+        "byteOffset": 4366304,
         "vertexCount": 572,
         "sourceSidecarSha256": "06f1f0d0c8153b79ff109b2aeac6ea60b3a671cd01288a93ed8c7326be03b694",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_181.json"
@@ -29392,15 +29530,21 @@
       "name": "ml01 Stundenrad2 z32 m0,12",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -29808,7 +29952,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4356768,
+        "byteOffset": 4375456,
         "vertexCount": 722,
         "sourceSidecarSha256": "7af777b4e4417585971a7987405dce537b4ce9735fc00feada0316354ce3a75f",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_189.json"
@@ -29977,7 +30121,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4368320,
+        "byteOffset": 4387008,
         "vertexCount": 726,
         "sourceSidecarSha256": "d6056119019265136d4811c7645131850243958ba6e9eae882dd4f70387d6c54",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_191.json"
@@ -30062,7 +30206,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4379936,
+        "byteOffset": 4398624,
         "vertexCount": 930,
         "sourceSidecarSha256": "b4c8932c1fa0c09f4430b74bea925253bf0f13522e102bfdc28d3515004763f3",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_192.json"
@@ -30199,6 +30343,12 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Warm pink-gilt plate appearance",
+      "materialReview": {
+        "physicalMaterial": "Rose-gold plating; substrate unknown",
+        "surfaceFinish": "Retained frosting",
+        "renderingApproximation": "Pink-gilt metallic appearance; no brass-substrate claim",
+        "evidence": "maker"
+      },
       "surfaceReview": "Coarser irregular cellular frosting with fine detail and restrained color contrast; existing inscription regions darkened; actual engraving geometry retained. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
@@ -30817,7 +30967,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 4394816,
+        "byteOffset": 4413504,
         "vertexCount": 56250,
         "sourceSidecarSha256": "adedc5bc3205b281572ce1e86711c5e7c993ef4bb89a4d1526cf1eb854b4ee40",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_195.json"
@@ -30829,10 +30979,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -30896,10 +31052,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -30963,10 +31125,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31030,10 +31198,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31230,7 +31404,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 5294816,
+        "byteOffset": 5313504,
         "vertexCount": 796,
         "sourceSidecarSha256": "2e26e8f5924cc8e8f17cb68c9cb8d95d8cecd55ba151b35fbac276e93f19dda5",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_201.json"
@@ -31319,10 +31493,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31387,10 +31567,16 @@
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31761,10 +31947,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -31825,17 +32017,23 @@
     {
       "id": "d_0_1_1_210",
       "name": "ml01 Wechselrad1 z36 m0,177",
-      "status": "inferred",
-      "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -32279,15 +32477,21 @@
       "name": "ml01 Wechselrad2 z36 m0,177",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -32648,15 +32852,21 @@
       "name": "ml01 Wechselrad3 z 24 m0,15",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -33099,7 +33309,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 5307552,
+        "byteOffset": 5326240,
         "vertexCount": 3210,
         "sourceSidecarSha256": "b9a6fca365d511627bad269ddddbad0d985cb4d2bc9e718730092d5000399917",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_219.json"
@@ -33339,7 +33549,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 5358912,
+        "byteOffset": 5377600,
         "vertexCount": 4569,
         "sourceSidecarSha256": "9f26615ef8002ae4aaa80d60ee6c9bfc3525aa168b806be0bdd57acd292b71f7",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_222.json"
@@ -33514,7 +33724,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 5432016,
+        "byteOffset": 5450704,
         "vertexCount": 679,
         "sourceSidecarSha256": "45b39046f86cda00f53f3f4af23d638cb991ede7c608604f0fd75764213550e7",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_226.json"
@@ -33749,7 +33959,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 5442880,
+        "byteOffset": 5461568,
         "vertexCount": 9106,
         "sourceSidecarSha256": "76a75837bf34e908ae993ad9239e2c4a7db4011de499ae71a46bfc6186731b83",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_228.json"
@@ -33894,7 +34104,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 5588576,
+        "byteOffset": 5607264,
         "vertexCount": 3786,
         "sourceSidecarSha256": "b46bbe1e926a4d424987e44baa94e23efb447817d2402a2a752cd16f2815d74e",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_230.json"
@@ -33906,10 +34116,16 @@
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
       "intendedMaterial": "Ruby-bearing dielectric",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "materialReview": {
+        "physicalMaterial": "Ruby; synthetic origin not independently established here",
+        "surfaceFinish": "Polished transparent jewel",
+        "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+        "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+      },
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
       "assignment": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -33973,6 +34189,12 @@
       "status": "unresolved",
       "confidence": "low/conflicting",
       "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
+      "materialReview": {
+        "physicalMaterial": "Unresolved escape-wheel alloy",
+        "surfaceFinish": "Retained circular satin",
+        "renderingApproximation": "Legacy brass profile is a warm appearance only; not a verified brass identity",
+        "evidence": "Existing source/reference audit; no steel conversion authorized"
+      },
       "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
@@ -34639,15 +34861,21 @@
       "name": "ml01 Kleinbodenrad z75 m0,1159",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -35306,7 +35534,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 5649152,
+        "byteOffset": 5667840,
         "vertexCount": 7224,
         "sourceSidecarSha256": "e5f583cf460302bfed588d747c8c248983aa34082a356d33911a98fd8adaefca",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_240.json"
@@ -35454,15 +35682,21 @@
       "name": "ml01 Sekundenrad z81 m0,102",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "materialReview": {
+        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "surfaceFinish": "Retained circular brushing and existing edge response",
+        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+      },
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
       "assignment": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
       "source": {
@@ -37166,7 +37400,7 @@
         "degenerateTriangles": 45
       },
       "annotation": {
-        "byteOffset": 5764736,
+        "byteOffset": 5783424,
         "vertexCount": 53221,
         "sourceSidecarSha256": "bee210ec348cfd0fa05971b3ed5821c546b334e636edadbff5d6e9897cd87178",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_249.json"
@@ -37258,7 +37492,7 @@
         "degenerateTriangles": 0
       },
       "annotation": {
-        "byteOffset": 6616272,
+        "byteOffset": 6634960,
         "vertexCount": 2876,
         "sourceSidecarSha256": "bbc1cb185dd99dc2cb70c1fd2e5633fd7515dc1ff1f581986cdd50bef3bb5a41",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_251.json"
@@ -37436,7 +37670,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 6662288,
+        "byteOffset": 6680976,
         "vertexCount": 692,
         "sourceSidecarSha256": "7b7076168dc9c98c45721fca5b5f3a536a6d7c7faab48afeab77a5d9b5eb4dfd",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_253.json"
@@ -37627,7 +37861,7 @@
         "degenerateTriangles": 1
       },
       "annotation": {
-        "byteOffset": 6673360,
+        "byteOffset": 6692048,
         "vertexCount": 932,
         "sourceSidecarSha256": "38865be3204ead9b0b8dbfd4d1c7599a785ad4dd8b6c5135b06318e8548ed9eb",
         "regionEvidence": "artifacts/finishing-cad/sidecars/d_0_1_1_255.json"
@@ -37825,9 +38059,9 @@
       },
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Source-named red enamel variant",
+      "intendedMaterial": "Raw catalog red enamel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Red glossy dielectric appearance; optional red CAD variant is not silently recolored to the photographed blue production dial. Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.",
+      "surfaceReview": "Red glossy raw-catalog rendering retained; the fitted d21 presentation is separately overridden. The source name and later XCAF body-color evidence disagree. Fitted d21 uses translucent blue vitreous enamel. Raw catalog red presentation is retained. The historical name says red, but the later fresh XCAF audit reports blue d21 body colors; the source name does not establish color or composition.",
       "before": {
         "color": 7086129,
         "metalness": 0.12,
@@ -40015,9 +40249,9 @@
       },
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Source-named red enamel variant",
+      "intendedMaterial": "Raw catalog red enamel appearance",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Red glossy dielectric appearance; optional red CAD variant is not silently recolored to the photographed blue production dial. Maker current target is blue enamel; red is retained as explicitly named CAD catalog alternative. Customer-variant selection unresolved.",
+      "surfaceReview": "Red glossy raw-catalog rendering retained; the fitted d21 presentation is separately overridden. The source name and later XCAF body-color evidence disagree. Fitted d21 uses translucent blue vitreous enamel. Raw catalog red presentation is retained. The historical name says red, but the later fresh XCAF audit reports blue d21 body colors; the source name does not establish color or composition.",
       "before": {
         "color": 7086129,
         "metalness": 0.12,
@@ -40234,9 +40468,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -40246,14 +40480,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -40526,9 +40760,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -40538,14 +40772,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -40599,9 +40833,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -40611,14 +40845,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -40766,7 +41000,7 @@
       },
       "mismatch": "enamel → blue",
       "disposition": "Targeted correction",
-      "annotation": false
+      "annotation": true
     },
     {
       "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_11",
@@ -40818,9 +41052,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -40830,14 +41064,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -40891,9 +41125,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -40903,14 +41137,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -40964,9 +41198,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -40976,14 +41210,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41110,9 +41344,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41122,14 +41356,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41183,9 +41417,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41195,14 +41429,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41256,9 +41490,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41268,14 +41502,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41402,9 +41636,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41414,14 +41648,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41475,9 +41709,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41487,14 +41721,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41548,9 +41782,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41560,14 +41794,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -41767,9 +42001,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored jewel setting",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -41779,14 +42013,14 @@
         "assignment": "catalog-fallback"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "gold",
+        "family": "roseGold",
         "assignment": "source-definition"
       },
-      "mismatch": "steel → gold",
+      "mismatch": "steel → roseGold",
       "disposition": "Targeted correction",
       "annotation": false
     },
@@ -48702,9 +48936,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -48714,15 +48948,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -48846,11 +49080,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -48860,15 +49094,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -49142,7 +49376,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -49152,7 +49386,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49288,7 +49522,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -49298,7 +49532,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49361,7 +49595,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -49371,7 +49605,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49653,7 +49887,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -49663,7 +49897,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -49943,9 +50177,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm balance rim; alloy unresolved",
-      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
-      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
+      "intendedMaterial": "Gold eccentric weights; karat unspecified",
+      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
+      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -49955,15 +50189,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 13016451,
+        "color": 14202226,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "balance",
+        "family": "gold",
         "assignment": "source-definition"
       },
-      "mismatch": "gold → balance",
-      "disposition": "Targeted correction",
+      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
+      "disposition": "Retained/corrected with exact source-region annotations",
       "annotation": true
     },
     {
@@ -50016,9 +50250,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm balance rim; alloy unresolved",
-      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
-      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
+      "intendedMaterial": "Gold eccentric weights; karat unspecified",
+      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
+      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50028,15 +50262,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 13016451,
+        "color": 14202226,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "balance",
+        "family": "gold",
         "assignment": "source-definition"
       },
-      "mismatch": "gold → balance",
-      "disposition": "Targeted correction",
+      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
+      "disposition": "Retained/corrected with exact source-region annotations",
       "annotation": true
     },
     {
@@ -50089,9 +50323,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm balance rim; alloy unresolved",
-      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
-      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
+      "intendedMaterial": "Gold eccentric weights; karat unspecified",
+      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
+      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50101,15 +50335,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 13016451,
+        "color": 14202226,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "balance",
+        "family": "gold",
         "assignment": "source-definition"
       },
-      "mismatch": "gold → balance",
-      "disposition": "Targeted correction",
+      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
+      "disposition": "Retained/corrected with exact source-region annotations",
       "annotation": true
     },
     {
@@ -50162,9 +50396,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm balance rim; alloy unresolved",
-      "evidence": "User explicit timing-eccentric color correction; source ml01 Unruhexcenter identity",
-      "surfaceReview": "All timing eccentrics use the same base color as the balance rim d110, retaining their prior polished roughness .16. Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.",
+      "intendedMaterial": "Gold eccentric weights; karat unspecified",
+      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
+      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50174,15 +50408,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 13016451,
+        "color": 14202226,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
-        "family": "balance",
+        "family": "gold",
         "assignment": "source-definition"
       },
-      "mismatch": "gold → balance",
-      "disposition": "Targeted correction",
+      "mismatch": "Original source face regions require separate annotation; reviewed annotation now present",
+      "disposition": "Retained/corrected with exact source-region annotations",
       "annotation": true
     },
     {
@@ -50237,7 +50471,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -50247,7 +50481,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -50821,7 +51055,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -50831,7 +51065,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -50907,7 +51141,7 @@
         "color": 14202226,
         "metalness": 1,
         "roughness": 0.31,
-        "pattern": 2,
+        "pattern": 0,
         "family": "satinGold",
         "assignment": "source-definition"
       },
@@ -51332,7 +51566,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -51342,7 +51576,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -51405,7 +51639,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -51415,7 +51649,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -51843,7 +52077,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -51853,7 +52087,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -52715,11 +52949,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52729,15 +52963,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -53814,7 +54048,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "User correction 2026-09-10 explicitly supersedes earlier steel instruction; USER-FINISH-2026-09-10-02",
-      "surfaceReview": "The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate. Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "The cylindrical shock-indicator mass uses the shared magenta-ruby dielectric jewel profile; gauge inlays remain separate. Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13793182,
         "metalness": 0,
@@ -53824,7 +54058,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -57024,9 +57258,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -57036,15 +57270,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -58194,7 +58428,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58204,7 +58438,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58267,7 +58501,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58277,7 +58511,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58340,7 +58574,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58350,7 +58584,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58413,7 +58647,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58423,7 +58657,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58486,7 +58720,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58496,7 +58730,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58559,7 +58793,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58569,7 +58803,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -58778,7 +59012,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -58788,7 +59022,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59070,7 +59304,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -59080,7 +59314,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59143,7 +59377,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -59153,7 +59387,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59362,7 +59596,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -59372,7 +59606,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -59431,11 +59665,11 @@
           ]
         ]
       },
-      "status": "inferred",
-      "confidence": "medium/low",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59445,15 +59679,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -59579,9 +59813,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59591,15 +59825,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -59725,9 +59959,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59737,15 +59971,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -59946,7 +60180,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -59956,7 +60190,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -60311,7 +60545,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -60321,7 +60555,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -60384,7 +60618,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -60394,7 +60628,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61249,7 +61483,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -61259,7 +61493,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61322,7 +61556,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -61332,7 +61566,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61541,7 +61775,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -61551,7 +61785,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61614,7 +61848,7 @@
       "confidence": "medium/low",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -61624,7 +61858,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -61906,7 +62140,7 @@
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
       "intendedMaterial": "Ruby-bearing dielectric",
       "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Deep red dielectric with IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Interior optics approximate; no measured transmission.",
+      "surfaceReview": "Pink-magenta ruby appearance approved 22 September 2026; IOR1.76, transmission .72, clearcoat and authored .55mm optical thickness. Color and absorption are rendering approximations; no measured transmission or synthetic-origin certification.",
       "before": {
         "color": 13848460,
         "metalness": 0,
@@ -61916,7 +62150,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 12004200,
+        "color": 12861824,
         "metalness": 0,
         "roughness": 0.055,
         "pattern": 0,
@@ -62269,9 +62503,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62281,15 +62515,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -62634,9 +62868,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations",
-      "surfaceReview": "Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62646,15 +62880,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 14005378,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "hardGold",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained with confidence stated",
+      "mismatch": "brass → hardGold",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {

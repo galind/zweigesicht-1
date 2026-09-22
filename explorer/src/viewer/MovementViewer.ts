@@ -55,6 +55,7 @@ import {
 import { makeSpread, type SpreadPlacement } from '../experience/spread';
 import {
   createMaterial,
+  FITTED_BLUE_ENAMEL,
   finishFor,
   setFinishEnabled,
   setEmphasis,
@@ -1796,18 +1797,19 @@ export class MovementViewer {
             !this.fitted.has(selection) &&
             ![...this.fittedCase].some((id) => belongs(id, selection))
           );
-        // Dedicated electric cobalt lacquer, independent of heat-blued steel.
-        enamel.color.setHex(fitted ? 0x0e47ba : finish.color);
-        enamel.metalness = fitted ? 0.15 : finish.metalness;
-        enamel.roughness = fitted ? 0.18 : finish.roughness;
-        enamel.transmission = 0;
+        // Translucent vitreous enamel; the raw catalog presentation stays separate.
+        const optical = FITTED_BLUE_ENAMEL;
+        enamel.color.setHex(fitted ? optical.color : finish.color);
+        enamel.metalness = fitted ? optical.metalness : finish.metalness;
+        enamel.roughness = fitted ? optical.roughness : finish.roughness;
+        enamel.transmission = fitted ? optical.transmission : 0;
         enamel.userData.finishTransmission = enamel.transmission;
-        enamel.ior = 1.53;
-        enamel.thickness = 0.35;
-        enamel.attenuationColor.setHex(0x063b9a);
-        enamel.attenuationDistance = 0.65;
-        enamel.clearcoat = fitted ? 1 : 0;
-        enamel.clearcoatRoughness = 0.035;
+        enamel.ior = optical.ior;
+        enamel.thickness = optical.thickness;
+        enamel.attenuationColor.setHex(optical.attenuationColor);
+        enamel.attenuationDistance = optical.attenuationDistance;
+        enamel.clearcoat = fitted ? optical.clearcoat : 0;
+        enamel.clearcoatRoughness = optical.clearcoatRoughness;
         // The supplied carrier and enamel share coplanar outward faces.
         // Depth bias resolves their source overlap without moving either mesh.
         enamel.polygonOffset = fitted;

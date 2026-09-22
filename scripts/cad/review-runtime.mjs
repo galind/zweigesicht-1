@@ -257,6 +257,45 @@ const finishShaderFor=(n)=>{
  const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
  p.material.onBeforeCompile(shader,{});return {p,shader};
 };
+// Material review: target wheel leaves only, with independent gold eccentrics.
+for(const n of [94,96,141,187,210,213,216,238,243]){
+ const {p,shader}=finishShaderFor(n);
+ assert.equal(p.material.name,'hardGold');
+ assert.equal(shader.uniforms.finishPattern.value,2);
+ assert.equal(p.material.anisotropy,.58,'Gold wheels retain circular brushing');
+}
+for(const n of [137,142,183,188,235])assert.equal(finishShaderFor(n).p.material.name,'steel');
+for(const n of [115,233])assert.equal(finishShaderFor(n).p.material.name,'brass','Unresolved collet/escape-wheel appearances retained');
+const eccentric=finishShaderFor(111).p.material,rim=finishShaderFor(110).p.material;
+assert.equal(eccentric.name,'gold');assert.equal(rim.name,'balance');
+assert.equal(eccentric.roughness,.16);assert.ok(!eccentric.color.equals(rim.color));
+assert.equal(rim.color.getHex(),0xc69d83,'No balance-rim recolor');
+assert.equal(rubyPart.material.color.getHex(),0xc44180);
+assert.equal(rubyPart.material.attenuationColor.getHex(),0xac2868);
+assert.equal(rubyPart.material.ior,1.76);assert.equal(rubyPart.material.roughness,.055);
+results.push({check:'nine gold wheel definitions retain brushing, four eccentrics separate from rim, steel hubs and uncertain alloys stay scoped; pinker ruby preserves optics',status:'pass'});
+{
+ const {DIALS}=load('explorer/src/experience/dials.ts');
+ const enamel=v.renderParts.get(DIALS.presentationOverrides[0].leafId).material;
+ const raw=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_4');
+ for(const visible of [true,false,true]){
+  v.state={...initialState,centralVisible:visible,smallVisible:visible};v.retarget();
+  if(visible){
+   assert.equal(enamel.metalness,0);assert.equal(enamel.transmission,.58);
+   assert.equal(enamel.roughness,.065);assert.equal(enamel.clearcoat,1);
+   setFinishEnabled(enamel,false);assert.equal(enamel.transmission,0);
+   setFinishEnabled(enamel,true);assert.equal(enamel.transmission,.58);
+  }
+ }
+ v.state={...initialState,part:raw.source.id};v.retarget();
+ assert.equal(enamel.transmission,0,'Raw catalog keeps its original opaque presentation');
+ assert.equal(enamel.color.getHex(),0x6c2031);
+ v.state={...initialState,centralVisible:true,smallVisible:true};v.retarget();
+ assert.equal(enamel.transmission,.58,'Leaving raw inspection restores fitted enamel');
+ assert.equal(enamel.color.getHex(),0x0e47ba);
+ v.state={...initialState};v.retarget();
+ results.push({check:'fitted enamel is translucent dielectric through hide/show and raw-catalog round trip, without recoloring raw variants',status:'pass'});
+}
 for(const id of [25,36]) {
  const a=finishShaderFor(id).p.material,b=finishShaderFor(100).p.material;
  assert.equal(a.name,'roseGold');assert.ok(a.color.equals(b.color));

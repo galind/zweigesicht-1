@@ -14,6 +14,8 @@ const profiles = {
   warmPlate: { color: 0xd4a58e, metalness: 1, roughness: 0.27, pattern: 1 },
   frosted: { color: 0xd2a48b, metalness: 1, roughness: 0.49, pattern: 3 },
   brass: { color: 0xd9aa7d, metalness: 1, roughness: 0.27, pattern: 2 },
+  // Maker-documented 14 ct hard-gold wheels; hue and brushing are authored.
+  hardGold: { color: 0xd5b482, metalness: 1, roughness: 0.27, pattern: 2 },
   barrel: { color: 0xd2a079, metalness: 1, roughness: 0.3, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
   gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
@@ -30,12 +32,26 @@ const profiles = {
   dialSilver: { color: 0xd5d8dc, metalness: 1, roughness: 0.25, pattern: 6 },
   blue: { color: 0x0b3768, metalness: 1, roughness: 0.13, pattern: 0 },
   spring: { color: 0x304f83, metalness: 1, roughness: 0.25, pattern: 0 },
-  ruby: { color: 0xb72b68, metalness: 0, roughness: 0.055, pattern: 0 },
+  ruby: { color: 0xc44180, metalness: 0, roughness: 0.055, pattern: 0 },
   leather: { color: 0x684330, metalness: 0, roughness: 0.78, pattern: 3 },
   rubber: { color: 0x17191c, metalness: 0, roughness: 0.7, pattern: 0 },
   enamel: { color: 0x062e78, metalness: 0, roughness: 0.065, pattern: 0 },
   sapphire: { color: 0xffffff, metalness: 0, roughness: 0.035, pattern: 0 },
   diamond: { color: 0xffffff, metalness: 0, roughness: 0.025, pattern: 0 },
+};
+// Fitted dial II: translucent vitreous enamel over the separate silver carrier.
+// Optical values are an appearance approximation, not measured enamel data.
+export const FITTED_BLUE_ENAMEL = {
+  color: 0x0e47ba,
+  metalness: 0,
+  roughness: 0.065,
+  transmission: 0.58,
+  ior: 1.53,
+  thickness: 0.35,
+  attenuationColor: 0x063b9a,
+  attenuationDistance: 0.65,
+  clearcoat: 1,
+  clearcoatRoughness: 0.035,
 };
 type Finish = keyof typeof profiles;
 // Shared straight-brush controls: updating a family affects all its parts.
@@ -70,11 +86,13 @@ for (const [family, ids] of Object.entries({
     159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188, 211, 214, 217,
     220, 234, 235, 237, 242, 252, 254,
   ],
-  brass: [94, 96, 115, 141, 187, 210, 213, 216, 233, 238, 243],
-  gold: [118, 163, 179, 200, 206],
+  // Retained warm appearances: collet and escape-wheel alloys are unresolved.
+  brass: [115, 233],
+  hardGold: [94, 96, 141, 187, 210, 213, 216, 238, 243],
+  gold: [111, 118, 163, 179, 200, 206],
   satinGold: [121],
   roseGold: [100, 203, 207, 224],
-  balance: [110, 111],
+  balance: [110],
   ruby: [
     101, 102, 106, 112, 128, 134, 155, 196, 197, 198, 199, 204, 205, 208, 231,
   ],
@@ -148,8 +166,6 @@ export function finishFor(
     else family = 'steel';
   }
   const finish = { ...profiles[family], family, assignment };
-  // Match the balance rim's color while retaining the eccentric's polish.
-  if (definitionId === 'd_0_1_1_111') finish.roughness = 0.16;
   if (family === 'leather' && /dunkelblau/i.test(name)) finish.color = 0x182a41;
   if (family === 'leather' && /schwarz/i.test(name)) finish.color = 0x191b20;
   if (family === 'enamel' && /rot/i.test(name)) finish.color = 0x6c2031;
@@ -304,15 +320,15 @@ export function createMaterial(
     material.ior = 1.76;
     material.transmission = 0.72;
     material.thickness = 0.55;
-    material.attenuationColor.setHex(0x9b174f);
+    material.attenuationColor.setHex(0xac2868);
     material.attenuationDistance = 0.7;
     material.clearcoat = 1;
     material.clearcoatRoughness = 0.035;
   }
   if (finish.family === 'enamel') {
     material.ior = 1.53;
-    // Raw catalog enamel retains its source-color inspection. The fitted blue
-    // inner ring receives the electric-blue lacquer target in retarget().
+    // Raw catalog enamel retains its existing red presentation. The fitted blue
+    // inner ring receives translucent blue vitreous enamel in retarget().
     material.transmission = 0;
     material.thickness = 0.35;
     material.attenuationColor.setHex(0x063b9a);

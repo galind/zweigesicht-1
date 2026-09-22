@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-22",
+  "scope": "User-approved changes: fitted enamel, nine gold wheel definitions, gold balance eccentrics, slightly pinker rubies, and material-record reconciliation. Bridge borders, bridge frosting and crown-wheel finish are retained.",
+  "components": [
+    {
+      "definitionIds": [
+        "d_0_1_1_94",
+        "d_0_1_1_96",
+        "d_0_1_1_141",
+        "d_0_1_1_187",
+        "d_0_1_1_210",
+        "d_0_1_1_213",
+        "d_0_1_1_216",
+        "d_0_1_1_238",
+        "d_0_1_1_243"
+      ],
+      "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+      "surfaceFinish": "Retained circular brushing and existing edge response",
+      "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
+      "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_111"
+      ],
+      "physicalMaterial": "Gold; karat unspecified",
+      "surfaceFinish": "Polished",
+      "renderingApproximation": "Dedicated gold assignment independent of rim; authored hue and roughness",
+      "evidence": "maker; user approval 2026-09-22"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_21"
+      ],
+      "physicalMaterial": "Blue vitreous grand-feu enamel in fitted dial II",
+      "surfaceFinish": "Glossy, translucent",
+      "renderingApproximation": "FITTED_BLUE_ENAMEL shared runtime values; approximate screen-space transmission. Raw catalog keeps its existing red presentation despite the fresh XCAF blue-body evidence. No geometry changes.",
+      "evidence": "maker; scoped fitted-display approval 2026-09-22"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_14"
+      ],
+      "physicalMaterial": "Solid silver dial-II carrier",
+      "surfaceFinish": "Retained satin finish",
+      "renderingApproximation": "Separate silver-colored metallic carrier; optical response unmeasured",
+      "evidence": "maker"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_195"
+      ],
+      "physicalMaterial": "Rose-gold plating; substrate unknown",
+      "surfaceFinish": "Retained frosting",
+      "renderingApproximation": "Pink-gilt metallic appearance; no brass-substrate claim",
+      "evidence": "maker"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_110"
+      ],
+      "physicalMaterial": "Unresolved balance-rim alloy",
+      "surfaceFinish": "Retained smooth metal",
+      "renderingApproximation": "Existing warm balance profile retained; color does not establish alloy",
+      "evidence": "Existing evidence ledger; no steel conversion authorized"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_233"
+      ],
+      "physicalMaterial": "Unresolved escape-wheel alloy",
+      "surfaceFinish": "Retained circular satin",
+      "renderingApproximation": "Legacy brass profile is a warm appearance only; not a verified brass identity",
+      "evidence": "Existing source/reference audit; no steel conversion authorized"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_115"
+      ],
+      "physicalMaterial": "Unresolved hairspring-collet alloy",
+      "surfaceFinish": "Retained circular satin",
+      "renderingApproximation": "Legacy brass profile is a warm appearance only",
+      "evidence": "Existing source/reference audit"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_116"
+      ],
+      "physicalMaterial": "Blued metallic hairspring; exact alloy unspecified",
+      "surfaceFinish": "Retained heat-blued appearance",
+      "renderingApproximation": "Spring profile retained; supplier name does not establish Nivarox alloy composition",
+      "evidence": "maker"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_101",
+        "d_0_1_1_102",
+        "d_0_1_1_106",
+        "d_0_1_1_112",
+        "d_0_1_1_128",
+        "d_0_1_1_134",
+        "d_0_1_1_155",
+        "d_0_1_1_196",
+        "d_0_1_1_197",
+        "d_0_1_1_198",
+        "d_0_1_1_199",
+        "d_0_1_1_204",
+        "d_0_1_1_205",
+        "d_0_1_1_208",
+        "d_0_1_1_231"
+      ],
+      "physicalMaterial": "Ruby; synthetic origin not independently established here",
+      "surfaceFinish": "Polished transparent jewel",
+      "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+      "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+    }
+  ],
+  "historicalAudit": {
+    "path": "docs/appearance/cad-finishing-audit.json",
+    "meaning": "Historical source/reference investigation and browser-review snapshot. Runtime values, approval status and correction locks in this snapshot are not the current material specification. Its source geometry evidence remains available; current assignments are generated in docs/appearance/ledger.json.",
+    "supersededClaims": [
+      {
+        "id": "USER-STEEL-2026-09-10",
+        "scope": [
+          "d_0_1_1_155"
+        ],
+        "current": "Shock cylinder is ruby. The steel pinion/hub decisions in the same historical lock remain valid."
+      },
+      {
+        "id": "USER-ECCENTRIC",
+        "scope": [
+          "d_0_1_1_111"
+        ],
+        "current": "Gold weights now independent of balance rim; explicitly approved 2026-09-22."
+      },
+      {
+        "id": "USER-RUBY-HUE",
+        "scope": "ruby family",
+        "current": "Slightly pinker magenta ruby requested 2026-09-22; optical behavior retained."
+      },
+      {
+        "id": "fitted enamel",
+        "scope": [
+          "d_0_1_1_21"
+        ],
+        "current": "Translucent vitreous enamel restored 2026-09-22. Raw catalog keeps its existing red appearance. Historical source name says red, but the later fresh XCAF audit reports blue body colors; neither source color establishes composition."
+      }
+    ]
+  },
+  "sourceManifest": "assets/source-manifest/material-review.json"
+}

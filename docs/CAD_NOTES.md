@@ -2,6 +2,8 @@
 
 This is a summary of constraints that still matter when changing assets. Detailed checkpoint reports are recoverable from commit `e5c890f` (`git show e5c890f:docs/<filename>`). Recorded measurements below are source-specific findings, not fresh certification.
 
+Current material decisions are recorded in [material-review.json](../assets/authored/material-review.json), separating physical material, surface finish and rendering approximation. The generated [appearance ledger](appearance/ledger.json) reflects the current assignments. `appearance/cad-finishing-audit.json` is a historical investigation snapshot: its runtime values, approval status and correction locks are superseded only where the current material review explicitly says so. In particular, the shock cylinder is ruby and the gold balance eccentrics no longer inherit the rim color. Its original source-geometry evidence remains valid for the recorded source hash.
+
 ## Source and conversion
 
 The original assembly SHA-256 is `f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b`. URLs, reference images and hashes are recorded under `assets/source-manifest/`. The source contains 426 hierarchy instances: 365 leaves and 61 assemblies, using 255 referenced definitions (202 leaf definitions).

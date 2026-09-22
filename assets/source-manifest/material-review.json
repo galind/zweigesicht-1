@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "checked": "2026-09-22",
+  "method": "Read public watch specifications and review text; no source images or CAD downloaded for this revision. Existing CAD hashes remain in the original source manifests.",
+  "references": [
+    {
+      "id": "maker",
+      "url": "https://www.marcolangwatches.com/en/watches/",
+      "checked": "2026-09-22",
+      "supports": [
+        "Solid 14 ct hard-gold alloy wheels",
+        "Gold balance eccentrics",
+        "Solid-silver dial II with translucent blue grand-feu enamel",
+        "Rose-gold-plated base plate",
+        "Blued Breguet hairspring"
+      ],
+      "limits": "Does not specify wheel alloy hue, balance-rim or escape-wheel alloy, base-plate substrate, eccentric karat or exact hairspring alloy."
+    },
+    {
+      "id": "sjx",
+      "url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "checked": "2026-09-22",
+      "supports": [
+        "Ruby cylindrical shock mass",
+        "Heat-blued bridge borders"
+      ],
+      "limits": "Border response and bridge/crown finishing changes were not approved in this turn."
+    }
+  ]
+}
