@@ -282,10 +282,10 @@ export async function runWatchChecks(v: MovementViewer) {
   v.flipMovement();
   await pause(160);
   check(
-    'Four locking pins travel during the lug flip',
+    'Unresolved locking pins stay seated in the turning case',
     [...CASE_LOCKING_PINS].every((id) => {
       const p = v.renderParts.get(id)!;
-      return !p.mesh.matrix.equals(p.assembled);
+      return p.mesh.matrix.equals(p.assembled);
     }),
   );
   v.flipMovement();
@@ -304,6 +304,68 @@ export async function runWatchChecks(v: MovementViewer) {
       return p.mesh.matrix.equals(p.assembled);
     }),
   );
+  for (const caseVisible of [false, true]) {
+    await v.configureWatch({
+      caseVisible,
+      dialsVisible: true,
+      caseMaterial: 'rose-gold',
+      smallStyle: 'pear',
+    });
+    v.reset();
+    await settle(v);
+    for (const side of ['front', 'back'] as const) {
+      v.setSide(side);
+      await settle(v);
+      check(
+        `Maker flip ${side}, case ${caseVisible}: configuration and exact assembly`,
+        v.state.side === side &&
+          v.caseTurn === (side === 'back' ? 1 : 0) &&
+          v.caseEffective() === caseVisible &&
+          v.state.smallStyle === 'pear' &&
+          v.state.dialsVisible &&
+          v.state.caseMaterial === 'rose-gold' &&
+          (v.assemblyError('presentation') ?? Infinity) < 1e-8,
+      );
+    }
+    v.flipMovement();
+    await pause(700);
+    const position = v.camera.position.clone(),
+      up = v.camera.up.clone();
+    v.flipMovement();
+    v.applyPose(0);
+    check(
+      `Maker reversal has no camera jump, case ${caseVisible}`,
+      v.camera.position.distanceTo(position) < 1e-8 &&
+        v.camera.up.distanceTo(up) < 1e-8,
+    );
+    v.patch({ separation: 1 });
+    await settle(v);
+    check(
+      `Disassembly during flip settles, case ${caseVisible}`,
+      !v.caseTravel && !v.faceCamera && v.state.separation === 1,
+    );
+    v.flipMovement();
+    await pause(600);
+    v.patch({ separation: 0 });
+    await settle(v);
+    check(
+      `Reassembly during flip restores endpoints, case ${caseVisible}`,
+      (v.assemblyError('presentation') ?? Infinity) < 1e-8 &&
+        v.state.smallStyle === 'pear',
+    );
+    const wasReduced = v.reduced;
+    v.flipMovement();
+    await pause(700);
+    v.onMotionPreference({ matches: true } as MediaQueryListEvent);
+    await settle(v);
+    check(
+      `Live reduced motion snaps the complete turn, case ${caseVisible}`,
+      !v.caseTravel &&
+        !v.faceCamera &&
+        v.caseTurn === (v.state.side === 'back' ? 1 : 0),
+    );
+    v.onMotionPreference({ matches: wasReduced } as MediaQueryListEvent);
+  }
   for (const caseMaterial of ['steel', 'rose-gold', 'platinum']) {
     await v.configureWatch({
       caseMaterial,

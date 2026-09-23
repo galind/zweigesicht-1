@@ -4,7 +4,7 @@ import * as THREE from 'three';
 export class StudioEnvironment extends THREE.Scene {
   constructor() {
     super();
-    this.background = new THREE.Color(0x747880);
+    this.background = new THREE.Color(0x51545a);
     const panel = (
       position: [number, number, number],
       size: [number, number],
@@ -14,8 +14,9 @@ export class StudioEnvironment extends THREE.Scene {
       const uv = geometry.getAttribute('uv');
       const colors = new Float32Array(uv.count * 3);
       for (let i = 0; i < uv.count; i++) {
-        const x = (uv.getX(i) - .5) * 2, y = (uv.getY(i) - .5) * 2;
-        const value = .18 + .82 * Math.exp(-2.2 * x * x - 1.4 * y * y);
+        const x = (uv.getX(i) - 0.5) * 2,
+          y = (uv.getY(i) - 0.5) * 2;
+        const value = 0.18 + 0.82 * Math.exp(-2.2 * x * x - 1.4 * y * y);
         colors.set([value, value, value], i * 3);
       }
       geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
@@ -33,10 +34,10 @@ export class StudioEnvironment extends THREE.Scene {
     };
     // Unequal broad sources and narrow cards leave dark reflection intervals.
     // Both hemispheres are lit so the reverse side supports the same inspection.
-    panel([-18, -20, -60], [75, 50], 1.7);
+    panel([-18, -20, -60], [65, 42], 1.9);
     panel([65, 0, 0], [32, 85], 2.8);
     panel([0, 65, 0], [85, 32], 2.8);
-    panel([18, -18, 60], [75, 50], 1.7);
+    panel([18, -18, 60], [65, 42], 1.9);
     panel([-65, 0, 0], [32, 85], 2.8);
     panel([0, -65, 0], [85, 32], 2.8);
   }

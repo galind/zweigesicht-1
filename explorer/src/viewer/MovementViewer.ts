@@ -1,5 +1,5 @@
 import { MOTION, motionEase } from '../experience/motion';
-import { caseDisplayMatrix } from './CasePose';
+import { caseDisplayMatrix, caseFlipPhase, CASE_PIVOT } from './CasePose';
 import { loadCaseRecovery, recoverCaseSurfaces } from './CaseRecovery';
 import {
   WATCH,
@@ -167,6 +167,8 @@ export class MovementViewer {
   spread = new Map<string, SpreadPlacement>();
   spreadFocus: string | null = null;
   caseTurn = 1;
+  faceCamera?: { angle: number };
+  faceFitPending = false;
   caseTravel?: { from: number; to: number; elapsed: number };
   inventoryAngle = 0;
   inventoryTravel?: { from: number; to: number; elapsed: number };
@@ -1032,6 +1034,10 @@ export class MovementViewer {
     return bounds;
   }
   fitPresentation() {
+    if (this.faceCamera) {
+      this.faceFitPending = true;
+      return;
+    }
     if (this.cameraUserOwned) return;
     if (
       !this.state.group &&
@@ -1184,6 +1190,9 @@ export class MovementViewer {
     else this.homeCamera();
   }
   back() {
+    // History owns its saved camera; stop the superseded turnover frame.
+    this.faceCamera = undefined;
+    this.faceFitPending = false;
     this.cancelDialRequest();
     this.selectionGeneration++;
     const previous = this.history.pop();
@@ -1323,6 +1332,10 @@ export class MovementViewer {
     direction: THREE.Vector3,
     immediate = false,
   ) {
+    // Explicit framing/navigation supersedes the flip; ordinary configuration
+    // and disassembly refits defer through fitPresentation instead.
+    this.faceCamera = undefined;
+    this.faceFitPending = false;
     const scale = 1 / Math.min(1, this.camera.aspect);
     const position = target
       .clone()
@@ -1474,8 +1487,12 @@ export class MovementViewer {
     this.save();
     this.cameraUserOwned = false;
     this.restoringCamera = null;
+    // Retain the displayed camera even when a flip is interrupted. Rotating its
+    // frame with the inverse attachment transform is a fixed-observer case turn.
+    this.travel = null;
+    this.faceCamera = { angle: caseFlipPhase(this.caseTurn).angle };
+    this.faceFitPending = true;
     this.patch({ side });
-    this.fitPresentation();
   }
   view(kind: 'front' | 'back' | 'side' | 'oblique') {
     if (kind === 'side') {
@@ -1645,7 +1662,7 @@ export class MovementViewer {
     this.fitted = this.renderableDials();
     this.fittedCase = this.caseEffective() ? new Set(CASE_LEAVES) : new Set();
     const caseTo = this.state.side === 'back' ? 1 : 0;
-    if (!this.fittedCase.size || !previousCase?.size || this.reduced) {
+    if (this.state.layout === 'spread' || this.reduced) {
       this.caseTurn = caseTo;
       this.caseTravel = undefined;
     } else if ((this.caseTravel?.to ?? this.caseTurn) !== caseTo) {
@@ -1887,6 +1904,31 @@ export class MovementViewer {
       this.caseTurn = THREE.MathUtils.lerp(turn.from, turn.to, motionEase(t));
       moving = t < 1 || moving;
       if (t === 1) this.caseTravel = undefined;
+    }
+    if (this.faceCamera) {
+      const frame = this.faceCamera;
+      const rotation = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(1, 0, 0),
+        frame.angle - caseFlipPhase(this.caseTurn).angle,
+      );
+      this.camera.position
+        .sub(CASE_PIVOT)
+        .applyQuaternion(rotation)
+        .add(CASE_PIVOT);
+      this.controls.target
+        .sub(CASE_PIVOT)
+        .applyQuaternion(rotation)
+        .add(CASE_PIVOT);
+      this.camera.up.applyQuaternion(rotation);
+      frame.angle = caseFlipPhase(this.caseTurn).angle;
+      this.syncOrbitUp();
+      if (!this.caseTravel) {
+        this.faceCamera = undefined;
+        if (this.faceFitPending) {
+          this.faceFitPending = false;
+          this.fitPresentation();
+        }
+      }
     }
     if (this.inventoryTravel && (!this.inventoryEntering || this.reduced)) {
       const turn = this.inventoryTravel;

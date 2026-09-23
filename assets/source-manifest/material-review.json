@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "checked": "2026-09-24",
-  "method": "Public references checked 22 September 2026, supplemented by maker correspondence and render supplied by the user on 24 September. No new public-page verification or CAD download in this revision.",
+  "method": "Existing 22 September references and user-supplied 24 September maker correspondence/render retained. Official downloads page and animation retrieved and visually checked 24 September; animation hash matches earlier record. Supplied render and local maker movement photograph inspected for qualitative finish guidance.",
   "references": [
     {
       "id": "maker",
@@ -38,15 +38,16 @@
         "Escape wheel is steel, an explicit exception to the broad wheel statement."
       ],
       "limits": "Original outgoing component list and correspondence date were not provided. Do not infer every part is solid gold, assign 4N composition to solid alloys, or map the cover plate to a specific CAD definition without further evidence. Colors remain authored approximations.",
-      "pendingFeedback": [
-        "Lugs move clear and case flips around x-axis; verify against maker download-page animation before changing motion.",
-        "Finishing should be coarser and steel less milky; requires visual tuning."
-      ],
       "attachment": {
         "filename": "codex-clipboard-9983c1a8-03d6-4d2b-bb80-a3e716d5b4a6.png",
         "sha256": "555124fadbdadd5229c5fdb2d6ebcd9ee8ec36a33d2aaf8fc3cd49aabc1da0b2",
         "use": "Visual rose-gold/steel contrast reference; not calibrated material data. Original image remains outside Git."
-      }
+      },
+      "addressedFeedback": [
+        "Lugs move clear and case flips around x-axis; verify against maker download-page animation before changing motion.",
+        "Finishing should be coarser and steel less milky; requires visual tuning."
+      ],
+      "resolution": "Face-flip evidence is in assets/source-manifest/face-flip.json; separate spatial/optical tuning and remaining interpretations in assets/authored/material-review.json. No calibrated values inferred."
     }
   ]
 }

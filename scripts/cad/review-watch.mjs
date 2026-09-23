@@ -28,7 +28,7 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  await c.configureWatch({caseVisible:true,dialsVisible:true});pose();
  const missing=[...CASE_CRYSTALS][0],saved=c.renderParts.get(missing);c.renderParts.delete(missing);pose();assert.equal(c.fittedCase.size,0);assert.equal(c.fitted.size,43);assert.equal(c.caseEffective(),false);c.renderParts.set(missing,saved);pose();assert.equal(c.fittedCase.size,41);
  results.push({check:'incomplete case suppresses every case piece while preserving complete dials; restored geometry reveals one complete case',status:'pass'});
- const {caseDisplayMatrix,CASE_LUGS,CASE_LOCKING_PINS}=load('explorer/src/viewer/CasePose.ts');
+ const {caseDisplayMatrix,caseFlipPhase,CASE_PIVOT,CASE_LUGS,CASE_LOCKING_PINS}=load('explorer/src/viewer/CasePose.ts');
  for(const record of WATCH.leaves.filter(p=>p.oppositeWorldTransform)) {
   const alternate=parts.find(p=>p.id===record.oppositeSourceId);
   assert.equal(alternate.definitionId,record.definitionId);
@@ -49,20 +49,56 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  for(const id of CASE_LOCKING_PINS){const p=c.renderParts.get(id);assert.equal(p.source.definitionId,'d_0_1_1_72');
   const original=p.assembled.clone();
   for(const endpoint of [0,1])assert.ok(caseDisplayMatrix(id,p.assembled,endpoint).equals(original));
-  const middle=caseDisplayMatrix(id,p.assembled,.5);assert.ok(Math.abs(middle.elements[13]-original.elements[13]-Math.sign(original.elements[13])*8)<1e-10);assert.ok(p.assembled.equals(original));
+  const middle=caseDisplayMatrix(id,p.assembled,.5);assert.ok(middle.equals(original));assert.ok(p.assembled.equals(original));
  }
  c.reduced=false;c.state={...c.state,side:'front'};c.retarget();c.applyPose(.2);
  const movingPins=new Map([...CASE_LOCKING_PINS].map(id=>[id,c.renderParts.get(id).mesh.matrix.clone()]));
- for(const [id,matrix]of movingPins)assert.ok(!matrix.equals(c.renderParts.get(id).assembled));
+ for(const [id,matrix]of movingPins)assert.ok(matrix.equals(c.renderParts.get(id).assembled));
  c.state={...c.state,side:'back'};c.retarget();c.applyPose(0);
  for(const [id,matrix]of movingPins)assert.ok(matrix.equals(c.renderParts.get(id).mesh.matrix));
  c.applyPose(2);for(const id of CASE_LOCKING_PINS)assert.ok(c.renderParts.get(id).mesh.matrix.equals(c.renderParts.get(id).assembled));
  c.reduced=true;
+
+ // Independently verify the physical viewing frame: lugs translate without
+ // rotating, while a case point rotates about the crown/X axis.
+ for(const q of [0,.1,.22,.35,.5,.65,.78,.9,1]) {
+  const phase=caseFlipPhase(q);
+  const view=new THREE.Matrix4().makeTranslation(0,0,CASE_PIVOT.z)
+   .multiply(new THREE.Matrix4().makeRotationX(phase.angle))
+   .multiply(new THREE.Matrix4().makeTranslation(0,0,-CASE_PIVOT.z));
+  for(const record of WATCH.leaves.filter(p=>p.oppositeWorldTransform)) {
+   const assembled=c.renderParts.get(record.id).assembled;
+   const displayed=view.clone().multiply(caseDisplayMatrix(record.id,assembled,q));
+   const expected=assembled.clone();expected.elements[13]+=(record.packet==='upper-lugs'?1:-1)*caseFlipPhase(q,record.packet==='upper-lugs'?1:-1).clearance;
+   assert.ok(displayed.elements.every((n,i)=>Math.abs(n-expected.elements[i])<1e-8));
+  }
+ }
+ assert.equal(caseFlipPhase(.24).angle,0);assert.equal(caseFlipPhase(.76).angle,Math.PI);
+ assert.equal(caseFlipPhase(.5).clearance,WATCH.lugPresentation.clearanceMm);
+ for(const caseVisible of [false,true]) for(const interruptedAt of [.2,.65,.95,1.4]) {
+  c.reduced=true;c.state={...initialState,caseVisible};pose();
+  c.camera.position.set(0,0,-90);c.camera.up.set(0,-1,0);c.controls.target.set(0,0,CASE_PIVOT.z);
+  c.reduced=false;c.setSide('front');c.applyPose(interruptedAt);
+  const camera=c.camera.position.clone(),up=c.camera.up.clone(),matrices=new Map([...CASE_LUGS].map(id=>[id,c.renderParts.get(id).mesh.matrix.clone()]));
+  c.setSide('back');c.applyPose(0);assert.ok(c.camera.position.distanceTo(camera)<1e-10);assert.ok(c.camera.up.distanceTo(up)<1e-10);
+  for(const[id,m]of matrices)assert.ok(c.renderParts.get(id).mesh.matrix.equals(m));
+  c.applyPose(2);assert.equal(c.caseTurn,1);assert.ok(c.camera.position.distanceTo(new THREE.Vector3(0,0,-90))<1e-8);
+  c.setSide('front');c.applyPose(.7);c.reduced=true;c.retarget();c.applyPose(0);
+  assert.equal(c.caseTurn,0);assert.equal(c.caseTravel,undefined);assert.equal(c.faceCamera,undefined);
+  assert.ok(Math.abs(c.camera.position.x)<1e-9);assert.ok(c.camera.up.distanceTo(new THREE.Vector3(0,1,0))<1e-8);
+ }
+ results.push({check:'CAD X flip leaves all 18 lug orientations fixed in observer frame; withdrawal precedes turn and reseating follows; both case visibility states reverse continuously in all three phases and reduced motion snaps camera and parts together',status:'pass'});
+
+ c.reduced=true;c.state={...initialState,caseVisible:true};pose();
+ c.reduced=false;c.setSide('front');c.applyPose(.8);assert.ok(c.faceCamera);
+ c.back();assert.equal(c.faceCamera,undefined);assert.equal(c.faceFitPending,false);
+ assert.equal(c.state.side,'back');c.applyPose(2);c.travel=null;c.reduced=true;
+ results.push({check:'History during turnover restores saved intent and cancels the superseded observer frame',status:'pass'});
  const seconds=c.renderParts.get(DIALS.faces.central.styles[0].handLeafIds.seconds);
  const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};seconds.material.onBeforeCompile(shader,{});
  assert.ok(shader.fragmentShader.indexOf('diffuseColor.rgb=diffuse;')>shader.fragmentShader.indexOf('diffuseColor.rgb=vec3(.546,.584,.631)'));
  assert.ok(shader.fragmentShader.includes('configurationOverride>.5) roughnessFactor=roughness'));
- results.push({check:'gold packet overrides source-white surfaces and polish; fitted lug bars match case; four locking pins travel with the clearing arc, reverse continuously and return to original seats',status:'pass'});
+ results.push({check:'gold packet overrides source-white surfaces and polish; fitted lug bars match case; four unresolved locking pins remain seated in the case throughout the turn',status:'pass'});
  const geometries=new Set([...c.renderParts.values()].map(p=>p.mesh.geometry));
  const recovery=sourceModules({fetchImpl:modelFetch})('explorer/src/viewer/CaseRecovery.ts');const patch=await recovery.loadCaseRecovery();
  const scene=(await parse('catalog.glb')).scene;const original=[];scene.traverse(n=>{if(n.isMesh&&n.material.name==='d_0_1_1_54')original.push(n)});

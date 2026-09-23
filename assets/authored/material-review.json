@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "date": "2026-09-24",
-  "scope": "Retains the approved 22 September enamel/ruby/material review. Maker feedback relayed 24 September confirms rose-gold hue (no regular yellow gold) and steel escape wheel. Correct yellow gold appearance profiles and the escape wheel while preserving grain, roughness, geometry and motion. Finish tuning and flip correction remain pending.",
+  "scope": "Maker-confirmed rose-gold and steel escape-wheel corrections from a17d341 retained. Refine grain/frost spatial scale and steel reflection response separately; source geometry, finish regions and calibrated-color limits preserved.",
   "components": [
     {
       "definitionIds": [
@@ -71,7 +71,7 @@
       ],
       "physicalMaterial": "Steel; exact grade unspecified",
       "surfaceFinish": "Retained circular satin",
-      "renderingApproximation": "Dedicated circularSteel profile; neutral steel color with previous circular grain and roughness retained",
+      "renderingApproximation": "Dedicated circularSteel profile; neutral steel hue, roughness .27 and anisotropy .58 retained. Coarser circular grain is recorded separately in finishRefinement.",
       "evidence": "maker-feedback-2026-09-24; user correction authorization 2026-09-24"
     },
     {
@@ -174,5 +174,97 @@
       }
     ]
   },
-  "sourceManifest": "assets/source-manifest/material-review.json"
+  "sourceManifest": "assets/source-manifest/material-review.json",
+  "finishRefinement": {
+    "checked": "2026-09-24",
+    "evidence": [
+      "maker-feedback-2026-09-24",
+      "REF-MAKER-01",
+      "REF-MAKER-02"
+    ],
+    "guidance": "User-supplied maker render guides metallic dark/bright reflection separation and polished borders. Existing maker movement photograph guides straight grain, cellular frosting and smooth edges. Neither image supplies calibrated alloy colors or roughness.",
+    "spatialScale": {
+      "frostCellsPerMm": {
+        "before": 24,
+        "after": 10
+      },
+      "straightBrushFrequenciesPerMm": {
+        "before": [
+          32,
+          90,
+          230,
+          520
+        ],
+        "after": [
+          7,
+          22,
+          75,
+          210
+        ]
+      },
+      "circularBrushFrequenciesPerMm": {
+        "before": [
+          45,
+          140,
+          360
+        ],
+        "after": [
+          12,
+          45,
+          150
+        ]
+      },
+      "unchanged": "Brush direction/source axes, amplitudes, anisotropy, snailing, silver dial grain and exact face masks."
+    },
+    "opticalResponse": {
+      "steelRoughness": {
+        "before": 0.18,
+        "after": 0.14
+      },
+      "brushedSteelRoughness": {
+        "before": 0.28,
+        "after": 0.22
+      },
+      "bridgeRoughness": {
+        "before": 0.25,
+        "after": 0.2
+      },
+      "neutralSourceSeatRoughness": {
+        "before": 0.2,
+        "after": 0.14
+      },
+      "frostSlopeAmplitude": {
+        "before": 0.06,
+        "after": 0.035
+      },
+      "frostMicroRoughness": {
+        "before": 0.36,
+        "after": 0.31
+      },
+      "studioBackground": {
+        "before": "#747880",
+        "after": "#51545a"
+      },
+      "frontBackSoftboxes": {
+        "before": {
+          "size": [
+            75,
+            50
+          ],
+          "intensity": 1.7
+        },
+        "after": {
+          "size": [
+            65,
+            42
+          ],
+          "intensity": 1.9
+        }
+      },
+      "rationale": "Coarser grains remain readable without excessive relief. Darker reflection intervals and slightly narrower softboxes restore steel contrast while preserving bright metallic highlights. Metalness remains 1; base alloy colors and exposure remain unchanged."
+    },
+    "preserved": "a17d341 rose-gold color and material assignments; steel escape-wheel identity, roughness .27 and anisotropy .58; polished bevel roughness .075; black-polished crown response .055; exact frosting scope on main plate, seven pads and crown M background. Source geometry and annotations unchanged.",
+    "limits": "All frequencies, slope amplitudes, optical values and environment lights are authored presentation values, not measured manufacturing or spectral data. Environment changes necessarily affect reflections of all materials.",
+    "localComparison": "artifacts/browser/maker-refinement/comparison.png; matched 1275×1354 desktop captures, both faces, Reset overview and two + zoom steps. Before uses a17d341 material/FrostedSurface/StudioEnvironment modules in a temporary local copy; current motion used for matched framing. No source media committed."
+  }
 }

@@ -1276,6 +1276,7 @@ export default function Home() {
               'spread',
               'interrupt',
               'dials',
+              'flip',
             ] as MotionCase[]
           ).map((kind) => (
             <button

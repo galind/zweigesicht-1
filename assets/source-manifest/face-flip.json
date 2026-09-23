@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "checked": "2026-09-24",
+  "references": [
+    {
+      "id": "maker-face-flip-animation",
+      "publisher": "Marco Lang",
+      "title": "Zweigesicht-1 Animation",
+      "pageUrl": "https://www.marcolangwatches.com/en/downloads-2/",
+      "downloadUrl": "https://www.marcolangwatches.com/de/download/2792/",
+      "bytes": 5569187,
+      "sha256": "4328559383cb5187e34364beb0bf1c04122cce1bb2fe0dfa5cac34e70914e55c",
+      "durationSeconds": 34.85,
+      "inspection": "Full 1-second contact sheet plus exact 0.5-second frames from 8 to 18 s decoded with AVFoundation; frame timestamps retained in filenames. Matches the existing REF-MAKER-02 hash.",
+      "localPath": "artifacts/browser/maker-refinement/references/official-animation.mp4",
+      "rights": "Local analysis only. No redistribution permission inferred; video and extracted frames remain ignored."
+    },
+    {
+      "id": "maker-feedback-2026-09-24",
+      "record": "assets/source-manifest/material-review.json",
+      "supports": "Maker says lugs move away and case flips around X."
+    }
+  ],
+  "sourceCADSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "limits": "Visual sequence and CAD coordinate correspondence; no physical lock/collision/tolerance review."
+}

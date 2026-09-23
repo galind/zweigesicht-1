@@ -82,5 +82,16 @@
       "caseBars": "d55 Schraubsteg bars and d53 end screws match the selected case material. Only fitted case instances receive this override.",
       "flipHardware": "All d53/d57 attachment screws already travel with the 18-leaf lug packets. Four d72 Riegelstift fest instances on the middle ring now accompany the outward clearing arc and return to their original seats; no new CAD pose or mechanical sequence is claimed."
     }
+  },
+  "makerMotionCorrection20260924": {
+    "supersedes": "Previous user-directed lug Y rotation and outward ring-pin arc; retain all original geometry and the assembled visible set.",
+    "evidence": "assets/source-manifest/face-flip.json",
+    "axis": "CAD X through case midpoint; upper source child 4 maps to opposite child 5, lower child 9 to opposite child 10. All 18 maps preserve definition identity.",
+    "limits": [
+      "The 8 mm clearance and 1.8 second UI duration are authored, not measured from the presentation video.",
+      "The pivot Z is the midpoint validated by source counterpart transforms, not a measured physical hinge. No permanent case hinge is claimed.",
+      "The animation demonstrates a released case being turned. Detailed lock actuation, strap flex, tools, collisions and tolerances are not simulated.",
+      "Disassembly remains an illustrative explorer mode; combining it with Flip is not a physical assembly procedure."
+    ]
   }
 }

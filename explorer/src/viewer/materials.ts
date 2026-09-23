@@ -8,14 +8,14 @@ import {
 
 /** Authored surface interpretations of local maker references, not measured finishes. */
 const profiles = {
-  steel: { color: 0xc7cdd4, metalness: 1, roughness: 0.18, pattern: 0 },
-  brushedSteel: { color: 0xc9ced5, metalness: 1, roughness: 0.28, pattern: 4 },
-  bridge: { color: 0xd4d8de, metalness: 1, roughness: 0.25, pattern: 1 },
+  steel: { color: 0xc7cdd4, metalness: 1, roughness: 0.14, pattern: 0 },
+  brushedSteel: { color: 0xc9ced5, metalness: 1, roughness: 0.22, pattern: 4 },
+  bridge: { color: 0xd4d8de, metalness: 1, roughness: 0.2, pattern: 1 },
   warmPlate: { color: 0xd4a58e, metalness: 1, roughness: 0.27, pattern: 1 },
   frosted: { color: 0xd2a48b, metalness: 1, roughness: 0.49, pattern: 3 },
   brass: { color: 0xd9aa7d, metalness: 1, roughness: 0.27, pattern: 2 },
   // Marco confirms rose gold and a steel escape wheel (feedback relayed 2026-09-24).
-  // Screen colors are authored approximations; retain the existing grain/roughness.
+  // Screen colors are authored approximations; alloy assignments and hues are retained.
   hardGold: { color: 0xd9ab94, metalness: 1, roughness: 0.27, pattern: 2 },
   circularSteel: { color: 0xc7cdd4, metalness: 1, roughness: 0.27, pattern: 2 },
   barrel: { color: 0xd2a079, metalness: 1, roughness: 0.3, pattern: 2 },
@@ -57,7 +57,7 @@ export const FITTED_BLUE_ENAMEL = {
 };
 type Finish = keyof typeof profiles;
 // Shared straight-brush controls: updating a family affects all its parts.
-// Circular gear finishes keep their existing response.
+// Spatial grain controls below remain independent of these optical amplitudes.
 const brushingDetail: Partial<Record<Finish, number>> = {
   bridge: 2.6,
   brushedSteel: 1.65,
@@ -218,10 +218,10 @@ float filteredFinishNoise(vec2 p) {
 float finishBrush(vec2 p) {
  // A wider strand layer survives normal bridge framing, while the finer
  // layers retain close-up detail. Derivative filtering still prevents shimmer.
- return filteredFinishNoise(p*vec2(.45,32.0))*.35
-      + filteredFinishNoise(p*vec2(.8,90.0))*.3
-      + filteredFinishNoise(p*vec2(2.2,230.0))*.23
-      + filteredFinishNoise(p*vec2(5.0,520.0))*.12;
+ return filteredFinishNoise(p*vec2(.45,7.0))*.35
+      + filteredFinishNoise(p*vec2(.8,22.0))*.3
+      + filteredFinishNoise(p*vec2(2.2,75.0))*.23
+      + filteredFinishNoise(p*vec2(5.0,210.0))*.12;
 }
 `;
 
@@ -573,9 +573,9 @@ if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRol
   // Irregular concentric brushing around the original source axle. The slow
   // XY variation breaks up perfect lathe rings without an angular seam.
   float wander=finishNoise(finishUv*2.1)*.012;
-  finishGrain=filteredFinishNoise(vec2((radius+wander)*45.0,0.0))*.46
-    + filteredFinishNoise(vec2((radius+wander*.5)*140.0,7.0))*.34
-    + filteredFinishNoise(vec2(radius*360.0,19.0))*.2;
+  finishGrain=filteredFinishNoise(vec2((radius+wander)*12.0,0.0))*.46
+    + filteredFinishNoise(vec2((radius+wander*.5)*45.0,7.0))*.34
+    + filteredFinishNoise(vec2(radius*150.0,19.0))*.2;
   }
   finishHeight=finishGrain*.00022;
  } else {
@@ -619,7 +619,7 @@ if(finishEnabled>.5 && configurationOverride>.5) {
       '#include <roughnessmap_fragment>',
       /* glsl */ `
 #include <roughnessmap_fragment>
-if(finishEnabled>.5 && finishWholeBlue<.5 && finishSteelSeat>.5) roughnessFactor=.2;
+if(finishEnabled>.5 && finishWholeBlue<.5 && finishSteelSeat>.5) roughnessFactor=.14;
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
 if(finishEnabled>.5 && abs(vFinishRole-3.0)<.2) roughnessFactor=.085;
 if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || finishSteelSeat<.5)) roughnessFactor=.13;
@@ -702,6 +702,6 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
       ? `ml01-diamond-facets-v1-${diamond.planes.length}`
       : ['sapphire', 'diamond'].includes(finish.family)
         ? 'ml01-source-surface-clear-v10'
-        : 'ml01-source-surface-v11';
+        : 'ml01-source-surface-v12';
   return material;
 }

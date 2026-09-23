@@ -328,7 +328,7 @@
   },
   "timingStudyPresentation": {
     "recommended": false,
-    "label": "Timing study \u2014 source gear counts, illustrative cadence",
+    "label": "Timing study — source gear counts, illustrative cadence",
     "hideDefinitionIds": [
       "0:1:1:116",
       "0:1:1:112",
@@ -355,5 +355,44 @@
     "playbackEnabled": false,
     "review": "docs/ANIMATION_REVIEW.md",
     "reason": "Incomplete energy-to-display chain; unvalidated escapement contacts and spring deformation. Retained parameters are historical research, not runtime configuration."
+  },
+  "faceFlip": {
+    "checked": "2026-09-24",
+    "source": "assets/source-manifest/face-flip.json",
+    "reviewStatus": "Maker animation visually inspected; CAD endpoint correspondence numerically verified. Not a physical service or collision certification.",
+    "observations": [
+      "Exact half-second frames: upper attachment withdraws around 9–10 s; lower around 10.5–11 s; complete case turns around 11–13 s; lower attachment seats around 13.5–14 s; upper around 16–17 s.",
+      "Attachments retain their orientation in the viewing frame; the case, crown and complete movement turn across the crown/9–3 axis.",
+      "Maker correspondence names this X. CAD crown lies at positive X (crown occurrence translation X=20 mm); the two attachment packets lie along ±Y and the faces normal to ±Z. This establishes CAD X, not the previous lug-local Y interpretation."
+    ],
+    "coordinateMapping": {
+      "axisCAD": [
+        1,
+        0,
+        0
+      ],
+      "pivotCADMm": [
+        0,
+        0,
+        -2.500016176126711
+      ],
+      "endpointFormula": "T(pivot) Rx(-pi) T(-pivot) M_source",
+      "endpointResidualMax": 9.4e-12,
+      "endpointAudit": "All 18 transformed leaves match an original opposite-end occurrence with identical definition ID. Audited source matrices are used exactly at endpoints; upper child 4 now maps to child 5, lower child 9 to child 10. The assembled visible set is unchanged; only identical-instance correspondence changes."
+    },
+    "implementation": {
+      "referenceFrame": "Source CAD stays fixed. Apply the same inverse X rotation to the observer position/target/up and to the lug packets. In this fixed-attachment viewing frame the entire case turns and the attachments translate without rotating. Source buffers and immutable assembled matrices remain unchanged.",
+      "sequence": "Upper clears, lower clears, case turns 180 degrees, lower reseats, upper reseats. Symmetric phase path supports continuous interrupted reversals from any displayed phase.",
+      "configuration": "Case-hidden flips use the same case-turn clock. Optional case loading/visibility does not restart it. Dial/hand/material preferences remain independent. Disassembly offsets remain separate; requested camera refits defer until turnover ends. Explicit navigation supersedes its viewing frame.",
+      "reducedMotion": "One update moves camera and fitted poses to the requested exact endpoint, including a preference change during playback.",
+      "lockingPins": "Four ring-mounted d72 pins remain on their source seats in the turning case; their release is not resolved by the video. Previous illustrative outward pin motion is removed."
+    },
+    "interpretations": [
+      "The 8 mm clearance and 1.8 second UI duration are authored, not measured from the presentation video.",
+      "The pivot Z is the midpoint validated by source counterpart transforms, not a measured physical hinge. No permanent case hinge is claimed.",
+      "The animation demonstrates a released case being turned. Detailed lock actuation, strap flex, tools, collisions and tolerances are not simulated.",
+      "Disassembly remains an illustrative explorer mode; combining it with Flip is not a physical assembly procedure."
+    ],
+    "localEvidence": "artifacts/browser/maker-refinement/"
   }
 }
