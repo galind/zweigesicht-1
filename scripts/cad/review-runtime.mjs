@@ -261,11 +261,19 @@ const finishShaderFor=(n)=>{
 for(const n of [94,96,141,187,210,213,216,238,243]){
  const {p,shader}=finishShaderFor(n);
  assert.equal(p.material.name,'hardGold');
+ assert.equal(p.material.color.getHex(),0xd9ab94,'Maker confirms rose-gold wheels');
  assert.equal(shader.uniforms.finishPattern.value,2);
  assert.equal(p.material.anisotropy,.58,'Gold wheels retain circular brushing');
 }
 for(const n of [137,142,183,188,235])assert.equal(finishShaderFor(n).p.material.name,'steel');
-for(const n of [115,233])assert.equal(finishShaderFor(n).p.material.name,'brass','Unresolved collet/escape-wheel appearances retained');
+assert.equal(finishShaderFor(115).p.material.name,'brass','Unresolved collet appearance retained');
+const escapeWheel=finishShaderFor(233);
+assert.equal(escapeWheel.p.material.name,'circularSteel');
+assert.equal(escapeWheel.p.material.color.getHex(),finishFor('', 'd_0_1_1_235').color,'Escape wheel and separate hub are steel');
+assert.equal(escapeWheel.shader.uniforms.finishPattern.value,2);
+assert.equal(escapeWheel.p.material.roughness,.27);
+assert.equal(escapeWheel.p.material.anisotropy,.58,'Steel correction preserves escape-wheel brushing');
+for(const n of [111,118,121,163,179,200,206])assert.equal(finishShaderFor(n).p.material.color.getHex(),0xd9ab94,'Existing gold appearances use rose hue');
 const eccentric=finishShaderFor(111).p.material,rim=finishShaderFor(110).p.material;
 assert.equal(eccentric.name,'gold');assert.equal(rim.name,'balance');
 assert.equal(eccentric.roughness,.16);assert.ok(!eccentric.color.equals(rim.color));
@@ -273,7 +281,7 @@ assert.equal(rim.color.getHex(),0xc69d83,'No balance-rim recolor');
 assert.equal(rubyPart.material.color.getHex(),0xc44180);
 assert.equal(rubyPart.material.attenuationColor.getHex(),0xac2868);
 assert.equal(rubyPart.material.ior,1.76);assert.equal(rubyPart.material.roughness,.055);
-results.push({check:'nine gold wheel definitions retain brushing, four eccentrics separate from rim, steel hubs and uncertain alloys stay scoped; pinker ruby preserves optics',status:'pass'});
+results.push({check:'rose-gold wheels and eccentrics, steel escape wheel with retained grain; hubs and uncertain alloys stay scoped; pinker ruby preserves optics',status:'pass'});
 {
  const {DIALS}=load('explorer/src/experience/dials.ts');
  const enamel=v.renderParts.get(DIALS.presentationOverrides[0].leafId).material;

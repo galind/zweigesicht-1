@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "checked": "2026-09-22",
-  "method": "Read public watch specifications and review text; no source images or CAD downloaded for this revision. Existing CAD hashes remain in the original source manifests.",
+  "checked": "2026-09-24",
+  "method": "Public references checked 22 September 2026, supplemented by maker correspondence and render supplied by the user on 24 September. No new public-page verification or CAD download in this revision.",
   "references": [
     {
       "id": "maker",
@@ -25,6 +25,28 @@
         "Heat-blued bridge borders"
       ],
       "limits": "Border response and bridge/crown finishing changes were not approved in this turn."
+    },
+    {
+      "id": "maker-feedback-2026-09-24",
+      "type": "user-supplied maker correspondence",
+      "provided": "2026-09-24",
+      "author": "Marco Lang, as attributed by the user",
+      "url": null,
+      "supports": [
+        "Listed wheels, cover plate and balance eccentric are solid rose gold; plated parts are rose-gold plated, color 4N.",
+        "No regular yellow gold is used on the watch.",
+        "Escape wheel is steel, an explicit exception to the broad wheel statement."
+      ],
+      "limits": "Original outgoing component list and correspondence date were not provided. Do not infer every part is solid gold, assign 4N composition to solid alloys, or map the cover plate to a specific CAD definition without further evidence. Colors remain authored approximations.",
+      "pendingFeedback": [
+        "Lugs move clear and case flips around x-axis; verify against maker download-page animation before changing motion.",
+        "Finishing should be coarser and steel less milky; requires visual tuning."
+      ],
+      "attachment": {
+        "filename": "codex-clipboard-9983c1a8-03d6-4d2b-bb80-a3e716d5b4a6.png",
+        "sha256": "555124fadbdadd5229c5fdb2d6ebcd9ee8ec36a33d2aaf8fc3cd49aabc1da0b2",
+        "use": "Visual rose-gold/steel contrast reference; not calibrated material data. Original image remains outside Git."
+      }
     }
   ]
 }

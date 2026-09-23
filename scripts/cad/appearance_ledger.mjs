@@ -28,11 +28,12 @@ const families={
  warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher.'],
  frosted:['Warm pink-gilt plate appearance','Coarser irregular cellular frosting with fine detail and restrained color contrast; existing inscription regions darkened; actual engraving geometry retained.'],
  brass:['Warm wheel/compound-part metal; no blanket alloy claim','Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.'],
- hardGold:['Solid 14 ct hard-gold alloy wheel','Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate.'],
+ hardGold:['Solid 14 ct hard rose-gold alloy wheel','Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate.'],
+ circularSteel:['Steel escape wheel','Maker-confirmed steel; neutral appearance with retained circular grain, roughness .27 and anisotropy .58. Steel grade and numerical optics unmeasured.'],
  barrel:['Warm rose-colored barrel metal','User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.'],
  ratchet:['Neutral steel ratchet','Circular satin fields with sharper edges; exact wheel polishing unmeasured.'],
- gold:['Warm gold-colored setting/pin','Smooth polished warm metal; actual alloy/process not established for every hidden pin.'],
- satinGold:['Satin yellow-gold-colored metal','User correction: goldish thin washer with circular satin grain; authored color and roughness, not an alloy claim.'],
+ gold:['Rose-gold-colored setting/pin','Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.'],
+ satinGold:['Satin rose-gold-colored metal','Existing satin finish retained; rose hue follows maker clarification, not an alloy claim.'],
  roseGold:['Rose-gold-colored jewel setting','User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.'],
  balance:['Warm balance rim; alloy unresolved','Smooth metal with warm reflections; source/photo evidence cannot distinguish all reflected warmth from intrinsic color.'],
  blackPolished:['Black-polished steel crown wheel','Mirror-smooth steel response on d249; broad light-to-dark reflections provide the black-polished appearance without painting it black.'],
@@ -50,7 +51,6 @@ const photo=new Set([85,86,90,91,94,99,100,101,102,105,106,110,111,116,133,134,1
 const conflicts={
  130:'Safety piece source is warm; current steel family retained pending component-specific evidence.',
  206:'Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved.',
- 233:'Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy.',
  185:'Clamp body source gray and maker component render blue/violet top conflict; installed photo exposes too little of the lug. Keep steel body, resolve only its separately identified screws.',
  256:'Regulation support is optional source tooling, not a watch part; orange CAD color does not establish metal/plastic composition. Neutral retained.',
  66:'Pale source glass gasket rendered dark rubber; no exposed production reference resolves color/composition. Retained, not certified.',
@@ -63,8 +63,9 @@ const specific={
  156:['USER-FINISH-2026-09-10-01; source-red gauge-inlay faces','The existing gauge-inlay regions use a darker ruby-red response matching the user photograph; surrounding bridge fields retain their steel finishes.'],
  159:['USER-FINISH-2026-09-10-02; source-verified full arm regions and subsequent user all-face correction','Blue covers every arm surface, including connections, bevels and shared underside, through a source-local per-fragment region. The join fades at local Y 1.05–1.45 mm, shifted 0.4 mm left from the preceding pass; the central spine remains steel.'],
  183:['User explicit cannon-pinion steel correction; source gray appearance','Dial-II cannon pinion uses neutral polished steel.'],
- 121:['User explicit thin-washer goldish satin correction; source Flitter 200x400 identity','Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict.'],
- 111:['Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling','All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.'],
+ 121:['User explicit thin-washer goldish satin correction; source Flitter 200x400 identity','Thin washer d121 retains its satin finish, now with rose-gold appearance following maker-feedback-2026-09-24. Exact alloy remains unresolved.'],
+ 111:['Maker specifications and maker-feedback-2026-09-24: solid rose-gold eccentrics','All four timing eccentrics use independent polished rose gold, roughness .16. Balance rim d110 remains unchanged and unresolved. Karat and numerical color are unspecified.'],
+ 233:['maker-feedback-2026-09-24: escape wheel is steel','Steel replaces the legacy warm appearance; circular brushing and roughness are preserved.'],
  188:['User explicit Hour-wheel hub 2 steel correction; source ml01 Butzen Stundenrad2 identity and gray appearance','The separately modeled hour-wheel-II hub uses neutral steel. Its wheel d187 retains its own warm finish.'],
  235:['User explicit wheel-hub steel correction; source ml01 Butzen Gangrad identity and pale neutral appearance','The separately modeled escape-wheel hub uses neutral steel. Its wheel d233 retains its own finish.'],
  117:['User explicit hairspring-holder steel correction; source ml01 Klötzchen identity and gray appearance','Both source occurrences of the hairspring stud use neutral steel. The separate clamping screw is corrected by exact instance; the hairspring itself retains blue metal.'],
@@ -83,15 +84,15 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  const n=Number(d.id.split('_').at(-1)),f=current(d.name,d.id),m=manifest.definitions.find(x=>x.id===d.id),entry=surfaces.definitions[d.id];
  let status=photo.has(n)?'verified':'inferred',evidence=photo.has(n)?'REF-MAKER-01 and FINISHING_REFERENCES.md ID-mapped observations':'STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)';
  let notes=families[f.family][1];if(specific[n]){evidence=specific[n][0];notes=specific[n][1]+(n===111?'':' '+notes);}
- if([111,114,117,121,137,142,155,183,188,235,100,203,207,224].includes(n))status='verified';
+ if([111,114,117,121,137,142,155,183,188,233,235,100,203,207,224].includes(n))status='verified';
  if([100,203,207,224].includes(n)){evidence+='; user explicit rose-gold jewel-chaton correction';notes+=' Rose-gold setting metal supersedes the previous yellow interpretation; original stone identities and optics remain separate.';}
  if(n===240){evidence+='; user explicit horizontal winding-bridge brushing correction';notes+=' Grain axis is local (cos8deg,-sin8deg), compensating for source placement so grain follows assembly X. Matching anisotropic frame uses the same axis; source matrix is unchanged.';}
  if([97,172,174,176,178,190,193,244,246,248].includes(n)){
   evidence+='; USER-FINISH-2026-09-09-02 (user-supplied CAD render and explicit brushing request)';
   notes+=' Updated straight/circular keyless satin per user reference; family inferred from CAD identity, no manufacturing certification. See docs/FINISH_ADJUSTMENTS.md.';
  }
- if(['bridge','frosted','barrel','brass','hardGold','ratchet'].includes(f.family))notes+=' Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.';
- if(f.family==='hardGold'){status='verified';evidence='https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026';}
+ if(['bridge','frosted','barrel','brass','hardGold','circularSteel','ratchet'].includes(f.family))notes+=' Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.';
+ if(f.family==='hardGold'){status='verified';evidence='https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity';}
  if([85,86,90,91].includes(n))evidence+='; USER-FINISH-2026-09-09-04 snailing reference and user confirmation';
  if([85,86,90,91].includes(n))notes+=' Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.';
  if(n===105)evidence+='; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation';
@@ -107,7 +108,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  if(n<83&&[7,8,11,12,13,16,18,19,24,28,29,30,31,32,34,35,38,39,41,42].includes(n)){evidence='Maker watch page: blued-steel hands; source blue/neutral face assignments';notes='Blue metal hands/bushings replace dielectric enamel or brass fallback; neutral seats preserved where source mixed. Exact alternative hand variants inferred. '+notes;}
  const regionEvidence=entry?`artifacts/finishing-cad/sidecars/${d.id}.json`:undefined;
  const reviewed=materialReview.components.find(c=>c.definitionIds.includes(d.id));
- return {id:d.id,name:m.name,status,confidence:status==='verified'?'high for identified visible family/region; authored numerical response':status==='inferred'?'medium/low; no per-surface photographic proof':'low/conflicting',intendedMaterial:n===111?'Gold eccentric weights; karat unspecified':families[f.family][0],...(reviewed?{materialReview:{physicalMaterial:reviewed.physicalMaterial,surfaceFinish:reviewed.surfaceFinish,renderingApproximation:reviewed.renderingApproximation,evidence:reviewed.evidence}}:{}),surfaceReview:notes,evidence,assignment:f,source:{definitionColors:d.directColors,bodies:d.bodies,faceCount:d.faces.length,faceAppearanceGroups:groups(d.faces),faceTypes:Object.fromEntries([...new Set(d.faces.map(x=>x.surfaceType))].map(t=>[t,d.faces.filter(x=>x.surfaceType===t).length])),brepValid:m.brepValid,missingFaces:m.missingTriangulatedFaces,degenerateTriangles:m.degenerateTriangles},annotation:entry?{...entry,regionEvidence}:null};
+ return {id:d.id,name:m.name,status,confidence:status==='verified'?'high for identified visible family/region; authored numerical response':status==='inferred'?'medium/low; no per-surface photographic proof':'low/conflicting',intendedMaterial:n===111?'Solid rose-gold eccentric weights; karat unspecified':families[f.family][0],...(reviewed?{materialReview:{physicalMaterial:reviewed.physicalMaterial,surfaceFinish:reviewed.surfaceFinish,renderingApproximation:reviewed.renderingApproximation,evidence:reviewed.evidence}}:{}),surfaceReview:notes,evidence,assignment:f,source:{definitionColors:d.directColors,bodies:d.bodies,faceCount:d.faces.length,faceAppearanceGroups:groups(d.faces),faceTypes:Object.fromEntries([...new Set(d.faces.map(x=>x.surfaceType))].map(t=>[t,d.faces.filter(x=>x.surfaceType===t).length])),brepValid:m.brepValid,missingFaces:m.missingTriangulatedFaces,degenerateTriangles:m.degenerateTriangles},annotation:entry?{...entry,regionEvidence}:null};
 });
 const instances=manifest.instances.filter(i=>!i.isAssembly).map(i=>{
  const def=definitions.find(d=>d.id===i.definitionId),n=Number(i.definitionId.split('_').at(-1)),before=prior(i.name,i.definitionId,i.id),after=current(i.name,i.definitionId,i.id);

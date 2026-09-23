@@ -34,7 +34,7 @@
     }
   ],
   "schemaVersion": 1,
-  "date": "2026-09-22",
+  "date": "2026-09-24",
   "materialReview": "assets/authored/material-review.json",
   "historicalAudit": {
     "path": "docs/appearance/cad-finishing-audit.json",
@@ -65,6 +65,18 @@
           "d_0_1_1_21"
         ],
         "current": "Translucent vitreous enamel restored 2026-09-22. Raw catalog keeps its existing red appearance. Historical source name says red, but the later fresh XCAF audit reports blue body colors; neither source color establishes composition."
+      },
+      {
+        "id": "maker rose-gold clarification",
+        "scope": "hardGold, gold and satinGold appearance profiles",
+        "current": "Marco confirms no regular yellow gold. Rose-gold appearance replaces yellow; only explicitly identified parts gain solid-metal claims."
+      },
+      {
+        "id": "escape-wheel alloy",
+        "scope": [
+          "d_0_1_1_233"
+        ],
+        "current": "Marco confirms steel. Previous unresolved/warm interpretation is superseded; circular finish retained."
       }
     ]
   },
@@ -88,7 +100,7 @@
       "11": "user-approved recessed enamel",
       "12": "user-approved bridge screw mounting pad frosting"
     },
-    "materialSourceSha256": "a7484b53b6cfc65961e893194f4816830d41ce748d8e098e8c1a1cdbb4f28fb8",
+    "materialSourceSha256": "a3823b1ff2114135a0f2af4f92ec9a7d63530e64cc9e83fa58e2229ce2df09ea",
     "packagerSourceSha256": "e81226b8dbe710f0b4176077c699ddcf12acc0ffb7c823551d981004aac4426f"
   },
   "coverage": {
@@ -97,11 +109,11 @@
     "movement": 223,
     "catalog": 142,
     "byStatus": {
-      "verified": 92,
+      "verified": 93,
       "inferred": 261,
-      "unresolved": 12
+      "unresolved": 11
     },
-    "changedFamilyInstances": 107,
+    "changedFamilyInstances": 108,
     "annotatedDefinitions": 59
   },
   "meaning": "Verified concerns identified visible material family/region, not all surfaces or measured PBR values. Every retained unobserved assignment remains inferred/unresolved. Source RGB is display evidence, never calibrated material measurement.",
@@ -20922,17 +20934,17 @@
       "name": "ml01 Minutenrad z64 m0,13",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -21458,17 +21470,17 @@
       "name": "ml01 ۆHMinRad z26 m0,15",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -22936,17 +22948,17 @@
       "name": "ml01 Unruhexcenter",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Gold eccentric weights; karat unspecified",
+      "intendedMaterial": "Solid rose-gold eccentric weights; karat unspecified",
       "materialReview": {
-        "physicalMaterial": "Gold; karat unspecified",
+        "physicalMaterial": "Solid rose gold; karat unspecified",
         "surfaceFinish": "Polished",
-        "renderingApproximation": "Dedicated gold assignment independent of rim; authored hue and roughness",
-        "evidence": "maker; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated gold assignment independent of rim; rose-gold hue and roughness are authored",
+        "evidence": "maker; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
-      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
+      "surfaceReview": "All four timing eccentrics use independent polished rose gold, roughness .16. Balance rim d110 remains unchanged and unresolved. Karat and numerical color are unspecified.",
+      "evidence": "Maker specifications and maker-feedback-2026-09-24: solid rose-gold eccentrics",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -23547,11 +23559,17 @@
       "name": "020-30x80 kon ms",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
+      "materialReview": {
+        "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+        "surfaceFinish": "Retained polished or satin finish",
+        "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+        "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+      },
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -23693,11 +23711,17 @@
       "name": "Flitter 200x400",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Satin yellow-gold-colored metal",
-      "surfaceReview": "Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict. User correction: goldish thin washer with circular satin grain; authored color and roughness, not an alloy claim.",
+      "intendedMaterial": "Satin rose-gold-colored metal",
+      "materialReview": {
+        "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+        "surfaceFinish": "Retained polished or satin finish",
+        "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+        "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+      },
+      "surfaceReview": "Thin washer d121 retains its satin finish, now with rose-gold appearance following maker-feedback-2026-09-24. Exact alloy remains unresolved. Existing satin finish retained; rose hue follows maker clarification, not an alloy claim.",
       "evidence": "User explicit thin-washer goldish satin correction; source Flitter 200x400 identity",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.31,
         "pattern": 0,
@@ -25389,17 +25413,17 @@
       "name": "ml01 Stundenrad1 z40 m0,17",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -27678,11 +27702,17 @@
       "name": "020-12x60 kon ms",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
+      "materialReview": {
+        "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+        "surfaceFinish": "Retained polished or satin finish",
+        "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+        "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+      },
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -29067,11 +29097,17 @@
       "name": "020-40x120 kon ms",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
+      "materialReview": {
+        "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+        "surfaceFinish": "Retained polished or satin finish",
+        "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+        "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+      },
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -29530,17 +29566,17 @@
       "name": "ml01 Stundenrad2 z32 m0,12",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -31270,11 +31306,17 @@
       "name": "020-40x135 ms",
       "status": "inferred",
       "confidence": "medium/low; no per-surface photographic proof",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
+      "materialReview": {
+        "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+        "surfaceFinish": "Retained polished or satin finish",
+        "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+        "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+      },
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -31636,11 +31678,17 @@
       "name": "incabloc_sous_937-21_Lyrafeder",
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Warm gold-colored setting/pin",
-      "surfaceReview": "Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved. Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
+      "materialReview": {
+        "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+        "surfaceFinish": "Retained polished or satin finish",
+        "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+        "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+      },
+      "surfaceReview": "Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved. Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
       "assignment": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -32019,17 +32067,17 @@
       "name": "ml01 Wechselrad1 z36 m0,177",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -32477,17 +32525,17 @@
       "name": "ml01 Wechselrad2 z36 m0,177",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -32852,17 +32900,17 @@
       "name": "ml01 Wechselrad3 z 24 m0,15",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -34186,23 +34234,23 @@
     {
       "id": "d_0_1_1_233",
       "name": "ml01 Gangrad Niv20.5",
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
+      "status": "verified",
+      "confidence": "high for identified visible family/region; authored numerical response",
+      "intendedMaterial": "Steel escape wheel",
       "materialReview": {
-        "physicalMaterial": "Unresolved escape-wheel alloy",
+        "physicalMaterial": "Steel; exact grade unspecified",
         "surfaceFinish": "Retained circular satin",
-        "renderingApproximation": "Legacy brass profile is a warm appearance only; not a verified brass identity",
-        "evidence": "Existing source/reference audit; no steel conversion authorized"
+        "renderingApproximation": "Dedicated circularSteel profile; neutral steel color with previous circular grain and roughness retained",
+        "evidence": "maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
+      "surfaceReview": "Steel replaces the legacy warm appearance; circular brushing and roughness are preserved. Maker-confirmed steel; neutral appearance with retained circular grain, roughness .27 and anisotropy .58. Steel grade and numerical optics unmeasured. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "maker-feedback-2026-09-24: escape wheel is steel",
       "assignment": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "circularSteel",
         "assignment": "source-definition"
       },
       "source": {
@@ -34861,17 +34909,17 @@
       "name": "ml01 Kleinbodenrad z75 m0,1159",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -35682,17 +35730,17 @@
       "name": "ml01 Sekundenrad z81 m0,102",
       "status": "verified",
       "confidence": "high for identified visible family/region; authored numerical response",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
       "materialReview": {
-        "physicalMaterial": "Solid 14 ct hard-gold alloy; precise hue/composition unspecified",
+        "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
         "surfaceFinish": "Retained circular brushing and existing edge response",
-        "renderingApproximation": "Dedicated hardGold profile; warm-gold color authored, not a measured alloy color",
-        "evidence": "maker; CAD wheel identities; user approval 2026-09-22"
+        "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+        "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
       },
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
       "assignment": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -48936,9 +48984,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -48948,7 +48996,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -49082,9 +49130,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -49094,7 +49142,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -50177,9 +50225,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Gold eccentric weights; karat unspecified",
-      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
-      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
+      "intendedMaterial": "Solid rose-gold eccentric weights; karat unspecified",
+      "evidence": "Maker specifications and maker-feedback-2026-09-24: solid rose-gold eccentrics",
+      "surfaceReview": "All four timing eccentrics use independent polished rose gold, roughness .16. Balance rim d110 remains unchanged and unresolved. Karat and numerical color are unspecified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50189,7 +50237,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -50250,9 +50298,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Gold eccentric weights; karat unspecified",
-      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
-      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
+      "intendedMaterial": "Solid rose-gold eccentric weights; karat unspecified",
+      "evidence": "Maker specifications and maker-feedback-2026-09-24: solid rose-gold eccentrics",
+      "surfaceReview": "All four timing eccentrics use independent polished rose gold, roughness .16. Balance rim d110 remains unchanged and unresolved. Karat and numerical color are unspecified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50262,7 +50310,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -50323,9 +50371,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Gold eccentric weights; karat unspecified",
-      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
-      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
+      "intendedMaterial": "Solid rose-gold eccentric weights; karat unspecified",
+      "evidence": "Maker specifications and maker-feedback-2026-09-24: solid rose-gold eccentrics",
+      "surfaceReview": "All four timing eccentrics use independent polished rose gold, roughness .16. Balance rim d110 remains unchanged and unresolved. Karat and numerical color are unspecified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50335,7 +50383,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -50396,9 +50444,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Gold eccentric weights; karat unspecified",
-      "evidence": "Maker watch specifications: gold excenters; user approval 22 September 2026 supersedes prior rim-color coupling",
-      "surfaceReview": "All four timing eccentrics use a separate polished gold appearance, roughness .16. The balance rim d110 keeps its unresolved alloy and existing appearance. Gold karat and exact hue are not specified.",
+      "intendedMaterial": "Solid rose-gold eccentric weights; karat unspecified",
+      "evidence": "Maker specifications and maker-feedback-2026-09-24: solid rose-gold eccentrics",
+      "surfaceReview": "All four timing eccentrics use independent polished rose gold, roughness .16. Balance rim d110 remains unchanged and unresolved. Karat and numerical color are unspecified.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50408,7 +50456,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -50907,9 +50955,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -50919,7 +50967,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -51126,9 +51174,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Satin yellow-gold-colored metal",
+      "intendedMaterial": "Satin rose-gold-colored metal",
       "evidence": "User explicit thin-washer goldish satin correction; source Flitter 200x400 identity",
-      "surfaceReview": "Thin washer d121 uses yellow-gold color and circular satin. This resolves the prior steel/warm appearance conflict. User correction: goldish thin washer with circular satin grain; authored color and roughness, not an alloy claim.",
+      "surfaceReview": "Thin washer d121 retains its satin finish, now with rose-gold appearance following maker-feedback-2026-09-24. Exact alloy remains unresolved. Existing satin finish retained; rose hue follows maker clarification, not an alloy claim.",
       "before": {
         "color": 12831184,
         "metalness": 1,
@@ -51138,7 +51186,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.31,
         "pattern": 0,
@@ -52951,9 +52999,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -52963,7 +53011,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -54776,9 +54824,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -54788,7 +54836,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -55433,9 +55481,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -55445,7 +55493,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -55506,9 +55554,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -55518,7 +55566,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -55652,9 +55700,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -55664,7 +55712,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -55725,9 +55773,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -55737,7 +55785,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -55871,9 +55919,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -55883,7 +55931,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -56528,9 +56576,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -56540,7 +56588,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -57258,9 +57306,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -57270,7 +57318,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -58864,9 +58912,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -58876,7 +58924,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -58937,9 +58985,9 @@
       },
       "status": "inferred",
       "confidence": "medium/low",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -58949,7 +58997,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -59448,9 +59496,9 @@
       },
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved. Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved. Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -59460,7 +59508,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -59667,9 +59715,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59679,7 +59727,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -59813,9 +59861,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59825,7 +59873,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -59959,9 +60007,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -59971,7 +60019,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -60689,9 +60737,9 @@
       },
       "status": "unresolved",
       "confidence": "low/conflicting",
-      "intendedMaterial": "Warm gold-colored setting/pin",
+      "intendedMaterial": "Rose-gold-colored setting/pin",
       "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved. Smooth polished warm metal; actual alloy/process not established for every hidden pin.",
+      "surfaceReview": "Incabloc lyre spring source gray versus current warm treatment; precise variant unresolved. Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.",
       "before": {
         "color": 14202226,
         "metalness": 1,
@@ -60701,7 +60749,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14202226,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.16,
         "pattern": 0,
@@ -62209,11 +62257,11 @@
           ]
         ]
       },
-      "status": "unresolved",
-      "confidence": "low/conflicting",
-      "intendedMaterial": "Warm wheel/compound-part metal; no blanket alloy claim",
-      "evidence": "STEP/XCAF source identity/appearance; existing family review in FINISHING_REFERENCES.md (not individual physical confirmation)",
-      "surfaceReview": "Escape-wheel source gray versus warm wheel treatment; current photographed-family interpretation cannot certify this concealed alloy. Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "status": "verified",
+      "confidence": "high for identity and appearance family; numerical finish unmeasured",
+      "intendedMaterial": "Steel escape wheel",
+      "evidence": "maker-feedback-2026-09-24: escape wheel is steel",
+      "surfaceReview": "Steel replaces the legacy warm appearance; circular brushing and roughness are preserved. Maker-confirmed steel; neutral appearance with retained circular grain, roughness .27 and anisotropy .58. Steel grade and numerical optics unmeasured. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62223,15 +62271,15 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14264957,
+        "color": 13094356,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
-        "family": "brass",
+        "family": "circularSteel",
         "assignment": "source-definition"
       },
-      "mismatch": "No proven new mismatch; retained interpretation has stated limits",
-      "disposition": "Retained pending listed evidence; no correctness claim",
+      "mismatch": "brass → circularSteel",
+      "disposition": "Targeted correction",
       "annotation": false
     },
     {
@@ -62503,9 +62551,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62515,7 +62563,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,
@@ -62868,9 +62916,9 @@
       },
       "status": "verified",
       "confidence": "high for identity and appearance family; numerical finish unmeasured",
-      "intendedMaterial": "Solid 14 ct hard-gold alloy wheel",
-      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; source wheel identity; user approval 22 September 2026",
-      "surfaceReview": "Maker-documented wheel material; restrained warm-gold rendering with retained circular brushing. Exact alloy hue, grain and optical values are authored. Steel hubs and pinions, and the unresolved escape wheel, are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
+      "intendedMaterial": "Solid 14 ct hard rose-gold alloy wheel",
+      "evidence": "https://www.marcolangwatches.com/en/watches/ — solid 14 ct hard gold alloy wheels; maker-feedback-2026-09-24 confirms rose gold; source wheel identity",
+      "surfaceReview": "Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate. Finishing-fidelity pass, 10 September 2026: fine derivative-filtered grain with restrained relief/color contrast. Bridge bases, bevels and plate frost use explicit source roles; unlisted undersides stay neutral. Numerical grain is authored.",
       "before": {
         "color": 14462597,
         "metalness": 1,
@@ -62880,7 +62928,7 @@
         "assignment": "source-definition"
       },
       "after": {
-        "color": 14005378,
+        "color": 14265236,
         "metalness": 1,
         "roughness": 0.27,
         "pattern": 2,

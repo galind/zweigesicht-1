@@ -14,12 +14,14 @@ const profiles = {
   warmPlate: { color: 0xd4a58e, metalness: 1, roughness: 0.27, pattern: 1 },
   frosted: { color: 0xd2a48b, metalness: 1, roughness: 0.49, pattern: 3 },
   brass: { color: 0xd9aa7d, metalness: 1, roughness: 0.27, pattern: 2 },
-  // Maker-documented 14 ct hard-gold wheels; hue and brushing are authored.
-  hardGold: { color: 0xd5b482, metalness: 1, roughness: 0.27, pattern: 2 },
+  // Marco confirms rose gold and a steel escape wheel (feedback relayed 2026-09-24).
+  // Screen colors are authored approximations; retain the existing grain/roughness.
+  hardGold: { color: 0xd9ab94, metalness: 1, roughness: 0.27, pattern: 2 },
+  circularSteel: { color: 0xc7cdd4, metalness: 1, roughness: 0.27, pattern: 2 },
   barrel: { color: 0xd2a079, metalness: 1, roughness: 0.3, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
-  gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
-  satinGold: { color: 0xd8b572, metalness: 1, roughness: 0.31, pattern: 0 },
+  gold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
+  satinGold: { color: 0xd9ab94, metalness: 1, roughness: 0.31, pattern: 0 },
   roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xbac1ca, metalness: 1, roughness: 0.055, pattern: 5 },
@@ -86,8 +88,9 @@ for (const [family, ids] of Object.entries({
     159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188, 211, 214, 217,
     220, 234, 235, 237, 242, 252, 254,
   ],
-  // Retained warm appearances: collet and escape-wheel alloys are unresolved.
-  brass: [115, 233],
+  // Collet alloy remains unresolved; the escape wheel is maker-confirmed steel.
+  brass: [115],
+  circularSteel: [233],
   hardGold: [94, 96, 141, 187, 210, 213, 216, 238, 243],
   gold: [111, 118, 163, 179, 200, 206],
   satinGold: [121],
