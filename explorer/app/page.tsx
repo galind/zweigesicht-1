@@ -884,8 +884,12 @@ export default function Home() {
               <p>
                 A big thank you to Marco Lang for generously sharing his CAD
                 files, giving everyone the chance to explore his watches and
-                learn how they’re made. I’m also grateful for his feedback and
-                advice throughout this project.
+                learn how they’re made.
+              </p>
+              <p>
+                On a personal note, thank you, Marco, for your feedback, advice
+                and encouragement throughout this project and my career. Your
+                support means a lot to me.
               </p>
               <p>
                 And thank you to everyone who uses and enjoys this website. I
