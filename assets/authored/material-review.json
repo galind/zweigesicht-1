@@ -322,6 +322,97 @@
       "preserved": "1.8× steel frequency, fine-layer strengths, source axes and masks, base roughness, anisotropy, lighting, polished edges, frosting, circular brushing, warm-metal grain, dial materials, source geometry and face flipping.",
       "limits": "Qualitative interpretation of a supplied photograph; light direction, camera, white balance and processing are not matched. No measured roughness or alloy-color inference. The dial/edge/frosting differences observed in the comparison are outside this scoped grain correction.",
       "localComparison": "artifacts/browser/steel-hairline-refinement/comparison.png and detail-comparison.png; a48e751 baseline, both faces at overview and two zoom steps."
+    },
+    "flatViewLightingFollowUp": {
+      "checked": "2026-09-24",
+      "evidence": "user-flat-view-lighting-2026-09-24",
+      "scope": "Studio reflection environment only; flat default camera, direct lights, exposure, environment intensity, materials, texture scales and source geometry unchanged.",
+      "surround": {
+        "before": "#51545a",
+        "after": "#5a5e64"
+      },
+      "panelFalloff": {
+        "before": "intensity * (0.18 + 0.82 * exp(-2.2*x*x - 1.4*y*y))",
+        "after": "linear surround RGB + intensity * (1-x*x)^2 * (1-y*y)^2",
+        "rationale": "Each card meets the surround at its boundary with zero analytic slope, reducing abrupt rectangular transitions during orbit."
+      },
+      "panels": [
+        {
+          "position": [
+            -30,
+            -18,
+            -60
+          ],
+          "size": [
+            90,
+            74
+          ],
+          "intensity": 2.8
+        },
+        {
+          "position": [
+            60,
+            18,
+            -8
+          ],
+          "size": [
+            24,
+            90
+          ],
+          "intensity": 3
+        },
+        {
+          "position": [
+            0,
+            65,
+            0
+          ],
+          "size": [
+            85,
+            32
+          ],
+          "intensity": 2
+        },
+        {
+          "position": [
+            -30,
+            18,
+            60
+          ],
+          "size": [
+            90,
+            74
+          ],
+          "intensity": 2.8
+        },
+        {
+          "position": [
+            -60,
+            -12,
+            8
+          ],
+          "size": [
+            38,
+            100
+          ],
+          "intensity": 1.7
+        },
+        {
+          "position": [
+            0,
+            -65,
+            0
+          ],
+          "size": [
+            75,
+            40
+          ],
+          "intensity": 1.2
+        }
+      ],
+      "rationale": "Broader off-axis keys, unequal edge/fill cards and slightly raised surround provide directional steel reflections in the flat view. A dimmer trial suppressed metallic highlights; a brighter reverse-face trial washed out keyless steel, so its key was repositioned.",
+      "limits": "Authored presentation lighting, not a measured reconstruction of the supplied photograph. Reflections change on all materials even though material parameters are fixed. Does not claim physically matched photographic illumination.",
+      "localComparison": "artifacts/browser/lighting-refinement/comparison.png; 4300c6b baseline and current environment, both faces at normal distance and two zoom steps."
     }
   }
 }

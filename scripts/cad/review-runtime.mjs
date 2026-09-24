@@ -670,12 +670,25 @@ for(const p of v.renderParts.values()){
 results.push({check:'all six emphasis groups preserve physical finishes, opaque depth, selected members and surrounding context across reveal threshold and reset',status:'pass'});
 const {StudioEnvironment}=load('explorer/src/viewer/StudioEnvironment.ts');
 const studio=new StudioEnvironment(),studioResources=[];
-studio.traverse(o=>{if(o instanceof THREE.Mesh){studioResources.push(o.geometry,o.material);assert.ok(o.material.color.r>1);assert.equal(o.material.side,THREE.DoubleSide)}});
+studio.traverse(o=>{if(o instanceof THREE.Mesh){
+ studioResources.push(o.geometry,o.material);
+ assert.equal(o.material.side,THREE.DoubleSide);
+ assert.equal(o.material.vertexColors,true);
+ const colors=o.geometry.getAttribute('color'),uv=o.geometry.getAttribute('uv');
+ let peak=0;
+ for(let i=0;i<colors.count;i++){
+  const rgb=[colors.getX(i)*o.material.color.r,colors.getY(i)*o.material.color.g,colors.getZ(i)*o.material.color.b];
+  assert.ok(rgb.every(c=>Number.isFinite(c)&&c>=0));peak=Math.max(peak,...rgb);
+  if(uv.getX(i)===0||uv.getX(i)===1||uv.getY(i)===0||uv.getY(i)===1)
+   [studio.background.r,studio.background.g,studio.background.b].forEach((c,k)=>assert.ok(Math.abs(rgb[k]-c)<1e-6,'Card edges match the reflection surround'));
+ }
+ assert.ok(peak>1,'Combined vertex/material radiance retains HDR highlights');
+}});
 assert.equal(studioResources.length,12);
 const studioDisposals=new Map(studioResources.map(r=>[r,0]));
 for(const r of studioResources)r.addEventListener('dispose',()=>studioDisposals.set(r,studioDisposals.get(r)+1));
 studio.dispose();for(const count of studioDisposals.values())assert.equal(count,1);
-results.push({check:'actual six-card studio has HDR emission colors and disposes every temporary geometry/material once',status:'pass'});
+results.push({check:'actual six-card studio has finite HDR radiance, feathered edges matching its surround, and disposes every temporary geometry/material once',status:'pass'});
 
 // No DOM was connected in this CPU harness, so OrbitControls has no DOM listeners to dispose.
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}

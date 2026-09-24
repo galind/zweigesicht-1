@@ -76,6 +76,16 @@
         "User approved reducing broad grain contribution and relief while retaining finer hairlines."
       ],
       "limits": "Image is not calibrated material data; differences in lighting and photographic processing remain. Does not authorize changes to alloys, source geometry or mechanical claims."
+    },
+    {
+      "id": "user-flat-view-lighting-2026-09-24",
+      "type": "direct user presentation preference",
+      "provided": "2026-09-24",
+      "url": null,
+      "supports": [
+        "User likes the flat view and requests improved lighting/reflections without changing the default angle."
+      ],
+      "limits": "Presentation preference; no new maker, alloy or mechanical evidence. Existing supplied photograph remains qualitative guidance."
     }
   ]
 }
