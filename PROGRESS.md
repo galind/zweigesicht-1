@@ -114,11 +114,11 @@ The checkout includes merged PRs #1 (homepage SEO), #2 (loading layout) and #3 (
 
 On 14 September, Vercel confirmed valid configuration for `zweigesicht-1.guillemgalindo.com` on project `zweigesicht-1` (`prj_Z2S8IQ88PypFXHg6JktpE2CJMoju`); a fresh HTTPS check returned 200.
 
-At the user's request, connected `zweigesicht-1.com`, `thesevenspheres.com` and both `www` variants to that project and published a dashboard CDN routing rule, `Redirect watch domains to Marco Lang` (`01e4b6ab-ca8b-4eda-a001-adf5f2d20dda`). It matches path `^/.*$` only when the host matches `^(www\.)?(zweigesicht-1\.com|thesevenspheres\.com)$`, returning 301 to `https://www.marcolangwatches.com/`. This rule lives in Vercel's dashboard, not the repository configuration; the explorer hostname is excluded.
+At the user's request, the four redirect hostnames were later removed from the Vercel project. Only the canonical `zweigesicht-1.guillemgalindo.com` remains attached there; the dashboard CDN routing rule, `Redirect watch domains to Marco Lang` (`01e4b6ab-ca8b-4eda-a001-adf5f2d20dda`), remains in place but has no attached watch domains.
 
-Zweigesicht retains its Vercel nameservers. Seven Spheres retains Namecheap BasicDNS: changed its parking CNAME `www` to `4e9bb417d6b08f83.vercel-dns-017.com.` and replaced the apex parking redirect with A `@` → `216.198.79.1`, both TTL 30 minutes. Mail settings were retained.
+Both domains now use Namecheap BasicDNS. Namecheap Domain-tab forwarding is configured for `zweigesicht-1.com`, `www.zweigesicht-1.com`, `thesevenspheres.com` and `www.thesevenspheres.com`, each targeting `https://www.marcolangwatches.com/`. The obsolete Vercel A records and Seven Spheres `www` CNAME were removed; mail settings and the locked SPF record were retained.
 
-Verification around 18:38 UTC: all four redirect hostnames show Valid Configuration in Vercel. Both Zweigesicht addresses returned HTTPS 301 to the destination using ordinary DNS. Both Seven Spheres addresses passed certificate validation and returned the same 301 using curl `--resolve` to the configured Vercel IP; ordinary local DNS still reached the old endpoint or timed out. Next domain action: recheck Seven Spheres through ordinary DNS after propagation. No site build or CAD deployment was performed for these redirects.
+Configuration was visibly confirmed in Namecheap on 15 September. Immediate browser checks still reached cached Vercel 404 responses for all four hosts, so public redirect behavior remains pending DNS/forwarding propagation. No site build or CAD deployment was performed for these redirects.
 
 ## Verification and limits
 
@@ -316,3 +316,17 @@ The local refinement pass is complete. Next action: physical iPhone/Android veri
 
 
 PR publication: at the user's request, pushed `codex/website-polish` over SSH and opened [PR #8](https://github.com/galind/zweigesicht-1/pull/8) against `main` through the connected GitHub app. It contains the verified refinement commit `bcc8e00`. Next action: PR review and the outstanding physical-phone/accessibility checks. No merge or manual deployment was performed; existing branch integrations may run on push. Unrelated local domain-history edits remain excluded.
+
+
+## Disassembly direction and sequence review — 24 September 2026
+
+Started from fetched `origin/main` at `5402e93` on `codex/disassembly-review`; the connected GitHub app confirms PRs #6, #7 and #8 merged. The [disassembly review](docs/DISASSEMBLY_REVIEW.md) records implemented coordinates/order, four configurations on both faces, six Focus sections, source-solid evidence, interrupted motion and before/after comparisons.
+
+Corrected all 18 lug-packet offsets to follow the continuous attachment frame through Flip, including target framing, so the Skeleton attachments separate outward rather than through the movement. Shortened four case-back/seal axial distances after reproducing landscape clipping in the unchanged baseline; the sampled maximum projected extent falls from 1.19071 to 0.96435 (edge = 1). Source geometry, finishes, fitted assembly endpoints, preferences, selection behavior and existing visible/hidden-case Flip timing are preserved.
+
+Verification: 17 state/motion/packaging tests, 113 CPU source/runtime checks, 543 browser assertions across the configuration matrix, existing suites and three viewport transition runs, plus 12 fresh-production checks pass. TypeScript, lint, production build and SEO/HTTP checks pass. Source-solid evidence includes 40 lug/ring samples, 28 rejected-ring comparisons and 54 back/seal/dial samples; no named outer-case pair increases overlap above its original fit. Local ignored evidence is in `artifacts/browser/disassembly-review/` and `artifacts/disassembly-cad/`. The report records the warm-catalog skips, repeated affected suites, existing build notices and evidence limits.
+
+Middle-ring/plate interference remains: the simple axial alternative introduces tube/stem interference, so a broader staged extraction needs mechanical review. Opposite-face Focus can remain obscured by its contextual plate. This is an illustrative construction view, not a service procedure. Physical iPhone/Android, Safari/WebKit and representative accessibility/usability review remain outstanding. Next action: local review of the report and comparisons, followed by mechanical/device review. Changes are committed locally only; no push, PR, merge or deployment. Unrelated domain-history edits remain unstaged and excluded.
+
+
+PR publication: at the user's request, pushed `codex/disassembly-review` over SSH and opened [PR #9](https://github.com/galind/zweigesicht-1/pull/9) against `main`. The user subsequently authorized including the existing domain-history corrections above; they are now included in this PR. Next action: PR review and the outstanding mechanical/device checks. No merge or manual deployment.

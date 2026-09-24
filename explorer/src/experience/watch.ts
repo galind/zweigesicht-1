@@ -49,10 +49,12 @@ export function validateWatchPatch(
 }
 const casePackets = new Map(WATCH.leaves.map((p) => [p.id, p.packet]));
 const caseVectors: Record<string, [number, number, number]> = {
-  'front-back': [0, 0, 120],
-  'front-seal': [0, 0, 110],
-  'rear-back': [0, 0, -120],
-  'rear-seal': [0, 0, -110],
+  // Outside the complete display envelopes for every hand style, with >8 mm
+  // final axial gaps. Fixed across configurations; see DISASSEMBLY_REVIEW.md.
+  'front-back': [0, 0, 60],
+  'front-seal': [0, 0, 50],
+  'rear-back': [0, 0, -75],
+  'rear-seal': [0, 0, -65],
   middle: [-55, 0, 0],
   crown: [45, 0, 0],
   'upper-lugs': [0, 40, 0],

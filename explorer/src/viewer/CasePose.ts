@@ -55,6 +55,23 @@ export function caseFlipProgress(
       )
     : THREE.MathUtils.lerp(from, to, motionEase(progress));
 }
+
+/** Separation belongs to the attachment frame, just like its source pose.
+ * Keep the authored vector unmodified so reversals and configuration changes
+ * always compose from the currently displayed flip phase. */
+export function caseSeparationOffset(
+  id: string,
+  offset: THREE.Vector3,
+  turn: number,
+) {
+  const result = offset.clone();
+  if (!CASE_LUGS.has(id) || turn === 0) return result;
+  if (turn === 1) return result.set(offset.x, -offset.y, -offset.z);
+  return result.applyAxisAngle(
+    new THREE.Vector3(1, 0, 0),
+    -caseFlipPhase(turn).angle,
+  );
+}
 /** Source CAD frame. The observer follows the same inverse X rotation, leaving
  * the attachments stationary on screen while the case turns between them.
  * This change of reference frame preserves all source buffers and case matrices.

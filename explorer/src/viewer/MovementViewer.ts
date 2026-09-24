@@ -3,6 +3,7 @@ import {
   caseDisplayMatrix,
   caseFlipPhase,
   caseFlipProgress,
+  caseSeparationOffset,
   CASE_PIVOT,
 } from './CasePose';
 import { loadCaseRecovery, recoverCaseSurfaces } from './CaseRecovery';
@@ -1056,11 +1057,18 @@ export class MovementViewer {
     const bounds = new THREE.Box3();
     for (const p of this.renderParts.values())
       if (include(p)) {
+        const offset = this.fittedCase?.has(p.source.id)
+          ? caseSeparationOffset(
+              p.source.id,
+              p.target,
+              this.state.side === 'back' ? 1 : 0,
+            )
+          : p.target;
         const matrix = new THREE.Matrix4()
           .makeTranslation(
-            p.center.x + p.target.x,
-            p.center.y + p.target.y,
-            p.center.z + p.target.z,
+            p.center.x + offset.x,
+            p.center.y + offset.y,
+            p.center.z + offset.z,
           )
           .multiply(
             new THREE.Matrix4().makeRotationFromQuaternion(p.targetRotation),
@@ -1146,6 +1154,13 @@ export class MovementViewer {
       p.mesh.geometry.computeBoundingBox();
       const b = p.mesh.geometry.boundingBox!;
       const matrix = p.displayMatrix ?? p.assembled;
+      const offset = this.fittedCase?.has(p.source.id)
+        ? caseSeparationOffset(
+            p.source.id,
+            p.target,
+            this.state.side === 'back' ? 1 : 0,
+          )
+        : p.target;
       for (let i = 0; i < 8; i++)
         points.push(
           new THREE.Vector3(
@@ -1154,7 +1169,7 @@ export class MovementViewer {
             i & 4 ? b.max.z : b.min.z,
           )
             .applyMatrix4(matrix)
-            .add(p.target),
+            .add(offset),
         );
     }
     return points;
@@ -2079,7 +2094,10 @@ export class MovementViewer {
         temp.makeTranslation(p.center.x, p.center.y, p.center.z);
         p.mesh.matrix.premultiply(temp);
       }
-      temp.makeTranslation(p.offset.x, p.offset.y, p.offset.z);
+      const offset = this.fittedCase?.has(p.source.id)
+        ? caseSeparationOffset(p.source.id, p.offset, this.caseTurn)
+        : p.offset;
+      temp.makeTranslation(offset.x, offset.y, offset.z);
       p.mesh.matrix.premultiply(temp);
       if (this.state.layout === 'spread' && this.spread.has(p.source.id)) {
         const pivot = p.mesh.geometry

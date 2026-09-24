@@ -5,6 +5,10 @@ import type {
   ViewerSnapshot,
 } from '@/src/viewer/MovementViewer';
 import { runUxChecks } from '@/src/viewer/uxValidation';
+import {
+  runDisassemblyChecks,
+  runDisassemblyTransitionChecks,
+} from '@/src/viewer/disassemblyValidation';
 import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import { runWatchChecks } from '@/src/viewer/watchValidation';
 import { runDialChecks } from '@/src/viewer/dialValidation';
@@ -102,6 +106,14 @@ export default function InspectionPanel({
       </div>
       <button onClick={() => void run((v) => runExplosionChecks(v))}>
         Run explosion checks
+      </button>
+      <button onClick={() => void run((v) => runDisassemblyChecks(v))}>
+        Run disassembly review
+      </button>
+      <button
+        onClick={() => void run((v) => runDisassemblyTransitionChecks(v))}
+      >
+        Run disassembly transitions
       </button>
       <button onClick={() => void run((v) => runDialChecks(v))}>
         Run dial checks
