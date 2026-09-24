@@ -50,16 +50,18 @@ export function InformationPanel({
         <SheetContent
           style={style}
           id="watch-information"
-          className="explorer-panel information-panel"
+          className="explorer-panel information-panel header-panel"
           showOverlay={mobile}
           scrollContent
           finalFocus={() => (restoreFocus ? trigger.current : false)}
         >
           <SheetHeader>
             <SheetTitle>Learn about the watch</SheetTitle>
-            <SheetDescription>Zweigesicht–1 by Marco Lang</SheetDescription>
+            <SheetDescription className="sr-only">
+              Zweigesicht–1 by Marco Lang
+            </SheetDescription>
           </SheetHeader>
-          <div className="watch-reading">
+          <div className="watch-reading header-panel-body">
             <p className="watch-description">{watchDescription}</p>
             <a
               className="watch-official-link"
