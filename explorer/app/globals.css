@@ -1388,7 +1388,9 @@ canvas:focus-visible {
     calc(100vw - var(--popup-width) / 2 - 16px)
   );
 
-  max-height: calc(100dvh - var(--panel-bottom, 90px) - 16px);
+  max-height: calc(
+    100dvh - var(--panel-bottom, 90px) - var(--viewport-top, 0px) - 16px
+  );
 }
 .explorer-panel[data-side='bottom'] [data-slot='sheet-header'] {
   position: sticky;
@@ -1741,7 +1743,12 @@ canvas:focus-visible {
       100vw - max(12px, env(safe-area-inset-left)) -
         max(12px, env(safe-area-inset-right))
     ) !important;
-    max-height: min(72dvh, calc(100dvh - var(--panel-bottom, 120px) - 16px));
+    max-height: min(
+      72dvh,
+      calc(
+        100dvh - var(--panel-bottom, 120px) - var(--viewport-top, 0px) - 16px
+      )
+    );
   }
   .explorer-panel.information-panel[data-slot='sheet-content'],
   .text-enlarged .explorer-panel.information-panel[data-slot='sheet-content'] {
@@ -1758,5 +1765,12 @@ canvas:focus-visible {
 @supports not (backdrop-filter: blur(1px)) {
   :root {
     --panel-surface: #1c1c1c;
+  }
+}
+
+/* Keep phone search readable without triggering focus zoom on iOS. */
+@media (pointer: coarse) {
+  .component-finder .catalog-search input {
+    font-size: max(16px, 1rem);
   }
 }

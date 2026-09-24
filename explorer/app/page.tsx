@@ -98,11 +98,16 @@ export default function Home() {
   const [topBounds, setTopBounds] = useState({ header: 88, context: 150 });
   const [panelX, setPanelX] = useState<number | null>(null);
   const [panelBottom, setPanelBottom] = useState<number | null>(null);
+  const [viewportInsets, setViewportInsets] = useState({ top: 0, bottom: 0 });
   const panelStyle = {
     '--header-bottom': `${topBounds.header}px`,
     '--context-bottom': `${topBounds.context}px`,
     '--panel-anchor-x': panelX === null ? '50vw' : `${panelX}px`,
-    '--panel-bottom': panelBottom === null ? undefined : `${panelBottom}px`,
+    '--panel-bottom':
+      panelBottom === null
+        ? undefined
+        : `${Math.max(panelBottom, viewportInsets.bottom + 12)}px`,
+    '--viewport-top': `${viewportInsets.top}px`,
   } as CSSProperties;
   useEffect(() => {
     const measure = () => {
@@ -113,12 +118,32 @@ export default function Home() {
         ?.getBoundingClientRect();
       if (dockRect) setPanelBottom(window.innerHeight - dockRect.top + 12);
     };
+    const viewport = window.visualViewport;
+    const measureViewport = () => {
+      // Pinch zoom keeps its native viewport behavior. Only compensate for
+      // keyboard/browser chrome changes at the normal page scale.
+      const top = viewport?.scale === 1 ? viewport.offsetTop : 0;
+      const bottom =
+        viewport?.scale === 1
+          ? Math.max(0, window.innerHeight - viewport.height - top)
+          : 0;
+      setViewportInsets((previous) =>
+        previous.top === top && previous.bottom === bottom
+          ? previous
+          : { top, bottom },
+      );
+    };
     window.addEventListener('resize', measure);
+    viewport?.addEventListener('resize', measureViewport);
+    viewport?.addEventListener('scroll', measureViewport);
+    measureViewport();
     const observer = new ResizeObserver(measure);
     const dock = document.querySelector('.action-dock');
     if (dock) observer.observe(dock);
     return () => {
       window.removeEventListener('resize', measure);
+      viewport?.removeEventListener('resize', measureViewport);
+      viewport?.removeEventListener('scroll', measureViewport);
       observer.disconnect();
     };
   }, []);

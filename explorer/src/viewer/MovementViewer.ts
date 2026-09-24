@@ -230,7 +230,7 @@ export class MovementViewer {
   contextLost = false;
   selectionBox = new THREE.Box3Helper(new THREE.Box3(), 0xffdaa0);
   raycaster = new THREE.Raycaster();
-  pointer = { x: 0, y: 0, id: -1, cancelled: false };
+  pointer = { x: 0, y: 0, id: -1, started: 0, cancelled: false };
   pointers = new Set<number>();
   constructor(
     public host: HTMLElement,
@@ -295,6 +295,10 @@ export class MovementViewer {
       });
       this.renderer.domElement.addEventListener(
         'pointercancel',
+        this.pointerCancel,
+      );
+      this.renderer.domElement.addEventListener(
+        'lostpointercapture',
         this.pointerCancel,
       );
       this.renderer.domElement.addEventListener(
@@ -2141,6 +2145,7 @@ export class MovementViewer {
         x: e.clientX,
         y: e.clientY,
         id: e.pointerId,
+        started: e.timeStamp,
         cancelled: !e.isPrimary || e.button !== 0,
       };
     else this.pointer.cancelled = true;
@@ -2166,6 +2171,9 @@ export class MovementViewer {
       this.pointer.cancelled ||
       this.pointers.size ||
       this.pointer.id !== e.pointerId ||
+      // A resting finger or stylus is not a tap, even without movement.
+      ((e.pointerType === 'touch' || e.pointerType === 'pen') &&
+        e.timeStamp - this.pointer.started > 500) ||
       e.button !== 0
     )
       return;
@@ -2514,6 +2522,7 @@ export class MovementViewer {
     canvas.removeEventListener('pointermove', this.pointerMove);
     canvas.removeEventListener('wheel', this.pointerWheel);
     canvas.removeEventListener('pointercancel', this.pointerCancel);
+    canvas.removeEventListener('lostpointercapture', this.pointerCancel);
     canvas.removeEventListener('webglcontextlost', this.onContextLost);
     canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
     this.controls?.removeEventListener('start', this.manual);

@@ -1172,13 +1172,15 @@ for(const name of ['pointerDown','pointerMove','pointerCancel','pointerUp','poin
 }
 let selections=0,dismissals=0;const gesture={pointers:new Set(),pointer:{x:0,y:0,id:-1,cancelled:false},renderer:{domElement:{getBoundingClientRect(){return {left:0,top:0,width:100,height:100}}}},camera:v.camera,renderParts:new Map(),raycaster:{setFromCamera(){},intersectObjects(){return [{object:{userData:{partId:'fixture'}}}]}},select(){selections++},deselect(){dismissals++}};
 for(const [name,handler]of Object.entries(handlers))gesture[name]=handler.call(gesture);
-const event=(id=1,x=10,y=10,extra={})=>({pointerId:id,clientX:x,clientY:y,button:0,isPrimary:id===1,...extra});
+const event=(id=1,x=10,y=10,extra={})=>({pointerId:id,clientX:x,clientY:y,button:0,isPrimary:id===1,pointerType:'touch',timeStamp:100,...extra});
 const sequences=[
  [['pointerDown',event()],['pointerMove',event(1,40)],['pointerMove',event()],['pointerUp',event()]],
  [['pointerDown',event()],['pointerDown',event(2)],['pointerUp',event()],['pointerUp',event(2)]],
  [['pointerDown',event()],['pointerDown',event(2)],['pointerUp',event(2)],['pointerUp',event()]],
  [['pointerDown',event()],['pointerCancel',event()],['pointerUp',event()]],
  [['pointerDown',event()],['pointerWheel',{}],['pointerUp',event()]],
+ [['pointerDown',event()],['pointerUp',event(1,10,10,{timeStamp:601})]],
+ [['pointerDown',event(1,10,10,{pointerType:'pen'})],['pointerUp',event(1,10,10,{pointerType:'pen',timeStamp:601})]],
  [['pointerDown',event(1,1,10)],['pointerUp',event(1,-1,10)]],
  [['pointerDown',event(1,10,10,{button:2})],['pointerUp',event(1,10,10,{button:2})]],
  [['pointerDown',event(1,10,10,{button:1})],['pointerUp',event(1,10,10,{button:1})]],
@@ -1188,7 +1190,14 @@ gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(selections,
 gesture.raycaster.intersectObjects=()=>[];
 for(const sequence of sequences){for(const [name,e]of sequence)gesture[name](e);assert.equal(dismissals,0);}
 gesture.pointerDown(event());gesture.pointerUp(event());assert.equal(dismissals,1);
-results.push({check:'out-and-back drags, pinch release orders, cancellation, right/middle clicks reject selection; deliberate tap selects exactly once',status:'pass',scope:'actual event handlers with CPU raycast fixture; browser/touch-emulation checked separately'});
+// Losing capture without pointerup must not poison the next independent tap.
+gesture.pointerDown(event());gesture.pointerCancel(event());
+gesture.pointerDown(event(3,10,10,{isPrimary:true}));gesture.pointerUp(event(3,10,10,{isPrimary:true,timeStamp:400}));
+assert.equal(dismissals,2);assert.equal(gesture.pointers.size,0);
+// A mouse hold retains the existing click behavior.
+gesture.pointerDown(event(1,10,10,{pointerType:'mouse'}));gesture.pointerUp(event(1,10,10,{pointerType:'mouse',timeStamp:900}));
+assert.equal(dismissals,3);
+results.push({check:'out-and-back drags, pinch release orders, cancellation, touch/stylus holds and right/middle clicks reject selection; taps recover after capture loss and mouse clicks remain unchanged',status:'pass',scope:'actual event handlers with CPU raycast fixture; browser/touch-emulation checked separately'});
 
 const {reviewExplosion}=await import('./review-explosion.mjs');
 reviewExplosion({v,THREE,initialState,load,ROOT,parts,results});
@@ -1236,7 +1245,7 @@ const lifetime={dead:false,loadGeneration:0,frame:1,observer:{disconnect:()=>rel
  domElement:{removeEventListener:name=>released.push(name),remove:()=>released.push('canvas')}}};
 disposalModule.exports.call(lifetime);disposalModule.exports.call(lifetime);
 assert.equal(geometryDisposals,1);assert.equal(materialDisposals,1);
-for(const name of ['frame','resize','visibilitychange','motion','controls:start','controls:change','controls','keydown','pointerdown','pointerup','pointermove','pointercancel','wheel','webglcontextlost','webglcontextrestored','environment','occlusion','renderer','canvas'])
+for(const name of ['frame','resize','visibilitychange','motion','controls:start','controls:change','controls','keydown','pointerdown','pointerup','pointermove','pointercancel','lostpointercapture','wheel','webglcontextlost','webglcontextrestored','environment','occlusion','renderer','canvas'])
  assert.equal(released.filter(x=>x===name).length,1,name+' released once');
 results.push({check:'disposal is idempotent, removes every explicit listener and releases shared geometry/materials exactly once',status:'pass'});
 
