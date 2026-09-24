@@ -240,7 +240,7 @@
         ],
         "scope": "Narrower steel strokes only. Along-stroke variation, grain weights/contrast/relief amplitudes, roughness, anisotropy, lighting, frosting, polished edges, silver dial grain and warm-metal grain remain unchanged. Derivative filtering remains enabled.",
         "limits": "Authored visual refinement after user review, not maker-measured grain pitch. Frequency changes also affect filtered screen-space grain and relief slopes despite unchanged amplitudes.",
-        "localComparison": "artifacts/browser/steel-grain-refinement/comparison.png; aa2493a before/current after, matched 1275\u00d71354 views on both faces at overview and two zoom steps."
+        "localComparison": "artifacts/browser/steel-grain-refinement/comparison.png; aa2493a before/current after, matched 1275×1354 views on both faces at overview and two zoom steps."
       }
     },
     "opticalResponse": {
@@ -292,6 +292,36 @@
     },
     "preserved": "a17d341 rose-gold color and material assignments; steel escape-wheel identity, roughness .27 and anisotropy .58; polished bevel roughness .075; black-polished crown response .055; exact frosting scope on main plate, seven pads and crown M background. Source geometry and annotations unchanged.",
     "limits": "All frequencies, slope amplitudes, optical values and environment lights are authored presentation values, not measured manufacturing or spectral data. Environment changes necessarily affect reflections of all materials.",
-    "localComparison": "artifacts/browser/maker-refinement/comparison.png; matched 1275\u00d71354 desktop captures, both faces, Reset overview and two + zoom steps. Before uses a17d341 material/FrostedSurface/StudioEnvironment modules in a temporary local copy; current motion used for matched framing. No source media committed."
+    "localComparison": "artifacts/browser/maker-refinement/comparison.png; matched 1275×1354 desktop captures, both faces, Reset overview and two + zoom steps. Before uses a17d341 material/FrostedSurface/StudioEnvironment modules in a temporary local copy; current motion used for matched framing. No source media committed.",
+    "steelHairlineFollowUp": {
+      "checked": "2026-09-24",
+      "evidence": "user-supplied-sjx-detail-2026-09-24",
+      "families": [
+        "bridge",
+        "brushedSteel"
+      ],
+      "grainLayerWeights": {
+        "before": [
+          0.35,
+          0.3,
+          0.23,
+          0.12
+        ],
+        "after": [
+          0.12,
+          0.22,
+          0.23,
+          0.12
+        ]
+      },
+      "reliefMultiplier": {
+        "before": 1,
+        "after": 0.7
+      },
+      "rationale": "Reduce broad continuous streaks over smooth steel while retaining the two fine layers without renormalizing or amplifying them. This supersedes the unchanged straight-steel amplitudes recorded in the preceding spatial-only follow-up.",
+      "preserved": "1.8× steel frequency, fine-layer strengths, source axes and masks, base roughness, anisotropy, lighting, polished edges, frosting, circular brushing, warm-metal grain, dial materials, source geometry and face flipping.",
+      "limits": "Qualitative interpretation of a supplied photograph; light direction, camera, white balance and processing are not matched. No measured roughness or alloy-color inference. The dial/edge/frosting differences observed in the comparison are outside this scoped grain correction.",
+      "localComparison": "artifacts/browser/steel-hairline-refinement/comparison.png and detail-comparison.png; a48e751 baseline, both faces at overview and two zoom steps."
+    }
   }
 }

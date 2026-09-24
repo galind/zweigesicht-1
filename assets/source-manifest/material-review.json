@@ -56,9 +56,26 @@
       "url": null,
       "supports": [
         "Steel brushing in aa2493a appears too thick.",
-        "User approved starting with 1.8\u00d7 finer steel grain while retaining current reflections, frosting and polished edges."
+        "User approved starting with 1.8× finer steel grain while retaining current reflections, frosting and polished edges."
       ],
       "limits": "User preference and authored scale adjustment; no new maker statement or calibrated material measurement."
+    },
+    {
+      "id": "user-supplied-sjx-detail-2026-09-24",
+      "type": "user-supplied photograph",
+      "provided": "2026-09-24",
+      "attribution": "SJX watermark visible; original page not supplied with attachment",
+      "url": null,
+      "attachment": {
+        "filename": "codex-clipboard-c69e6b6f-a85c-4699-a18e-429a2d71edb9.png",
+        "sha256": "331959da24d7468c44a2fd2e8c914286eeb21cfcaa9c49fa138d4fd31f57e344",
+        "use": "Qualitative comparison of bridge hairlines and reflection structure. Original remains outside Git."
+      },
+      "supports": [
+        "Fine directional scratches on smoother steel fields, less dominated by broad streaks than the current rendering.",
+        "User approved reducing broad grain contribution and relief while retaining finer hairlines."
+      ],
+      "limits": "Image is not calibrated material data; differences in lighting and photographic processing remain. Does not authorize changes to alloys, source geometry or mechanical claims."
     }
   ]
 }

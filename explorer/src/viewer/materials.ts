@@ -187,6 +187,8 @@ varying float vFinishRole;
 uniform float finishPattern;
 uniform float finishBrushDetail;
 uniform float finishBrushFrequency;
+uniform vec4 finishBrushWeights;
+uniform float finishBrushRelief;
 uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
@@ -219,12 +221,12 @@ float filteredFinishNoise(vec2 p) {
 float finishBrush(vec2 p) {
  // Narrow steel hairlines across the stroke without shortening their length.
  p.y*=finishBrushFrequency;
- // A wider strand layer survives normal bridge framing, while the finer
- // layers retain close-up detail. Derivative filtering still prevents shimmer.
- return filteredFinishNoise(p*vec2(.45,7.0))*.35
-      + filteredFinishNoise(p*vec2(.8,22.0))*.3
-      + filteredFinishNoise(p*vec2(2.2,75.0))*.23
-      + filteredFinishNoise(p*vec2(5.0,210.0))*.12;
+ // Broad steel bands are subdued independently of the fine hairlines.
+ // Do not normalize the weights: that would amplify the retained fine layers.
+ return filteredFinishNoise(p*vec2(.45,7.0))*finishBrushWeights.x
+      + filteredFinishNoise(p*vec2(.8,22.0))*finishBrushWeights.y
+      + filteredFinishNoise(p*vec2(2.2,75.0))*finishBrushWeights.z
+      + filteredFinishNoise(p*vec2(5.0,210.0))*finishBrushWeights.w;
 }
 `;
 
@@ -406,6 +408,14 @@ export function createMaterial(
           ? 1.8
           : 1,
       },
+      finishBrushWeights: {
+        value: ['bridge', 'brushedSteel'].includes(finish.family)
+          ? new THREE.Vector4(.12, .22, .23, .12)
+          : new THREE.Vector4(.35, .3, .23, .12),
+      },
+      finishBrushRelief: {
+        value: ['bridge', 'brushedSteel'].includes(finish.family) ? .7 : 1,
+      },
       finishBrushDetail: {
         value:
           definitionId === 'd_0_1_1_26'
@@ -564,7 +574,7 @@ if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRol
   // Broad lower bases stay satin; only seven explicit mounting pads frost.
   finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
   finishGrain=brushed*finishField;
-  finishHeight=brushed*finishField*(finishPattern>5.5 && finishBrushDetail>1.5?.0004:.00018);
+  finishHeight=brushed*finishField*(finishPattern>5.5 && finishBrushDetail>1.5?.0004:.00018)*finishBrushRelief;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -711,6 +721,6 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
       ? `ml01-diamond-facets-v1-${diamond.planes.length}`
       : ['sapphire', 'diamond'].includes(finish.family)
         ? 'ml01-source-surface-clear-v10'
-        : 'ml01-source-surface-v13';
+        : 'ml01-source-surface-v14';
   return material;
 }
