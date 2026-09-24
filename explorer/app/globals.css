@@ -699,6 +699,7 @@ canvas:focus-visible {
 }
 .explorer-panel[data-slot='sheet-content'][data-ending-style] {
   transition-duration: 120ms;
+  pointer-events: none;
 }
 /* Reading has more room, with the same glass surface as the controls. */
 .explorer-panel.information-panel[data-slot='sheet-content'] {
@@ -1529,6 +1530,10 @@ canvas:focus-visible {
 .explorer-panel .panel-body {
   padding: 16px 20px 20px;
 }
+.separation-panel .panel-body > [data-slot='sheet-description'] {
+  padding-right: 0;
+  margin: 0 0 16px;
+}
 .action-dock .text-button[data-popup-open] {
   background: #ffffff0c;
   border-radius: 8px;
@@ -1772,5 +1777,122 @@ canvas:focus-visible {
 @media (pointer: coarse) {
   .component-finder .catalog-search input {
     font-size: max(16px, 1rem);
+  }
+}
+
+/* Reserve usable space between the header and dock, including recovery copy. */
+.focus-strip,
+.text-enlarged .focus-strip {
+  max-height: calc(
+    100dvh - var(--header-bottom, 88px) - var(--panel-bottom, 90px) - 12px
+  );
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.focus-title,
+.part-selection .focus-title {
+  display: flex;
+  flex-wrap: wrap;
+}
+.focus-actions {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+}
+.part-selection .isolate-button {
+  white-space: normal;
+}
+.fallback,
+.text-enlarged .fallback {
+  top: calc(var(--header-bottom, 88px) + 12px);
+  bottom: var(--panel-bottom, 90px);
+}
+.load-message {
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.component-finder .catalog-scope {
+  margin: 0 0 8px;
+}
+.catalog-scope input {
+  flex-shrink: 0;
+}
+.explorer-panel:not(.information-panel) > [data-slot='sheet-header'] {
+  /* A long component name must not consume the entire popup at large text. */
+  max-height: max(
+    44px,
+    calc(100dvh - var(--panel-bottom, 90px) - var(--viewport-top, 0px) - 80px)
+  );
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* Short windows need fewer dock rows and a bounded, scrollable header. */
+@media (max-height: 500px) {
+  .topbar {
+    max-height: 28dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding: 4px;
+    scroll-padding: 4px;
+    pointer-events: auto;
+  }
+  .identity,
+  .header-actions,
+  .text-enlarged .header-actions {
+    flex-shrink: 0;
+  }
+  .explorer-panel[data-slot='sheet-content']:not(.information-panel),
+  .text-enlarged
+    .explorer-panel[data-slot='sheet-content']:not(.information-panel) {
+    top: auto;
+    bottom: var(--panel-bottom, 90px);
+    max-height: calc(
+      100dvh - var(--panel-bottom, 90px) - var(--viewport-top, 0px) - 16px
+    );
+  }
+  /* Search identifies the compact finder; retain its dialog title for AT. */
+  .catalog-sheet [data-slot='sheet-title'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .explorer-panel.catalog-sheet > [data-slot='sheet-header'] {
+    padding: 8px 12px !important;
+  }
+  .catalog-sheet .finder-controls {
+    padding-top: 0;
+    padding-right: 48px;
+  }
+}
+@media (min-width: 480px) and (max-height: 500px) {
+  .action-dock {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    width: calc(100% - 24px);
+  }
+  .action-dock .text-button {
+    width: 100%;
+    height: 100%;
+    padding: 8px 4px;
+    white-space: normal;
+  }
+  .action-dock .dock-icon {
+    display: none;
+  }
+  .action-dock .reset-button {
+    grid-column: auto;
+    margin: 0;
+  }
+  .text-enlarged .action-dock {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

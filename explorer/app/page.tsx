@@ -598,6 +598,8 @@ export default function Home() {
           >
             <SheetHeader>
               <SheetTitle>Disassemble</SheetTitle>
+            </SheetHeader>
+            <div className="panel-body">
               <SheetDescription>
                 {s.layout === 'spread'
                   ? 'The parts are laid out individually. Reassemble to return to the movement.'
@@ -605,8 +607,6 @@ export default function Home() {
                     ? `Section · ${group.technical}`
                     : 'Whole movement · Adjust the space between parts.'}
               </SheetDescription>
-            </SheetHeader>
-            <div className="panel-body">
               {s.layout === 'spread' ? (
                 <button
                   className="separation-action"
@@ -1169,17 +1169,17 @@ export default function Home() {
                   placeholder="Search components…"
                 />
               </label>
-              <label className="catalog-scope">
-                <input
-                  type="checkbox"
-                  checked={includeAllCad}
-                  onChange={(event) => setIncludeAllCad(event.target.checked)}
-                />
-                Include all CAD entries
-              </label>
             </div>
           </SheetHeader>
           <div className="panel-body component-finder">
+            <label className="catalog-scope">
+              <input
+                type="checkbox"
+                checked={includeAllCad}
+                onChange={(event) => setIncludeAllCad(event.target.checked)}
+              />
+              Include all CAD entries
+            </label>
             <p className="catalog-scope-note">
               {includeAllCad
                 ? 'All CAD entries. Hidden geometry may load on selection.'
