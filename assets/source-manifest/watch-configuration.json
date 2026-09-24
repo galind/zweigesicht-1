@@ -1,0 +1,97 @@
+{
+  "checkedAt": "2026-09-14",
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "makerPages": [
+    "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/",
+    "https://www.marcolangwatches.com/en/downloads-2/"
+  ],
+  "detailedPage": "https://www.marcolangwatches.com/en/watches/",
+  "detailedPageResult": "Timed out; no additional specification claims used.",
+  "images": [
+    {
+      "url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/steilschraeg_Front_1_Stahl_blauer_Zeiger_blaues_Band.jpg",
+      "sha256": "1bc197af2c44bd1eeb8e72c23aeaf1766899f64ab941d010cefa3a9f4d1588b2",
+      "bytes": 61751
+    },
+    {
+      "url": "https://www.marcolangwatches.com/wp-content/uploads/2020/12/steilschraeg_Front_1_rose_rose_Zeiger_braunes_Band.jpg",
+      "sha256": "e70f6f30a475f0e7cce7ca6d526fefae057398815d0173159075d9d31586e41f",
+      "bytes": 66115
+    }
+  ],
+  "caseEvidence": "Gallery labels stainless steel, rose gold and platinum versions. Pictured body, two circular backs, crown and lugs agree with the SS assembly silhouette. The same SS source geometry is used for authored visual finish presets; no alternate alloy geometry, measured reflectance or offer/order compatibility is claimed.",
+  "handEvidence": "Fine straight central hands pictured in blue (steel watch) and rose (rose-gold and platinum watches). Blue source assignments also support retained Lance/Open lance. No rose-gold evidence for those two shapes: selector disables it and changing shape normalizes to blue with live feedback. Skeleton finishes unchanged.",
+  "scope": "Case color applies only to exterior d46/d48/d53/d54/d55/d56/d68/d70/d71; remaining fasteners, locks, tube, corrector, seals and crystals retain baseline materials. Fine hand finish targets three blades and their three fitted central bushings d34/d38/d41, excluding Skeleton supports, markers and logo. Fine colors follow case material by explicit user direction; this is not an order configurator.",
+  "occurrences": "Complete source packets 1,2,3,6,7,8 plus d51 lugs under 4 and 9. Matching orientation with both lug rods on source negative Z; exclude reverse-face alternatives 5/10 and all leather/buckles. No transforms changed.",
+  "d54": {
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "definition": "d_0_1_1_54",
+    "faceCount": 74,
+    "missingFaces": [
+      {
+        "face": 1,
+        "areaMm2": 28.35798478015336,
+        "boundsLocalMm": [
+          -11.950000000000008,
+          15.72,
+          -0.5,
+          11.950000000000014,
+          20.0,
+          -0.5
+        ],
+        "centerLocalMm": [
+          -1.0898945758273482e-16,
+          18.20337621741804,
+          -0.5
+        ]
+      }
+    ],
+    "repairPerformed": false,
+    "recovery": {
+      "method": "Independent meshing of a copy of original face 1; unchanged source wires and surface.",
+      "linearDeflectionMm": 0.03,
+      "triangles": 34,
+      "meshAreaMm2": 28.227461644257463,
+      "areaErrorMm2": -0.1305231358958956,
+      "sha256": "c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2"
+    }
+  },
+  "redistribution": "All downloaded/reference and recovered geometry remain local ignored files; no new CAD payload is committed or published.",
+  "userRefinement": {
+    "date": "2026-09-14",
+    "authority": "Explicit project-owner feedback; visual configuration rule, not a new manufacturer ordering claim.",
+    "fineHandsByCase": {
+      "steel": "blued-steel",
+      "rose-gold": "rose-gold",
+      "platinum": "rose-gold"
+    },
+    "lugs": "Skeleton is default main face; both attachment packets must turn opposite the main face. All 18 alternate occurrence transforms audited against source, same definition IDs. Upper child 4 uses opposite child 10; lower child 9 uses opposite child 5.",
+    "crownFrost": {
+      "definitionId": "d_0_1_1_46",
+      "sourceFace": 468,
+      "areaMm2": 5.828602376499894,
+      "plane": "local X=3.4 mm",
+      "exclusions": "Raised M planes at X=3.5, bevels, rim and knurling",
+      "probe": "scripts/cad/crown_finish_probe.py"
+    },
+    "bushings": "15 September 2026: explicit user direction extends the gold hand color to the three fitted central Zeigerbuchse bushings on rose-gold/platinum Fine configurations.",
+    "polishedHandsAndLugHardware": {
+      "date": "2026-09-15",
+      "authority": "Explicit user correction",
+      "goldFinish": "The fitted gold hand packet overrides all source-color roles, including the white seconds counterweight, with polished gold (authored roughness 0.075, metalness 1).",
+      "caseBars": "d55 Schraubsteg bars and d53 end screws match the selected case material. Only fitted case instances receive this override.",
+      "flipHardware": "All d53/d57 attachment screws already travel with the 18-leaf lug packets. Four d72 Riegelstift fest instances on the middle ring now accompany the outward clearing arc and return to their original seats; no new CAD pose or mechanical sequence is claimed."
+    }
+  },
+  "makerMotionCorrection20260924": {
+    "supersedes": "Previous user-directed lug Y rotation and outward ring-pin arc; retain all original geometry and the assembled visible set.",
+    "evidence": "assets/source-manifest/face-flip.json",
+    "axis": "CAD X through case midpoint; upper source child 4 maps to opposite child 5, lower child 9 to opposite child 10. All 18 maps preserve definition identity.",
+    "limits": [
+      "The 8 mm clearance and 1.8 second UI duration are authored, not measured from the presentation video.",
+      "The pivot Z is the midpoint validated by source counterpart transforms, not a measured physical hinge. No permanent case hinge is claimed.",
+      "The animation demonstrates a released case being turned. Detailed lock actuation, strap flex, tools, collisions and tolerances are not simulated.",
+      "Disassembly remains an illustrative explorer mode; combining it with Flip is not a physical assembly procedure."
+    ]
+  }
+}

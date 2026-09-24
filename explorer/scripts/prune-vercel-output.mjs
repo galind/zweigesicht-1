@@ -28,6 +28,7 @@ const surfaces = JSON.parse(
 );
 const keep = new Set([
   'assembly-manifest.json',
+  'case-lug-recovery.json',
   'asset-paths.json',
   path.basename(assetPaths.catalog),
   `${path.basename(assetPaths.catalog)}.gz`,

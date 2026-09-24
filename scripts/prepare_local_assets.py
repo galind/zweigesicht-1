@@ -7,6 +7,10 @@ source=root/'assets/generated'
 target=root/'explorer/public/models'
 target.mkdir(parents=True,exist_ok=True)
 paths={}
+case_recovery=root/'artifacts/case-cad/lug-recovery.json'
+if not case_recovery.is_file():
+    raise SystemExit('Run .venv-cad/bin/python scripts/cad/case_fit_probe.py before preparing case assets.')
+shutil.copy2(case_recovery,target/'case-lug-recovery.json')
 diamond=root/'assets/source-originals/appearance-audit/030-Brilliant_200.stl'
 if diamond.is_file():
     data=diamond.read_bytes()

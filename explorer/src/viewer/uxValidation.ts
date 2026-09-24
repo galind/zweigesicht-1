@@ -26,7 +26,7 @@ export async function runUxChecks(v: MovementViewer) {
       dockButtons
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
-      'Explore|Separate|All parts|Dial & hands|Flip movement|Reset view',
+      'Disassemble|Focus|All parts|Configure|Flip movement|Reset view',
   });
   checks.push({
     name: 'Dock controls retain touch targets',
@@ -86,13 +86,10 @@ export async function runUxChecks(v: MovementViewer) {
     Object.fromEntries(
       [
         '.stage',
-        '.back-button',
         '.reset-button',
-        '.options-trigger',
         '.explore-button',
         '.separate-trigger',
         '.dial-trigger',
-        '.all-parts-button',
         '.side-slot',
       ].map((selector) => {
         const r = document.querySelector(selector)!.getBoundingClientRect();
@@ -114,24 +111,25 @@ export async function runUxChecks(v: MovementViewer) {
     await settle(v);
     const strip = document.querySelector<HTMLElement>('.focus-strip')!;
     checks.push({
-      name: `${label}: selection shows only readable name and isolation action`,
+      name: `${label}: selection shows readable name, details and isolation`,
       pass:
         strip.querySelector('h2')?.textContent === label &&
-        strip.querySelectorAll('button').length === 1 &&
-        strip.querySelector('button')?.textContent?.trim() === 'Isolate part' &&
+        strip.querySelectorAll('button').length === 2 &&
+        strip.querySelector('.isolate-button')?.textContent?.trim() ===
+          'Isolate part' &&
         !strip.querySelector('.component-caption') &&
         !document.querySelector('#component-details') &&
         ![part.id, part.definitionId, part.sourceInstanceId, part.name].some(
           (id) => strip.innerText.includes(id),
         ),
     });
-    strip.querySelector<HTMLButtonElement>('button')!.click();
+    strip.querySelector<HTMLButtonElement>('.isolate-button')!.click();
     await settle(v);
     checks.push({
       name: `${label}: isolation remains available`,
       pass: v.state.isolated && strip.innerText.includes('Show context'),
     });
-    strip.querySelector<HTMLButtonElement>('button')!.click();
+    strip.querySelector<HTMLButtonElement>('.isolate-button')!.click();
     await settle(v);
   }
   v.reset();
@@ -143,7 +141,6 @@ export async function runUxChecks(v: MovementViewer) {
     '.explore-button',
     '.separate-trigger',
     '.dial-trigger',
-    '.options-trigger',
   ]) {
     const trigger = document.querySelector<HTMLButtonElement>(selector)!;
     const position = v.camera.position.clone(),
@@ -175,6 +172,185 @@ export async function runUxChecks(v: MovementViewer) {
       pass: document.activeElement === trigger,
     });
   }
+
+  const explore = document.querySelector<HTMLButtonElement>('.explore-button')!;
+  explore.click();
+  await sleep(300);
+  const menu = [
+    ...document.querySelectorAll<HTMLButtonElement>('.explore-menu button'),
+  ];
+  checks.push({
+    name: 'Focus contains section choices without auxiliary navigation',
+    pass:
+      menu.some((button) => button.textContent?.includes('Whole movement')) &&
+      !menu.some((button) =>
+        /Previous view|All parts|Source catalog|View options/.test(
+          button.textContent ?? '',
+        ),
+      ),
+  });
+  document.querySelector<HTMLButtonElement>('.settings-trigger')!.click();
+  await sleep(300);
+  checks.push({
+    name: 'Contextual options retain keyboard camera and quality controls without reframing',
+    pass:
+      !!document.querySelector('.alternative-controls') &&
+      !!document.querySelector('#render-quality') &&
+      JSON.stringify(rects()) === JSON.stringify(baseline),
+  });
+  document
+    .querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!
+    .click();
+  await sleep(300);
+  checks.push({
+    name: 'Viewer settings return focus to Settings',
+    pass:
+      document.activeElement === document.querySelector('.settings-trigger'),
+  });
+
+  document.querySelector<HTMLButtonElement>('.all-parts-button')!.click();
+  await settle(v);
+  await sleep(300);
+  document.querySelector<HTMLButtonElement>('.find-component-button')!.click();
+  await sleep(300);
+  const currentIds = [...document.querySelectorAll('.catalog-index button')];
+  checks.push({
+    name: 'Component finder defaults to displayed physical parts',
+    pass:
+      currentIds.length === v.snapshot().visiblePartIds.length &&
+      currentIds.length > 0 &&
+      currentIds.every(
+        (button) =>
+          v
+            .snapshot()
+            .visiblePartIds.includes(
+              button.getAttribute('data-part-id') ?? '',
+            ) && button.querySelectorAll('small').length === 1,
+      ),
+  });
+  const scope = document.querySelector<HTMLInputElement>(
+    '.catalog-scope input',
+  )!;
+  scope.click();
+  await sleep(300);
+  const allEntries = [...document.querySelectorAll('.catalog-index button')];
+  checks.push({
+    name: 'All CAD scope includes labeled assemblies and hidden entries',
+    pass:
+      allEntries.length ===
+        v.parts.filter((p) => p.id !== 'p_0_1_1_1').length &&
+      allEntries.some((button) =>
+        button.textContent?.includes('Assembly · Not shown'),
+      ) &&
+      allEntries.some(
+        (button) =>
+          button.textContent?.includes('Not shown') &&
+          !button.textContent?.includes('Assembly ·'),
+      ),
+  });
+  document
+    .querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!
+    .click();
+  await sleep(300);
+  checks.push({
+    name: 'Component finder restores focus to its All parts entry point',
+    pass:
+      document.activeElement ===
+      document.querySelector('.find-component-button'),
+  });
+
+  // Exercise the relocated group framing and the explicit way back from All parts.
+  explore.click();
+  await sleep(300);
+  const spreadChoices = [
+    ...document.querySelectorAll<HTMLButtonElement>('.explore-menu button'),
+  ];
+  checks.push({
+    name: 'All parts Focus offers Fit all and inventory group framing',
+    pass:
+      spreadChoices[0]?.textContent?.trim() === 'Fit all' &&
+      !spreadChoices.some((b) => b.textContent?.includes('Whole movement')),
+  });
+  spreadChoices.find((b) => b.textContent?.includes('Twin barrels'))!.click();
+  await settle(v);
+  await sleep(300);
+  checks.push({
+    name: 'Inventory Focus stays active after choosing and closing its panel',
+    pass:
+      v.spreadFocus === 'Twin barrels' &&
+      v.state.layout === 'spread' &&
+      explore.getAttribute('aria-pressed') === 'true' &&
+      explore.getAttribute('aria-expanded') === 'false',
+  });
+  const disassemble =
+    document.querySelector<HTMLButtonElement>('.separate-trigger')!;
+  disassemble.click();
+  await sleep(300);
+  const returnAction =
+    document.querySelector<HTMLButtonElement>('.separation-action')!;
+  checks.push({
+    name: 'All parts Disassemble offers Reassemble without duplicate framing choices',
+    pass:
+      returnAction.textContent?.trim() === 'Reassemble' &&
+      !document.querySelector('.separation-panel .menu-link'),
+  });
+  const preferences = JSON.stringify([
+    v.state.caseVisible,
+    v.state.caseMaterial,
+    v.state.dialsVisible,
+    v.state.centralStyle,
+    v.state.smallStyle,
+    v.state.side,
+  ]);
+  returnAction.click();
+  await settle(v);
+  await sleep(300);
+  checks.push({
+    name: 'Reassemble exits inventory, clears separation and retains watch choices and side',
+    pass:
+      v.state.layout === 'assembly' &&
+      !v.state.group &&
+      !v.state.separation &&
+      !v.state.partSpread &&
+      !v.state.reveal &&
+      preferences ===
+        JSON.stringify([
+          v.state.caseVisible,
+          v.state.caseMaterial,
+          v.state.dialsVisible,
+          v.state.centralStyle,
+          v.state.smallStyle,
+          v.state.side,
+        ]),
+  });
+  explore.click();
+  await sleep(300);
+  [...document.querySelectorAll<HTMLButtonElement>('.explore-menu button')]
+    .find((b) => b.textContent?.includes('Twin barrels'))!
+    .click();
+  await settle(v);
+  await sleep(300);
+  checks.push({
+    name: 'Mechanism Focus stays active after its menu closes',
+    pass:
+      v.state.group === 'energy' &&
+      explore.getAttribute('aria-pressed') === 'true' &&
+      explore.getAttribute('aria-expanded') === 'false',
+  });
+  disassemble.click();
+  await sleep(300);
+  checks.push({
+    name: 'Focused disassembly provides distinct spacing and cover controls',
+    pass:
+      document.querySelector('#separation-label')?.textContent?.trim() ===
+        'Spacing' &&
+      document.querySelector('#uncover-label')?.textContent ===
+        'Move covers aside',
+  });
+  document
+    .querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!
+    .click();
+  await sleep(300);
 
   for (const mode of [
     'whole',

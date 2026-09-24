@@ -4,7 +4,8 @@ import * as THREE from 'three';
 export class StudioEnvironment extends THREE.Scene {
   constructor() {
     super();
-    this.background = new THREE.Color(0x747880);
+    this.background = new THREE.Color(0x5a5e64);
+    const ambient = this.background;
     const panel = (
       position: [number, number, number],
       size: [number, number],
@@ -14,15 +15,18 @@ export class StudioEnvironment extends THREE.Scene {
       const uv = geometry.getAttribute('uv');
       const colors = new Float32Array(uv.count * 3);
       for (let i = 0; i < uv.count; i++) {
-        const x = (uv.getX(i) - .5) * 2, y = (uv.getY(i) - .5) * 2;
-        const value = .18 + .82 * Math.exp(-2.2 * x * x - 1.4 * y * y);
-        colors.set([value, value, value], i * 3);
+        const x = (uv.getX(i) - 0.5) * 2,
+          y = (uv.getY(i) - 0.5) * 2;
+        // Feather into the surround with zero slope at the card boundary.
+        // This avoids rectangular bright/dark steps as polished parts turn.
+        const value = intensity * (1 - x * x) ** 2 * (1 - y * y) ** 2;
+        colors.set([ambient.r + value, ambient.g + value, ambient.b + value], i * 3);
       }
       geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
       const mesh = new THREE.Mesh(
         geometry,
         new THREE.MeshBasicMaterial({
-          color: new THREE.Color().setScalar(intensity),
+          color: 0xffffff,
           vertexColors: true,
           side: THREE.DoubleSide,
         }),
@@ -31,14 +35,14 @@ export class StudioEnvironment extends THREE.Scene {
       mesh.lookAt(0, 0, 0);
       this.add(mesh);
     };
-    // Unequal broad sources and narrow cards leave dark reflection intervals.
-    // Both hemispheres are lit so the reverse side supports the same inspection.
-    panel([-18, -20, -60], [75, 50], 1.7);
-    panel([65, 0, 0], [32, 85], 2.8);
-    panel([0, 65, 0], [85, 32], 2.8);
-    panel([18, -18, 60], [75, 50], 1.7);
-    panel([-65, 0, 0], [32, 85], 2.8);
-    panel([0, -65, 0], [85, 32], 2.8);
+    // Off-axis broad keys serve both flat faces. Unequal edge cards give
+    // polished borders direction, with a restrained fill on the opposite side.
+    panel([-30, -18, -60], [90, 74], 2.8);
+    panel([60, 18, -8], [24, 90], 3.0);
+    panel([0, 65, 0], [85, 32], 2.0);
+    panel([-30, 18, 60], [90, 74], 2.8);
+    panel([-60, -12, 8], [38, 100], 1.7);
+    panel([0, -65, 0], [75, 40], 1.2);
   }
   dispose() {
     this.traverse((object) => {

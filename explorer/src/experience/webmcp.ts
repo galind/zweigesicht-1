@@ -1,3 +1,4 @@
+import { WATCH, type WatchPreferences } from './watch';
 import type { MovementViewer } from '../viewer/MovementViewer';
 import { type DialPreferences } from './dials';
 import { GROUPS } from './catalog';
@@ -28,8 +29,14 @@ export function registerMovementTools(viewer: MovementViewer) {
       layout: s.layout,
       inventoryBack: s.inventoryBack,
       presentation: s.presentation,
-      centralVisible: s.centralVisible,
-      smallVisible: s.smallVisible,
+      dialsVisible: s.dialsVisible,
+      caseVisible: s.caseVisible,
+      caseMaterial: s.caseMaterial,
+      centralFinish: s.centralFinish,
+      caseEffective: s.caseEffective,
+      caseRequest: s.caseRequest,
+      caseError: s.caseError,
+      configurationNotice: s.configurationNotice,
       centralStyle: s.centralStyle,
       smallStyle: s.smallStyle,
       dialRequest: s.dialRequest,
@@ -71,14 +78,44 @@ export function registerMovementTools(viewer: MovementViewer) {
   };
   const tools: Tool[] = [
     {
-      name: 'configure_dials',
+      name: 'configure_watch',
       description:
-        'Set independent Three hands (central) and Skeleton (small) visibility and hand styles without changing side or separation.',
+        'Configure case visibility/material, shared dials and independent hand shapes. Fine hands follow the case: blue for steel, gold for rose gold and platinum. Other shapes use blued steel. Case temporarily hides in Focus, All parts and unfitted CAD inspection. Reset retains configuration.',
       inputSchema: {
         type: 'object',
         properties: {
-          centralVisible: { type: 'boolean' },
-          smallVisible: { type: 'boolean' },
+          caseVisible: { type: 'boolean' },
+          caseMaterial: {
+            type: 'string',
+            enum: WATCH.caseMaterials.map((m) => m.id),
+          },
+          centralFinish: { type: 'string', enum: ['blued-steel', 'rose-gold'] },
+          dialsVisible: { type: 'boolean' },
+          centralStyle: {
+            type: 'string',
+            enum: ['fine', 'lance', 'open-lance'],
+          },
+          smallStyle: {
+            type: 'string',
+            enum: ['lance', 'broad-lance', 'pear'],
+          },
+        },
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false },
+      execute: async (input) => {
+        await viewer.configureWatch(input as Partial<WatchPreferences>);
+        return settle();
+      },
+    },
+    {
+      name: 'configure_dials',
+      description:
+        'Show or hide both dials together. Set independent Three hands (central) and Skeleton (small) hand styles without revealing hidden dials or changing side or separation.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          dialsVisible: { type: 'boolean' },
           centralStyle: {
             type: 'string',
             enum: ['fine', 'lance', 'open-lance'],

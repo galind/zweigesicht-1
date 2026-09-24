@@ -2,7 +2,7 @@
 
 Local real-CAD explorer for Marco Lang's ml–01 movement. Open **http://127.0.0.1:4173/** while the local development server is running.
 
-The movement opens fully assembled. Reveal six functional groups, configure both dials and their hands, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
+The movement opens fully assembled. Reveal six functional groups, configure a fitted case in stainless steel, rose-gold or platinum appearances, show or hide both dials together and choose their hands independently, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. Fine Three hands follow the case: blue for steel, gold for rose gold and platinum; other shapes retain blue. Flip withdraws the fitted attachments, turns the case about the CAD X/crown axis, then reseats them following the maker animation. Selecting a fitted case part keeps the configured watch visible. Reset preserves configuration. Focus and All parts temporarily hide the case. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
 
 See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
@@ -18,6 +18,8 @@ npm run dev
 The server binds to `127.0.0.1:4173`. The local middleware serves prepared gzip assets with content-hashed URLs.
 
 ## Reproduce local assets when needed
+
+For an existing prepared checkout adding watch configuration, first run `.venv-cad/bin/python scripts/cad/case_fit_probe.py` and `python3 scripts/prepare_local_assets.py`. The new local case recovery sidecar is generated from the original STEP and is deliberately not committed.
 
 Preserve the original STEP files and the URLs and hashes in `assets/source-manifest/`. CAD tooling uses the existing `.venv-cad` environment and Blender installation; the exporter reuses its geometry cache unless source files or conversion settings require regeneration.
 

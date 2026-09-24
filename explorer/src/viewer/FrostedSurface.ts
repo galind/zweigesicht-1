@@ -2,9 +2,9 @@
  * Photographic interpretation, not measured topography. No tiled texture/UVs.
  */
 export const FROST = {
-  cellsPerMm: 24,
-  slopeAmplitude: 0.06,
-  microRoughness: 0.36,
+  cellsPerMm: 10,
+  slopeAmplitude: 0.035,
+  microRoughness: 0.31,
   minRadius: 0.5,
   maxRadius: 0.85,
 };

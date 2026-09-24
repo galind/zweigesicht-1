@@ -21,11 +21,11 @@ test('dial defaults and independent preferences normalize unknown style IDs',()=
  const small=resolveState(s,{side:'back',smallStyle:'broad-lance'});assert.equal(small.centralStyle,'open-lance');
  const invalid=resolveState(small,{centralStyle:'obsolete',smallStyle:'obsolete'});assert.equal(invalid.centralStyle,'fine');assert.equal(invalid.smallStyle,'lance');
 });
-test('all four dial combinations survive navigation and separation with styles retained',()=>{
+test('legacy combinations normalize to shared visibility through navigation',()=>{
  for(const centralVisible of [false,true]) for(const smallVisible of [false,true]) {
   const s=resolveState(initialState,{centralVisible,smallVisible,centralStyle:'open-lance',smallStyle:'pear'});
   for(const patch of [{side:'front'},{side:'back'},{layout:'spread'},{group:'display'},{group:'energy'},{separation:1},{partSpread:1},{reveal:1},{separation:0},{part:'catalog-part',isolated:true}]) {
-   const next=resolveState(s,patch);assert.equal(next.centralVisible,centralVisible);assert.equal(next.smallVisible,smallVisible);
+   const next=resolveState(s,patch);assert.equal(next.dialsVisible,centralVisible && smallVisible);assert.equal(next.centralVisible,next.dialsVisible);assert.equal(next.smallVisible,next.dialsVisible);
    assert.equal(next.centralStyle,'open-lance');assert.equal(next.smallStyle,'pear');
   }
  }
@@ -69,5 +69,49 @@ test('inventory flip state is independent of assembly side and clears on exit/Re
   assert.equal(resolveState(back,{inventoryBack:false}).side,side);
   assert.equal(resolveState(back,{layout:'assembly'}).inventoryBack,false);
   assert.equal(resetViewState(back).inventoryBack,false);assert.equal(resetViewState(back).side,side);
+ }
+});
+
+
+test('shared toggle wins over legacy snapshots and hidden styles stay hidden',()=>{
+ let state=resolveState(initialState,{centralStyle:'open-lance',smallStyle:'pear'});
+ assert.equal(state.dialsVisible,false);
+ state=resolveState(state,{dialsVisible:true});
+ assert.equal(state.centralVisible,true);assert.equal(state.smallVisible,true);
+ state=resolveState(state,{dialsVisible:false});
+ assert.equal(state.centralStyle,'open-lance');assert.equal(state.smallStyle,'pear');
+ assert.equal(state.centralVisible,false);assert.equal(state.smallVisible,false);
+ for(const centralVisible of [true,false]) for(const smallVisible of [true,false]) {
+  const restored=resolveState({...state,centralVisible,smallVisible},{});
+  assert.equal(restored.dialsVisible,centralVisible&&smallVisible);
+ }
+});
+
+test('watch defaults migrate old state and preserve configuration on Reset',()=>{
+ const legacy={...initialState};delete legacy.caseVisible;delete legacy.caseMaterial;delete legacy.centralFinish;
+ const migrated=resolveState(legacy,{});assert.equal(migrated.caseVisible,false);assert.equal(migrated.caseMaterial,'steel');assert.equal(migrated.centralFinish,'blued-steel');
+ for(const caseVisible of [false,true]) for(const caseMaterial of ['steel','rose-gold','platinum']) {
+  const s=resolveState(initialState,{caseVisible,caseMaterial,centralStyle:'fine',centralFinish:'rose-gold',side:'front',group:'energy',layout:'spread'});
+  const reset=resetViewState(s);for(const key of ['caseVisible','caseMaterial','centralFinish','side'])assert.equal(reset[key],s[key]);
+  assert.equal(reset.dialsVisible,false);assert.equal(reset.group,null);assert.equal(reset.layout,'assembly');
+ }
+});
+test('unsupported hand combinations and malformed configuration normalize deterministically',()=>{
+ const rose=resolveState(initialState,{caseMaterial:'rose-gold',centralFinish:'rose-gold'});assert.equal(rose.centralFinish,'rose-gold');
+ for(const centralStyle of ['lance','open-lance']) {
+  const s=resolveState(rose,{centralStyle});assert.equal(s.centralFinish,'blued-steel');assert.equal(s.centralStyle,centralStyle);assert.equal(s.dialsVisible,false);
+ }
+ const invalid=resolveState(initialState,{caseVisible:'yes',caseMaterial:'unknown',centralFinish:'unknown'});assert.equal(invalid.caseVisible,false);assert.equal(invalid.caseMaterial,'steel');assert.equal(invalid.centralFinish,'blued-steel');
+});
+
+test('Fine hand finish follows case through hidden choices, overrides and restoration',()=>{
+ for(const caseMaterial of ['steel','rose-gold','platinum']) for(const caseVisible of [true,false]) {
+  const expected=caseMaterial==='steel'?'blued-steel':'rose-gold';
+  for(const centralFinish of ['blued-steel','rose-gold']) {
+   const s=resolveState(initialState,{caseMaterial,caseVisible,centralFinish,centralStyle:'fine'});
+   assert.equal(s.centralFinish,expected);assert.equal(resetViewState(s).centralFinish,expected);
+   const lance=resolveState(s,{centralStyle:'lance'});assert.equal(lance.centralFinish,'blued-steel');
+   assert.equal(resolveState(lance,{centralStyle:'fine'}).centralFinish,expected);
+  }
  }
 });

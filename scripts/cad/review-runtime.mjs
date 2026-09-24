@@ -34,7 +34,7 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
    if(id.startsWith('.')){const p=path.resolve(path.dirname(file),id);return fs.existsSync(p+'.ts')?load(p+'.ts'):require(p)}
    return require(path.join(ROOT,'explorer/node_modules',id));
   };
-  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,Float32Array,Uint8Array,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
+  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,Float32Array,Uint8Array,TextDecoder,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
   cache.set(file,module.exports);return module.exports;
  };
 }
@@ -257,15 +257,65 @@ const finishShaderFor=(n)=>{
  const shader={uniforms:{},vertexShader:THREE.ShaderLib.physical.vertexShader,fragmentShader:THREE.ShaderLib.physical.fragmentShader};
  p.material.onBeforeCompile(shader,{});return {p,shader};
 };
+// Material review: target wheel leaves only, with independent gold eccentrics.
+for(const n of [94,96,141,187,210,213,216,238,243]){
+ const {p,shader}=finishShaderFor(n);
+ assert.equal(p.material.name,'hardGold');
+ assert.equal(p.material.color.getHex(),0xd9ab94,'Maker confirms rose-gold wheels');
+ assert.equal(shader.uniforms.finishPattern.value,2);
+ assert.equal(p.material.anisotropy,.58,'Gold wheels retain circular brushing');
+}
+for(const n of [137,142,183,188,235])assert.equal(finishShaderFor(n).p.material.name,'steel');
+assert.equal(finishShaderFor(115).p.material.name,'brass','Unresolved collet appearance retained');
+const escapeWheel=finishShaderFor(233);
+assert.equal(escapeWheel.p.material.name,'circularSteel');
+assert.equal(escapeWheel.p.material.color.getHex(),finishFor('', 'd_0_1_1_235').color,'Escape wheel and separate hub are steel');
+assert.equal(escapeWheel.shader.uniforms.finishPattern.value,2);
+assert.equal(escapeWheel.p.material.roughness,.27);
+assert.equal(escapeWheel.p.material.anisotropy,.58,'Steel correction preserves escape-wheel brushing');
+for(const n of [111,118,163,179,200,206])assert.equal(finishShaderFor(n).p.material.color.getHex(),0xd9ab94,'Existing gold appearances use rose hue');
+const eccentric=finishShaderFor(111).p.material,rim=finishShaderFor(110).p.material;
+assert.equal(eccentric.name,'gold');assert.equal(rim.name,'balance');
+assert.equal(eccentric.roughness,.16);assert.ok(!eccentric.color.equals(rim.color));
+assert.equal(rim.color.getHex(),0xc69d83,'No balance-rim recolor');
+assert.equal(rubyPart.material.color.getHex(),0xc44180);
+assert.equal(rubyPart.material.attenuationColor.getHex(),0xac2868);
+assert.equal(rubyPart.material.ior,1.76);assert.equal(rubyPart.material.roughness,.055);
+results.push({check:'rose-gold wheels and eccentrics, steel escape wheel with retained grain; hubs and uncertain alloys stay scoped; pinker ruby preserves optics',status:'pass'});
+{
+ const {DIALS}=load('explorer/src/experience/dials.ts');
+ const enamel=v.renderParts.get(DIALS.presentationOverrides[0].leafId).material;
+ const raw=[...v.renderParts.values()].find(p=>p.source.definitionId==='d_0_1_1_4');
+ for(const visible of [true,false,true]){
+  v.state={...initialState,centralVisible:visible,smallVisible:visible};v.retarget();
+  if(visible){
+   assert.equal(enamel.metalness,0);assert.equal(enamel.transmission,.58);
+   assert.equal(enamel.roughness,.065);assert.equal(enamel.clearcoat,1);
+   setFinishEnabled(enamel,false);assert.equal(enamel.transmission,0);
+   setFinishEnabled(enamel,true);assert.equal(enamel.transmission,.58);
+  }
+ }
+ v.state={...initialState,part:raw.source.id};v.retarget();
+ assert.equal(enamel.transmission,0,'Raw catalog keeps its original opaque presentation');
+ assert.equal(enamel.color.getHex(),0x6c2031);
+ v.state={...initialState,centralVisible:true,smallVisible:true};v.retarget();
+ assert.equal(enamel.transmission,.58,'Leaving raw inspection restores fitted enamel');
+ assert.equal(enamel.color.getHex(),0x0e47ba);
+ v.state={...initialState};v.retarget();
+ results.push({check:'fitted enamel is translucent dielectric through hide/show and raw-catalog round trip, without recoloring raw variants',status:'pass'});
+}
 for(const id of [25,36]) {
  const a=finishShaderFor(id).p.material,b=finishShaderFor(100).p.material;
  assert.equal(a.name,'roseGold');assert.ok(a.color.equals(b.color));
  assert.equal(a.metalness,b.metalness);assert.equal(a.roughness,b.roughness);
 }
 assert.equal(finishShaderFor(121).shader.uniforms.finishPattern.value,0);
+assert.equal(finishShaderFor(121).p.material.name,'satinBrass','Dial washer has its own brass assignment');
+assert.equal(finishShaderFor(121).p.material.color.getHex(),0xc6a45a);
+assert.equal(finishShaderFor(121).p.material.metalness,1);
 assert.equal(finishShaderFor(121).p.material.anisotropy,0);
 assert.equal(finishShaderFor(121).p.material.roughness,.31);
-results.push({check:'three-hander indices/logo share chaton rose gold; thin washer has satin roughness without brushing or anisotropy',status:'pass'});
+results.push({check:'three-hander indices/logo retain chaton rose gold; dial washer is brass with retained satin roughness and no brushing or anisotropy',status:'pass'});
 for(const suffix of ['54__0_1_1_194_11','54__0_1_1_194_12']){
  const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
  assert.equal(p.source.definitionId,'d_0_1_1_201');
@@ -623,12 +673,25 @@ for(const p of v.renderParts.values()){
 results.push({check:'all six emphasis groups preserve physical finishes, opaque depth, selected members and surrounding context across reveal threshold and reset',status:'pass'});
 const {StudioEnvironment}=load('explorer/src/viewer/StudioEnvironment.ts');
 const studio=new StudioEnvironment(),studioResources=[];
-studio.traverse(o=>{if(o instanceof THREE.Mesh){studioResources.push(o.geometry,o.material);assert.ok(o.material.color.r>1);assert.equal(o.material.side,THREE.DoubleSide)}});
+studio.traverse(o=>{if(o instanceof THREE.Mesh){
+ studioResources.push(o.geometry,o.material);
+ assert.equal(o.material.side,THREE.DoubleSide);
+ assert.equal(o.material.vertexColors,true);
+ const colors=o.geometry.getAttribute('color'),uv=o.geometry.getAttribute('uv');
+ let peak=0;
+ for(let i=0;i<colors.count;i++){
+  const rgb=[colors.getX(i)*o.material.color.r,colors.getY(i)*o.material.color.g,colors.getZ(i)*o.material.color.b];
+  assert.ok(rgb.every(c=>Number.isFinite(c)&&c>=0));peak=Math.max(peak,...rgb);
+  if(uv.getX(i)===0||uv.getX(i)===1||uv.getY(i)===0||uv.getY(i)===1)
+   [studio.background.r,studio.background.g,studio.background.b].forEach((c,k)=>assert.ok(Math.abs(rgb[k]-c)<1e-6,'Card edges match the reflection surround'));
+ }
+ assert.ok(peak>1,'Combined vertex/material radiance retains HDR highlights');
+}});
 assert.equal(studioResources.length,12);
 const studioDisposals=new Map(studioResources.map(r=>[r,0]));
 for(const r of studioResources)r.addEventListener('dispose',()=>studioDisposals.set(r,studioDisposals.get(r)+1));
 studio.dispose();for(const count of studioDisposals.values())assert.equal(count,1);
-results.push({check:'actual six-card studio has HDR emission colors and disposes every temporary geometry/material once',status:'pass'});
+results.push({check:'actual six-card studio has finite HDR radiance, feathered edges matching its surround, and disposes every temporary geometry/material once',status:'pass'});
 
 // No DOM was connected in this CPU harness, so OrbitControls has no DOM listeners to dispose.
 const pending=[];class DeferredLoader{setMeshoptDecoder(){return this}loadAsync(url,progress){return new Promise((resolve,reject)=>pending.push({resolve,reject,progress}))}}
@@ -735,7 +798,7 @@ restoreModule.exports.call(restoreFixture)();
 assert.equal(oldDisposed,1);assert.equal(environmentCreated,1);assert.equal(restoreFixture.environment.texture,replacementTexture);assert.equal(restoreFixture.scene.environment,replacementTexture);assert.notEqual(restoreFixture.scene.environment,oldTexture);assert.equal(restoreFixture.scene.environmentIntensity,.8);assert.equal(roomDisposed,1);assert.equal(generatorDisposed,1);assert.equal(restoreFixture.contextLost,false);assert.equal(restoreFixture.error,'');assert.equal(restoreFixture.needsRender,true);assert.equal(notifications,1);
 results.push({check:'context restore replaces environment texture and releases temporary PMREM resources',status:'pass',scope:'actual handler with CPU PMREM/room stubs; not WebGL reflection proof'});
 const snapshotFixture=Object.create(Viewer.prototype),benchmarkResult={fixture:'completed benchmark'};
-Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',error:'',detailError:'',parts:[],history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},stats(){return {}}});
+Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',error:'',detailError:'',parts:[],renderParts:new Map(),history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},stats(){return {}}});
 const snapshot=snapshotFixture.snapshot();assert.equal(snapshot.catalogLoaded,true);assert.equal(snapshot.benchmarkResult,benchmarkResult);
 snapshotFixture.benchmark=null;assert.equal(snapshotFixture.snapshot().benchmarkResult,undefined);
 results.push({check:'snapshot exposes catalog/benchmark values without requiring render-time refs',status:'pass'});
@@ -748,7 +811,7 @@ results.push({check:'unknown or invalid transfer totals remain indeterminate; me
 const tickField=viewerClass.members.find(n=>ts.isPropertyDeclaration(n)&&n.name.getText(viewerSource)==='tick');
 const tickModule={exports:{}};
 const tickCode=ts.transpileModule('module.exports=function(){return '+tickField.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
-vm.runInNewContext(tickCode,{module:tickModule,THREE,performance,console,requestAnimationFrame:()=>1,document:{hidden:false}});
+vm.runInNewContext(tickCode,{module:tickModule,THREE,...load('explorer/src/experience/motion.ts'),performance,console,requestAnimationFrame:()=>1,document:{hidden:false}});
 const renderOrder=[];
 const frameFixture={dead:false,contextLost:false,lastFrame:0,lastNotify:1e9,benchmark:null,needsRender:true,presentationMoving:false,travel:null,ready:false,awaitingFirstFrame:true,loadStart:performance.now(),frameIntervals:[],renderCount:0,
  state:{...initialState,phase:'whole'},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
@@ -848,6 +911,12 @@ for(const state of [
 }
 results.push({check:'viewport resize preserves Reset overview with visible dials and exact selected face inside Time display',status:'pass'});
 
+function caseFixtureScene(){
+ const scene=new THREE.Scene(), geometry=new THREE.BufferGeometry();
+ geometry.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,1,0,0,0,1,0],3));geometry.setIndex([0,1,2]);geometry.computeVertexNormals();
+ const material=new THREE.MeshStandardMaterial();material.name='d_0_1_1_54';
+ const mesh=new THREE.Mesh(geometry,material);mesh.name='case-recovery-fixture';scene.add(mesh);return scene;
+}
 const catalogFixture=Object.create(RaceViewer.prototype),externalParts=parts.filter(p=>!belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT));
 Object.assign(catalogFixture,{ready:true,dead:false,selectionGeneration:0,catalogLoaded:false,catalogPending:null,detailError:'',status:'',parts:externalParts,paths:{catalog:'fixture-catalog.glb'},state:{...initialState,phase:'whole'},history:[],saves:0,save(){this.saves++},emit(){},ingest(){},retarget(){},targetBounds:()=>new THREE.Box3(),disposeObject(){}});
 const preserved=JSON.stringify(catalogFixture.state);
@@ -856,7 +925,7 @@ assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalo
 pending[idx].reject(Error('Optional catalog unavailable'));await failedSelection;
 assert.equal(JSON.stringify(catalogFixture.state),preserved);assert.equal(catalogFixture.catalogPending,null);assert.ok(catalogFixture.detailError);
 idx=pending.length;const obsoleteSelection=catalogFixture.select(externalParts[1].id);
-catalogFixture.patch({treatment:'function'});pending[idx].resolve({scene:{}});await obsoleteSelection;
+catalogFixture.patch({treatment:'function'});pending[idx].resolve({scene:caseFixtureScene()});await obsoleteSelection;
 assert.equal(catalogFixture.state.part,null);assert.equal('treatment' in catalogFixture.state,false);assert.equal(catalogFixture.saves,0);assert.equal(catalogFixture.catalogLoaded,true);
 results.push({check:'optional catalog failure preserves pose/state/history; retry succeeds and intervening navigation cancels obsolete selection',status:'pass'});
 // Background dismissal cancels successful, failing and retrying optional selections.
@@ -865,7 +934,7 @@ for (const fails of [false,true]) {
  const pendingSelection=catalogFixture.select(externalParts[1].id);
  const stateBefore={...catalogFixture.state},savesBefore=catalogFixture.saves;
  catalogFixture.deselect();
- if(fails)pending[idx].reject(Error('Dismissed request'));else pending[idx].resolve({scene:{}});
+ if(fails)pending[idx].reject(Error('Dismissed request'));else pending[idx].resolve({scene:caseFixtureScene()});
  await pendingSelection;
  assert.equal(JSON.stringify(catalogFixture.state),JSON.stringify(stateBefore));assert.equal(catalogFixture.saves,savesBefore);
  assert.equal(catalogFixture.catalogRetry,undefined);assert.equal(catalogFixture.detailError,'');
@@ -873,7 +942,7 @@ for (const fails of [false,true]) {
 results.push({check:'empty-space dismissal invalidates pending selection success/failure without adding history or stale retry',status:'pass'});
 catalogFixture.catalogLoaded=false;idx=pending.length;const secondFailure=catalogFixture.select(externalParts[2].id);
 pending[idx].reject(Error('Retry fixture'));await secondFailure;
-idx=pending.length;const targetedRetry=catalogFixture.retryCatalog();pending[idx].resolve({scene:{}});await targetedRetry;
+idx=pending.length;const targetedRetry=catalogFixture.retryCatalog();pending[idx].resolve({scene:caseFixtureScene()});await targetedRetry;
 assert.equal(catalogFixture.state.part,externalParts[2].id);assert.equal(catalogFixture.saves,1);
 catalogFixture.catalogLoaded=false;idx=pending.length;const disposedCatalog=catalogFixture.loadCatalog();catalogFixture.dead=true;
 const disposedCatalogScenes=[];catalogFixture.disposeObject=o=>disposedCatalogScenes.push(o);const disposedScene={id:'disposed-catalog'};
@@ -1061,6 +1130,26 @@ for(let i=0;i<24;i++) {
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
 results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
+v.reset();v.applyPose(10);v.cameraUserOwned=true;v.travel=null;v.reduced=false;
+v.patch({separation:1});assert.equal(v.explosionTravel.duration,1.25);
+v.patch({separation:0});v.applyPose(1.5);
+assert.equal(v.assemblyError(),0,'Opening reversed before its first frame must never open later');
+for(const hz of [30,60,120]){
+ v.reset();v.applyPose(10);v.patch({separation:1});
+ let previous=0;
+ for(let i=0;i<Math.ceil(1.25*hz)+1;i++){
+  v.applyPose(1/hz);
+  const progress=v.displayedExplosionState.separation;
+  assert.ok(progress>=previous && progress<=1,'Opening must be monotonic at every refresh rate');previous=progress;
+ }
+ assert.equal(v.displayedExplosionState.separation,1);assert.equal(v.explosionTravel,undefined);
+ v.patch({separation:0});assert.equal(v.explosionTravel.duration,1.05);v.applyPose(.35);
+ const displayed=new Map([...v.renderParts].map(([id,p])=>[id,p.offset.clone()]));
+ v.patch({separation:1});v.applyPose(0);
+ for(const [id,offset] of displayed)assert.ok(v.renderParts.get(id).offset.distanceTo(offset)<1e-10,'Reversal must start at the displayed pose');
+ v.applyPose(2);v.patch({separation:0});v.applyPose(2);assert.equal(v.assemblyError(),0);
+}
+results.push({check:'Separate opens in 1.25 s and closes in 1.05 s at 30/60/120 Hz; immediate and mid-flight reversals preserve poses and exact endpoints',status:'pass'});
 v.reset();v.applyPose(1);v.cameraUserOwned=true;v.travel=null;
 v.scrub({separation:.8});const probe=[...v.renderParts.values()].find(p=>p.target.length()>1);
 const displayed=probe.offset.clone();v.applyPose(0);assert.ok(probe.offset.equals(displayed));
@@ -1099,8 +1188,10 @@ results.push({check:'out-and-back drags, pinch release orders, cancellation, rig
 const {reviewExplosion}=await import('./review-explosion.mjs');
 reviewExplosion({v,THREE,initialState,load,ROOT,parts,results});
 const {reviewDials}=await import('./review-dials.mjs');
-await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results});
+await reviewDials({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results,modelFetch,caseFixtureScene});
 const {reviewInventory}=await import('./review-inventory.mjs');
 await reviewInventory({v,Viewer,THREE,initialState,load,parts,results});
+const {reviewWatch}=await import('./review-watch.mjs');
+await reviewWatch({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results,modelFetch,caseFixtureScene,parse});
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Inventory must preserve source geometry bytes');
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

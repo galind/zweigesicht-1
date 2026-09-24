@@ -96,7 +96,8 @@ export async function runInventoryChecks(v: MovementViewer) {
   check(
     'Flip movement retains its label, decorative icon, keyboard button and touch target',
     !button.disabled &&
-      button.textContent?.trim() === 'Flip movement' &&
+      button.textContent?.trim() === 'Flip' &&
+      button.getAttribute('aria-label') === 'Flip movement' &&
       !!button.querySelector('svg[aria-hidden="true"]') &&
       button.tabIndex === 0 &&
       rect.width >= 44 &&
@@ -173,24 +174,25 @@ export async function runInventoryChecks(v: MovementViewer) {
     'User pan and zoom are unchanged during flip',
     same(v.camera.matrixWorld, panned) && v.controls.target.equals(panTarget),
   );
-  for (const centralVisible of [false, true])
-    for (const smallVisible of [false, true]) {
-      await v.configureDials({
-        centralVisible,
-        smallVisible,
-        centralStyle: 'open-lance',
-        smallStyle: 'pear',
-      });
-      await settle(v);
-      check(
-        `Visibility ${centralVisible}/${smallVisible} retains back and independent styles`,
-        v.state.inventoryBack &&
-          v.inventoryAngle === Math.PI &&
-          v.state.centralStyle === 'open-lance' &&
-          v.state.smallStyle === 'pear' &&
-          v.fitted.size === (centralVisible ? 22 : 0) + (smallVisible ? 21 : 0),
-      );
-    }
+  for (const dialsVisible of [false, true]) {
+    const centralVisible = dialsVisible,
+      smallVisible = dialsVisible;
+    await v.configureDials({
+      centralVisible,
+      smallVisible,
+      centralStyle: 'open-lance',
+      smallStyle: 'pear',
+    });
+    await settle(v);
+    check(
+      `Visibility ${centralVisible}/${smallVisible} retains back and independent styles`,
+      v.state.inventoryBack &&
+        v.inventoryAngle === Math.PI &&
+        v.state.centralStyle === 'open-lance' &&
+        v.state.smallStyle === 'pear' &&
+        v.fitted.size === (centralVisible ? 22 : 0) + (smallVisible ? 21 : 0),
+    );
+  }
   v.cameraUserOwned = false;
   v.deselect();
   v.frameSpread();

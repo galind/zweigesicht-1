@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "checked": "2026-09-24",
+  "method": "Existing 22 September references and user-supplied 24 September maker correspondence/render retained. Official downloads page and animation retrieved and visually checked 24 September; animation hash matches earlier record. Supplied render and local maker movement photograph inspected for qualitative finish guidance.",
+  "references": [
+    {
+      "id": "maker",
+      "url": "https://www.marcolangwatches.com/en/watches/",
+      "checked": "2026-09-22",
+      "supports": [
+        "Solid 14 ct hard-gold alloy wheels",
+        "Gold balance eccentrics",
+        "Solid-silver dial II with translucent blue grand-feu enamel",
+        "Rose-gold-plated base plate",
+        "Blued Breguet hairspring"
+      ],
+      "limits": "Does not specify wheel alloy hue, balance-rim or escape-wheel alloy, base-plate substrate, eccentric karat or exact hairspring alloy."
+    },
+    {
+      "id": "sjx",
+      "url": "https://watchesbysjx.com/2023/08/marco-lang-zweigesicht-1-review.html",
+      "checked": "2026-09-22",
+      "supports": [
+        "Ruby cylindrical shock mass",
+        "Heat-blued bridge borders"
+      ],
+      "limits": "Border response and bridge/crown finishing changes were not approved in this turn."
+    },
+    {
+      "id": "maker-feedback-2026-09-24",
+      "type": "user-supplied maker correspondence",
+      "provided": "2026-09-24",
+      "author": "Marco Lang, as attributed by the user",
+      "url": null,
+      "supports": [
+        "Listed wheels, cover plate and balance eccentric are solid rose gold; plated parts are rose-gold plated, color 4N.",
+        "No regular yellow gold is used on the watch.",
+        "Escape wheel is steel, an explicit exception to the broad wheel statement."
+      ],
+      "limits": "Original outgoing component list and correspondence date were not provided. Do not infer every part is solid gold, assign 4N composition to solid alloys, or map the cover plate to a specific CAD definition without further evidence. Colors remain authored approximations.",
+      "attachment": {
+        "filename": "codex-clipboard-9983c1a8-03d6-4d2b-bb80-a3e716d5b4a6.png",
+        "sha256": "555124fadbdadd5229c5fdb2d6ebcd9ee8ec36a33d2aaf8fc3cd49aabc1da0b2",
+        "use": "Visual rose-gold/steel contrast reference; not calibrated material data. Original image remains outside Git."
+      },
+      "addressedFeedback": [
+        "Lugs move clear and case flips around x-axis; verify against maker download-page animation before changing motion.",
+        "Finishing should be coarser and steel less milky; requires visual tuning."
+      ],
+      "resolution": "Face-flip evidence is in assets/source-manifest/face-flip.json; separate spatial/optical tuning and remaining interpretations in assets/authored/material-review.json. No calibrated values inferred."
+    },
+    {
+      "id": "user-steel-grain-feedback-2026-09-24",
+      "type": "direct user visual feedback",
+      "provided": "2026-09-24",
+      "url": null,
+      "supports": [
+        "Steel brushing in aa2493a appears too thick.",
+        "User approved starting with 1.8× finer steel grain while retaining current reflections, frosting and polished edges."
+      ],
+      "limits": "User preference and authored scale adjustment; no new maker statement or calibrated material measurement."
+    },
+    {
+      "id": "user-supplied-sjx-detail-2026-09-24",
+      "type": "user-supplied photograph",
+      "provided": "2026-09-24",
+      "attribution": "SJX watermark visible; original page not supplied with attachment",
+      "url": null,
+      "attachment": {
+        "filename": "codex-clipboard-c69e6b6f-a85c-4699-a18e-429a2d71edb9.png",
+        "sha256": "331959da24d7468c44a2fd2e8c914286eeb21cfcaa9c49fa138d4fd31f57e344",
+        "use": "Qualitative comparison of bridge hairlines and reflection structure. Original remains outside Git."
+      },
+      "supports": [
+        "Fine directional scratches on smoother steel fields, less dominated by broad streaks than the current rendering.",
+        "User approved reducing broad grain contribution and relief while retaining finer hairlines."
+      ],
+      "limits": "Image is not calibrated material data; differences in lighting and photographic processing remain. Does not authorize changes to alloys, source geometry or mechanical claims."
+    },
+    {
+      "id": "user-flat-view-lighting-2026-09-24",
+      "type": "direct user presentation preference",
+      "provided": "2026-09-24",
+      "url": null,
+      "supports": [
+        "User likes the flat view and requests improved lighting/reflections without changing the default angle."
+      ],
+      "limits": "Presentation preference; no new maker, alloy or mechanical evidence. Existing supplied photograph remains qualitative guidance."
+    },
+    {
+      "id": "user-dial-washer-brass-2026-09-24",
+      "type": "direct user material correction",
+      "provided": "2026-09-24",
+      "url": null,
+      "supports": [
+        "Dial washer must be brass."
+      ],
+      "limits": "User-specified material; exact brass grade and numerical optical values are not measured. Source identity d121 Flitter 200x400 maps the correction to the existing thin washer."
+    }
+  ]
+}

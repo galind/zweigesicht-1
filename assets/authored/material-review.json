@@ -1,0 +1,431 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-24",
+  "scope": "Maker-confirmed rose-gold and steel escape-wheel corrections from a17d341 retained. Refine grain/frost spatial scale and steel reflection response separately; source geometry, finish regions and calibrated-color limits preserved.",
+  "components": [
+    {
+      "definitionIds": [
+        "d_0_1_1_94",
+        "d_0_1_1_96",
+        "d_0_1_1_141",
+        "d_0_1_1_187",
+        "d_0_1_1_210",
+        "d_0_1_1_213",
+        "d_0_1_1_216",
+        "d_0_1_1_238",
+        "d_0_1_1_243"
+      ],
+      "physicalMaterial": "Solid 14 ct hard rose-gold alloy; precise composition unspecified",
+      "surfaceFinish": "Retained circular brushing and existing edge response",
+      "renderingApproximation": "Dedicated hardGold profile with authored rose-gold color and retained circular brushing; not a measured alloy color",
+      "evidence": "maker; CAD wheel identities; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_111"
+      ],
+      "physicalMaterial": "Solid rose gold; karat unspecified",
+      "surfaceFinish": "Polished",
+      "renderingApproximation": "Dedicated gold assignment independent of rim; rose-gold hue and roughness are authored",
+      "evidence": "maker; maker-feedback-2026-09-24; user correction authorization 2026-09-24"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_21"
+      ],
+      "physicalMaterial": "Blue vitreous grand-feu enamel in fitted dial II",
+      "surfaceFinish": "Glossy, translucent",
+      "renderingApproximation": "FITTED_BLUE_ENAMEL shared runtime values; approximate screen-space transmission. Raw catalog keeps its existing red presentation despite the fresh XCAF blue-body evidence. No geometry changes.",
+      "evidence": "maker; scoped fitted-display approval 2026-09-22"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_14"
+      ],
+      "physicalMaterial": "Solid silver dial-II carrier",
+      "surfaceFinish": "Retained satin finish",
+      "renderingApproximation": "Separate silver-colored metallic carrier; optical response unmeasured",
+      "evidence": "maker"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_195"
+      ],
+      "physicalMaterial": "Rose-gold plating; substrate unknown",
+      "surfaceFinish": "Retained frosting",
+      "renderingApproximation": "Pink-gilt metallic appearance; no brass-substrate claim",
+      "evidence": "maker"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_110"
+      ],
+      "physicalMaterial": "Unresolved balance-rim alloy",
+      "surfaceFinish": "Retained smooth metal",
+      "renderingApproximation": "Existing warm balance profile retained; color does not establish alloy",
+      "evidence": "Existing evidence ledger; no steel conversion authorized"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_233"
+      ],
+      "physicalMaterial": "Steel; exact grade unspecified",
+      "surfaceFinish": "Retained circular satin",
+      "renderingApproximation": "Dedicated circularSteel profile; neutral steel hue, roughness .27 and anisotropy .58 retained. Circular grain refinement is recorded separately in finishRefinement.",
+      "evidence": "maker-feedback-2026-09-24; user correction authorization 2026-09-24"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_115"
+      ],
+      "physicalMaterial": "Unresolved hairspring-collet alloy",
+      "surfaceFinish": "Retained circular satin",
+      "renderingApproximation": "Legacy brass profile is a warm appearance only",
+      "evidence": "Existing source/reference audit"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_116"
+      ],
+      "physicalMaterial": "Blued metallic hairspring; exact alloy unspecified",
+      "surfaceFinish": "Retained heat-blued appearance",
+      "renderingApproximation": "Spring profile retained; supplier name does not establish Nivarox alloy composition",
+      "evidence": "maker"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_101",
+        "d_0_1_1_102",
+        "d_0_1_1_106",
+        "d_0_1_1_112",
+        "d_0_1_1_128",
+        "d_0_1_1_134",
+        "d_0_1_1_155",
+        "d_0_1_1_196",
+        "d_0_1_1_197",
+        "d_0_1_1_198",
+        "d_0_1_1_199",
+        "d_0_1_1_204",
+        "d_0_1_1_205",
+        "d_0_1_1_208",
+        "d_0_1_1_231"
+      ],
+      "physicalMaterial": "Ruby; synthetic origin not independently established here",
+      "surfaceFinish": "Polished transparent jewel",
+      "renderingApproximation": "Slightly pinker magenta base and absorption tint; IOR, transmission and roughness retained. Gauge inlays are separately shaded and unchanged.",
+      "evidence": "User hue request 2026-09-22; sjx for shock-cylinder material"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_118",
+        "d_0_1_1_163",
+        "d_0_1_1_179",
+        "d_0_1_1_200",
+        "d_0_1_1_206"
+      ],
+      "physicalMaterial": "Individual alloys and solid/plated construction unresolved",
+      "surfaceFinish": "Retained polished or satin finish",
+      "renderingApproximation": "Existing gold/satinGold appearance profiles now use rose-gold hue in response to the maker stating there is no regular yellow gold. This appearance correction does not establish each component as solid gold.",
+      "evidence": "maker-feedback-2026-09-24; existing component assignments; user correction authorization 2026-09-24"
+    },
+    {
+      "definitionIds": [
+        "d_0_1_1_121"
+      ],
+      "physicalMaterial": "Brass; exact grade unspecified",
+      "surfaceFinish": "Retained smooth satin",
+      "renderingApproximation": "Dedicated satinBrass profile, authored color #c6a45a; metalness 1, roughness .31, pattern 0 and anisotropy 0. No geometry or adjacent gold appearance changes.",
+      "evidence": "user-dial-washer-brass-2026-09-24; source Flitter 200x400 identity"
+    }
+  ],
+  "historicalAudit": {
+    "path": "docs/appearance/cad-finishing-audit.json",
+    "meaning": "Historical source/reference investigation and browser-review snapshot. Runtime values, approval status and correction locks in this snapshot are not the current material specification. Its source geometry evidence remains available; current assignments are generated in docs/appearance/ledger.json.",
+    "supersededClaims": [
+      {
+        "id": "USER-STEEL-2026-09-10",
+        "scope": [
+          "d_0_1_1_155"
+        ],
+        "current": "Shock cylinder is ruby. The steel pinion/hub decisions in the same historical lock remain valid."
+      },
+      {
+        "id": "USER-ECCENTRIC",
+        "scope": [
+          "d_0_1_1_111"
+        ],
+        "current": "Gold weights now independent of balance rim; explicitly approved 2026-09-22."
+      },
+      {
+        "id": "USER-RUBY-HUE",
+        "scope": "ruby family",
+        "current": "Slightly pinker magenta ruby requested 2026-09-22; optical behavior retained."
+      },
+      {
+        "id": "fitted enamel",
+        "scope": [
+          "d_0_1_1_21"
+        ],
+        "current": "Translucent vitreous enamel restored 2026-09-22. Raw catalog keeps its existing red appearance. Historical source name says red, but the later fresh XCAF audit reports blue body colors; neither source color establishes composition."
+      },
+      {
+        "id": "maker rose-gold clarification",
+        "scope": "hardGold, gold and satinGold appearance profiles",
+        "current": "Marco confirms no regular yellow gold. Rose-gold appearance replaces yellow; only explicitly identified parts gain solid-metal claims."
+      },
+      {
+        "id": "escape-wheel alloy",
+        "scope": [
+          "d_0_1_1_233"
+        ],
+        "current": "Marco confirms steel. Previous unresolved/warm interpretation is superseded; circular finish retained."
+      },
+      {
+        "scope": "Dial washer d121 / Flitter 200x400",
+        "previous": "Unresolved goldish satin, subsequently included in the rose-gold appearance correction.",
+        "current": "User explicitly confirms brass on 24 September 2026. Preserve satin finish; this exception does not change other gold appearances."
+      }
+    ]
+  },
+  "sourceManifest": "assets/source-manifest/material-review.json",
+  "finishRefinement": {
+    "checked": "2026-09-24",
+    "evidence": [
+      "maker-feedback-2026-09-24",
+      "REF-MAKER-01",
+      "REF-MAKER-02"
+    ],
+    "guidance": "User-supplied maker render guides metallic dark/bright reflection separation and polished borders. Existing maker movement photograph guides straight grain, cellular frosting and smooth edges. Neither image supplies calibrated alloy colors or roughness.",
+    "spatialScale": {
+      "frostCellsPerMm": {
+        "before": 24,
+        "after": 10
+      },
+      "straightBrushFrequenciesPerMm": {
+        "before": [
+          32,
+          90,
+          230,
+          520
+        ],
+        "after": [
+          7,
+          22,
+          75,
+          210
+        ]
+      },
+      "circularBrushFrequenciesPerMm": {
+        "before": [
+          45,
+          140,
+          360
+        ],
+        "after": [
+          12,
+          45,
+          150
+        ]
+      },
+      "unchanged": "Brush direction/source axes, amplitudes, anisotropy, snailing, silver dial grain and exact face masks.",
+      "steelGrainFollowUp": {
+        "checked": "2026-09-24",
+        "evidence": "user-steel-grain-feedback-2026-09-24",
+        "frequencyMultiplier": 1.8,
+        "straightFamilies": [
+          "bridge",
+          "brushedSteel"
+        ],
+        "straightAcrossStrokeFrequenciesPerMm": [
+          12.6,
+          39.6,
+          135,
+          378
+        ],
+        "circularFamilies": [
+          "circularSteel",
+          "ratchet"
+        ],
+        "circularRadialFrequenciesPerMm": [
+          21.6,
+          81,
+          270
+        ],
+        "scope": "Narrower steel strokes only. Along-stroke variation, grain weights/contrast/relief amplitudes, roughness, anisotropy, lighting, frosting, polished edges, silver dial grain and warm-metal grain remain unchanged. Derivative filtering remains enabled.",
+        "limits": "Authored visual refinement after user review, not maker-measured grain pitch. Frequency changes also affect filtered screen-space grain and relief slopes despite unchanged amplitudes.",
+        "localComparison": "artifacts/browser/steel-grain-refinement/comparison.png; aa2493a before/current after, matched 1275×1354 views on both faces at overview and two zoom steps."
+      }
+    },
+    "opticalResponse": {
+      "steelRoughness": {
+        "before": 0.18,
+        "after": 0.14
+      },
+      "brushedSteelRoughness": {
+        "before": 0.28,
+        "after": 0.22
+      },
+      "bridgeRoughness": {
+        "before": 0.25,
+        "after": 0.2
+      },
+      "neutralSourceSeatRoughness": {
+        "before": 0.2,
+        "after": 0.14
+      },
+      "frostSlopeAmplitude": {
+        "before": 0.06,
+        "after": 0.035
+      },
+      "frostMicroRoughness": {
+        "before": 0.36,
+        "after": 0.31
+      },
+      "studioBackground": {
+        "before": "#747880",
+        "after": "#51545a"
+      },
+      "frontBackSoftboxes": {
+        "before": {
+          "size": [
+            75,
+            50
+          ],
+          "intensity": 1.7
+        },
+        "after": {
+          "size": [
+            65,
+            42
+          ],
+          "intensity": 1.9
+        }
+      },
+      "rationale": "Coarser grains remain readable without excessive relief. Darker reflection intervals and slightly narrower softboxes restore steel contrast while preserving bright metallic highlights. Metalness remains 1; base alloy colors and exposure remain unchanged."
+    },
+    "preserved": "a17d341 rose-gold color and material assignments; steel escape-wheel identity, roughness .27 and anisotropy .58; polished bevel roughness .075; black-polished crown response .055; exact frosting scope on main plate, seven pads and crown M background. Source geometry and annotations unchanged.",
+    "limits": "All frequencies, slope amplitudes, optical values and environment lights are authored presentation values, not measured manufacturing or spectral data. Environment changes necessarily affect reflections of all materials.",
+    "localComparison": "artifacts/browser/maker-refinement/comparison.png; matched 1275×1354 desktop captures, both faces, Reset overview and two + zoom steps. Before uses a17d341 material/FrostedSurface/StudioEnvironment modules in a temporary local copy; current motion used for matched framing. No source media committed.",
+    "steelHairlineFollowUp": {
+      "checked": "2026-09-24",
+      "evidence": "user-supplied-sjx-detail-2026-09-24",
+      "families": [
+        "bridge",
+        "brushedSteel"
+      ],
+      "grainLayerWeights": {
+        "before": [
+          0.35,
+          0.3,
+          0.23,
+          0.12
+        ],
+        "after": [
+          0.12,
+          0.22,
+          0.23,
+          0.12
+        ]
+      },
+      "reliefMultiplier": {
+        "before": 1,
+        "after": 0.7
+      },
+      "rationale": "Reduce broad continuous streaks over smooth steel while retaining the two fine layers without renormalizing or amplifying them. This supersedes the unchanged straight-steel amplitudes recorded in the preceding spatial-only follow-up.",
+      "preserved": "1.8× steel frequency, fine-layer strengths, source axes and masks, base roughness, anisotropy, lighting, polished edges, frosting, circular brushing, warm-metal grain, dial materials, source geometry and face flipping.",
+      "limits": "Qualitative interpretation of a supplied photograph; light direction, camera, white balance and processing are not matched. No measured roughness or alloy-color inference. The dial/edge/frosting differences observed in the comparison are outside this scoped grain correction.",
+      "localComparison": "artifacts/browser/steel-hairline-refinement/comparison.png and detail-comparison.png; a48e751 baseline, both faces at overview and two zoom steps."
+    },
+    "flatViewLightingFollowUp": {
+      "checked": "2026-09-24",
+      "evidence": "user-flat-view-lighting-2026-09-24",
+      "scope": "Studio reflection environment only; flat default camera, direct lights, exposure, environment intensity, materials, texture scales and source geometry unchanged.",
+      "surround": {
+        "before": "#51545a",
+        "after": "#5a5e64"
+      },
+      "panelFalloff": {
+        "before": "intensity * (0.18 + 0.82 * exp(-2.2*x*x - 1.4*y*y))",
+        "after": "linear surround RGB + intensity * (1-x*x)^2 * (1-y*y)^2",
+        "rationale": "Each card meets the surround at its boundary with zero analytic slope, reducing abrupt rectangular transitions during orbit."
+      },
+      "panels": [
+        {
+          "position": [
+            -30,
+            -18,
+            -60
+          ],
+          "size": [
+            90,
+            74
+          ],
+          "intensity": 2.8
+        },
+        {
+          "position": [
+            60,
+            18,
+            -8
+          ],
+          "size": [
+            24,
+            90
+          ],
+          "intensity": 3
+        },
+        {
+          "position": [
+            0,
+            65,
+            0
+          ],
+          "size": [
+            85,
+            32
+          ],
+          "intensity": 2
+        },
+        {
+          "position": [
+            -30,
+            18,
+            60
+          ],
+          "size": [
+            90,
+            74
+          ],
+          "intensity": 2.8
+        },
+        {
+          "position": [
+            -60,
+            -12,
+            8
+          ],
+          "size": [
+            38,
+            100
+          ],
+          "intensity": 1.7
+        },
+        {
+          "position": [
+            0,
+            -65,
+            0
+          ],
+          "size": [
+            75,
+            40
+          ],
+          "intensity": 1.2
+        }
+      ],
+      "rationale": "Broader off-axis keys, unequal edge/fill cards and slightly raised surround provide directional steel reflections in the flat view. A dimmer trial suppressed metallic highlights; a brighter reverse-face trial washed out keyless steel, so its key was repositioned.",
+      "limits": "Authored presentation lighting, not a measured reconstruction of the supplied photograph. Reflections change on all materials even though material parameters are fixed. Does not claim physically matched photographic illumination.",
+      "localComparison": "artifacts/browser/lighting-refinement/comparison.png; 4300c6b baseline and current environment, both faces at normal distance and two zoom steps."
+    }
+  }
+}

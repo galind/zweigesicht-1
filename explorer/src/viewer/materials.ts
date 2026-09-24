@@ -8,16 +8,22 @@ import {
 
 /** Authored surface interpretations of local maker references, not measured finishes. */
 const profiles = {
-  steel: { color: 0xc7cdd4, metalness: 1, roughness: 0.18, pattern: 0 },
-  brushedSteel: { color: 0xc9ced5, metalness: 1, roughness: 0.28, pattern: 4 },
-  bridge: { color: 0xd4d8de, metalness: 1, roughness: 0.25, pattern: 1 },
+  steel: { color: 0xc7cdd4, metalness: 1, roughness: 0.14, pattern: 0 },
+  brushedSteel: { color: 0xc9ced5, metalness: 1, roughness: 0.22, pattern: 4 },
+  bridge: { color: 0xd4d8de, metalness: 1, roughness: 0.2, pattern: 1 },
   warmPlate: { color: 0xd4a58e, metalness: 1, roughness: 0.27, pattern: 1 },
   frosted: { color: 0xd2a48b, metalness: 1, roughness: 0.49, pattern: 3 },
   brass: { color: 0xd9aa7d, metalness: 1, roughness: 0.27, pattern: 2 },
+  // Marco confirms rose gold and a steel escape wheel (feedback relayed 2026-09-24).
+  // Screen colors are authored approximations; alloy assignments and hues are retained.
+  hardGold: { color: 0xd9ab94, metalness: 1, roughness: 0.27, pattern: 2 },
+  circularSteel: { color: 0xc7cdd4, metalness: 1, roughness: 0.27, pattern: 2 },
   barrel: { color: 0xd2a079, metalness: 1, roughness: 0.3, pattern: 2 },
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
-  gold: { color: 0xd8b572, metalness: 1, roughness: 0.16, pattern: 0 },
-  satinGold: { color: 0xd8b572, metalness: 1, roughness: 0.31, pattern: 0 },
+  gold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
+  satinGold: { color: 0xd9ab94, metalness: 1, roughness: 0.31, pattern: 0 },
+  // User-confirmed brass dial washer; preserve its smooth satin finish.
+  satinBrass: { color: 0xc6a45a, metalness: 1, roughness: 0.31, pattern: 0 },
   roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xbac1ca, metalness: 1, roughness: 0.055, pattern: 5 },
@@ -30,16 +36,30 @@ const profiles = {
   dialSilver: { color: 0xd5d8dc, metalness: 1, roughness: 0.25, pattern: 6 },
   blue: { color: 0x0b3768, metalness: 1, roughness: 0.13, pattern: 0 },
   spring: { color: 0x304f83, metalness: 1, roughness: 0.25, pattern: 0 },
-  ruby: { color: 0xb72b68, metalness: 0, roughness: 0.055, pattern: 0 },
+  ruby: { color: 0xc44180, metalness: 0, roughness: 0.055, pattern: 0 },
   leather: { color: 0x684330, metalness: 0, roughness: 0.78, pattern: 3 },
   rubber: { color: 0x17191c, metalness: 0, roughness: 0.7, pattern: 0 },
   enamel: { color: 0x062e78, metalness: 0, roughness: 0.065, pattern: 0 },
   sapphire: { color: 0xffffff, metalness: 0, roughness: 0.035, pattern: 0 },
   diamond: { color: 0xffffff, metalness: 0, roughness: 0.025, pattern: 0 },
 };
+// Fitted dial II: translucent vitreous enamel over the separate silver carrier.
+// Optical values are an appearance approximation, not measured enamel data.
+export const FITTED_BLUE_ENAMEL = {
+  color: 0x0e47ba,
+  metalness: 0,
+  roughness: 0.065,
+  transmission: 0.58,
+  ior: 1.53,
+  thickness: 0.35,
+  attenuationColor: 0x063b9a,
+  attenuationDistance: 0.65,
+  clearcoat: 1,
+  clearcoatRoughness: 0.035,
+};
 type Finish = keyof typeof profiles;
 // Shared straight-brush controls: updating a family affects all its parts.
-// Circular gear finishes keep their existing response.
+// Spatial grain controls below remain independent of these optical amplitudes.
 const brushingDetail: Partial<Record<Finish, number>> = {
   bridge: 2.6,
   brushedSteel: 1.65,
@@ -70,11 +90,14 @@ for (const [family, ids] of Object.entries({
     159, 160, 161, 162, 164, 167, 173, 177, 183, 184, 185, 188, 211, 214, 217,
     220, 234, 235, 237, 242, 252, 254,
   ],
-  brass: [94, 96, 115, 141, 187, 210, 213, 216, 233, 238, 243],
-  gold: [118, 163, 179, 200, 206],
-  satinGold: [121],
+  // Collet alloy remains unresolved; the escape wheel is maker-confirmed steel.
+  brass: [115],
+  circularSteel: [233],
+  hardGold: [94, 96, 141, 187, 210, 213, 216, 238, 243],
+  gold: [111, 118, 163, 179, 200, 206],
+  satinBrass: [121],
   roseGold: [100, 203, 207, 224],
-  balance: [110, 111],
+  balance: [110],
   ruby: [
     101, 102, 106, 112, 128, 134, 155, 196, 197, 198, 199, 204, 205, 208, 231,
   ],
@@ -148,8 +171,6 @@ export function finishFor(
     else family = 'steel';
   }
   const finish = { ...profiles[family], family, assignment };
-  // Match the balance rim's color while retaining the eccentric's polish.
-  if (definitionId === 'd_0_1_1_111') finish.roughness = 0.16;
   if (family === 'leather' && /dunkelblau/i.test(name)) finish.color = 0x182a41;
   if (family === 'leather' && /schwarz/i.test(name)) finish.color = 0x191b20;
   if (family === 'enamel' && /rot/i.test(name)) finish.color = 0x6c2031;
@@ -167,6 +188,9 @@ varying vec3 vFinishY;
 varying float vFinishRole;
 uniform float finishPattern;
 uniform float finishBrushDetail;
+uniform float finishBrushFrequency;
+uniform vec4 finishBrushWeights;
+uniform float finishBrushRelief;
 uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
@@ -176,6 +200,7 @@ uniform float finishSnailTurn;
 uniform float finishRadius;
 uniform vec2 finishBrushAxis;
 uniform float finishCapSeat;
+uniform float finishCrownField;
 uniform float finishSecondsCounterweight;
 uniform float finishShockBlock;
 uniform float finishHeatBlue;
@@ -196,12 +221,14 @@ float filteredFinishNoise(vec2 p) {
  return (finishNoise(p)-.5)*(1.0-smoothstep(.4,1.8,footprint));
 }
 float finishBrush(vec2 p) {
- // A wider strand layer survives normal bridge framing, while the finer
- // layers retain close-up detail. Derivative filtering still prevents shimmer.
- return filteredFinishNoise(p*vec2(.45,32.0))*.35
-      + filteredFinishNoise(p*vec2(.8,90.0))*.3
-      + filteredFinishNoise(p*vec2(2.2,230.0))*.23
-      + filteredFinishNoise(p*vec2(5.0,520.0))*.12;
+ // Narrow steel hairlines across the stroke without shortening their length.
+ p.y*=finishBrushFrequency;
+ // Broad steel bands are subdued independently of the fine hairlines.
+ // Do not normalize the weights: that would amplify the retained fine layers.
+ return filteredFinishNoise(p*vec2(.45,7.0))*finishBrushWeights.x
+      + filteredFinishNoise(p*vec2(.8,22.0))*finishBrushWeights.y
+      + filteredFinishNoise(p*vec2(2.2,75.0))*finishBrushWeights.z
+      + filteredFinishNoise(p*vec2(5.0,210.0))*finishBrushWeights.w;
 }
 `;
 
@@ -292,7 +319,9 @@ export function createMaterial(
   // Only materials with reviewed frosted regions compile the relief evaluator.
   if (
     finish.family === 'frosted' ||
-    ['d_0_1_1_99', 'd_0_1_1_222', 'd_0_1_1_228'].includes(definitionId ?? '')
+    ['d_0_1_1_46', 'd_0_1_1_99', 'd_0_1_1_222', 'd_0_1_1_228'].includes(
+      definitionId ?? '',
+    )
   )
     material.defines = { ...material.defines, FROST_RELIEF: 1 };
   if (geometry?.hasAttribute('sourceFinishNormal'))
@@ -301,15 +330,15 @@ export function createMaterial(
     material.ior = 1.76;
     material.transmission = 0.72;
     material.thickness = 0.55;
-    material.attenuationColor.setHex(0x9b174f);
+    material.attenuationColor.setHex(0xac2868);
     material.attenuationDistance = 0.7;
     material.clearcoat = 1;
     material.clearcoatRoughness = 0.035;
   }
   if (finish.family === 'enamel') {
     material.ior = 1.53;
-    // Raw catalog enamel retains its source-color inspection. The fitted blue
-    // inner ring receives the electric-blue lacquer target in retarget().
+    // Raw catalog enamel retains its existing red presentation. The fitted blue
+    // inner ring receives translucent blue vitreous enamel in retarget().
     material.transmission = 0;
     material.thickness = 0.35;
     material.attenuationColor.setHex(0x063b9a);
@@ -356,6 +385,8 @@ export function createMaterial(
   material.userData.emphasisRole = 'whole';
   const enabled = { value: 1 };
   material.userData.finishEnabled = enabled;
+  const configurationOverride = { value: 0 };
+  material.userData.configurationOverride = configurationOverride;
   const etched = [99, 219, 222, 228].includes(
     Number(definitionId?.split('_').at(-1)),
   );
@@ -373,6 +404,20 @@ export function createMaterial(
     }
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
+      // Spatial scale only: keep optical amplitudes and warm-metal grain intact.
+      finishBrushFrequency: {
+        value: ['bridge', 'brushedSteel', 'circularSteel', 'ratchet'].includes(finish.family)
+          ? 1.8
+          : 1,
+      },
+      finishBrushWeights: {
+        value: ['bridge', 'brushedSteel'].includes(finish.family)
+          ? new THREE.Vector4(.12, .22, .23, .12)
+          : new THREE.Vector4(.35, .3, .23, .12),
+      },
+      finishBrushRelief: {
+        value: ['bridge', 'brushedSteel'].includes(finish.family) ? .7 : 1,
+      },
       finishBrushDetail: {
         value:
           definitionId === 'd_0_1_1_26'
@@ -380,6 +425,7 @@ export function createMaterial(
             : (brushingDetail[finish.family] ?? 1),
       },
       finishEnabled: enabled,
+      configurationOverride,
       emphasis,
       emphasisColor,
       finishEngraved: { value: etched ? 1 : 0 },
@@ -395,6 +441,7 @@ export function createMaterial(
       },
       finishRadius: { value: Math.max(radius, 0.01) },
       finishBrushAxis: { value: brushAxis },
+      finishCrownField: { value: definitionId === 'd_0_1_1_46' ? 1 : 0 },
       finishCapSeat: { value: definitionId === 'd_0_1_1_99' ? 1 : 0 },
       finishSecondsCounterweight: {
         value: definitionId === 'd_0_1_1_30' ? 1 : 0,
@@ -419,7 +466,7 @@ export function createMaterial(
           '#include <begin_vertex>\nvFinishPosition=position; vFinishNormal=normal; vFinishRole=0.0;\n#ifdef SOURCE_FINISH\nvFinishNormal=sourceFinishNormal; vFinishRole=sourceFinishRole;\n#endif\nvFinishViewNormal=normalize(normalMatrix*vFinishNormal);\nvFinishX=mat3(modelViewMatrix)*vec3(1,0,0); vFinishY=mat3(modelViewMatrix)*vec3(0,1,0);',
         );
     shader.fragmentShader =
-      'uniform vec2 emphasis;\nuniform vec3 emphasisColor;\n' +
+      'uniform float configurationOverride;\nuniform vec2 emphasis;\nuniform vec3 emphasisColor;\n' +
       declarations +
       surface +
       frostReliefGLSL +
@@ -456,7 +503,7 @@ outgoingLight = outgoingLight * emphasis.x + emphasisColor * emphasis.y * focusR
       '#include <color_fragment>',
       /* glsl */ `
 #include <color_fragment>
-vec2 finishUv=vFinishPosition.xy;
+vec2 finishUv=finishCrownField>.5 ? vFinishPosition.yz : vFinishPosition.xy;
 // Clip the interpolated neutral role at the actual counterweight circle;
 // long source triangles must not carry its white face up the stem.
 float finishSteelSeat=1.0-step(.2,abs(vFinishRole-2.0));
@@ -478,6 +525,11 @@ float finishGrain=0.0;
 float finishHeight=0.0;
 float finishField=1.0;
 float finishFrostMask=finishFrosted;
+// Original d46 face 468: recessed M background, local X=3.4 mm.
+// Raised lettering at X=3.5 and the rim/knurling keep their polished finish.
+finishFrostMask=max(finishFrostMask,finishCrownField
+  * step(.999,abs(normalize(vFinishNormal).x))
+  * (1.0-smoothstep(.0001,.0003,abs(vFinishPosition.x-3.4))));
 float finishBase=0.0;
 // Audited d99 face 54 is the only flat source plane at Z=-.3 mm.
 // The tight plane mask leaves the lower feet, chamfers and engraving separate.
@@ -498,7 +550,7 @@ float finishBlueSurface=max(max(finishHeatBlue,1.0-step(.2,abs(vFinishRole-4.0))
 // The explicit shock-arm region wins over neutral/interpolated source roles.
 // Other parts and the central steel spine still have finishShockBlue == 0.
 if(finishWholeBlue<.5 && finishSteelSeat>.5) finishBlueSurface=finishShockBlue;
-if(finishEnabled>.5 && finishBlueSurface>0.0) {
+if(finishEnabled>.5 && configurationOverride<.5 && finishBlueSurface>0.0) {
  float blueAngle=pow(1.0-abs(dot(normalize(vFinishViewNormal),normalize(vViewPosition))),1.7);
  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(.004,.018,.055),vec3(.018,.16,.46),.22+blueAngle*.78),finishBlueSurface);
 }
@@ -524,7 +576,7 @@ if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRol
   // Broad lower bases stay satin; only seven explicit mounting pads frost.
   finishFrostMask=1.0-step(.2,abs(vFinishRole-12.0));
   finishGrain=brushed*finishField;
-  finishHeight=brushed*finishField*(finishPattern>5.5 && finishBrushDetail>1.5?.0004:.00018);
+  finishHeight=brushed*finishField*(finishPattern>5.5 && finishBrushDetail>1.5?.0004:.00018)*finishBrushRelief;
   finishFrostMask*=1.0-finishSeat;
   finishGrain*=1.0-finishSeat;
   finishHeight*=1.0-finishSeat;
@@ -542,9 +594,9 @@ if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRol
   // Irregular concentric brushing around the original source axle. The slow
   // XY variation breaks up perfect lathe rings without an angular seam.
   float wander=finishNoise(finishUv*2.1)*.012;
-  finishGrain=filteredFinishNoise(vec2((radius+wander)*45.0,0.0))*.46
-    + filteredFinishNoise(vec2((radius+wander*.5)*140.0,7.0))*.34
-    + filteredFinishNoise(vec2(radius*360.0,19.0))*.2;
+  finishGrain=filteredFinishNoise(vec2((radius+wander)*12.0*finishBrushFrequency,0.0))*.46
+    + filteredFinishNoise(vec2((radius+wander*.5)*45.0*finishBrushFrequency,7.0))*.34
+    + filteredFinishNoise(vec2(radius*150.0*finishBrushFrequency,19.0))*.2;
   }
   finishHeight=finishGrain*.00022;
  } else {
@@ -574,13 +626,21 @@ if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) {
  diffuseColor.rgb=vec3(.008,.03,.105);
  finishHeight=0.0;
 }
+// The fitted gold packet is polished throughout, including the source-white
+// seconds counterweight and neutral hub faces. Source roles remain intact.
+if(finishEnabled>.5 && configurationOverride>.5) {
+ diffuseColor.rgb=diffuse;
+ finishHeight=0.0;
+ finishGrain=0.0;
+ finishFrostMask=0.0;
+}
 `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <roughnessmap_fragment>',
       /* glsl */ `
 #include <roughnessmap_fragment>
-if(finishEnabled>.5 && finishWholeBlue<.5 && finishSteelSeat>.5) roughnessFactor=.2;
+if(finishEnabled>.5 && finishWholeBlue<.5 && finishSteelSeat>.5) roughnessFactor=.14;
 if(finishEnabled>.5 && abs(vFinishRole-5.0)<.2) roughnessFactor=.25;
 if(finishEnabled>.5 && abs(vFinishRole-3.0)<.2) roughnessFactor=.085;
 if(finishEnabled>.5 && finishHeatBlue>.5 && (finishWholeBlue>.5 || finishSteelSeat<.5)) roughnessFactor=.13;
@@ -603,11 +663,12 @@ if(finishEnabled>.5 && finishBase>.5) roughnessFactor=.24;
 // Minute recesses share the Crown-wheel plate blue metal and polish.
 if(finishEnabled>.5 && finishPattern>5.5 && abs(vFinishRole-4.0)<.2) roughnessFactor=.055;
 if(finishEnabled>.5 && abs(vFinishRole-11.0)<.2) roughnessFactor=.085;
+if(finishEnabled>.5 && configurationOverride>.5) roughnessFactor=roughness;
 `,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <metalnessmap_fragment>',
-      '#include <metalnessmap_fragment>\nif(finishEnabled>.5 && (abs(vFinishRole-5.0)<.2 || abs(vFinishRole-11.0)<.2)) metalnessFactor=0.0;',
+      '#include <metalnessmap_fragment>\nif(finishEnabled>.5 && (abs(vFinishRole-5.0)<.2 || abs(vFinishRole-11.0)<.2)) metalnessFactor=0.0;\nif(finishEnabled>.5 && configurationOverride>.5) metalnessFactor=metalness;',
     );
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <normal_fragment_maps>',
@@ -618,6 +679,7 @@ if(finishEnabled>.5 && finishFrostMask>.5) {
  // The unmasked analytic slope is projected only after the exact face mask.
  // No screen derivative can sample a neighboring polished face's height.
  vec3 frostX=normalize(vFinishX),frostY=normalize(vFinishY);
+ if(finishCrownField>.5){ frostX=normalize(vFinishY); frostY=normalize(cross(vFinishX,vFinishY)); }
  vec3 frostGradient=frostX*finishRelief.x+frostY*finishRelief.y;
  frostGradient-=normal*dot(normal,frostGradient);
  normal=normalize(normal-frostGradient);
@@ -661,6 +723,6 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
       ? `ml01-diamond-facets-v1-${diamond.planes.length}`
       : ['sapphire', 'diamond'].includes(finish.family)
         ? 'ml01-source-surface-clear-v10'
-        : 'ml01-source-surface-v11';
+        : 'ml01-source-surface-v14';
   return material;
 }

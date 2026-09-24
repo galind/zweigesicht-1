@@ -1,3 +1,4 @@
+import { CASE_LEAVES } from './watch';
 import authored from '../../../assets/authored/mechanisms.json';
 import readable from '../../../assets/authored/component-labels.json';
 export const ROOT = authored.movementRoot;
@@ -156,6 +157,22 @@ export function buildPartIndex(parts: Part[]) {
         ancestry.push(parent);
         parent = parent.parentId ? byId.get(parent.parentId) : undefined;
       }
+      const context = ancestry[0] ? partLabel(ancestry[0]) : 'Complete source';
+      const mechanism = GROUPS.find((g) => inMembers(p.id, g.members));
+      const parentLocation = context.replace(
+        /^Barrel assembly (\d+)$/,
+        'Barrel $1',
+      );
+      const location = [
+        ...new Set(
+          [
+            mechanism?.technical,
+            parentLocation === 'Movement assembly' && mechanism
+              ? undefined
+              : parentLocation,
+          ].filter(Boolean),
+        ),
+      ].join(' · ');
       const segments = p.sourceInstanceId.split('/');
       let length = 1;
       while (
@@ -168,10 +185,12 @@ export function buildPartIndex(parts: Part[]) {
         p.id,
         {
           reference,
-          context: ancestry[0] ? partLabel(ancestry[0]) : 'Complete source',
+          context,
+          location,
           search: normalizeSearch(
             [
               partLabel(p),
+              location,
               p.name,
               p.id,
               p.sourceInstanceId,
@@ -195,6 +214,9 @@ export function category(p: Part) {
     return 'Alternate setting spring · hidden in assembled view';
   if (p.definitionId === 'd_0_1_1_225')
     return 'Maker component STL · assembly STEP is empty';
+  if (p.definitionId === 'd_0_1_1_54')
+    return 'Original mesh omits one lug face · recovered from original CAD';
+  if (CASE_LEAVES.has(p.id)) return 'Fitted case component · loaded on demand';
   if (!belongs(p.id, ROOT))
     return 'Case, display variant or source support · loaded on demand';
   return p.isAssembly ? 'Source subassembly' : 'Movement component';

@@ -43,11 +43,6 @@ export const websiteSchema = {
       url: `${ORIGIN}/`,
       name: 'Marco Lang Zweigesicht-1 — Calibre ML-01 interactive movement viewer',
       description: aboutDescription,
-      creator: {
-        '@type': 'Person',
-        name: 'Guillem Galindo',
-        url: 'https://guillemgalindo.com',
-      },
       image,
       isPartOf: { '@id': `${ORIGIN}/#website` },
       about: [
