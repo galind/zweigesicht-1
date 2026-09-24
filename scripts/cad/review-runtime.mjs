@@ -1194,4 +1194,52 @@ await reviewInventory({v,Viewer,THREE,initialState,load,parts,results});
 const {reviewWatch}=await import('./review-watch.mjs');
 await reviewWatch({v,Viewer,THREE,initialState,load,sourceModules,ROOT,parts,results,modelFetch,caseFixtureScene,parse});
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest,'Inventory must preserve source geometry bytes');
+
+// The real scheduler must stop notifying React once its last frame is published.
+let idleNotifications=0,qualityChecks=0;
+const idleFixture={...frameFixture, state:{...initialState,phase:'whole'}, dead:false,
+ lastFrame:0,lastNotify:0,snapshotPending:false,needsRender:false,presentationMoving:false,
+ travel:null,benchmark:null,loadStage:'ready',awaitingFirstFrame:false,inspectionFrame:undefined,
+ controls:{update:()=>false},renderer:{render(){},info:{render:{triangles:1,calls:1}}},
+ surfaceOcclusion:{render(){}},applyPose:()=>false,ensureFramingRange(){},retargetVisibility(){},
+ adjustQuality(){qualityChecks++},snapshot:()=>({}),notify(){idleNotifications++},emit:Viewer.prototype.emit};
+const idleTick=tickModule.exports.call(idleFixture);
+for(let now=1000;now<=10000;now+=16)idleTick(now);
+assert.equal(idleNotifications,0);assert.equal(qualityChecks,0);
+idleFixture.needsRender=true;idleTick(11000);assert.equal(idleNotifications,1);
+for(let now=11016;now<=13000;now+=16)idleTick(now);
+assert.equal(idleNotifications,1,'Publish the completed frame once, then remain quiet');
+results.push({check:'idle frame loop performs no React notifications or quality scans; a new frame publishes once',status:'pass'});
+
+// Shared decoded resources and all explicit listeners have one bounded lifetime.
+const sharedGeometry=new THREE.BufferGeometry(),sharedMaterial=new THREE.MeshBasicMaterial();
+let geometryDisposals=0,materialDisposals=0;
+sharedGeometry.addEventListener('dispose',()=>geometryDisposals++);
+sharedMaterial.addEventListener('dispose',()=>materialDisposals++);
+const lifetimeRoot=new THREE.Group();lifetimeRoot.add(new THREE.Mesh(sharedGeometry,sharedMaterial),new THREE.Mesh(sharedGeometry,[sharedMaterial]));
+const released=[];
+const disposeMethod=viewerClass.members.find(n=>ts.isMethodDeclaration(n)&&n.name.getText(viewerSource)==='dispose');
+const disposalModule={exports:{}};
+vm.runInNewContext(ts.transpileModule('module.exports=function '+disposeMethod.getText(viewerSource),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,
+ {module:disposalModule,cancelAnimationFrame:()=>released.push('frame'),document:{removeEventListener:name=>released.push(name)}});
+const lifetime={dead:false,loadGeneration:0,frame:1,observer:{disconnect:()=>released.push('resize')},
+ motionPreference:{removeEventListener:()=>released.push('motion')},
+ controls:{removeEventListener:name=>released.push('controls:'+name),dispose:()=>released.push('controls')},
+ root:lifetimeRoot,disposeObject:Viewer.prototype.disposeObject,
+ selectionBox:{geometry:{dispose(){}},material:{dispose(){}}},environment:{dispose:()=>released.push('environment')},
+ surfaceOcclusion:{dispose:()=>released.push('occlusion')},renderer:{dispose:()=>released.push('renderer'),
+ domElement:{removeEventListener:name=>released.push(name),remove:()=>released.push('canvas')}}};
+disposalModule.exports.call(lifetime);disposalModule.exports.call(lifetime);
+assert.equal(geometryDisposals,1);assert.equal(materialDisposals,1);
+for(const name of ['frame','resize','visibilitychange','motion','controls:start','controls:change','controls','keydown','pointerdown','pointerup','pointermove','pointercancel','wheel','webglcontextlost','webglcontextrestored','environment','occlusion','renderer','canvas'])
+ assert.equal(released.filter(x=>x===name).length,1,name+' released once');
+results.push({check:'disposal is idempotent, removes every explicit listener and releases shared geometry/materials exactly once',status:'pass'});
+const separationModule=load('explorer/src/experience/explosion.ts');
+const cachedFirst=separationModule.explosionOffsets(parts,{...initialState,separation:.5});
+const firstId=cachedFirst.keys().next().value,firstOffset=[...cachedFirst.get(firstId)];
+cachedFirst.get(firstId)[0]=999;cachedFirst.clear();
+assert.deepEqual(Array.from(separationModule.explosionOffsets(parts,{...initialState,separation:.5}).get(firstId)),firstOffset);
+const changedManifest=parts.filter(p=>p.id!==firstId);
+assert.equal(separationModule.explosionOffsets(changedManifest,{...initialState,separation:.5}).has(firstId),false);
+results.push({check:'cached source separation uses manifest identity and returns independent per-frame maps/vectors',status:'pass'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

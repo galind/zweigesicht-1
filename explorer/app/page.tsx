@@ -2,9 +2,9 @@
 
 import { InformationPanel } from '@/components/InformationPanel';
 import { makerUrl } from '@/src/content/about';
-import { runUxChecks } from '@/src/viewer/uxValidation';
-import { runExplosionChecks } from '@/src/viewer/explosionValidation';
 import {
+  lazy,
+  Suspense,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -36,18 +36,6 @@ import {
   type ViewerSnapshot,
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
-import { runWatchChecks } from '@/src/viewer/watchValidation';
-import { runDialChecks } from '@/src/viewer/dialValidation';
-import { runInventoryChecks } from '@/src/viewer/inventoryValidation';
-import { runCameraChecks } from '@/src/viewer/cameraValidation';
-import { runBrowserChecks, startBenchmark } from '@/src/viewer/validation';
-import { captureMotion, type MotionCase } from '@/src/viewer/capture';
-import {
-  FROST_VIEWS,
-  frostReviewView,
-  recordFrostMotion,
-} from '@/src/viewer/frostReview';
-import { runFrostChecks } from '@/src/viewer/frostValidation';
 import { ConfigurationControls } from '@/components/ConfigurationControls';
 import { initialState } from '@/src/experience/state';
 import {
@@ -77,6 +65,8 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+const InspectionPanel = lazy(() => import('@/components/InspectionPanel'));
+
 const empty: ViewerSnapshot = {
   ...initialState,
   ready: false,
@@ -143,9 +133,7 @@ export default function Home() {
     [dials, setDials] = useState(false),
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
-    [inspect, setInspect] = useState(false),
-    [qa, setQa] = useState<unknown>(null);
-  const [motion, setMotion] = useState<unknown>(null);
+    [inspect, setInspect] = useState(false);
   const [catalogQuery, setCatalogQuery] = useState('');
   const [includeAllCad, setIncludeAllCad] = useState(false);
   const visibleParts = useMemo(
@@ -1207,217 +1195,9 @@ export default function Home() {
         {JSON.stringify({ ...s, parts: undefined })}
       </pre>
       {inspect && (
-        <details className="inspection">
-          <summary>Inspection tools</summary>
-          <button
-            onClick={() =>
-              viewer.current && setQa(runFrostChecks(viewer.current))
-            }
-          >
-            Run frost checks
-          </button>
-          {FROST_VIEWS.map((view) => (
-            <button
-              key={view}
-              onClick={async () => {
-                if (!viewer.current) return;
-                setQa({ running: true });
-                try {
-                  setQa(await frostReviewView(viewer.current, view));
-                } catch (error) {
-                  setQa({ error: String(error) });
-                }
-              }}
-            >
-              Frost {view}
-            </button>
-          ))}
-          <button
-            onClick={async () => {
-              if (!viewer.current) return;
-              setMotion({ running: true });
-              setMotion(await recordFrostMotion(viewer.current));
-            }}
-          >
-            Record frosting motion
-          </button>
-          <button
-            onClick={async () => {
-              if (!viewer.current) return;
-              setQa({ running: true });
-              setQa(await runInventoryChecks(viewer.current));
-            }}
-          >
-            Run inventory checks
-          </button>
-          <button
-            onClick={async () => {
-              if (!viewer.current) return;
-              setQa({ running: true });
-              setQa(await runCameraChecks(viewer.current));
-            }}
-          >
-            Run camera checks
-          </button>
-          <button
-            onClick={async () => {
-              if (viewer.current) {
-                setQa({ running: true });
-                setQa(await runUxChecks(viewer.current));
-              }
-            }}
-          >
-            Run UX checks
-          </button>
-          {(
-            [
-              'separate',
-              'scrub',
-              'spread',
-              'interrupt',
-              'dials',
-              'flip',
-            ] as MotionCase[]
-          ).map((kind) => (
-            <button
-              key={kind}
-              onClick={async () => {
-                if (!viewer.current) return;
-                setMotion({ running: true });
-                setMotion(await captureMotion(viewer.current, kind));
-              }}
-            >
-              Record {kind}
-            </button>
-          ))}
-          <pre id="motion-report" hidden>
-            {JSON.stringify(motion)}
-          </pre>
-          <div>
-            <button onClick={() => viewer.current?.view('front')}>
-              Front reference
-            </button>
-            <button onClick={() => viewer.current?.view('back')}>
-              Back reference
-            </button>
-            <button onClick={() => viewer.current?.view('side')}>
-              Side reference
-            </button>
-            <button onClick={() => viewer.current?.view('oblique')}>
-              Oblique reference
-            </button>
-          </div>
-          <button
-            onClick={async () => {
-              if (viewer.current) {
-                setQa({ running: true });
-                setQa(await runExplosionChecks(viewer.current));
-              }
-            }}
-          >
-            Run explosion checks
-          </button>
-          <button
-            onClick={async () => {
-              if (viewer.current) {
-                setQa({ running: true });
-                setQa(await runDialChecks(viewer.current));
-              }
-            }}
-          >
-            Run dial checks
-          </button>
-          <button
-            onClick={async () => {
-              if (viewer.current) {
-                setQa({ running: true });
-                try {
-                  setQa(await runWatchChecks(viewer.current));
-                } catch (error) {
-                  setQa({ error: String(error) });
-                }
-              }
-            }}
-          >
-            Run watch checks
-          </button>
-          <button
-            onClick={async () => {
-              if (viewer.current) {
-                setQa({ running: true });
-                setQa(await runBrowserChecks(viewer.current));
-              }
-            }}
-          >
-            Run interaction checks
-          </button>
-          <button
-            onClick={() => {
-              if (viewer.current)
-                viewer.current.benchmark = startBenchmark(viewer.current, 60);
-            }}
-          >
-            Benchmark 60 seconds
-          </button>
-          <button
-            onClick={() => {
-              if (viewer.current)
-                viewer.current.benchmark = startBenchmark(viewer.current, 300);
-            }}
-          >
-            Benchmark 5 minutes
-          </button>
-          <button
-            disabled={s.catalogLoaded || !available}
-            onClick={async () => {
-              const v = viewer.current;
-              if (!v) return;
-              const path = v.paths.catalog;
-              v.paths.catalog = '/models/intentionally-missing-dials.glb';
-              try {
-                await v.configureDials({ dialsVisible: true });
-              } finally {
-                v.paths.catalog = path;
-              }
-            }}
-          >
-            Test dial failure
-          </button>
-          <button
-            disabled={s.catalogLoaded}
-            onClick={async () => {
-              const v = viewer.current;
-              if (!v) return;
-              const path = v.paths.catalog;
-              v.paths.catalog = '/models/intentionally-missing-catalog.glb';
-              try {
-                await v.loadCatalog();
-              } catch {
-              } finally {
-                v.paths.catalog = path;
-              }
-            }}
-          >
-            Test catalog failure
-          </button>
-          <button
-            onClick={() => {
-              const ext = viewer.current?.renderer
-                .getContext()
-                .getExtension('WEBGL_lose_context');
-              if (ext) {
-                ext.loseContext();
-                setTimeout(() => ext.restoreContext(), 1200);
-              }
-            }}
-          >
-            Test context recovery
-          </button>
-          <pre id="qa-report">{JSON.stringify(qa, null, 2)}</pre>
-          <pre id="benchmark-report">
-            {JSON.stringify(s.benchmarkResult ?? s.stats, null, 2)}
-          </pre>
-        </details>
+        <Suspense fallback={null}>
+          <InspectionPanel viewer={() => viewer.current} state={s} />
+        </Suspense>
       )}
     </main>
   );

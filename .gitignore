@@ -31,8 +31,6 @@ explorer/public/models/*
 !explorer/public/models/catalog-0d8f8da54d0b.glb.gz
 !explorer/public/models/diamond-c74ee2731a1f.stl
 !explorer/public/models/finish-surfaces.json
-!explorer/public/models/finish-surfaces-4d11dd3bb5bd.bin
-!explorer/public/models/finish-surfaces-4d11dd3bb5bd.bin.gz
 !explorer/public/models/overview-2337df2dca58.glb
 !explorer/public/models/overview-2337df2dca58.glb.gz
 
@@ -52,13 +50,7 @@ artifacts/explode-depth-audit/
 # Local exhaustive CAD audit extraction/evidence.
 artifacts/cad-finishing-audit/
 
-# Final user-approved material annotations.
-!explorer/public/models/finish-surfaces-afd3394797bd.bin
-!explorer/public/models/finish-surfaces-afd3394797bd.bin.gz
 
-# Corrected main-plate letter counter annotations.
-!explorer/public/models/finish-surfaces-ce5d9d834cf7.bin
-!explorer/public/models/finish-surfaces-ce5d9d834cf7.bin.gz
 
 # Current verified dial surface annotations.
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin

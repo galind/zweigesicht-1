@@ -22,7 +22,7 @@ import {
   type DialFace,
   type DialPreferences,
 } from '../experience/dials';
-import { benchmarkFrame, type Benchmark } from './validation';
+import { benchmarkFrame, type Benchmark } from './benchmark';
 import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -194,6 +194,7 @@ export class MovementViewer {
   needsRender = true;
   lastFrame = 0;
   lastNotify = 0;
+  snapshotPending = false;
   frameIntervals: number[] = [];
   renderCount = 0;
   qualityChanged = 0;
@@ -316,6 +317,7 @@ export class MovementViewer {
     };
   }
   emit() {
+    this.snapshotPending = false;
     if (!this.dead) this.notify(this.snapshot());
   }
   stats() {
@@ -2321,6 +2323,7 @@ export class MovementViewer {
         return;
       }
       this.renderCount++;
+      this.snapshotPending = true;
       if (interval > 0) {
         this.frameIntervals.push(interval);
         if (this.frameIntervals.length > 20000) this.frameIntervals.shift();
@@ -2345,9 +2348,8 @@ export class MovementViewer {
           : 'whole';
       this.emit();
     }
-    if (now - this.lastNotify > 400) {
+    if (this.snapshotPending && now - this.lastNotify > 400) {
       this.lastNotify = now;
-      this.retargetVisibility();
       this.adjustQuality(now);
       this.emit();
     }
@@ -2426,15 +2428,20 @@ export class MovementViewer {
     }
   }
   disposeObject(o: THREE.Object3D) {
+    const geometries = new Set<THREE.BufferGeometry>();
+    const materials = new Set<THREE.Material>();
     o.traverse((p) => {
       if (p instanceof THREE.Mesh) {
-        p.geometry.dispose();
+        geometries.add(p.geometry);
         for (const m of Array.isArray(p.material) ? p.material : [p.material])
-          m.dispose();
+          materials.add(m);
       }
     });
+    for (const geometry of geometries) geometry.dispose();
+    for (const material of materials) material.dispose();
   }
   dispose() {
+    if (this.dead) return;
     this.dead = true;
     this.loadGeneration++;
     cancelAnimationFrame(this.frame);
@@ -2444,6 +2451,17 @@ export class MovementViewer {
       'change',
       this.onMotionPreference,
     );
+    const canvas = this.renderer.domElement;
+    canvas.removeEventListener('keydown', this.keyDown);
+    canvas.removeEventListener('pointerdown', this.pointerDown);
+    canvas.removeEventListener('pointerup', this.pointerUp);
+    canvas.removeEventListener('pointermove', this.pointerMove);
+    canvas.removeEventListener('wheel', this.pointerWheel);
+    canvas.removeEventListener('pointercancel', this.pointerCancel);
+    canvas.removeEventListener('webglcontextlost', this.onContextLost);
+    canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
+    this.controls.removeEventListener('start', this.manual);
+    this.controls.removeEventListener('change', this.invalidate);
     this.controls.dispose();
     this.disposeObject(this.root);
     this.selectionBox.geometry.dispose();

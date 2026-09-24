@@ -245,3 +245,10 @@ The user authorized pushing all accumulated task changes to a PR. The GitHub con
 
 
 PR publication: pushed the accumulated branch over SSH and opened [PR #4](https://github.com/galind/zweigesicht-1/pull/4) against `main`, including the verified brass-washer correction `7f9128e`. GitHub confirmed the PR head matches the pushed commit. No merge or manual deployment was performed; the existing branch CI/deployment integration may run on push. The unrelated domain-history edit remains outside the PR.
+
+
+## Codebase cleanup — 24 September 2026
+
+Updated `main` from the configured SSH remote (`89d9fca`) and created `codex/codebase-cleanup`. Baseline passed 16 state/motion tests, 102 CPU checks, TypeScript, lint, build and 196 cold-catalog browser watch checks; both flat-face references were captured. The unrelated local domain-history edit remains excluded.
+
+Repository audit and implementation are recorded in [cleanup review](docs/CLEANUP_REVIEW.md). Removed unreachable UI scaffold/dependencies and stale runtime finish copies; isolated inspection tools, cached immutable separation inputs, stopped idle React snapshots, tightened resource/listener disposal and unified safe build-output pruning. Source geometry, authored finishes/lighting, attribution, hashes and historical evidence are preserved. Fresh offline install, typecheck, lint, standard/Vercel builds and production SEO checks pass. Final regressions and visual/phone comparison are in progress; next action is complete validation, inspect the diff and publish the requested PR through SSH/GitHub connector. No merge or manual deployment.

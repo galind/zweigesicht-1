@@ -47,23 +47,25 @@ export function validateWatchPatch(
   }
   validateDialPatch(dials);
 }
+const casePackets = new Map(WATCH.leaves.map((p) => [p.id, p.packet]));
+const caseVectors: Record<string, [number, number, number]> = {
+  'front-back': [0, 0, 120],
+  'front-seal': [0, 0, 110],
+  'rear-back': [0, 0, -120],
+  'rear-seal': [0, 0, -110],
+  middle: [-55, 0, 0],
+  crown: [45, 0, 0],
+  'upper-lugs': [0, 40, 0],
+  'lower-lugs': [0, -40, 0],
+};
+
 /** Illustrative clearing paths only. Packets keep their internal source placements. */
 export function caseOffset(
   id: string,
   progress: number,
 ): [number, number, number] {
-  const packet = WATCH.leaves.find((p) => p.id === id)?.packet;
-  const vectors: Record<string, [number, number, number]> = {
-    'front-back': [0, 0, 120],
-    'front-seal': [0, 0, 110],
-    'rear-back': [0, 0, -120],
-    'rear-seal': [0, 0, -110],
-    middle: [-55, 0, 0],
-    crown: [45, 0, 0],
-    'upper-lugs': [0, 40, 0],
-    'lower-lugs': [0, -40, 0],
-  };
-  return (vectors[packet ?? ''] ?? [0, 0, 0]).map((n) => n * progress) as [
+  const packet = casePackets.get(id);
+  return (caseVectors[packet ?? ''] ?? [0, 0, 0]).map((n) => n * progress) as [
     number,
     number,
     number,
