@@ -502,6 +502,11 @@ export async function runUxChecks(v: MovementViewer) {
       event('pointerup', xy),
     ],
     [
+      event('pointerdown', xy, { pointerType: 'touch' }),
+      event('lostpointercapture', xy, { pointerType: 'touch' }),
+      event('pointerup', xy, { pointerType: 'touch' }),
+    ],
+    [
       event('pointerdown', xy),
       event('pointerdown', xy, { pointerId: 102, isPrimary: false }),
       event('pointerup', xy, { pointerId: 102, isPrimary: false }),
@@ -512,11 +517,19 @@ export async function runUxChecks(v: MovementViewer) {
       event('pointerup', xy, { button }),
     ]),
   ];
+  v.pointerDown(event('pointerdown', xy, { pointerType: 'touch' }));
+  await sleep(550);
+  v.pointerUp(event('pointerup', xy, { pointerType: 'touch' }));
+  checks.push({
+    name: 'Holding a finger does not dismiss the selected component',
+    pass: v.state.part === sample,
+  });
   for (const [i, sequence] of sequences.entries()) {
     for (const e of sequence) {
       if (e.type === 'pointerdown') v.pointerDown(e);
       if (e.type === 'pointermove') v.pointerMove(e);
       if (e.type === 'pointercancel') v.pointerCancel(e);
+      if (e.type === 'lostpointercapture') canvas.dispatchEvent(e);
       if (e.type === 'pointerup') v.pointerUp(e);
     }
     checks.push({

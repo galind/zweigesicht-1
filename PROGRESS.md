@@ -288,3 +288,12 @@ The user authorized a PR containing the popup refinement, Configure copy simplif
 
 
 UI PR publication: pushed the verified branch over SSH and opened [PR #6](https://github.com/galind/zweigesicht-1/pull/6) against `main` through the GitHub connector. It includes the glass-popup refinement, Configure copy simplification and immediate hidden-case flip. GitHub confirmed the verified implementation head `8bc515b` and a mergeable open PR. No merge or manual deployment. Next action: review the PR. The unrelated domain-history edits remain unstaged.
+
+
+## Touch interaction pass — 24 September 2026
+
+PR #6 is merged; this work starts from `origin/main` at `95e4691` on `codex/touch-interactions`. Touch/stylus holds longer than 500 ms no longer select or deselect parts, and lost pointer capture clears pending selection so an interrupted gesture does not poison the next tap. Existing drag and multi-touch rejection remain; mouse hold behavior is preserved. Slider thumbs keep their 18 px appearance with a measured 44 × 44 px hit area. Popup positioning observes visual viewport resize/scroll to account for a phone keyboard, including viewport panning, while leaving native pinch zoom alone. Catalog inputs use at least 16 px text on coarse pointers to avoid iOS focus zoom.
+
+Verification: 17 state/motion/packaging tests, 109 CPU source/runtime checks, 65 browser UX checks, TypeScript, lint and production build pass. Added regression coverage for touch/stylus holds, capture-loss recovery, listener disposal and preserved mouse behavior. Browser review at 390×844 verifies the 44 px thumb target and dragging from outside the visible thumb; catalog search at 390×500 retains reachable search/close controls, 188 px of results space and no horizontal overflow. Evidence summaries are in ignored `artifacts/browser/touch-interactions/`. These are desktop-browser viewport and synthetic-pointer checks, not physical touch-device validation. The visual viewport keyboard handling and iOS focus-zoom behavior still need a real iPhone/Android check. Slider scroll-versus-drag arbitration is unchanged. Existing build notices remain.
+
+Local implementation ready for review at http://127.0.0.1:4175/. No push or PR requested for this pass. Next action: physical-phone review of orbit/pinch, finger taps versus holds, slider dragging and search with the keyboard open. Unrelated domain-history edits remain unstaged.
