@@ -8,7 +8,12 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import { cadUrl, watchReadingLinks } from '@/src/content/about';
+import {
+  cadUrl,
+  watchDescription,
+  watchSourceUrl,
+  watchPressLinks,
+} from '@/src/content/about';
 
 export function InformationPanel({
   open,
@@ -52,13 +57,28 @@ export function InformationPanel({
         >
           <SheetHeader>
             <SheetTitle>Learn about the watch</SheetTitle>
-            <SheetDescription>
-              From Marco Lang and the watch press.
-            </SheetDescription>
+            <SheetDescription>Zweigesicht–1 by Marco Lang</SheetDescription>
           </SheetHeader>
           <div className="watch-reading">
-            <ul className="watch-reading-links" aria-label="Further reading">
-              {watchReadingLinks.map(({ publisher, title, url }) => (
+            <p className="watch-description">{watchDescription}</p>
+            <a
+              className="watch-official-link"
+              href={watchSourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Explore the watch on Marco Lang’s website</span>
+              <ArrowUpRight aria-hidden="true" />
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            <h3 className="watch-press-heading" id="watch-press-heading">
+              Press coverage
+            </h3>
+            <ul
+              className="watch-reading-links"
+              aria-labelledby="watch-press-heading"
+            >
+              {watchPressLinks.map(({ publisher, title, url }) => (
                 <li key={url}>
                   <a href={url} target="_blank" rel="noopener noreferrer">
                     <span>

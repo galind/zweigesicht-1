@@ -746,6 +746,15 @@ canvas:focus-visible {
   line-height: 1.6;
   color: #d6d4d0;
 }
+.watch-description {
+  margin: 16px 0 8px;
+}
+.watch-press-heading {
+  margin: 28px 0 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #aaa8a4;
+}
 .watch-reading-links {
   list-style: none;
   margin: 0;
@@ -754,7 +763,8 @@ canvas:focus-visible {
 .watch-reading-links li + li {
   border-top: 1px solid #ffffff14;
 }
-.watch-reading-links a {
+.watch-reading-links a,
+.watch-official-link {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -768,7 +778,8 @@ canvas:focus-visible {
 .watch-reading-links a > span:first-child {
   min-width: 0;
 }
-.watch-reading-links svg {
+.watch-reading-links svg,
+.watch-official-link svg {
   flex: 0 0 18px;
   width: 18px;
   height: 18px;
@@ -785,12 +796,17 @@ canvas:focus-visible {
   display: block;
   line-height: 1.45;
 }
+.watch-official-link > span:first-child {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .watch-reading-links a:hover .watch-reading-title,
 .watch-reading-links a:focus-visible .watch-reading-title {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-.watch-reading-links a:focus-visible {
+.watch-reading-links a:focus-visible,
+.watch-official-link:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 4px;
   border-radius: 4px;

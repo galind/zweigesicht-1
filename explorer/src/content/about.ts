@@ -6,13 +6,11 @@ export const makerUrl = 'https://www.marcolangwatches.com/en/main-page/';
 export const cadUrl =
   'https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/';
 export const watchSourceUrl = 'https://www.marcolangwatches.com/en/watches/';
+// Watch description checked against the maker's page on 24 September 2026.
+export const watchDescription =
+  'The Zweigesicht–1 is Marco Lang’s watch with two faces: a classical dial on one side and an open view of the movement on the other. Changing the strap attachments allows either face to be worn outward. Its ML–01 movement combines traditional finishing with open bridges, two barrels and an optional indicator that records shocks in four directions.';
 // Reading destinations and article titles verified on 24 September 2026.
-export const watchReadingLinks = [
-  {
-    publisher: 'Marco Lang · Official website',
-    title: 'Zweigesicht–1',
-    url: watchSourceUrl,
-  },
+export const watchPressLinks = [
   {
     publisher: 'SJX Watches · 2023',
     title: 'In Depth: Marco Lang Zweigesicht-1',
