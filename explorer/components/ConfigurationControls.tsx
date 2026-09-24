@@ -19,19 +19,9 @@ export function ConfigurationControls({
 }) {
   const id = useId();
   const caseStatus =
-    state.caseError ||
-    (state.caseRequest ? 'Loading case…' : '') ||
-    (state.caseVisible && !state.caseEffective
-      ? 'Temporarily hidden in this view.'
-      : state.caseVisible
-        ? 'Case visible.'
-        : 'Case hidden. Choose a finish for later.');
+    state.caseError || (state.caseRequest ? 'Loading case…' : '');
   const dialStatus =
-    state.dialError ||
-    (state.dialRequest ? 'Loading dials…' : '') ||
-    (state.dialsVisible
-      ? 'Both dials visible.'
-      : 'Dials hidden. Your hand choices are kept.');
+    state.dialError || (state.dialRequest ? 'Loading dials…' : '');
   return (
     <div className="dial-options">
       <fieldset className="configuration-group" disabled={!available}>
@@ -83,7 +73,7 @@ export function ConfigurationControls({
             ))}
           </div>
         </fieldset>
-        <div className="configuration-feedback">
+        <div className="configuration-feedback" hidden={!caseStatus}>
           <output aria-live="polite" className="dial-status">
             {caseStatus}
           </output>
@@ -146,7 +136,7 @@ export function ConfigurationControls({
             </div>
           </fieldset>
         ))}
-        <div className="configuration-feedback">
+        <div className="configuration-feedback" hidden={!dialStatus}>
           <output aria-live="polite" className="dial-status">
             {dialStatus}
           </output>
@@ -161,7 +151,7 @@ export function ConfigurationControls({
           )}
         </div>
       </fieldset>
-      <output aria-live="polite" className="configuration-notice">
+      <output aria-live="polite" className="sr-only">
         {state.configurationNotice}
       </output>
       <p className="configuration-footer">

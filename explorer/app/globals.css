@@ -1713,11 +1713,6 @@ canvas:focus-visible {
 .configuration-feedback .tool {
   margin-top: 8px;
 }
-.configuration-notice:not(:empty) {
-  display: block;
-  margin-top: 12px;
-  font-size: 0.75rem;
-}
 .configuration-footer {
   font-size: 0.6875rem;
   color: #aaa8a4;
