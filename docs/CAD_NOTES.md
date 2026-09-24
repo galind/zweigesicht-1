@@ -30,7 +30,7 @@ Fitted hands show static 10:10:00 around measured bore axes. Source transforms, 
 
 ## Separation and mechanics
 
-`assets/authored/explosion.json` records presentation paths. Source-local +Z identifies screw withdrawal only after applying the occurrence transform: three screws are radial, not world-Z fasteners. Pins, spring attachments and riveted packets retain their reviewed hosts. Balance-cover screws are source children 23/24; 34/35 belong to the pallet bridge.
+`assets/authored/explosion.json` records focused-section host/release paths. Whole-movement disassembly instead interpolates the individual layer offsets in `assets/derived/complete-separation.json`; it does not execute the focused winding sequence described below. The [disassembly review](DISASSEMBLY_REVIEW.md) records the corrected attachment frame and remaining case-ring interference. Source-local +Z identifies screw withdrawal only after applying the occurrence transform: three screws are radial, not world-Z fasteners. Pins, spring attachments and riveted packets retain their reviewed hosts. Balance-cover screws are source children 23/24; 34/35 belong to the pallet bridge.
 
 The winding stem cannot withdraw together with the larger coupling wheels through the plate. Source sampling detected interference. The authored sequence lifts the keyless levers before withdrawing the bare stem, then moves the retained wheel/clutch pair through the open bearing side. `scripts/cad/explode_probe.py` records sampled overlaps under `artifacts/explode-cad/`; sampled clearance is not a continuous collision proof or service procedure.
 

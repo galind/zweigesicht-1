@@ -1271,4 +1271,84 @@ assert.deepEqual(Array.from(separationModule.explosionOffsets(parts,{...initialS
 const changedManifest=parts.filter(p=>p.id!==firstId);
 assert.equal(separationModule.explosionOffsets(changedManifest,{...initialState,separation:.5}).has(firstId),false);
 results.push({check:'cached source separation uses manifest identity and returns independent per-frame maps/vectors',status:'pass'});
+// Fitted attachment translations must follow the same continuous frame as Flip.
+// Compare actual transformed vertices in the observer frame, independently of
+// the offset helper; endpoint-only tests previously missed the inward path.
+const poseReview=load('explorer/src/viewer/CasePose.ts');
+const watchReview=load('explorer/src/experience/watch.ts');
+v.ready=false;v.reduced=true;v.state={...initialState,side:'front',caseVisible:true,dialsVisible:true,centralVisible:true,smallVisible:true};
+v.caseTurn=0;v.faceCamera=undefined;v.caseTravel=undefined;v.retarget();v.applyPose(0);
+const sourceMatrices=new Map([...v.renderParts].map(([id,p])=>[id,p.assembled.clone()]));
+let maxFrameError=0;
+for(const progress of [0,.05,.2,.4,.7,1]) {
+ v.state={...v.state,separation:progress};v.retarget();v.applyPose(0);v.reduced=false;
+ for(const phase of [0,.12,.24,.31,.5,.69,.76,.88,1]) {
+  v.caseTurn=phase;v.caseTravel=undefined;v.explosionTravel=undefined;v.faceCamera=undefined;
+  for(const p of v.renderParts.values())p.motion=undefined;
+  v.applyPose(0);
+  const angle=poseReview.caseFlipPhase(phase).angle;
+  const observerInverse=new THREE.Matrix4().makeTranslation(...poseReview.CASE_PIVOT.toArray())
+   .multiply(new THREE.Matrix4().makeRotationX(angle))
+   .multiply(new THREE.Matrix4().makeTranslation(...poseReview.CASE_PIVOT.clone().negate().toArray()));
+  for(const id of poseReview.CASE_LUGS) {
+   const p=v.renderParts.get(id),leaf=watchReview.WATCH.leaves.find(p=>p.id===id);
+   const point=p.mesh.geometry.boundingBox.getCenter(new THREE.Vector3());
+   const shown=point.clone().applyMatrix4(p.mesh.matrix).applyMatrix4(observerInverse);
+   const base=point.clone().applyMatrix4(poseReview.caseDisplayMatrix(id,p.assembled,phase)).applyMatrix4(observerInverse);
+   const expected=new THREE.Vector3(0,(leaf.packet==='upper-lugs'?1:-1)*40*progress,0);
+   maxFrameError=Math.max(maxFrameError,shown.sub(base).distanceTo(expected));
+  }
+ }
+ v.reduced=true;
+}
+assert.ok(maxFrameError<1e-9,`Attachment frame drift ${maxFrameError}`);
+results.push({check:'all 18 attachment leaves separate outward in their observer frame at 54 progress/Flip poses, including intermediate turnover',status:'pass',maxFrameError});
+for(const side of ['front','back']) {
+ v.reduced=true;v.state={...v.state,side,separation:.6};v.retarget();v.applyPose(0);
+ const include=p=>v.fittedCase.has(p.source.id),bounds=v.targetBounds(include),points=v.targetPoints(include);
+ for(const p of v.renderParts.values())if(include(p)) {
+  const local=p.mesh.geometry.boundingBox;
+  for(let i=0;i<8;i++) {
+   const corner=new THREE.Vector3(i&1?local.max.x:local.min.x,i&2?local.max.y:local.min.y,i&4?local.max.z:local.min.z).applyMatrix4(p.mesh.matrix);
+   assert.ok(bounds.clone().expandByScalar(1e-9).containsPoint(corner));
+   assert.ok(points.some(point=>point.distanceTo(corner)<1e-9));
+  }
+ }
+ v.state={...v.state,separation:0};v.retarget();v.applyPose(0);assert.equal(v.assemblyError('presentation'),0);
+}
+for(const [id,matrix]of sourceMatrices)assert.ok(v.renderParts.get(id).assembled.equals(matrix));
+results.push({check:'both fitted faces use rendered attachment endpoints in both camera bounds paths and reassemble to exact immutable source/display matrices',status:'pass'});
+// Interrupted changes start from the displayed pose, including a mid-turn scrub.
+v.reduced=true;v.state={...v.state,side:'front',separation:.6};v.retarget();v.applyPose(0);v.reduced=false;
+v.state={...v.state,side:'back'};v.retarget();v.applyPose(.8);
+const interrupted=new Map([...poseReview.CASE_LUGS].map(id=>[id,v.renderParts.get(id).mesh.matrix.clone()]));
+v.patch({side:'front'});v.scrub({separation:.35});v.applyPose(0);
+for(const [id,matrix]of interrupted)assert.ok(v.renderParts.get(id).mesh.matrix.equals(matrix),'Reversal cannot jump a separated attachment');
+for(let i=0;i<240;i++)v.applyPose(1/60);
+v.reduced=true;v.state={...v.state,separation:0};v.retarget();v.applyPose(0);assert.equal(v.assemblyError('presentation'),0);
+results.push({check:'separated attachment Flip reversal plus partial scrub preserves the displayed matrix and exact reassembly',status:'pass'});
+// Independent interval ordering: all authored hand alternatives are inside
+// their seal/back layers, regardless of configuration. These are presentation
+// bounds, not a claim about continuously swept mechanical solids.
+const displayReview=load('explorer/src/experience/dials.ts');
+let minCaseGap=Infinity;
+for(const face of ['central','small']) {
+ const sign=face==='central'?1:-1,packet=face==='central'?'front':'rear';
+ const displays=parts.filter(p=>!p.isAssembly&&p.boundsWorldMm&&displayReview.displayFace(p.id)===face);
+ const seals=watchReview.WATCH.leaves.filter(p=>p.packet===packet+'-seal');
+ const backs=watchReview.WATCH.leaves.filter(p=>p.packet===packet+'-back');
+ const interval=(p,progress)=>{
+  const offset=separationModule.explosionOffsets(parts,{...initialState,separation:progress}).get(p.id)?.[2]??0;
+  return [sign*(p.boundsWorldMm[sign===1?0:1][2]+offset),sign*(p.boundsWorldMm[sign===1?1:0][2]+offset)];
+ };
+ for(const [inner,outer]of [[displays,seals],[seals,backs]]) {
+  const gap=progress=>Math.min(...outer.map(p=>interval(p,progress)[0]))-Math.max(...inner.map(p=>interval(p,progress)[1]));
+  const sourceGap=gap(0);let previous=sourceGap;
+  for(const progress of [.005,.01,.025,.05,.1,.2,.4,.7,1]) {
+   const value=gap(progress);assert.ok(value>=previous-1e-9,'Outer case layers must never overtake inner layers');previous=value;
+  }
+  minCaseGap=Math.min(minCaseGap,gap(1));assert.ok(gap(1)>8,'Conservative final case/display gap remains over 8 mm');
+ }
+}
+results.push({check:'both case seal/back packets preserve monotone outward interval ordering for all source dial/hand alternatives and >8 mm final gaps',status:'pass',minCaseGap});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

@@ -316,3 +316,14 @@ The local refinement pass is complete. Next action: physical iPhone/Android veri
 
 
 PR publication: at the user's request, pushed `codex/website-polish` over SSH and opened [PR #8](https://github.com/galind/zweigesicht-1/pull/8) against `main` through the connected GitHub app. It contains the verified refinement commit `bcc8e00`. Next action: PR review and the outstanding physical-phone/accessibility checks. No merge or manual deployment was performed; existing branch integrations may run on push. Unrelated local domain-history edits remain excluded.
+
+
+## Disassembly direction and sequence review — 24 September 2026
+
+Started from fetched `origin/main` at `5402e93` on `codex/disassembly-review`; the connected GitHub app confirms PRs #6, #7 and #8 merged. The [disassembly review](docs/DISASSEMBLY_REVIEW.md) records implemented coordinates/order, four configurations on both faces, six Focus sections, source-solid evidence, interrupted motion and before/after comparisons.
+
+Corrected all 18 lug-packet offsets to follow the continuous attachment frame through Flip, including target framing, so the Skeleton attachments separate outward rather than through the movement. Shortened four case-back/seal axial distances after reproducing landscape clipping in the unchanged baseline; the sampled maximum projected extent falls from 1.19071 to 0.96435 (edge = 1). Source geometry, finishes, fitted assembly endpoints, preferences, selection behavior and existing visible/hidden-case Flip timing are preserved.
+
+Verification: 17 state/motion/packaging tests, 113 CPU source/runtime checks, 543 browser assertions across the configuration matrix, existing suites and three viewport transition runs, plus 12 fresh-production checks pass. TypeScript, lint, production build and SEO/HTTP checks pass. Source-solid evidence includes 40 lug/ring samples, 28 rejected-ring comparisons and 54 back/seal/dial samples; no named outer-case pair increases overlap above its original fit. Local ignored evidence is in `artifacts/browser/disassembly-review/` and `artifacts/disassembly-cad/`. The report records the warm-catalog skips, repeated affected suites, existing build notices and evidence limits.
+
+Middle-ring/plate interference remains: the simple axial alternative introduces tube/stem interference, so a broader staged extraction needs mechanical review. Opposite-face Focus can remain obscured by its contextual plate. This is an illustrative construction view, not a service procedure. Physical iPhone/Android, Safari/WebKit and representative accessibility/usability review remain outstanding. Next action: local review of the report and comparisons, followed by mechanical/device review. Changes are committed locally only; no push, PR, merge or deployment. Unrelated domain-history edits remain unstaged and excluded.
