@@ -335,3 +335,9 @@ PR publication: at the user's request, pushed `codex/disassembly-review` over SS
 ## Acknowledgements copy — 24 September 2026
 
 Replaced the placeholder with three personal thank-you paragraphs: Marco Lang sharing his CAD files so others can explore and learn about his watches; his feedback, advice and encouragement throughout the project; and everyone who uses and enjoys the website. The copy uses the panel's scrolling body beneath its fixed heading. TypeScript and lint pass. Next action: review the wording locally. No push or publication.
+
+## Watch reading list — 24 September 2026
+
+Replaced the Learn about the watch description and specifications with links to Marco Lang's official Zweigesicht page and coverage from SJX Watches (2023), Monochrome (2020), and Time and Watches (2021). Verified the destinations, titles and years against the live pages. Each reading entry shows its publisher, title and an external-link arrow; the original CAD link remains. Removed the unused descriptive copy and specification styles.
+
+TypeScript, lint and production build pass, with the existing build notices. Browser review covers desktop, 390×844, and 320×568 at 200% text: links wrap within the panel, keyboard focus is visible, all links are reachable through the scrolling body, and Escape returns focus to the trigger. Next action: local review of the reading list. No push or publication.

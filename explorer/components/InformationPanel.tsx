@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -7,12 +8,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import {
-  cadUrl,
-  watchSourceUrl,
-  watchParagraphs,
-  movementSpecs,
-} from '@/src/content/about';
+import { cadUrl, watchReadingLinks } from '@/src/content/about';
 
 export function InformationPanel({
   open,
@@ -55,36 +51,27 @@ export function InformationPanel({
           finalFocus={() => (restoreFocus ? trigger.current : false)}
         >
           <SheetHeader>
-            <SheetTitle>Zweigesicht–1</SheetTitle>
-            <SheetDescription>By Marco Lang</SheetDescription>
+            <SheetTitle>Learn about the watch</SheetTitle>
+            <SheetDescription>
+              From Marco Lang and the watch press.
+            </SheetDescription>
           </SheetHeader>
           <div className="watch-reading">
-            {watchParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <table className="watch-facts">
-              <caption className="sr-only">
-                Movement specifications reported by Marco Lang
-              </caption>
-              <tbody>
-                {movementSpecs.map(([label, value]) => (
-                  <tr key={label}>
-                    <th scope="row">{label}</th>
-                    <td>{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <ul className="watch-reading-links" aria-label="Further reading">
+              {watchReadingLinks.map(({ publisher, title, url }) => (
+                <li key={url}>
+                  <a href={url} target="_blank" rel="noopener noreferrer">
+                    <span>
+                      <span className="watch-reading-publisher">{publisher}</span>
+                      <span className="watch-reading-title">{title}</span>
+                    </span>
+                    <ArrowUpRight aria-hidden="true" />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
             <footer className="watch-sources" aria-label="Watch sources">
-              <a
-                href={watchSourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Marco Lang — watch details, opens in a new tab"
-              >
-                Marco Lang
-              </a>
-              <span aria-hidden="true">·</span>
               <a
                 href={cadUrl}
                 target="_blank"
