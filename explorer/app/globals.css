@@ -671,7 +671,7 @@ canvas:focus-visible {
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   height: auto !important;
   gap: 0;
-  overflow: hidden;
+  overflow: clip;
   --popup-width: min(380px, calc(100vw - 24px));
   inset: auto auto var(--panel-bottom, 90px)
     clamp(
@@ -685,10 +685,12 @@ canvas:focus-visible {
   max-height: min(520px, calc(100dvh - var(--panel-bottom, 90px) - 64px));
   border: 0;
   border-radius: 10px;
-  background: rgb(24 24 24 / 82%) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: none;
+  background: var(--panel-surface) !important;
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
+  box-shadow:
+    0 12px 40px #00000024,
+    inset 0 1px #ffffff09;
 }
 .explorer-panel[data-slot='sheet-content'][data-starting-style],
 .explorer-panel[data-slot='sheet-content'][data-ending-style] {
@@ -698,7 +700,7 @@ canvas:focus-visible {
 .explorer-panel[data-slot='sheet-content'][data-ending-style] {
   transition-duration: 120ms;
 }
-/* Reading is one quiet, opaque surface, independent of the canvas layout. */
+/* Reading has more room, with the same glass surface as the controls. */
 .explorer-panel.information-panel[data-slot='sheet-content'] {
   top: max(80px, calc(env(safe-area-inset-top) + 64px));
   right: 20px;
@@ -707,9 +709,6 @@ canvas:focus-visible {
   transform: none;
   --popup-width: min(420px, calc(100vw - 24px));
   max-height: calc(100dvh - 112px);
-  background: #1b1b1b !important;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 .explorer-panel.settings-panel[data-slot='sheet-content'] {
   top: max(80px, calc(env(safe-area-inset-top) + 64px));
@@ -723,7 +722,7 @@ canvas:focus-visible {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #1b1b1b;
+  background: transparent;
   padding: 28px 28px 16px !important;
 }
 .information-panel [data-slot='sheet-title'] {
@@ -738,7 +737,7 @@ canvas:focus-visible {
   right: 12px;
   min-width: 44px;
   min-height: 44px;
-  background: #1b1b1b;
+  background: transparent;
 }
 .watch-reading {
   padding: 24px 28px 20px;
@@ -801,7 +800,7 @@ canvas:focus-visible {
   overflow: visible;
 }
 .explorer-panel [data-slot='sheet-close'] {
-  background: #181818;
+  background: transparent;
   z-index: 2;
 }
 .explorer-panel .about-copy {
@@ -817,62 +816,6 @@ canvas:focus-visible {
 .explorer-panel .about-copy .about-copy {
   padding: 0;
   font-size: 0.75rem;
-}
-.dial-visibility {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-.dial-visibility input {
-  width: 18px;
-  height: 18px;
-  accent-color: #bdbbb4;
-}
-.dial-face {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-  font-size: 0.8125rem;
-}
-.dial-hand-select {
-  position: relative;
-  min-width: 0;
-}
-.dial-hand-select select {
-  appearance: none;
-  width: 100%;
-  min-height: 44px;
-  border: 1px solid #ffffff20;
-  border-radius: 5px;
-  padding: 8px 26px 8px 10px;
-  color: #eeece4;
-  background: #292929;
-  font: inherit;
-  cursor: pointer;
-}
-.dial-hand-select > svg {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 13px;
-  pointer-events: none;
-}
-.dial-note {
-  color: #aaa8a4;
-  font-size: 0.75rem;
-  margin: 12px 0 0;
-}
-.dial-status {
-  display: block;
-  font-size: 0.8125rem;
-  color: #cbc9c5;
-}
-.dial-status:not(:empty) {
-  margin: 14px 0;
 }
 @media (hover: hover) {
   .text-button:hover:enabled,
@@ -1191,7 +1134,6 @@ canvas:focus-visible {
 }
 .explorer-panel.settings-panel[data-slot='sheet-content'] {
   --popup-width: min(360px, calc(100vw - 32px));
-  background: #1b1b1b !important;
 }
 .explorer-panel.mechanism-panel[data-slot='sheet-content'] {
   --popup-width: min(420px, calc(100vw - 32px));
@@ -1200,7 +1142,6 @@ canvas:focus-visible {
   bottom: auto;
   transform: none;
   max-height: calc(100dvh - var(--context-bottom, 150px) - 24px);
-  background: #1b1b1b !important;
 }
 .explorer-panel [data-slot='sheet-header'] {
   padding: 20px 20px 12px !important;
@@ -1211,7 +1152,7 @@ canvas:focus-visible {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #1b1b1b;
+  background: transparent;
 }
 .explorer-panel [data-slot='sheet-title'] {
   overflow-wrap: anywhere;
@@ -1435,7 +1376,7 @@ canvas:focus-visible {
   --popup-width: min(320px, calc(100vw - 32px));
 }
 .explorer-panel.dial-panel[data-slot='sheet-content'] {
-  --popup-width: min(360px, calc(100vw - 32px));
+  --popup-width: min(384px, calc(100vw - 32px));
 }
 .explorer-panel.catalog-sheet[data-slot='sheet-content'] {
   --popup-width: min(420px, calc(100vw - 32px));
@@ -1446,14 +1387,14 @@ canvas:focus-visible {
     var(--panel-anchor-x, 50vw),
     calc(100vw - var(--popup-width) / 2 - 16px)
   );
-  background: #1b1b1b !important;
+
   max-height: calc(100dvh - var(--panel-bottom, 90px) - 16px);
 }
 .explorer-panel[data-side='bottom'] [data-slot='sheet-header'] {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #1b1b1b;
+  background: transparent;
 }
 .explorer-panel[data-side='bottom'] [data-slot='sheet-title'] {
   font: 500 1.125rem/1.4 var(--font-sans);
@@ -1473,31 +1414,6 @@ canvas:focus-visible {
   text-align: right;
   font-variant-numeric: tabular-nums;
   color: #aaa8a4;
-}
-.configuration-group {
-  display: grid;
-  gap: 12px;
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  margin: 0;
-}
-.configuration-group + .configuration-group {
-  margin-top: 24px;
-}
-.configuration-group legend {
-  margin-bottom: 8px;
-  font-size: 0.9375rem;
-  font-weight: 500;
-}
-.configuration-group .case-material {
-  margin: 0;
-}
-.configuration-group .dial-face {
-  font-size: 0.875rem;
-}
-.configuration-group .dial-note {
-  margin: 0;
 }
 .component-finder .catalog-search {
   display: block;
@@ -1570,5 +1486,282 @@ canvas:focus-visible {
   }
   .text-enlarged .action-dock .reset-button {
     justify-self: stretch;
+  }
+}
+
+/* Shared popup chrome: fixed heading, one scrollable body, quiet glass. */
+:root {
+  --panel-surface: rgb(28 28 28 / 86%);
+  --panel-rule: #ffffff10;
+}
+.explorer-panel[data-slot='sheet-content'] {
+  border-radius: 16px;
+  border: 1px solid var(--panel-rule);
+}
+.explorer-panel[data-slot='sheet-content'] > [data-slot='sheet-header'] {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 18px 20px 14px !important;
+  border-bottom: 1px solid var(--panel-rule);
+  gap: 4px;
+}
+.explorer-panel [data-slot='sheet-title'],
+.explorer-panel [data-slot='sheet-description']:not(.sr-only) {
+  padding-right: 36px;
+}
+.explorer-panel [data-slot='sheet-close'] {
+  width: 44px;
+  height: 44px;
+  top: 8px;
+  right: 8px;
+  border-radius: 10px;
+}
+.explorer-panel [data-slot='sheet-close']:hover {
+  background: #ffffff0a;
+}
+.explorer-panel .sheet-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff30 transparent;
+  scroll-padding: 16px;
+}
+.explorer-panel .panel-body {
+  padding: 16px 20px 20px;
+}
+.action-dock .text-button[data-popup-open] {
+  background: #ffffff0c;
+  border-radius: 8px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+/* The warm underline continues to mean an applied mode, independently of open state. */
+.explore-menu .menu-link {
+  border-radius: 8px;
+  padding: 10px 12px;
+  min-height: 44px;
+}
+.explore-menu .menu-link[aria-pressed='true'] {
+  background: #cbb58e16;
+  color: #f0e2cb;
+}
+.explore-menu .menu-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.visibility-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  position: relative;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.visibility-switch > span:first-child {
+  flex: 1;
+}
+.visibility-switch input,
+.choice-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.switch-track {
+  width: 36px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  background: #ffffff24;
+  transition: background 150ms;
+}
+.switch-track::after {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #bdbbb7;
+  transition:
+    transform 150ms,
+    background 150ms;
+}
+.visibility-switch input:checked + .switch-track {
+  background: #cbb58e55;
+}
+.visibility-switch input:checked + .switch-track::after {
+  transform: translateX(14px);
+  background: #e4d6bd;
+}
+.visibility-switch input:focus-visible + .switch-track,
+.choice-option input:focus-visible + .choice-label {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.visibility-switch:has(input:disabled),
+.choice-option:has(input:disabled) {
+  opacity: 0.4;
+  cursor: default;
+}
+.configuration-group {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.configuration-group > legend {
+  margin-bottom: 0;
+  color: #efeeeb;
+}
+.configuration-group + .configuration-group {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--panel-rule);
+}
+.choice-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.choice-group legend {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #b5b3af;
+  margin-bottom: 8px;
+}
+.choice-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 5rem), 1fr));
+  gap: 6px;
+}
+.choice-option {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+}
+.choice-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  min-height: 44px;
+  padding: 8px 4px;
+  border: 1px solid #ffffff12;
+  border-radius: 8px;
+  background: #ffffff04;
+  color: #bdbbb7;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  transition:
+    background 150ms,
+    border-color 150ms;
+}
+.choice-option input:checked + .choice-label {
+  border-color: #cbb58e70;
+  background: #cbb58e12;
+  color: #f0e2cb;
+}
+@media (hover: hover) {
+  .choice-option:hover .choice-label {
+    background: #ffffff0a;
+  }
+}
+.material-choices .choice-label {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.material-swatch {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #ffffff40;
+}
+.material-swatch[data-material='steel'] {
+  background: linear-gradient(135deg, #757e83, #e0e2e3 48%, #7d858b);
+}
+.material-swatch[data-material='rose-gold'] {
+  background: linear-gradient(135deg, #9a6251, #ebbd9e 48%, #ad7965);
+}
+.material-swatch[data-material='platinum'] {
+  background: linear-gradient(135deg, #a4a4a0, #f4f1e7 48%, #b5b5b0);
+}
+.material-swatch svg {
+  width: 14px;
+  height: 14px;
+  color: #25221e;
+  stroke-width: 3;
+}
+.configuration-feedback {
+  min-height: 1.4em;
+  font-size: 0.75rem;
+  color: #b5b3af;
+}
+.dial-status {
+  display: block;
+  line-height: 1.4;
+}
+.configuration-feedback .tool {
+  margin-top: 8px;
+}
+.configuration-notice:not(:empty) {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.75rem;
+}
+.configuration-footer {
+  font-size: 0.6875rem;
+  color: #aaa8a4;
+  margin: 12px 0 0;
+}
+.finder-controls {
+  padding-top: 12px;
+}
+.component-finder .catalog-count {
+  display: block;
+  margin: 8px 0 0;
+}
+.explorer-panel.catalog-sheet .panel-body {
+  padding-top: 6px;
+}
+@media (max-width: 600px) {
+  .explorer-panel[data-slot='sheet-content']:not(.information-panel),
+  .text-enlarged
+    .explorer-panel[data-slot='sheet-content']:not(.information-panel) {
+    top: auto;
+    left: max(12px, env(safe-area-inset-left));
+    right: auto;
+    bottom: var(--panel-bottom, 120px);
+    transform: none;
+    width: calc(
+      100vw - max(12px, env(safe-area-inset-left)) -
+        max(12px, env(safe-area-inset-right))
+    ) !important;
+    max-height: min(72dvh, calc(100dvh - var(--panel-bottom, 120px) - 16px));
+  }
+  .explorer-panel.information-panel[data-slot='sheet-content'],
+  .text-enlarged .explorer-panel.information-panel[data-slot='sheet-content'] {
+    top: auto;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 32px);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --panel-surface: #1c1c1c;
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  :root {
+    --panel-surface: #1c1c1c;
   }
 }

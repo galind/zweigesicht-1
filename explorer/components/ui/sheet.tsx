@@ -43,6 +43,7 @@ function SheetContent({
   showCloseButton = true,
   showOverlay = true,
   scrollContent = false,
+  finalFocus,
   ...props
 }: SheetPrimitive.Popup.Props & {
   side?: 'top' | 'right' | 'bottom' | 'left';
@@ -51,11 +52,32 @@ function SheetContent({
   scrollContent?: boolean;
 }) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const popupRef = React.useRef<HTMLDivElement>(null);
+  const content = React.Children.toArray(children);
+  const isHeader = (child: React.ReactNode) =>
+    React.isValidElement(child) && child.type === SheetHeader;
   return (
     <SheetPortal>
       {showOverlay && <SheetOverlay />}
       <SheetPrimitive.Popup
+        ref={popupRef}
         initialFocus={scrollContent ? scrollRef : undefined}
+        finalFocus={(interaction) => {
+          // An outgoing panel must not steal focus from its replacement.
+          const replacement = [
+            ...document.querySelectorAll('[data-slot="sheet-content"]'),
+          ].some(
+            (panel) =>
+              panel !== popupRef.current &&
+              !panel.hasAttribute('data-ending-style'),
+          );
+          if (replacement) return false;
+          return typeof finalFocus === 'function'
+            ? finalFocus(interaction)
+            : typeof finalFocus === 'object'
+              ? finalFocus.current
+              : (finalFocus ?? true);
+        }}
         data-slot="sheet-content"
         data-side={side}
         className={cn(
@@ -65,9 +87,12 @@ function SheetContent({
         {...props}
       >
         {scrollContent ? (
-          <div className="sheet-scroll-area" tabIndex={-1} ref={scrollRef}>
-            {children}
-          </div>
+          <>
+            {content.filter(isHeader)}
+            <div className="sheet-scroll-area" tabIndex={-1} ref={scrollRef}>
+              {content.filter((child) => !isHeader(child))}
+            </div>
+          </>
         ) : (
           children
         )}

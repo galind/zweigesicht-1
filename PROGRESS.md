@@ -262,3 +262,14 @@ Measured against the clean baseline: application JavaScript gzip 451,191 → 434
 
 
 Cleanup publication: pushed the verified branch through the configured SSH remote and opened [PR #5](https://github.com/galind/zweigesicht-1/pull/5) against main using the GitHub connector. No merge or manual deployment was performed. The original local domain-history edits remain outside the PR. Next action: review the PR; deferred work and release-gate limits are recorded in the cleanup review.
+
+
+## Popup refinement — 24 September 2026
+
+Refined the existing interface on `codex/popup-refinement`. Popups now share a translucent dark surface, soft blur, consistent corners, fixed headings and 44 px close controls. Configure exposes labeled material swatches and native radio choices for both hand sets, with accessible visibility switches and case/dial feedback beside the relevant controls. Choices remain editable while hidden, apply immediately and persist through Reset. Focus has a clearer current selection, Disassemble identifies whole-movement versus section scope, and open-popup styling is distinct from the warm applied-mode indicator.
+
+The shared sheet keeps its heading outside the scrolling body and suppresses outgoing focus restoration during panel handoff. Component search and its scope filter remain above the scrolling results; keyboard opening focuses search without forcing the touch keyboard. Phone panels use the available space above the dock; reading retains its modal sheet. Choices stack as text grows. Fixed popup overflow clipping prevents keyboard navigation from scrolling the close control out of view. Removed obsolete configuration dropdown styles. Viewer motion, geometry, finishes and configuration rules are unchanged.
+
+Verification: 17 state/motion/packaging tests, CPU source/runtime regression suite, TypeScript, lint and production build pass. All 63 browser UX checks pass, including four new checks for hidden preference changes, native control groups, fixed popup headings and focus handoff. Targeted browser review covers desktop, 390×844 and 320×740 with 200% text, reachable controls, no horizontal overflow, Escape/focus return, nested quality-menu dismissal, section actions, component search and real catalog failure/retry. Enlarged-text review caught and corrected narrow choice wrapping, insufficient search result space and an old Settings height override. Review measurements are in ignored `artifacts/browser/popup-refinement/review.json`; visual checks were performed in the in-app browser. Phone checks are viewport emulation, not physical-device review. Existing build notices concern large chunks and vinext route classification.
+
+Ready for local user review at the running development server, http://127.0.0.1:4175/. No push or deployment. The unrelated domain-history edits remain excluded from this milestone.

@@ -1,5 +1,6 @@
 'use client';
-import { ChevronDown } from 'lucide-react';
+import { useId } from 'react';
+import { Check } from 'lucide-react';
 import { WATCH } from '@/src/experience/watch';
 import { DIALS } from '@/src/experience/dials';
 import type {
@@ -16,144 +17,156 @@ export function ConfigurationControls({
   viewer: () => MovementViewer | null;
   available: boolean;
 }) {
+  const id = useId();
+  const caseStatus =
+    state.caseError ||
+    (state.caseRequest ? 'Loading case…' : '') ||
+    (state.caseVisible && !state.caseEffective
+      ? 'Temporarily hidden in this view.'
+      : state.caseVisible
+        ? 'Case visible.'
+        : 'Case hidden. Choose a finish for later.');
+  const dialStatus =
+    state.dialError ||
+    (state.dialRequest ? 'Loading dials…' : '') ||
+    (state.dialsVisible
+      ? 'Both dials visible.'
+      : 'Dials hidden. Your hand choices are kept.');
   return (
     <div className="dial-options">
-      <fieldset className="configuration-group">
-        <legend>Case</legend>
-        <label className="dial-visibility">
+      <fieldset className="configuration-group" disabled={!available}>
+        <legend className="sr-only">Case</legend>
+        <label className="visibility-switch">
+          <span>Show case</span>
           <input
             type="checkbox"
+            role="switch"
+            aria-checked={state.caseVisible}
             checked={state.caseVisible}
-            disabled={!available}
             onChange={(event) =>
               void viewer()?.configureWatch({
                 caseVisible: event.target.checked,
               })
             }
           />
-          <span>Show case</span>
+          <span className="switch-track" aria-hidden="true" />
         </label>
-        <label className="dial-face case-material">
-          <span>Case material</span>
-          <div className="dial-hand-select">
-            <select
-              aria-label="Case material"
-              value={state.caseMaterial}
-              disabled={!available}
-              onChange={(event) =>
-                void viewer()?.configureWatch({
-                  caseMaterial: event.target.value,
-                })
-              }
-            >
-              {WATCH.caseMaterials.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown aria-hidden="true" />
+        <fieldset className="choice-group material-choices">
+          <legend>Case material</legend>
+          <div className="choice-options">
+            {WATCH.caseMaterials.map((material) => (
+              <label
+                className="choice-option"
+                key={material.id}
+                aria-label={material.label}
+              >
+                <input
+                  type="radio"
+                  name={`${id}-material`}
+                  value={material.id}
+                  checked={state.caseMaterial === material.id}
+                  onChange={() =>
+                    void viewer()?.configureWatch({ caseMaterial: material.id })
+                  }
+                />
+                <span className="choice-label">
+                  <span
+                    className="material-swatch"
+                    data-material={material.id}
+                    aria-hidden="true"
+                  >
+                    {state.caseMaterial === material.id && <Check />}
+                  </span>
+                  <span>{material.label}</span>
+                </span>
+              </label>
+            ))}
           </div>
-        </label>
-        {state.caseVisible &&
-          !state.caseEffective &&
-          !state.caseRequest &&
-          !state.caseError && (
-            <p className="dial-note">
-              The case is temporarily hidden in this view.
-            </p>
+        </fieldset>
+        <div className="configuration-feedback">
+          <output aria-live="polite" className="dial-status">
+            {caseStatus}
+          </output>
+          {state.caseError && (
+            <button
+              className="tool"
+              disabled={state.catalogLoading}
+              onClick={() => void viewer()?.retryDials()}
+            >
+              Retry case
+            </button>
           )}
+        </div>
       </fieldset>
-      <fieldset className="configuration-group">
-        <legend>Dials &amp; hands</legend>
-        <label className="dial-visibility">
+      <fieldset className="configuration-group" disabled={!available}>
+        <legend className="sr-only">Dials &amp; hands</legend>
+        <label className="visibility-switch">
+          <span>Show both dials</span>
           <input
             type="checkbox"
+            role="switch"
+            aria-checked={state.dialsVisible}
             checked={state.dialsVisible}
-            disabled={!available}
             onChange={(event) =>
               void viewer()?.configureDials({
                 dialsVisible: event.target.checked,
               })
             }
           />
-          <span>Show both dials</span>
+          <span className="switch-track" aria-hidden="true" />
         </label>
-        <label className="dial-face">
-          <span>Skeleton hands</span>
-          <div className="dial-hand-select">
-            <select
-              aria-label="Skeleton hand style"
-              value={state.smallStyle}
-              disabled={!available}
-              onChange={(event) =>
-                void viewer()?.configureDials({
-                  smallStyle: event.target.value,
-                })
-              }
-            >
-              {DIALS.faces.small.styles.map((hand) => (
-                <option key={hand.id} value={hand.id}>
-                  {hand.label}
-                </option>
+        {(['small', 'central'] as const).map((face) => (
+          <fieldset className="choice-group" key={face}>
+            <legend>
+              {face === 'small' ? 'Skeleton hands' : 'Three hands'}
+            </legend>
+            <div className="choice-options">
+              {DIALS.faces[face].styles.map((hand) => (
+                <label className="choice-option" key={hand.id}>
+                  <input
+                    type="radio"
+                    name={`${id}-${face}`}
+                    value={hand.id}
+                    checked={
+                      state[
+                        face === 'small' ? 'smallStyle' : 'centralStyle'
+                      ] === hand.id
+                    }
+                    onChange={() =>
+                      void viewer()?.configureDials(
+                        face === 'small'
+                          ? { smallStyle: hand.id }
+                          : { centralStyle: hand.id },
+                      )
+                    }
+                  />
+                  <span className="choice-label">{hand.label}</span>
+                </label>
               ))}
-            </select>
-            <ChevronDown aria-hidden="true" />
-          </div>
-        </label>
-        <label className="dial-face">
-          <span>Three hands</span>
-          <div className="dial-hand-select">
-            <select
-              aria-label="Three hands style"
-              value={state.centralStyle}
-              disabled={!available}
-              onChange={(event) =>
-                void viewer()?.configureDials({
-                  centralStyle: event.target.value,
-                })
-              }
+            </div>
+          </fieldset>
+        ))}
+        <div className="configuration-feedback">
+          <output aria-live="polite" className="dial-status">
+            {dialStatus}
+          </output>
+          {state.dialError && (
+            <button
+              className="tool"
+              disabled={state.catalogLoading}
+              onClick={() => void viewer()?.retryDials()}
             >
-              {DIALS.faces.central.styles.map((hand) => (
-                <option key={hand.id} value={hand.id}>
-                  {hand.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown aria-hidden="true" />
-          </div>
-        </label>
+              Retry dials
+            </button>
+          )}
+        </div>
       </fieldset>
-      <p className="dial-note">
-        Your choices are kept when you reset the view.
-      </p>
-      <output aria-live="polite" className="dial-status">
+      <output aria-live="polite" className="configuration-notice">
         {state.configurationNotice}
       </output>
-      <output aria-live="polite" className="dial-status">
-        {state.caseError || (state.caseRequest ? 'Loading case…' : '')}
-      </output>
-      {state.caseError && (
-        <button
-          className="tool"
-          disabled={!available || state.catalogLoading}
-          onClick={() => void viewer()?.retryDials()}
-        >
-          Retry case
-        </button>
-      )}
-      <output aria-live="polite" className="dial-status">
-        {state.dialError || (state.dialRequest ? 'Loading dials…' : '')}
-      </output>
-      {state.dialError && (
-        <button
-          className="tool"
-          disabled={!available || state.catalogLoading}
-          onClick={() => void viewer()?.retryDials()}
-        >
-          Retry dials
-        </button>
-      )}
+      <p className="configuration-footer">
+        Your choices are kept when you reset the view.
+      </p>
     </div>
   );
 }

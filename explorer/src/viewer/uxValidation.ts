@@ -173,6 +173,79 @@ export async function runUxChecks(v: MovementViewer) {
     });
   }
 
+  const popupPreferences = {
+    caseVisible: v.state.caseVisible,
+    caseMaterial: v.state.caseMaterial,
+    dialsVisible: v.state.dialsVisible,
+    smallStyle: v.state.smallStyle,
+    centralStyle: v.state.centralStyle,
+  };
+  await v.configureWatch({ caseVisible: false, dialsVisible: false });
+  document.querySelector<HTMLButtonElement>('.dial-trigger')!.click();
+  await sleep(300);
+  const configuration = document.querySelector<HTMLElement>('.dial-panel')!;
+  configuration
+    .querySelector<HTMLInputElement>('input[value="rose-gold"]')!
+    .click();
+  configuration.querySelector<HTMLInputElement>('input[value="pear"]')!.click();
+  await sleep(300);
+  checks.push({
+    name: 'Visible configuration choices update retained preferences without revealing hidden case or dials',
+    pass:
+      v.state.caseMaterial === 'rose-gold' &&
+      v.state.smallStyle === 'pear' &&
+      !v.state.caseVisible &&
+      !v.state.dialsVisible &&
+      !!document.querySelector('.dial-panel'),
+  });
+  checks.push({
+    name: 'Configuration uses labeled switches and three independently named native radio groups',
+    pass:
+      configuration.querySelectorAll(
+        'input[role="switch"][aria-checked="false"]',
+      ).length === 2 &&
+      configuration.querySelectorAll('input[type="radio"]').length === 9 &&
+      new Set(
+        [
+          ...configuration.querySelectorAll<HTMLInputElement>(
+            'input[type="radio"]',
+          ),
+        ].map((input) => input.name),
+      ).size === 3,
+  });
+  const scroller =
+    configuration.querySelector<HTMLElement>('.sheet-scroll-area')!;
+  const header = configuration.querySelector<HTMLElement>(
+    '[data-slot="sheet-header"]',
+  )!;
+  const headerTop = header.getBoundingClientRect().top;
+  scroller.scrollTop = scroller.scrollHeight;
+  checks.push({
+    name: 'Popup heading and close control stay outside the scrolling content',
+    pass:
+      !scroller.contains(header) &&
+      !scroller.contains(
+        configuration.querySelector('[data-slot="sheet-close"]'),
+      ) &&
+      header.getBoundingClientRect().top === headerTop,
+  });
+  document.querySelector<HTMLButtonElement>('.explore-button')!.click();
+  await sleep(350);
+  checks.push({
+    name: 'Switching popups leaves one panel open and focus inside its replacement',
+    pass:
+      document.querySelectorAll('.explorer-panel').length === 1 &&
+      !!document
+        .querySelector('.explore-panel')
+        ?.contains(document.activeElement),
+  });
+  document
+    .querySelector<HTMLButtonElement>('[data-slot="sheet-close"]')!
+    .click();
+  await sleep(300);
+  await v.configureWatch(popupPreferences);
+  await settle(v);
+
   const explore = document.querySelector<HTMLButtonElement>('.explore-button')!;
   explore.click();
   await sleep(300);
