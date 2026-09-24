@@ -242,3 +242,6 @@ Applied the user's explicit correction to dial washer d121 (`Flitter 200x400`): 
 Verification: 102 CPU source/runtime checks, TypeScript, lint and production build pass. Targeted browser inspection covers both washer faces, isolation and return to assembly, with no warning/error logs. Screenshots are ignored under `artifacts/browser/dial-washer-brass/`. The existing build notices remain.
 
 The user authorized pushing all accumulated task changes to a PR. The GitHub connector confirms no open PR for this repository/branch, so the verified branch will be pushed over its configured SSH remote and a PR opened against main. No original CAD/reference media is added. The unrelated domain-history edit remains unstaged.
+
+
+PR publication: pushed the accumulated branch over SSH and opened [PR #4](https://github.com/galind/zweigesicht-1/pull/4) against `main`, including the verified brass-washer correction `7f9128e`. GitHub confirmed the PR head matches the pushed commit. No merge or manual deployment was performed; the existing branch CI/deployment integration may run on push. The unrelated domain-history edit remains outside the PR.
