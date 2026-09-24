@@ -23,15 +23,15 @@ const prefix='p_0_1_1_1__0_1_1_1_4__0_1_1_83_',movement='p_0_1_1_1__0_1_1_1_4';
 const families={
  steel:['Neutral steel/pale metal; alloy unresolved unless source SS','Polished/satin metal. Exact polishing map, concealed walls and manufacturing grain unverified.'],
  dialSilver:['Solid-silver dial carrier appearance','Fine circular satin on the visible carrier field; source-dark markings remain separate. Numerical response authored.'],
- brushedSteel:['Brushed keyless steel appearance','User reference correction: more detailed straight satin (shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
- bridge:['Steel bridge','More visible local-X straight-grained upper fields (shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
+ brushedSteel:['Brushed keyless steel appearance','User reference correction: finer steel straight satin (1.8× spatial frequency, shared strength 1.65) on both local-Z flat faces of the reviewed keyless levers/springs; existing inclined edges polished, walls satin. See FINISH_ADJUSTMENTS.md; pitch and response authored.'],
+ bridge:['Steel bridge','Finer local-X straight-grained upper fields (1.8× across-stroke frequency, shared detail strength 2.6); smooth satin lower feet, with no frosting; existing inclined bevels polished; vertical walls satin. Direction/pitch authored, not manufacturing measurements.'],
  warmPlate:['Warm rose-colored metal cap; exact alloy/coating unmeasured','More detailed straight-grained top (shared strength 1.65); polished existing chamfers/countersinks; underside and walls rougher.'],
  frosted:['Warm pink-gilt plate appearance','Source-millimetre cellular normal relief (10 cells/mm, slope .035, micro-roughness .31) without reflectance-color noise; existing inscription regions darkened; actual engraving geometry retained.'],
  brass:['Warm wheel/compound-part metal; no blanket alloy claim','Fine circular satin with sharper existing inclined edges; individual spoke-aligned brushing remains approximated.'],
  hardGold:['Solid 14 ct hard rose-gold alloy wheel','Maker-documented wheel material and rose hue; circular brushing retained. Numerical color, grain and optics are authored. Steel hubs, pinions and escape wheel are separate.'],
- circularSteel:['Steel escape wheel','Maker-confirmed steel; neutral appearance with coarser circular grain, retained roughness .27 and anisotropy .58. Steel grade and numerical optics unmeasured.'],
+ circularSteel:['Steel escape wheel','Maker-confirmed steel; neutral appearance with refined circular grain (1.8× radial frequency), retained roughness .27 and anisotropy .58. Steel grade and numerical optics unmeasured.'],
  barrel:['Warm rose-colored barrel metal','User-corrected snailing: fine curved strokes sweeping around the axle with matching directional reflections; rougher cylindrical walls and bright existing inclined rims. Hidden lid/drum differences unverified.'],
- ratchet:['Neutral steel ratchet','Circular satin fields with sharper edges; exact wheel polishing unmeasured.'],
+ ratchet:['Neutral steel ratchet','Circular satin fields at 1.8× radial grain frequency with sharper edges; exact wheel polishing unmeasured.'],
  gold:['Rose-gold-colored setting/pin','Smooth polished rose-colored metal; maker rules out yellow gold, but actual alloy/process is not established for every hidden pin.'],
  satinGold:['Satin rose-gold-colored metal','Existing satin finish retained; rose hue follows maker clarification, not an alloy claim.'],
  roseGold:['Rose-gold-colored jewel setting','User correction: rose-gold chatons and jewel-setting shells with retained smooth polished response; stones remain separate.'],
@@ -96,7 +96,7 @@ const definitions=audit.definitions.filter(d=>!d.isAssembly).map(d=>{
  if([85,86,90,91].includes(n))evidence+='; USER-FINISH-2026-09-09-04 snailing reference and user confirmation';
  if([85,86,90,91].includes(n))notes+=' Follow-up user correction: both barrels match the accepted left winding. Local curvature is +1.15 for d85/86 and -1.15 for oppositely oriented d90/91; grain and reflection directions both compensate for the original source transforms.';
  if(n===105)evidence+='; USER-FINISH-2026-09-09-03 cap plate photograph and user confirmation';
- if(n===249){evidence+='; User correction 2026-09-10 explicitly requests brushing, superseding earlier black-polished instruction';notes='Shared circular satin steel profile, pattern 2.';}
+ if(n===249){evidence+='; User correction 2026-09-10 explicitly requests brushing, superseding earlier black-polished instruction';notes='Shared circular satin steel profile, pattern 2; 1.8× radial grain frequency, unchanged optical response.';}
  if(n===99){evidence+='; user enamel request and exact source faces';notes+=' Logo/number faces 129–247 excluding 219/223/227 use dielectric enamel; existing border retained.';}
  if(n===230){evidence+='; user enamel request and exact source faces';notes+=' Recessed outlines 37–66 use dielectric enamel. Source has no modeled lettering; none invented.';}
  if([99,222,228].includes(n)){evidence+='; user approved seven screw-mounting frost areas';notes+=' Exact role-12 mounting pads use coarser irregular frosting per USER-FROST-2026-09-11: d99 faces28/30, d222 faces31/33, d228 faces49/50/52. Brushed tops, polished bevels and broad satin undersides are preserved.';}

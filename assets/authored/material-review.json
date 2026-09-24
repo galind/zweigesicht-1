@@ -71,7 +71,7 @@
       ],
       "physicalMaterial": "Steel; exact grade unspecified",
       "surfaceFinish": "Retained circular satin",
-      "renderingApproximation": "Dedicated circularSteel profile; neutral steel hue, roughness .27 and anisotropy .58 retained. Coarser circular grain is recorded separately in finishRefinement.",
+      "renderingApproximation": "Dedicated circularSteel profile; neutral steel hue, roughness .27 and anisotropy .58 retained. Circular grain refinement is recorded separately in finishRefinement.",
       "evidence": "maker-feedback-2026-09-24; user correction authorization 2026-09-24"
     },
     {
@@ -214,7 +214,34 @@
           150
         ]
       },
-      "unchanged": "Brush direction/source axes, amplitudes, anisotropy, snailing, silver dial grain and exact face masks."
+      "unchanged": "Brush direction/source axes, amplitudes, anisotropy, snailing, silver dial grain and exact face masks.",
+      "steelGrainFollowUp": {
+        "checked": "2026-09-24",
+        "evidence": "user-steel-grain-feedback-2026-09-24",
+        "frequencyMultiplier": 1.8,
+        "straightFamilies": [
+          "bridge",
+          "brushedSteel"
+        ],
+        "straightAcrossStrokeFrequenciesPerMm": [
+          12.6,
+          39.6,
+          135,
+          378
+        ],
+        "circularFamilies": [
+          "circularSteel",
+          "ratchet"
+        ],
+        "circularRadialFrequenciesPerMm": [
+          21.6,
+          81,
+          270
+        ],
+        "scope": "Narrower steel strokes only. Along-stroke variation, grain weights/contrast/relief amplitudes, roughness, anisotropy, lighting, frosting, polished edges, silver dial grain and warm-metal grain remain unchanged. Derivative filtering remains enabled.",
+        "limits": "Authored visual refinement after user review, not maker-measured grain pitch. Frequency changes also affect filtered screen-space grain and relief slopes despite unchanged amplitudes.",
+        "localComparison": "artifacts/browser/steel-grain-refinement/comparison.png; aa2493a before/current after, matched 1275\u00d71354 views on both faces at overview and two zoom steps."
+      }
     },
     "opticalResponse": {
       "steelRoughness": {
@@ -265,6 +292,6 @@
     },
     "preserved": "a17d341 rose-gold color and material assignments; steel escape-wheel identity, roughness .27 and anisotropy .58; polished bevel roughness .075; black-polished crown response .055; exact frosting scope on main plate, seven pads and crown M background. Source geometry and annotations unchanged.",
     "limits": "All frequencies, slope amplitudes, optical values and environment lights are authored presentation values, not measured manufacturing or spectral data. Environment changes necessarily affect reflections of all materials.",
-    "localComparison": "artifacts/browser/maker-refinement/comparison.png; matched 1275×1354 desktop captures, both faces, Reset overview and two + zoom steps. Before uses a17d341 material/FrostedSurface/StudioEnvironment modules in a temporary local copy; current motion used for matched framing. No source media committed."
+    "localComparison": "artifacts/browser/maker-refinement/comparison.png; matched 1275\u00d71354 desktop captures, both faces, Reset overview and two + zoom steps. Before uses a17d341 material/FrostedSurface/StudioEnvironment modules in a temporary local copy; current motion used for matched framing. No source media committed."
   }
 }

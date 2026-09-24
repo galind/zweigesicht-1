@@ -186,6 +186,7 @@ varying vec3 vFinishY;
 varying float vFinishRole;
 uniform float finishPattern;
 uniform float finishBrushDetail;
+uniform float finishBrushFrequency;
 uniform float finishEnabled;
 uniform float finishEngraved;
 uniform float finishWholeBlue;
@@ -216,6 +217,8 @@ float filteredFinishNoise(vec2 p) {
  return (finishNoise(p)-.5)*(1.0-smoothstep(.4,1.8,footprint));
 }
 float finishBrush(vec2 p) {
+ // Narrow steel hairlines across the stroke without shortening their length.
+ p.y*=finishBrushFrequency;
  // A wider strand layer survives normal bridge framing, while the finer
  // layers retain close-up detail. Derivative filtering still prevents shimmer.
  return filteredFinishNoise(p*vec2(.45,7.0))*.35
@@ -397,6 +400,12 @@ export function createMaterial(
     }
     Object.assign(shader.uniforms, {
       finishPattern: { value: finish.pattern },
+      // Spatial scale only: keep optical amplitudes and warm-metal grain intact.
+      finishBrushFrequency: {
+        value: ['bridge', 'brushedSteel', 'circularSteel', 'ratchet'].includes(finish.family)
+          ? 1.8
+          : 1,
+      },
       finishBrushDetail: {
         value:
           definitionId === 'd_0_1_1_26'
@@ -573,9 +582,9 @@ if(finishEnabled>.5 && finishPattern>.5 && !(finishPattern>5.5 && abs(vFinishRol
   // Irregular concentric brushing around the original source axle. The slow
   // XY variation breaks up perfect lathe rings without an angular seam.
   float wander=finishNoise(finishUv*2.1)*.012;
-  finishGrain=filteredFinishNoise(vec2((radius+wander)*12.0,0.0))*.46
-    + filteredFinishNoise(vec2((radius+wander*.5)*45.0,7.0))*.34
-    + filteredFinishNoise(vec2(radius*150.0,19.0))*.2;
+  finishGrain=filteredFinishNoise(vec2((radius+wander)*12.0*finishBrushFrequency,0.0))*.46
+    + filteredFinishNoise(vec2((radius+wander*.5)*45.0*finishBrushFrequency,7.0))*.34
+    + filteredFinishNoise(vec2(radius*150.0*finishBrushFrequency,19.0))*.2;
   }
   finishHeight=finishGrain*.00022;
  } else {
@@ -702,6 +711,6 @@ material.alphaT=mix(pow2(material.roughness),1.0,pow2(material.anisotropy));
       ? `ml01-diamond-facets-v1-${diamond.planes.length}`
       : ['sapphire', 'diamond'].includes(finish.family)
         ? 'ml01-source-surface-clear-v10'
-        : 'ml01-source-surface-v12';
+        : 'ml01-source-surface-v13';
   return material;
 }

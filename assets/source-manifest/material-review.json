@@ -48,6 +48,17 @@
         "Finishing should be coarser and steel less milky; requires visual tuning."
       ],
       "resolution": "Face-flip evidence is in assets/source-manifest/face-flip.json; separate spatial/optical tuning and remaining interpretations in assets/authored/material-review.json. No calibrated values inferred."
+    },
+    {
+      "id": "user-steel-grain-feedback-2026-09-24",
+      "type": "direct user visual feedback",
+      "provided": "2026-09-24",
+      "url": null,
+      "supports": [
+        "Steel brushing in aa2493a appears too thick.",
+        "User approved starting with 1.8\u00d7 finer steel grain while retaining current reflections, frosting and polished edges."
+      ],
+      "limits": "User preference and authored scale adjustment; no new maker statement or calibrated material measurement."
     }
   ]
 }
