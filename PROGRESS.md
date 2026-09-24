@@ -330,3 +330,8 @@ Middle-ring/plate interference remains: the simple axial alternative introduces 
 
 
 PR publication: at the user's request, pushed `codex/disassembly-review` over SSH and opened [PR #9](https://github.com/galind/zweigesicht-1/pull/9) against `main`. The user subsequently authorized including the existing domain-history corrections above; they are now included in this PR. Next action: PR review and the outstanding mechanical/device checks. No merge or manual deployment.
+
+
+## Acknowledgements copy — 24 September 2026
+
+Replaced the placeholder with a personal thank-you to Marco Lang for sharing his CAD files so others can explore and learn about his watches, and for his feedback and advice throughout the project. A second paragraph thanks everyone who uses and enjoys the website. The copy uses the panel's scrolling body beneath its fixed heading. TypeScript and lint pass. Next action: review the wording locally. No push or publication.

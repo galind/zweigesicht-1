@@ -878,8 +878,21 @@ export default function Home() {
         >
           <SheetHeader>
             <SheetTitle>Acknowledgements</SheetTitle>
-            <SheetDescription>Coming soon.</SheetDescription>
           </SheetHeader>
+          <div className="panel-body">
+            <SheetDescription render={<div />} className="space-y-4">
+              <p>
+                A big thank you to Marco Lang for generously sharing his CAD
+                files, giving everyone the chance to explore his watches and
+                learn how they’re made. I’m also grateful for his feedback and
+                advice throughout this project.
+              </p>
+              <p>
+                And thank you to everyone who uses and enjoys this website. I
+                hope you enjoy exploring it as much as I enjoyed building it.
+              </p>
+            </SheetDescription>
+          </div>
         </SheetContent>
       </Sheet>
       <Sheet
