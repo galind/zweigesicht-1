@@ -22,6 +22,8 @@ const profiles = {
   ratchet: { color: 0xc7d0da, metalness: 1, roughness: 0.29, pattern: 2 },
   gold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   satinGold: { color: 0xd9ab94, metalness: 1, roughness: 0.31, pattern: 0 },
+  // User-confirmed brass dial washer; preserve its smooth satin finish.
+  satinBrass: { color: 0xc6a45a, metalness: 1, roughness: 0.31, pattern: 0 },
   roseGold: { color: 0xd9ab94, metalness: 1, roughness: 0.16, pattern: 0 },
   balance: { color: 0xc69d83, metalness: 1, roughness: 0.22, pattern: 0 },
   crown: { color: 0xbac1ca, metalness: 1, roughness: 0.055, pattern: 5 },
@@ -93,7 +95,7 @@ for (const [family, ids] of Object.entries({
   circularSteel: [233],
   hardGold: [94, 96, 141, 187, 210, 213, 216, 238, 243],
   gold: [111, 118, 163, 179, 200, 206],
-  satinGold: [121],
+  satinBrass: [121],
   roseGold: [100, 203, 207, 224],
   balance: [110],
   ruby: [

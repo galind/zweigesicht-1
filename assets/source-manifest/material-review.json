@@ -86,6 +86,16 @@
         "User likes the flat view and requests improved lighting/reflections without changing the default angle."
       ],
       "limits": "Presentation preference; no new maker, alloy or mechanical evidence. Existing supplied photograph remains qualitative guidance."
+    },
+    {
+      "id": "user-dial-washer-brass-2026-09-24",
+      "type": "direct user material correction",
+      "provided": "2026-09-24",
+      "url": null,
+      "supports": [
+        "Dial washer must be brass."
+      ],
+      "limits": "User-specified material; exact brass grade and numerical optical values are not measured. Source identity d121 Flitter 200x400 maps the correction to the existing thin washer."
     }
   ]
 }

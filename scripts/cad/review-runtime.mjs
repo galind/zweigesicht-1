@@ -273,7 +273,7 @@ assert.equal(escapeWheel.p.material.color.getHex(),finishFor('', 'd_0_1_1_235').
 assert.equal(escapeWheel.shader.uniforms.finishPattern.value,2);
 assert.equal(escapeWheel.p.material.roughness,.27);
 assert.equal(escapeWheel.p.material.anisotropy,.58,'Steel correction preserves escape-wheel brushing');
-for(const n of [111,118,121,163,179,200,206])assert.equal(finishShaderFor(n).p.material.color.getHex(),0xd9ab94,'Existing gold appearances use rose hue');
+for(const n of [111,118,163,179,200,206])assert.equal(finishShaderFor(n).p.material.color.getHex(),0xd9ab94,'Existing gold appearances use rose hue');
 const eccentric=finishShaderFor(111).p.material,rim=finishShaderFor(110).p.material;
 assert.equal(eccentric.name,'gold');assert.equal(rim.name,'balance');
 assert.equal(eccentric.roughness,.16);assert.ok(!eccentric.color.equals(rim.color));
@@ -310,9 +310,12 @@ for(const id of [25,36]) {
  assert.equal(a.metalness,b.metalness);assert.equal(a.roughness,b.roughness);
 }
 assert.equal(finishShaderFor(121).shader.uniforms.finishPattern.value,0);
+assert.equal(finishShaderFor(121).p.material.name,'satinBrass','Dial washer has its own brass assignment');
+assert.equal(finishShaderFor(121).p.material.color.getHex(),0xc6a45a);
+assert.equal(finishShaderFor(121).p.material.metalness,1);
 assert.equal(finishShaderFor(121).p.material.anisotropy,0);
 assert.equal(finishShaderFor(121).p.material.roughness,.31);
-results.push({check:'three-hander indices/logo share chaton rose gold; thin washer has satin roughness without brushing or anisotropy',status:'pass'});
+results.push({check:'three-hander indices/logo retain chaton rose gold; dial washer is brass with retained satin roughness and no brushing or anisotropy',status:'pass'});
 for(const suffix of ['54__0_1_1_194_11','54__0_1_1_194_12']){
  const p=v.renderParts.get(PREFIX+suffix);assert.ok(p);
  assert.equal(p.source.definitionId,'d_0_1_1_201');
