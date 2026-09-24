@@ -276,3 +276,12 @@ Ready for local user review at the running development server, http://127.0.0.1:
 
 
 Configure copy follow-up: removed routine case/dial visibility messages and their empty spacing at the user's request. The only persistent helper text is “Your choices are kept when you reset the view.” Loading/error feedback and retry remain contextual; hand-finish notices remain available to screen readers without adding visible copy. TypeScript, lint and targeted browser visual review pass. Local change only; unrelated domain-history edits remain excluded.
+
+
+## Immediate hidden-case flip and UI PR — 24 September 2026
+
+When the fitted case is not actually visible, Flip now traverses only the rotation phase over 0.85 seconds, starting on the first rendered frame instead of waiting through roughly 0.64 seconds of invisible attachment withdrawal. Visible-case flips retain their authored 1.8-second withdrawal/turn/reseat sequence. The timing choice is fixed for each active turn; showing/hiding the case does not jump the camera, and a reversal uses current effective visibility. Both paths share the same canonical pose and exact endpoints. Focus-hidden cases also use the shorter path. Source geometry, finishes and All parts behavior are unchanged.
+
+Verification: 17 state/motion/packaging tests, 109 CPU source/runtime checks, TypeScript, lint and production build pass. CPU coverage verifies first-frame rotation and monotonic 0.85-second endpoints on both faces at 30/60/120 Hz, visible-case withdrawal, mid-turn visibility changes, reversals and Focus. All 200 browser watch checks and all 63 browser UX checks pass, including four new visible/hidden initial-rotation checks. Local evidence summaries are in ignored `artifacts/browser/popup-refinement/flip-runtime.json` and `flip-browser-summary.json`. Existing build notices and physical-device/release-gate limits remain.
+
+The user authorized a PR containing the popup refinement, Configure copy simplification and hidden-case flip fix. The branch is based on current `origin/main` (`50c55ea`), and the GitHub connector confirms no existing open PR for it. Next action: SSH push and connected-GitHub PR creation. Unrelated local domain-history edits stay excluded. No merge or manual deployment.

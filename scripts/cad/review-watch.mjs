@@ -89,6 +89,40 @@ export async function reviewWatch({v,Viewer,THREE,initialState,load,sourceModule
  }
  results.push({check:'CAD X flip leaves all 18 lug orientations fixed in observer frame; withdrawal precedes turn and reseating follows; both case visibility states reverse continuously in all three phases and reduced motion snaps camera and parts together',status:'pass'});
 
+ // Hidden-case turns spend the full clock rotating, with no attachment hold.
+ for(const hz of [30,60,120]) for(const side of ['front','back']) {
+  c.reduced=true;c.state={...initialState,caseVisible:false,side:side==='front'?'back':'front'};pose();
+  c.camera.position.set(0,0,side==='front'?-90:90);c.camera.up.set(0,side==='front'?-1:1,0);c.controls.target.copy(CASE_PIVOT);
+  const before=c.camera.up.clone();c.reduced=false;c.setSide(side);
+  assert.equal(c.caseTravel.rotationOnly,true);c.applyPose(1/hz);
+  assert.ok(c.camera.up.distanceTo(before)>1e-6,'Hidden case must rotate on its first frame');
+  let previous=caseFlipPhase(c.caseTurn).angle;
+  for(let n=1;n<Math.ceil(.85*hz);n++) {
+   c.applyPose(1/hz);const angle=caseFlipPhase(c.caseTurn).angle;
+   assert.ok(side==='front'?angle<=previous+1e-12:angle>=previous-1e-12,'Bare flip stays monotonic');previous=angle;
+  }
+  c.applyPose(1e-9);assert.equal(c.caseTravel,undefined);assert.equal(c.faceCamera,undefined);
+  assert.equal(c.caseTurn,side==='front'?0:1);
+  assert.ok(c.camera.up.distanceTo(new THREE.Vector3(0,side==='front'?1:-1,0))<1e-8);
+ }
+ results.push({check:'hidden case rotates on the first frame, monotonically settles in 850 ms and reaches exact endpoints on both faces at 30/60/120 Hz',status:'pass'});
+ for(const caseVisible of [false,true]) {
+  c.reduced=true;c.state={...initialState,caseVisible};pose();
+  c.camera.position.set(0,0,-90);c.camera.up.set(0,-1,0);c.controls.target.copy(CASE_PIVOT);
+  c.reduced=false;c.setSide('front');c.applyPose(.2);
+  assert.equal(c.caseTravel.rotationOnly,!caseVisible);
+  if(caseVisible)assert.ok(c.camera.up.equals(new THREE.Vector3(0,-1,0)),'Visible case retains withdrawal hold');
+  const before=c.camera.up.clone();await c.configureWatch({caseVisible:!caseVisible});c.applyPose(0);
+  assert.ok(c.camera.up.distanceTo(before)<1e-10,'Visibility change cannot jump the camera');
+  assert.equal(c.caseTravel.rotationOnly,!caseVisible,'An active turn retains its timing');
+  c.setSide('back');c.applyPose(0);assert.ok(c.camera.up.distanceTo(before)<1e-10,'Reversing after a visibility change cannot jump');
+  assert.equal(c.caseTravel.rotationOnly,caseVisible,'The next turn uses current effective visibility');
+  c.applyPose(2);assert.equal(c.caseTurn,1);assert.ok(c.camera.up.distanceTo(new THREE.Vector3(0,-1,0))<1e-8);
+ }
+ c.reduced=true;c.state={...initialState,caseVisible:true,group:'energy',phase:'mechanism'};pose();
+ assert.equal(c.caseEffective(),false);c.reduced=false;c.setSide('front');assert.equal(c.caseTravel.rotationOnly,true);c.applyPose(2);
+ results.push({check:'visible case retains attachment timing; mid-turn visibility changes and reversals preserve camera continuity; Focus-hidden case skips attachment phases',status:'pass'});
+
  c.reduced=true;c.state={...initialState,caseVisible:true};pose();
  c.reduced=false;c.setSide('front');c.applyPose(.8);assert.ok(c.faceCamera);
  c.back();assert.equal(c.faceCamera,undefined);assert.equal(c.faceFitPending,false);
