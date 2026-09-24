@@ -334,4 +334,4 @@ PR publication: at the user's request, pushed `codex/disassembly-review` over SS
 
 ## Acknowledgements copy — 24 September 2026
 
-Replaced the placeholder with three personal thank-you paragraphs: Marco Lang sharing his CAD files so others can explore and learn about his watches; his feedback, advice and encouragement throughout the project and the author's career; and everyone who uses and enjoys the website. The copy uses the panel's scrolling body beneath its fixed heading. TypeScript and lint pass. Next action: review the wording locally. No push or publication.
+Replaced the placeholder with three personal thank-you paragraphs: Marco Lang sharing his CAD files so others can explore and learn about his watches; his feedback, advice and encouragement throughout the project; and everyone who uses and enjoys the website. The copy uses the panel's scrolling body beneath its fixed heading. TypeScript and lint pass. Next action: review the wording locally. No push or publication.

@@ -888,7 +888,7 @@ export default function Home() {
               </p>
               <p>
                 On a personal note, thank you, Marco, for your feedback, advice
-                and encouragement throughout this project and my career. Your
+                and encouragement throughout this project. Your
                 support means a lot to me.
               </p>
               <p>
