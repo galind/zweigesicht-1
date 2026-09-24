@@ -71,7 +71,7 @@ const screwDefinitions = [
 ];
 // Exact definition identity wins over source-name fallbacks. No geometry is modified.
 // Full movement coverage by source definition. Unknown physical processes remain
-// authored; see docs/FINISHING_REFERENCES.md for confidence by surface family.
+// authored; see docs/CAD_NOTES.md for confidence by surface family.
 const definitions: Record<number, Finish> = {};
 for (const [family, ids] of Object.entries({
   frosted: [195],

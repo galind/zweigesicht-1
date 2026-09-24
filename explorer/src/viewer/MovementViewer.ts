@@ -227,67 +227,84 @@ export class MovementViewer {
     public notify: (s: ViewerSnapshot) => void,
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-    this.renderer.setClearColor(0, 0);
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
-    host.appendChild(this.renderer.domElement);
-    this.renderer.domElement.setAttribute(
-      'aria-label',
-      'Movement; drag to orbit, pinch to zoom. Arrow keys move the view, plus and minus zoom, Home resets, Escape deselects.',
-    );
-    this.renderer.domElement.tabIndex = 0;
-    this.renderer.domElement.addEventListener('keydown', this.keyDown);
-    this.camera.up.set(0, -1, 0);
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;
-    this.controls.enablePan = false;
-    this.controls.minDistance = 3;
-    this.controls.maxDistance = 200;
-    this.controls.addEventListener('start', this.manual);
-    this.controls.addEventListener('change', this.invalidate);
-    const pmrem = new THREE.PMREMGenerator(this.renderer),
-      room = new StudioEnvironment();
-    this.environment = pmrem.fromScene(room, 0.015);
-    this.scene.environment = this.environment.texture;
-    this.scene.environmentIntensity = 0.9;
-    room.dispose();
-    pmrem.dispose();
-    this.scene.add(new THREE.HemisphereLight(0xc8e0ed, 0x29221b, 0.25));
-    const key = new THREE.DirectionalLight(0xffecd6, 0.8);
-    key.position.set(-25, 40, -45);
-    this.scene.add(key);
-    const rim = new THREE.DirectionalLight(0xc0dff3, 0.6);
-    rim.position.set(30, -10, 35);
-    this.scene.add(rim);
-    this.scene.add(this.root, this.selectionBox);
-    this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
-    this.selectionBox.visible = false;
-    this.observer = new ResizeObserver(() => this.resize());
-    this.observer.observe(host);
-    this.resize();
-    this.renderer.domElement.addEventListener('pointerdown', this.pointerDown);
-    this.renderer.domElement.addEventListener('pointerup', this.pointerUp);
-    this.renderer.domElement.addEventListener('pointermove', this.pointerMove);
-    this.renderer.domElement.addEventListener('wheel', this.pointerWheel, {
-      passive: true,
-    });
-    this.renderer.domElement.addEventListener(
-      'pointercancel',
-      this.pointerCancel,
-    );
-    this.renderer.domElement.addEventListener(
-      'webglcontextlost',
-      this.onContextLost,
-    );
-    this.renderer.domElement.addEventListener(
-      'webglcontextrestored',
-      this.onContextRestored,
-    );
-    document.addEventListener('visibilitychange', this.onVisibility);
-    this.motionPreference.addEventListener('change', this.onMotionPreference);
-    void this.load();
-    this.frame = requestAnimationFrame(this.tick);
+    try {
+      this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+      this.renderer.setClearColor(0, 0);
+      this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      this.renderer.toneMappingExposure = 1.05;
+      host.appendChild(this.renderer.domElement);
+      this.renderer.domElement.setAttribute(
+        'aria-label',
+        'Movement; drag to orbit, pinch to zoom. Arrow keys move the view, plus and minus zoom, Home resets, Escape deselects.',
+      );
+      this.renderer.domElement.tabIndex = 0;
+      this.renderer.domElement.addEventListener('keydown', this.keyDown);
+      this.camera.up.set(0, -1, 0);
+      this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+      this.controls.enableDamping = true;
+      this.controls.enablePan = false;
+      this.controls.minDistance = 3;
+      this.controls.maxDistance = 200;
+      this.controls.addEventListener('start', this.manual);
+      this.controls.addEventListener('change', this.invalidate);
+      const pmrem = new THREE.PMREMGenerator(this.renderer);
+      let room: StudioEnvironment | undefined;
+      try {
+        room = new StudioEnvironment();
+        this.environment = pmrem.fromScene(room, 0.015);
+        this.scene.environment = this.environment.texture;
+        this.scene.environmentIntensity = 0.9;
+      } finally {
+        room?.dispose();
+        pmrem.dispose();
+      }
+      this.scene.add(new THREE.HemisphereLight(0xc8e0ed, 0x29221b, 0.25));
+      const key = new THREE.DirectionalLight(0xffecd6, 0.8);
+      key.position.set(-25, 40, -45);
+      this.scene.add(key);
+      const rim = new THREE.DirectionalLight(0xc0dff3, 0.6);
+      rim.position.set(30, -10, 35);
+      this.scene.add(rim);
+      this.scene.add(this.root, this.selectionBox);
+      this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
+      this.selectionBox.visible = false;
+      this.observer = new ResizeObserver(() => this.resize());
+      this.observer.observe(host);
+      this.resize();
+      this.renderer.domElement.addEventListener(
+        'pointerdown',
+        this.pointerDown,
+      );
+      this.renderer.domElement.addEventListener('pointerup', this.pointerUp);
+      this.renderer.domElement.addEventListener(
+        'pointermove',
+        this.pointerMove,
+      );
+      this.renderer.domElement.addEventListener('wheel', this.pointerWheel, {
+        passive: true,
+      });
+      this.renderer.domElement.addEventListener(
+        'pointercancel',
+        this.pointerCancel,
+      );
+      this.renderer.domElement.addEventListener(
+        'webglcontextlost',
+        this.onContextLost,
+      );
+      this.renderer.domElement.addEventListener(
+        'webglcontextrestored',
+        this.onContextRestored,
+      );
+      document.addEventListener('visibilitychange', this.onVisibility);
+      this.motionPreference.addEventListener('change', this.onMotionPreference);
+      void this.load();
+      this.frame = requestAnimationFrame(this.tick);
+    } catch (error) {
+      // Initialization can fail after attaching the canvas or creating controls.
+      // Release whichever resources exist before the UI offers a fresh retry.
+      this.dispose();
+      throw error;
+    }
   }
   snapshot(): ViewerSnapshot {
     return {
@@ -493,13 +510,25 @@ export class MovementViewer {
     this.emit();
   };
   onContextRestored = () => {
-    this.environment.dispose();
-    const pmrem = new THREE.PMREMGenerator(this.renderer),
+    let pmrem: THREE.PMREMGenerator | undefined;
+    let room: StudioEnvironment | undefined;
+    try {
+      pmrem = new THREE.PMREMGenerator(this.renderer);
       room = new StudioEnvironment();
-    this.environment = pmrem.fromScene(room, 0.015);
-    this.scene.environment = this.environment.texture;
-    room.dispose();
-    pmrem.dispose();
+      const environment = pmrem.fromScene(room, 0.015);
+      this.environment.dispose();
+      this.environment = environment;
+      this.scene.environment = environment.texture;
+    } catch {
+      // Keep contextLost true so the existing Reload 3D action creates a new viewer.
+      this.error =
+        'The graphics environment could not recover. Reload the 3D view.';
+      this.emit();
+      return;
+    } finally {
+      room?.dispose();
+      pmrem?.dispose();
+    }
     this.contextLost = false;
     this.error = '';
     this.awaitingFirstFrame = this.contentPrepared;
@@ -2445,7 +2474,7 @@ export class MovementViewer {
     this.dead = true;
     this.loadGeneration++;
     cancelAnimationFrame(this.frame);
-    this.observer.disconnect();
+    this.observer?.disconnect();
     document.removeEventListener('visibilitychange', this.onVisibility);
     this.motionPreference?.removeEventListener(
       'change',
@@ -2460,13 +2489,13 @@ export class MovementViewer {
     canvas.removeEventListener('pointercancel', this.pointerCancel);
     canvas.removeEventListener('webglcontextlost', this.onContextLost);
     canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
-    this.controls.removeEventListener('start', this.manual);
-    this.controls.removeEventListener('change', this.invalidate);
-    this.controls.dispose();
+    this.controls?.removeEventListener('start', this.manual);
+    this.controls?.removeEventListener('change', this.invalidate);
+    this.controls?.dispose();
     this.disposeObject(this.root);
     this.selectionBox.geometry.dispose();
     (this.selectionBox.material as THREE.Material).dispose();
-    this.environment.dispose();
+    this.environment?.dispose();
     this.surfaceOcclusion?.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();

@@ -784,12 +784,12 @@ const restoreField=viewerClass.members.find(n=>ts.isPropertyDeclaration(n)&&n.na
 assert.ok(restoreField?.initializer,'Context-restore handler must exist');
 const restoreModule={exports:{}};
 const restoreCode=ts.transpileModule('module.exports=function(){return '+restoreField.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
-let oldDisposed=0,roomDisposed=0,generatorDisposed=0,environmentCreated=0,notifications=0;
+let oldDisposed=0,roomDisposed=0,generatorDisposed=0,environmentCreated=0,notifications=0,pmremFails=false;
 const oldTexture={id:'lost-context-texture'},replacementTexture={id:'restored-context-texture'},rendererFixture={};
 class RoomStub{dispose(){roomDisposed++}}
 class PmremStub{
  constructor(renderer){assert.equal(renderer,rendererFixture)}
- fromScene(room,sigma){assert.ok(room instanceof RoomStub);assert.equal(sigma,.015);environmentCreated++;return {texture:replacementTexture,dispose(){}}}
+ fromScene(room,sigma){assert.ok(room instanceof RoomStub);assert.equal(sigma,.015);if(pmremFails)throw Error('environment allocation failed');environmentCreated++;return {texture:replacementTexture,dispose(){}}}
  dispose(){generatorDisposed++}
 }
 vm.runInNewContext(restoreCode,{module:restoreModule,THREE:{PMREMGenerator:PmremStub},StudioEnvironment:RoomStub});
@@ -797,6 +797,11 @@ const restoreFixture={renderer:rendererFixture,environment:{texture:oldTexture,d
 restoreModule.exports.call(restoreFixture)();
 assert.equal(oldDisposed,1);assert.equal(environmentCreated,1);assert.equal(restoreFixture.environment.texture,replacementTexture);assert.equal(restoreFixture.scene.environment,replacementTexture);assert.notEqual(restoreFixture.scene.environment,oldTexture);assert.equal(restoreFixture.scene.environmentIntensity,.8);assert.equal(roomDisposed,1);assert.equal(generatorDisposed,1);assert.equal(restoreFixture.contextLost,false);assert.equal(restoreFixture.error,'');assert.equal(restoreFixture.needsRender,true);assert.equal(notifications,1);
 results.push({check:'context restore replaces environment texture and releases temporary PMREM resources',status:'pass',scope:'actual handler with CPU PMREM/room stubs; not WebGL reflection proof'});
+pmremFails=true;restoreFixture.contextLost=true;
+assert.doesNotThrow(()=>restoreModule.exports.call(restoreFixture)());
+assert.equal(restoreFixture.contextLost,true);assert.match(restoreFixture.error,/could not recover/);
+assert.equal(oldDisposed,1);assert.equal(roomDisposed,2);assert.equal(generatorDisposed,2);assert.equal(notifications,2);
+results.push({check:'failed environment restoration releases temporary resources and preserves the visible Reload 3D recovery path',status:'pass'});
 const snapshotFixture=Object.create(Viewer.prototype),benchmarkResult={fixture:'completed benchmark'};
 Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',error:'',detailError:'',parts:[],renderParts:new Map(),history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},stats(){return {}}});
 const snapshot=snapshotFixture.snapshot();assert.equal(snapshot.catalogLoaded,true);assert.equal(snapshot.benchmarkResult,benchmarkResult);
@@ -1234,6 +1239,21 @@ assert.equal(geometryDisposals,1);assert.equal(materialDisposals,1);
 for(const name of ['frame','resize','visibilitychange','motion','controls:start','controls:change','controls','keydown','pointerdown','pointerup','pointermove','pointercancel','wheel','webglcontextlost','webglcontextrestored','environment','occlusion','renderer','canvas'])
  assert.equal(released.filter(x=>x===name).length,1,name+' released once');
 results.push({check:'disposal is idempotent, removes every explicit listener and releases shared geometry/materials exactly once',status:'pass'});
+
+const constructorNode=viewerClass.members.find(n=>ts.isConstructorDeclaration(n));
+const constructorModule={exports:{}};let failedRendererDisposals=0,failedControlDisposals=0,failedRoomDisposals=0,failedPmremDisposals=0,failedCanvasRemovals=0;
+const failedCanvas={setAttribute(){},addEventListener(){},removeEventListener(){},remove(){failedCanvasRemovals++}};
+class FailedRenderer{domElement=failedCanvas;setPixelRatio(){}setClearColor(){}dispose(){failedRendererDisposals++}}
+class FailedControls{addEventListener(){}removeEventListener(){}dispose(){failedControlDisposals++}}
+class FailedRoom{dispose(){failedRoomDisposals++}}
+class FailedPmrem{fromScene(){throw Error('injected environment failure')}dispose(){failedPmremDisposals++}}
+vm.runInNewContext(ts.transpileModule('module.exports=function(host,notify)'+constructorNode.body.getText(viewerSource),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,
+ {module:constructorModule,THREE:{WebGLRenderer:FailedRenderer,PMREMGenerator:FailedPmrem},OrbitControls:FailedControls,StudioEnvironment:FailedRoom,devicePixelRatio:1});
+const partial={dead:false,loadGeneration:0,root:new THREE.Group(),camera:new THREE.PerspectiveCamera(),scene:new THREE.Scene(),selectionBox:new THREE.Box3Helper(new THREE.Box3()),dispose:disposalModule.exports,disposeObject:Viewer.prototype.disposeObject};
+assert.throws(()=>constructorModule.exports.call(partial,{appendChild(){}},()=>{}),/injected environment failure/);
+assert.equal(partial.dead,true);
+assert.deepEqual([failedRendererDisposals,failedControlDisposals,failedRoomDisposals,failedPmremDisposals,failedCanvasRemovals],[1,1,1,1,1]);
+results.push({check:'partial initialization failure releases renderer, controls, canvas, studio and PMREM before exposing retry',status:'pass'});
 const separationModule=load('explorer/src/experience/explosion.ts');
 const cachedFirst=separationModule.explosionOffsets(parts,{...initialState,separation:.5});
 const firstId=cachedFirst.keys().next().value,firstOffset=[...cachedFirst.get(firstId)];
