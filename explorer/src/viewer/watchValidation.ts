@@ -314,7 +314,18 @@ export async function runWatchChecks(v: MovementViewer) {
     v.reset();
     await settle(v);
     for (const side of ['front', 'back'] as const) {
+      const changing = v.state.side !== side;
+      const before = v.camera.up.clone();
       v.setSide(side);
+      if (changing) {
+        await pause(120);
+        check(
+          `Flip starts immediately only with hidden case: ${side}, case ${caseVisible}`,
+          caseVisible
+            ? v.camera.up.distanceTo(before) < 1e-8
+            : v.camera.up.distanceTo(before) > 1e-4,
+        );
+      }
       await settle(v);
       check(
         `Maker flip ${side}, case ${caseVisible}: configuration and exact assembly`,

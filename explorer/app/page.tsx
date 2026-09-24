@@ -573,16 +573,12 @@ export default function Home() {
           >
             <SheetHeader>
               <SheetTitle>Disassemble</SheetTitle>
-              <SheetDescription
-                className={
-                  group || s.layout === 'spread' ? undefined : 'sr-only'
-                }
-              >
+              <SheetDescription>
                 {s.layout === 'spread'
                   ? 'The parts are laid out individually. Reassemble to return to the movement.'
                   : group
-                    ? group.technical
-                    : 'Adjust the space between the movement parts.'}
+                    ? `Section · ${group.technical}`
+                    : 'Whole movement · Adjust the space between parts.'}
               </SheetDescription>
             </SheetHeader>
             <div className="panel-body">
@@ -1115,6 +1111,15 @@ export default function Home() {
           className="explorer-panel catalog-sheet"
           showOverlay={false}
           scrollContent
+          initialFocus={(interaction) =>
+            interaction === 'keyboard'
+              ? document.querySelector<HTMLInputElement>(
+                  '.catalog-search input',
+                )
+              : document.querySelector<HTMLElement>(
+                  '.catalog-sheet .sheet-scroll-area',
+                )
+          }
           finalFocus={() =>
             selectionFocus.current
               ? (host.current?.querySelector('canvas') ?? false)
@@ -1129,29 +1134,31 @@ export default function Home() {
             <SheetDescription className="sr-only">
               Search by name, location or CAD reference.
             </SheetDescription>
+            <div className="component-finder finder-controls">
+              <label className="catalog-search">
+                <span className="sr-only">Search components</span>
+                <input
+                  type="search"
+                  value={catalogQuery}
+                  onChange={(event) => setCatalogQuery(event.target.value)}
+                  placeholder="Search components…"
+                />
+              </label>
+              <label className="catalog-scope">
+                <input
+                  type="checkbox"
+                  checked={includeAllCad}
+                  onChange={(event) => setIncludeAllCad(event.target.checked)}
+                />
+                Include all CAD entries
+              </label>
+            </div>
           </SheetHeader>
           <div className="panel-body component-finder">
-            <label className="catalog-search">
-              <span className="sr-only">Search components</span>
-              <input
-                type="search"
-                value={catalogQuery}
-                onChange={(event) => setCatalogQuery(event.target.value)}
-                placeholder="Search components…"
-              />
-            </label>
-            <label className="catalog-scope">
-              <input
-                type="checkbox"
-                checked={includeAllCad}
-                onChange={(event) => setIncludeAllCad(event.target.checked)}
-              />
-              Include all CAD entries
-            </label>
             <p className="catalog-scope-note">
               {includeAllCad
-                ? 'Includes assemblies, hidden parts and alternatives. Selection may load geometry.'
-                : 'Parts in the current view, including those covered by other parts.'}
+                ? 'All CAD entries. Hidden geometry may load on selection.'
+                : 'Visible parts, including covered parts.'}
             </p>
             <output
               className="catalog-count"

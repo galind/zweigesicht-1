@@ -262,3 +262,29 @@ Measured against the clean baseline: application JavaScript gzip 451,191 → 434
 
 
 Cleanup publication: pushed the verified branch through the configured SSH remote and opened [PR #5](https://github.com/galind/zweigesicht-1/pull/5) against main using the GitHub connector. No merge or manual deployment was performed. The original local domain-history edits remain outside the PR. Next action: review the PR; deferred work and release-gate limits are recorded in the cleanup review.
+
+
+## Popup refinement — 24 September 2026
+
+Refined the existing interface on `codex/popup-refinement`. Popups now share a translucent dark surface, soft blur, consistent corners, fixed headings and 44 px close controls. Configure exposes labeled material swatches and native radio choices for both hand sets, with accessible visibility switches and case/dial feedback beside the relevant controls. Choices remain editable while hidden, apply immediately and persist through Reset. Focus has a clearer current selection, Disassemble identifies whole-movement versus section scope, and open-popup styling is distinct from the warm applied-mode indicator.
+
+The shared sheet keeps its heading outside the scrolling body and suppresses outgoing focus restoration during panel handoff. Component search and its scope filter remain above the scrolling results; keyboard opening focuses search without forcing the touch keyboard. Phone panels use the available space above the dock; reading retains its modal sheet. Choices stack as text grows. Fixed popup overflow clipping prevents keyboard navigation from scrolling the close control out of view. Removed obsolete configuration dropdown styles. Viewer motion, geometry, finishes and configuration rules are unchanged.
+
+Verification: 17 state/motion/packaging tests, CPU source/runtime regression suite, TypeScript, lint and production build pass. All 63 browser UX checks pass, including four new checks for hidden preference changes, native control groups, fixed popup headings and focus handoff. Targeted browser review covers desktop, 390×844 and 320×740 with 200% text, reachable controls, no horizontal overflow, Escape/focus return, nested quality-menu dismissal, section actions, component search and real catalog failure/retry. Enlarged-text review caught and corrected narrow choice wrapping, insufficient search result space and an old Settings height override. Review measurements are in ignored `artifacts/browser/popup-refinement/review.json`; visual checks were performed in the in-app browser. Phone checks are viewport emulation, not physical-device review. Existing build notices concern large chunks and vinext route classification.
+
+Ready for local user review at the running development server, http://127.0.0.1:4175/. No push or deployment. The unrelated domain-history edits remain excluded from this milestone.
+
+
+Configure copy follow-up: removed routine case/dial visibility messages and their empty spacing at the user's request. The only persistent helper text is “Your choices are kept when you reset the view.” Loading/error feedback and retry remain contextual; hand-finish notices remain available to screen readers without adding visible copy. TypeScript, lint and targeted browser visual review pass. Local change only; unrelated domain-history edits remain excluded.
+
+
+## Immediate hidden-case flip and UI PR — 24 September 2026
+
+When the fitted case is not actually visible, Flip now traverses only the rotation phase over 0.85 seconds, starting on the first rendered frame instead of waiting through roughly 0.64 seconds of invisible attachment withdrawal. Visible-case flips retain their authored 1.8-second withdrawal/turn/reseat sequence. The timing choice is fixed for each active turn; showing/hiding the case does not jump the camera, and a reversal uses current effective visibility. Both paths share the same canonical pose and exact endpoints. Focus-hidden cases also use the shorter path. Source geometry, finishes and All parts behavior are unchanged.
+
+Verification: 17 state/motion/packaging tests, 109 CPU source/runtime checks, TypeScript, lint and production build pass. CPU coverage verifies first-frame rotation and monotonic 0.85-second endpoints on both faces at 30/60/120 Hz, visible-case withdrawal, mid-turn visibility changes, reversals and Focus. All 200 browser watch checks and all 63 browser UX checks pass, including four new visible/hidden initial-rotation checks. Local evidence summaries are in ignored `artifacts/browser/popup-refinement/flip-runtime.json` and `flip-browser-summary.json`. Existing build notices and physical-device/release-gate limits remain.
+
+The user authorized a PR containing the popup refinement, Configure copy simplification and hidden-case flip fix. The branch is based on current `origin/main` (`50c55ea`), and the GitHub connector confirms no existing open PR for it. Next action: SSH push and connected-GitHub PR creation. Unrelated local domain-history edits stay excluded. No merge or manual deployment.
+
+
+UI PR publication: pushed the verified branch over SSH and opened [PR #6](https://github.com/galind/zweigesicht-1/pull/6) against `main` through the GitHub connector. It includes the glass-popup refinement, Configure copy simplification and immediate hidden-case flip. GitHub confirmed the verified implementation head `8bc515b` and a mergeable open PR. No merge or manual deployment. Next action: review the PR. The unrelated domain-history edits remain unstaged.

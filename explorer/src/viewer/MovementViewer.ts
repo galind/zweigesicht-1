@@ -1,5 +1,10 @@
 import { MOTION, motionEase } from '../experience/motion';
-import { caseDisplayMatrix, caseFlipPhase, CASE_PIVOT } from './CasePose';
+import {
+  caseDisplayMatrix,
+  caseFlipPhase,
+  caseFlipProgress,
+  CASE_PIVOT,
+} from './CasePose';
 import { loadCaseRecovery, recoverCaseSurfaces } from './CaseRecovery';
 import {
   WATCH,
@@ -169,7 +174,12 @@ export class MovementViewer {
   caseTurn = 1;
   faceCamera?: { angle: number };
   faceFitPending = false;
-  caseTravel?: { from: number; to: number; elapsed: number };
+  caseTravel?: {
+    from: number;
+    to: number;
+    elapsed: number;
+    rotationOnly: boolean;
+  };
   inventoryAngle = 0;
   inventoryTravel?: { from: number; to: number; elapsed: number };
   inventoryApplied = false;
@@ -1697,7 +1707,13 @@ export class MovementViewer {
       this.caseTurn = caseTo;
       this.caseTravel = undefined;
     } else if ((this.caseTravel?.to ?? this.caseTurn) !== caseTo) {
-      this.caseTravel = { from: this.caseTurn, to: caseTo, elapsed: 0 };
+      this.caseTravel = {
+        from: this.caseTurn,
+        to: caseTo,
+        elapsed: 0,
+        // Latch timing for this turn; visibility changes must not jump its clock.
+        rotationOnly: this.fittedCase.size === 0,
+      };
     }
     if (this.state.layout === 'spread') this.rebuildSpread();
     if (this.controls) {
@@ -1931,8 +1947,19 @@ export class MovementViewer {
       turn.elapsed += Math.max(0, dt);
       const t = this.reduced
         ? 1
-        : Math.min(1, turn.elapsed / WATCH.lugPresentation.durationSeconds);
-      this.caseTurn = THREE.MathUtils.lerp(turn.from, turn.to, motionEase(t));
+        : Math.min(
+            1,
+            turn.elapsed /
+              (turn.rotationOnly
+                ? MOTION.navigate
+                : WATCH.lugPresentation.durationSeconds),
+          );
+      this.caseTurn = caseFlipProgress(
+        turn.from,
+        turn.to,
+        t,
+        turn.rotationOnly,
+      );
       moving = t < 1 || moving;
       if (t === 1) this.caseTravel = undefined;
     }

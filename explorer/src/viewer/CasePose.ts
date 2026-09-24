@@ -25,13 +25,35 @@ export const CASE_PIVOT = new THREE.Vector3(
   ...(WATCH.lugPresentation.pivotMm as [number, number, number]),
 );
 /** Maker sequence; distances/timing are authored, not service instructions. */
+const TURN_START = 0.24;
+const TURN_END = 0.76;
 export function caseFlipPhase(turn: number, sign = 1) {
   return {
-    angle: Math.PI * motionEase((turn - 0.24) / 0.52),
+    angle: Math.PI * motionEase((turn - TURN_START) / (TURN_END - TURN_START)),
     clearance:
       WATCH.lugPresentation.clearanceMm *
       motionEase((Math.min(turn, 1 - turn) - (sign > 0 ? 0 : 0.12)) / 0.12),
   };
+}
+
+/** Hidden attachments need no withdrawal/reseating time. Keep the canonical
+ * case pose so reversals and revealing the case mid-turn share the same angle.
+ * The rotation phase already eases its angle; do not ease its clock twice. */
+export function caseFlipProgress(
+  from: number,
+  to: number,
+  progress: number,
+  rotationOnly = false,
+) {
+  if (progress === 0) return from;
+  if (progress === 1) return to;
+  return rotationOnly
+    ? THREE.MathUtils.lerp(
+        THREE.MathUtils.clamp(from, TURN_START, TURN_END),
+        THREE.MathUtils.clamp(to, TURN_START, TURN_END),
+        progress,
+      )
+    : THREE.MathUtils.lerp(from, to, motionEase(progress));
 }
 /** Source CAD frame. The observer follows the same inverse X rotation, leaving
  * the attachments stationary on screen while the case turns between them.
