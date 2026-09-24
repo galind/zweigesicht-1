@@ -245,3 +245,20 @@ The user authorized pushing all accumulated task changes to a PR. The GitHub con
 
 
 PR publication: pushed the accumulated branch over SSH and opened [PR #4](https://github.com/galind/zweigesicht-1/pull/4) against `main`, including the verified brass-washer correction `7f9128e`. GitHub confirmed the PR head matches the pushed commit. No merge or manual deployment was performed; the existing branch CI/deployment integration may run on push. The unrelated domain-history edit remains outside the PR.
+
+
+## Codebase cleanup — 24 September 2026
+
+Updated `main` from the configured SSH remote (`89d9fca`) and created `codex/codebase-cleanup`. Baseline passed 16 state/motion tests, 102 CPU checks, TypeScript, lint, build and 196 cold-catalog browser watch checks; both flat-face references were captured. The unrelated local domain-history edit remains excluded.
+
+Repository audit and implementation are recorded in [cleanup review](docs/CLEANUP_REVIEW.md). Removed unreachable UI scaffold/dependencies and stale runtime finish copies; isolated inspection tools, cached immutable separation inputs, stopped idle React snapshots, tightened resource/listener disposal and unified safe build-output pruning. Source geometry, authored finishes/lighting, attribution, hashes and historical evidence are preserved. Fresh offline install, typecheck, lint, standard/Vercel builds and production SEO checks pass. Final regressions and visual/phone comparison are in progress; next action is complete validation, inspect the diff and publish the requested PR through SSH/GitHub connector. No merge or manual deployment.
+
+Failure-path follow-up: initialization now disposes partially created resources, and WebGL environment restoration always releases temporary PMREM/studio objects while preserving Reload 3D on failure. Added real-handler/constructor fault-injection checks; all 107 CPU checks, 17 state/motion/packaging tests, TypeScript and lint pass. Camera browser checks pass 19 assertions; remaining final suites continue. A stale material-comment link was corrected and only the corresponding appearance-ledger source hash changed.
+
+
+Final cleanup verification: all 17 state/motion/packaging tests, 107 CPU checks and 400 browser assertions pass across eight suites. TypeScript, lint, standard/Vercel builds, decoded-geometry checks and production start/SEO checks pass. Both flat-face comparisons preserve accepted appearance; 390×844 fitted-phone controls, flip, configuration retention and reassembly pass. An existing fallback/header overlap found at 320×740 / 200% text was corrected and production retry verified. Browser screenshots/reports remain ignored.
+
+Measured against the clean baseline: application JavaScript gzip 451,191 → 434,054 bytes; CSS gzip 31,546 → 11,292; lockfile entries 723 → 300; 23,238,795 bytes of superseded runtime buffers removed. Warm complete-separation CPU median 142.76 → 11.27 ms per 500 evaluations (not a device FPS claim). Remaining large modules/chunks, idle RAF callbacks, physical-device/thermal review and CAD/release-gate limits are documented in the cleanup review. Final diff reviewed; next action is SSH push and GitHub-connector PR against main, with unrelated domain-history edits excluded. No merge or manual deployment.
+
+
+Cleanup publication: pushed the verified branch through the configured SSH remote and opened [PR #5](https://github.com/galind/zweigesicht-1/pull/5) against main using the GitHub connector. No merge or manual deployment was performed. The original local domain-history edits remain outside the PR. Next action: review the PR; deferred work and release-gate limits are recorded in the cleanup review.

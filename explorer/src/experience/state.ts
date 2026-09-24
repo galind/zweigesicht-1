@@ -111,17 +111,6 @@ export function resolveState(
   if (!next.part) next.isolated = false;
   return next;
 }
-export function damp(
-  current: number,
-  target: number,
-  seconds: number,
-  reduced = false,
-) {
-  return reduced
-    ? target
-    : current + (target - current) * (1 - Math.exp(-Math.max(0, seconds) * 7));
-}
-
 /** Reset the view without changing the user's fitted display configuration. */
 export function resetViewState(state: ExperienceState): ExperienceState {
   return resolveState(initialState, {

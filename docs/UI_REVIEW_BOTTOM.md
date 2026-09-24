@@ -1,5 +1,6 @@
 # UI review — bottom
 
+Historical design/review record. Current behavior and validation are documented in [runtime architecture](LOCAL_ARCHITECTURE.md) and [project status](../PROGRESS.md).
 Reviewed 15 September 2026. Recommendations based on the desktop interface and a 390 px mobile viewport, updated for the subsequent Disassemble naming and hand-material cleanup. The original recommendations below are retained as the review record; the implementation status and resolved behavior are recorded here.
 
 Scope: bottom navigation, Disassemble, Focus, All parts and its component finder, Configure, Flip and Reset view. Header actions and contextual mechanism information are covered in [UI review — top](UI_REVIEW_TOP.md).

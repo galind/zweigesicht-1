@@ -1,5 +1,6 @@
 # UI review — top
 
+Historical design/review record. Current behavior and validation are documented in [runtime architecture](LOCAL_ARCHITECTURE.md) and [project status](../PROGRESS.md).
 Reviewed 15 September 2026. Recommendations based on the desktop interface and a 390 px mobile viewport. This document records proposals; it does not authorize or claim their implementation.
 
 Scope: watch identity, Learn about the watch, Settings, and the contextual information shown below the identity. Mechanism details belong here because they are opened from that context, although their current panel appears near the bottom. Bottom controls and component search are covered in [UI review — bottom](UI_REVIEW_BOTTOM.md).

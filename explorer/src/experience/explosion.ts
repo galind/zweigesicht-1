@@ -68,7 +68,11 @@ export const DISPLAY_LAYERS = Object.fromEntries(
   }),
 ) as Record<'central' | 'small', string[][]>;
 
+const displayOffsetsCache = new WeakMap<Part[], Map<string, number>>();
+const assemblyOffsetsCache = new WeakMap<Part[], Map<string, Vec3>>();
 export function displaySeparationOffsets(parts: Part[]) {
+  const cached = displayOffsetsCache.get(parts);
+  if (cached) return cached;
   const byId = new Map(parts.map((p) => [p.id, p]));
   const offsets = new Map<string, number>();
   for (const face of ['central', 'small'] as const) {
@@ -92,7 +96,49 @@ export function displaySeparationOffsets(parts: Part[]) {
       edge = max + distance;
     }
   }
+  displayOffsetsCache.set(parts, offsets);
   return offsets;
+}
+
+function assemblySeparationOffsets(parts: Part[]): Map<string, Vec3> {
+  const cached = assemblyOffsetsCache.get(parts);
+  if (cached) return cached;
+  const displayOffsets = displaySeparationOffsets(parts);
+  const ids = new Set(parts.map((p) => p.id));
+  const result = new Map<string, Vec3>(
+    complete.parts
+      .filter((p) => ids.has(p.id))
+      .map((p) => [p.id, [...p.offsetMm] as Vec3]),
+  );
+  const minZ = Math.min(
+    ...complete.parts.map((p) => p.boundsWorldMm[0][2] + p.offsetMm[2]),
+  );
+  const maxZ = Math.max(
+    ...complete.parts.map((p) => p.boundsWorldMm[1][2] + p.offsetMm[2]),
+  );
+  for (const face of ['central', 'small'] as const) {
+    // Start each display outside the movement envelope, then separate its
+    // individual layers along its outward axis. Fitted XY remains unchanged.
+    const structure = parts.filter(
+      (p) =>
+        DIALS.faces[face].structureLeafIds.includes(p.id) && p.boundsWorldMm,
+    );
+    if (!structure.length) continue;
+    const edge =
+      face === 'central'
+        ? Math.min(...structure.map((p) => p.boundsWorldMm![0][2]))
+        : Math.max(...structure.map((p) => p.boundsWorldMm![1][2]));
+    const z =
+      face === 'central'
+        ? maxZ + complete.gapMm - edge
+        : minZ - complete.gapMm - edge;
+    for (const part of parts)
+      if (!part.isAssembly && displayFace(part.id) === face)
+        result.set(part.id, [0, 0, z + (displayOffsets.get(part.id) ?? 0)]);
+  }
+  for (const id of CASE_LEAVES) result.set(id, caseOffset(id, 1));
+  assemblyOffsetsCache.set(parts, result);
+  return result;
 }
 
 /** One evaluator owns all assembly presentation offsets. Source matrices are read only.
@@ -105,44 +151,12 @@ export function explosionOffsets(
   const displayOffsets = displaySeparationOffsets(parts);
   if (!state.group) {
     const progress = Math.max(0, Math.min(1, state.separation));
-    const ids = new Set(parts.map((p) => p.id));
-    const result = new Map<string, Vec3>(
-      complete.parts
-        .filter((p) => ids.has(p.id))
-        .map((p) => [p.id, p.offsetMm.map((n) => n * progress) as Vec3]),
+    return new Map(
+      [...assemblySeparationOffsets(parts)].map(([id, offset]) => [
+        id,
+        offset.map((n) => n * progress) as Vec3,
+      ]),
     );
-    const minZ = Math.min(
-      ...complete.parts.map((p) => p.boundsWorldMm[0][2] + p.offsetMm[2]),
-    );
-    const maxZ = Math.max(
-      ...complete.parts.map((p) => p.boundsWorldMm[1][2] + p.offsetMm[2]),
-    );
-    for (const face of ['central', 'small'] as const) {
-      // Start each display outside the movement envelope, then separate its
-      // individual layers along its outward axis. Fitted XY remains unchanged.
-      const structure = parts.filter(
-        (p) =>
-          DIALS.faces[face].structureLeafIds.includes(p.id) && p.boundsWorldMm,
-      );
-      if (!structure.length) continue;
-      const edge =
-        face === 'central'
-          ? Math.min(...structure.map((p) => p.boundsWorldMm![0][2]))
-          : Math.max(...structure.map((p) => p.boundsWorldMm![1][2]));
-      const z =
-        face === 'central'
-          ? maxZ + complete.gapMm - edge
-          : minZ - complete.gapMm - edge;
-      for (const part of parts)
-        if (!part.isAssembly && displayFace(part.id) === face)
-          result.set(part.id, [
-            0,
-            0,
-            (z + (displayOffsets.get(part.id) ?? 0)) * progress,
-          ]);
-    }
-    for (const id of CASE_LEAVES) result.set(id, caseOffset(id, progress));
-    return result;
   }
   const byId = new Map(parts.map((p) => [p.id, p]));
   const focus =

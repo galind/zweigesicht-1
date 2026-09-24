@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {initialState,resolveState,resetViewState,damp} from '../explorer/src/experience/state.ts';
+import {initialState,resolveState,resetViewState} from '../explorer/src/experience/state.ts';
 test('obsolete playback input cannot enter the static explorer state',()=>{
  const s=resolveState(initialState,{study:true,playing:true,time:12,speed:1});
  for(const key of ['study','playing','time','speed'])assert.equal(key in s,false);
@@ -7,10 +7,6 @@ test('obsolete playback input cannot enter the static explorer state',()=>{
 });
 test('separation endpoints normalize without changing accepted dial preferences',()=>{
  for(const separation of [0,.2,.52,.72,1,.72,.2,0]) { const s=resolveState(initialState,{separation}); assert.equal(s.separation,separation);assert.equal(s.centralStyle,'fine'); }
-});
-test('interrupted reveal starts from current state and converges',()=>{
- let x=damp(0,10,.1);const interrupted=x;assert.equal(damp(x,-5,0),interrupted);
- for(let i=0;i<200;i++)x=damp(x,-5,1/60);assert.ok(Math.abs(x+5)<1e-8);assert.equal(damp(4,0,.1,true),0);
 });
 test('invalid states are normalized and isolation needs a selected part',()=>{
  const s=resolveState(initialState,{separation:Infinity,reveal:4,isolated:true});assert.equal(s.separation,0);assert.equal(s.reveal,1);assert.equal(s.isolated,false);
