@@ -963,6 +963,15 @@ canvas:focus-visible {
   overflow: auto;
 }
 @media (max-width: 1000px) {
+  /* Enlarged fallback copy must stay clear of the header and three-row dock. */
+  .text-enlarged .fallback {
+    top: calc(var(--header-bottom, 244px) + 12px);
+    bottom: 180px;
+  }
+  .text-enlarged .load-message {
+    max-height: 100%;
+    overflow-y: auto;
+  }
   .text-enlarged .action-dock {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,5 +1,6 @@
 # Goal: configure the watch around the real movement
 
+Historical design/review record. Current behavior and validation are documented in [runtime architecture](LOCAL_ARCHITECTURE.md) and [project status](../PROGRESS.md).
 Implement watch configuration in `/Users/guillemgalindo/projects/zweigesicht-1`, replacing the current **Dials & hands** control. Read `AGENTS.md`, `README.md`, `PROGRESS.md`, `docs/LOCAL_ARCHITECTURE.md` and `docs/CAD_NOTES.md` first. Implementation completed locally on 14 September 2026 under the user’s subsequent authorization. See [PROGRESS.md](../PROGRESS.md) for verification and remaining limits. This document does not authorize publishing.
 
 ## User intent
