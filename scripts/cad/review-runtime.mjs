@@ -803,7 +803,7 @@ assert.equal(restoreFixture.contextLost,true);assert.match(restoreFixture.error,
 assert.equal(oldDisposed,1);assert.equal(roomDisposed,2);assert.equal(generatorDisposed,2);assert.equal(notifications,2);
 results.push({check:'failed environment restoration releases temporary resources and preserves the visible Reload 3D recovery path',status:'pass'});
 const snapshotFixture=Object.create(Viewer.prototype),benchmarkResult={fixture:'completed benchmark'};
-Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',error:'',detailError:'',parts:[],renderParts:new Map(),history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},stats(){return {}}});
+Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',error:'',detailError:'',parts:[],renderParts:new Map(),history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},canReset(){return false},stats(){return {}}});
 const snapshot=snapshotFixture.snapshot();assert.equal(snapshot.catalogLoaded,true);assert.equal(snapshot.benchmarkResult,benchmarkResult);
 snapshotFixture.benchmark=null;assert.equal(snapshotFixture.snapshot().benchmarkResult,undefined);
 results.push({check:'snapshot exposes catalog/benchmark values without requiring render-time refs',status:'pass'});
@@ -903,6 +903,25 @@ for(const aspect of [1280/504,374/560,304/456,1920/864]) {
 }
 results.push({check:'straight-on opening and exact axial dial framing share a center, both faces share scale, and reassembly restores the overview at four aspects',status:'pass',scope:'actual framing methods with real OrbitControls and source metadata'});
 
+// Reset availability compares geometry, not a sticky history/input flag.
+framing.ready=true;
+for(const aspect of [1440/900,390/844]) for(const side of ['front','back']) for(const caseVisible of [false,true]) {
+ framing.camera.aspect=aspect;framing.state={...initialState,side,caseVisible};framing.homeCamera(true);
+ assert.equal(framing.canReset(),false,'A fitted home camera is already reset on either side/configuration');
+ const position=framing.camera.position.clone(),target=framing.controls.target.clone(),up=framing.camera.up.clone();
+ framing.cameraUserOwned=true;assert.equal(framing.canReset(),false,'Camera ownership alone is not a visible change');
+ framing.camera.position.x+=1;assert.equal(framing.canReset(),true,'Orbit/translation changes the view');framing.camera.position.copy(position);
+ framing.camera.position.lerp(target,.1);assert.equal(framing.canReset(),true,'Zoom changes the view');framing.camera.position.copy(position);
+ framing.controls.target.x+=1;assert.equal(framing.canReset(),true,'Pan changes the view');framing.controls.target.copy(target);
+ framing.camera.up.set(1,0,0);assert.equal(framing.canReset(),true,'Roll changes the view');framing.camera.up.copy(up);
+ assert.equal(framing.canReset(),false,'Returning exactly home clears availability without Reset');
+ for(const patch of [{group:'energy'},{part:'fixture'},{isolated:true},{layout:'spread'},{separation:.5},{partSpread:.5},{reveal:.5}]) {
+  const saved={...framing.state};Object.assign(framing.state,patch);assert.equal(framing.canReset(),true);framing.state=saved;
+ }
+}
+results.push({check:'Reset availability covers camera orbit, zoom, pan, roll, returning home and view modes on desktop/phone, both sides and case configurations',status:'pass'});
+
+framing.cameraUserOwned=false;
 // Exercise resize routing itself: it must not replace a chosen face with a group's authored side.
 Object.assign(framing,{fitted:new Map(),ready:true,host:{clientWidth:390,clientHeight:680},renderer:{setSize(){}},invalidate(){},ensureFramingRange(){},restoringCamera:null});
 for(const state of [

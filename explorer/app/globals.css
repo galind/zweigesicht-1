@@ -615,8 +615,10 @@ canvas:focus-visible {
 }
 .action-dock .reset-button {
   margin-left: 12px;
-  color: #aaa8a4;
   font-size: 0.75rem;
+}
+.action-dock .reset-button[data-reset-idle='true'] {
+  color: #aaa8a4;
 }
 .side-slot {
   display: flex;

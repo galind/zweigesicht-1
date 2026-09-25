@@ -126,6 +126,7 @@ export interface ViewerSnapshot extends ExperienceState {
   parts: Part[];
   visiblePartIds: string[];
   canBack: boolean;
+  canReset: boolean;
   catalogLoaded: boolean;
   benchmarkResult: unknown;
   stats: Record<string, unknown>;
@@ -343,6 +344,7 @@ export class MovementViewer {
         .filter((p) => this.partVisible(p))
         .map((p) => p.source.id),
       canBack: !!this.history.length,
+      canReset: this.canReset(),
       catalogLoaded: this.catalogLoaded,
       benchmarkResult: this.benchmark?.result,
       stats: this.stats(),
@@ -1174,11 +1176,10 @@ export class MovementViewer {
     }
     return points;
   }
-  frameBounds(
+  boundsFrame(
     bounds: THREE.Box3,
     direction: THREE.Vector3,
     points?: THREE.Vector3[],
-    immediate = false,
   ) {
     const center = bounds.getCenter(new THREE.Vector3());
     const right = new THREE.Vector3()
@@ -1200,11 +1201,47 @@ export class MovementViewer {
             ),
       );
     }
+    return { center, distance };
+  }
+  frameBounds(
+    bounds: THREE.Box3,
+    direction: THREE.Vector3,
+    points?: THREE.Vector3[],
+    immediate = false,
+  ) {
+    const { center, distance } = this.boundsFrame(bounds, direction, points);
     this.frameTo(
       center,
       distance * Math.min(1, this.camera.aspect),
       direction,
       immediate,
+    );
+  }
+  canReset() {
+    if (!this.ready) return false;
+    if (
+      this.state.layout !== 'assembly' ||
+      this.state.group ||
+      this.state.part ||
+      this.state.isolated ||
+      this.state.separation > 0 ||
+      this.state.partSpread > 0 ||
+      this.state.reveal > 0
+    )
+      return true;
+    // Compare the displayed camera to the same framing Reset uses, preserving
+    // the current side and configuration. Input history alone is not a change.
+    const direction = this.assemblyDirection();
+    const { center, distance } = this.boundsFrame(
+      this.assemblyBounds(),
+      direction,
+    );
+    const position = center.clone().addScaledVector(direction, distance);
+    const toleranceSquared = Math.pow(distance * 1e-5, 2);
+    return (
+      this.camera.position.distanceToSquared(position) > toleranceSquared ||
+      this.controls.target.distanceToSquared(center) > toleranceSquared ||
+      this.camera.up.distanceToSquared(this.defaultUp()) > 1e-8
     );
   }
   save() {

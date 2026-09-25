@@ -87,6 +87,7 @@ const empty: ViewerSnapshot = {
   parts: [],
   visiblePartIds: [],
   canBack: false,
+  canReset: false,
   catalogLoaded: false,
   benchmarkResult: null,
   stats: {},
@@ -931,6 +932,7 @@ export default function Home() {
         </div>
         <button
           className="text-button reset-button"
+          data-reset-idle={!s.canReset && !s.group}
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
           title="Return to the straight-on view; keep watch configuration"
