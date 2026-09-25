@@ -1,5 +1,11 @@
 'use client';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+  type CSSProperties,
+} from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import {
   Sheet,
@@ -19,11 +25,13 @@ export function InformationPanel({
   open,
   onOpenChange,
   restoreFocus = true,
+  focusFallback,
   style,
 }: {
   style?: CSSProperties;
   open: boolean;
   restoreFocus?: boolean;
+  focusFallback?: RefObject<HTMLButtonElement | null>;
   onOpenChange: (open: boolean) => void;
 }) {
   const trigger = useRef<HTMLButtonElement>(null);
@@ -53,7 +61,13 @@ export function InformationPanel({
           className="explorer-panel information-panel header-panel"
           showOverlay={mobile}
           scrollContent
-          finalFocus={() => (restoreFocus ? trigger.current : false)}
+          finalFocus={() =>
+            restoreFocus
+              ? trigger.current?.getClientRects().length
+                ? trigger.current
+                : focusFallback?.current
+              : false
+          }
         >
           <SheetHeader>
             <SheetTitle>Learn about the watch</SheetTitle>
@@ -84,7 +98,9 @@ export function InformationPanel({
                 <li key={url}>
                   <a href={url} target="_blank" rel="noopener noreferrer">
                     <span>
-                      <span className="watch-reading-publisher">{publisher}</span>
+                      <span className="watch-reading-publisher">
+                        {publisher}
+                      </span>
                       <span className="watch-reading-title">{title}</span>
                     </span>
                     <ArrowUpRight aria-hidden="true" />

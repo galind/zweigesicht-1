@@ -19,14 +19,17 @@ export async function runUxChecks(v: MovementViewer) {
   const canvas = v.renderer.domElement;
   const dockButtons = [
     ...document.querySelectorAll<HTMLButtonElement>('.action-dock button'),
-  ];
+  ].filter((button) => button.getClientRects().length > 0);
+  const compactDock = window.matchMedia('(max-width: 600px)').matches;
   checks.push({
     name: 'Dock follows inspection, display, reset order in keyboard navigation',
     pass:
       dockButtons
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
-      'Disassemble|Focus|All parts|Configure|Flip movement|Reset view',
+      (compactDock
+        ? 'Disassemble|Configure|Flip movement|Reset view|More'
+        : 'Disassemble|Focus|All parts|Configure|Flip movement|Reset view'),
   });
   checks.push({
     name: 'Dock controls retain touch targets',
@@ -98,6 +101,60 @@ export async function runUxChecks(v: MovementViewer) {
     );
   v.reset();
   await settle(v);
+  const resetStyle = async () => {
+    // Camera-only input reaches React through the renderer's snapshot cadence.
+    await sleep(450);
+    const reset = document.querySelector<HTMLButtonElement>('.reset-button')!;
+    const peer = document.querySelector<HTMLButtonElement>('.dial-trigger')!;
+    const style = getComputedStyle(reset),
+      other = getComputedStyle(peer);
+    return {
+      idle: reset.dataset.resetIdle === 'true',
+      sameWeight:
+        style.color === other.color &&
+        style.fontWeight === other.fontWeight &&
+        style.fontSize === other.fontSize &&
+        style.opacity === other.opacity,
+    };
+  };
+  let resetAppearance = await resetStyle();
+  checks.push({
+    name: 'Reset is muted at the default camera',
+    pass: !v.canReset() && resetAppearance.idle,
+  });
+  v.manual();
+  checks.push({
+    name: 'A gesture without camera movement does not activate Reset',
+    pass: !v.canReset(),
+  });
+  v.zoom(0.85);
+  await settle(v);
+  resetAppearance = await resetStyle();
+  checks.push({
+    name: 'Zoom activates Reset with the same style as other actions',
+    pass: v.canReset() && !resetAppearance.idle && resetAppearance.sameWeight,
+  });
+  v.zoom(1 / 0.85);
+  await settle(v);
+  resetAppearance = await resetStyle();
+  checks.push({
+    name: 'Returning the camera to default mutes Reset without a reset click',
+    pass: !v.canReset() && resetAppearance.idle,
+  });
+  v.orbit(0.2, 0.1);
+  await settle(v);
+  resetAppearance = await resetStyle();
+  checks.push({
+    name: 'Orbit activates Reset',
+    pass: v.canReset() && resetAppearance.sameWeight,
+  });
+  v.reset();
+  await settle(v);
+  resetAppearance = await resetStyle();
+  checks.push({
+    name: 'Completed Reset restores its muted appearance',
+    pass: !v.canReset() && resetAppearance.idle,
+  });
   for (const label of [
     'Balance bridge',
     'Third wheel',
@@ -169,7 +226,11 @@ export async function runUxChecks(v: MovementViewer) {
     await sleep(300);
     checks.push({
       name: `${selector} restores keyboard focus on close`,
-      pass: document.activeElement === trigger,
+      pass:
+        document.activeElement ===
+        (compactDock && selector === '.explore-button'
+          ? document.querySelector('.mobile-more-trigger')
+          : trigger),
     });
   }
 
@@ -276,9 +337,12 @@ export async function runUxChecks(v: MovementViewer) {
     .click();
   await sleep(300);
   checks.push({
-    name: 'Viewer settings return focus to Settings',
+    name: 'Viewer settings return focus to their visible entry point',
     pass:
-      document.activeElement === document.querySelector('.settings-trigger'),
+      document.activeElement ===
+      document.querySelector(
+        compactDock ? '.mobile-menu-trigger' : '.settings-trigger',
+      ),
   });
 
   document.querySelector<HTMLButtonElement>('.all-parts-button')!.click();

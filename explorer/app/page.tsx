@@ -13,6 +13,7 @@ import {
   type CSSProperties,
 } from 'react';
 import {
+  Menu,
   ChevronDown,
   ChevronRight,
   Check,
@@ -86,6 +87,7 @@ const empty: ViewerSnapshot = {
   parts: [],
   visiblePartIds: [],
   canBack: false,
+  canReset: false,
   catalogLoaded: false,
   benchmarkResult: null,
   stats: {},
@@ -93,6 +95,15 @@ const empty: ViewerSnapshot = {
 export default function Home() {
   const exploreButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const moreButton = useRef<HTMLButtonElement>(null);
+  const visibleTrigger = (
+    selector: string,
+    fallback: HTMLButtonElement | null,
+  ) => {
+    const trigger = document.querySelector<HTMLButtonElement>(selector);
+    return trigger?.getClientRects().length ? trigger : fallback;
+  };
   const selectionFocus = useRef(false);
   const panelAnchor = useRef<HTMLElement | null>(null);
   const [topBounds, setTopBounds] = useState({ header: 88, context: 150 });
@@ -150,6 +161,8 @@ export default function Home() {
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
   const [s, set] = useState<ViewerSnapshot>(empty),
+    [menu, setMenu] = useState(false),
+    [more, setMore] = useState(false),
     [catalog, setCatalog] = useState(false),
     [about, setAbout] = useState(false),
     [acknowledgements, setAcknowledgements] = useState(false),
@@ -159,6 +172,15 @@ export default function Home() {
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
     [inspect, setInspect] = useState(false);
+  useEffect(() => {
+    const breakpoint = window.matchMedia('(max-width: 600px)');
+    const dismissNavigation = () => {
+      setMenu(false);
+      setMore(false);
+    };
+    breakpoint.addEventListener('change', dismissNavigation);
+    return () => breakpoint.removeEventListener('change', dismissNavigation);
+  }, []);
   const [catalogQuery, setCatalogQuery] = useState('');
   const [includeAllCad, setIncludeAllCad] = useState(false);
   const visibleParts = useMemo(
@@ -299,6 +321,8 @@ export default function Home() {
       if (
         event.key !== 'Escape' ||
         event.defaultPrevented ||
+        menu ||
+        more ||
         catalog ||
         about ||
         acknowledgements ||
@@ -316,6 +340,8 @@ export default function Home() {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [
+    menu,
+    more,
     catalog,
     about,
     acknowledgements,
@@ -351,6 +377,8 @@ export default function Home() {
   };
   const sideLabel = 'Flip movement';
   const closePanels = () => {
+    setMenu(false);
+    setMore(false);
     setExplore(false);
     setSeparate(false);
     setDials(false);
@@ -373,7 +401,7 @@ export default function Home() {
               : update === setOptions
                 ? '.settings-trigger'
                 : '.action-dock';
-      panelAnchor.current = document.querySelector<HTMLElement>(selector);
+      panelAnchor.current = visibleTrigger(selector, moreButton.current);
       const rect = panelAnchor.current?.getBoundingClientRect();
       if (rect) setPanelX(rect.left + rect.width / 2);
       const dockRect = document
@@ -383,6 +411,16 @@ export default function Home() {
       closePanels();
     }
     update(open);
+  };
+  const toggleAllParts = () => {
+    closePanels();
+    if (s.layout === 'spread') chooseGroup(null);
+    else viewer.current?.allParts();
+  };
+  const resetView = () => {
+    closePanels();
+    if (viewer.current) viewer.current.reset();
+    else set({ ...empty, loadStage: 'error', error: s.error });
   };
   const patch = (v: Parameters<MovementViewer['patch']>[0]) =>
     viewer.current?.patch(v);
@@ -412,6 +450,7 @@ export default function Home() {
             style={panelStyle}
             open={about}
             restoreFocus={!options && !acknowledgements}
+            focusFallback={menuButton}
             onOpenChange={(open) => {
               if (open) closePanels();
               setAbout(open);
@@ -434,6 +473,62 @@ export default function Home() {
             Settings
           </button>
         </nav>
+        <Sheet
+          modal={false}
+          open={menu}
+          onOpenChange={(open) => openPanel(setMenu, open)}
+        >
+          <SheetTrigger
+            ref={menuButton}
+            className="text-button mobile-menu-trigger"
+            aria-label="Menu"
+          >
+            <Menu aria-hidden="true" />
+          </SheetTrigger>
+          <SheetContent
+            side="top"
+            style={panelStyle}
+            className="explorer-panel settings-panel header-panel mobile-navigation"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="panel-body explore-menu">
+              <a
+                className="menu-link mobile-maker-credit"
+                href={makerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="A watch by Marco Lang — official website, opens in a new tab"
+              >
+                A watch by Marco Lang
+              </a>
+              <button
+                className="menu-link"
+                onClick={() => openPanel(setAbout, true)}
+              >
+                Learn about the watch
+                <ChevronRight aria-hidden="true" />
+              </button>
+              <button
+                className="menu-link"
+                onClick={() => openPanel(setAcknowledgements, true)}
+              >
+                Acknowledgements
+                <ChevronRight aria-hidden="true" />
+              </button>
+              <button
+                className="menu-link"
+                onClick={() => openPanel(setOptions, true)}
+              >
+                Settings
+                <ChevronRight aria-hidden="true" />
+              </button>
+            </div>
+          </SheetContent>
+        </Sheet>
       </header>
       <section className="workspace" aria-label="Movement explorer">
         <div
@@ -697,7 +792,7 @@ export default function Home() {
         >
           <SheetTrigger
             ref={exploreButton}
-            className="explore-button text-button"
+            className="explore-button text-button desktop-secondary"
             aria-pressed={s.layout === 'spread' ? !!s.spreadFocus : !!s.group}
             disabled={s.loadStage === 'recovering'}
           >
@@ -708,6 +803,9 @@ export default function Home() {
             side="bottom"
             style={panelStyle}
             className="explorer-panel explore-panel"
+            finalFocus={() =>
+              visibleTrigger('.explore-button', moreButton.current)
+            }
             showOverlay={false}
             scrollContent
           >
@@ -769,14 +867,10 @@ export default function Home() {
           </SheetContent>
         </Sheet>
         <button
-          className="text-button all-parts-button"
+          className="text-button all-parts-button desktop-secondary"
           disabled={!available}
           aria-pressed={s.layout === 'spread'}
-          onClick={() => {
-            closePanels();
-            if (s.layout === 'spread') chooseGroup(null);
-            else viewer.current?.allParts();
-          }}
+          onClick={toggleAllParts}
         >
           <Grid2X2 className="dock-icon" aria-hidden="true" />
           <span>All parts</span>
@@ -820,7 +914,10 @@ export default function Home() {
           <button
             className="side-switch text-button"
             disabled={!available}
-            onClick={() => viewer.current?.flipMovement()}
+            onClick={() => {
+              closePanels();
+              viewer.current?.flipMovement();
+            }}
             aria-pressed={s.layout === 'spread' ? s.inventoryBack : undefined}
             aria-label={sideLabel}
             title={sideLabel}
@@ -835,18 +932,63 @@ export default function Home() {
         </div>
         <button
           className="text-button reset-button"
+          data-reset-idle={!s.canReset && !s.group}
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
           title="Return to the straight-on view; keep watch configuration"
-          onClick={() => {
-            closePanels();
-            if (viewer.current) viewer.current.reset();
-            else set({ ...empty, loadStage: 'error', error: s.error });
-          }}
+          onClick={resetView}
         >
           <RotateCcw className="dock-icon" aria-hidden="true" />
-          <span>Reset view</span>
+          <span className="reset-desktop-label">Reset view</span>
+          <span className="reset-mobile-label" aria-hidden="true">
+            Reset
+          </span>
         </button>
+        <Sheet
+          modal={false}
+          open={more}
+          onOpenChange={(open) => openPanel(setMore, open)}
+        >
+          <SheetTrigger
+            ref={moreButton}
+            className="text-button mobile-more-trigger"
+            aria-pressed={s.layout === 'spread' || !!s.group}
+          >
+            <span>More</span>
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            style={panelStyle}
+            className="explorer-panel mobile-navigation"
+            showOverlay={false}
+            scrollContent
+          >
+            <SheetHeader>
+              <SheetTitle>More</SheetTitle>
+            </SheetHeader>
+            <div className="panel-body explore-menu">
+              <button
+                className="menu-link"
+                disabled={s.loadStage === 'recovering'}
+                aria-pressed={
+                  s.layout === 'spread' ? !!s.spreadFocus : !!s.group
+                }
+                onClick={() => openPanel(setExplore, true)}
+              >
+                Focus
+                <ChevronRight aria-hidden="true" />
+              </button>
+              <button
+                className="menu-link"
+                disabled={!available}
+                aria-pressed={s.layout === 'spread'}
+                onClick={toggleAllParts}
+              >
+                All parts{s.layout === 'spread' && <Check aria-hidden="true" />}
+              </button>
+            </div>
+          </SheetContent>
+        </Sheet>
       </nav>
       <Sheet
         modal={false}
@@ -871,8 +1013,9 @@ export default function Home() {
               ? false
               : selectionFocus.current
                 ? (host.current?.querySelector('canvas') ?? false)
-                : document.querySelector<HTMLButtonElement>(
+                : visibleTrigger(
                     '.acknowledgements-trigger',
+                    menuButton.current,
                   )
           }
         >
@@ -880,7 +1023,10 @@ export default function Home() {
             <SheetTitle>Acknowledgements</SheetTitle>
           </SheetHeader>
           <div className="panel-body header-panel-body">
-            <SheetDescription render={<div />} className="acknowledgements-copy">
+            <SheetDescription
+              render={<div />}
+              className="acknowledgements-copy"
+            >
               <p>
                 A big thank you to Marco Lang for generously sharing his CAD
                 files, giving everyone the chance to explore his watches and
@@ -918,7 +1064,7 @@ export default function Home() {
               ? false
               : selectionFocus.current
                 ? (host.current?.querySelector('canvas') ?? false)
-                : document.querySelector<HTMLButtonElement>('.settings-trigger')
+                : visibleTrigger('.settings-trigger', menuButton.current)
           }
         >
           <SheetHeader>
@@ -1166,8 +1312,7 @@ export default function Home() {
               ? (host.current?.querySelector('canvas') ?? false)
               : (document.querySelector<HTMLButtonElement>(
                   '.find-component-button',
-                ) ??
-                document.querySelector<HTMLButtonElement>('.all-parts-button'))
+                ) ?? visibleTrigger('.all-parts-button', moreButton.current))
           }
         >
           <SheetHeader>
