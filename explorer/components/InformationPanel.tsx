@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -9,9 +10,9 @@ import {
 } from '@/components/ui/sheet';
 import {
   cadUrl,
+  watchDescription,
   watchSourceUrl,
-  watchParagraphs,
-  movementSpecs,
+  watchPressLinks,
 } from '@/src/content/about';
 
 export function InformationPanel({
@@ -49,42 +50,50 @@ export function InformationPanel({
         <SheetContent
           style={style}
           id="watch-information"
-          className="explorer-panel information-panel"
+          className="explorer-panel information-panel header-panel"
           showOverlay={mobile}
           scrollContent
           finalFocus={() => (restoreFocus ? trigger.current : false)}
         >
           <SheetHeader>
-            <SheetTitle>Zweigesicht–1</SheetTitle>
-            <SheetDescription>By Marco Lang</SheetDescription>
+            <SheetTitle>Learn about the watch</SheetTitle>
+            <SheetDescription className="sr-only">
+              Zweigesicht–1 by Marco Lang
+            </SheetDescription>
           </SheetHeader>
-          <div className="watch-reading">
-            {watchParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <table className="watch-facts">
-              <caption className="sr-only">
-                Movement specifications reported by Marco Lang
-              </caption>
-              <tbody>
-                {movementSpecs.map(([label, value]) => (
-                  <tr key={label}>
-                    <th scope="row">{label}</th>
-                    <td>{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="watch-reading header-panel-body">
+            <p className="watch-description">{watchDescription}</p>
+            <a
+              className="watch-official-link"
+              href={watchSourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Explore the watch on Marco Lang’s website</span>
+              <ArrowUpRight aria-hidden="true" />
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            <h3 className="watch-press-heading" id="watch-press-heading">
+              Press coverage
+            </h3>
+            <ul
+              className="watch-reading-links"
+              aria-labelledby="watch-press-heading"
+            >
+              {watchPressLinks.map(({ publisher, title, url }) => (
+                <li key={url}>
+                  <a href={url} target="_blank" rel="noopener noreferrer">
+                    <span>
+                      <span className="watch-reading-publisher">{publisher}</span>
+                      <span className="watch-reading-title">{title}</span>
+                    </span>
+                    <ArrowUpRight aria-hidden="true" />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
             <footer className="watch-sources" aria-label="Watch sources">
-              <a
-                href={watchSourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Marco Lang — watch details, opens in a new tab"
-              >
-                Marco Lang
-              </a>
-              <span aria-hidden="true">·</span>
               <a
                 href={cadUrl}
                 target="_blank"

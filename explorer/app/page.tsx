@@ -856,7 +856,7 @@ export default function Home() {
         <SheetContent
           side="top"
           style={panelStyle}
-          className="explorer-panel settings-panel acknowledgements-panel"
+          className="explorer-panel settings-panel acknowledgements-panel header-panel"
           id="acknowledgements"
           showOverlay={false}
           scrollContent
@@ -878,8 +878,24 @@ export default function Home() {
         >
           <SheetHeader>
             <SheetTitle>Acknowledgements</SheetTitle>
-            <SheetDescription>Coming soon.</SheetDescription>
           </SheetHeader>
+          <div className="panel-body header-panel-body">
+            <SheetDescription render={<div />} className="acknowledgements-copy">
+              <p>
+                A big thank you to Marco Lang for generously sharing his CAD
+                files, giving everyone the chance to explore his watches and
+                learn how they’re made.
+              </p>
+              <p>
+                On a personal note, thank you, Marco, for your feedback, advice
+                and encouragement throughout this project.
+              </p>
+              <p>
+                And thank you to everyone who uses and enjoys this website. I
+                hope you enjoy exploring it as much as I enjoyed building it.
+              </p>
+            </SheetDescription>
+          </div>
         </SheetContent>
       </Sheet>
       <Sheet
@@ -893,7 +909,7 @@ export default function Home() {
         <SheetContent
           side="top"
           style={panelStyle}
-          className="explorer-panel about-sheet settings-panel"
+          className="explorer-panel about-sheet settings-panel header-panel"
           id="viewer-settings"
           showOverlay={false}
           scrollContent
@@ -906,12 +922,12 @@ export default function Home() {
           }
         >
           <SheetHeader>
-            <SheetTitle>Viewer settings</SheetTitle>
+            <SheetTitle>Settings</SheetTitle>
             <SheetDescription className="sr-only">
               Adjust rendering quality and move the camera.
             </SheetDescription>
           </SheetHeader>
-          <div className="about-copy settings-copy">
+          <div className="about-copy settings-copy header-panel-body">
             <div className="quality-control">
               <label htmlFor="render-quality">Rendering quality</label>
               <Select

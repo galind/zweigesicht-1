@@ -330,3 +330,26 @@ Middle-ring/plate interference remains: the simple axial alternative introduces 
 
 
 PR publication: at the user's request, pushed `codex/disassembly-review` over SSH and opened [PR #9](https://github.com/galind/zweigesicht-1/pull/9) against `main`. The user subsequently authorized including the existing domain-history corrections above; they are now included in this PR. Next action: PR review and the outstanding mechanical/device checks. No merge or manual deployment.
+
+
+## Acknowledgements copy — 24 September 2026
+
+Replaced the placeholder with three personal thank-you paragraphs: Marco Lang sharing his CAD files so others can explore and learn about his watches; his feedback, advice and encouragement throughout the project; and everyone who uses and enjoys the website. The copy uses the panel's scrolling body beneath its fixed heading. TypeScript and lint pass. Next action: review the wording locally. No push or publication.
+
+## Watch reading list — 24 September 2026
+
+Replaced the Learn about the watch description and specifications with links to Marco Lang's official Zweigesicht page and coverage from SJX Watches (2023), Monochrome (2020), and Time and Watches (2021). Verified the destinations, titles and years against the live pages. Each reading entry shows its publisher, title and an external-link arrow; the original CAD link remains. Removed the unused descriptive copy and specification styles.
+
+TypeScript, lint and production build pass, with the existing build notices. Browser review covers desktop, 390×844, and 320×568 at 200% text: links wrap within the panel, keyboard focus is visible, all links are reachable through the scrolling body, and Escape returns focus to the trigger. Next action: local review of the reading list. No push or publication.
+
+Reading panel follow-up: restored a concise watch description verified against Marco Lang's official page, followed by a dedicated link to his site and a Press coverage heading above the three articles. The CAD link remains at the end. TypeScript, lint and desktop/390×844 visual review pass; the longer content scrolls with all links reachable. Next action: local copy/layout review. No push or publication.
+
+## Header panel consistency — 24 September 2026
+
+Aligned Learn about the watch, Acknowledgements and Settings with shared 420 px desktop widths, 18 px sans-serif headings, 15 px reading text, 20 px body padding, section-heading styles and close-button offsets. Removed the extra right gutter and muted description styling from the acknowledgement paragraphs. Learn's redundant subtitle is now screen-reader-only, and the Settings heading matches its trigger. Existing glass surfaces, responsive panel behavior and controls remain.
+
+TypeScript, lint and production build pass with existing build notices. Fresh production browser review confirms matching computed styles across all three panels, desktop and 390×844 visual layouts, and no horizontal content overflow at 320×568 and 568×320 with 200% text. The shortest enlarged landscape bodies retain 82 px of scroll space. Verified panel switching, Escape focus return and nested quality-menu dismissal. Local production preview is available at http://127.0.0.1:4177/; the older development preview served stale CSS during review. Next action: local visual review. No push or publication.
+
+PR publication — 25 September 2026: at the user's request, pushed `codex/acknowledgements` over SSH and opened [PR #10](https://github.com/galind/zweigesicht-1/pull/10) against `main` through the connected GitHub app. It includes the acknowledgements, watch description and reading links, and consistent header-panel styling. The verified implementation head is `f7b1050`, based on current main at `f49d87d`. Next action: PR review. No merge or manual deployment.
+
+Acknowledgements wording follow-up — 25 September 2026: removed the final sentence of the personal thank-you paragraph at the user's request. Copy-only change; diff checked. Commit and push authorized to the existing PR branch. Next action: PR review.

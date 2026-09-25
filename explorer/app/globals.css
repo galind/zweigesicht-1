@@ -726,9 +726,6 @@ canvas:focus-visible {
   background: transparent;
   padding: 28px 28px 16px !important;
 }
-.information-panel [data-slot='sheet-title'] {
-  font-size: 1.625rem;
-}
 .information-panel [data-slot='sheet-description'] {
   font-size: 0.875rem;
   color: #aaa8a4;
@@ -746,27 +743,70 @@ canvas:focus-visible {
   line-height: 1.6;
   color: #d6d4d0;
 }
-.watch-reading p {
-  margin: 0 0 24px;
+.watch-description {
+  margin: 16px 0 8px;
 }
-.watch-facts {
-  width: 100%;
-  border-collapse: collapse;
+.watch-press-heading {
+  margin: 28px 0 0;
   font-size: 0.875rem;
-  line-height: 1.5;
-  margin-top: 28px;
-}
-.watch-facts th,
-.watch-facts td {
-  padding: 6px 0;
-  text-align: left;
-  vertical-align: top;
-  font-weight: normal;
-}
-.watch-facts th {
-  width: 45%;
-  padding-right: 16px;
+  font-weight: 500;
   color: #aaa8a4;
+}
+.watch-reading-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.watch-reading-links li + li {
+  border-top: 1px solid #ffffff14;
+}
+.watch-reading-links a,
+.watch-official-link {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+  padding: 16px 0;
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.watch-reading-links a > span:first-child {
+  min-width: 0;
+}
+.watch-reading-links svg,
+.watch-official-link svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  color: #aaa8a4;
+}
+.watch-reading-publisher {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  color: #aaa8a4;
+}
+.watch-reading-title {
+  display: block;
+  line-height: 1.45;
+}
+.watch-official-link > span:first-child {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.watch-reading-links a:hover .watch-reading-title,
+.watch-reading-links a:focus-visible .watch-reading-title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.watch-reading-links a:focus-visible,
+.watch-official-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 .watch-sources {
   display: flex;
@@ -1022,23 +1062,8 @@ canvas:focus-visible {
   .information-panel [data-slot='sheet-header'] {
     padding: 24px 20px 16px !important;
   }
-  .information-panel [data-slot='sheet-title'] {
-    font-size: min(1.625rem, 10vw);
-    overflow-wrap: anywhere;
-  }
   .watch-reading {
     padding: 24px 20px 20px;
-  }
-  .text-enlarged .watch-facts tr {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2px;
-    padding: 8px 0;
-  }
-  .text-enlarged .watch-facts th,
-  .text-enlarged .watch-facts td {
-    width: auto;
-    padding: 0;
   }
 }
 @media (max-width: 1000px) {
@@ -1157,9 +1182,6 @@ canvas:focus-visible {
 }
 .explorer-panel [data-slot='sheet-title'] {
   overflow-wrap: anywhere;
-}
-.explorer-panel.settings-panel [data-slot='sheet-title'] {
-  font: 500 1.125rem/1.4 var(--font-sans);
 }
 .explorer-panel [data-slot='sheet-close'],
 .explorer-panel.information-panel [data-slot='sheet-close'] {
@@ -1490,6 +1512,55 @@ canvas:focus-visible {
   .text-enlarged .action-dock .reset-button {
     justify-self: stretch;
   }
+}
+
+/* The three header panels share typography, gutters and content rhythm. */
+.explorer-panel.header-panel[data-slot='sheet-content'] {
+  --popup-width: min(420px, calc(100vw - 24px));
+}
+.explorer-panel.header-panel [data-slot='sheet-title'] {
+  font: 500 1.125rem/1.4 var(--font-sans);
+}
+.explorer-panel.header-panel .header-panel-body {
+  padding: 20px;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #d6d4d0;
+}
+.explorer-panel.header-panel .header-panel-body .acknowledgements-copy {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+.acknowledgements-copy p {
+  margin: 0;
+}
+.acknowledgements-copy p + p {
+  margin-top: 16px;
+}
+.header-panel .watch-description {
+  margin: 0 0 8px;
+}
+.header-panel .watch-press-heading,
+.explorer-panel.header-panel .settings-copy h3,
+.header-panel .alternative-controls legend {
+  font: 500 0.875rem/1.5 var(--font-sans);
+  color: #d6d4d0;
+}
+.header-panel .watch-press-heading {
+  margin-top: 24px;
+}
+.header-panel .quality-control {
+  margin-top: 0;
+  font-size: 0.9375rem;
+}
+.header-panel .watch-sources {
+  margin-top: 24px;
+}
+.explorer-panel.header-panel [data-slot='sheet-close'] {
+  top: 8px;
+  right: 8px;
 }
 
 /* Shared popup chrome: fixed heading, one scrollable body, quiet glass. */
