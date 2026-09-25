@@ -353,3 +353,13 @@ TypeScript, lint and production build pass with existing build notices. Fresh pr
 PR publication — 25 September 2026: at the user's request, pushed `codex/acknowledgements` over SSH and opened [PR #10](https://github.com/galind/zweigesicht-1/pull/10) against `main` through the connected GitHub app. It includes the acknowledgements, watch description and reading links, and consistent header-panel styling. The verified implementation head is `f7b1050`, based on current main at `f49d87d`. Next action: PR review. No merge or manual deployment.
 
 Acknowledgements wording follow-up — 25 September 2026: removed the final sentence of the personal thank-you paragraph at the user's request. Copy-only change; diff checked. Commit and push authorized to the existing PR branch. Next action: PR review.
+
+## Compact phone navigation — 25 September 2026
+
+Implemented the agreed phone hierarchy on `codex/compact-phone-controls`, based on main after PR #10. At widths up to 600 px, the header shows the watch name and Menu; the maker credit, Learn about the watch, Acknowledgements and Settings are available inside Menu. The dock keeps Disassemble, Configure, Flip and More; More contains Focus, All parts and Reset view. Existing actions share their handlers across both layouts, panels replace one another, and closing secondary panels restores focus to a visible Menu/More trigger. Crossing the breakpoint dismisses phone navigation. Desktop retains its existing controls and order.
+
+Normal phone chrome measures 44 px for the header and 52 px for the dock. All four dock actions retain at least 44 × 44 px targets, including at 320 px width. At 200% text the dock reflows into two rows without reducing text size. Menus and existing panels keep their scrolling bodies and close controls.
+
+Verification: TypeScript, lint and production build pass (existing module-registration, chunk-size and route-classification notices remain). All 65 desktop browser UX checks pass. Chromium viewport review covers 390×844, 320×568, 320×568 at 200% text, 568×320 and desktop 1440×900. Targeted interaction checks cover Menu → Settings/Acknowledgements/Learn, More → Focus/All parts/Reset, Configure at enlarged text, one active panel, Escape/focus return, tap-target sizes, no horizontal overflow, landscape menu scrolling and the no-3D Focus fallback. At 320×568 / 200%, the acknowledgement body retained 180 px of scrolling space in the reviewed layout. This is browser viewport validation; real iPhone/Android and Safari checks remain outstanding.
+
+Local preview: http://127.0.0.1:4175/. Next action: user review on a phone. No push, PR, merge or deployment.
