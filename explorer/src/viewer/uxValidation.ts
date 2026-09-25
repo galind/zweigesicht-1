@@ -28,7 +28,7 @@ export async function runUxChecks(v: MovementViewer) {
         .map((b) => b.getAttribute('aria-label') || b.textContent?.trim())
         .join('|') ===
       (compactDock
-        ? 'Disassemble|Configure|Flip movement|More'
+        ? 'Disassemble|Configure|Flip movement|Reset view|More'
         : 'Disassemble|Focus|All parts|Configure|Flip movement|Reset view'),
   });
   checks.push({

@@ -525,16 +525,6 @@ export default function Home() {
                 Settings
                 <ChevronRight aria-hidden="true" />
               </button>
-              <button
-                className="menu-link"
-                disabled={
-                  s.loadStage === 'recovering' || (!available && !s.group)
-                }
-                onClick={resetView}
-              >
-                Reset view
-                <RotateCcw aria-hidden="true" />
-              </button>
             </div>
           </SheetContent>
         </Sheet>
@@ -940,14 +930,17 @@ export default function Home() {
           </button>
         </div>
         <button
-          className="text-button reset-button desktop-secondary"
+          className="text-button reset-button"
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
           title="Return to the straight-on view; keep watch configuration"
           onClick={resetView}
         >
           <RotateCcw className="dock-icon" aria-hidden="true" />
-          <span>Reset view</span>
+          <span className="reset-desktop-label">Reset view</span>
+          <span className="reset-mobile-label" aria-hidden="true">
+            Reset
+          </span>
         </button>
         <Sheet
           modal={false}
@@ -990,16 +983,6 @@ export default function Home() {
                 onClick={toggleAllParts}
               >
                 All parts{s.layout === 'spread' && <Check aria-hidden="true" />}
-              </button>
-              <button
-                className="menu-link"
-                disabled={
-                  s.loadStage === 'recovering' || (!available && !s.group)
-                }
-                onClick={resetView}
-              >
-                Reset view
-                <RotateCcw aria-hidden="true" />
               </button>
             </div>
           </SheetContent>

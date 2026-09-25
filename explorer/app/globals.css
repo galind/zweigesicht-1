@@ -1970,7 +1970,8 @@ canvas:focus-visible {
 
 /* Phones keep only primary actions on the canvas; secondary actions are on demand. */
 .mobile-menu-trigger,
-.mobile-more-trigger {
+.mobile-more-trigger,
+.reset-mobile-label {
   display: none;
 }
 .mobile-navigation .menu-link {
@@ -2026,7 +2027,10 @@ canvas:focus-visible {
   .action-dock,
   .text-enlarged .action-dock {
     display: grid;
-    grid-template-columns: 1.4fr 1.2fr 0.7fr 0.7fr;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) repeat(
+        3,
+        minmax(44px, 0.7fr)
+      );
     width: calc(
       100% - max(24px, env(safe-area-inset-left) + env(safe-area-inset-right))
     );
@@ -2043,9 +2047,30 @@ canvas:focus-visible {
   .action-dock .side-slot {
     min-width: 0;
   }
+  .action-dock .reset-button,
+  .text-enlarged .action-dock .reset-button {
+    grid-column: auto;
+    margin: 0;
+    font-size: 0.8125rem;
+  }
+  .reset-desktop-label {
+    display: none;
+  }
+  .reset-mobile-label {
+    display: inline;
+  }
   .text-enlarged .action-dock {
-    /* Reflow at large text instead of shrinking labels or tap targets. */
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    /* Primary pair above Flip, Reset and More when text needs more room. */
+    grid-template-columns: repeat(3, minmax(0, 1.2fr)) repeat(3, minmax(0, 1fr));
+  }
+  .text-enlarged .action-dock .separate-trigger,
+  .text-enlarged .action-dock .dial-trigger {
+    grid-column: span 3;
+  }
+  .text-enlarged .action-dock .side-slot,
+  .text-enlarged .action-dock .reset-button,
+  .text-enlarged .action-dock .mobile-more-trigger {
+    grid-column: span 2;
   }
   .explorer-panel.mobile-navigation[data-slot='sheet-content'] {
     --popup-width: min(320px, calc(100vw - 32px));
