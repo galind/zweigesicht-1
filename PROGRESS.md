@@ -365,3 +365,5 @@ Verification: TypeScript, lint and production build pass (existing module-regist
 Local preview: http://127.0.0.1:4175/. Next action: user review on a phone. No push, PR, merge or deployment.
 
 PR publication: at the user's request, pushed `codex/compact-phone-controls` over SSH and opened [PR #11](https://github.com/galind/zweigesicht-1/pull/11) against `main` through the connected GitHub app. It contains verified implementation commit `3479cd0`, based on main at `15610fa`. Next action: PR and physical-phone review. No merge or manual deployment.
+
+Main-menu Reset follow-up: added Reset view to the phone Menu as well as More, using the shared reset handler and availability rules. TypeScript and lint pass; targeted 390×844 browser interaction confirms it restores the assembled view from All parts and dismisses the menu. Included in PR #11 at the user's request.

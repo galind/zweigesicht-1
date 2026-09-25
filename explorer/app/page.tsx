@@ -525,6 +525,16 @@ export default function Home() {
                 Settings
                 <ChevronRight aria-hidden="true" />
               </button>
+              <button
+                className="menu-link"
+                disabled={
+                  s.loadStage === 'recovering' || (!available && !s.group)
+                }
+                onClick={resetView}
+              >
+                Reset view
+                <RotateCcw aria-hidden="true" />
+              </button>
             </div>
           </SheetContent>
         </Sheet>
