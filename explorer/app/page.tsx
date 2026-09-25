@@ -27,8 +27,6 @@ import {
   Grid2X2,
   Layers,
   Clock3,
-  FlipHorizontal2,
-  RotateCcw,
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { loadingMessage } from '@/src/experience/loading';
@@ -38,6 +36,7 @@ import {
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { ConfigurationControls } from '@/components/ConfigurationControls';
+import { FlipButton, ResetViewButton } from '@/components/viewer-controls';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
@@ -375,7 +374,6 @@ export default function Home() {
     viewer.current?.frameSpread(name);
     setExplore(false);
   };
-  const sideLabel = 'Flip movement';
   const closePanels = () => {
     setMenu(false);
     setMore(false);
@@ -911,7 +909,7 @@ export default function Home() {
           </SheetContent>
         </Sheet>
         <div className="side-slot">
-          <button
+          <FlipButton
             className="side-switch text-button"
             disabled={!available}
             onClick={() => {
@@ -919,31 +917,16 @@ export default function Home() {
               viewer.current?.flipMovement();
             }}
             aria-pressed={s.layout === 'spread' ? s.inventoryBack : undefined}
-            aria-label={sideLabel}
-            title={sideLabel}
-          >
-            <FlipHorizontal2
-              className="dock-icon"
-              style={{ transform: 'rotate(90deg)' }}
-              aria-hidden="true"
-            />
-            <span>Flip</span>
-          </button>
+          />
         </div>
-        <button
+        <ResetViewButton
           className="text-button reset-button"
           data-reset-idle={!s.canReset && !s.group}
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
           title="Return to the straight-on view; keep watch configuration"
           onClick={resetView}
-        >
-          <RotateCcw className="dock-icon" aria-hidden="true" />
-          <span className="reset-desktop-label">Reset view</span>
-          <span className="reset-mobile-label" aria-hidden="true">
-            Reset
-          </span>
-        </button>
+        />
         <Sheet
           modal={false}
           open={more}

@@ -21,8 +21,8 @@ function checkFlipFraming(before,after,width=1440,height=900,label='desktop'){co
 async function snapshot(page,route){return route==='play'?page.evaluate(()=>window.__playInspect()):JSON.parse(await page.locator('#benchmark-report').textContent());}
 async function reset(page,route,side){
  if(route==='play'){
-  await page.getByRole('button',{name:'Reframe',exact:true}).click();await wait(300);
-  if((await snapshot(page,route)).side!==side)await page.getByRole('button',{name:'Flip',exact:true}).click();
+  await page.getByRole('button',{name:'Show placement',exact:true}).click();await wait(300);
+  if((await snapshot(page,route)).side!==side)await page.getByRole('button',{name:'Flip movement',exact:true}).click();
  }else{
   await page.getByText('Inspection tools',{exact:true}).click();
   await page.getByRole('button',{name:side==='front'?'Front reference':'Back reference',exact:true}).click();
@@ -48,7 +48,7 @@ try{
     await reset(page,route,side);const before=await snapshot(page,route);
     if(action.startsWith('drag')){await page.mouse.move(1100,400);await page.mouse.down();await page.mouse.move(action==='drag-right'?1180:1100,action==='drag-down'?480:400,{steps:8});await page.mouse.up();}
     else if(action==='wheel-out'){await page.mouse.move(1100,400);await page.mouse.wheel(0,120);}
-    else if(action==='flip')await page.getByRole('button',{name:route==='home'?'Flip movement':'Flip',exact:true}).click();
+    else if(action==='flip')await page.getByRole('button',{name:'Flip movement',exact:true}).click();
     else {await page.locator('canvas').first().focus();await page.keyboard.press(action==='zoom-in'?'+':action);}
     const samples=[];
     for(const ms of [0,100,350,1700]){if(ms)await wait(ms);samples.push(await snapshot(page,route));}
@@ -62,7 +62,7 @@ try{
  }
  if(phase==='final')for(const width of [390,320]){
   const page=await browser.newPage({viewport:{width,height:844}});await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await page.getByRole('button',{name:/^Easy\b/}).click();await wait(2300);
-  for(const side of ['front','back']){const before=await snapshot(page,'play');await page.getByRole('button',{name:'Flip',exact:true}).click();await wait(1800);const after=await snapshot(page,'play');checkFlipFraming(before,after,width,844,`${width}px to ${side}`);await page.screenshot({path:path.join(out,`${phase}-play-${width}-${side}.png`)});}
+  for(const side of ['front','back']){const before=await snapshot(page,'play');await page.getByRole('button',{name:'Flip movement',exact:true}).click();await wait(1800);const after=await snapshot(page,'play');checkFlipFraming(before,after,width,844,`${width}px to ${side}`);await page.screenshot({path:path.join(out,`${phase}-play-${width}-${side}.png`)});}
   await page.close();
  }
  for(const side of ['back','front'])for(const action of ['drag-right','drag-down','ArrowRight','ArrowDown','zoom-in','wheel-out']){

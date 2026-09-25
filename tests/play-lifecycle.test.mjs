@@ -198,6 +198,48 @@ test('unchanged layout preserves keyboard orbit while changed chrome bounds refr
   assert.equal(invalidations, 8, 'Each live layout and the keyboard gesture refresh rendering');
 });
 
+test('measured staging captions clear the dock at narrow widths without resetting orbit on repeat delivery', () => {
+  let reframes = 0, captionHeight = 12;
+  const header = {bottom: 110}, dock = {top: 630, left: 12};
+  const rect = {left: 12, top: 24, width: 320, height: 844, right: 332, bottom: 868};
+  const caption = {dataset: {selected: 'false'}, getBoundingClientRect: () => ({height: captionHeight})};
+  const v = fixture();
+  Object.assign(v, {
+    active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
+    stage: {offsetHeight: 84, style: {}, querySelector(selector) {assert.equal(selector, '.play-stage-caption'); return caption;}},
+    host: {
+      getBoundingClientRect: () => rect,
+      parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => selector === '.play-heading' ? header : dock})},
+    },
+    reframe() {reframes++; this.camera.position.set(0, 0, 100);}, invalidate() {},
+  });
+  const layout = actual('layout', v), keyDown = actual('keyDown', v);
+  let previousTop;
+  for (const height of [12, 44]) {
+    captionHeight = height;
+    layout();
+    const stageTop = Number.parseFloat(v.stage.style.top), stageLeft = Number.parseFloat(v.stage.style.left);
+    const captionBottom = rect.top + stageTop + v.stage.offsetHeight + 8 + height;
+    assert.ok(captionBottom <= dock.top - 20, `A ${height}px measured caption keeps its full height above the dock`);
+    assert.ok(rect.top + stageTop > header.bottom, 'Staging remains below the header');
+    assert.ok(stageLeft >= 0 && stageLeft + v.stage.offsetHeight <= rect.width);
+    if (previousTop !== undefined) assert.ok(stageTop < previousTop, 'A wrapped enlarged caption moves the stage up to preserve clearance');
+    previousTop = stageTop;
+    const count = reframes;
+    keyDown({key: 'ArrowRight', preventDefault() {}});
+    const camera = v.camera.position.clone(), stage = {...v.stage.style};
+    for (let delivery = 0; delivery < 3; delivery++) layout();
+    assert.equal(reframes, count, 'The same measured caption must not reclaim the user camera');
+    assert.ok(v.camera.position.equals(camera)); assert.deepEqual(v.stage.style, stage);
+    // The browser's overlaid labels report the same reserved height when selection changes.
+    v.drag = {pointer: 7}; caption.dataset.selected = 'true'; layout();
+    assert.equal(reframes, count); assert.ok(v.camera.position.equals(camera)); assert.deepEqual(v.stage.style, stage);
+    v.drag = undefined; caption.dataset.selected = 'false';
+  }
+  assert.equal(reframes, 2, 'Only initial framing and the real caption-size change reframe');
+  v.controls.dispose();
+});
+
 function renderedFixture() {
   const callbacks = new Map();
   let next = 0;
@@ -295,6 +337,49 @@ test('off-center assembly framing keeps its projected center fixed throughout fl
     assert.ok(v.controls.target.distanceTo(initialTarget) < 1e-8);
     assert.ok(v.camera.up.distanceTo(initialUp) < 1e-8);
     mesh.geometry.dispose(); mesh.material.dispose(); v.controls.dispose();
+  }
+});
+
+test('Reset and Home preserve the viewed side and assembly while Guide restores the authored screw view', () => {
+  for (const authoredSide of ['front', 'back']) for (const viewedSide of ['front', 'back']) for (const reduced of [false, true]) for (const action of ['reset', 'home']) {
+    const {v, settle} = renderedFixture();
+    const authoredSign = authoredSide === 'front' ? 1 : -1, viewedSign = viewedSide === 'front' ? 1 : -1;
+    const screw = {
+      id: 'radial-retaining-screw', side: authoredSide, leafIds: ['leaf'], focusLeafIds: ['leaf'],
+      contextLeafIds: ['foundation'], viewDirectionWorld: [.8, .25, authoredSign * .45],
+    };
+    const part = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 2), new THREE.MeshBasicMaterial());
+    const foundation = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 1), new THREE.MeshBasicMaterial());
+    v.pieces.set('leaf', {mesh: part, bounds: new THREE.Box3(new THREE.Vector3(-.5, -.5, -1), new THREE.Vector3(.5, .5, 1))});
+    v.pieces.set('foundation', {mesh: foundation, bounds: new THREE.Box3(new THREE.Vector3(-5, -5, -2), new THREE.Vector3(5, 5, -1))});
+    v.scene.add(part, foundation); v.fitted.add('foundation');
+    let commits = 0, prevented = 0;
+    Object.assign(v, {
+      active: true, current: screw, side: viewedSide, hasFramed: false,
+      host: {clientWidth: 390, clientHeight: 844}, frameRegion: {top: 80, bottom: 400, left: 0, width: 390},
+      destination: {style: {}}, placed() {commits++;},
+    });
+    v.camera.aspect = 390 / 844; v.camera.updateProjectionMatrix(); v.media.matches = reduced;
+    for (const name of ['boundsFor', 'reframe', 'project', 'resetView', 'guide', 'keyDown']) v[name] = actual(name, v);
+    v.reframe(); settle(performance.now());
+    CameraFrame.orbitCamera(v.camera, v.controls, .2, .2); settle(performance.now());
+    const fitted = v.fitted, current = v.current;
+    if (action === 'reset') v.resetView();
+    else v.keyDown({key: 'Home', preventDefault() {prevented++;}});
+    settle(v.cameraMotion?.start ?? performance.now());
+    const straight = v.camera.position.clone().sub(v.controls.target).normalize();
+    assert.ok(straight.distanceTo(new THREE.Vector3(0, 0, viewedSign)) < 1e-8, `${action} is straight-on even when a screw has an authored oblique view`);
+    assert.ok(v.camera.up.distanceTo(new THREE.Vector3(0, viewedSign, 0)) < 1e-8);
+    assert.equal(v.side, viewedSide); assert.equal(v.current, current); assert.equal(v.fitted, fitted);
+    assert.deepEqual([...v.fitted], ['foundation']); assert.equal(commits, 0);
+    assert.equal(prevented, action === 'home' ? 1 : 0);
+    v.guide(); settle(v.cameraMotion?.start ?? performance.now());
+    assert.equal(v.side, authoredSide, 'Guide deliberately restores the part’s authored side');
+    const guided = v.camera.position.clone().sub(v.controls.target).normalize();
+    assert.ok(guided.distanceTo(new THREE.Vector3().fromArray(screw.viewDirectionWorld).normalize()) < 1e-8, 'Guide restores the oblique radial-screw destination');
+    assert.equal(v.current, current); assert.equal(v.fitted, fitted); assert.equal(commits, 0);
+    assert.equal(v.busy, false); assert.equal(v.frame, 0);
+    part.geometry.dispose(); part.material.dispose(); foundation.geometry.dispose(); foundation.material.dispose(); v.controls.dispose();
   }
 });
 

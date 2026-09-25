@@ -1386,7 +1386,8 @@ canvas:focus-visible {
   font-size: 0.875rem;
   position: relative;
 }
-.action-dock [aria-pressed='true'] {
+.action-dock [aria-pressed='true'],
+.play-actions [aria-pressed='true'] {
   background: #cbb58e18;
   color: #e4d6bd;
   box-shadow: inset 0 -2px #cbb58e;

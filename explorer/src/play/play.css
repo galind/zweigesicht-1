@@ -14,10 +14,6 @@
 .play-app .text-button {
   font-family: inherit;
 }
-.play-app .text-button:hover:not(:disabled),
-.play-app .text-button[aria-pressed='true'] {
-  background: #ffffff10;
-}
 .play-app svg {
   width: 16px;
   height: 16px;
@@ -162,6 +158,14 @@
   font-size: 0.6875em;
   text-align: center;
   pointer-events: none;
+  display: grid;
+}
+.play-stage-caption > span {
+  grid-area: 1 / 1;
+}
+.play-stage-caption[data-selected='true'] > span:first-child,
+.play-stage-caption[data-selected='false'] > span:last-child {
+  visibility: hidden;
 }
 .play-target {
   position: absolute;
@@ -209,29 +213,25 @@
   color: var(--muted-foreground);
   pointer-events: none;
 }
-.play-help {
-  position: absolute;
-  top: 76px;
-  right: 24px;
-  width: min(380px, calc(100% - 48px));
-  max-height: calc(100% - 120px);
-  overflow: auto;
-  padding: 20px;
-  border: 1px solid #ffffff20;
-  border-radius: 12px;
-  background: #1d1d1df5;
+/* Shared Sheet supplies the header, Close button, scrolling and focus behavior. */
+.play-help-copy p {
+  margin: 0 0 14px;
+  line-height: 1.6;
 }
-.play-help h2,
+.play-help-copy small {
+  color: var(--muted-foreground);
+}
 .play-confirm h2 {
   font-size: 1.125em;
   margin: 12px 0;
 }
-.play-close {
-  float: right;
-}
 .play-confirm {
   color: var(--foreground);
   width: min(400px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  overflow: auto;
   border: 1px solid #ffffff30;
   border-radius: 16px;
   padding: 24px;

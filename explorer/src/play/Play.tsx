@@ -5,16 +5,27 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-  type ComponentProps,
+  type CSSProperties,
 } from 'react';
 import {
   Undo2,
-  ScanSearch,
-  FlipHorizontal2,
-  RotateCcw,
+  LocateFixed,
+  ListRestart,
   Lightbulb,
-  Layers,
+  Gauge,
 } from 'lucide-react';
+import {
+  TextButton as Control,
+  FlipButton,
+  ResetViewButton,
+} from '@/components/viewer-controls';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet';
 import authored from '../../../assets/authored/play-manifest.json';
 import {
   commitPlacement,
@@ -37,10 +48,6 @@ const blank: PlayViewStatus = {
   cutaway: false,
   side: 'front',
 };
-// Reuse the explorer's native text-button treatment and semantic button API.
-function Control({ className = '', ...props }: ComponentProps<'button'>) {
-  return <button className={`text-button ${className}`} {...props} />;
-}
 export default function Play() {
   const host = useRef<HTMLDivElement>(null),
     stage = useRef<HTMLButtonElement>(null),
@@ -60,6 +67,8 @@ export default function Play() {
       'restart' | 'levels' | PlayLevel | null
     >(null),
     [attempt, setAttempt] = useState(0);
+  const helpButton = useRef<HTMLButtonElement>(null);
+  const [headerBottom, setHeaderBottom] = useState(80);
   const dialog = useRef<HTMLDialogElement>(null),
     lastFocus = useRef<HTMLElement | null>(null);
   const apply = useCallback(
@@ -193,11 +202,18 @@ export default function Play() {
     }
   }, [confirm]);
   useLayoutEffect(() => {
-    const layout = () => viewer.current?.layout();
+    const layout = () => {
+      viewer.current?.layout();
+      const heading =
+        host.current?.parentElement?.querySelector('.play-heading');
+      if (heading) setHeaderBottom(heading.getBoundingClientRect().bottom);
+    };
     layout();
     const observer = new ResizeObserver(layout);
     host.current?.parentElement
-      ?.querySelectorAll('.play-heading, .play-dock, .play-choice')
+      ?.querySelectorAll(
+        '.play-heading, .play-dock, .play-choice, .play-stage-caption',
+      )
       .forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, [active, session, hint, status.ready]);
@@ -209,8 +225,12 @@ export default function Play() {
     apply(createSession(manifest, level));
     setNotice(`${level === 'easy' ? 'Easy' : 'Hard'} assembly started.`);
   };
+  const requestConfirmation = (intent: 'restart' | 'levels' | PlayLevel) => {
+    setHelp(false);
+    setConfirm(intent);
+  };
   const choose = (level: PlayLevel) => {
-    if (session?.completedStepIds.length) setConfirm(level);
+    if (session?.completedStepIds.length) requestConfirmation(level);
     else start(level);
   };
   const undo = () => {
@@ -236,6 +256,7 @@ export default function Play() {
         <span>Zweigesicht–1</span>
         <span>Assembly</span>
         <Control
+          ref={helpButton}
           onClick={() => setHelp(!help)}
           aria-expanded={help}
           aria-controls="play-help"
@@ -252,8 +273,13 @@ export default function Play() {
         hidden={!step}
         onClick={() => setSelected(true)}
       >
-        <span className="play-stage-caption">
-          {selected ? 'Selected' : 'Drag this piece'}
+        <span
+          className="play-stage-caption"
+          data-selected={selected}
+          aria-hidden="true"
+        >
+          <span>Drag this piece</span>
+          <span>Selected</span>
         </span>
       </Control>
       <Control
@@ -341,15 +367,33 @@ export default function Play() {
             >
               <Undo2 aria-hidden="true" /> Undo
             </Control>
-            <Control
+            {step && (
+              <Control
+                disabled={disabled}
+                title="Return to the current piece’s placement view; keep assembly progress"
+                onClick={() => {
+                  setHelp(false);
+                  viewer.current?.guide();
+                }}
+              >
+                <LocateFixed aria-hidden="true" /> Show placement
+              </Control>
+            )}
+            <FlipButton
               disabled={disabled}
-              onClick={() => viewer.current?.guide()}
-            >
-              <ScanSearch aria-hidden="true" /> Reframe
-            </Control>
-            <Control disabled={disabled} onClick={() => viewer.current?.flip()}>
-              <FlipHorizontal2 aria-hidden="true" /> Flip
-            </Control>
+              onClick={() => {
+                setHelp(false);
+                viewer.current?.flip();
+              }}
+            />
+            <ResetViewButton
+              disabled={disabled}
+              title="Return to the straight-on view; keep assembly progress"
+              onClick={() => {
+                setHelp(false);
+                viewer.current?.resetView();
+              }}
+            />
             {step && (
               <Control
                 disabled={disabled}
@@ -359,12 +403,22 @@ export default function Play() {
                 <Lightbulb aria-hidden="true" /> Hint
               </Control>
             )}
-            <Control disabled={disabled} onClick={() => setConfirm('restart')}>
-              <RotateCcw aria-hidden="true" />{' '}
+            <Control
+              disabled={disabled}
+              aria-label={completed ? 'Play again' : 'Restart assembly'}
+              title="Start a new assembly after confirmation"
+              onClick={() => requestConfirmation('restart')}
+            >
+              <ListRestart aria-hidden="true" />{' '}
               {completed ? 'Play again' : 'Restart'}
             </Control>
-            <Control disabled={disabled} onClick={() => setConfirm('levels')}>
-              <Layers aria-hidden="true" /> Levels
+            <Control
+              disabled={disabled}
+              aria-label="Choose difficulty"
+              title="Choose Easy or Hard; keep your save until a new assembly starts"
+              onClick={() => requestConfirmation('levels')}
+            >
+              <Gauge aria-hidden="true" /> Difficulty
             </Control>
           </div>
         </section>
@@ -385,36 +439,45 @@ export default function Play() {
         </section>
       )}
       <div className="play-storage">{storage}</div>
-      {help && (
-        <aside id="play-help" className="play-help">
-          <Control
-            className="play-close"
-            onClick={() => setHelp(false)}
-            aria-label="Close instructions"
-          >
-            Close
-          </Control>
-          <h2>Take your time</h2>
-          <p>
-            Drag the staged part near the ring and release. A missed drop simply
-            returns it. Tap the part and then the ring, or use Tab and Enter, if
-            you prefer.
-          </p>
-          <p>
-            Drag empty space to orbit. Scroll or pinch to zoom. On the canvas,
-            arrow keys orbit, + / − zoom, and Home reframes. Undo returns the
-            last piece.
-          </p>
-          <p>
-            Close-ups temporarily hide surrounding parts so small fittings
-            remain visible. The completed watch brings everything together.
-          </p>
-          <small>
-            A guided puzzle using Marco Lang’s CAD, not watch-servicing
-            instructions.
-          </small>
-        </aside>
-      )}
+      <Sheet modal={false} open={help} onOpenChange={setHelp}>
+        <SheetContent
+          id="play-help"
+          className="explorer-panel settings-panel header-panel play-help-panel"
+          style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+          showOverlay={false}
+          scrollContent
+          finalFocus={helpButton}
+        >
+          <SheetHeader>
+            <SheetTitle>How to play</SheetTitle>
+            <SheetDescription className="sr-only">
+              Assembly controls and keyboard shortcuts
+            </SheetDescription>
+          </SheetHeader>
+          <div className="panel-body play-help-copy">
+            <p>
+              Drag the staged part near the ring and release. A missed drop
+              simply returns it. Tap the part and then the ring, or use Tab and
+              Enter, if you prefer.
+            </p>
+            <p>
+              Drag empty space to orbit. Scroll or pinch to zoom. On the canvas,
+              arrow keys orbit, + / − zoom, and Home resets the current view.
+              Reset view keeps your progress and the face you are viewing. Show
+              placement returns to the current piece’s guided view. Undo returns
+              the last piece.
+            </p>
+            <p>
+              Close-ups temporarily hide surrounding parts so small fittings
+              remain visible. The completed watch brings everything together.
+            </p>
+            <small>
+              A guided puzzle using Marco Lang’s CAD, not watch-servicing
+              instructions.
+            </small>
+          </div>
+        </SheetContent>
+      </Sheet>
       <output className="play-sr" aria-live="polite" aria-atomic="true">
         {notice}
       </output>

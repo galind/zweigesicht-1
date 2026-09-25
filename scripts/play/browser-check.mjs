@@ -8,7 +8,7 @@ const supplied = process.env.PLAYWRIGHT_MODULE;
 const { chromium } = await import(supplied ? pathToFileURL(supplied).href : 'playwright');
 const base = process.argv[2] || 'http://127.0.0.1:4180';
 const mode = process.argv[3] || 'all';
-assert.ok(['all','easy','hard','focused','home','dev'].includes(mode), 'Unknown browser-check mode');
+assert.ok(['all','easy','hard','focused','home','dev','controls','dialogs'].includes(mode), 'Unknown browser-check mode');
 const out = path.resolve(process.env.PLAY_QA_OUTPUT || 'artifacts/browser/play');
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true,
@@ -136,7 +136,7 @@ async function traverse(level,viewport) {
   await page.screenshot({path:path.join(out,`${level}-complete.png`)});
   const complete=await inspect(page);
   check(`${level}: completion renders every intended physical leaf`,setEquals(complete.fitted,manifest.finalLeafIds)&&setEquals(complete.visible,manifest.finalLeafIds)&&complete.geometryCount===manifest.finalLeafIds.length,{fitted:complete.fitted.length,visible:complete.visible.length,geometries:complete.geometryCount});
-  await page.getByRole('button',{name:'Flip',exact:true}).click(); await settle(page);
+  await page.getByRole('button',{name:'Flip movement',exact:true}).click(); await settle(page);
   await page.screenshot({path:path.join(out,`${level}-complete-flipped.png`)});
   check(`${level}: completed watch remains available to flip`,setEquals((await inspect(page)).fitted,manifest.finalLeafIds));
   const idle=await inspect(page); await page.waitForTimeout(600);const resting=await inspect(page);
@@ -164,7 +164,7 @@ async function focused() {
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.evaluate(()=>document.documentElement.style.fontSize='200%');
   await page.waitForTimeout(250); // Allow ResizeObserver and root-font reflow to settle before the user's next action.
-  await page.getByRole('button',{name:'Reframe',exact:true}).click();await settle(page);
+  await page.getByRole('button',{name:'Show placement',exact:true}).click();await settle(page);
   await targetEvidence(page,'320px 200% text reduced motion');
   await page.screenshot({path:path.join(out,'phone-320-enlarged-reduced.png')});
   for(const button of await page.locator('.play-actions button').all()){
@@ -182,7 +182,7 @@ async function focused() {
   const canvas=page.locator('.play-canvas canvas'); await canvas.focus();
   const beforeOrbit=(await inspect(page)).camera;await page.keyboard.press('ArrowRight');await settle(page);
   check('Keyboard camera orbit remains useful',JSON.stringify((await inspect(page)).camera)!==JSON.stringify(beforeOrbit),{before:beforeOrbit,after:(await inspect(page)).camera,focus:await page.evaluate(()=>document.activeElement?.tagName)});
-  await page.getByRole('button',{name:'Reframe',exact:true}).click();await settle(page);
+  await page.getByRole('button',{name:'Show placement',exact:true}).click();await settle(page);
   s=await inspect(page);
   const zoomBefore=s.camera;await page.mouse.move(370,180);await page.mouse.wheel(0,-100);await settle(page);
   check('Wheel zoom outside drag remains useful',JSON.stringify((await inspect(page)).camera)!==JSON.stringify(zoomBefore));
@@ -203,7 +203,7 @@ async function focused() {
   await page.locator('.play-stage').tap();await page.locator('.play-target').tap();await settle(page);
   check('Tap-select and tap-destination accessible path', (await inspect(page)).session.completedStepIds.length===2);
   const kept=await inspect(page);
-  await page.getByRole('button',{name:'Restart',exact:true}).click();
+  await page.getByRole('button',{name:'Restart assembly',exact:true}).click();
   await page.getByRole('button',{name:'Keep playing',exact:true}).click();
   check('Restart confirmation cancellation preserves fitted set',setEquals((await inspect(page)).fitted,kept.fitted));
   await page.evaluate(()=>window.__playContext());
@@ -211,11 +211,11 @@ async function focused() {
   check('Context loss disables placement',!(await inspect(page)).ready);
   await page.evaluate(()=>window.__playContext(true));await settle(page);
   check('Context restore preserves exact fitted set',setEquals((await inspect(page)).fitted,kept.fitted));
-  await page.getByRole('button',{name:'Restart',exact:true}).click();
+  await page.getByRole('button',{name:'Restart assembly',exact:true}).click();
   await page.getByRole('button',{name:'Start again',exact:true}).click();await settle(page);
   check('Confirmed restart restores shared foundation',setEquals((await inspect(page)).fitted,manifest.initialLeafIds));
   await page.screenshot({path:path.join(out,'phone-390-first-part.png')});
-  await page.getByRole('button',{name:'Levels',exact:true}).click();
+  await page.getByRole('button',{name:'Choose difficulty',exact:true}).click();
   await page.getByRole('button',{name:'Choose level',exact:true}).click();
   await page.getByRole('button',{name:/^Easy\b/}).click();await settle(page);
   check('Changing level starts Easy with same shared foundation',(await inspect(page)).session.level==='easy'&&setEquals((await inspect(page)).fitted,manifest.initialLeafIds));
@@ -240,6 +240,91 @@ async function focused() {
     await c.close();
   }
 }
+async function controls() {
+  const reference=await browser.newPage({viewport:{width:1440,height:900}});
+  await reference.goto(`${base}/`,{waitUntil:'networkidle'});
+  const shared={};
+  for(const name of ['Flip movement','Reset view'])shared[name]=await reference.getByRole('button',{name,exact:true}).evaluate(b=>({svg:JSON.stringify({paths:b.querySelector('svg')?.innerHTML,attributes:[...b.querySelector('svg').attributes].filter(a=>a.name!=='style').map(a=>[a.name,a.value]).sort(),transform:getComputedStyle(b.querySelector('svg')).transform}),label:b.getAttribute('aria-label'),title:b.getAttribute('title'),text:b.textContent}));
+  await reference.screenshot({path:path.join(out,'controls-home-desktop.png')});await reference.close();
+  const sameProgress=(a,b)=>a.stepId===b.stepId&&setEquals(a.fitted,b.fitted)&&JSON.stringify(a.session)===JSON.stringify(b.session);
+  const closeCamera=(a,b)=>Math.hypot(...a.camera.map((v,i)=>v-b.camera[i]))<0.001&&Math.hypot(...a.cameraTarget.map((v,i)=>v-b.cameraTarget[i]))<0.001;
+  for(const level of ['easy','hard']) {
+    const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage();page.on('pageerror',e=>report.errors.push(String(e)));
+    await start(page,level);await mouseDrag(page,await inspect(page));
+    const authored=await inspect(page);
+    for(const name of ['Flip movement','Reset view']) {
+      const actual=await page.getByRole('button',{name,exact:true}).evaluate(b=>({svg:JSON.stringify({paths:b.querySelector('svg')?.innerHTML,attributes:[...b.querySelector('svg').attributes].filter(a=>a.name!=='style').map(a=>[a.name,a.value]).sort(),transform:getComputedStyle(b.querySelector('svg')).transform}),label:b.getAttribute('aria-label'),title:b.getAttribute('title'),text:b.textContent}));
+      check(`${level}: ${name} shares exact icon and accessible label`,actual.svg===shared[name].svg&&actual.label===shared[name].label,{home:shared[name],play:actual});
+    }
+    for(const [name,icon] of [['Show placement','lucide-locate-fixed'],['Restart assembly','lucide-list-restart'],['Choose difficulty','lucide-gauge']])check(`${level}: ${name} has a distinct truthful icon`,await page.getByRole('button',{name,exact:true}).locator(`svg.${icon}`).count()===1);
+    check(`${level}: old conflicting control names are absent`,await page.getByRole('button',{name:/^(Reframe|Levels|Restart|Focus|Disassemble)$/}).count()===0);
+    await page.getByRole('button',{name:'Flip movement',exact:true}).click();await settle(page);
+    const flipped=await inspect(page);check(`${level}: Flip changes viewed side without assembly progress`,flipped.side!==authored.side&&sameProgress(authored,flipped));
+    const canvas=page.locator('.play-canvas canvas');await canvas.focus();await page.keyboard.press('ArrowRight');await page.keyboard.press('+');await settle(page);const moved=await inspect(page);
+    await page.getByRole('button',{name:'Reset view',exact:true}).click();await settle(page);const reset=await inspect(page);
+    check(`${level}: Reset view reframes current side and preserves exact progress`,reset.side===flipped.side&&sameProgress(authored,reset)&&!closeCamera(reset,moved),{authored:authored.side,flipped:flipped.side,reset:reset.side});
+    await canvas.focus();await page.keyboard.press('ArrowDown');await page.keyboard.press('-');await settle(page);await page.keyboard.press('Home');await settle(page);const homeKey=await inspect(page);
+    check(`${level}: Home is the same nondestructive current-side Reset view`,closeCamera(reset,homeKey)&&reset.side===homeKey.side&&sameProgress(reset,homeKey));
+    await page.getByRole('button',{name:'Show placement',exact:true}).click();await settle(page);const located=await inspect(page);
+    check(`${level}: Show placement restores authored destination side without progress change`,located.side===authored.side&&sameProgress(authored,located)&&closeCamera(authored,located),{authored:authored.side,located:located.side});
+    await targetEvidence(page,`${level} shown placement`);
+    await page.getByRole('button',{name:'Restart assembly',exact:true}).click();check(`${level}: Restart requires explicit destructive confirmation`,await page.getByRole('dialog').isVisible());
+    await page.keyboard.press('Escape');check(`${level}: Escape from restart preserves exact assembly`,sameProgress(located,await inspect(page)));
+    await page.getByRole('button',{name:'Choose difficulty',exact:true}).click();await page.getByRole('button',{name:'Choose level',exact:true}).click();
+    check(`${level}: Difficulty selection screen preserves saved assembly`,JSON.stringify((await inspect(page)).session)===JSON.stringify(located.session)&&await page.getByRole('button',{name:new RegExp(`^Continue ${level==='easy'?'Easy':'Hard'}`)}).isVisible());
+    await page.getByRole('button',{name:new RegExp(`^${level==='easy'?'Hard':'Easy'}\\b`)}).click();
+    check(`${level}: choosing another difficulty protects saved progress with confirmation`,await page.getByRole('dialog').isVisible());
+    await page.getByRole('button',{name:'Keep playing',exact:true}).click();
+    check(`${level}: cancelled difficulty replacement keeps save`,JSON.stringify((await inspect(page)).session)===JSON.stringify(located.session));
+    await page.getByRole('button',{name:/^Continue /}).click();await settle(page);check(`${level}: Continue resumes exact assembly`,sameProgress(located,await inspect(page)));
+    await page.screenshot({path:path.join(out,`controls-${level}-desktop.png`)});
+    await page.setViewportSize({width:320,height:844});await page.emulateMedia({reducedMotion:'reduce'});await page.evaluate(()=>document.documentElement.style.fontSize='200%');await page.waitForTimeout(300);await settle(page);
+    await targetEvidence(page,`${level} controls 320px 200%`);
+    for(const button of await page.locator('.play-actions button').all()) {
+      await button.scrollIntoViewIfNeeded();if(await button.isEnabled())await button.focus();
+      const reach=await button.evaluate(b=>{const r=b.getBoundingClientRect(),hit=document.elementFromPoint((r.left+r.right)/2,(r.top+r.bottom)/2)?.closest('button');return {label:b.getAttribute('aria-label')||b.textContent.trim(),hit:hit===b,within:r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight};});
+      check(`${level}: enlarged ${reach.label} reachable`,reach.hit&&reach.within,reach);
+    }
+    const captionLayout=await page.evaluate(()=>{const caption=document.querySelector('.play-stage-caption').getBoundingClientRect(),dock=document.querySelector('.play-dock').getBoundingClientRect();return {captionBottom:caption.bottom,dockTop:dock.top};});
+    check(`${level}: enlarged stage caption stays clear of dock`,captionLayout.captionBottom<=captionLayout.dockTop-4,captionLayout);
+    const help=page.getByRole('button',{name:'How to play',exact:true});await help.click();const sheet=page.locator('[data-slot="sheet-content"]');await sheet.waitFor();await page.waitForTimeout(300);
+    check(`${level}: Help uses shared Sheet heading and close control`,await sheet.locator('[data-slot="sheet-header"]').count()===1&&await sheet.getByRole('button',{name:'Close',exact:true}).count()===1);
+    const scroll=sheet.locator('.sheet-scroll-area');await scroll.focus();await page.keyboard.press('End');await page.waitForTimeout(350);
+    const helpLayout=await sheet.evaluate(el=>{const r=el.getBoundingClientRect(),sc=el.querySelector('.sheet-scroll-area'),close=el.querySelector('[data-slot="sheet-close"]'),c=close.getBoundingClientRect();return {rect:{left:r.left,right:r.right,top:r.top,bottom:r.bottom},width:innerWidth,height:innerHeight,scrollWidth:sc.scrollWidth,clientWidth:sc.clientWidth,scrollTop:sc.scrollTop,scrollHeight:sc.scrollHeight,clientHeight:sc.clientHeight,closeHit:document.elementFromPoint((c.left+c.right)/2,(c.top+c.bottom)/2)?.closest('button')===close};});
+    check(`${level}: enlarged Help fits viewport, scrolls content and retains close`,helpLayout.rect.left>=0&&helpLayout.rect.right<=helpLayout.width&&helpLayout.rect.top>=0&&helpLayout.rect.bottom<=helpLayout.height+1&&helpLayout.scrollWidth<=helpLayout.clientWidth+1&&(helpLayout.scrollHeight<=helpLayout.clientHeight||helpLayout.scrollTop>0)&&helpLayout.closeHit,helpLayout);
+    await page.screenshot({path:path.join(out,`controls-${level}-help-320-enlarged.png`)});
+    await page.keyboard.press('Escape');await sheet.waitFor({state:'hidden'});check(`${level}: Help Escape returns focus to its trigger`,await help.evaluate(el=>el===document.activeElement));
+    await help.click();await sheet.getByRole('button',{name:'Close',exact:true}).click();await sheet.waitFor({state:'hidden'});check(`${level}: Help Close returns focus to its trigger`,await help.evaluate(el=>el===document.activeElement));
+    await page.screenshot({path:path.join(out,`controls-${level}-320-enlarged.png`)});
+    await page.getByRole('button',{name:'Restart assembly',exact:true}).click();
+    const confirmation=page.getByRole('dialog');const confirmLayout=await confirmation.evaluate(el=>{const r=el.getBoundingClientRect(),h=el.querySelector('h2');return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:innerWidth,height:innerHeight,fontSize:getComputedStyle(h).fontSize,margin:getComputedStyle(h).margin};});
+    check(`${level}: enlarged confirmation heading retains intended relative sizing`,confirmLayout.fontSize==='36px'&&confirmLayout.margin==='12px 0px',confirmLayout);
+    await page.getByRole('button',{name:'Start again',exact:true}).scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,`controls-${level}-confirmation-320-enlarged.png`)});
+    await page.getByRole('button',{name:'Start again',exact:true}).click();await settle(page);check(`${level}: Confirmed Restart alone resets assembly progress`,setEquals((await inspect(page)).fitted,manifest.initialLeafIds)&&(await inspect(page)).session.completedStepIds.length===0);
+    await context.close();await save();
+  }
+}
+async function dialogs() {
+  const page=await browser.newPage({viewport:{width:1440,height:900}});page.on('pageerror',e=>report.errors.push(String(e)));
+  await start(page,'easy');await mouseDrag(page,await inspect(page));const progress=await inspect(page);
+  await page.screenshot({path:path.join(out,'controls-final-desktop.png')});
+  for(const small of [false,true]) {
+    if(small){await page.setViewportSize({width:320,height:844});await page.evaluate(()=>document.documentElement.style.fontSize='200%');await page.waitForTimeout(300);await settle(page);}
+    for(const action of ['Restart assembly','Choose difficulty']) {
+      const trigger=page.getByRole('button',{name:action,exact:true});await trigger.click();const dialog=page.getByRole('dialog');await dialog.waitFor();
+      const layout=await dialog.evaluate(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:innerWidth,height:innerHeight,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth};});
+      const label=`${small?'320px 200%':'desktop'} ${action}`;
+      check(`${label}: confirmation is centered within safe viewport bounds`,layout.left>=15&&layout.top>=15&&layout.right<=layout.width-15&&layout.bottom<=layout.height-15&&Math.abs(layout.left+layout.right-layout.width)<2&&Math.abs(layout.top+layout.bottom-layout.height)<2&&layout.scrollWidth<=layout.clientWidth+1,layout);
+      check(`${label}: initial focus stays on nondestructive action`,await dialog.getByRole('button',{name:'Keep playing',exact:true}).evaluate(el=>el===document.activeElement));
+      for(const b of await dialog.getByRole('button').all()){await b.scrollIntoViewIfNeeded();const hit=await b.evaluate(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint((r.left+r.right)/2,(r.top+r.bottom)/2)?.closest('button')===el;});check(`${label}: ${await b.innerText()} is reachable`,hit);}
+      await page.screenshot({path:path.join(out,`controls-final-${small?'320-enlarged':'desktop'}-${action.startsWith('Restart')?'restart':'difficulty'}.png`)});
+      await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
+      check(`${label}: Escape restores triggering control focus`,await trigger.evaluate(el=>el===document.activeElement));
+      const after=await inspect(page);check(`${label}: dismissal preserves exact assembly`,JSON.stringify(after.session)===JSON.stringify(progress.session)&&setEquals(after.fitted,progress.fitted));
+    }
+  }
+  await page.close();
+}
 async function developmentSmoke() {
   const page=await browser.newPage({viewport:{width:1440,height:900}});
   page.on('pageerror',e=>report.errors.push(String(e)));
@@ -252,6 +337,8 @@ async function developmentSmoke() {
   await page.close();
 }
 try {
+  if (mode === 'dialogs') await dialogs();
+  if (mode === 'controls') await controls();
   if (mode === 'dev') await developmentSmoke();
   if (mode === 'home' || mode === 'all') await home();
   if (mode === 'easy' || mode === 'all') await traverse('easy',{width:1440,height:900});

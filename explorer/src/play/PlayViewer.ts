@@ -370,7 +370,7 @@ export class PlayViewer {
     }
     return b;
   }
-  reframe = (animate = false) => {
+  reframe = (animate = false, straightOn = false) => {
     if (!this.ready || this.drag || (this.busy && !this.cameraMotion)) return;
     const transition = (animate || !!this.cameraMotion) && this.hasFramed;
     this.hasFramed = true;
@@ -403,7 +403,7 @@ export class PlayViewer {
     // retaining screws' authored oblique view. Frame in screen axes, not CAD XY.
     const up = new THREE.Vector3(0, this.side === 'front' ? 1 : -1, 0);
     const direction =
-      step?.viewDirectionWorld && this.side === step.side
+      !straightOn && step?.viewDirectionWorld && this.side === step.side
         ? new THREE.Vector3().fromArray(step.viewDirectionWorld).normalize()
         : new THREE.Vector3(0, 0, this.side === 'front' ? 1 : -1);
     const right = new THREE.Vector3().crossVectors(up, direction).normalize();
@@ -671,6 +671,10 @@ export class PlayViewer {
       () => this.placed(id),
     );
   };
+  resetView = () => {
+    if (this.drag || this.busy) return;
+    this.reframe(true, true);
+  };
   guide = () => {
     if (this.drag || this.busy) return;
     if (this.current) this.side = this.current.side;
@@ -731,7 +735,7 @@ export class PlayViewer {
     }
     if (event.key === 'Home') {
       event.preventDefault();
-      this.guide();
+      this.resetView();
       return;
     }
     const move = KEYBOARD_ORBIT_MOVES[event.key];
@@ -768,7 +772,10 @@ export class PlayViewer {
       : rect.width;
     const stageHeight =
       this.stage.offsetHeight || (rect.width <= 600 ? 84 : 96);
-    const stageY = bottom - stageHeight / 2 - 20;
+    const captionHeight =
+      this.stage.querySelector?.('.play-stage-caption')?.getBoundingClientRect()
+        .height ?? 0;
+    const stageY = bottom - stageHeight / 2 - Math.max(20, captionHeight + 8);
     this.stage.style.top = `${stageY - stageHeight / 2}px`;
     this.stage.style.left = `${Math.max(stageHeight / 2 + 12, width * 0.22) - stageHeight / 2}px`;
     const region = {
