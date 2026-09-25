@@ -38,9 +38,13 @@ geometry.add(diamond);
 assert.equal(play.schemaVersion, 1);
 assert.ok(play.version);
 assert.equal(play.sourceSha256, source.source.sha256);
-const expectedInitial = allLeaves.filter((id) => under(id, play.foundationRootId));
-sameSet(play.initialLeafIds, expectedInitial, 'Foundation is exactly the fitted mainplate subtree');
-assert.equal(play.initialLeafIds.length, 18);
+const deferred = [11, 12].map((index) => 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_' + index);
+sameSet(play.deferredFoundationLeafIds, deferred, 'Only the two explicitly requested source dial-retaining screws are deferred');
+for (const id of deferred) assert.equal(parts.get(id)?.definitionId, 'd_0_1_1_201', 'Deferred fittings retain the audited screw identity');
+const expectedInitial = allLeaves.filter((id) => under(id, play.foundationRootId) && !deferred.includes(id));
+sameSet(play.initialLeafIds, expectedInitial, 'Foundation is the fitted mainplate subtree minus the two explicitly deferred dial screws');
+assert.equal(play.initialLeafIds.length, 16);
+assert.equal(play.version, 'play-3', 'Foundation and order changes reject incompatible play-2 saves');
 const expectedFinal = allLeaves.filter((id) => under(id, 'p_0_1_1_1__0_1_1_1_4') && id !== 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_66');
 for (const key of ['central', 'small']) {
   const face = dials.faces[key];
@@ -89,6 +93,17 @@ for (const level of ['easy', 'hard']) {
     assert.ok(step.label && step.assemblyId && step.instruction);
     assert.ok(['front', 'back'].includes(step.side));
     assert.equal(step.staging, 'lower-left');
+    if (step.viewDirectionWorld) {
+      assert.ok(step.viewDirectionWorld.length === 3 && step.viewDirectionWorld.every(Number.isFinite));
+      assert.ok(Math.abs(Math.hypot(...step.viewDirectionWorld) - 1) < 1e-12, 'Authored camera direction is normalized');
+      assert.ok(step.leafIds.length === 1 && deferred.includes(step.leafIds[0]), 'Only audited radial dial screws use the oblique view');
+      const matrix = parts.get(step.leafIds[0]).worldTransform;
+      const axis = [matrix[0][2], matrix[1][2], matrix[2][2]];
+      assert.deepEqual(step.sourceWithdrawalAxisWorld, axis, 'Radial screw direction uses source local +Z transformed to world');
+      assert.ok(Math.abs(axis[2]) < 1e-12, 'These screw axes lie in the source XY plane');
+      const view = step.viewDirectionWorld;
+      assert.ok(view[2] > 0 && view[0] * axis[0] + view[1] * axis[1] > .8, 'Oblique front view exposes the outward-facing radial screw head');
+    }
     assert.ok(step.leafIds.length > 0);
     if (level === 'hard') assert.equal(step.leafIds.length, 1, 'Hard places exactly one unsplit source leaf');
     unique(step.leafIds, `Unique leaves within ${step.id}`);
@@ -118,6 +133,14 @@ for (const level of ['easy', 'hard']) {
   const occurrencePrefix = 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_';
   const placementIndex = new Map(steps.flatMap((step, index) => step.leafIds.map((id) => [id, index])));
   const packetIndices = (child) => [...placementIndex].filter(([id]) => under(id, occurrencePrefix + child)).map(([, index]) => index);
+  const lastCentralDial = Math.max(...dials.faces.central.structureLeafIds.map((id) => placementIndex.get(id)));
+  const firstCentralHand = Math.min(...dials.faces.central.styles.find((style) => style.id === dials.defaults.central).leafIds.map((id) => placementIndex.get(id)));
+  for (const id of deferred) {
+    const index = placementIndex.get(id);
+    assert.ok(index > lastCentralDial && index < firstCentralHand, 'Deferred screws follow the central dial and precede its hands');
+    assert.deepEqual(steps[index].leafIds, [id], 'Each deferred screw remains an individual placement in both levels');
+    assert.ok(steps[index].viewDirectionWorld, 'Each radial screw has its explicitly authored oblique camera direction');
+  }
   // Independent source-host constraints; the full chapter sequence is not mechanically certified.
   for (const [inner, cover] of [[1, 60], [2, 60], [3, 61], [63, 6], [65, 6], [62, 6], [13, 16], [7, 59]]) {
     assert.ok(Math.max(...packetIndices(inner)) < Math.min(...packetIndices(cover)), `Place movement child ${inner} before covering bridge ${cover}`);
@@ -137,4 +160,4 @@ for (const level of ['easy', 'hard']) {
 }
 sameSet(completed.easy, completed.hard, 'Both levels finish identical configurations');
 assert.ok(play.levels.easy.steps.length < play.levels.hard.steps.length);
-console.log(JSON.stringify({ sourceLeaves: allLeaves.length, fittedMainplateLeaves: play.initialLeafIds.length, includedLeaves: play.finalLeafIds.length, excludedLeaves: excluded.length, easyPlacements: play.levels.easy.steps.length, hardPlacements: play.levels.hard.steps.length, geometry: 'All selected mesh nodes plus hash-checked maker diamond STL', targetVisibility: 'Meaningful whole-movement and local-packet contexts verified; renderer geometry-ray occlusion and browser reachability checks remain required.' }, null, 2));
+console.log(JSON.stringify({ sourceLeaves: allLeaves.length, fittedMainplateLeaves: play.initialLeafIds.length, deferredDialScrews: deferred.length, includedLeaves: play.finalLeafIds.length, excludedLeaves: excluded.length, easyPlacements: play.levels.easy.steps.length, hardPlacements: play.levels.hard.steps.length, geometry: 'All selected mesh nodes plus hash-checked maker diamond STL', targetVisibility: 'Meaningful whole-movement and local-packet contexts verified; renderer geometry-ray occlusion and browser reachability checks remain required.' }, null, 2));

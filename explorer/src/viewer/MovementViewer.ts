@@ -32,6 +32,14 @@ import { benchmarkFrame, type Benchmark } from './benchmark';
 import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import {
+  KEYBOARD_ORBIT_MOVES,
+  KEYBOARD_ZOOM_IN,
+  KEYBOARD_ZOOM_OUT,
+  orbitCamera,
+  syncOrbitUp,
+  zoomCamera,
+} from './CameraFrame';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { StudioEnvironment } from './StudioEnvironment';
 import {
@@ -1409,19 +1417,7 @@ export class MovementViewer {
     return bounds;
   }
   syncOrbitUp() {
-    // Three r186 caches its orbit basis at construction. Keep that basis aligned
-    // with the camera's continuous turnover, without recreating its event handlers.
-    const controls = this.controls as OrbitControls & {
-      _quat?: THREE.Quaternion;
-      _quatInverse?: THREE.Quaternion;
-    };
-    if (controls._quat && controls._quatInverse) {
-      controls._quat.setFromUnitVectors(
-        this.camera.up,
-        new THREE.Vector3(0, 1, 0),
-      );
-      controls._quatInverse.copy(controls._quat).invert();
-    }
+    syncOrbitUp(this.camera, this.controls);
   }
   frameTo(
     target: THREE.Vector3,
@@ -1615,16 +1611,7 @@ export class MovementViewer {
   zoom(factor: number) {
     this.manual();
     this.travel = null;
-    const offset = this.camera.position.clone().sub(this.controls.target);
-    offset.setLength(
-      THREE.MathUtils.clamp(
-        offset.length() * factor,
-        3,
-        this.controls.maxDistance,
-      ),
-    );
-    this.camera.position.copy(this.controls.target).add(offset);
-    this.controls.update();
+    zoomCamera(this.camera, this.controls, factor);
     this.invalidate();
   }
   orbit(dx: number, dy: number) {
@@ -1634,18 +1621,7 @@ export class MovementViewer {
       return;
     }
     this.travel = null;
-    const offset = this.camera.position.clone().sub(this.controls.target),
-      spherical = new THREE.Spherical().setFromVector3(offset);
-    spherical.theta += dx;
-    spherical.phi = THREE.MathUtils.clamp(
-      spherical.phi + dy,
-      0.02,
-      Math.PI - 0.02,
-    );
-    this.camera.position
-      .copy(this.controls.target)
-      .add(new THREE.Vector3().setFromSpherical(spherical));
-    this.controls.update();
+    orbitCamera(this.camera, this.controls, dx, dy);
     this.invalidate();
   }
   async select(id: string) {
@@ -2174,12 +2150,7 @@ export class MovementViewer {
   }
   keyDown = (e: KeyboardEvent) => {
     if (!this.ready) return;
-    const moves: Record<string, [number, number]> = {
-      ArrowLeft: [-0.2, 0],
-      ArrowRight: [0.2, 0],
-      ArrowUp: [0, -0.2],
-      ArrowDown: [0, 0.2],
-    };
+    const moves = KEYBOARD_ORBIT_MOVES;
     if (e.key === 'Escape') {
       e.preventDefault();
       e.stopPropagation();
@@ -2190,7 +2161,7 @@ export class MovementViewer {
     } else if (['+', '=', '-', 'Home'].includes(e.key)) {
       e.preventDefault();
       if (e.key === 'Home') this.reset();
-      else this.zoom(e.key === '-' ? 1.2 : 0.83);
+      else this.zoom(e.key === '-' ? KEYBOARD_ZOOM_OUT : KEYBOARD_ZOOM_IN);
     }
   };
   pointerDown = (e: PointerEvent) => {

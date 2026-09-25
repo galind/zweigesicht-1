@@ -7,6 +7,9 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { createRequire } from 'node:module';
 import * as THREE from '../explorer/node_modules/three/build/three.module.js';
+import {OrbitControls} from '../explorer/node_modules/three/examples/jsm/controls/OrbitControls.js';
+import * as CameraFrame from '../explorer/src/viewer/CameraFrame.ts';
+import {motionEase, MOTION} from '../explorer/src/experience/motion.ts';
 
 const require = createRequire(import.meta.url);
 const ts = require('../explorer/node_modules/typescript');
@@ -23,7 +26,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, console: {error() {}}, ...globals,
+    module, THREE, performance, ...CameraFrame, motionEase, MOTION, console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }
@@ -39,15 +42,24 @@ function scene(id = 'leaf') {
 }
 const identity = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
 function fixture(globals = {}) {
+  const camera = new THREE.PerspectiveCamera(33, 1.5, .01, 2000);
+  camera.position.set(0, 0, 60);
+  const document = {addEventListener() {}, removeEventListener() {}};
+  const element = {style: {}, ownerDocument: document, getRootNode: () => document, addEventListener() {}, removeEventListener() {}};
+  const controls = new OrbitControls(camera, element);
+  controls.enableDamping = true;
+  controls.minDistance = 3;
+  controls.maxDistance = 1500;
   const value = {
     generation: 0, dead: false, ready: false, busy: false, frame: 0, error: '', renderCount: 0,
     pieces: new Map(), loadedObjects: [], staged: new THREE.Group(), scene: new THREE.Scene(),
-    camera: new THREE.PerspectiveCamera(), controls: {enabled: true}, fitted: new Set(), current: null, active: false,
+    camera, controls, fitted: new Set(), current: null, active: false,
+    target: new THREE.Vector3(), frameFocus: new THREE.Vector3(), stepBounds: new THREE.Box3(),
     manifest: {finalLeafIds: ['leaf'], targetPoses: {leaf: identity}}, notifications: [], updates: 0,
     notify(status) { this.notifications.push(status); },
     update() { this.updates++; }, positionStage() {},
   };
-  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load']) value[name] = actual(name, value, globals);
+  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext', 'occlusionDistance']) value[name] = actual(name, value, globals);
   return value;
 }
 function loadGlobals({overview, catalog, diamond, surfaces = async () => new Map(), metadataFails = false}) {
@@ -156,7 +168,6 @@ test('unchanged layout preserves keyboard orbit while changed chrome bounds refr
       getBoundingClientRect: () => rect,
       parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => selector === '.play-heading' ? header : dock})},
     },
-    controls: {enabled: true, target: new THREE.Vector3(), update() {}},
     reframe() {reframes++; this.camera.position.set(0, 0, 100);},
     invalidate() {invalidations++;},
   });
@@ -184,7 +195,179 @@ test('unchanged layout preserves keyboard orbit while changed chrome bounds refr
   const stageTop = Number.parseFloat(v.stage.style.top), stageLeft = Number.parseFloat(v.stage.style.left);
   assert.ok(stageTop > header.bottom && stageTop + v.stage.offsetHeight < dock.top);
   assert.ok(stageLeft >= 0 && stageLeft + v.stage.offsetHeight <= rect.width);
-  assert.equal(invalidations, 7, 'Each live layout keeps stage rendering fresh');
+  assert.equal(invalidations, 8, 'Each live layout and the keyboard gesture refresh rendering');
+});
+
+function renderedFixture() {
+  const callbacks = new Map();
+  let next = 0;
+  const globals = {
+    requestAnimationFrame(callback) {const id = ++next; callbacks.set(id, callback); return id;},
+    cancelAnimationFrame(id) {callbacks.delete(id);},
+  };
+  const v = fixture(globals);
+  Object.assign(v, {ready: true, side: 'front', media: {matches: false}, draws: 0, renderer: {render() {v.draws++;}}});
+  for (const name of ['render', 'invalidate', 'cameraChanged', 'flip', 'contextLost']) v[name] = actual(name, v, globals);
+  v.controls.addEventListener('change', v.cameraChanged);
+  function frame(now) {
+    const entry = callbacks.entries().next().value;
+    assert.ok(entry, 'A frame is scheduled');
+    callbacks.delete(entry[0]); entry[1](now);
+  }
+  function settle(start, limit = 500) {
+    let count = 0;
+    while (callbacks.size && count < limit) frame(start + ++count * 16);
+    assert.equal(callbacks.size, 0, 'Finite movement returns to idle');
+    return count;
+  }
+  return {v, callbacks, frame, settle};
+}
+
+test('flip uses the shared orbit basis throughout a finite camera arc and reduced-motion endpoint', () => {
+  for (const sign of [-1, 1]) for (const reduced of [false, true]) {
+    const {v, callbacks, frame, settle} = renderedFixture();
+    v.side = sign === 1 ? 'front' : 'back'; v.media.matches = reduced;
+    v.camera.position.set(7, 5, sign * 60); v.camera.up.set(0, sign, 0);
+    CameraFrame.syncOrbitUp(v.camera, v.controls); v.controls.update();
+    settle(performance.now());
+    const before = v.camera.position.clone(), up = v.camera.up.clone(), radius = before.length();
+    v.flip();
+    const start = v.cameraMotion.start, rotation = -sign * Math.PI;
+    assert.equal(v.busy, true); assert.equal(v.controls.enabled, false);
+    assert.ok(v.camera.position.distanceTo(before) < 1e-9, 'Flip does not jump at activation');
+    frame(start + 100);
+    assert.ok(Math.abs(v.camera.position.length() - radius) < 1e-8, 'Flip keeps a safe orbit radius');
+    assert.ok(v.camera.up.clone().applyQuaternion(v.controls._quat).distanceTo(new THREE.Vector3(0, 1, 0)) < 1e-8);
+    if (!reduced) {assert.equal(v.busy, true); assert.ok(v.cameraMotion);}
+    else {assert.equal(v.busy, false); assert.equal(v.cameraMotion, undefined);}
+    settle(start + 100);
+    assert.equal(v.cameraMotion, undefined); assert.equal(v.busy, false); assert.equal(v.controls.enabled, true);
+    assert.ok(v.camera.position.distanceTo(before.clone().applyAxisAngle(new THREE.Vector3(1, 0, 0), rotation)) < 1e-8);
+    assert.ok(v.camera.up.distanceTo(up.clone().applyAxisAngle(new THREE.Vector3(1, 0, 0), rotation)) < 1e-8);
+    const count = v.draws;
+    assert.equal(callbacks.size, 0); assert.equal(v.frame, 0);
+    v.flip(); settle(v.cameraMotion.start);
+    assert.ok(v.camera.position.distanceTo(before) < 1e-8, 'A second flip restores the original orbit');
+    assert.ok(v.camera.up.distanceTo(up) < 1e-8); assert.ok(v.draws > count);
+    v.controls.dispose();
+  }
+});
+
+test('off-center assembly framing keeps its projected center fixed throughout flip and double flip', () => {
+  for (const sign of [-1, 1]) for (const reduced of [false, true]) {
+    const {v, callbacks, frame, settle} = renderedFixture();
+    const center = new THREE.Vector3(3, -7, 2), halfSize = new THREE.Vector3(14, 14, 4);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(28, 28, 8), new THREE.MeshBasicMaterial());
+    mesh.position.copy(center);
+    v.pieces.set('leaf', {mesh, bounds: new THREE.Box3(center.clone().sub(halfSize), center.clone().add(halfSize))});
+    v.fitted.add('leaf'); v.scene.add(mesh);
+    Object.assign(v, {
+      side: sign === 1 ? 'front' : 'back', host: {clientWidth: 390, clientHeight: 844},
+      frameRegion: {top: 80, bottom: 400, left: 0, width: 390}, hasFramed: false,
+    });
+    v.camera.aspect = 390 / 844; v.camera.updateProjectionMatrix();
+    v.media.matches = reduced;
+    for (const name of ['boundsFor', 'reframe', 'project']) v[name] = actual(name, v);
+    v.reframe(); settle(performance.now());
+    assert.ok(v.frameFocus.distanceTo(center) < 1e-9, 'Framing stores the actual assembly center');
+    assert.ok(v.controls.target.distanceTo(center) > 5, 'Fixture has a real offset to leave staging and controls clear');
+    const initialPoint = v.project(center), initialPosition = v.camera.position.clone(), initialTarget = v.controls.target.clone(), initialUp = v.camera.up.clone();
+    assert.ok(Math.abs(initialPoint.x - 195) < 1e-8);
+    assert.ok(Math.abs(initialPoint.y - 240) < 1e-8, 'Assembly appears in the deliberately off-center usable region');
+    const centerDistance = v.camera.position.distanceTo(center);
+    for (let turn = 0; turn < 2; turn++) {
+      v.flip();
+      const start = v.cameraMotion.start;
+      assert.ok(v.cameraMotion.rotationPivot.distanceTo(center) < 1e-9);
+      for (const fraction of reduced ? [1] : [.05, .15, .3, .5, .7, .9, 1]) {
+        frame(start + MOTION.navigate * 1000 * fraction + .001);
+        const point = v.project(center);
+        assert.ok(Math.hypot(point.x - initialPoint.x, point.y - initialPoint.y) < 1e-7, `Projected assembly center stays clear of staging at flip fraction ${fraction}`);
+        assert.ok(Math.abs(v.camera.position.distanceTo(center) - centerDistance) < 1e-8, 'The assembly remains at a fixed viewing distance');
+        assert.ok(point.y >= v.frameRegion.top && point.y <= v.frameRegion.bottom);
+      }
+      settle(start + MOTION.navigate * 1000 + 1);
+      assert.equal(callbacks.size, 0); assert.equal(v.busy, false);
+      const point = v.project(center);
+      assert.ok(Math.hypot(point.x - initialPoint.x, point.y - initialPoint.y) < 1e-7);
+    }
+    assert.ok(v.camera.position.distanceTo(initialPosition) < 1e-8);
+    assert.ok(v.controls.target.distanceTo(initialTarget) < 1e-8);
+    assert.ok(v.camera.up.distanceTo(initialUp) < 1e-8);
+    mesh.geometry.dispose(); mesh.material.dispose(); v.controls.dispose();
+  }
+});
+
+test('capturing a part clears orbit inertia and prevents flip or camera drift during dragging', () => {
+  const {v, callbacks, settle} = renderedFixture();
+  Object.assign(v, {
+    active: true, current: {id: 'offered-part'}, point: () => ({x: 40, y: 50}), stagePoint: () => ({x: 40, y: 50}),
+    stage: {setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
+    destination: {dataset: {}, style: {}}, selected() {}, project() {return {x: 100, y: 100};},
+  });
+  for (const name of ['pointerDown', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
+  v.controls._sphericalDelta.theta = .6;
+  v.controls.update();
+  assert.ok(v.controls._sphericalDelta.theta !== 0, 'A real damped orbit has inertia');
+  const before = v.camera.position.clone(), side = v.side;
+  v.pointerDown({button: 0, pointerId: 7, preventDefault() {}, stopPropagation() {}});
+  assert.equal(v.controls.enabled, false); assert.ok(v.drag);
+  assert.equal(v.controls._sphericalDelta.theta, 0); assert.equal(v.controls._sphericalDelta.phi, 0);
+  v.flip(); assert.equal(v.cameraMotion, undefined); assert.equal(v.side, side);
+  v.reframe(true); assert.equal(v.cameraMotion, undefined, 'Guidance also cannot turn during capture');
+  settle(performance.now());
+  assert.ok(v.camera.position.distanceTo(before) < 1e-10, 'Captured part keeps its screen-space target fixed');
+  assert.equal(callbacks.size, 0);
+  v.cancel(); settle(performance.now());
+  assert.equal(v.drag, undefined); assert.equal(v.controls.enabled, true);
+  assert.ok(v.camera.position.distanceTo(before) < 1e-10, 'Old inertia does not resume after cancellation');
+  v.controls.dispose();
+});
+
+test('real OrbitControls damping drives a bounded render tail and then sleeps', () => {
+  const {v, callbacks, settle} = renderedFixture();
+  v.controls._sphericalDelta.theta = .7;
+  v.controls.update();
+  assert.ok(callbacks.size > 0);
+  const start = v.camera.position.clone();
+  const frames = settle(performance.now());
+  assert.ok(frames > 5 && frames < 500, `Damping settles in ${frames} frames`);
+  assert.ok(v.camera.position.distanceTo(start) > 1, 'The tail applies real camera motion');
+  assert.equal(v.frame, 0); assert.equal(callbacks.size, 0);
+  const draws = v.draws;
+  assert.equal(callbacks.size, 0); assert.equal(v.draws, draws);
+  v.controls.dispose();
+});
+
+test('context loss cancels a camera turn without committing or leaving a scheduled render tail', () => {
+  const {v, callbacks, frame} = renderedFixture();
+  v.cancel = actual('cancel', v);
+  v.flip(); frame(v.cameraMotion.start + 100);
+  assert.ok(v.cameraMotion);
+  v.contextLost({preventDefault() {}});
+  assert.equal(v.cameraMotion, undefined); assert.equal(v.busy, false); assert.equal(v.ready, false);
+  assert.equal(v.controls.enabled, false); assert.equal(v.frame, 0); assert.equal(callbacks.size, 0);
+  v.controls.dispose();
+});
+
+test('beauty or contact-render failure stops pending damping frames and exposes retry', () => {
+  for (const pass of ['beauty', 'occlusion']) {
+    const {v, callbacks, frame} = renderedFixture();
+    v.controls._sphericalDelta.theta = .5;
+    v.controls.update();
+    let attempts = 0;
+    const fail = () => {attempts++; throw Error(`Injected ${pass} failure`);};
+    if (pass === 'beauty') v.renderer.render = fail;
+    else v.surfaceOcclusion = {render: fail};
+    assert.doesNotThrow(() => frame(performance.now()));
+    assert.equal(v.ready, false); assert.equal(v.busy, false); assert.equal(v.controls.enabled, false);
+    assert.match(v.error, /could not render.*Retry/);
+    assert.equal(v.animation, undefined); assert.equal(v.cameraMotion, undefined);
+    assert.equal(callbacks.size, 0, 'A failed renderer must stay idle until retry');
+    v.render(performance.now() + 16);
+    assert.equal(attempts, 1, 'A late frame cannot retry a broken renderer');
+    v.controls.dispose();
+  }
 });
 
 test('the production settle commits once, blocks duplicate activation and stops scheduling at completion', () => {
@@ -240,7 +423,7 @@ test('controller disposal releases geometry, cloned materials, listeners, observ
   v.scene.add(display); v.pieces.set('leaf', {mesh: display}); v.loadedObjects.push(original.object);
   Object.assign(v, {
     frame: 19, releaseCapture() {releases.push('capture');}, observer: {disconnect() {releases.push('observer');}},
-    controls: {dispose() {releases.push('controls');}}, environment: {dispose() {releases.push('environment');}},
+    controls: {dispose() {releases.push('controls');}}, environment: {dispose() {releases.push('environment');}}, surfaceOcclusion: {dispose() {releases.push('occlusion');}},
     stage: {removeEventListener(name) {releases.push(`stage:${name}`);}},
     media: {removeEventListener(name) {releases.push(`media:${name}`);}},
     renderer: {dispose() {releases.push('renderer');}, domElement: {removeEventListener(name) {releases.push(`canvas:${name}`);}, remove() {releases.push('canvas');}}},
@@ -249,7 +432,7 @@ test('controller disposal releases geometry, cloned materials, listeners, observ
   dispose(); dispose();
   assert.equal(v.dead, true); assert.equal(v.pieces.size, 0); assert.equal(v.loadedObjects.length, 0);
   assert.deepEqual(original.disposal, {geometry: 1, material: 1}); assert.equal(displayDisposed, 1);
-  for (const key of ['capture', 'observer', 'controls', 'environment', 'renderer', 'canvas', 'frame', 'media:change',
+  for (const key of ['capture', 'observer', 'controls', 'environment', 'occlusion', 'renderer', 'canvas', 'frame', 'media:change',
     'stage:pointerdown', 'stage:pointermove', 'stage:pointerup', 'stage:pointercancel', 'stage:lostpointercapture', 'stage:keydown',
     'canvas:webglcontextlost', 'canvas:webglcontextrestored', 'canvas:keydown']) assert.equal(releases.filter((value) => value === key).length, 1, key);
 });
@@ -316,7 +499,7 @@ test('failed controller construction frees the renderer, controls, canvas and te
   const released = [];
   const canvas = {setAttribute() {}, removeEventListener() {}, remove() {released.push('canvas');}};
   class Renderer {domElement = canvas; setPixelRatio() {} setClearColor() {} dispose() {released.push('renderer');}}
-  class Controls {addEventListener() {} dispose() {released.push('controls');}}
+  class Controls {touches = {}; addEventListener() {} dispose() {released.push('controls');}}
   class Room {dispose() {released.push('room');}}
   class Pmrem {fromScene() {throw Error('Injected environment failure');} dispose() {released.push('pmrem');}}
   const globals = {THREE: {...THREE, WebGLRenderer: Renderer, PMREMGenerator: Pmrem}, OrbitControls: Controls, StudioEnvironment: Room, devicePixelRatio: 1, cancelAnimationFrame() {}};

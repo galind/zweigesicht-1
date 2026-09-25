@@ -7,6 +7,7 @@ export interface PlayStep {
   label: string;
   leafIds: readonly string[];
   side: PlaySide;
+  viewDirectionWorld?: readonly number[];
   assemblyId: string;
   staging: 'lower-left';
   contextLeafIds: readonly string[];

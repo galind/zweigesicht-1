@@ -2,6 +2,16 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import {
+  syncOrbitUp,
+  orbitCamera,
+  zoomCamera,
+  KEYBOARD_ORBIT_MOVES,
+  KEYBOARD_ZOOM_IN,
+  KEYBOARD_ZOOM_OUT,
+} from '../viewer/CameraFrame';
+import { motionEase, MOTION } from '../experience/motion';
+import { SurfaceOcclusion } from '../viewer/SurfaceOcclusion';
 import { StudioEnvironment } from '../viewer/StudioEnvironment';
 import {
   attachSourceSurface,
@@ -26,6 +36,7 @@ export type PlayViewStatus = {
   error: string;
   busy: boolean;
   cutaway: boolean;
+  side: 'front' | 'back';
 };
 
 /** A route-local controller. Source matrices and shared geometry are never mutated. */
@@ -35,6 +46,18 @@ export class PlayViewer {
   camera = new THREE.PerspectiveCamera(33, 1, 0.01, 2000);
   controls: OrbitControls;
   environment?: THREE.WebGLRenderTarget;
+  surfaceOcclusion?: SurfaceOcclusion;
+  cameraMotion?: {
+    start: number;
+    fromPosition: THREE.Vector3;
+    fromTarget: THREE.Vector3;
+    fromUp: THREE.Vector3;
+    position: THREE.Vector3;
+    target: THREE.Vector3;
+    up: THREE.Vector3;
+    rotation?: number;
+    rotationPivot?: THREE.Vector3;
+  };
   pieces = new Map<string, Piece>();
   staged = new THREE.Group();
   observer: ResizeObserver;
@@ -50,8 +73,10 @@ export class PlayViewer {
   fitted = new Set<string>();
   active = false;
   target = new THREE.Vector3();
+  frameFocus = new THREE.Vector3();
   stepBounds = new THREE.Box3();
   stageScale = 1;
+  hasFramed = false;
   frameRegion = { top: 80, bottom: 500, left: 0, width: 1000 };
   side: 'front' | 'back' = 'front';
   drag?: {
@@ -96,7 +121,9 @@ export class PlayViewer {
       this.camera.up.set(0, -1, 0);
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.controls.enablePan = false;
-      this.controls.minDistance = 0.4;
+      this.controls.enableDamping = true;
+      this.controls.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
+      this.controls.minDistance = 3;
       this.controls.maxDistance = 1500;
       this.controls.addEventListener('change', this.cameraChanged);
       this.makeEnvironment();
@@ -106,6 +133,7 @@ export class PlayViewer {
       const rim = new THREE.DirectionalLight(0xc0dff3, 0.6);
       rim.position.set(30, -10, 35);
       this.scene.add(key, rim, this.staged);
+      this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
       stage.addEventListener('pointerdown', this.pointerDown);
       stage.addEventListener('pointermove', this.pointerMove);
       stage.addEventListener('pointerup', this.pointerUp);
@@ -137,6 +165,7 @@ export class PlayViewer {
         error: this.error,
         busy: this.busy,
         cutaway: this.cutaway,
+        side: this.side,
       });
   }
   makeEnvironment() {
@@ -305,7 +334,9 @@ export class PlayViewer {
   update(fitted: Set<string>, step: PlayStep | null, active: boolean) {
     this.cancel();
     this.animation = undefined;
+    this.cameraMotion = undefined;
     this.busy = false;
+    const previous = this.current;
     this.fitted = new Set(fitted);
     this.current = step;
     this.active = active;
@@ -328,7 +359,7 @@ export class PlayViewer {
     }
     this.staged.visible = !!step && active;
     this.side = step?.side ?? this.side;
-    this.reframe();
+    this.reframe(!!previous && active);
     this.emit();
   }
   boundsFor(ids: Iterable<string>) {
@@ -339,8 +370,13 @@ export class PlayViewer {
     }
     return b;
   }
-  reframe = () => {
-    if (!this.ready || this.drag || this.busy) return;
+  reframe = (animate = false) => {
+    if (!this.ready || this.drag || (this.busy && !this.cameraMotion)) return;
+    const transition = (animate || !!this.cameraMotion) && this.hasFramed;
+    this.hasFramed = true;
+    const fromPosition = this.camera.position.clone(),
+      fromTarget = this.controls.target.clone(),
+      fromUp = this.camera.up.clone();
     const step = this.active ? this.current : null;
     const ids = step
       ? [...step.focusLeafIds, ...step.leafIds]
@@ -349,6 +385,7 @@ export class PlayViewer {
     if (bounds.isEmpty()) bounds = this.boundsFor(this.manifest.initialLeafIds);
     const center = bounds.getCenter(new THREE.Vector3()),
       size = bounds.getSize(new THREE.Vector3());
+    this.frameFocus.copy(center);
     const span = Math.max(size.x, size.y, size.z, step ? 3.5 : 25);
     const regionHeight = Math.max(
       80,
@@ -362,29 +399,60 @@ export class PlayViewer {
       );
     const desiredY = (this.frameRegion.top + this.frameRegion.bottom) / 2;
     const worldHeight = 2 * distance * Math.tan(THREE.MathUtils.degToRad(16.5));
-    // Shift the view upward to leave the stage and controls clear on phones.
-    const upSign = this.side === 'front' ? 1 : -1;
-    this.camera.up.set(0, upSign, 0);
+    // Use the same source-face convention as the explorer, including radial
+    // retaining screws' authored oblique view. Frame in screen axes, not CAD XY.
+    const up = new THREE.Vector3(0, this.side === 'front' ? 1 : -1, 0);
+    const direction =
+      step?.viewDirectionWorld && this.side === step.side
+        ? new THREE.Vector3().fromArray(step.viewDirectionWorld).normalize()
+        : new THREE.Vector3(0, 0, this.side === 'front' ? 1 : -1);
+    const right = new THREE.Vector3().crossVectors(up, direction).normalize();
+    const screenUp = new THREE.Vector3()
+      .crossVectors(direction, right)
+      .normalize();
     const desiredX = this.frameRegion.left + this.frameRegion.width / 2;
+    this.camera.up.copy(up);
+    syncOrbitUp(this.camera, this.controls);
     this.controls.target
       .copy(center)
-      .add(
-        new THREE.Vector3(
-          (0.5 - desiredX / this.host.clientWidth) *
-            worldHeight *
-            this.camera.aspect,
-          upSign * (desiredY / this.host.clientHeight - 0.5) * worldHeight,
-          0,
-        ),
+      .addScaledVector(
+        right,
+        (0.5 - desiredX / this.host.clientWidth) *
+          worldHeight *
+          this.camera.aspect,
+      )
+      .addScaledVector(
+        screenUp,
+        (desiredY / this.host.clientHeight - 0.5) * worldHeight,
       );
     this.camera.position
       .copy(this.controls.target)
-      .add(
-        new THREE.Vector3(0, 0, this.side === 'front' ? distance : -distance),
-      );
+      .addScaledVector(direction, distance);
     this.camera.lookAt(this.controls.target);
     this.camera.updateMatrixWorld();
+    this.stopOrbitMotion();
     this.controls.update();
+    if (transition && !this.media.matches) {
+      const old = this.cameraMotion;
+      this.cameraMotion = {
+        start: old?.start ?? performance.now(),
+        fromPosition: old?.fromPosition ?? fromPosition,
+        fromTarget: old?.fromTarget ?? fromTarget,
+        fromUp: old?.fromUp ?? fromUp,
+        position: this.camera.position.clone(),
+        target: this.controls.target.clone(),
+        up: this.camera.up.clone(),
+      };
+      this.camera.position.copy(fromPosition);
+      this.controls.target.copy(fromTarget);
+      this.camera.up.copy(fromUp);
+      syncOrbitUp(this.camera, this.controls);
+      this.camera.lookAt(this.controls.target);
+      this.camera.updateMatrixWorld();
+      this.busy = true;
+      this.controls.enabled = false;
+      this.emit();
+    }
     this.presentContext();
     this.positionStage();
     this.invalidate();
@@ -512,6 +580,7 @@ export class PlayViewer {
       start: p,
       moved: false,
     };
+    this.stopOrbitMotion();
     this.controls.enabled = false;
     this.stage.setPointerCapture(event.pointerId);
     this.selected();
@@ -605,13 +674,50 @@ export class PlayViewer {
   guide = () => {
     if (this.drag || this.busy) return;
     if (this.current) this.side = this.current.side;
-    this.reframe();
+    this.reframe(true);
   };
   flip = () => {
-    if (this.drag || this.busy) return;
+    if (!this.ready || this.drag || this.busy) return;
+    this.stopOrbitMotion();
+    const rotation = this.side === 'front' ? -Math.PI : Math.PI;
     this.side = this.side === 'front' ? 'back' : 'front';
-    this.reframe();
+    const axis = new THREE.Vector3(1, 0, 0);
+    this.cameraMotion = {
+      start: performance.now(),
+      rotation,
+      rotationPivot: this.frameFocus.clone(),
+      fromPosition: this.camera.position.clone(),
+      fromTarget: this.controls.target.clone(),
+      fromUp: this.camera.up.clone(),
+      position: this.camera.position
+        .clone()
+        .sub(this.frameFocus)
+        .applyAxisAngle(axis, rotation)
+        .add(this.frameFocus),
+      target: this.controls.target
+        .clone()
+        .sub(this.frameFocus)
+        .applyAxisAngle(axis, rotation)
+        .add(this.frameFocus),
+      up: this.camera.up.clone().applyAxisAngle(axis, rotation),
+    };
+    this.busy = true;
+    this.controls.enabled = false;
+    this.emit();
+    this.invalidate();
   };
+  stopOrbitMotion() {
+    // The pinned controls retain damping deltas. Freeze them before placing a
+    // piece, so the camera cannot drift under a captured pointer or a guided turn.
+    const c = this.controls as OrbitControls & {
+      _sphericalDelta?: THREE.Spherical;
+      _panOffset?: THREE.Vector3;
+      _scale?: number;
+    };
+    c._sphericalDelta?.set(0, 0, 0);
+    c._panOffset?.set(0, 0, 0);
+    c._scale = 1;
+  }
   stageKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       this.cancel();
@@ -628,21 +734,19 @@ export class PlayViewer {
       this.guide();
       return;
     }
-    const delta = this.camera.position.clone().sub(this.controls.target),
-      sphere = new THREE.Spherical().setFromVector3(delta);
-    if (event.key === 'ArrowLeft') sphere.theta -= 0.12;
-    else if (event.key === 'ArrowRight') sphere.theta += 0.12;
-    else if (event.key === 'ArrowUp') sphere.phi -= 0.12;
-    else if (event.key === 'ArrowDown') sphere.phi += 0.12;
-    else if (event.key === '+' || event.key === '=') sphere.radius *= 0.9;
-    else if (event.key === '-') sphere.radius *= 1.1;
-    else return;
-    event.preventDefault();
-    sphere.makeSafe();
-    this.camera.position
-      .copy(this.controls.target)
-      .add(new THREE.Vector3().setFromSpherical(sphere));
-    this.controls.update();
+    const move = KEYBOARD_ORBIT_MOVES[event.key];
+    if (move) {
+      event.preventDefault();
+      orbitCamera(this.camera, this.controls, ...move);
+    } else if (['+', '=', '-'].includes(event.key)) {
+      event.preventDefault();
+      zoomCamera(
+        this.camera,
+        this.controls,
+        event.key === '-' ? KEYBOARD_ZOOM_OUT : KEYBOARD_ZOOM_IN,
+      );
+    } else return;
+    this.invalidate();
   };
   layout = () => {
     if (this.dead) return;
@@ -675,7 +779,8 @@ export class PlayViewer {
       width,
     };
     const changed = Object.entries(region).some(
-      ([key, value]) => Math.abs(value - this.frameRegion[key as keyof typeof region]) > 0.5,
+      ([key, value]) =>
+        Math.abs(value - this.frameRegion[key as keyof typeof region]) > 0.5,
     );
     this.frameRegion = region;
     // Observer delivery can follow a user's camera gesture. An unchanged layout
@@ -688,6 +793,7 @@ export class PlayViewer {
     this.cancel();
     const { clientWidth: w, clientHeight: h } = this.host;
     this.renderer.setSize(w, h);
+    this.surfaceOcclusion?.resize(w, h);
     this.camera.aspect = w / Math.max(h, 1);
     this.camera.updateProjectionMatrix();
     this.layout();
@@ -697,6 +803,7 @@ export class PlayViewer {
   contextLost = (event: Event) => {
     event.preventDefault();
     this.contextUnavailable = true;
+    this.cameraMotion = undefined;
     this.cancel();
     this.animation = undefined;
     this.busy = false;
@@ -736,11 +843,11 @@ export class PlayViewer {
   };
   render = (now: number) => {
     this.frame = 0;
-    if (this.dead || this.contextUnavailable) return;
+    if (this.dead || this.contextUnavailable || this.error) return;
     if (this.animation) {
       const a = this.animation,
         t = this.media.matches ? 1 : Math.min(1, (now - a.start) / 220),
-        eased = t * t * (3 - 2 * t);
+        eased = motionEase(t);
       this.positionStage(
         {
           x: THREE.MathUtils.lerp(a.from.x, a.to.x, eased),
@@ -756,6 +863,62 @@ export class PlayViewer {
         this.emit();
       } else this.invalidate();
     }
+    if (this.cameraMotion) {
+      const motion = this.cameraMotion;
+      const t = this.media.matches
+        ? 1
+        : Math.min(1, (now - motion.start) / (MOTION.navigate * 1000));
+      const eased = motionEase(t);
+      this.controls.target.lerpVectors(motion.fromTarget, motion.target, eased);
+      const offset = motion.fromPosition.clone().sub(motion.fromTarget);
+      if (motion.rotation !== undefined) {
+        const axis = new THREE.Vector3(1, 0, 0);
+        if (motion.rotationPivot) {
+          this.controls.target
+            .copy(motion.fromTarget)
+            .sub(motion.rotationPivot)
+            .applyAxisAngle(axis, motion.rotation * eased)
+            .add(motion.rotationPivot);
+        }
+        offset.applyAxisAngle(axis, motion.rotation * eased);
+        this.camera.up
+          .copy(motion.fromUp)
+          .applyAxisAngle(axis, motion.rotation * eased);
+      } else {
+        const end = motion.position.clone().sub(motion.target),
+          origin = new THREE.Vector3();
+        const orientation = new THREE.Quaternion().setFromRotationMatrix(
+          new THREE.Matrix4().lookAt(offset, origin, motion.fromUp),
+        );
+        orientation.slerp(
+          new THREE.Quaternion().setFromRotationMatrix(
+            new THREE.Matrix4().lookAt(end, origin, motion.up),
+          ),
+          eased,
+        );
+        offset
+          .set(0, 0, THREE.MathUtils.lerp(offset.length(), end.length(), eased))
+          .applyQuaternion(orientation);
+        this.camera.up.set(0, 1, 0).applyQuaternion(orientation);
+      }
+      this.camera.position.copy(this.controls.target).add(offset);
+      if (t === 1) {
+        this.camera.position.copy(motion.position);
+        this.controls.target.copy(motion.target);
+        this.camera.up.copy(motion.up);
+        this.cameraMotion = undefined;
+        this.busy = false;
+        this.controls.enabled = this.ready;
+      } else this.invalidate();
+      syncOrbitUp(this.camera, this.controls);
+      this.camera.lookAt(this.controls.target);
+      this.camera.updateMatrixWorld();
+      this.presentContext();
+      this.positionStage();
+      if (t === 1) this.emit();
+    }
+    // Orbit damping shares the explorer's feel, but only schedules while moving.
+    if (!this.drag && !this.busy && this.controls.update()) this.invalidate();
     if (this.ready && this.active && this.current) {
       const p = this.project(this.target);
       this.destination.style.left = `${p.x}px`;
@@ -763,8 +926,21 @@ export class PlayViewer {
     }
     // React may have revealed/reflowed staging after the discrete update.
     if (!this.drag && !this.animation && !this.busy) this.positionStage();
-    this.renderer.render(this.scene, this.camera);
-    this.renderCount++;
+    try {
+      this.renderer.render(this.scene, this.camera);
+      this.surfaceOcclusion?.render(this.renderer);
+      this.renderCount++;
+    } catch {
+      if (this.frame) cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.ready = false;
+      this.busy = false;
+      this.cameraMotion = undefined;
+      this.animation = undefined;
+      this.controls.enabled = false;
+      this.error = 'The view could not render. Retry to restore your assembly.';
+      this.emit();
+    }
   };
   /** Read-only diagnostics; placement tests use the same DOM pointer path as players. */
   inspect() {
@@ -787,6 +963,9 @@ export class PlayViewer {
     return {
       side: this.side,
       camera: this.camera.position.toArray(),
+      cameraUp: this.camera.up.toArray(),
+      cameraTarget: this.controls.target.toArray(),
+      cameraMoving: !!this.cameraMotion,
       occluders,
       ready: this.ready,
       stepId: this.current?.id,
@@ -818,6 +997,7 @@ export class PlayViewer {
     this.controls?.dispose();
     this.clearPieces();
     this.environment?.dispose();
+    this.surfaceOcclusion?.dispose();
     this.stage.removeEventListener('pointerdown', this.pointerDown);
     this.stage.removeEventListener('pointermove', this.pointerMove);
     this.stage.removeEventListener('pointerup', this.pointerUp);

@@ -5,7 +5,16 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type ComponentProps,
 } from 'react';
+import {
+  Undo2,
+  ScanSearch,
+  FlipHorizontal2,
+  RotateCcw,
+  Lightbulb,
+  Layers,
+} from 'lucide-react';
 import authored from '../../../assets/authored/play-manifest.json';
 import {
   commitPlacement,
@@ -26,7 +35,12 @@ const blank: PlayViewStatus = {
   busy: false,
   error: '',
   cutaway: false,
+  side: 'front',
 };
+// Reuse the explorer's native text-button treatment and semantic button API.
+function Control({ className = '', ...props }: ComponentProps<'button'>) {
+  return <button className={`text-button ${className}`} {...props} />;
+}
 export default function Play() {
   const host = useRef<HTMLDivElement>(null),
     stage = useRef<HTMLButtonElement>(null),
@@ -81,7 +95,9 @@ export default function Play() {
         setSession(saved.session);
       } else if (saved.status === 'corrupt' || saved.status === 'incompatible')
         setStorage(
-          'Your previous session cannot be restored. Choose a level to start again.',
+          saved.status === 'incompatible'
+            ? 'Your saved assembly uses an earlier part sequence. Choose a level to start again with the dial screws.'
+            : 'Your previous session cannot be restored. Choose a level to start again.',
         );
       else if (saved.status === 'unavailable')
         setStorage('Saving is unavailable. You can play in this tab.');
@@ -219,15 +235,15 @@ export default function Play() {
       <header className="play-heading">
         <span>Zweigesicht–1</span>
         <span>Assembly</span>
-        <button
+        <Control
           onClick={() => setHelp(!help)}
           aria-expanded={help}
           aria-controls="play-help"
         >
           How to play
-        </button>
+        </Control>
       </header>
-      <button
+      <Control
         ref={stage}
         className="play-stage"
         aria-label={step ? `Select ${step.label}` : 'Current piece'}
@@ -239,8 +255,8 @@ export default function Play() {
         <span className="play-stage-caption">
           {selected ? 'Selected' : 'Drag this piece'}
         </span>
-      </button>
-      <button
+      </Control>
+      <Control
         ref={destination}
         className="play-target"
         data-hint={hint}
@@ -252,35 +268,35 @@ export default function Play() {
         onClick={() => viewer.current?.place()}
       >
         <span aria-hidden="true">＋</span>
-      </button>
+      </Control>
       {!active && (
         <section className="play-choice" aria-labelledby="play-title">
-          <h1 id="play-title">A watch, piece by piece.</h1>
+          <h1 id="play-title">Assemble the movement</h1>
           <p>Choose how much you assemble. Take your time.</p>
           {session && (
-            <button
+            <Control
               className="play-primary"
               disabled={disabled}
               onClick={() => apply(session, true, false)}
             >
               Continue {session.level === 'easy' ? 'Easy' : 'Hard'} ·{' '}
               {session.completedStepIds.length} / {total}
-            </button>
+            </Control>
           )}
           <div className="play-levels">
-            <button disabled={disabled} onClick={() => choose('easy')}>
+            <Control disabled={disabled} onClick={() => choose('easy')}>
               <strong>Easy</strong>
               <span>
                 Prepared assemblies · {manifest.levels.easy.steps.length} steps
               </span>
-            </button>
-            <button disabled={disabled} onClick={() => choose('hard')}>
+            </Control>
+            <Control disabled={disabled} onClick={() => choose('hard')}>
               <strong>Hard</strong>
               <span>
                 Individual components · {manifest.levels.hard.steps.length}{' '}
                 steps
               </span>
-            </button>
+            </Control>
           </div>
           <small>The fitted mainplate is ready in both levels.</small>
         </section>
@@ -298,7 +314,7 @@ export default function Play() {
                 ? 'Complete'
                 : status.cutaway
                   ? 'Assembly close-up'
-                  : step?.side === 'front'
+                  : status.side === 'front'
                     ? 'Three-hands face'
                     : 'Skeleton face'}
             </span>
@@ -319,33 +335,37 @@ export default function Play() {
             </p>
           )}
           <div className="play-actions">
-            <button
+            <Control
               disabled={disabled || !session?.completedStepIds.length}
               onClick={undo}
             >
-              Undo
-            </button>
-            <button disabled={disabled} onClick={() => viewer.current?.guide()}>
-              Reframe
-            </button>
-            <button disabled={disabled} onClick={() => viewer.current?.flip()}>
-              Flip
-            </button>
+              <Undo2 aria-hidden="true" /> Undo
+            </Control>
+            <Control
+              disabled={disabled}
+              onClick={() => viewer.current?.guide()}
+            >
+              <ScanSearch aria-hidden="true" /> Reframe
+            </Control>
+            <Control disabled={disabled} onClick={() => viewer.current?.flip()}>
+              <FlipHorizontal2 aria-hidden="true" /> Flip
+            </Control>
             {step && (
-              <button
+              <Control
                 disabled={disabled}
                 aria-pressed={hint}
                 onClick={() => setHint(!hint)}
               >
-                Hint
-              </button>
+                <Lightbulb aria-hidden="true" /> Hint
+              </Control>
             )}
-            <button disabled={disabled} onClick={() => setConfirm('restart')}>
+            <Control disabled={disabled} onClick={() => setConfirm('restart')}>
+              <RotateCcw aria-hidden="true" />{' '}
               {completed ? 'Play again' : 'Restart'}
-            </button>
-            <button disabled={disabled} onClick={() => setConfirm('levels')}>
-              Levels
-            </button>
+            </Control>
+            <Control disabled={disabled} onClick={() => setConfirm('levels')}>
+              <Layers aria-hidden="true" /> Levels
+            </Control>
           </div>
         </section>
       )}
@@ -353,27 +373,27 @@ export default function Play() {
         <section className="play-loading" aria-label="Loading status">
           <p>{status.error || 'Preparing the watch…'}</p>
           {status.error && (
-            <button
+            <Control
               onClick={() => {
                 setStatus(blank);
                 setAttempt((n) => n + 1);
               }}
             >
               Retry 3D
-            </button>
+            </Control>
           )}
         </section>
       )}
       <div className="play-storage">{storage}</div>
       {help && (
         <aside id="play-help" className="play-help">
-          <button
+          <Control
             className="play-close"
             onClick={() => setHelp(false)}
             aria-label="Close instructions"
           >
             Close
-          </button>
+          </Control>
           <h2>Take your time</h2>
           <p>
             Drag the staged part near the ring and release. A missed drop simply
@@ -412,12 +432,12 @@ export default function Play() {
             : 'This replaces your current progress with a fresh assembly.'}
         </p>
         <div>
-          <button onClick={() => setConfirm(null)} autoFocus>
+          <Control onClick={() => setConfirm(null)} autoFocus>
             Keep playing
-          </button>
-          <button onClick={discard}>
+          </Control>
+          <Control onClick={discard}>
             {confirm === 'levels' ? 'Choose level' : 'Start again'}
-          </button>
+          </Control>
         </div>
       </dialog>
     </main>

@@ -1,6 +1,6 @@
 # Play inventory and sequence audit
 
-Audited 25 September 2026 against the prepared source manifest and actual runtime GLB nodes. The authoritative runtime mapping is [`play-manifest.json`](../assets/authored/play-manifest.json), version `play-2`. It contains full stable source instance IDs, source/fitted endpoint matrices, bounds, ordered placement IDs, per-step contexts, explicit exclusions and exceptions. Labels are presentation only; neither labels nor runtime name matching determine membership.
+Audited 26 September 2026 against the prepared source manifest and actual runtime GLB nodes. The authoritative runtime mapping is [`play-manifest.json`](../assets/authored/play-manifest.json), version `play-3`. It contains full stable source instance IDs, source/fitted endpoint matrices, bounds, ordered placement IDs, per-step contexts, explicit exclusions and exceptions. Labels are presentation only; neither labels nor runtime name matching determine membership.
 
 ## Scope and counts
 
@@ -11,16 +11,17 @@ Audited 25 September 2026 against the prepared source manifest and actual runtim
 | Chosen movement leaves | 222 |
 | Chosen dial/hand leaves | 43 |
 | Final physical leaves, either level | 265 |
-| Initially fitted mainplate leaves, either level | 18 |
+| Initially fitted mainplate leaves, either level | 16 |
+| Deferred mainplate dial-retaining screws, placed by player | 2 |
 | Excluded source leaves | 100 |
-| Easy player placements | 87 |
-| Hard player placements | 247 |
+| Easy player placements | 89 |
+| Hard player placements | 249 |
 
 The final configuration reuses the existing authored defaults: central Fine hands, small Lance hands, original blue fitted appearances, and static 10:10:00 hand-display correction. There is no case. The movement-side mounting clamps and their screws remain: they are modeled movement components, while the entire independent case tree is excluded. The existing fitted setting spring is movement child 53; overlapping alternative child 66 is excluded. Every selected physical leaf appears exactly once in each level, either initially fitted or in one placement. No source solid is split.
 
 ## Shared foundation
 
-The foundation is **only** `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54`, source “Werkplatte verstiftet versteint”. Its 18 physical descendants include the plate, eight directly modeled jewels, two pins, two screws and all five Incabloc components. Mainplate child 13 is an assembly node, not an extra physical piece. Other movement children sharing parent 83 are not included initially.
+The foundation comes **only** from `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54`, source “Werkplatte verstiftet versteint”. Its source subtree has 18 physical descendants. Following the user’s 26 September instruction, the two dial-retaining screws are deferred into placement steps. The other **16 leaves remain initially fitted**: the plate, eight directly modeled jewels, two pins and all five Incabloc components. Mainplate child 13 is an assembly node, not an extra physical piece. Other movement children sharing parent 83 are not included initially. The explicit `deferredFoundationLeafIds` field records this deliberate exception to the original fitted-foundation requirement.
 
 | Relative source path under mainplate 83:54 | Source component |
 | --- | --- |
@@ -34,14 +35,25 @@ The foundation is **only** `p_0_1_1_1__0_1_1_1_4__0_1_1_83_54`, source “Werkpl
 | `0:1:1:194:8` | 020-40x135 ms |
 | `0:1:1:194:9` | 020-40x135 ms |
 | `0:1:1:194:10` | 030-BO_10x100x25 |
-| `0:1:1:194:11` | 010-linsenk s70x120 k100x30 |
-| `0:1:1:194:12` | 010-linsenk s70x120 k100x30 |
 | `0:1:1:194:13/0:1:1:202:1` | incabloc_sous_937-21_Lochsteinschale |
 | `0:1:1:194:13/0:1:1:202:2` | incabloc_sous_937-21_BO_9x90x14 |
 | `0:1:1:194:13/0:1:1:202:3` | incabloc_sous_937-21_CPB_0x105x8 |
 | `0:1:1:194:13/0:1:1:202:4` | incabloc_sous_937-21_Lyrafeder |
 | `0:1:1:194:13/0:1:1:202:5` | incabloc_sous_937-21_Grundschale |
 | `0:1:1:194:14` | 030-G_70x130x25 |
+
+### Deferred dial-retaining screws
+
+| Stable source suffix under mainplate 83:54 | Definition | World radial withdrawal axis | Mainplate source seat faces |
+| --- | --- | --- | --- |
+| `0:1:1:194:11` | d201 | (0.406737, −0.913545, 0) | 376, 377 |
+| `0:1:1:194:12` | d201 | (−0.139173, 0.990268, 0) | 382, 384 |
+
+The [appearance ledger](appearance/ledger.json) explicitly identifies these two occurrences as outer-rim dial-retaining screws, at a 16 mm radius, with a source-instance neutral-steel finish. The [authored release evidence](../assets/authored/explosion.json) records original concentric head/shank cylinder faces 11/2 and the corresponding mainplate seat faces. Source local +Z points toward the head; applying each immutable occurrence matrix yields the radial XY axes above. This evidence supports their identity and seat, without inferring a screw role from the generic source name alone.
+
+Both levels now place these screws individually **after the complete central dial structure and before its hands** (Easy actions 82–83; Hard actions 221–222, one-based). They remain included in the same 265-leaf finished watch and retain their exact source target matrices. Their explicit `viewDirectionWorld` is a normalized target-to-camera direction formed from the outward radial axis plus source +0.65 Z, creating an oblique front view of each rim seat. The associated `sourceWithdrawalAxisWorld` preserves the measured source direction separately from this authored camera choice. Each action retains whole-movement context; no orientation matching or screw-turn simulation is introduced.
+
+This late fastening order is a deliberate puzzle interpretation, not mechanically certified assembly or servicing guidance. The source does not supply a validated installation procedure. Manifest `play-3` invalidates older sessions explicitly because the initial fitted set and ordered placements have changed; silently retaining an old completed set would incorrectly count these screws as already installed.
 
 ## Sequence and preparation
 
@@ -134,7 +146,7 @@ The deliberate movement chapter order below places train and escapement internal
 | 79 | 44 | Screw | 1 | front |
 | 80 | 45 | Screw | 1 | front |
 
-The last seven Easy actions are: Three-hands dial (16 leaves), hour hand (2), minute hand (2), seconds hand (2), Skeleton dial (17), hour hand (2), minute hand (2). Hard places the same 43 leaves individually after 204 movement placements.
+The last nine Easy actions are: Three-hands dial (16 leaves), dial-retaining screw 1 (1), dial-retaining screw 2 (1), hour hand (2), minute hand (2), seconds hand (2), Skeleton dial (17), hour hand (2), minute hand (2). Hard has 249 single-leaf actions: 204 earlier movement placements, the same 43 dial/hand leaves and the two deferred movement screws inserted after the central dial.
 
 ### Visibility and staging contract
 
@@ -157,6 +169,6 @@ Temporary isolation and automatically restored context are presentation choices.
 
 ## Reproduce the inventory verification
 
-Run `node scripts/play/validate-inventory.mjs` from the repository root. It verifies source hash, exact foundation, selected configuration, explicit source-wide exclusions, physical IDs, available GLB nodes, required maker-STL hash, matrix validity, immutable non-hand endpoints, unique placement coverage, ordered prerequisites, context availability and whole/local framing and equal finished sets. The recorded result is 365 source leaves, 18 initial leaves, 265 final leaves, 100 exclusions, 87 Easy placements and 247 Hard placements.
+Run `node scripts/play/validate-inventory.mjs` from the repository root. It verifies source hash, exact foundation, selected configuration, explicit source-wide exclusions, physical IDs, available GLB nodes, required maker-STL hash, matrix validity, immutable non-hand endpoints, unique placement coverage, ordered prerequisites, context availability, whole/local framing, the two explicit foundation deferrals, late screw order and source-radial oblique camera directions and equal finished sets. The recorded result is 365 source leaves, 16 initial leaves, two deferred dial-retaining screws, 265 final leaves, 100 exclusions, 89 Easy placements and 249 Hard placements.
 
 Browser interaction/visual evidence belongs to the implementation verification record in `PROGRESS.md` and ignored `artifacts/`; this audit does not claim real-device testing, user testing or mechanical certification.

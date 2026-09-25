@@ -1,5 +1,9 @@
 # Play verification — 26 September 2026
 
+This records the original `play-2` verification. The subsequent user-requested
+dial-screw and camera-cohesion changes use `play-3`; see
+[the follow-up review](PLAY_COHESION_REVIEW.md) for its revised 89/249-step results.
+
 The version `play-2` implementation passes the complete Easy and Hard browser
 traversals. Both finish with all 265 intended physical leaves rendered, including
 the same 18 fitted-mainplate leaves. Inventory and sequence evidence is recorded

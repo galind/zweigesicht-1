@@ -50,11 +50,12 @@ async function targetEvidence(page, label) {
   const e = await page.evaluate(({target,stage}) => {
     const topAt=p=>{const e=document.elementFromPoint(p.x,p.y);return {tag:e?.tagName,className:(e?.closest('button')||e)?.className,aria:e?.getAttribute('aria-label')};};
     const rect=q=>{const r=document.querySelector(q)?.getBoundingClientRect();return r?{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}:null;};
-    return {width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,targetElement:topAt(target),stageElement:topAt(stage),targetRect:rect('.play-target'),stageRect:rect('.play-stage'),dockRect:rect('.play-dock'),headerRects:[...document.querySelectorAll('.play-heading>*')].filter(el=>el.getClientRects().length).map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};})};
+    return {width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,targetElement:topAt(target),stageElement:topAt(stage),targetRect:rect('.play-target'),stageRect:rect('.play-stage'),dockRect:rect('.play-dock'),actions:[...document.querySelectorAll('.play-actions button')].map(b=>({label:b.textContent.trim(),clientWidth:b.clientWidth,scrollWidth:b.scrollWidth})),headerRects:[...document.querySelectorAll('.play-heading>*')].filter(el=>el.getClientRects().length).map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};})};
   },s);
   check(`${label}: target and stage remain in viewport`, [s.target,s.stage].every(p=>p.x>=28&&p.x<=e.width-28&&p.y>=28&&p.y<=e.height-28), {target:s.target,stage:s.stage,viewport:e});
   check(`${label}: destination is exposed to pointer input`, e.targetElement.className?.includes('play-target'), e.targetElement);
   check(`${label}: stage is exposed to pointer input`, e.stageElement.className?.includes('play-stage'), e.stageElement);
+  check(`${label}: action labels stay within their own hit areas`,e.actions.every(b=>b.scrollWidth<=b.clientWidth+1),e.actions);
   check(`${label}: no horizontal overflow or clipped header`, e.scrollWidth<=e.width&&e.headerRects.every(r=>r.left>=0&&r.right<=e.width&&r.top>=0),e);
   check(`${label}: stage and destination do not overlap controls`,(!e.dockRect||[e.targetRect,e.stageRect].every(r=>r.bottom<=e.dockRect.top||r.right<=e.dockRect.left||r.left>=e.dockRect.right)),e);
   check(`${label}: stage and destination have separate hit areas`,Math.hypot(s.target.x-s.stage.x,s.target.y-s.stage.y)>=(e.stageRect.width+e.targetRect.width)/2+8,{target:s.target,stage:s.stage});
@@ -112,7 +113,7 @@ async function traverse(level,viewport) {
       await page.setViewportSize(viewport); await settle(page); s=await inspect(page);
     }
     check(`${label}: expected step/fitted set`,s.stepId===step.id&&setEquals(s.fitted,expected),{actual:s.stepId,expected:step.id,count:s.fitted.length});
-    const capture=index<3 || index%25===0 || index>=steps.length-15 || (index>0&&step.side!==steps[index-1].side);
+    const capture=index<3 || index%25===0 || index>=steps.length-15 || step.viewDirectionWorld || (index>0&&step.side!==steps[index-1].side);
     if(capture)await page.screenshot({path:path.join(out,`${level}-${String(index+1).padStart(3,'0')}-${step.id}.png`)});
     if(index===0) {
       await mouseDrag(page,s,{miss:true});
@@ -166,6 +167,12 @@ async function focused() {
   await page.getByRole('button',{name:'Reframe',exact:true}).click();await settle(page);
   await targetEvidence(page,'320px 200% text reduced motion');
   await page.screenshot({path:path.join(out,'phone-320-enlarged-reduced.png')});
+  for(const button of await page.locator('.play-actions button').all()){
+    await button.scrollIntoViewIfNeeded();if(await button.isEnabled())await button.focus();
+    const reach=await button.evaluate(b=>{const r=b.getBoundingClientRect(),d=document.querySelector('.play-dock').getBoundingClientRect(),hit=document.elementFromPoint((r.left+r.right)/2,(r.top+r.bottom)/2)?.closest('button');return {label:b.textContent.trim(),visible:r.top>=d.top&&r.bottom<=d.bottom+1&&r.left>=d.left&&r.right<=d.right,hit:hit===b};});
+    check(`Enlarged ${reach.label} control is reachable by focus/scroll`,reach.visible&&reach.hit,reach);
+  }
+  await page.screenshot({path:path.join(out,'phone-320-enlarged-controls-scrolled.png')});
   await page.evaluate(()=>document.documentElement.style.removeProperty('font-size'));
   await page.waitForTimeout(250); // Font-size restoration also triggers observer-driven reframing.
   await page.setViewportSize({width:390,height:844});await settle(page);
@@ -226,7 +233,7 @@ async function focused() {
       check('Required catalog retry restores all intended assets',(await inspect(p)).geometryCount===manifest.finalLeafIds.length);
     } else {
       await settle(p);
-      check(`${variant} storage receives an honest message`,await p.getByText(variant==='unavailable'?/Saving is unavailable/:/previous session cannot be restored/).isVisible());
+      check(`${variant} storage receives an honest message`,await p.getByText(variant==='unavailable'?/Saving is unavailable/:variant==='incompatible'?/earlier part sequence/:/previous session cannot be restored/).isVisible());
       await p.getByRole('button',{name:/^Easy\b/}).click();await settle(p);await mouseDrag(p,await inspect(p));
       check(`${variant} storage does not prevent play`,(await inspect(p)).session.completedStepIds.length===1);
     }
