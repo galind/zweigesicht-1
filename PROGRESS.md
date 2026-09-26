@@ -810,3 +810,20 @@ camera while Show seat remains available. The maintained homepage, focused and
 drag/workbench suites pass 15, 87 and 87 checks respectively, with no uncaught
 browser errors. The rebuilt preview remains at
 http://127.0.0.1:4187/workshop.
+
+## Develop/staging release workflow — 26 September 2026
+
+Established `develop` as the long-lived integration branch and Vercel Preview
+source for staging, while `main` remains the production branch. Feature, fix and
+Codex branches now target `develop`; only a `develop` → `main` release PR is an
+ordinary production path. The branch policy is documented in
+`docs/BRANCHING_AND_RELEASES.md` and reinforced by the pull-request template.
+
+Added GitHub Actions CI for pull requests and pushes involving `develop` or
+`main`: automated tests, Workshop inventory validation, TypeScript, lint and the
+production build. A separate Prepare release workflow runs after pushes to
+`develop`, maintains one release PR to `main`, and leaves the actual merge
+manual behind staging, performance and publication checks. Vercel's existing
+Git integration remains the sole deployer: feature/develop pushes create Preview
+deployments, while a reviewed merge to `main` creates production. No Vercel
+token or parallel deployment path was introduced.

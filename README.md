@@ -9,11 +9,12 @@ See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTUR
 `/workshop` is the separate free-choice assembly feature, entered from the
 homepage through **Assemble the movement**. Easy offers 89 prepared fits; Hard
 exposes 249 individual parts through 35 focused subassembly projects. The
-primary Ready now tray contains constructible choices without
-revealing their seats; All parts keeps the complete searchable inventory and
-dependency clues available. Both experiences retain the same 16-leaf foundation
-and finish with 265 physical leaves. Nonlinear progress and the clue preference
-save locally. Earlier guided saves require an explicit fresh start. See the
+primary Ready now tray contains constructible choices without revealing their
+seats; All parts keeps the complete searchable inventory, while Show seat is the
+optional placement aid. The movement can be freely rotated like the homepage
+viewer. Both experiences retain the same 16-leaf foundation and finish with 265
+physical leaves. Nonlinear progress saves locally. Earlier guided saves require
+an explicit fresh start. See the
 [experience review](docs/PLAY_EXPERIENCE_REVIEW.md),
 [dependency ledger](docs/PLAY_DEPENDENCIES.md) and [source inventory](docs/PLAY_INVENTORY.md).
 It is a puzzle, not a servicing procedure.
@@ -85,12 +86,18 @@ boundary and the barrel cover's workspace/support requirements.
 
 The repository has a Vercel build configuration (`vercel.json`, `npm run build:vercel` in `explorer/`). Domain cutover status is recorded in [PROGRESS.md](PROGRESS.md).
 
+Feature branches target `develop`, whose latest Vercel branch Preview is the
+shared staging build. A reviewed `develop` → `main` release PR promotes that
+exact state to production; merges to `main` remain the only normal production
+deployment path. See [branching, staging and releases](docs/BRANCHING_AND_RELEASES.md).
+
 Original CAD, source imagery, caches and environments remain outside Git. Most generated assets are local; explicitly approved runtime payloads are tracked through the exceptions in `.gitignore`. Source provenance is under `assets/source-manifest/`; hand-authored overrides are under `assets/authored/`. Publication and redistribution remain subject to the [release gates](docs/RELEASE_GATES.md).
 
 Both build targets prune their output to the current runtime manifests, reject missing required assets and exclude local reference imagery. Local originals/generated evidence are never pruned. `npm start` serves the standard build; `build:vercel` only creates deployment output. For audit scope, removals and measured improvements, see [cleanup review](docs/CLEANUP_REVIEW.md).
 
 
-Workshop uses two fixed faces with Flip and centered zoom. The shock-indicator
-workbench has a fixed angled pair; radial dial screws expose a fixed edge view.
+Workshop supports free orbit with Flip, Reset and centered zoom retained as
+quick camera actions. The shock-indicator workbench has a guided angled pair;
+radial dial screws expose a guided edge view.
 `node scripts/play/fixed-access-check.mjs` checks source-surface access for all
 373 actions at three sampled distances using the prepared local runtime assets.
