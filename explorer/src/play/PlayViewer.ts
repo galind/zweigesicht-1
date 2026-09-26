@@ -149,6 +149,8 @@ export class PlayViewer {
         'Watch assembly. Flip switches sides. Pinch or scroll to zoom. F flips; plus and minus zoom; Home resets.',
       );
       this.camera.up.set(0, -1, 0);
+      // Match the movement-side preset before controls can report a camera change.
+      this.camera.position.set(0, 0, -60);
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.controls.enablePan = false;
       this.controls.enableRotate = false;

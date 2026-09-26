@@ -611,3 +611,13 @@ Preview refreshed at http://127.0.0.1:4185/play; reload to receive the new contr
 The user's existing save was not touched; browser review used port 4186.
 Next action: user review of fixed views and fitting. Local commit only, no push,
 PR or deployment. Original untracked prompt files remain excluded.
+
+## Play opening orientation — 26 September 2026
+
+Initialized the Play camera on negative Z before constructing OrbitControls,
+matching the movement-side preset and negative-Y up vector used when a game
+starts. Previously, the unpositioned camera could trigger a controls change
+before first framing and replace the intended back-side default with front.
+The difficulty-selection screen now starts with the same movement-side
+orientation as gameplay. Production build passes; no additional tests run.
+Preview refreshed on port 4185. Local change only; no publishing.
