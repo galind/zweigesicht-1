@@ -6,16 +6,18 @@ The movement opens fully assembled. Reveal six functional groups, configure a fi
 
 See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
-`/play` is a separate free-choice assembly puzzle. Easy offers 89 prepared
-assemblies and parts; Hard offers 249 individual parts grouped by mechanism,
-with explicit workbenches and 35 assembly transfers. Hints start off. Both levels
-retain the same 16-leaf foundation and finish with 265 physical leaves. Nonlinear
-progress and the hint preference save locally. Earlier guided saves require an
-explicit fresh start. See the [redesign](docs/PLAY_REDESIGN.md),
-[dependency ledger](docs/PLAY_DEPENDENCIES.md) and
-[source inventory](docs/PLAY_INVENTORY.md). It is not a servicing procedure.
+`/play` is a separate free-choice assembly puzzle. Workshop offers 89 prepared
+fits; Master bench exposes 249 individual parts through 35 focused subassembly
+projects. The primary Ready now tray contains constructible choices without
+revealing their seats; All parts keeps the complete searchable inventory and
+dependency clues available. Both experiences retain the same 16-leaf foundation
+and finish with 265 physical leaves. Nonlinear progress and the clue preference
+save locally. Earlier guided saves require an explicit fresh start. See the
+[experience review](docs/PLAY_EXPERIENCE_REVIEW.md),
+[dependency ledger](docs/PLAY_DEPENDENCIES.md) and [source inventory](docs/PLAY_INVENTORY.md).
+It is a puzzle, not a servicing procedure.
 
-Current local production preview: **http://127.0.0.1:4185/play**.
+Current local production preview: **http://127.0.0.1:4187/play**.
 
 ## Run the prepared checkout
 
@@ -68,15 +70,15 @@ an existing local Playwright installation through `PLAYWRIGHT_MODULE` and Chrome
 through `CHROME_PATH`; they do not add runtime or project dependencies.
 
 For the redesigned Play flow, run `node scripts/play/browser-check.mjs
-http://127.0.0.1:4185 all` with those environment variables. Individual modes are
+http://127.0.0.1:4187 all` with those environment variables. Individual modes are
 `easy`, `hard`, `focused` and `home`. `PLAY_QA_OUTPUT` selects the ignored evidence
 directory; `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternative legal
 orders and narrow Hard viewports. The older guided browser reports describe
 historical `play-2`/`play-3` code, not the current free-choice interaction.
-`node scripts/play/drag-check.mjs http://127.0.0.1:4185` uses the same environment
-variables to check actual-scale card dragging, touch dragging from thumbnails and swiping
-at desktop, 390 px and 320 px widths, plus every Hard component's pickup and the
-barrel cover's workspace/support requirements.
+`node scripts/play/drag-check.mjs http://127.0.0.1:4187` uses the same environment
+variables to check actual-scale card dragging, the selected touch affordance,
+gallery swiping at desktop, 390 px and 320 px widths, the Master bench project
+boundary and the barrel cover's workspace/support requirements.
 
 ## Hosting and source boundaries
 

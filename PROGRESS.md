@@ -630,3 +630,48 @@ Pushed `codex/play-free-assembly` over SSH and opened
 The PR describes the redesign, gallery dragging, fixed views, opening orientation,
 verification evidence and remaining review limits. No merge or manual deployment.
 Next action: review PR #14. Original prompt files remain untracked.
+
+## Play workshop experience redesign — 26 September 2026
+
+Completed an experience-led review of the current free-assembly branch. The
+[review and plan](docs/PLAY_EXPERIENCE_REVIEW.md) identifies the main product
+failure: exact mechanics and exhaustive inventory were presented as a CAD-style
+database before the player reached a satisfying fit. Existing production logs
+remain useful regression evidence but were explicitly rejected as evidence of
+enjoyment or comprehension.
+
+The new primary loop is **Ready now**: it offers only unplaced actions whose
+authored prerequisites pass, without revealing their seats. **All parts** keeps
+the full searchable dependency puzzle. Workshop retains 89 prepared fits.
+Master bench still contains all 249 individual parts and 35 transfers, but the
+watch-level tray now presents named subassembly projects; child leaves appear
+only inside their focused workbench. Empty workbenches show an intentional
+fixture cue rather than a blank canvas. Source endpoints, the dependency graph,
+snap validation, fixed views, save schema and finished 265-leaf movement are
+unchanged.
+
+The interface now sets honest mode expectations, gives the watch priority, uses
+a warmer workshop hierarchy, shows physical-part / fit / mechanism progress,
+marks selected thumbnails as draggable, acknowledges clue-free fits, calls out
+subassembly and mechanism milestones, and provides a dedicated completion
+state. Undo, Flip and Reset remain in the fitting path. Help, clue preference,
+restart and challenge selection live in a compact labeled menu. Successful
+saves no longer occupy a permanent footer; storage failures remain visible.
+
+Verification on the final build: inventory validation passes with 16 foundation,
+89 Workshop, 249 Master-bench and 265 final leaves; the maximal-obstruction
+access audit passes all 373 actions / 1,119 camera checks; all 66 unit and
+lifecycle tests, TypeScript, lint and production build pass. Browser review on
+the local production build covered entry/resume, Ready now, All parts, menu,
+Master-bench projects, an empty workbench, explicit Show seat, a successful fit
+and advancing prerequisite tray at 1440×900 and 390×844. The 320×740 / 200% text
+layout has zero horizontal overflow, an in-viewport dock and icon-only labelled
+header controls. No browser warnings or errors were recorded. The maintained
+Play browser scripts were updated for project cards and the renamed controls;
+their full Playwright traversals were not rerun because this checkout has no
+Playwright runtime.
+
+Physical-phone, Safari and representative human enjoyment/accessibility review
+remain outstanding. The fixed-view surface audit is not collision or servicing
+certification. Final production preview: http://127.0.0.1:4187/play. This work
+is on `codex/play-workshop-redesign`, based directly on `codex/play-assembly`.

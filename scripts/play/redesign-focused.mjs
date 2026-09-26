@@ -18,13 +18,15 @@ const same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
 const card=id=>page.locator(`[data-action-id="${id}"]`);
 const pick=async id=>{await card(id).click();await settle();};
 const toggle=async()=>{await page.getByRole('button',{name:/^Hints (on|off)$/}).click();await settle();};
-const reveal=async()=>{await page.getByRole('button',{name:'Show destination',exact:true}).click();await settle();};
+const reveal=async()=>{await page.getByRole('button',{name:'Show seat',exact:true}).click();await settle();};
 const drag=async(s,target=s.target,offset={x:0,y:0},finish=true)=>{await page.locator('.play-card-drag').scrollIntoViewIfNeeded();s={...s,stage:(await inspect()).stage};await page.mouse.move(s.stage.x+offset.x,s.stage.y+offset.y);await page.mouse.down();await page.mouse.move(target.x+offset.x,target.y+offset.y,{steps:6});if(finish){await page.mouse.up();await settle();}};
 const touch=async(from,to,cancel=false)=>{const cdp=await context.newCDPSession(page),pts=p=>[{x:p.x,y:p.y,id:1}];await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:pts(from)});for(let i=1;i<=6;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:pts({x:from.x+(to.x-from.x)*i/6,y:from.y+(to.y-from.y)*i/6})});await cdp.send('Input.dispatchTouchEvent',{type:cancel?'touchCancel':'touchEnd',touchPoints:[]});await cdp.detach();await settle();};
 const start=async level=>{await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await settle();await page.locator('.play-levels button').nth(level==='easy'?0:1).click();if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:'Start again',exact:true}).click();await settle();};
 try {
  await start('easy');const initial=await inspect();
- check('All 89 Easy cards available for inspection with hints off',await page.locator('.play-card').count()===89&&await page.locator('.play-card:disabled').count()===0&&await page.locator('.play-card[data-unavailable=true]').count()===0);
+ check('Ready now starts with 19 legal Easy choices',await page.locator('.play-card').count()===19&&await page.locator('.play-card:disabled').count()===0&&await page.locator('.play-card[data-unavailable=true]').count()===0);
+ await page.getByText('All parts',{exact:true}).click();await settle();
+ check('All parts keeps all 89 Easy actions inspectable',await page.locator('.play-card').count()===89);
  await pick('movement-60');preserved('Selecting unavailable bridge preserves camera',initial,await inspect());
  check('Hints off does not expose destination',await page.locator('.play-target').isHidden());
  let s=await inspect();await drag(s,{x:195,y:220});check('Unsupported drop is rejected',!(await inspect()).session.actionIds.length);preserved('Failed unsupported drop preserves camera',s,await inspect());
@@ -62,8 +64,9 @@ try {
  // Resume a nonlinear history, including the persistent hint preference.
  await toggle();s=await inspect();await page.reload({waitUntil:'networkidle'});await settle();await page.getByRole('button',{name:/^Continue /}).click();await settle();check('Nonlinear resume restores exact history and hints',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
  await page.evaluate(()=>window.__playContext());await page.waitForFunction(()=>!window.__playInspect().ready);await page.evaluate(()=>window.__playContext(true));await settle();check('Renderer recovery preserves nonlinear session',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
- await start('hard');await pick(manifest.levels.hard.steps[0].id);await page.locator('canvas').focus();await page.keyboard.press('ArrowLeft');await page.keyboard.press('-');await settle();const main=await inspect();
- await page.getByRole('button',{name:'Open workbench',exact:true}).click();await settle();check('Workbench is an explicit labelled view',(await inspect()).workspace==='movement-1'&&/Workbench/.test(await page.locator('.play-workspace').innerText()));
+ await start('hard');await page.locator('canvas').focus();await page.keyboard.press('ArrowLeft');await page.keyboard.press('-');await settle();const main=await inspect();
+ check('Hard watch level exposes three ready subassembly projects',await page.locator('[data-packet-id]').count()===3);
+ await page.locator('[data-packet-id="movement-1"]').click();await settle();await pick(manifest.levels.hard.steps[0].id);check('Workbench is an explicit labelled view',(await inspect()).workspace==='movement-1'&&/Workbench/.test(await page.locator('.play-workspace').innerText()));
  await page.screenshot({path:path.join(out,'phone-hard-workbench-off.png')});
  await toggle();await page.screenshot({path:path.join(out,'phone-hard-workbench-on.png')});
  await page.getByRole('button',{name:'Return to watch',exact:true}).first().click();await settle();preserved('Returning restores previous main camera exactly',main,await inspect());
@@ -87,7 +90,7 @@ try {
    const detailTop=await page.locator('.play-selection').evaluate(e=>e.getBoundingClientRect().top);
    check(`${width}×${height}/${text}% card labels stay inside gallery, above details`,cardLayout.inside&&cardLayout.cardBottom<=detailTop,{cardLayout,detailTop});
    await page.screenshot({path:path.join(out,`hard-${width}-${height}-text${text}.png`)});
-   await page.getByRole('button',{name:'Choose difficulty',exact:true}).focus();check(`${width}×${height}/${text}% keyboard reaches last dock control`,await page.getByRole('button',{name:'Choose difficulty',exact:true}).evaluate(e=>e===document.activeElement));
+   await page.getByRole('button',{name:'Reset view',exact:true}).focus();check(`${width}×${height}/${text}% keyboard reaches last dock control`,await page.getByRole('button',{name:'Reset view',exact:true}).evaluate(e=>e===document.activeElement));
  }
  await page.waitForTimeout(400);const count=(await inspect()).renderCount;await page.waitForTimeout(700);check('Settled renderer returns to idle',(await inspect()).renderCount===count);
  const old=JSON.stringify({manifestVersion:'play-3',level:'easy',completedStepIds:['movement-1']});await page.evaluate(raw=>localStorage.setItem('zweigesicht:play:session:v1',raw),old);

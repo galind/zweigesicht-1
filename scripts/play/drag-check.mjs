@@ -41,13 +41,14 @@ try {
   let p=await center(card('movement-1'));await page.mouse.move(p.x,p.y);await page.mouse.down();s=await inspect();await page.mouse.move(s.target.x,s.target.y,{steps:10});await page.mouse.up();await settle();
   check(`${width}: hints-on card drop commits once`,(await inspect()).session.actionIds.length===1);
   await page.getByRole('button',{name:'Undo',exact:true}).click();await settle();
+  await page.getByText('All parts',{exact:true}).click();await settle();
   await card('movement-60').click();await settle();
   check(`${width}: hints-on unavailable piece disables touch dragging`,await page.locator('.play-card-drag').isDisabled());
   check(`${width}: unavailable card stays inspectable`,await card('movement-60').isEnabled());
   await page.getByRole('button',{name:'Hints on',exact:true}).click();await settle();
   await card('movement-1').tap();await settle();
   const dragControl=page.locator('.play-card-drag');
-  check(`${width}: selected thumbnail is draggable without a visible Drag label`,await dragControl.isVisible()&&await dragControl.isEnabled()&&(await dragControl.innerText())===''&&/Drag part:/.test(await dragControl.getAttribute('aria-label')));
+  check(`${width}: selected thumbnail exposes a labelled Drag affordance`,await dragControl.isVisible()&&await dragControl.isEnabled()&&/Drag part:/.test(await dragControl.getAttribute('aria-label'))&&await dragControl.evaluate(e=>getComputedStyle(e,'::after').opacity==='1'));
   p=await center(dragControl);s=await inspect();
   await touch(p,{x:s.target.x+20,y:s.target.y},true);
   check(`${width}: touch cancel releases capture without placement`,!(await inspect()).dragging&&!(await inspect()).session.actionIds.length&&!(await inspect()).stageVisible);
@@ -68,35 +69,32 @@ try {
   await card('movement-1').tap();await settle();await page.locator('.play-card-drag').scrollIntoViewIfNeeded();
   await page.screenshot({path:path.join(out,`drag-control-${width}.png`)});
   // Hard deliberately requires entering the part's workspace; selection alone cannot move the camera.
-  await page.getByRole('button',{name:'Choose difficulty',exact:true}).click();await page.getByRole('button',{name:'Choose level',exact:true}).click();await settle();await page.locator('.play-levels button').nth(1).click();if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:'Start again',exact:true}).click();await settle();
-  const hardCamera=pose(await inspect());await card(manifest.levels.hard.steps[0].id).tap();await settle();
-  check(`${width}: Hard explains the required workbench`,/Open workbench/.test(await page.locator('.play-selection').innerText())&&await page.getByRole('button',{name:'Open workbench',exact:true}).isVisible()&&await page.locator('.play-card-drag').isEnabled()&&pose(await inspect())===hardCamera);
+  await page.getByRole('button',{name:'Menu',exact:true}).click();await page.getByRole('button',{name:'Choose difficulty',exact:true}).click();await page.getByRole('button',{name:'Choose challenge',exact:true}).click();await settle();await page.locator('.play-levels button').nth(1).click();if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:'Start again',exact:true}).click();await settle();
+  const hardCamera=pose(await inspect());
+  check(`${width}: Hard watch level presents subassembly projects instead of child leaves`,await page.locator('[data-packet-id]').count()===3&&await card(manifest.levels.hard.steps[0].id).count()===0&&pose(await inspect())===hardCamera);
   if(width===1440) {
     for(const group of manifest.groups) {
       await page.getByLabel('Parts group',{exact:true}).selectOption(group.id);
-      for(const part of manifest.levels.hard.steps.filter(s=>s.groupId===group.id)) {
-        const point=await center(card(part.id));await page.mouse.move(point.x,point.y);await page.mouse.down();
-        const carried=await inspect();
-        check(`Hard pickup: ${part.label} (${part.id})`,carried.dragging&&carried.stageVisible&&carried.stageScale.every(n=>n===1)&&carried.workspace===null&&pose(carried)===hardCamera);
-        await page.keyboard.press('Escape');await page.mouse.up();await settle();
-      }
+      check(`Hard group exposes meaningful ready work: ${group.label}`,await page.locator('[data-packet-id], .play-card').count()>0);
     }
     await page.getByLabel('Parts group',{exact:true}).selectOption('power');
   }
+  await page.locator('[data-packet-id="movement-1"]').click();await settle();
+  check(`${width}: project opens its labelled workbench`,(await inspect()).workspace==='movement-1'&&/Barrel assembly 2/.test(await page.locator('.play-workspace').innerText()));
+  await page.getByText('All parts',{exact:true}).click();await settle();
   const cover=manifest.levels.hard.steps.find(s=>s.label==='Barrel cover 2');
   await card(cover.id).tap();await settle();p=await center(page.locator('.play-card-drag'));
   await page.mouse.move(p.x,p.y);await page.mouse.down();check(`${width}: cover begins dragging`,(await inspect()).dragging);await page.mouse.move(width/2,180,{steps:6});await page.screenshot({path:path.join(out,`cover-real-scale-${width}.png`)});await page.mouse.up();await settle();
-  check(`${width}: cover can be picked up outside its workbench, wrong-workspace drop rejected`,!(await inspect()).session.actionIds.length&&/workbench/.test(await page.locator('.play-selection').innerText())&&! (await inspect()).stageVisible);
+  check(`${width}: unsupported cover drop is rejected inside its workbench`,!(await inspect()).session.actionIds.length&&/cannot be fitted yet/.test(await page.locator('.play-selection').innerText())&&! (await inspect()).stageVisible);
   await page.getByRole('button',{name:'Hints off',exact:true}).click();await settle();
   check(`${width}: cover explains missing supports with hints on`,await page.locator('.play-card-drag').isDisabled()&&/Needs Barrel arbor, Mainspring/.test(await page.locator('.play-selection').innerText()));
   await page.getByRole('button',{name:'Hints on',exact:true}).click();await settle();
   await card(manifest.levels.hard.steps[0].id).tap();await settle();
-  await page.getByRole('button',{name:'Open workbench',exact:true}).click();await settle();
   check(`${width}: workbench exposes touch drag`,await page.locator('.play-card-drag').isVisible());
   p=await center(page.locator('.play-card-drag'));s=await inspect();await touch(p,s.target);
   check(`${width}: workbench part can be dragged without hints`,(await inspect()).session.actionIds.length===1);
   for(const part of manifest.levels.hard.steps.filter(s=>s.workspaceId===cover.workspaceId).slice(1)) {
-    await card(part.id).tap();await settle();await page.getByRole('button',{name:'Show destination',exact:true}).click();await settle();
+    await card(part.id).tap();await settle();await page.getByRole('button',{name:'Show seat',exact:true}).click();await settle();
     p=await center(page.locator('.play-card-drag'));s=await inspect();await touch(p,s.target);
     check(`${width}: workbench accepts ${part.label} after supports`,(await inspect()).session.actionIds.includes(part.id));
   }
