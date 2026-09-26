@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 24 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
+Updated 26 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
 
 ## Implemented
 
@@ -401,3 +401,19 @@ Play's new Reset view and Home shortcut preserve assembly progress and the viewe
 PR publication — 26 September 2026: at the user's request, pushed `codex/play-assembly` over SSH and opened [PR #12](https://github.com/galind/zweigesicht-1/pull/12) against `main` through the connected GitHub app. The verified implementation head is `bb7ab6b`, based on `db8a664`. It includes the complete assembly game, revised dial-screw sequence and shared control refinements. Next action: PR review and the outstanding physical-device/accessibility checks. No merge or manual deployment. The untracked agent prompt remains local and excluded.
 
 Website review goal prepared: [WEBSITE_REVIEW_GOAL.md](docs/WEBSITE_REVIEW_GOAL.md) defines an implementation-focused audit of architecture, duplication, UI semantics, accessibility, resource lifecycle and measured performance. It preserves homepage behavior and requires complete verification of both Play levels, documented findings and working previews. This is a prepared execution brief; the review/refactor has not started. Next action: invoke the goal when ready. Documentation is local only; PR #12 is unchanged.
+
+## Website review implemented — 26 September 2026
+
+Completed [the review goal](docs/WEBSITE_REVIEW_GOAL.md) on separate local branch `codex/website-review`, preserving unmerged PR #12 and the untracked agent prompt. [The review report](docs/WEBSITE_REVIEW.md) maps both routes, prioritizes findings, records sharing decisions, before/after measurements, reproduction commands and remaining limits.
+
+Both viewers now share renderer settings, studio lighting, environment allocation and resource disposal. Homepage rendering sleeps completely at rest (measured RAF callbacks per idle second: 60 → 0) and still wakes for interaction, resize, recovery and opt-in diagnostics. Play prepares required assets transactionally and prevents metadata finishing after unmount from starting heavy loads. Optional explorer loading and Play's mandatory assembly rules remain separate. Ordinary home contains neither Play payload nor the optional benchmark implementation.
+
+Named confirmation dialogs, explicit keyboard focus destinations, shared root text-preview behavior and measured storage/caption clearance improve Play access. Short screens use clear space beside staging when vertical room is insufficient. Homepage phone labels wrap at their actual content width, and both routes respect emulated safe-area insets. Removed obsolete and duplicated style rules. Inventory `play-3`, source geometry/transforms, materials, configuration behavior and compatible saved sessions are unchanged.
+
+Verification passes: 59 automated tests, 114 prepared CPU source/runtime checks, inventory validation, TypeScript, lint, production build and SEO/HTTP. Both complete DOM traversals pass all 89 Easy and 249 Hard placements, including both dial screws and every Hard target at 390/320 px, with exactly 265 fitted/visible leaves at completion. The combined run passes 6,458 checks, including the 71-check homepage UX wrapper and focused recovery paths. A further 350 explorer assertions, actual motion capture and a 60-second benchmark pass. The final safe-area build passes 99 control, 26 dialog, 61 focused and 197 responsive/accessibility/recovery checks with no uncaught errors. Exhaustive traversals preceded the final inset-only correction; targeted final-build checks verify that changed boundary. Raw artifacts are ignored under `artifacts/browser/website-review/`.
+
+Cold-context request counts remain 17 home / 19 Play. Home requested JavaScript changes by −113 bytes; Play adds 1,877 bytes (about 0.06%) for lifecycle/accessibility/layout behavior. No loading-speed or memory reduction is claimed. Existing module-registration, large-chunk and route-classification build notices remain. Physical-device/Safari, representative accessibility, mechanical and publication gates remain outstanding; no new CAD or source redistribution was performed.
+
+Working production previews: http://127.0.0.1:4183/ and http://127.0.0.1:4183/play. Next action: local user review and the separate real-device/accessibility release reviews. No push, merge or deployment was performed.
+
+Verified implementation committed locally as `1888891` (`Improve viewer lifecycle and responsive accessibility`); the accompanying review report and setup/status documentation record its evidence and remaining release limits.

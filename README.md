@@ -6,6 +6,11 @@ The movement opens fully assembled. Reveal six functional groups, configure a fi
 
 See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
+`/play` is the separate guided assembly puzzle: 89 Easy or 249 Hard placements,
+with local resume and the same 265-leaf finished movement. It uses the original
+source components and records its construction limits in the
+[inventory audit](docs/PLAY_INVENTORY.md). It is not a servicing procedure.
+
 ## Run the prepared checkout
 
 For a prepared checkout with dependencies and generated assets:
@@ -38,6 +43,7 @@ A new checkout needs the pinned `explorer/` and `scripts/assets/` dependencies, 
 ```sh
 node --test tests/*.test.mjs
 node scripts/cad/review-runtime.mjs
+node scripts/play/validate-inventory.mjs
 cd explorer
 npm run typecheck
 npm run lint
@@ -47,6 +53,13 @@ npm start -- --hostname 127.0.0.1 --port 4176
 ```
 
 `http://127.0.0.1:4173/?inspect=1` exposes browser regression, benchmark, optional-asset failure and WebGL recovery checks. `?no3d=1` exercises the static fallback; `?text=200` exercises a 200% root-font layout. These are explicit test modes, not real-device certification. Screenshots and numeric traces remain local in ignored `artifacts/` paths. The CPU source/runtime suite also requires the prepared ignored CAD audit inputs documented in [cleanup review](docs/CLEANUP_REVIEW.md); it is not a clean-clone test. The inspection UI and browser regression modules load only with `?inspect=1`.
+
+The [website review](docs/WEBSITE_REVIEW.md) maps both routes and records the
+regression commands, measured comparisons and remaining verification limits.
+`scripts/play/browser-check.mjs` completes both levels through real DOM inputs;
+`scripts/review/explorer-check.mjs` runs the opt-in homepage suites. Both accept
+an existing local Playwright installation through `PLAYWRIGHT_MODULE` and Chrome
+through `CHROME_PATH`; they do not add runtime or project dependencies.
 
 ## Hosting and source boundaries
 
