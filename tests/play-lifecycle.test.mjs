@@ -10,6 +10,8 @@ import * as THREE from '../explorer/node_modules/three/build/three.module.js';
 import {OrbitControls} from '../explorer/node_modules/three/examples/jsm/controls/OrbitControls.js';
 import * as CameraFrame from '../explorer/src/viewer/CameraFrame.ts';
 import {motionEase, MOTION} from '../explorer/src/experience/motion.ts';
+import {fixedViewDirection} from '../explorer/src/play/fixedViews.ts';
+import {snapDrop} from '../explorer/src/play/state.ts';
 
 const require = createRequire(import.meta.url);
 const ts = require('../explorer/node_modules/typescript');
@@ -35,7 +37,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
+    module, THREE, performance, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, fixedViewDirection, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }
@@ -61,14 +63,14 @@ function fixture(globals = {}) {
   controls.maxDistance = 1500;
   const value = {
     generation: 0, dead: false, ready: false, busy: false, frame: 0, error: '', renderCount: 0,
-    pieces: new Map(), loadedObjects: [], staged: new THREE.Group(), scene: new THREE.Scene(),
+    pieces: new Map(), loadedObjects: [], staged: new THREE.Group(), ghost: new THREE.Group(), ghostMaterial: new THREE.MeshBasicMaterial(), thumbnails: new Map(), scene: new THREE.Scene(),
     camera, controls, fitted: new Set(), current: null, active: false,
     target: new THREE.Vector3(), frameFocus: new THREE.Vector3(), stepBounds: new THREE.Box3(),
-    manifest: {finalLeafIds: ['leaf'], targetPoses: {leaf: identity}}, notifications: [], updates: 0,
+    manifest: {initialLeafIds: ['leaf'], packets: [], finalLeafIds: ['leaf'], targetPoses: {leaf: identity}}, notifications: [], updates: 0,
     notify(status) { this.notifications.push(status); },
-    update() { this.updates++; }, positionStage() {},
+    update() { this.updates++; }, positionStage() {}, updateSeat() {}, updateProjection() {}, available: true, seatVisible: true, seatInView: true, feedback() {},
   };
-  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext', 'occlusionDistance']) value[name] = actual(name, value, globals);
+  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext']) value[name] = actual(name, value, globals);
   return value;
 }
 function loadGlobals({overview, catalog, diamond, surfaces = async () => new Map(), metadataFails = false}) {
@@ -166,118 +168,20 @@ test('idle rendering schedules one frame for coalesced invalidations and then sl
   assert.equal(scheduled, 1);
 });
 
-test('unchanged layout preserves keyboard orbit while changed chrome bounds reframe and locate staging', () => {
-  let reframes = 0, invalidations = 0;
-  const header = {bottom: 60}, dock = {top: 680, left: 0};
-  const rect = {left: 0, top: 0, width: 390, height: 844, right: 390, bottom: 844};
-  const v = fixture();
-  Object.assign(v, {
-    active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
-    stage: {offsetHeight: 84, style: {}},
-    host: {
-      getBoundingClientRect: () => rect,
-      parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => selector === '.play-heading' ? header : dock})},
-    },
-    reframe() {reframes++; this.camera.position.set(0, 0, 100);},
-    invalidate() {invalidations++;},
-  });
-  const layout = actual('layout', v), keyDown = actual('keyDown', v);
-  layout();
-  assert.equal(reframes, 1);
-  assert.equal(v.stage.style.top, '556px');
-  const initialStage = {...v.stage.style};
-  keyDown({key: 'ArrowLeft', preventDefault() {}});
-  const orbited = v.camera.position.toArray();
-  assert.notDeepEqual(orbited, [0, 0, 100]);
-  for (let i = 0; i < 4; i++) layout();
-  assert.equal(reframes, 1, 'Redundant observer delivery must not reset user camera ownership');
-  assert.deepEqual(v.camera.position.toArray(), orbited);
-  assert.deepEqual(v.stage.style, initialStage, 'Staging remains anchored despite repeated layout delivery');
-  header.bottom += 0.25;
-  layout();
-  assert.equal(reframes, 1, 'Subpixel observer noise does not reset the camera');
-  assert.deepEqual(v.camera.position.toArray(), orbited);
-  dock.top -= 60;
-  layout();
-  assert.equal(reframes, 2, 'A newly expanded dock changes the usable region');
-  assert.deepEqual(v.camera.position.toArray(), [0, 0, 100]);
-  assert.equal(v.stage.style.top, '496px');
-  const stageTop = Number.parseFloat(v.stage.style.top), stageLeft = Number.parseFloat(v.stage.style.left);
-  assert.ok(stageTop > header.bottom && stageTop + v.stage.offsetHeight < dock.top);
-  assert.ok(stageLeft >= 0 && stageLeft + v.stage.offsetHeight <= rect.width);
-  assert.equal(invalidations, 8, 'Each live layout and the keyboard gesture refresh rendering');
-});
-
-test('measured staging captions clear the dock at narrow widths without resetting orbit on repeat delivery', () => {
-  let reframes = 0, captionHeight = 12;
-  const header = {bottom: 110}, dock = {top: 630, left: 12};
-  const rect = {left: 12, top: 24, width: 320, height: 844, right: 332, bottom: 868};
-  const caption = {dataset: {selected: 'false'}, getBoundingClientRect: () => ({height: captionHeight})};
-  const v = fixture();
-  Object.assign(v, {
-    active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
-    stage: {offsetHeight: 84, style: {}, querySelector(selector) {assert.equal(selector, '.play-stage-caption'); return caption;}},
-    host: {
-      getBoundingClientRect: () => rect,
-      parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => selector === '.play-heading' ? header : dock})},
-    },
-    reframe() {reframes++; this.camera.position.set(0, 0, 100);}, invalidate() {},
-  });
-  const layout = actual('layout', v), keyDown = actual('keyDown', v);
-  let previousTop;
-  for (const height of [12, 44]) {
-    captionHeight = height;
-    layout();
-    const stageTop = Number.parseFloat(v.stage.style.top), stageLeft = Number.parseFloat(v.stage.style.left);
-    const captionBottom = rect.top + stageTop + v.stage.offsetHeight + 8 + height;
-    assert.ok(captionBottom <= dock.top - 20, `A ${height}px measured caption keeps its full height above the dock`);
-    assert.ok(rect.top + stageTop > header.bottom, 'Staging remains below the header');
-    assert.ok(stageLeft >= 0 && stageLeft + v.stage.offsetHeight <= rect.width);
-    if (previousTop !== undefined) assert.ok(stageTop < previousTop, 'A wrapped enlarged caption moves the stage up to preserve clearance');
-    previousTop = stageTop;
-    const count = reframes;
-    keyDown({key: 'ArrowRight', preventDefault() {}});
-    const camera = v.camera.position.clone(), stage = {...v.stage.style};
-    for (let delivery = 0; delivery < 3; delivery++) layout();
-    assert.equal(reframes, count, 'The same measured caption must not reclaim the user camera');
-    assert.ok(v.camera.position.equals(camera)); assert.deepEqual(v.stage.style, stage);
-    // The browser's overlaid labels report the same reserved height when selection changes.
-    v.drag = {pointer: 7}; caption.dataset.selected = 'true'; layout();
-    assert.equal(reframes, count); assert.ok(v.camera.position.equals(camera)); assert.deepEqual(v.stage.style, stage);
-    v.drag = undefined; caption.dataset.selected = 'false';
-  }
-  assert.equal(reframes, 2, 'Only initial framing and the real caption-size change reframe');
-  v.controls.dispose();
-});
-
-test('short enlarged scenes keep the full staged caption beside a positive assembly region', () => {
-  for (const [width, height, headerBottom, dockTop, dockLeft, storageTop] of [
-    [320, 568, 130, 340, 12, 530],
-    [568, 320, 78, 80, 280, 282],
-    [844, 390, 78, 110, 470, 348],
-  ]) {
-    const rect = {left: 0, top: 0, width, height, right: width, bottom: height};
-    const chrome = {
-      '.play-heading': {bottom: headerBottom},
-      '.play-dock': {top: dockTop, left: dockLeft},
-      '.play-storage': {top: storageTop, height: 30},
-    };
-    const v = fixture();
-    Object.assign(v, {
-      active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
-      stage: {offsetHeight: 84, style: {}, querySelector: () => ({offsetLeft: -20, getBoundingClientRect: () => ({height: 66})})},
-      host: {getBoundingClientRect: () => rect, parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => chrome[selector]})}},
-      reframe() {}, invalidate() {},
+test('chrome layout changes preserve camera ownership without a detached drag tray', () => {
+  for (const [width,height] of [[1440,900],[390,844],[320,568],[568,320]]) {
+    const v=fixture(); let updates=0;
+    const rect={left:0,top:0,width,height,right:width,bottom:height};
+    const dock={top:height-260,left:width>height&&height<600?width*.52:0};
+    const heading={bottom:60};
+    Object.assign(v,{active:true,hasFramed:true,stage:{offsetHeight:64,style:{},querySelector:()=>null},
+      host:{getBoundingClientRect:()=>rect,parentElement:{querySelector:selector=>({getBoundingClientRect:()=>selector==='.play-heading'?heading:selector==='.play-workspace'?{bottom:80}:dock})}},
+      updateProjection(){updates++;},invalidate(){},reframe(){throw Error('Layout cannot claim camera ownership');},
     });
-    const safeLeft = width === 844 ? 44 : 0;
-    actual('layout', v, {getComputedStyle: () => ({getPropertyValue: () => `${safeLeft}px`})})();
-    const stageTop = parseFloat(v.stage.style.top), stageLeft = parseFloat(v.stage.style.left);
-    assert.ok(stageTop >= headerBottom + 18, 'The full staged piece clears the heading');
-    assert.ok(stageLeft - 20 >= safeLeft, 'The wrapped caption remains inside the safe viewport');
-    assert.ok(stageTop + 84 + 8 + 66 <= (width > height ? storageTop - 12 : dockTop - 20), 'Caption clears the dock or landscape storage warning');
-    assert.ok(v.frameRegion.left >= stageLeft + 84 + 24, 'Short layouts reserve a separate horizontal assembly region');
-    assert.ok(v.frameRegion.bottom - v.frameRegion.top >= 80, 'The camera never frames an inverted vertical region');
-    assert.ok(v.frameRegion.width >= 100, 'Assembly region retains space for its target');
+    const layout=actual('layout',v),before=v.camera.position.clone(),target=v.controls.target.clone();
+    layout();dock.top-=10;layout();heading.bottom+=5;layout();
+    assert.ok(v.camera.position.equals(before));assert.ok(v.controls.target.equals(target));
+    assert.equal(updates,3);assert.ok(v.frameRegion.bottom>v.frameRegion.top);
     v.controls.dispose();
   }
 });
@@ -351,10 +255,10 @@ test('off-center assembly framing keeps its projected center fixed throughout fl
     });
     v.camera.aspect = 390 / 844; v.camera.updateProjectionMatrix();
     v.media.matches = reduced;
-    for (const name of ['boundsFor', 'reframe', 'project']) v[name] = actual(name, v);
+    for (const name of ['boundsFor', 'reframe', 'project', 'updateProjection']) v[name] = actual(name, v);
     v.reframe(); settle(performance.now());
     assert.ok(v.frameFocus.distanceTo(center) < 1e-9, 'Framing stores the actual assembly center');
-    assert.ok(v.controls.target.distanceTo(center) > 5, 'Fixture has a real offset to leave staging and controls clear');
+    assert.ok(v.controls.target.distanceTo(center) < 1e-9, 'Orbit pivot stays on geometry; projection reserves chrome space');
     const initialPoint = v.project(center), initialPosition = v.camera.position.clone(), initialTarget = v.controls.target.clone(), initialUp = v.camera.up.clone();
     assert.ok(Math.abs(initialPoint.x - 195) < 1e-8);
     assert.ok(Math.abs(initialPoint.y - 240) < 1e-8, 'Assembly appears in the deliberately off-center usable region');
@@ -382,19 +286,19 @@ test('off-center assembly framing keeps its projected center fixed throughout fl
   }
 });
 
-test('Reset and Home preserve the viewed side and assembly while Guide restores the authored screw view', () => {
+test('Reset and Home use fixed faces; edge guidance requires explicit detail entry', () => {
   for (const authoredSide of ['front', 'back']) for (const viewedSide of ['front', 'back']) for (const reduced of [false, true]) for (const action of ['reset', 'home']) {
     const {v, settle} = renderedFixture();
-    const authoredSign = authoredSide === 'front' ? 1 : -1, viewedSign = viewedSide === 'front' ? 1 : -1;
+    const viewedSign = viewedSide === 'front' ? 1 : -1;
     const screw = {
       id: 'radial-retaining-screw', side: authoredSide, leafIds: ['leaf'], focusLeafIds: ['leaf'],
-      contextLeafIds: ['foundation'], viewDirectionWorld: [.8, .25, authoredSign * .45],
+      contextLeafIds: ['foundation'], viewDirectionWorld: [.8, .25, .45],
     };
     const part = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 2), new THREE.MeshBasicMaterial());
     const foundation = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 1), new THREE.MeshBasicMaterial());
     v.pieces.set('leaf', {mesh: part, bounds: new THREE.Box3(new THREE.Vector3(-.5, -.5, -1), new THREE.Vector3(.5, .5, 1))});
     v.pieces.set('foundation', {mesh: foundation, bounds: new THREE.Box3(new THREE.Vector3(-5, -5, -2), new THREE.Vector3(5, 5, -1))});
-    v.scene.add(part, foundation); v.fitted.add('foundation');
+    v.scene.add(part, foundation); v.fitted.add('foundation'); v.manifest.initialLeafIds=['foundation'];
     let commits = 0, prevented = 0;
     Object.assign(v, {
       active: true, current: screw, side: viewedSide, hasFramed: false,
@@ -402,7 +306,7 @@ test('Reset and Home preserve the viewed side and assembly while Guide restores 
       destination: {style: {}}, placed() {commits++;},
     });
     v.camera.aspect = 390 / 844; v.camera.updateProjectionMatrix(); v.media.matches = reduced;
-    for (const name of ['boundsFor', 'reframe', 'project', 'resetView', 'guide', 'keyDown']) v[name] = actual(name, v);
+    for (const name of ['boundsFor', 'reframe', 'project', 'resetView', 'guide', 'keyDown', 'updateProjection']) v[name] = actual(name, v);
     v.reframe(); settle(performance.now());
     CameraFrame.orbitCamera(v.camera, v.controls, .2, .2); settle(performance.now());
     const fitted = v.fitted, current = v.current;
@@ -416,9 +320,12 @@ test('Reset and Home preserve the viewed side and assembly while Guide restores 
     assert.deepEqual([...v.fitted], ['foundation']); assert.equal(commits, 0);
     assert.equal(prevented, action === 'home' ? 1 : 0);
     v.guide(); settle(v.cameraMotion?.start ?? performance.now());
-    assert.equal(v.side, authoredSide, 'Guide deliberately restores the part’s authored side');
+    assert.equal(v.side, viewedSide, 'Guide cannot silently open an edge view');
+    v.detail=screw;
+    v.guide(); settle(v.cameraMotion?.start ?? performance.now());
+    assert.equal(v.side, authoredSide, 'Explicit detail guidance selects the preset face');
     const guided = v.camera.position.clone().sub(v.controls.target).normalize();
-    assert.ok(guided.distanceTo(new THREE.Vector3().fromArray(screw.viewDirectionWorld).normalize()) < 1e-8, 'Guide restores the oblique radial-screw destination');
+    assert.ok(guided.distanceTo(fixedViewDirection(authoredSide,null,screw)) < 1e-8, 'Guide stays on the explicit fixed edge preset');
     assert.equal(v.current, current); assert.equal(v.fitted, fitted); assert.equal(commits, 0);
     assert.equal(v.busy, false); assert.equal(v.frame, 0);
     part.geometry.dispose(); part.material.dispose(); foundation.geometry.dispose(); foundation.material.dispose(); v.controls.dispose();
@@ -429,15 +336,15 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
   const {v, callbacks, settle} = renderedFixture();
   Object.assign(v, {
     active: true, current: {id: 'offered-part'}, point: () => ({x: 40, y: 50}), stagePoint: () => ({x: 40, y: 50}),
-    stage: {setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
+    stage: {addEventListener() {}, removeEventListener() {}, setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
     destination: {dataset: {}, style: {}}, selected() {}, project() {return {x: 100, y: 100};},
   });
-  for (const name of ['pointerDown', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
+  for (const name of ['beginDrag', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
   v.controls._sphericalDelta.theta = .6;
   v.controls.update();
   assert.ok(v.controls._sphericalDelta.theta !== 0, 'A real damped orbit has inertia');
   const before = v.camera.position.clone(), side = v.side;
-  v.pointerDown({button: 0, pointerId: 7, preventDefault() {}, stopPropagation() {}});
+  v.beginDrag({button: 0, pointerId: 7, preventDefault() {}, stopPropagation() {}}, v.stage);
   assert.equal(v.controls.enabled, false); assert.ok(v.drag);
   assert.equal(v.controls._sphericalDelta.theta, 0); assert.equal(v.controls._sphericalDelta.phi, 0);
   v.flip(); assert.equal(v.cameraMotion, undefined); assert.equal(v.side, side);
@@ -448,6 +355,51 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
   v.cancel(); settle(performance.now());
   assert.equal(v.drag, undefined); assert.equal(v.controls.enabled, true);
   assert.ok(v.camera.position.distanceTo(before) < 1e-10, 'Old inertia does not resume after cancellation');
+  v.controls.dispose();
+});
+
+test('drag positioning preserves source scale independently of viewport or part size', () => {
+  const v=fixture();
+  Object.assign(v,{ready:true,current:{id:'tiny-jewel'},stagePoint:()=>({x:10,y:20}),planePoint:p=>new THREE.Vector3(p.x,p.y,3)});
+  v.positionStage=actual('positionStage',v);
+  for(const oldScale of [.01,1,8,120]) {
+    v.staged.scale.setScalar(oldScale);
+    v.positionStage({x:30,y:50},oldScale);
+    assert.deepEqual(v.staged.scale.toArray(),[1,1,1]);
+    assert.deepEqual(v.staged.position.toArray(),[30,50,3]);
+  }
+  v.controls.dispose();
+});
+
+test('inventory drag capture owns and removes its temporary listeners on cancel and release', () => {
+  const {v, settle} = renderedFixture();
+  const listeners = new Map(), captured = new Set();
+  const origin = {
+    addEventListener(name, listener) {listeners.set(name, listener);},
+    removeEventListener(name, listener) {assert.equal(listeners.get(name), listener); listeners.delete(name);},
+    setPointerCapture(id) {captured.add(id);}, hasPointerCapture(id) {return captured.has(id);},
+    releasePointerCapture(id) {captured.delete(id);},
+  };
+  Object.assign(v, {
+    active: true, current: {id: 'gallery-part'}, point: () => ({x: 160, y: 500}),
+    stage: {}, destination: {dataset: {}}, selected() {},
+  });
+  for (const name of ['beginDrag', 'cancel', 'releaseCapture']) v[name] = actual(name, v);
+  const event = {button: 0, pointerId: 9, preventDefault() {}, stopPropagation() {}};
+  for (const finish of ['cancel', 'releaseCapture']) {
+    assert.equal(v.beginDrag(event, origin), true);
+    assert.equal(listeners.size, 4); assert.equal(captured.size, 1);
+    assert.equal(v.drag.position.x, 160); assert.equal(v.drag.position.y, 500);
+    assert.equal(v.drag.grab.x, 0); assert.equal(v.drag.grab.y, 0);
+    assert.equal(v.controls.enabled, false);
+    v[finish](); settle(performance.now());
+    assert.equal(listeners.size, 0); assert.equal(captured.size, 0);
+    assert.equal(v.captureElement, undefined); assert.equal(v.drag, undefined);
+    assert.equal(v.controls.enabled, true);
+  }
+  v.hints = true; v.available = false;
+  assert.equal(v.beginDrag(event, origin), false);
+  assert.equal(listeners.size, 0); assert.equal(captured.size, 0);
   v.controls.dispose();
 });
 
@@ -510,7 +462,7 @@ test('the production settle commits once, blocks duplicate activation and stops 
       positionStage(point, scale) {if (scale !== undefined) scales.push(scale);},
       placed(stepId) {assert.equal(stepId, 'offered-part'); commits++; this.current = null;},
     });
-    v.staged.scale.setScalar(8);
+    v.staged.scale.setScalar(1);
     for (const name of ['invalidate', 'render', 'animate', 'place']) v[name] = actual(name, v, globals);
     v.place(); v.place(); v.place();
     assert.equal(v.busy, true); assert.equal(v.controls.enabled, false); assert.equal(commits, 0);
@@ -520,7 +472,7 @@ test('the production settle commits once, blocks duplicate activation and stops 
     if (!reduced) callbacks.shift()(start + 240);
     assert.equal(commits, 1); assert.equal(v.busy, false); assert.equal(v.controls.enabled, true);
     assert.equal(v.animation, undefined); assert.equal(callbacks.length, 0); assert.equal(v.frame, 0);
-    assert.equal(scales.at(-1), 1, 'The authored target ends at true physical scale');
+    assert.ok(scales.length && scales.every(s=>s===1), 'Pickup and settling both retain true physical scale');
   }
 });
 
@@ -560,7 +512,6 @@ test('controller disposal releases geometry, cloned materials, listeners, observ
   assert.equal(v.dead, true); assert.equal(v.pieces.size, 0); assert.equal(v.loadedObjects.length, 0);
   assert.deepEqual(original.disposal, {geometry: 1, material: 1}); assert.equal(displayDisposed, 1);
   for (const key of ['capture', 'observer', 'controls', 'environment', 'occlusion', 'renderer', 'canvas', 'frame', 'media:change',
-    'stage:pointerdown', 'stage:pointermove', 'stage:pointerup', 'stage:pointercancel', 'stage:lostpointercapture', 'stage:keydown',
     'canvas:webglcontextlost', 'canvas:webglcontextrestored', 'canvas:keydown']) assert.equal(releases.filter((value) => value === key).length, 1, key);
 });
 
@@ -634,7 +585,7 @@ test('failed controller construction frees the renderer, controls, canvas and te
   Object.assign(v, {stage: {removeEventListener() {}}, destination: {dataset: {}}, media: {removeEventListener() {}}});
   for (const name of ['makeEnvironment', 'dispose', 'releaseCapture']) v[name] = actual(name, v, globals);
   const constructor = declaration.members.find(ts.isConstructorDeclaration), module = {exports: {}};
-  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, ...graphics(globals), ...globals});
+  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, window: {addEventListener() {}, removeEventListener() {}}, ...graphics(globals), ...globals});
   assert.throws(() => module.exports.call(v, {appendChild() {}}, v.stage, v.destination, v.manifest, () => {}, () => {}, () => {}), /Injected environment failure/);
   assert.equal(v.dead, true);
   for (const key of ['renderer', 'controls', 'canvas', 'room', 'pmrem']) assert.equal(released.filter((value) => value === key).length, 1, key);
@@ -701,4 +652,115 @@ test('leaf preparation failure keeps the previous complete scene and releases ne
     v.clearPieces();
     assert.deepEqual(original.disposal, {geometry: 1, material: 1});
   }
+});
+
+test('selection and undo updates preserve camera, fitted visibility and shared source materials', () => {
+  const v=fixture();
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(20,20,1),new THREE.MeshBasicMaterial());
+  const incoming=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial());
+  const pose=new THREE.Matrix4().makeTranslation(2,3,1);
+  for(const [id,mesh,matrix] of [['plate',plate,new THREE.Matrix4()],['piece',incoming,pose]]) {
+    mesh.matrixAutoUpdate=false;mesh.matrix.copy(matrix);v.scene.add(mesh);
+    v.pieces.set(id,{mesh,pose:matrix,bounds:new THREE.Box3().setFromBufferAttribute(mesh.geometry.getAttribute('position')).applyMatrix4(matrix)});
+  }
+  Object.assign(v,{ready:true,hasFramed:true,active:true,available:true,hints:true,seatSamples:[],cancel(){},invalidate(){},layout(){throw Error('Selection cannot reframe');},reframe(){throw Error('Selection cannot reframe');}});
+  const step={id:'piece',leafIds:['piece'],side:'back'};
+  v.camera.position.set(12,8,65);v.controls.target.set(2,4,1);v.camera.up.set(0,1,0);
+  const before=[v.camera.position.clone(),v.controls.target.clone(),v.camera.up.clone()],material=plate.material;
+  v.cameraMotion={start:0};
+  actual('update',v)(new Set(['plate']),step,true);
+  assert.equal(v.cameraMotion,undefined,'Old guided motion cannot resume after selection');
+  assert.ok(v.camera.position.equals(before[0]));assert.ok(v.controls.target.equals(before[1]));assert.ok(v.camera.up.equals(before[2]));
+  assert.equal(plate.visible,true);assert.equal(incoming.visible,false);assert.equal(plate.material,material);assert.equal(material.opacity,1);
+  assert.equal(v.staged.children[0].material,incoming.material,'Staging keeps the authored finish');
+  assert.notEqual(v.ghost.children[0].material,incoming.material,'Hint overlay owns a separate material');
+  v.camera.position.set(-20,10,-60);v.presentContext();assert.equal(plate.visible,true,'Orbit must never hide opaque fitted geometry');
+  const orbited=v.camera.position.clone();actual('update',v)(new Set(['plate']),null,true);
+  assert.ok(v.camera.position.equals(orbited),'Clearing selection/undo does not choose a face');
+  assert.equal(material.opacity,1);assert.equal(material.transparent,false);
+  for(const mesh of [plate,incoming]){mesh.geometry.dispose();mesh.material.dispose();}v.ghostMaterial.dispose();v.controls.dispose();
+});
+
+test('a source seat behind an opaque fitted surface rejects placement without hiding that surface',()=>{
+  const v=fixture();
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(10,10,1),new THREE.MeshBasicMaterial());mesh.position.z=5;mesh.userData.partId='cover';v.scene.add(mesh);v.pieces.set('cover',{mesh});v.scene.updateMatrixWorld(true);
+  v.occludersAt=actual('occludersAt',v);v.visibleSeat=actual('visibleSeat',v);
+  assert.deepEqual(Array.from(v.occludersAt(new THREE.Vector3())),['cover','cover']);
+  assert.equal(v.visibleSeat(new THREE.Vector3()),false);assert.equal(mesh.visible,true);assert.equal(mesh.material.opacity,1);
+  assert.equal(v.visibleSeat(new THREE.Vector3(10,0,0)),true,'An actually clear ray can be used');
+  mesh.material.transparent=true;mesh.material.opacity=.2;
+  assert.equal(v.visibleSeat(new THREE.Vector3()),true,'Genuinely authored transparency is retained');
+  assert.equal(mesh.material.opacity,.2);mesh.geometry.dispose();mesh.material.dispose();v.controls.dispose();
+});
+
+test('a visible in-frame seat is accepted even when the centre-nearest source sample is offscreen',()=>{
+  for(const x of [12,50,212]) {
+    const v=fixture();let commits=0;
+    Object.assign(v,{
+      ready:true,active:true,current:{id:'part',workspaceId:null},workspace:null,
+      frameRegion:{left:12,width:200,top:80,bottom:200},
+      target:new THREE.Vector3(x,70,0),seatPoint:new THREE.Vector3(),
+      seatSamples:[new THREE.Vector3(x,70,0),new THREE.Vector3(x,100,0)],
+      destination:{style:{}},project:p=>({x:p.x,y:p.y}),visibleSeat:()=>true,
+      animate(_from,_to,_a,_b,complete){complete();},placed(){commits++;},
+      feedback(message){throw Error(`Valid drop was rejected: ${message}`);},
+    });
+    for(const name of ['inAssemblyView','updateSeat','isNear','place'])v[name]=actual(name,v,{snapDrop});
+    v.updateSeat();
+    assert.equal(v.seatVisible,true);assert.equal(v.seatInView,true);
+    assert.equal(v.seatPoint.y,100,'Offscreen centre sample must not veto the visible seat');
+    assert.equal(v.isNear({x,y:100}),true);
+    v.place();assert.equal(commits,1,'Final placement uses the same view bounds as the drop');
+    v.controls.dispose();
+  }
+});
+
+
+test('fixed workspace and edge presets have two exact Flip endpoints', () => {
+  for (const workspace of [null, 'movement-29', 'movement-4']) {
+    for (const detail of [null, {viewDirectionWorld: [.34, -.76, .54]}]) {
+      const front = fixedViewDirection('front', workspace, detail);
+      const back = fixedViewDirection('back', workspace, detail);
+      assert.ok(Math.abs(front.length() - 1) < 1e-12);
+      assert.ok(front.clone().applyAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI).distanceTo(back) < 1e-12);
+      assert.ok(front.z > 0 && back.z < 0);
+    }
+  }
+});
+
+test('Play keyboard ignores orbit arrows, zooms around its target and flips with F', () => {
+  const v = fixture();
+  let flips = 0, invalidations = 0;
+  v.flip = () => flips++;
+  v.invalidate = () => invalidations++;
+  v.keyDown = actual('keyDown', v);
+  const position = v.camera.position.clone(), target = v.controls.target.clone();
+  for (const key of ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']) v.keyDown({key, preventDefault() {assert.fail('Arrow key intercepted');}});
+  assert.ok(v.camera.position.equals(position));
+  v.keyDown({key: '+', preventDefault() {}});
+  assert.ok(v.camera.position.distanceTo(target) < position.distanceTo(target));
+  assert.ok(v.controls.target.equals(target));
+  v.keyDown({key: 'F', preventDefault() {}});
+  assert.equal(flips, 1); assert.equal(invalidations, 1);
+  v.controls.dispose();
+});
+
+test('leaving an explicit edge view restores the normal camera and zoom bounds', () => {
+  const v = fixture();
+  v.workspace = null; v.detail = null; v.side = 'back';
+  v.invalidate = () => {};
+  v.setDetail = actual('setDetail', v);
+  const position = v.camera.position.clone(), target = v.controls.target.clone(), up = v.camera.up.clone();
+  v.reframe = () => {
+    v.camera.position.set(3, 4, 5); v.controls.target.set(1, 2, 3);
+    v.controls.minDistance = 1; v.controls.maxDistance = 8;
+  };
+  v.setDetail({id: 'edge-1', side: 'front', viewDirectionWorld: [.3, -.7, .5]});
+  assert.equal(v.detail.id, 'edge-1');
+  v.setDetail({id: 'edge-2', side: 'front', viewDirectionWorld: [-.1, .8, .5]});
+  v.setDetail(null);
+  assert.equal(v.detail, null); assert.equal(v.side, 'back');
+  assert.ok(v.camera.position.equals(position)); assert.ok(v.controls.target.equals(target)); assert.ok(v.camera.up.equals(up));
+  assert.equal(v.controls.minDistance, 3); assert.equal(v.controls.maxDistance, 1500);
+  v.controls.dispose();
 });

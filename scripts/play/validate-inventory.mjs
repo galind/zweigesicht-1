@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import {actions, createSession, canPlace, commitPlacement, fittedLeafIds, isComplete} from '../../explorer/src/play/state.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (name) => JSON.parse(readFileSync(path.join(root, name), 'utf8'));
@@ -35,7 +36,7 @@ assert.equal(createHash('sha256').update(recovery).digest('hex'), 'c74ee2731a1f6
 assert.ok(recovery.readUInt32LE(80) > 0, 'Diamond STL has triangles');
 geometry.add(diamond);
 
-assert.equal(play.schemaVersion, 1);
+assert.equal(play.schemaVersion, 2);
 assert.ok(play.version);
 assert.equal(play.sourceSha256, source.source.sha256);
 const deferred = [11, 12].map((index) => 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_' + index);
@@ -44,7 +45,7 @@ for (const id of deferred) assert.equal(parts.get(id)?.definitionId, 'd_0_1_1_20
 const expectedInitial = allLeaves.filter((id) => under(id, play.foundationRootId) && !deferred.includes(id));
 sameSet(play.initialLeafIds, expectedInitial, 'Foundation is the fitted mainplate subtree minus the two explicitly deferred dial screws');
 assert.equal(play.initialLeafIds.length, 16);
-assert.equal(play.version, 'play-3', 'Foundation and order changes reject incompatible play-2 saves');
+assert.equal(play.version, 'play-4', 'Nonlinear workbench state rejects earlier prefix saves explicitly');
 const expectedFinal = allLeaves.filter((id) => under(id, 'p_0_1_1_1__0_1_1_1_4') && id !== 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_66');
 for (const key of ['central', 'small']) {
   const face = dials.faces[key];
@@ -107,22 +108,9 @@ for (const level of ['easy', 'hard']) {
     assert.ok(step.leafIds.length > 0);
     if (level === 'hard') assert.equal(step.leafIds.length, 1, 'Hard places exactly one unsplit source leaf');
     unique(step.leafIds, `Unique leaves within ${step.id}`);
-    assert.deepEqual(step.prerequisiteStepIds, index ? [steps[index - 1].id] : [], `Valid ordered dependency: ${step.id}`);
-    assert.ok(step.prerequisiteStepIds.every((id) => stepIds.has(id)));
-    for (const id of step.contextLeafIds) {
-      assert.ok(placed.has(id), `Context already fitted before ${step.id}: ${id}`);
-
-    }
-    for (const id of step.focusLeafIds) assert.ok(step.leafIds.includes(id) || step.contextLeafIds.includes(id));
-    const local = packetPlaced.get(step.assemblyId) ?? [];
-    if (level === 'easy' || local.length === 0) {
-      assert.ok(play.initialLeafIds.every((id) => step.contextLeafIds.includes(id)), 'Whole assembly views retain the fitted mainplate as meaningful context');
-      assert.ok(play.initialLeafIds.every((id) => step.focusLeafIds.includes(id)), 'Whole assembly views frame the mainplate, not a cropped collection of distant fittings');
-    } else {
-      sameSet(step.contextLeafIds, local, 'Hard close-up contains precisely the previously fitted source packet, not unrelated foundation jewels');
-      sameSet(step.focusLeafIds, [...local, ...step.leafIds], 'Hard close-up frames the actual assembly and current piece');
-    }
-    packetPlaced.set(step.assemblyId, [...local, ...step.leafIds]);
+    assert.ok(Array.isArray(step.prerequisiteStepIds));
+    assert.ok(play.groups.some((group) => group.id === step.groupId));
+    if (step.workspaceId) assert.ok(play.packets.some((packet) => packet.id === step.workspaceId && packet.leafIds.includes(step.leafIds[0])));
     for (const id of step.leafIds) {
       assert.ok(play.finalLeafIds.includes(id), `Included step leaf: ${id}`);
       assert.ok(!placed.has(id), `Physical leaf placed exactly once: ${id}`);
@@ -130,29 +118,24 @@ for (const level of ['easy', 'hard']) {
     }
     stepIds.add(step.id);
   }
-  const occurrencePrefix = 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_';
-  const placementIndex = new Map(steps.flatMap((step, index) => step.leafIds.map((id) => [id, index])));
-  const packetIndices = (child) => [...placementIndex].filter(([id]) => under(id, occurrencePrefix + child)).map(([, index]) => index);
-  const lastCentralDial = Math.max(...dials.faces.central.structureLeafIds.map((id) => placementIndex.get(id)));
-  const firstCentralHand = Math.min(...dials.faces.central.styles.find((style) => style.id === dials.defaults.central).leafIds.map((id) => placementIndex.get(id)));
-  for (const id of deferred) {
-    const index = placementIndex.get(id);
-    assert.ok(index > lastCentralDial && index < firstCentralHand, 'Deferred screws follow the central dial and precede its hands');
-    assert.deepEqual(steps[index].leafIds, [id], 'Each deferred screw remains an individual placement in both levels');
-    assert.ok(steps[index].viewDirectionWorld, 'Each radial screw has its explicitly authored oblique camera direction');
+  const all = actions(play, level), ids = new Set(all.map((s) => s.id));
+  unique([...all.map((s) => s.id)], 'Action IDs unique, including nonphysical transfers');
+  for (const action of all) {
+    assert.ok(action.prerequisiteStepIds.every((id) => ids.has(id) && id !== action.id), 'Every prerequisite exists within the level');
+    unique(action.prerequisiteStepIds, 'No repeated prerequisite');
   }
-  // Independent source-host constraints; the full chapter sequence is not mechanically certified.
-  for (const [inner, cover] of [[1, 60], [2, 60], [3, 61], [63, 6], [65, 6], [62, 6], [13, 16], [7, 59]]) {
-    assert.ok(Math.max(...packetIndices(inner)) < Math.min(...packetIndices(cover)), `Place movement child ${inner} before covering bridge ${cover}`);
-  }
-  for (const [host, fastener] of [[60, 17], [60, 19], [60, 21], [6, 18], [6, 22], [59, 23], [59, 24], [16, 34], [16, 35], [61, 10], [61, 36]]) {
-    assert.ok(Math.max(...packetIndices(host)) < Math.min(...packetIndices(fastener)), `Fastener ${fastener} follows source host ${host}`);
-  }
-  if (level === 'hard') {
-    for (const [packet, definition] of [[1, 84], [2, 89]]) {
-      const stem = occurrencePrefix + packet + '__0_1_1_' + definition + '_';
-      assert.ok(placementIndex.get(stem + '3') < placementIndex.get(stem + '2') && placementIndex.get(stem + '4') < placementIndex.get(stem + '2'), 'Barrel arbor and mainspring precede cover');
+  // Traverse forward, reverse and shuffled ready choices. Covers can never lock out later work.
+  for (let seed = 0; seed < 40; seed++) {
+    let session = createSession(play, level), random = seed + 1;
+    while (session.actionIds.length < all.length) {
+      const ready = all.filter((s) => canPlace(play, session, s.id));
+      assert.ok(ready.length, `${level} has no dependency dead end at seed ${seed}`);
+      random = (Math.imul(random, 1664525) + 1013904223) >>> 0;
+      const selected = ready[seed === 0 ? 0 : seed === 1 ? ready.length - 1 : random % ready.length];
+      session = commitPlacement(play, session, selected.id);
     }
+    assert.equal(isComplete(play, session), true);
+    sameSet(fittedLeafIds(play, session), play.finalLeafIds, 'Every valid order fits exactly the audited physical set');
   }
   sameSet([...placed], play.finalLeafIds, `${level} completes exactly full intended assembly`);
   assert.equal(play.levels[level].placementCount, steps.length);
@@ -160,4 +143,4 @@ for (const level of ['easy', 'hard']) {
 }
 sameSet(completed.easy, completed.hard, 'Both levels finish identical configurations');
 assert.ok(play.levels.easy.steps.length < play.levels.hard.steps.length);
-console.log(JSON.stringify({ sourceLeaves: allLeaves.length, fittedMainplateLeaves: play.initialLeafIds.length, deferredDialScrews: deferred.length, includedLeaves: play.finalLeafIds.length, excludedLeaves: excluded.length, easyPlacements: play.levels.easy.steps.length, hardPlacements: play.levels.hard.steps.length, geometry: 'All selected mesh nodes plus hash-checked maker diamond STL', targetVisibility: 'Meaningful whole-movement and local-packet contexts verified; renderer geometry-ray occlusion and browser reachability checks remain required.' }, null, 2));
+console.log(JSON.stringify({ sourceLeaves: allLeaves.length, fittedMainplateLeaves: play.initialLeafIds.length, deferredDialScrews: deferred.length, includedLeaves: play.finalLeafIds.length, excludedLeaves: excluded.length, easyPlacements: play.levels.easy.steps.length, hardPlacements: play.levels.hard.steps.length, geometry: 'All selected mesh nodes plus hash-checked maker diamond STL', dependencyOrders: '40 alternate graph traversals per level; browser visible-seat checks recorded separately.' }, null, 2));

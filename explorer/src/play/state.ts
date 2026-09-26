@@ -10,51 +10,120 @@ export const PLAY_STORAGE_KEY = 'zweigesicht:play:session:v1';
 /** CSS pixels, deliberately independent of camera zoom and difficulty. */
 export const SNAP_RADIUS_PX = 56;
 
+/** Stable inventory order is independent of dependency order and user selection. */
+export function actions(
+  manifest: PlayManifest,
+  level: PlayLevel,
+): readonly PlayStep[] {
+  return [...manifest.levels[level].steps, ...manifest.levels[level].transfers];
+}
+
 export function createSession(
   manifest: PlayManifest,
   level: PlayLevel,
 ): PlaySession {
   if (level !== 'easy' && level !== 'hard')
     throw new Error('Unknown play level.');
-  return { manifestVersion: manifest.version, level, completedStepIds: [] };
+  return {
+    manifestVersion: manifest.version,
+    level,
+    actionIds: [],
+    hints: false,
+  };
 }
 
-export function currentStep(
+export function missingPrerequisites(
   manifest: PlayManifest,
   session: PlaySession,
-): PlayStep | null {
-  if (validateSession(manifest, session).status !== 'saved') return null;
+  id: string,
+): PlayStep[] {
+  const all = actions(manifest, session.level);
+  const step = all.find((s) => s.id === id);
+  const done = new Set(session.actionIds);
+  return step
+    ? all.filter(
+        (s) => step.prerequisiteStepIds.includes(s.id) && !done.has(s.id),
+      )
+    : [];
+}
+
+export function canPlace(
+  manifest: PlayManifest,
+  session: PlaySession,
+  id: string,
+): boolean {
+  const step = actions(manifest, session.level).find((s) => s.id === id);
   return (
-    manifest.levels[session.level].steps[session.completedStepIds.length] ??
-    null
+    !!step &&
+    !session.actionIds.includes(id) &&
+    step.prerequisiteStepIds.every((p) => session.actionIds.includes(p))
   );
+}
+
+/** Component work and transfers are different actions; transfers never add physical count. */
+export function assembledLeafIds(
+  manifest: PlayManifest,
+  session: PlaySession,
+): string[] {
+  const done = new Set(session.actionIds);
+  return [
+    ...manifest.initialLeafIds,
+    ...manifest.levels[session.level].steps
+      .filter((s) => done.has(s.id))
+      .flatMap((s) => s.leafIds),
+  ];
 }
 
 export function fittedLeafIds(
   manifest: PlayManifest,
   session: PlaySession,
 ): string[] {
+  const done = new Set(session.actionIds);
   return [
     ...manifest.initialLeafIds,
-    ...manifest.levels[session.level].steps
-      .slice(0, session.completedStepIds.length)
-      .flatMap((step) => step.leafIds),
+    ...actions(manifest, session.level)
+      .filter((s) => !s.workspaceId && done.has(s.id))
+      .flatMap((s) => s.leafIds),
   ];
 }
 
-/** A release carries its original step ID, so duplicate/stale releases cannot advance twice. */
+export function workspaceLeafIds(
+  manifest: PlayManifest,
+  session: PlaySession,
+  workspace: string,
+): string[] {
+  const packet = manifest.packets.find((p) => p.id === workspace);
+  if (!packet || session.actionIds.includes(packet.transferId)) return [];
+  const done = new Set(session.actionIds);
+  return manifest.levels.hard.steps
+    .filter((s) => s.workspaceId === workspace && done.has(s.id))
+    .flatMap((s) => s.leafIds);
+}
+
+export function isComplete(
+  manifest: PlayManifest,
+  session: PlaySession,
+): boolean {
+  if (validateSession(manifest, session).status !== 'saved') return false;
+  const fitted = new Set(fittedLeafIds(manifest, session));
+  return (
+    fitted.size === manifest.finalLeafIds.length &&
+    manifest.finalLeafIds.every((id) => fitted.has(id))
+  );
+}
+
+/** A release carries its original action ID; stale and duplicate releases do nothing. */
 export function commitPlacement(
   manifest: PlayManifest,
   session: PlaySession,
-  expectedStepId: string,
+  id: string,
 ): PlaySession {
-  if (session.manifestVersion !== manifest.version) return session;
-  const step = currentStep(manifest, session);
-  if (!step || step.id !== expectedStepId) return session;
-  return {
-    ...session,
-    completedStepIds: [...session.completedStepIds, step.id],
-  };
+  if (
+    validateSession(manifest, session).status !== 'saved' ||
+    !canPlace(manifest, session, id)
+  )
+    return session;
+  return { ...session, actionIds: [...session.actionIds, id] };
 }
 
 export function undoPlacement(
@@ -63,20 +132,17 @@ export function undoPlacement(
 ): PlaySession {
   if (
     validateSession(manifest, session).status !== 'saved' ||
-    !session.completedStepIds.length
+    !session.actionIds.length
   )
     return session;
-  return {
-    ...session,
-    completedStepIds: session.completedStepIds.slice(0, -1),
-  };
+  return { ...session, actionIds: session.actionIds.slice(0, -1) };
 }
 
 export type SessionValidation =
   | { status: 'saved'; session: PlaySession }
   | { status: 'incompatible' | 'corrupt' };
 
-/** Restore only an exact ordered prefix. Never infer progress from a count or remap IDs. */
+/** Replay the committed DAG history, rejecting missing supports, duplicates and foreign actions. */
 export function validateSession(
   manifest: PlayManifest,
   value: unknown,
@@ -89,26 +155,33 @@ export function validateSession(
     return { status: 'incompatible' };
   if (
     (data.level !== 'easy' && data.level !== 'hard') ||
-    !Array.isArray(data.completedStepIds) ||
+    !Array.isArray(data.actionIds) ||
+    typeof data.hints !== 'boolean' ||
     Object.keys(data).some(
-      (key) => !['manifestVersion', 'level', 'completedStepIds'].includes(key),
+      (key) =>
+        !['manifestVersion', 'level', 'actionIds', 'hints'].includes(key),
     )
   )
     return { status: 'corrupt' };
-  const steps = manifest.levels[data.level].steps;
-  if (
-    data.completedStepIds.length > steps.length ||
-    Array.from(data.completedStepIds).some(
-      (id, index) => typeof id !== 'string' || id !== steps[index].id,
+  const byId = new Map(actions(manifest, data.level).map((s) => [s.id, s]));
+  const done = new Set<string>();
+  for (const id of data.actionIds) {
+    const step = typeof id === 'string' ? byId.get(id) : undefined;
+    if (
+      !step ||
+      done.has(id) ||
+      step.prerequisiteStepIds.some((p) => !done.has(p))
     )
-  )
-    return { status: 'corrupt' };
+      return { status: 'corrupt' };
+    done.add(id);
+  }
   return {
     status: 'saved',
     session: {
       manifestVersion: manifest.version,
       level: data.level,
-      completedStepIds: [...data.completedStepIds],
+      actionIds: [...data.actionIds],
+      hints: data.hints,
     },
   };
 }

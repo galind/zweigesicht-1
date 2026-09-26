@@ -417,3 +417,216 @@ Cold-context request counts remain 17 home / 19 Play. Home requested JavaScript 
 Working production previews: http://127.0.0.1:4183/ and http://127.0.0.1:4183/play. Next action: local user review and the separate real-device/accessibility release reviews. No push, merge or deployment was performed.
 
 Verified implementation committed locally as `1888891` (`Improve viewer lifecycle and responsive accessibility`); the accompanying review report and setup/status documentation record its evidence and remaining release limits.
+
+## Free-choice Play redesign — 26 September 2026
+
+Implemented the supplied `docs/PLAY_REDESIGN_PROMPT.md` on local branch
+`codex/play-free-assembly`, based on the merged website review at `affaa9d`.
+Easy has a stable thumbnail gallery of 89 prepared assemblies/parts. Hard has
+249 individually placed parts grouped by mechanism, search, remaining counts,
+and 35 explicitly entered workbenches with explicit transfers back into the
+watch. Transfers add no physical count. Both levels retain the same 16-leaf
+foundation, deferred dial screws, immutable source endpoints and 265-leaf finish.
+No next piece or group is selected automatically.
+
+The `play-4` dependency graph replaces the ordered prefix. Supports and cover
+constraints permit independent paths; replay validation, last-action Undo and
+separate assembled/fitted accounting preserve nonlinear progress. Hints start
+off, persist through actions and resume, and expose inspectable unavailable
+parts only when enabled. Show destination is explicit assistance for camera
+reveal and keyboard/tap placement. Earlier linear saves stay intact until an
+explicit fresh-start confirmation. Camera pose, orbit target, zoom and pan
+survive ordinary actions; workbench return restores the main camera. Removed
+camera-driven mesh hiding and all automatic selection/placement reframing.
+Source-surface rays reject drops through opaque fitted geometry, and hint
+materials are separate from authored finishes.
+
+The [redesign report](docs/PLAY_REDESIGN.md) and
+[dependency ledger](docs/PLAY_DEPENDENCIES.md) record the design, evidence,
+puzzle assumptions and reproduction commands. A real reverse-order failure
+exposed the diamond fitting closing a balance-bridge jewel seat too early;
+the missing guard is fixed and covered by a regression test. A further read-only
+maximal-obstruction audit passes all 373 Easy/Hard placement/transfer actions,
+checking each with every independently placeable obstruction present. This
+supports visual reachability across the graph, not collision-free insertion or
+certified servicing. All existing mechanical/publication gates remain.
+
+Verification: 59 automated tests, 40 graph traversals per level, source/geometry
+inventory validation, the existing CPU source/runtime suite, TypeScript, lint
+and production build pass. Production Easy completes 89 placements (538 checks);
+production Hard completes 284 actions in the opposite legal order at 320×844
+(1,708 checks). Earlier reverse Easy and forward Hard/390 traversals also pass.
+The focused production suite passes 111 interaction, camera, responsive,
+accessibility-layout, resume and recovery checks. It includes a full orbit with
+stable visibility/material identity, exact main-camera workbench return,
+measured initial/Reset centering, resize without pose changes, 200% text,
+asset retry and unavailable storage. Both complete with exactly 265 fitted leaves.
+The final build adds only the opt-in read-only access-audit module and removes a
+duplicate live announcement; final focused checks, all 71 homepage UX assertions,
+no-Play-payload checks, build/type/lint and local SEO/HTTP checks pass.
+
+Reviewed screenshots and numeric evidence are ignored under
+`artifacts/browser/play-redesign/`, with production runs in `production/`.
+Visual review corrected overlapping enlarged-text labels; cards and captions
+now remain contained and the bounded inventory supports horizontal and vertical
+scrolling. The gallery does not change order or scroll position on placement.
+Physical phones/Safari, representative accessibility and enjoyment review remain
+outstanding; browser emulation is identified as such.
+
+Working local production preview: http://127.0.0.1:4185/play (homepage at the
+same origin). Next action: user review of the local experience. Changes are
+committed locally only; no push, PR, merge or deployment. The two pre-existing
+untracked prompt files remain local and excluded from the commit.
+
+## Play drag discoverability follow-up — 26 September 2026
+
+User review found that selecting a gallery card did not make the separate loose
+piece's drag handle discoverable. Mouse users can now drag directly from a card,
+including an unselected card. The selected-part details expose a gold **Drag
+part** button for mouse and touch; native gallery swipes still browse. Hard
+parts requiring a workbench explicitly explain that entry step. Show destination
+remains an explicit keyboard/tap alternative in the action row. All drag origins
+share placement rules, camera preservation, cancellation and capture cleanup.
+The click generated after a card drop cannot cancel its settling animation.
+
+Verification: all 60 unit tests pass, including new temporary-listener lifecycle
+coverage; TypeScript, lint and production build pass. The new browser drag suite
+passes 49 checks at 1440 px, 390 px and 320 px, including hints off/on, direct
+unselected-card pickup, touch placement, unavailable inspection, Escape/touch
+cancellation, native gallery scrolling, Hard workbench entry and unchanged
+camera pose. The existing focused suite also passes all 111 interaction,
+responsive, resume and renderer-recovery checks on the final production build.
+Screenshots and reports are ignored under `artifacts/browser/play-drag/final/`.
+An earlier focused run overlapped a rebuild and timed out at the asset-retry
+check; the complete run passes after restarting the preview against the final
+bundle. No runtime failure remains reproduced.
+
+Local preview remains http://127.0.0.1:4185/play; reload to use the new controls.
+Next action: user review of the more discoverable gesture. Physical-device/Safari
+review remains outstanding. No push, PR or deployment; the two original untracked
+prompt files remain excluded.
+
+## Gallery-only dragging at source scale — 26 September 2026
+
+Implemented the next user review: carried parts now retain actual source scale
+relative to the watch throughout pickup, movement and settling. New games start
+on the movement side (negative Z). Removed the left-side loose piece and its DOM
+control completely. Mouse dragging starts on gallery cards; a selected card
+contains the gold touch Drag handle. Between interactions the carried mesh is
+hidden; failed drops return to the gallery and cancellation leaves no loose copy.
+
+Hard-mode pickup previously required the selected leaf's workspace to match the
+current view. That prevented even trying a barrel cover from the watch view.
+With hints off, every unfitted leaf can now be picked up without switching the
+camera or workspace. Placement and destination guidance still require the right
+workspace and supports. Wrong-workspace drops explain Open workbench/Return to
+watch. With hints on, missing prerequisites still disable dragging and remain
+inspectable. Both barrel covers require their arbor and mainspring; no dependency,
+source geometry, physical count or saved-session format changed.
+
+Verification: 61 unit tests, typecheck, lint and production build pass. The
+production drag suite passes 331 checks, including real mouse pickup of all 249
+Hard leaves, source scale of each carried mesh, startup side, no detached tray,
+hints off/on, mouse/touch and cancellation at 1440/390/320 px. The barrel cover
+can be carried from the gallery before workspace entry, is rejected in the wrong
+view, explains missing supports with hints on, and fits after its internals on
+its workbench. The existing focused suite passes all 111 camera, interaction,
+responsive, enlarged-text, resume and recovery checks. Screenshots were reviewed,
+including the carried cover at actual scale. Evidence is ignored under
+`artifacts/browser/play-gallery-only/production/`.
+
+The updated production preview is http://127.0.0.1:4185/play. Reload for the new
+controls; saves remain compatible. Next action: user review. Physical-device
+and Safari review remain outstanding. Local commit only; no push, PR or deployment.
+The two original untracked prompt files remain excluded.
+
+## Remove the Drag label — 26 September 2026
+
+Removed the visible Drag text, arrow and gold button from gallery cards at the
+user's request. The selected part's existing thumbnail is now the touch drag
+surface. Selected cards retain their full-size thumbnail and assembly context.
+Accessible naming and keyboard placement remain available. Updated help copy,
+architecture notes and the regression assertion to match.
+
+TypeScript and production build pass. A targeted production browser check passes
+mouse placement at 1440 px and touch placement at 390 px from the thumbnail,
+with no visible Drag label. Preview refreshed at http://127.0.0.1:4185/play.
+Next action: user review; local commit only, no publication.
+
+## Consistent visible-seat placement — 26 September 2026
+
+Investigated the reported difficulty fitting pieces. The existing user session
+was inspected read-only; its progress was left intact. Identified an inconsistency
+in the controller: drag validation accepted any exposed source sample inside the
+assembly viewport, while final placement selected the sample closest to the
+part's center and could reject it as offscreen. The two paths also used different
+horizontal margins. A partly visible or panned part could therefore reject an
+otherwise valid drop.
+
+Seat selection now prefers an exposed sample within the assembly viewport and
+uses exactly the same viewport boundaries as snapping. Opaque occlusion and
+support/workspace rules remain enforced. Failed drops distinguish missing
+supports, an obscured/offscreen fitting point, and a missed fitting point, with
+explicit hints/reveal options instead of one generic rejection message.
+
+All 62 unit tests pass. The new controller regression covers an offscreen
+center-nearest sample plus a visible valid sample, including both horizontal
+viewport boundaries, through final placement. TypeScript, lint and production
+build pass. The exact original rejected gesture has not been identified; this
+records the concrete code-level inconsistency found during investigation.
+Preview refreshed at http://127.0.0.1:4185/play; user reload preserves saved actions.
+Next action: retry the reported placement and identify any remaining rejection.
+Local commit only; no publishing.
+
+
+## Fixed Play views — 26 September 2026
+
+Replaced free orbit and pan in Play with two prescribed faces, Flip/F and bounded
+centered scroll/pinch or keyboard zoom. The movement side remains the default;
+selection, hints and ordinary placements preserve the view. Workbench return and
+renderer recovery preserve the camera and its zoom limits. Help and canvas
+accessibility text describe the new controls. The homepage controls are unchanged.
+
+Straight-on views alone leave four physical parts inaccessible in maximal legal
+assemblies: two radial dial screws and two shock-indicator washers. The screws
+now expose an explicit View dial edge action using the existing authored vectors;
+Return to faces restores the prior normal camera. The shock-indicator workbench
+uses a fixed tilted pair. Guidance checks only the two current presets and never
+hides fitted geometry or enters an edge view automatically. No source geometry,
+dependency, physical count or save format changed.
+
+Verification: all 65 CPU tests, typecheck, lint and production build pass. The
+new fixed-access geometry script checks all 373 Easy/Hard actions against every
+legal opaque predecessor at three sampled distances: all 1,119 checks pass.
+An isolated production browser session confirmed that empty-space drag plus
+arrow input leaves the rendered view identical, centered zoom and Flip work,
+a barrel can be dragged from its gallery thumbnail into place, and explicit edge
+view entry/return works. All 39 shock-indicator parts were placed through visible
+UI controls, including both washers, and the completed packet was transferred
+into the watch. The browser completion scripts were updated for fixed views but
+not rerun in full; mobile touch and Safari remain unverified for this change.
+The CPU ray-access audit is not physical collision certification.
+
+Preview refreshed at http://127.0.0.1:4185/play; reload to receive the new controls.
+The user's existing save was not touched; browser review used port 4186.
+Next action: user review of fixed views and fitting. Local commit only, no push,
+PR or deployment. Original untracked prompt files remain excluded.
+
+## Play opening orientation — 26 September 2026
+
+Initialized the Play camera on negative Z before constructing OrbitControls,
+matching the movement-side preset and negative-Y up vector used when a game
+starts. Previously, the unpositioned camera could trigger a controls change
+before first framing and replace the intended back-side default with front.
+The difficulty-selection screen now starts with the same movement-side
+orientation as gameplay. Production build passes; no additional tests run.
+Preview refreshed on port 4185. Local change only; no publishing.
+
+## Play redesign pull request — 26 September 2026
+
+Pushed `codex/play-free-assembly` over SSH and opened
+[PR #14](https://github.com/galind/zweigesicht-1/pull/14), targeting
+`codex/play-assembly` because the original Play PR #12 remains open.
+The PR describes the redesign, gallery dragging, fixed views, opening orientation,
+verification evidence and remaining review limits. No merge or manual deployment.
+Next action: review PR #14. Original prompt files remain untracked.
