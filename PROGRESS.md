@@ -1,12 +1,20 @@
 # Current project status
 
-Updated 26 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
+Updated 27 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
 
 ## Implemented
 
 The real-CAD static explorer includes all 426 source hierarchy instances, six functional groups, component inspection/isolation, complete separation, All parts, shared dial visibility with independent hand configurations and authored finishes. Running-watch simulation was removed by user decision. Reset preserves the current side and dial preferences.
 
 Later refinements include straight-on opening/Reset, independent inventory flipping, upright screw and hand presentation, revised frosting and dial finishes, diamond internal-facet shading, stable loading layout, visible author/independence credit and minimal homepage SEO. Maintenance constraints are in [CAD notes](docs/CAD_NOTES.md) and [runtime architecture](docs/LOCAL_ARCHITECTURE.md).
+
+## Homepage and Workshop visual parity — 27 September 2026
+
+The Workshop now uses the homepage's typography, header geometry, responsive menu treatment, glass surfaces, neutral/warm palette, button radii, control sizing, popup chrome and focus language. Its larger assembly tray remains route-specific, but no longer carries a separate visual system. Shared site tokens now own the overlay, panel, rule and active-state colors used by both routes.
+
+Both movement-loading paths replace the progress-bar treatment with a shared animated `gg` mark, retain concise loading/transfer status and present a static mark when reduced motion is requested. Error and retry paths remain unchanged.
+
+Verification: 67 automated state/lifecycle/packaging tests and inventory validation pass; TypeScript, lint and production build pass. A focused browser matrix passes 35 visual parity/loading checks across desktop, 390 px, 320 px, landscape and 200% text, including matched header, identity, navigation-control, dock and popup styles, no horizontal overflow, 44 px targets, animated loaders and reduced motion. All 87 current inventory drag/touch/workbench checks and 15 homepage navigation/viewer checks pass with no uncaught browser errors. Evidence remains ignored under `artifacts/browser/home-workshop-parity/`. No push or publication has been performed.
 
 ## Quiet interface redesign — 14 September 2026
 

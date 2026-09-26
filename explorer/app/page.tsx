@@ -37,6 +37,7 @@ import {
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { ConfigurationControls } from '@/components/ConfigurationControls';
+import { MovementLoadingMark } from '@/components/MovementLoadingMark';
 import { FlipButton, ResetViewButton } from '@/components/viewer-controls';
 import { initialState } from '@/src/experience/state';
 import {
@@ -465,7 +466,9 @@ export default function Home() {
             className="text-button assemble-trigger"
             aria-label="Assemble the movement"
           >
-            <span className="assemble-label-desktop">Assemble the movement</span>
+            <span className="assemble-label-desktop">
+              Assemble the movement
+            </span>
             <span className="assemble-label-phone" aria-hidden="true">
               Assemble
             </span>
@@ -610,30 +613,20 @@ export default function Home() {
         {!available && (
           <div className="fallback">
             <div className="load-message">
-              <p>{loadingMessage(s.loadStage)}</p>
               {s.error ? (
-                <p className="secondary">{s.error}</p>
-              ) : (
                 <>
-                  <progress
-                    aria-label={
-                      s.loadStage === 'movement'
-                        ? 'Movement file transfer'
-                        : loadingMessage(s.loadStage)
-                    }
-                    max={100}
-                    value={
-                      s.loadStage === 'movement' && s.transfer !== null
-                        ? s.transfer
-                        : undefined
-                    }
-                  />
-                  {s.loadStage === 'movement' && s.transfer !== null && (
-                    <span className="transfer-scope" aria-hidden="true">
-                      Movement file · {s.transfer}%
-                    </span>
-                  )}
+                  <p>{loadingMessage(s.loadStage)}</p>
+                  <p className="secondary">{s.error}</p>
                 </>
+              ) : (
+                <MovementLoadingMark
+                  label={loadingMessage(s.loadStage)}
+                  detail={
+                    s.loadStage === 'movement' && s.transfer !== null
+                      ? `Movement file · ${s.transfer}%`
+                      : undefined
+                  }
+                />
               )}
               {(s.error || s.loadStage === 'recovering') && (
                 <button
