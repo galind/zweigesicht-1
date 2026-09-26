@@ -417,3 +417,63 @@ Cold-context request counts remain 17 home / 19 Play. Home requested JavaScript 
 Working production previews: http://127.0.0.1:4183/ and http://127.0.0.1:4183/play. Next action: local user review and the separate real-device/accessibility release reviews. No push, merge or deployment was performed.
 
 Verified implementation committed locally as `1888891` (`Improve viewer lifecycle and responsive accessibility`); the accompanying review report and setup/status documentation record its evidence and remaining release limits.
+
+## Free-choice Play redesign — 26 September 2026
+
+Implemented the supplied `docs/PLAY_REDESIGN_PROMPT.md` on local branch
+`codex/play-free-assembly`, based on the merged website review at `affaa9d`.
+Easy has a stable thumbnail gallery of 89 prepared assemblies/parts. Hard has
+249 individually placed parts grouped by mechanism, search, remaining counts,
+and 35 explicitly entered workbenches with explicit transfers back into the
+watch. Transfers add no physical count. Both levels retain the same 16-leaf
+foundation, deferred dial screws, immutable source endpoints and 265-leaf finish.
+No next piece or group is selected automatically.
+
+The `play-4` dependency graph replaces the ordered prefix. Supports and cover
+constraints permit independent paths; replay validation, last-action Undo and
+separate assembled/fitted accounting preserve nonlinear progress. Hints start
+off, persist through actions and resume, and expose inspectable unavailable
+parts only when enabled. Show destination is explicit assistance for camera
+reveal and keyboard/tap placement. Earlier linear saves stay intact until an
+explicit fresh-start confirmation. Camera pose, orbit target, zoom and pan
+survive ordinary actions; workbench return restores the main camera. Removed
+camera-driven mesh hiding and all automatic selection/placement reframing.
+Source-surface rays reject drops through opaque fitted geometry, and hint
+materials are separate from authored finishes.
+
+The [redesign report](docs/PLAY_REDESIGN.md) and
+[dependency ledger](docs/PLAY_DEPENDENCIES.md) record the design, evidence,
+puzzle assumptions and reproduction commands. A real reverse-order failure
+exposed the diamond fitting closing a balance-bridge jewel seat too early;
+the missing guard is fixed and covered by a regression test. A further read-only
+maximal-obstruction audit passes all 373 Easy/Hard placement/transfer actions,
+checking each with every independently placeable obstruction present. This
+supports visual reachability across the graph, not collision-free insertion or
+certified servicing. All existing mechanical/publication gates remain.
+
+Verification: 59 automated tests, 40 graph traversals per level, source/geometry
+inventory validation, the existing CPU source/runtime suite, TypeScript, lint
+and production build pass. Production Easy completes 89 placements (538 checks);
+production Hard completes 284 actions in the opposite legal order at 320×844
+(1,708 checks). Earlier reverse Easy and forward Hard/390 traversals also pass.
+The focused production suite passes 111 interaction, camera, responsive,
+accessibility-layout, resume and recovery checks. It includes a full orbit with
+stable visibility/material identity, exact main-camera workbench return,
+measured initial/Reset centering, resize without pose changes, 200% text,
+asset retry and unavailable storage. Both complete with exactly 265 fitted leaves.
+The final build adds only the opt-in read-only access-audit module and removes a
+duplicate live announcement; final focused checks, all 71 homepage UX assertions,
+no-Play-payload checks, build/type/lint and local SEO/HTTP checks pass.
+
+Reviewed screenshots and numeric evidence are ignored under
+`artifacts/browser/play-redesign/`, with production runs in `production/`.
+Visual review corrected overlapping enlarged-text labels; cards and captions
+now remain contained and the bounded inventory supports horizontal and vertical
+scrolling. The gallery does not change order or scroll position on placement.
+Physical phones/Safari, representative accessibility and enjoyment review remain
+outstanding; browser emulation is identified as such.
+
+Working local production preview: http://127.0.0.1:4185/play (homepage at the
+same origin). Next action: user review of the local experience. Changes are
+committed locally only; no push, PR, merge or deployment. The two pre-existing
+untracked prompt files remain local and excluded from the commit.

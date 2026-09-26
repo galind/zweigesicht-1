@@ -1,181 +1,103 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import actualManifest from '../assets/authored/play-manifest.json' with { type: 'json' };
-import {
-  PLAY_STORAGE_KEY, SNAP_RADIUS_PX, createSession, currentStep, fittedLeafIds,
-  commitPlacement, undoPlacement, validateSession, getSavedSession,
-  saveSession, clearSavedSession, dragCenter, snapDrop,
-} from '../explorer/src/play/state.ts';
-
-const step = (id, leafIds, side = 'front') => ({
-  id, leafIds, side, label: id, assemblyId: 'packet', staging: 'lower-left',
-  contextLeafIds: [], focusLeafIds: leafIds,
-});
-const manifest = {
-  version: 'fixture-1', initialLeafIds: ['plate', 'retained-pin'],
-  finalLeafIds: ['plate', 'retained-pin', 'wheel', 'bridge', 'jewel', 'dial', 'hand'],
-  targetPoses: {},
-  levels: {
-    easy: { steps: [step('easy-wheel', ['wheel']), step('easy-bridge', ['bridge', 'jewel']), step('easy-face', ['dial', 'hand'], 'back')] },
-    hard: { steps: [step('hard-wheel', ['wheel']), step('hard-jewel', ['jewel']), step('hard-bridge', ['bridge']), step('hard-dial', ['dial'], 'back'), step('hard-hand', ['hand'], 'back')] },
-  },
-};
-function memoryStorage() {
-  const data = new Map();
-  return {
-    data,
-    getItem: (key) => data.get(key) ?? null,
-    setItem: (key, value) => data.set(key, value),
-    removeItem: (key) => data.delete(key),
-  };
+import manifest from '../assets/authored/play-manifest.json' with {type:'json'};
+import {PLAY_STORAGE_KEY, SNAP_RADIUS_PX, actions, createSession, canPlace, missingPrerequisites, assembledLeafIds, fittedLeafIds, workspaceLeafIds, isComplete, commitPlacement, undoPlacement, validateSession, getSavedSession, saveSession, clearSavedSession, dragCenter, snapDrop} from '../explorer/src/play/state.ts';
+function memoryStorage() {const data=new Map();return {data,getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};}
+function complete(level, reverse=false) {
+  let session=createSession(manifest,level);const snapshots=[session];
+  while (!isComplete(manifest,session)) {
+    const available=actions(manifest,level).filter(s=>canPlace(manifest,session,s.id));
+    assert.ok(available.length,'No hidden dependency dead end');
+    session=commitPlacement(manifest,session,available[reverse?available.length-1:0].id);snapshots.push(session);
+  }
+  return snapshots;
 }
-
-test('both sequences preserve the foundation and commit only the offered stable step ID once', () => {
-  for (const level of ['easy', 'hard']) {
-    let session = createSession(manifest, level);
-    const initial = session;
-    assert.deepEqual(fittedLeafIds(manifest, session), manifest.initialLeafIds);
-    assert.equal(undoPlacement(manifest, session), session);
-    for (const step of manifest.levels[level].steps) {
-      assert.equal(currentStep(manifest, session).id, step.id);
-      assert.equal(commitPlacement(manifest, session, 'wrong-step'), session);
-      const before = session;
-      session = commitPlacement(manifest, session, step.id);
-      assert.notEqual(session, before);
-      assert.equal(session.completedStepIds.length, before.completedStepIds.length + 1);
-      assert.equal(commitPlacement(manifest, session, step.id), session, 'duplicate pointer/keyboard release is ignored');
-      assert.ok(manifest.initialLeafIds.every((id) => fittedLeafIds(manifest, session).includes(id)));
+test('independent barrels and train branches can start freely; a premature bridge cannot close them',()=>{
+  let s=createSession(manifest,'easy');
+  for (const id of ['movement-1','movement-2','movement-3','movement-63','movement-65','movement-62','movement-27']) assert.ok(canPlace(manifest,s,id),id);
+  assert.equal(canPlace(manifest,s,'movement-60'),false);
+  assert.equal(commitPlacement(manifest,s,'movement-60'),s);
+  s=commitPlacement(manifest,s,'movement-2');
+  assert.equal(canPlace(manifest,s,'movement-60'),false);
+  s=commitPlacement(manifest,s,'movement-1');
+  assert.equal(canPlace(manifest,s,'movement-60'),true);
+  assert.equal(commitPlacement(manifest,s,'movement-1'),s,'Duplicate release does nothing');
+  const completed=commitPlacement(manifest,s,'movement-60');
+  assert.equal(canPlace(manifest,completed,'movement-17'),true);
+  assert.equal(canPlace(manifest,undoPlacement(manifest,completed),'movement-17'),false);
+  assert.equal(canPlace(manifest,s,'central-dial'),false,'Dial cannot cover unfinished movement work');
+});
+test('hard internals cannot be placed unsupported, transferred early, double-counted or auto-transferred',()=>{
+  const packet=manifest.packets.find(p=>p.id==='movement-1');
+  const steps=manifest.levels.hard.steps.filter(s=>s.workspaceId===packet.id);
+  const drum=steps.find(s=>s.label==='Barrel drum 2'),arbor=steps.find(s=>s.label==='Barrel arbor'),spring=steps.find(s=>s.label==='Mainspring'),cover=steps.find(s=>s.label==='Barrel cover 2');
+  let s=createSession(manifest,'hard');
+  assert.equal(canPlace(manifest,s,cover.id),false);assert.equal(canPlace(manifest,s,arbor.id),false);
+  assert.equal(commitPlacement(manifest,s,packet.transferId),s);
+  for (const step of [drum,arbor,spring,cover]) s=commitPlacement(manifest,s,step.id);
+  assert.equal(assembledLeafIds(manifest,s).length,20);assert.equal(fittedLeafIds(manifest,s).length,16);
+  assert.deepEqual(new Set(workspaceLeafIds(manifest,s,packet.id)),new Set(packet.leafIds));
+  const seated=commitPlacement(manifest,s,packet.transferId);
+  assert.equal(assembledLeafIds(manifest,seated).length,20);assert.equal(fittedLeafIds(manifest,seated).length,20);
+  assert.deepEqual(workspaceLeafIds(manifest,seated,packet.id),[]);
+  assert.equal(commitPlacement(manifest,seated,packet.transferId),seated);
+  assert.deepEqual(undoPlacement(manifest,seated),s,'Undo transfer restores the complete loose assembly');
+  assert.equal(canPlace(manifest,undoPlacement(manifest,s),packet.transferId),false,'Undo cover removes transfer availability');
+});
+test('both levels accept opposite legal orders, restore every action and undo all work with exact accounting',()=>{
+  for(const level of ['easy','hard']) for(const reverse of [false,true]) {
+    const history=complete(level,reverse),storage=memoryStorage();
+    for(const state of history) {
+      const s={...state,hints:true};assert.equal(saveSession(manifest,s,storage).status,'saved');
+      assert.deepEqual(getSavedSession(manifest,storage),{status:'saved',session:s});
+      assert.equal(new Set(assembledLeafIds(manifest,s)).size,assembledLeafIds(manifest,s).length);
+      assert.equal(new Set(fittedLeafIds(manifest,s)).size,fittedLeafIds(manifest,s).length);
     }
-    assert.deepEqual(initial.completedStepIds, [], 'commits do not mutate older React snapshots');
-    assert.equal(currentStep(manifest, session), null);
-    assert.equal(commitPlacement(manifest, session, 'anything'), session);
-    assert.deepEqual(fittedLeafIds(manifest, session).sort(), [...manifest.finalLeafIds].sort());
+    let s=history.at(-1);assert.deepEqual(new Set(fittedLeafIds(manifest,s)),new Set(manifest.finalLeafIds));
+    for(let i=history.length-2;i>=0;i--) {s=undoPlacement(manifest,s);assert.deepEqual(s,history[i]);}
+    assert.equal(s.hints,false);assert.equal(undoPlacement(manifest,s),s);
   }
 });
-
-test('undo crosses sides and prepared assemblies without losing leaf membership', () => {
-  let session = createSession(manifest, 'easy');
-  const snapshots = [session];
-  for (const step of manifest.levels.easy.steps) snapshots.push(session = commitPlacement(manifest, session, step.id));
-  while (session.completedStepIds.length) {
-    session = undoPlacement(manifest, session);
-    assert.deepEqual(session, snapshots[session.completedStepIds.length]);
-    const ids = fittedLeafIds(manifest, session);
-    assert.equal(ids.includes('bridge'), ids.includes('jewel'), 'prepared bridge is undone atomically');
+test('invalid histories, foreign IDs, duplicate releases and legacy linear saves never reinterpret progress',()=>{
+  const base=createSession(manifest,'easy');
+  for(const data of [null,[],{}, {...base,hints:undefined},{...base,level:'other'},{...base,actionIds:['movement-60']},{...base,actionIds:['movement-1','movement-1']},{...base,actionIds:['seat:movement-1']},{...base,actionIds:new Array(1)},{...base,selection:'movement-1'}]) assert.equal(validateSession(manifest,data).status,'corrupt');
+  const storage=memoryStorage();const old={manifestVersion:'play-3',level:'easy',completedStepIds:['movement-1']};
+  storage.setItem(PLAY_STORAGE_KEY,JSON.stringify(old));
+  assert.equal(getSavedSession(manifest,storage).status,'incompatible');assert.equal(saveSession(manifest,old,storage).status,'incompatible');
+  assert.equal(storage.getItem(PLAY_STORAGE_KEY),JSON.stringify(old));
+  assert.equal(commitPlacement(manifest,old,'movement-1'),old);
+});
+test('saved hints survive placements and undo; restart starts with hints off',()=>{
+  const s={...createSession(manifest,'easy'),hints:true};
+  assert.equal(commitPlacement(manifest,s,'movement-1').hints,true);
+  assert.equal(undoPlacement(manifest,commitPlacement(manifest,s,'movement-1')).hints,true);
+  assert.equal(createSession(manifest,'easy').hints,false);
+  assert.deepEqual(missingPrerequisites(manifest,s,'movement-60').map(s=>s.id),['movement-1','movement-2']);
+});
+test('unavailable storage and corrupt JSON are reported without blocking play',()=>{
+  const failure=()=>{throw Error('Storage blocked')},s=createSession(manifest,'easy');
+  for(const storage of [failure,{getItem:failure,setItem:failure,removeItem:failure}]) {
+    assert.equal(getSavedSession(manifest,storage).status,'unavailable');assert.equal(saveSession(manifest,s,storage).status,'unavailable');assert.equal(clearSavedSession(storage),false);
   }
-  assert.equal(currentStep(manifest, snapshots[2]).side, 'back');
-  assert.equal(currentStep(manifest, snapshots[1]).side, 'front');
+  const storage=memoryStorage();storage.setItem(PLAY_STORAGE_KEY,'{broken');assert.equal(getSavedSession(manifest,storage).status,'corrupt');
+  assert.equal(commitPlacement(manifest,s,'movement-1').actionIds.length,1);
+});
+test('snap validation respects grab offsets, generous CSS pixels and finite coordinates',()=>{
+  const target={x:180,y:250},grabOffset={x:23,y:-18},pointer={x:203,y:232};
+  assert.deepEqual(dragCenter(pointer,grabOffset),target);assert.equal(snapDrop({pointer,grabOffset,target}),true);
+  assert.equal(snapDrop({pointer:{...pointer,x:pointer.x+SNAP_RADIUS_PX},grabOffset,target}),true);
+  assert.equal(snapDrop({pointer:{...pointer,x:pointer.x+SNAP_RADIUS_PX+1},grabOffset,target}),false);
+  for(const n of [NaN,Infinity,-Infinity]) assert.equal(snapDrop({pointer:{x:n,y:0},grabOffset,target}),false);
+  for(const radius of [0,-1,Infinity]) assert.equal(snapDrop({pointer,grabOffset,target,radius}),false);
 });
 
-test('restore recreates every exact committed prefix and next step at both difficulties', () => {
-  for (const level of ['easy', 'hard']) {
-    const storage = memoryStorage();
-    let session = createSession(manifest, level);
-    assert.equal(getSavedSession(manifest, storage).status, 'empty');
-    for (let index = 0; index <= manifest.levels[level].steps.length; index++) {
-      assert.equal(saveSession(manifest, session, storage).status, 'saved');
-      assert.deepEqual([...storage.data.keys()], [PLAY_STORAGE_KEY]);
-      const restored = getSavedSession(manifest, storage);
-      assert.equal(restored.status, 'saved');
-      assert.deepEqual(restored.session, session);
-      assert.deepEqual(fittedLeafIds(manifest, restored.session), fittedLeafIds(manifest, session));
-      assert.deepEqual(currentStep(manifest, restored.session), currentStep(manifest, session));
-      const step = currentStep(manifest, session);
-      if (step) session = commitPlacement(manifest, session, step.id);
-    }
-    assert.equal(clearSavedSession(storage), true);
-    assert.equal(getSavedSession(manifest, storage).status, 'empty');
-  }
-});
-
-test('corrupt, out-of-order, duplicate, alternate-level and transient saves never remap progress', () => {
-  const base = createSession(manifest, 'easy');
-  const bad = [null, [], 7, {}, {...base, level: 'medium'}, {...base, completedStepIds: 1},
-    {...base, completedStepIds: ['easy-bridge']}, {...base, completedStepIds: ['easy-wheel', 'easy-wheel']},
-    {...base, completedStepIds: ['hard-wheel']}, {...base, completedStepIds: [null]},
-    {...base, completedStepIds: new Array(1)}, {...base, drag: { stepId: 'easy-wheel' }},
-    {...base, completedStepIds: [...manifest.levels.easy.steps.map((s) => s.id), 'extra']},
-  ];
-  for (const value of bad) assert.equal(validateSession(manifest, value).status, 'corrupt', JSON.stringify(value));
-  const storage = memoryStorage();
-  storage.setItem(PLAY_STORAGE_KEY, '{broken');
-  assert.equal(getSavedSession(manifest, storage).status, 'corrupt');
-  const incompatible = {...base, manifestVersion: 'older'};
-  assert.equal(validateSession(manifest, incompatible).status, 'incompatible');
-  assert.equal(saveSession(manifest, incompatible, storage).status, 'incompatible');
-  assert.equal(storage.getItem(PLAY_STORAGE_KEY), '{broken', 'rejected write does not overwrite saved evidence');
-  assert.equal(commitPlacement(manifest, incompatible, 'easy-wheel'), incompatible);
-  const outOfOrder = {...base, completedStepIds: ['easy-bridge']};
-  assert.equal(commitPlacement(manifest, outOfOrder, 'easy-bridge'), outOfOrder);
-});
-
-test('storage getter, read, quota and deletion failures are reported without blocking play', () => {
-  const failure = () => { throw new Error('Storage unavailable'); };
-  const session = createSession(manifest, 'easy');
-  for (const storage of [failure, {getItem: failure, setItem: failure, removeItem: failure}]) {
-    assert.equal(getSavedSession(manifest, storage).status, 'unavailable');
-    assert.equal(saveSession(manifest, session, storage).status, 'unavailable');
-    assert.equal(clearSavedSession(storage), false);
-    assert.equal(commitPlacement(manifest, session, 'easy-wheel').completedStepIds.length, 1);
-  }
-  const quota = {...memoryStorage(), setItem: failure};
-  assert.equal(saveSession(manifest, session, quota).status, 'unavailable');
-  assert.equal(getSavedSession(manifest, quota).status, 'empty');
-});
-
-test('snap validation uses the held piece center, generous CSS pixels, and a finite target', () => {
-  const target = {x: 180, y: 250};
-  const grabOffset = {x: 23, y: -18};
-  const pointer = {x: target.x + grabOffset.x, y: target.y + grabOffset.y};
-  assert.deepEqual(dragCenter(pointer, grabOffset), target);
-  assert.equal(snapDrop({pointer, grabOffset, target}), true);
-  assert.equal(snapDrop({pointer: {...pointer, x: pointer.x + SNAP_RADIUS_PX}, grabOffset, target}), true);
-  assert.equal(snapDrop({pointer: {...pointer, x: pointer.x + SNAP_RADIUS_PX + 1}, grabOffset, target}), false);
-  // A finger can be outside the destination while the held object's center is correctly placed.
-  assert.equal(snapDrop({pointer: {x: 280, y: 250}, grabOffset: {x: 100, y: 0}, target}), true);
-  assert.equal(snapDrop({pointer: target, grabOffset: {x: 100, y: 0}, target}), false);
-  for (const value of [NaN, Infinity, -Infinity]) {
-    assert.equal(snapDrop({pointer: {...pointer, x: value}, grabOffset, target}), false);
-    assert.equal(snapDrop({pointer, grabOffset, target: {...target, y: value}}), false);
-    assert.equal(snapDrop({pointer, grabOffset: {...grabOffset, x: value}, target}), false);
-    assert.equal(snapDrop({pointer, grabOffset, target, radius: value}), false);
-  }
-  for (const radius of [0, -1]) assert.equal(snapDrop({pointer, grabOffset, target, radius}), false);
-});
-
-test('target preview and invalid releases do not mutate discrete state', () => {
-  const session = createSession(manifest, 'hard');
-  const options = {pointer: {x: 150, y: 150}, target: {x: 150, y: 150}, grabOffset: {x: 0, y: 0}};
-  for (let index = 0; index < 100; index++) assert.equal(snapDrop(options), true);
-  assert.deepEqual(session.completedStepIds, []);
-  assert.equal(snapDrop({...options, pointer: {x: 500, y: 500}}), false);
-  assert.deepEqual(session.completedStepIds, []);
-});
-
-test('audited Easy and Hard manifests restore and undo every actual committed prefix', () => {
-  for (const level of ['easy', 'hard']) {
-    let session = createSession(actualManifest, level);
-    const storage = memoryStorage();
-    const expected = new Set(actualManifest.initialLeafIds);
-    for (const step of actualManifest.levels[level].steps) {
-      assert.equal(currentStep(actualManifest, session).id, step.id);
-      session = commitPlacement(actualManifest, session, step.id);
-      for (const id of step.leafIds) expected.add(id);
-      assert.deepEqual(new Set(fittedLeafIds(actualManifest, session)), expected);
-      assert.equal(saveSession(actualManifest, session, storage).status, 'saved');
-      const restored = getSavedSession(actualManifest, storage);
-      assert.equal(restored.status, 'saved');
-      assert.deepEqual(restored.session, session);
-      assert.deepEqual(fittedLeafIds(actualManifest, restored.session), fittedLeafIds(actualManifest, session));
-    }
-    assert.equal(currentStep(actualManifest, session), null);
-    assert.deepEqual(new Set(fittedLeafIds(actualManifest, session)), new Set(actualManifest.finalLeafIds));
-    for (const step of [...actualManifest.levels[level].steps].reverse()) {
-      session = undoPlacement(actualManifest, session);
-      for (const id of step.leafIds) expected.delete(id);
-      assert.equal(currentStep(actualManifest, session).id, step.id);
-      assert.deepEqual(new Set(fittedLeafIds(actualManifest, session)), expected);
-    }
-    assert.deepEqual(fittedLeafIds(actualManifest, session), actualManifest.initialLeafIds);
-  }
+test('balance-bridge diamond fitting cannot close over unfinished shock-protection jewels',()=>{
+ const steps=manifest.levels.hard.steps.filter(s=>s.workspaceId==='movement-59');
+ const byLabel=label=>steps.find(s=>s.label===label);
+ let s=commitPlacement(manifest,createSession(manifest,'hard'),byLabel('Balance bridge').id);
+ const setting=byLabel('Diamond setting').id;
+ assert.equal(canPlace(manifest,s,setting),false);
+ for(const label of ['Shock-protection housing','Shock-protection jewel setting','Shock-protection jewel 1','Shock-protection jewel 2','Shock-protection retaining spring']) s=commitPlacement(manifest,s,byLabel(label).id);
+ assert.equal(canPlace(manifest,s,setting),true);
+ assert.equal(canPlace(manifest,undoPlacement(manifest,s),setting),false);
 });

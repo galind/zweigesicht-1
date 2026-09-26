@@ -41,6 +41,7 @@ export type PlayViewStatus = {
   error: string;
   busy: boolean;
   cutaway: boolean;
+  obstructed?: boolean;
   side: 'front' | 'back';
 };
 
@@ -65,6 +66,30 @@ export class PlayViewer {
   };
   pieces = new Map<string, Piece>();
   staged = new THREE.Group();
+  ghost = new THREE.Group();
+  ghostMaterial = new THREE.MeshBasicMaterial({
+    color: 0xe8c88e,
+    transparent: true,
+    opacity: 0.3,
+    depthWrite: false,
+  });
+  available = true;
+  hints = false;
+  assistance = false;
+  workspace: string | null = null;
+  mainView?: {
+    position: THREE.Vector3;
+    target: THREE.Vector3;
+    up: THREE.Vector3;
+    focus: THREE.Vector3;
+    side: 'front' | 'back';
+  };
+  captureElement?: HTMLElement;
+  thumbnails = new Map<string, string>();
+  seatSamples: THREE.Vector3[] = [];
+  seatPoint = new THREE.Vector3();
+  seatVisible = false;
+  seatInView = false;
   observer: ResizeObserver;
   frame = 0;
   renderCount = 0;
@@ -110,6 +135,7 @@ export class PlayViewer {
     public notify: (status: PlayViewStatus) => void,
     public placed: (id: string) => void,
     public selected: () => void,
+    public feedback: (message: string) => void = () => {},
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     try {
@@ -122,7 +148,7 @@ export class PlayViewer {
       );
       this.camera.up.set(0, -1, 0);
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      this.controls.enablePan = false;
+      this.controls.enablePan = true;
       this.controls.enableDamping = true;
       this.controls.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
       this.controls.minDistance = 3;
@@ -130,7 +156,7 @@ export class PlayViewer {
       this.controls.addEventListener('change', this.cameraChanged);
       this.makeEnvironment();
       addStudioLights(this.scene);
-      this.scene.add(this.staged);
+      this.scene.add(this.staged, this.ghost);
       this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
       stage.addEventListener('pointerdown', this.pointerDown);
       stage.addEventListener('pointermove', this.pointerMove);
@@ -138,6 +164,7 @@ export class PlayViewer {
       stage.addEventListener('pointercancel', this.cancel);
       stage.addEventListener('lostpointercapture', this.cancel);
       stage.addEventListener('keydown', this.stageKeyDown);
+      window.addEventListener('keydown', this.escapeDrag);
       this.renderer.domElement.addEventListener(
         'webglcontextlost',
         this.contextLost,
@@ -163,6 +190,7 @@ export class PlayViewer {
         error: this.error,
         busy: this.busy,
         cutaway: this.cutaway,
+        obstructed: !!this.current && (!this.seatVisible || !this.seatInView),
         side: this.side,
       });
   }
@@ -320,6 +348,8 @@ export class PlayViewer {
   }
   clearPieces() {
     this.staged.clear();
+    this.ghost.clear();
+    this.thumbnails.clear();
     for (const { mesh } of this.pieces.values()) {
       this.scene.remove(mesh);
       (mesh.material as THREE.Material).dispose();
@@ -334,15 +364,19 @@ export class PlayViewer {
   update(fitted: Set<string>, step: PlayStep | null, active: boolean) {
     this.cancel();
     this.animation = undefined;
+    // A discrete selection never resumes an earlier guided transition.
     this.cameraMotion = undefined;
+    this.stopOrbitMotion();
     this.busy = false;
-    const previous = this.current;
+    this.controls.enabled = this.ready;
     this.fitted = new Set(fitted);
     this.current = step;
     this.active = active;
     if (!this.ready) return;
     this.staged.clear();
+    this.ghost.clear();
     this.stepBounds.makeEmpty();
+    this.seatSamples = [];
     for (const id of step?.leafIds ?? [])
       this.stepBounds.union(this.pieces.get(id)!.bounds);
     if (step) {
@@ -355,11 +389,102 @@ export class PlayViewer {
           .makeTranslation(-this.target.x, -this.target.y, -this.target.z)
           .multiply(part.pose);
         this.staged.add(mesh);
+        const overlay = new THREE.Mesh(part.mesh.geometry, this.ghostMaterial);
+        overlay.matrixAutoUpdate = false;
+        overlay.matrix.copy(part.pose);
+        this.ghost.add(overlay);
+        // Source surface samples, not an invisible centre behind a cover.
+        const positions = part.mesh.geometry.getAttribute('position');
+        const stride = Math.max(1, Math.floor(positions.count / 80));
+        for (let i = 0; i < positions.count; i += stride)
+          this.seatSamples.push(
+            new THREE.Vector3()
+              .fromBufferAttribute(positions, i)
+              .applyMatrix4(part.pose),
+          );
       }
     }
     this.staged.visible = !!step && active;
-    this.side = step?.side ?? this.side;
-    this.reframe(!!previous && active);
+    this.presentContext();
+    if (!this.hasFramed) {
+      this.layout();
+      this.reframe();
+    }
+    this.updateSeat();
+    this.positionStage();
+    this.invalidate();
+    this.emit();
+  }
+  setAssistance(hints: boolean, available: boolean, assistance = false) {
+    this.hints = hints;
+    this.available = available;
+    this.assistance = assistance;
+    this.ghost.visible = !!this.current && available && (hints || assistance);
+    this.destination.dataset.assisted = String(hints || assistance);
+    this.updateSeat();
+    this.invalidate();
+  }
+  captureCamera() {
+    return {
+      workspace: this.workspace,
+      mainView: this.mainView,
+      position: this.camera.position.clone(),
+      target: this.controls.target.clone(),
+      up: this.camera.up.clone(),
+      focus: this.frameFocus.clone(),
+      side: this.side,
+      hasFramed: this.hasFramed,
+    };
+  }
+  restoreCamera(saved: ReturnType<PlayViewer['captureCamera']>) {
+    this.workspace = saved.workspace;
+    this.mainView = saved.mainView;
+    this.camera.position.copy(saved.position);
+    this.controls.target.copy(saved.target);
+    this.camera.up.copy(saved.up);
+    this.frameFocus.copy(saved.focus);
+    this.side = saved.side;
+    this.hasFramed = saved.hasFramed;
+    syncOrbitUp(this.camera, this.controls);
+    this.stopOrbitMotion();
+    this.camera.lookAt(this.controls.target);
+    this.camera.updateMatrixWorld();
+    this.layout();
+    this.invalidate();
+  }
+  setWorkspace(workspace: string | null) {
+    if (workspace === this.workspace || this.busy || this.drag) return;
+    if (!this.workspace)
+      this.mainView = {
+        position: this.camera.position.clone(),
+        target: this.controls.target.clone(),
+        up: this.camera.up.clone(),
+        focus: this.frameFocus.clone(),
+        side: this.side,
+      };
+    this.workspace = workspace;
+    this.current = null;
+    this.staged.clear();
+    this.ghost.clear();
+    this.cameraMotion = undefined;
+    this.stopOrbitMotion();
+    if (!workspace && this.mainView) {
+      this.camera.position.copy(this.mainView.position);
+      this.controls.target.copy(this.mainView.target);
+      this.camera.up.copy(this.mainView.up);
+      this.frameFocus.copy(this.mainView.focus);
+      this.side = this.mainView.side;
+      syncOrbitUp(this.camera, this.controls);
+      this.camera.lookAt(this.controls.target);
+      this.camera.updateMatrixWorld();
+      this.updateProjection();
+      this.mainView = undefined;
+    } else {
+      this.side =
+        this.manifest.packets.find((p) => p.id === workspace)?.side ?? 'front';
+      this.reframe(false, true);
+    }
+    this.invalidate();
     this.emit();
   }
   boundsFor(ids: Iterable<string>) {
@@ -377,16 +502,15 @@ export class PlayViewer {
     const fromPosition = this.camera.position.clone(),
       fromTarget = this.controls.target.clone(),
       fromUp = this.camera.up.clone();
-    const step = this.active ? this.current : null;
-    const ids = step
-      ? [...step.focusLeafIds, ...step.leafIds]
-      : [...this.fitted];
-    let bounds = this.boundsFor(ids);
-    if (bounds.isEmpty()) bounds = this.boundsFor(this.manifest.initialLeafIds);
+    const step = !straightOn ? this.current : null;
+    const ids = this.workspace
+      ? this.manifest.packets.find((p) => p.id === this.workspace)!.leafIds
+      : this.manifest.initialLeafIds;
+    const bounds = this.boundsFor(ids);
     const center = bounds.getCenter(new THREE.Vector3()),
       size = bounds.getSize(new THREE.Vector3());
     this.frameFocus.copy(center);
-    const span = Math.max(size.x, size.y, size.z, step ? 3.5 : 25);
+    const span = Math.max(size.x, size.y, size.z, this.workspace ? 1 : 25);
     const regionHeight = Math.max(
       80,
       this.frameRegion.bottom - this.frameRegion.top,
@@ -397,34 +521,15 @@ export class PlayViewer {
         (this.host.clientHeight / regionHeight) * 1.18,
         (1.35 * this.host.clientHeight) / this.frameRegion.width,
       );
-    const desiredY = (this.frameRegion.top + this.frameRegion.bottom) / 2;
-    const worldHeight = 2 * distance * Math.tan(THREE.MathUtils.degToRad(16.5));
-    // Use the same source-face convention as the explorer, including radial
-    // retaining screws' authored oblique view. Frame in screen axes, not CAD XY.
     const up = new THREE.Vector3(0, this.side === 'front' ? 1 : -1, 0);
     const direction =
       !straightOn && step?.viewDirectionWorld && this.side === step.side
         ? new THREE.Vector3().fromArray(step.viewDirectionWorld).normalize()
         : new THREE.Vector3(0, 0, this.side === 'front' ? 1 : -1);
-    const right = new THREE.Vector3().crossVectors(up, direction).normalize();
-    const screenUp = new THREE.Vector3()
-      .crossVectors(direction, right)
-      .normalize();
-    const desiredX = this.frameRegion.left + this.frameRegion.width / 2;
     this.camera.up.copy(up);
     syncOrbitUp(this.camera, this.controls);
-    this.controls.target
-      .copy(center)
-      .addScaledVector(
-        right,
-        (0.5 - desiredX / this.host.clientWidth) *
-          worldHeight *
-          this.camera.aspect,
-      )
-      .addScaledVector(
-        screenUp,
-        (desiredY / this.host.clientHeight - 0.5) * worldHeight,
-      );
+    this.controls.target.copy(center);
+    this.updateProjection();
     this.camera.position
       .copy(this.controls.target)
       .addScaledVector(direction, distance);
@@ -458,52 +563,96 @@ export class PlayViewer {
     this.invalidate();
   };
   presentContext() {
-    const step = this.active ? this.current : null;
-    const context = new Set(step?.contextLeafIds ?? this.fitted);
-    for (const [id, p] of this.pieces)
-      p.mesh.visible = this.fitted.has(id) && (!step || context.has(id));
-    this.cutaway = !!step && [...this.fitted].some((id) => !context.has(id));
-    // Remove only fitted surfaces between the viewer and this destination. This
-    // presentation cutaway preserves endpoints and avoids invisible drop targets.
-    if (step) {
-      this.scene.updateMatrixWorld(true);
-      const direction = this.target.clone().sub(this.camera.position),
-        distance = direction.length();
-      const ray = new THREE.Raycaster(
-        this.camera.position,
-        direction.normalize(),
-        0,
-        this.occlusionDistance(direction, distance),
-      );
-      const hits = ray.intersectObjects(
-        [...this.pieces.values()]
-          .filter((p) => p.mesh.visible)
-          .map((p) => p.mesh),
-        false,
-      );
-      for (const hit of hits) {
-        hit.object.visible = false;
-        this.cutaway = true;
-      }
-    }
+    for (const [id, p] of this.pieces) p.mesh.visible = this.fitted.has(id);
+    this.cutaway = false;
+    this.ghost.visible =
+      !!this.current && this.available && (this.hints || this.assistance);
   }
-  occlusionDistance(direction: THREE.Vector3, distance: number) {
-    const size = this.stepBounds.isEmpty()
-      ? new THREE.Vector3()
-      : this.stepBounds.getSize(new THREE.Vector3());
-    const unit = direction.clone().normalize();
-    const extent =
-      (Math.abs(unit.x) * size.x +
-        Math.abs(unit.y) * size.y +
-        Math.abs(unit.z) * size.z) /
-      2;
-    return Math.max(0, distance - extent - 0.05);
+  updateProjection() {
+    const w = this.host.clientWidth,
+      h = this.host.clientHeight;
+    const x = this.frameRegion.left + this.frameRegion.width / 2;
+    const y = (this.frameRegion.top + this.frameRegion.bottom) / 2;
+    this.camera.setViewOffset(w, h, w / 2 - x, h / 2 - y, w, h);
+    this.camera.updateProjectionMatrix();
+  }
+  occludersAt(point: THREE.Vector3) {
+    const direction = point.clone().sub(this.camera.position);
+    const distance = direction.length();
+    const ray = new THREE.Raycaster(
+      this.camera.position,
+      direction.normalize(),
+      0,
+      Math.max(0, distance - 0.035),
+    );
+    // Transparent authored surfaces are not opaque blockers. Never mutate materials.
+    const meshes = [...this.pieces.values()]
+      .filter(
+        (p) =>
+          p.mesh.visible &&
+          !(
+            p.mesh.material instanceof THREE.Material &&
+            p.mesh.material.transparent &&
+            p.mesh.material.opacity < 0.5
+          ),
+      )
+      .map((p) => p.mesh);
+    return ray
+      .intersectObjects(meshes, false)
+      .map((hit) => hit.object.userData.partId as string);
+  }
+  visibleSeat(point: THREE.Vector3) {
+    return this.occludersAt(point).length === 0;
+  }
+  updateSeat() {
+    if (!this.current || !this.ready) {
+      this.seatVisible = false;
+      this.seatInView = false;
+      return;
+    }
+    const wasObscured = !this.seatVisible || !this.seatInView;
+    this.scene.updateMatrixWorld(true);
+    const center = this.project(this.target);
+    const samples = [...this.seatSamples].sort((a, b) => {
+      const p = this.project(a),
+        q = this.project(b);
+      return (
+        Math.hypot(p.x - center.x, p.y - center.y) -
+        Math.hypot(q.x - center.x, q.y - center.y)
+      );
+    });
+    const best = samples.find((point) => this.visibleSeat(point));
+    this.seatVisible = !!best;
+    this.seatPoint.copy(best ?? this.target);
+    const p = this.project(this.seatPoint);
+    const inView =
+      p.x > 20 &&
+      p.x < this.host.clientWidth - 20 &&
+      p.y > this.frameRegion.top &&
+      p.y < this.frameRegion.bottom;
+    this.seatInView = inView;
+    this.destination.style.visibility =
+      this.seatVisible &&
+      inView &&
+      this.available &&
+      (this.hints || this.assistance)
+        ? 'visible'
+        : 'hidden';
+    this.destination.style.left = `${p.x}px`;
+    this.destination.style.top = `${p.y}px`;
+    if (wasObscured !== (!this.seatVisible || !this.seatInView)) this.emit();
   }
   cameraChanged = () => {
     if (this.dead) return;
     this.camera.updateMatrixWorld();
     if (!this.drag && !this.animation) this.positionStage();
-    this.presentContext();
+    this.updateSeat();
+    const side =
+      this.camera.position.z >= this.controls.target.z ? 'front' : 'back';
+    if (side !== this.side) {
+      this.side = side;
+      this.emit();
+    }
     this.invalidate();
   };
   stagePoint(): Point {
@@ -564,6 +713,7 @@ export class PlayViewer {
       !this.ready ||
       !this.active ||
       !this.current ||
+      (this.hints && !this.available) ||
       this.busy ||
       this.drag ||
       event.button !== 0
@@ -582,7 +732,8 @@ export class PlayViewer {
     };
     this.stopOrbitMotion();
     this.controls.enabled = false;
-    this.stage.setPointerCapture(event.pointerId);
+    this.captureElement = this.stage;
+    this.captureElement.setPointerCapture(event.pointerId);
     this.selected();
   };
   pointerMove = (event: PointerEvent) => {
@@ -591,36 +742,58 @@ export class PlayViewer {
     this.drag.moved ||=
       Math.hypot(p.x - this.drag.start.x, p.y - this.drag.start.y) > 5;
     this.drag.position = dragCenter(p, this.drag.grab);
-    const near = this.isNear(this.drag.position);
+    // No magnetic preview with hints off: acceptance happens only on release.
+    const near =
+      (this.hints || this.assistance) &&
+      this.available &&
+      this.isNear(this.drag.position);
     this.destination.dataset.near = String(near);
-    this.positionStage(
-      near ? this.project(this.target) : this.drag.position,
-      near ? 1 : this.stageScale,
-    );
+    this.positionStage(this.drag.position, this.stageScale);
     this.invalidate();
   };
   isNear(point: Point) {
-    return snapDrop({
-      pointer: point,
-      grabOffset: { x: 0, y: 0 },
-      target: this.project(this.target),
-    });
+    return (
+      this.seatVisible &&
+      this.seatSamples.some((sample) => {
+        const target = this.project(sample);
+        return (
+          target.x >= this.frameRegion.left &&
+          target.x <= this.frameRegion.left + this.frameRegion.width &&
+          target.y >= this.frameRegion.top &&
+          target.y <= this.frameRegion.bottom &&
+          snapDrop({ pointer: point, grabOffset: { x: 0, y: 0 }, target }) &&
+          this.visibleSeat(sample)
+        );
+      })
+    );
   }
   pointerUp = (event: PointerEvent) => {
     if (!this.drag || event.pointerId !== this.drag.pointer) return;
     const drag = this.drag,
       p = this.point(event);
     const center = dragCenter(p, drag.grab);
-    const valid = drag.moved && this.isNear(center);
+    const valid = drag.moved && this.isNear(center) && this.available;
     this.releaseCapture();
     if (valid) this.place();
-    else this.animateToStage(drag.position);
+    else {
+      if (drag.moved)
+        this.feedback(
+          this.available
+            ? 'No placement there. Try another view or position.'
+            : 'That piece cannot be fitted yet.',
+        );
+      this.animateToStage(drag.position);
+    }
   };
   releaseCapture() {
     const pointer = this.drag?.pointer;
     this.drag = undefined;
-    if (pointer !== undefined && this.stage.hasPointerCapture(pointer))
-      this.stage.releasePointerCapture(pointer);
+    if (
+      pointer !== undefined &&
+      this.captureElement?.hasPointerCapture(pointer)
+    )
+      this.captureElement.releasePointerCapture(pointer);
+    this.captureElement = undefined;
     if (this.controls) this.controls.enabled = this.ready;
     this.destination.dataset.near = 'false';
   }
@@ -662,6 +835,16 @@ export class PlayViewer {
   place = () => {
     if (!this.ready || !this.active || !this.current || this.busy || this.drag)
       return;
+    this.updateSeat();
+    if (!this.available || !this.seatVisible || !this.seatInView) {
+      this.feedback(
+        this.available
+          ? 'The seat is obscured. Try another view.'
+          : 'That piece cannot be fitted yet.',
+      );
+      return;
+    }
+    this.stopOrbitMotion();
     const id = this.current.id;
     this.animate(
       this.project(this.staged.position),
@@ -676,9 +859,82 @@ export class PlayViewer {
     this.reframe(true, true);
   };
   guide = () => {
-    if (this.drag || this.busy) return;
-    if (this.current) this.side = this.current.side;
-    this.reframe(true);
+    if (this.drag || this.busy || !this.current) return;
+    if (!this.available) {
+      this.feedback('That piece cannot be fitted yet.');
+      return;
+    }
+    const fromPosition = this.camera.position.clone(),
+      fromTarget = this.controls.target.clone(),
+      fromUp = this.camera.up.clone();
+    this.assistance = true;
+    this.side = this.current.side;
+    this.reframe(false);
+    // Explicit reveal searches for an unobstructed source seat, never a cutaway.
+    const distance = this.camera.position.distanceTo(this.controls.target);
+    const directions: THREE.Vector3[] = [];
+    if (this.current.viewDirectionWorld)
+      directions.push(
+        new THREE.Vector3().fromArray(this.current.viewDirectionWorld),
+      );
+    for (const z of [
+      this.side === 'front' ? 1 : -1,
+      this.side === 'front' ? -1 : 1,
+    ])
+      for (const [x, y] of [
+        [0, 0],
+        [0.65, 0],
+        [-0.65, 0],
+        [0, 0.65],
+        [0, -0.65],
+        [1, 1],
+        [-1, 1],
+        [1, -1],
+        [-1, -1],
+        [3, 0],
+        [-3, 0],
+        [0, 3],
+        [0, -3],
+      ])
+        directions.push(new THREE.Vector3(x, y, z).normalize());
+    for (const direction of directions) {
+      this.camera.position
+        .copy(this.controls.target)
+        .addScaledVector(direction, distance);
+      this.camera.up.set(0, direction.z > 0 ? 1 : -1, 0);
+      syncOrbitUp(this.camera, this.controls);
+      this.camera.lookAt(this.controls.target);
+      this.camera.updateMatrixWorld();
+      this.updateSeat();
+      if (this.seatVisible) break;
+    }
+    this.side =
+      this.camera.position.z > this.controls.target.z ? 'front' : 'back';
+    if (!this.media.matches) {
+      this.cameraMotion = {
+        start: performance.now(),
+        fromPosition,
+        fromTarget,
+        fromUp,
+        position: this.camera.position.clone(),
+        target: this.controls.target.clone(),
+        up: this.camera.up.clone(),
+      };
+      this.camera.position.copy(fromPosition);
+      this.controls.target.copy(fromTarget);
+      this.camera.up.copy(fromUp);
+      syncOrbitUp(this.camera, this.controls);
+      this.camera.lookAt(this.controls.target);
+      this.camera.updateMatrixWorld();
+      this.busy = true;
+      this.controls.enabled = false;
+    }
+    this.presentContext();
+    this.positionStage();
+    this.invalidate();
+    this.emit();
+    if (!this.seatVisible)
+      this.feedback('This seat is obscured. Orbit to inspect the assembly.');
   };
   flip = () => {
     if (!this.ready || this.drag || this.busy) return;
@@ -722,6 +978,12 @@ export class PlayViewer {
     c._panOffset?.set(0, 0, 0);
     c._scale = 1;
   }
+  escapeDrag = (event: KeyboardEvent) => {
+    if (event.key === 'Escape' && this.drag) {
+      this.cancel();
+      event.preventDefault();
+    }
+  };
   stageKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       this.cancel();
@@ -756,71 +1018,48 @@ export class PlayViewer {
     if (this.dead) return;
     const root = this.host.parentElement,
       rect = this.host.getBoundingClientRect();
-    const header = root
+    const heading = root
       ?.querySelector('.play-heading')
       ?.getBoundingClientRect();
     const dock = root
       ?.querySelector(this.active ? '.play-dock' : '.play-choice')
       ?.getBoundingClientRect();
-    // These inherited variables contain plain env lengths, without CSS max/calc.
+    const landscape = rect.width / rect.height > 1.4 && rect.height < 600;
+    const workspace = root
+      ?.querySelector('.play-workspace')
+      ?.getBoundingClientRect();
+    const top =
+      Math.max(heading?.bottom ?? 64, workspace?.bottom ?? 0) - rect.top + 12;
+    const bottom = landscape
+      ? rect.height - 20
+      : (dock?.top ?? rect.bottom - 230) - rect.top - 12;
+    const width = landscape
+      ? (dock?.left ?? rect.right) - rect.left - 12
+      : rect.width;
     const style = getComputedStyle(this.host);
     const safeLeft =
       parseFloat(style.getPropertyValue('--play-safe-left')) || 0;
     const safeRight =
       parseFloat(style.getPropertyValue('--play-safe-right')) || 0;
-    const top = (header?.bottom ?? 64) - rect.top + 18;
-    const landscape = rect.height <= 550 && rect.width / rect.height >= 1.33;
-    const storage = root
-      ?.querySelector('.play-storage')
-      ?.getBoundingClientRect();
-    const bottom = landscape
-      ? Math.min(
-          rect.height - 20,
-          storage?.height ? storage.top - rect.top - 12 : rect.height - 20,
-        )
-      : (dock?.top ?? rect.bottom - 160) - rect.top - 20;
-    const width = landscape
-      ? Math.max(120, (dock?.left ?? rect.right) - rect.left - 16)
-      : rect.width;
-    const stageHeight =
-      this.stage.offsetHeight || (rect.width <= 600 ? 84 : 96);
-    const caption = this.stage.querySelector?.<HTMLElement>(
-      '.play-stage-caption',
-    );
-    const captionHeight = caption?.getBoundingClientRect().height ?? 0;
-    const stageY = bottom - stageHeight / 2 - Math.max(20, captionHeight + 8);
-    const stageLeft = Math.max(
-      12,
-      width * 0.22 - stageHeight / 2,
-      safeLeft - (caption?.offsetLeft ?? 0),
-    );
-    this.stage.style.top = `${stageY - stageHeight / 2}px`;
-    this.stage.style.left = `${stageLeft}px`;
-    const verticalBottom = stageY - stageHeight / 2 - 36;
-    // A short scene cannot stack the assembly, staged piece and full caption.
-    // Keep staging lower-left and use the clear region beside it instead.
-    const compact = this.active && this.current && verticalBottom - top < 100;
-    const left = compact ? stageLeft + stageHeight + 24 : safeLeft;
-    const region = {
-      top: compact ? top + 28 : top,
-      bottom: compact
-        ? bottom - 28
-        : this.active && this.current
-          ? verticalBottom
-          : bottom,
+    const left = Math.max(12, safeLeft + 8);
+    this.frameRegion = {
+      top,
+      bottom: Math.max(top + 80, bottom),
       left,
-      width: compact
-        ? Math.max(56, width - left - 12 - (landscape ? 0 : safeRight))
-        : width - safeLeft - (landscape ? 0 : safeRight),
+      width: Math.max(
+        80,
+        width - left - Math.max(12, landscape ? 12 : safeRight + 8),
+      ),
     };
-    const changed = Object.entries(region).some(
-      ([key, value]) =>
-        Math.abs(value - this.frameRegion[key as keyof typeof region]) > 0.5,
-    );
-    this.frameRegion = region;
-    // Observer delivery can follow a user's camera gesture. An unchanged layout
-    // must not take camera ownership back from that gesture.
-    if (changed) this.reframe();
+    const size = this.stage.offsetHeight || 64;
+    const caption =
+      this.stage.querySelector('.play-stage-caption')?.getBoundingClientRect()
+        .height ?? 16;
+    this.stage.style.top = `${Math.max(top, this.frameRegion.bottom - size - caption - 8)}px`;
+    this.stage.style.left = `${Math.max(20, safeLeft + 16)}px`;
+    if (this.hasFramed) this.updateProjection();
+    this.updateSeat();
+    this.positionStage();
     this.invalidate();
   };
   resize = () => {
@@ -948,17 +1187,12 @@ export class PlayViewer {
       syncOrbitUp(this.camera, this.controls);
       this.camera.lookAt(this.controls.target);
       this.camera.updateMatrixWorld();
-      this.presentContext();
+      this.updateSeat();
       this.positionStage();
       if (t === 1) this.emit();
     }
     // Orbit damping shares the explorer's feel, but only schedules while moving.
     if (!this.drag && !this.busy && this.controls.update()) this.invalidate();
-    if (this.ready && this.active && this.current) {
-      const p = this.project(this.target);
-      this.destination.style.left = `${p.x}px`;
-      this.destination.style.top = `${p.y}px`;
-    }
     // React may have revealed/reflowed staging after the discrete update.
     if (!this.drag && !this.animation && !this.busy) this.positionStage();
     try {
@@ -977,24 +1211,80 @@ export class PlayViewer {
       this.emit();
     }
   };
+  thumbnail(step: PlayStep): string | null {
+    if (!this.ready) return null;
+    const cached = this.thumbnails.get(step.id);
+    if (cached) return cached;
+    const scene = new THREE.Scene();
+    scene.environment = this.scene.environment;
+    scene.environmentIntensity = this.scene.environmentIntensity;
+    addStudioLights(scene);
+    const bounds = this.boundsFor(step.leafIds),
+      center = bounds.getCenter(new THREE.Vector3());
+    for (const id of step.leafIds) {
+      const piece = this.pieces.get(id)!;
+      const mesh = new THREE.Mesh(piece.mesh.geometry, piece.mesh.material);
+      mesh.matrixAutoUpdate = false;
+      mesh.matrix.copy(piece.pose);
+      scene.add(mesh);
+    }
+    const size = bounds.getSize(new THREE.Vector3());
+    const span = Math.max(size.x, size.y, size.z, 0.1) * 0.72;
+    const camera = new THREE.OrthographicCamera(
+      -span,
+      span,
+      span,
+      -span,
+      0.001,
+      1000,
+    );
+    camera.up.set(0, step.side === 'front' ? 1 : -1, 0);
+    camera.position
+      .copy(center)
+      .add(
+        new THREE.Vector3(0.2, -0.35, step.side === 'front' ? 1 : -1)
+          .normalize()
+          .multiplyScalar(span * 4 + 20),
+      );
+    camera.lookAt(center);
+    const target = new THREE.WebGLRenderTarget(128, 128);
+    const previous = this.renderer.getRenderTarget();
+    try {
+      this.renderer.setRenderTarget(target);
+      this.renderer.clear();
+      this.renderer.render(scene, camera);
+      const buffer = new Uint8Array(128 * 128 * 4);
+      this.renderer.readRenderTargetPixels(target, 0, 0, 128, 128, buffer);
+      const canvas = document.createElement('canvas');
+      canvas.width = 128;
+      canvas.height = 128;
+      const context = canvas.getContext('2d')!;
+      const data = context.createImageData(128, 128);
+      for (let y = 0; y < 128; y++)
+        data.data.set(
+          buffer.subarray((127 - y) * 512, (128 - y) * 512),
+          y * 512,
+        );
+      context.putImageData(data, 0, 0);
+      const url = canvas.toDataURL();
+      this.thumbnails.set(step.id, url);
+      return url;
+    } catch {
+      this.ready = false;
+      this.controls.enabled = false;
+      this.error =
+        'A part preview could not render. Retry to restore your assembly.';
+      this.emit();
+      return null;
+    } finally {
+      this.renderer.setRenderTarget(previous);
+      target.dispose();
+    }
+  }
   /** Read-only diagnostics; placement tests use the same DOM pointer path as players. */
   inspect() {
     this.scene.updateMatrixWorld(true);
-    const direction = this.target.clone().sub(this.camera.position);
-    const ray = new THREE.Raycaster(
-      this.camera.position,
-      direction.clone().normalize(),
-      0,
-      this.occlusionDistance(direction, direction.length()),
-    );
-    const occluders = ray
-      .intersectObjects(
-        [...this.pieces.values()]
-          .filter((p) => p.mesh.visible)
-          .map((p) => p.mesh),
-        false,
-      )
-      .map((h) => h.object.userData.partId);
+    const occluders = this.current ? this.occludersAt(this.seatPoint) : [];
     return {
       side: this.side,
       camera: this.camera.position.toArray(),
@@ -1009,7 +1299,28 @@ export class PlayViewer {
       visible: [...this.pieces]
         .filter(([, p]) => p.mesh.visible)
         .map(([id]) => id),
-      target: this.project(this.target),
+      target: this.project(this.seatPoint),
+      targetCenter: this.project(this.target),
+      seatVisible: this.seatVisible,
+      available: this.available,
+      hints: this.hints,
+      workspace: this.workspace,
+      frameRegion: this.frameRegion,
+      mainplateCenter: this.project(
+        this.boundsFor(this.manifest.initialLeafIds).getCenter(
+          new THREE.Vector3(),
+        ),
+      ),
+      frameFocus: this.frameFocus.toArray(),
+      projection: this.camera.projectionMatrix.toArray(),
+      materials: [...this.pieces]
+        .filter(([, p]) => p.mesh.visible)
+        .map(([id, p]) => ({
+          id,
+          uuid: (p.mesh.material as THREE.Material).uuid,
+          opacity: (p.mesh.material as THREE.Material).opacity,
+          transparent: (p.mesh.material as THREE.Material).transparent,
+        })),
       stage: this.stagePoint(),
       stageRendered: this.project(this.staged.position),
       stageCount: this.staged.children.length,
@@ -1033,6 +1344,7 @@ export class PlayViewer {
     this.controls?.dispose();
     this.clearPieces();
     this.environment?.dispose();
+    this.ghostMaterial.dispose();
     this.surfaceOcclusion?.dispose();
     this.stage.removeEventListener('pointerdown', this.pointerDown);
     this.stage.removeEventListener('pointermove', this.pointerMove);
@@ -1040,6 +1352,7 @@ export class PlayViewer {
     this.stage.removeEventListener('pointercancel', this.cancel);
     this.stage.removeEventListener('lostpointercapture', this.cancel);
     this.stage.removeEventListener('keydown', this.stageKeyDown);
+    window.removeEventListener('keydown', this.escapeDrag);
     this.renderer.domElement.removeEventListener(
       'webglcontextlost',
       this.contextLost,

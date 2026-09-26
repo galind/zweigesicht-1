@@ -50,12 +50,32 @@ Crown d46 compiles the existing frosting relief only for the recessed M backgrou
 ## Assembly route and shared boundaries
 
 `app/play/page.tsx` supplies separate canonical/noindex metadata. `Play.tsx`
-owns the validated ordered session prefix and storage feedback; `PlayViewer.ts`
-owns fitted/staged meshes, projection, camera transitions and pointer capture.
-The versioned authored manifest supplies exact membership and target poses.
-Both levels finish with 265 physical leaves, starting from 16 fitted leaves and
-placing 89 Easy packets/components or 249 Hard components. Geometry, sequence
-and saved-session schema remain unchanged by the website review.
+owns inventory selection, group/search position, explicit workspace navigation,
+validated action history and storage feedback. `state.ts` owns the dependency
+checks, replay validation, physical accounting and Undo. Selection never determines
+progress. `PlayViewer.ts` owns the source meshes, independent thumbnail render
+targets, source-seat visibility checks, pointer capture and camera lifetime.
+
+The versioned `play-4` manifest retains all source endpoints and the 265-leaf
+finished watch. It starts with 16 fitted leaves. Easy has 89 direct placements;
+Hard has 249 individual placements and 35 explicit packet transfers. Hard leaves
+assembled on the workbench remain separate from fitted leaves until transfer.
+Transfers add no physical count. Undo reverses the action history, including
+transfers; completion requires the exact fitted set and a valid graph history.
+Legacy linear saves are explicitly incompatible and are retained until the
+player confirms a fresh start. Hints persist with a nonlinear save; restart
+sets them off. The [dependency ledger](PLAY_DEPENDENCIES.md) distinguishes source
+evidence from conservative puzzle assumptions.
+
+The mainplate gives a fixed framing reference. The orbit pivot stays on that
+geometry; a camera projection offset reserves the measured inventory/header
+space. Selection, placement, failed drops, hints and Undo never reframe. Explicit
+workbench entry captures the main camera and return restores it. Resize updates
+projection while preserving camera direction, distance and pan. Reset, Flip and
+Show destination are explicit camera actions. No camera event hides fitted meshes
+or changes their materials. Hint meshes have a separate material, and drops
+require an actual source-surface sample with a clear ray past fitted opaque
+geometry. This is visual validation, not swept-solid collision certification.
 
 `GraphicsResources.ts` owns the identical renderer settings, studio lights,
 temporary PMREM generation and deduplicated scene-resource disposal. Controllers
@@ -74,11 +94,10 @@ An idle check must count scheduled callbacks as well as rendered frames.
 `CameraFrame.ts`, the native viewer controls and Sheet remain the shared
 interaction primitives. `useTextScalePreview` applies the explicit `?text=200`
 mode at the document root, including portaled panels, and restores previous
-styling on unmount. Play retains native confirmations with accessible names and
-explicit focus destinations. Its measured footer and caption bounds inform
-staging layout, without changing source geometry or the fitted endpoints.
-When a short scene cannot vertically stack the assembly and staged piece, Play
-uses the clear space beside staging and reserves enough scrolling-dock clearance
-for the complete caption. Normal tall layouts retain their prior framing. The
-homepage phone dock wraps according to actual label width, so enlarged text
-does not depend on a query-only CSS class to remain readable.
+styling on unmount. Play retains native confirmations with accessible names. Gallery cards remain
+in stable slots after placement and unavailable cards stay inspectable. A separate
+picked-up-piece handle distinguishes touch dragging from gallery scrolling.
+Enlarged text grows within the bounded, scrollable inventory; measured workspace
+and stage captions stay clear of the assembly. The homepage phone dock continues
+to wrap according to actual label width. Both routes share only the established
+camera helpers, graphics resources, native buttons and Sheet components.

@@ -35,7 +35,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
+    module, THREE, performance, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }
@@ -61,14 +61,14 @@ function fixture(globals = {}) {
   controls.maxDistance = 1500;
   const value = {
     generation: 0, dead: false, ready: false, busy: false, frame: 0, error: '', renderCount: 0,
-    pieces: new Map(), loadedObjects: [], staged: new THREE.Group(), scene: new THREE.Scene(),
+    pieces: new Map(), loadedObjects: [], staged: new THREE.Group(), ghost: new THREE.Group(), ghostMaterial: new THREE.MeshBasicMaterial(), thumbnails: new Map(), scene: new THREE.Scene(),
     camera, controls, fitted: new Set(), current: null, active: false,
     target: new THREE.Vector3(), frameFocus: new THREE.Vector3(), stepBounds: new THREE.Box3(),
-    manifest: {finalLeafIds: ['leaf'], targetPoses: {leaf: identity}}, notifications: [], updates: 0,
+    manifest: {initialLeafIds: ['leaf'], packets: [], finalLeafIds: ['leaf'], targetPoses: {leaf: identity}}, notifications: [], updates: 0,
     notify(status) { this.notifications.push(status); },
-    update() { this.updates++; }, positionStage() {},
+    update() { this.updates++; }, positionStage() {}, updateSeat() {}, updateProjection() {}, available: true, seatVisible: true, seatInView: true, feedback() {},
   };
-  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext', 'occlusionDistance']) value[name] = actual(name, value, globals);
+  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext']) value[name] = actual(name, value, globals);
   return value;
 }
 function loadGlobals({overview, catalog, diamond, surfaces = async () => new Map(), metadataFails = false}) {
@@ -166,118 +166,21 @@ test('idle rendering schedules one frame for coalesced invalidations and then sl
   assert.equal(scheduled, 1);
 });
 
-test('unchanged layout preserves keyboard orbit while changed chrome bounds reframe and locate staging', () => {
-  let reframes = 0, invalidations = 0;
-  const header = {bottom: 60}, dock = {top: 680, left: 0};
-  const rect = {left: 0, top: 0, width: 390, height: 844, right: 390, bottom: 844};
-  const v = fixture();
-  Object.assign(v, {
-    active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
-    stage: {offsetHeight: 84, style: {}},
-    host: {
-      getBoundingClientRect: () => rect,
-      parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => selector === '.play-heading' ? header : dock})},
-    },
-    reframe() {reframes++; this.camera.position.set(0, 0, 100);},
-    invalidate() {invalidations++;},
-  });
-  const layout = actual('layout', v), keyDown = actual('keyDown', v);
-  layout();
-  assert.equal(reframes, 1);
-  assert.equal(v.stage.style.top, '556px');
-  const initialStage = {...v.stage.style};
-  keyDown({key: 'ArrowLeft', preventDefault() {}});
-  const orbited = v.camera.position.toArray();
-  assert.notDeepEqual(orbited, [0, 0, 100]);
-  for (let i = 0; i < 4; i++) layout();
-  assert.equal(reframes, 1, 'Redundant observer delivery must not reset user camera ownership');
-  assert.deepEqual(v.camera.position.toArray(), orbited);
-  assert.deepEqual(v.stage.style, initialStage, 'Staging remains anchored despite repeated layout delivery');
-  header.bottom += 0.25;
-  layout();
-  assert.equal(reframes, 1, 'Subpixel observer noise does not reset the camera');
-  assert.deepEqual(v.camera.position.toArray(), orbited);
-  dock.top -= 60;
-  layout();
-  assert.equal(reframes, 2, 'A newly expanded dock changes the usable region');
-  assert.deepEqual(v.camera.position.toArray(), [0, 0, 100]);
-  assert.equal(v.stage.style.top, '496px');
-  const stageTop = Number.parseFloat(v.stage.style.top), stageLeft = Number.parseFloat(v.stage.style.left);
-  assert.ok(stageTop > header.bottom && stageTop + v.stage.offsetHeight < dock.top);
-  assert.ok(stageLeft >= 0 && stageLeft + v.stage.offsetHeight <= rect.width);
-  assert.equal(invalidations, 8, 'Each live layout and the keyboard gesture refresh rendering');
-});
-
-test('measured staging captions clear the dock at narrow widths without resetting orbit on repeat delivery', () => {
-  let reframes = 0, captionHeight = 12;
-  const header = {bottom: 110}, dock = {top: 630, left: 12};
-  const rect = {left: 12, top: 24, width: 320, height: 844, right: 332, bottom: 868};
-  const caption = {dataset: {selected: 'false'}, getBoundingClientRect: () => ({height: captionHeight})};
-  const v = fixture();
-  Object.assign(v, {
-    active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
-    stage: {offsetHeight: 84, style: {}, querySelector(selector) {assert.equal(selector, '.play-stage-caption'); return caption;}},
-    host: {
-      getBoundingClientRect: () => rect,
-      parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => selector === '.play-heading' ? header : dock})},
-    },
-    reframe() {reframes++; this.camera.position.set(0, 0, 100);}, invalidate() {},
-  });
-  const layout = actual('layout', v), keyDown = actual('keyDown', v);
-  let previousTop;
-  for (const height of [12, 44]) {
-    captionHeight = height;
-    layout();
-    const stageTop = Number.parseFloat(v.stage.style.top), stageLeft = Number.parseFloat(v.stage.style.left);
-    const captionBottom = rect.top + stageTop + v.stage.offsetHeight + 8 + height;
-    assert.ok(captionBottom <= dock.top - 20, `A ${height}px measured caption keeps its full height above the dock`);
-    assert.ok(rect.top + stageTop > header.bottom, 'Staging remains below the header');
-    assert.ok(stageLeft >= 0 && stageLeft + v.stage.offsetHeight <= rect.width);
-    if (previousTop !== undefined) assert.ok(stageTop < previousTop, 'A wrapped enlarged caption moves the stage up to preserve clearance');
-    previousTop = stageTop;
-    const count = reframes;
-    keyDown({key: 'ArrowRight', preventDefault() {}});
-    const camera = v.camera.position.clone(), stage = {...v.stage.style};
-    for (let delivery = 0; delivery < 3; delivery++) layout();
-    assert.equal(reframes, count, 'The same measured caption must not reclaim the user camera');
-    assert.ok(v.camera.position.equals(camera)); assert.deepEqual(v.stage.style, stage);
-    // The browser's overlaid labels report the same reserved height when selection changes.
-    v.drag = {pointer: 7}; caption.dataset.selected = 'true'; layout();
-    assert.equal(reframes, count); assert.ok(v.camera.position.equals(camera)); assert.deepEqual(v.stage.style, stage);
-    v.drag = undefined; caption.dataset.selected = 'false';
-  }
-  assert.equal(reframes, 2, 'Only initial framing and the real caption-size change reframe');
-  v.controls.dispose();
-});
-
-test('short enlarged scenes keep the full staged caption beside a positive assembly region', () => {
-  for (const [width, height, headerBottom, dockTop, dockLeft, storageTop] of [
-    [320, 568, 130, 340, 12, 530],
-    [568, 320, 78, 80, 280, 282],
-    [844, 390, 78, 110, 470, 348],
-  ]) {
-    const rect = {left: 0, top: 0, width, height, right: width, bottom: height};
-    const chrome = {
-      '.play-heading': {bottom: headerBottom},
-      '.play-dock': {top: dockTop, left: dockLeft},
-      '.play-storage': {top: storageTop, height: 30},
-    };
-    const v = fixture();
-    Object.assign(v, {
-      active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
-      stage: {offsetHeight: 84, style: {}, querySelector: () => ({offsetLeft: -20, getBoundingClientRect: () => ({height: 66})})},
-      host: {getBoundingClientRect: () => rect, parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => chrome[selector]})}},
-      reframe() {}, invalidate() {},
+test('chrome layout changes preserve camera ownership and keep gallery staging outside the dock', () => {
+  for (const [width,height] of [[1440,900],[390,844],[320,568],[568,320]]) {
+    const v=fixture(); let updates=0;
+    const rect={left:0,top:0,width,height,right:width,bottom:height};
+    const dock={top:height-260,left:width>height&&height<600?width*.52:0};
+    const heading={bottom:60};
+    Object.assign(v,{active:true,hasFramed:true,stage:{offsetHeight:64,style:{},querySelector:()=>null},
+      host:{getBoundingClientRect:()=>rect,parentElement:{querySelector:selector=>({getBoundingClientRect:()=>selector==='.play-heading'?heading:selector==='.play-workspace'?{bottom:80}:dock})}},
+      updateProjection(){updates++;},invalidate(){},reframe(){throw Error('Layout cannot claim camera ownership');},
     });
-    const safeLeft = width === 844 ? 44 : 0;
-    actual('layout', v, {getComputedStyle: () => ({getPropertyValue: () => `${safeLeft}px`})})();
-    const stageTop = parseFloat(v.stage.style.top), stageLeft = parseFloat(v.stage.style.left);
-    assert.ok(stageTop >= headerBottom + 18, 'The full staged piece clears the heading');
-    assert.ok(stageLeft - 20 >= safeLeft, 'The wrapped caption remains inside the safe viewport');
-    assert.ok(stageTop + 84 + 8 + 66 <= (width > height ? storageTop - 12 : dockTop - 20), 'Caption clears the dock or landscape storage warning');
-    assert.ok(v.frameRegion.left >= stageLeft + 84 + 24, 'Short layouts reserve a separate horizontal assembly region');
-    assert.ok(v.frameRegion.bottom - v.frameRegion.top >= 80, 'The camera never frames an inverted vertical region');
-    assert.ok(v.frameRegion.width >= 100, 'Assembly region retains space for its target');
+    const layout=actual('layout',v),before=v.camera.position.clone(),target=v.controls.target.clone();
+    layout();dock.top-=10;layout();heading.bottom+=5;layout();
+    assert.ok(v.camera.position.equals(before));assert.ok(v.controls.target.equals(target));
+    assert.equal(updates,3);assert.ok(v.frameRegion.bottom>v.frameRegion.top);
+    assert.ok(parseFloat(v.stage.style.top)+64<=v.frameRegion.bottom);
     v.controls.dispose();
   }
 });
@@ -351,10 +254,10 @@ test('off-center assembly framing keeps its projected center fixed throughout fl
     });
     v.camera.aspect = 390 / 844; v.camera.updateProjectionMatrix();
     v.media.matches = reduced;
-    for (const name of ['boundsFor', 'reframe', 'project']) v[name] = actual(name, v);
+    for (const name of ['boundsFor', 'reframe', 'project', 'updateProjection']) v[name] = actual(name, v);
     v.reframe(); settle(performance.now());
     assert.ok(v.frameFocus.distanceTo(center) < 1e-9, 'Framing stores the actual assembly center');
-    assert.ok(v.controls.target.distanceTo(center) > 5, 'Fixture has a real offset to leave staging and controls clear');
+    assert.ok(v.controls.target.distanceTo(center) < 1e-9, 'Orbit pivot stays on geometry; projection reserves chrome space');
     const initialPoint = v.project(center), initialPosition = v.camera.position.clone(), initialTarget = v.controls.target.clone(), initialUp = v.camera.up.clone();
     assert.ok(Math.abs(initialPoint.x - 195) < 1e-8);
     assert.ok(Math.abs(initialPoint.y - 240) < 1e-8, 'Assembly appears in the deliberately off-center usable region');
@@ -394,7 +297,7 @@ test('Reset and Home preserve the viewed side and assembly while Guide restores 
     const foundation = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 1), new THREE.MeshBasicMaterial());
     v.pieces.set('leaf', {mesh: part, bounds: new THREE.Box3(new THREE.Vector3(-.5, -.5, -1), new THREE.Vector3(.5, .5, 1))});
     v.pieces.set('foundation', {mesh: foundation, bounds: new THREE.Box3(new THREE.Vector3(-5, -5, -2), new THREE.Vector3(5, 5, -1))});
-    v.scene.add(part, foundation); v.fitted.add('foundation');
+    v.scene.add(part, foundation); v.fitted.add('foundation'); v.manifest.initialLeafIds=['foundation'];
     let commits = 0, prevented = 0;
     Object.assign(v, {
       active: true, current: screw, side: viewedSide, hasFramed: false,
@@ -402,7 +305,7 @@ test('Reset and Home preserve the viewed side and assembly while Guide restores 
       destination: {style: {}}, placed() {commits++;},
     });
     v.camera.aspect = 390 / 844; v.camera.updateProjectionMatrix(); v.media.matches = reduced;
-    for (const name of ['boundsFor', 'reframe', 'project', 'resetView', 'guide', 'keyDown']) v[name] = actual(name, v);
+    for (const name of ['boundsFor', 'reframe', 'project', 'resetView', 'guide', 'keyDown', 'updateProjection']) v[name] = actual(name, v);
     v.reframe(); settle(performance.now());
     CameraFrame.orbitCamera(v.camera, v.controls, .2, .2); settle(performance.now());
     const fitted = v.fitted, current = v.current;
@@ -634,7 +537,7 @@ test('failed controller construction frees the renderer, controls, canvas and te
   Object.assign(v, {stage: {removeEventListener() {}}, destination: {dataset: {}}, media: {removeEventListener() {}}});
   for (const name of ['makeEnvironment', 'dispose', 'releaseCapture']) v[name] = actual(name, v, globals);
   const constructor = declaration.members.find(ts.isConstructorDeclaration), module = {exports: {}};
-  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, ...graphics(globals), ...globals});
+  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, window: {addEventListener() {}, removeEventListener() {}}, ...graphics(globals), ...globals});
   assert.throws(() => module.exports.call(v, {appendChild() {}}, v.stage, v.destination, v.manifest, () => {}, () => {}, () => {}), /Injected environment failure/);
   assert.equal(v.dead, true);
   for (const key of ['renderer', 'controls', 'canvas', 'room', 'pmrem']) assert.equal(released.filter((value) => value === key).length, 1, key);
@@ -701,4 +604,43 @@ test('leaf preparation failure keeps the previous complete scene and releases ne
     v.clearPieces();
     assert.deepEqual(original.disposal, {geometry: 1, material: 1});
   }
+});
+
+test('selection and undo updates preserve camera, fitted visibility and shared source materials', () => {
+  const v=fixture();
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(20,20,1),new THREE.MeshBasicMaterial());
+  const incoming=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial());
+  const pose=new THREE.Matrix4().makeTranslation(2,3,1);
+  for(const [id,mesh,matrix] of [['plate',plate,new THREE.Matrix4()],['piece',incoming,pose]]) {
+    mesh.matrixAutoUpdate=false;mesh.matrix.copy(matrix);v.scene.add(mesh);
+    v.pieces.set(id,{mesh,pose:matrix,bounds:new THREE.Box3().setFromBufferAttribute(mesh.geometry.getAttribute('position')).applyMatrix4(matrix)});
+  }
+  Object.assign(v,{ready:true,hasFramed:true,active:true,available:true,hints:true,seatSamples:[],cancel(){},invalidate(){},layout(){throw Error('Selection cannot reframe');},reframe(){throw Error('Selection cannot reframe');}});
+  const step={id:'piece',leafIds:['piece'],side:'back'};
+  v.camera.position.set(12,8,65);v.controls.target.set(2,4,1);v.camera.up.set(0,1,0);
+  const before=[v.camera.position.clone(),v.controls.target.clone(),v.camera.up.clone()],material=plate.material;
+  v.cameraMotion={start:0};
+  actual('update',v)(new Set(['plate']),step,true);
+  assert.equal(v.cameraMotion,undefined,'Old guided motion cannot resume after selection');
+  assert.ok(v.camera.position.equals(before[0]));assert.ok(v.controls.target.equals(before[1]));assert.ok(v.camera.up.equals(before[2]));
+  assert.equal(plate.visible,true);assert.equal(incoming.visible,false);assert.equal(plate.material,material);assert.equal(material.opacity,1);
+  assert.equal(v.staged.children[0].material,incoming.material,'Staging keeps the authored finish');
+  assert.notEqual(v.ghost.children[0].material,incoming.material,'Hint overlay owns a separate material');
+  v.camera.position.set(-20,10,-60);v.presentContext();assert.equal(plate.visible,true,'Orbit must never hide opaque fitted geometry');
+  const orbited=v.camera.position.clone();actual('update',v)(new Set(['plate']),null,true);
+  assert.ok(v.camera.position.equals(orbited),'Clearing selection/undo does not choose a face');
+  assert.equal(material.opacity,1);assert.equal(material.transparent,false);
+  for(const mesh of [plate,incoming]){mesh.geometry.dispose();mesh.material.dispose();}v.ghostMaterial.dispose();v.controls.dispose();
+});
+
+test('a source seat behind an opaque fitted surface rejects placement without hiding that surface',()=>{
+  const v=fixture();
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(10,10,1),new THREE.MeshBasicMaterial());mesh.position.z=5;mesh.userData.partId='cover';v.scene.add(mesh);v.pieces.set('cover',{mesh});v.scene.updateMatrixWorld(true);
+  v.occludersAt=actual('occludersAt',v);v.visibleSeat=actual('visibleSeat',v);
+  assert.deepEqual(Array.from(v.occludersAt(new THREE.Vector3())),['cover','cover']);
+  assert.equal(v.visibleSeat(new THREE.Vector3()),false);assert.equal(mesh.visible,true);assert.equal(mesh.material.opacity,1);
+  assert.equal(v.visibleSeat(new THREE.Vector3(10,0,0)),true,'An actually clear ray can be used');
+  mesh.material.transparent=true;mesh.material.opacity=.2;
+  assert.equal(v.visibleSeat(new THREE.Vector3()),true,'Genuinely authored transparency is retained');
+  assert.equal(mesh.material.opacity,.2);mesh.geometry.dispose();mesh.material.dispose();v.controls.dispose();
 });

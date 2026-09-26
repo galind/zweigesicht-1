@@ -1,4 +1,12 @@
-# Play inventory and sequence audit
+# Play source inventory and historical sequence audit
+
+**Current interaction:** `play-4` preserves the exact physical membership and
+source endpoints audited below. The linear order, automatic cutaways and guided
+close-up descriptions in this historical `play-3` record are superseded by the
+[free-assembly design](PLAY_REDESIGN.md) and [dependency ledger](PLAY_DEPENDENCIES.md).
+Hard now explicitly builds 35 packets on workbenches and transfers them to the
+watch; those transfers add no physical leaf. The counts remain 16 initially
+fitted, 89 Easy placements, 249 Hard individual placements and 265 finished leaves.
 
 Audited 26 September 2026 against the prepared source manifest and actual runtime GLB nodes. The authoritative runtime mapping is [`play-manifest.json`](../assets/authored/play-manifest.json), version `play-3`. It contains full stable source instance IDs, source/fitted endpoint matrices, bounds, ordered placement IDs, per-step contexts, explicit exclusions and exceptions. Labels are presentation only; neither labels nor runtime name matching determine membership.
 
