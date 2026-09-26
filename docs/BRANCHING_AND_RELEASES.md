@@ -24,11 +24,17 @@ promoted there.
 
 ## Release flow
 
-Every push to `develop` runs the **Prepare release** workflow. If unreleased
-commits exist and no release pull request is open, it creates a
+Pushing or merging into `develop` never proposes or starts a production release.
+When a release is actually wanted, manually run the **Prepare production
+release** workflow and enter `release` as its confirmation. If unreleased
+commits exist and no release pull request is open, it creates a draft
 `develop` → `main` pull request. The release PR is deliberately not auto-merged:
 staging, sustained rendering performance, applicable release gates and the
 exact commit set must be reviewed first.
+
+GitHub repository settings must allow Actions to create pull requests before
+the manual workflow can open one. If that setting is intentionally disabled,
+open the same draft pull request manually when release work begins.
 
 Merge the release PR with a merge commit so the commits tested on `develop`
 remain identifiable in `main`. Vercel's Git integration treats non-production

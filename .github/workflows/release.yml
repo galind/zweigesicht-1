@@ -1,10 +1,12 @@
-name: Prepare release
+name: Prepare production release
 
 on:
-  push:
-    branches:
-      - develop
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type "release" to open a draft develop to main pull request
+        required: true
+        type: string
 
 concurrency:
   group: prepare-release
@@ -23,6 +25,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            if (context.payload.inputs?.confirmation !== 'release') {
+              core.setFailed('Production release was not confirmed. Enter "release" to continue.');
+              return;
+            }
+
             const { owner, repo } = context.repo;
             const comparison = await github.rest.repos.compareCommits({
               owner,
@@ -54,6 +61,7 @@ jobs:
               repo,
               base: 'main',
               head: 'develop',
+              draft: true,
               title: 'Release develop to production',
               body: [
                 '## Release',
