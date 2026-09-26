@@ -681,3 +681,26 @@ PR publication: pushed the branch over the configured SSH remote and opened
 `codex/play-assembly` through the connected GitHub app. No merge or deployment
 was performed. Next action: human play review, followed by the outstanding
 physical-device and Safari checks.
+
+### Gallery finish correction — 26 September 2026
+
+User review identified the gallery parts as visually unpleasant. The previews
+were materially faithful but colorimetrically wrong: WebGL render-target bytes
+are in linear-sRGB, while the generated PNG was interpreted by the browser as
+display-sRGB. That crushed metallic midtones toward black and left isolated
+warm highlights, producing the dark orange silhouettes seen in the tray.
+
+Thumbnail pixels now receive the missing display encoding before PNG export.
+The fix keeps the shared authored materials, source geometry, environment,
+camera, layout and drag behavior unchanged; it does not introduce a separate
+game-only finish. Desktop review across the full Ready-now tray and a 390×844
+phone review confirm legible steel, brass, rose-gold, blued and ruby parts.
+Browser warning/error logs remain empty. Existing build notices about chunk
+size and route classification are unrelated to this visual defect and remain
+documented rather than treated as feature-health evidence.
+
+Verification: all 67 tests, inventory validation, TypeScript, lint and the
+production build pass. The new regression check covers linear-to-display color
+encoding and unchanged alpha. Next action is to update PR #15 for user review;
+physical-device, Safari and representative enjoyment/accessibility review
+remain outstanding.

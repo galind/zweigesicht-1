@@ -32,6 +32,7 @@ import type { Manifest, Part } from '../experience/catalog';
 import type { PlayManifest, PlayStep } from './types';
 import { dragCenter, snapDrop } from './state';
 import { fixedViewDirection } from './fixedViews';
+import { encodeThumbnailForDisplay } from './thumbnailColor';
 
 type Piece = { mesh: THREE.Mesh; pose: THREE.Matrix4; bounds: THREE.Box3 };
 type Point = { x: number; y: number };
@@ -1329,6 +1330,7 @@ export class PlayViewer {
       this.renderer.render(scene, camera);
       const buffer = new Uint8Array(128 * 128 * 4);
       this.renderer.readRenderTargetPixels(target, 0, 0, 128, 128, buffer);
+      encodeThumbnailForDisplay(buffer);
       const canvas = document.createElement('canvas');
       canvas.width = 128;
       canvas.height = 128;

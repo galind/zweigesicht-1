@@ -12,6 +12,7 @@ import * as CameraFrame from '../explorer/src/viewer/CameraFrame.ts';
 import {motionEase, MOTION} from '../explorer/src/experience/motion.ts';
 import {fixedViewDirection} from '../explorer/src/play/fixedViews.ts';
 import {snapDrop} from '../explorer/src/play/state.ts';
+import {encodeThumbnailForDisplay} from '../explorer/src/play/thumbnailColor.ts';
 
 const require = createRequire(import.meta.url);
 const ts = require('../explorer/node_modules/typescript');
@@ -87,6 +88,12 @@ function loadGlobals({overview, catalog, diamond, surfaces = async () => new Map
       : {overview: 'overview', catalog: 'catalog'}}),
   };
 }
+
+test('offscreen thumbnail pixels are encoded for browser display without changing alpha', () => {
+  const pixels = Uint8Array.of(0, 64, 128, 255, 255, 32, 4, 73);
+  encodeThumbnailForDisplay(pixels);
+  assert.deepEqual([...pixels], [0, 137, 188, 255, 255, 99, 34, 73]);
+});
 
 test('all required load failures retain a disabled session, dispose successful siblings, and retry', async () => {
   for (const failure of ['overview', 'catalog', 'diamond', 'surfaces', 'metadata']) {

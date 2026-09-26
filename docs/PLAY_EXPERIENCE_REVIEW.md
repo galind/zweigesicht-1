@@ -90,6 +90,14 @@ stronger type hierarchy, larger part previews, a compact segmented inventory
 switch and one selected-part instruction. Keep Undo, Flip and Reset in the
 primary row; move restart, challenge selection and help into a labeled menu.
 
+Follow-up visual review found a separate renderer defect behind the gallery's
+black-and-orange appearance: thumbnail pixels were read from a linear-sRGB
+off-screen target and written directly to a display-sRGB PNG. Preserve the
+reviewed material assignments, but encode the preview pixels for display so
+steel, brass, rose gold, blued steel and ruby remain distinguishable. A separate
+"game" material palette would make the tray brighter at the cost of lying about
+the parts the player is fitting.
+
 ### P1 — touch requires learning an implementation detail
 
 Mouse can drag a card directly. Touch must first select a card and then drag the
