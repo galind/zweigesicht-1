@@ -675,3 +675,9 @@ Physical-phone, Safari and representative human enjoyment/accessibility review
 remain outstanding. The fixed-view surface audit is not collision or servicing
 certification. Final production preview: http://127.0.0.1:4187/play. This work
 is on `codex/play-workshop-redesign`, based directly on `codex/play-assembly`.
+
+PR publication: pushed the branch over the configured SSH remote and opened
+[PR #15](https://github.com/galind/zweigesicht-1/pull/15) against
+`codex/play-assembly` through the connected GitHub app. No merge or deployment
+was performed. Next action: human play review, followed by the outstanding
+physical-device and Safari checks.
