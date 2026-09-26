@@ -171,9 +171,6 @@ canvas:focus-visible {
 .catalog-search {
   padding: 0 28px 16px;
 }
-.catalog-search [data-slot='input-group'] {
-  width: 100%;
-}
 .catalog-index {
   overflow: auto;
   padding: 0 28px 30px;
@@ -201,38 +198,12 @@ canvas:focus-visible {
   color: #aaa;
   overflow-wrap: anywhere;
 }
-.catalog-index button > span,
-[data-slot='combobox-item'] > span {
+.catalog-index button > span {
   min-width: 0;
   overflow-wrap: anywhere;
 }
-[data-slot='combobox-item'] {
-  min-height: 48px;
-  padding: 10px !important;
-}
-[data-slot='toggle-group'] {
-  flex-wrap: wrap;
-  height: auto;
-}
-[data-slot='toggle-group-item'] {
-  min-height: 44px;
-  white-space: normal;
-}
 .catalog-search input {
   min-height: 44px;
-}
-.catalog-search [data-slot='input-group'] {
-  height: auto;
-}
-[data-slot='combobox-content'] {
-  background: #282828 !important;
-  max-width: 90vw !important;
-}
-[data-slot='combobox-item'] small {
-  display: block;
-  color: #aaa;
-  font-size: 0.75rem;
-  margin-top: 4px;
 }
 .fallback {
   position: absolute;
@@ -598,7 +569,9 @@ canvas:focus-visible {
   align-items: center;
   gap: 2px;
   width: max-content;
-  max-width: calc(100% - 24px);
+  max-width: calc(
+    100% - max(12px, env(safe-area-inset-left), env(safe-area-inset-right)) * 2
+  );
   padding: 4px;
   z-index: 3;
 }
@@ -2029,11 +2002,8 @@ canvas:focus-visible {
   }
   .action-dock,
   .text-enlarged .action-dock {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) repeat(
-        3,
-        minmax(44px, 0.7fr)
-      );
+    display: flex;
+    flex-wrap: wrap;
     width: calc(
       100% - max(24px, env(safe-area-inset-left) + env(safe-area-inset-right))
     );
@@ -2042,13 +2012,18 @@ canvas:focus-visible {
   .action-dock .mobile-more-trigger {
     display: flex;
   }
-  .action-dock .text-button {
+  .action-dock .text-button,
+  .text-enlarged .action-dock .text-button {
+    flex: 1 1 max-content;
+    width: auto;
     padding: 8px 4px;
-    min-width: 0;
-    overflow-wrap: anywhere;
+    min-width: 44px;
+    white-space: nowrap;
+    overflow-wrap: normal;
   }
   .action-dock .side-slot {
-    min-width: 0;
+    flex: 1 1 max-content;
+    min-width: 44px;
   }
   .action-dock .reset-button,
   .text-enlarged .action-dock .reset-button {
@@ -2061,19 +2036,6 @@ canvas:focus-visible {
   }
   .reset-mobile-label {
     display: inline;
-  }
-  .text-enlarged .action-dock {
-    /* Primary pair above Flip, Reset and More when text needs more room. */
-    grid-template-columns: repeat(3, minmax(0, 1.2fr)) repeat(3, minmax(0, 1fr));
-  }
-  .text-enlarged .action-dock .separate-trigger,
-  .text-enlarged .action-dock .dial-trigger {
-    grid-column: span 3;
-  }
-  .text-enlarged .action-dock .side-slot,
-  .text-enlarged .action-dock .reset-button,
-  .text-enlarged .action-dock .mobile-more-trigger {
-    grid-column: span 2;
   }
   .explorer-panel.mobile-navigation[data-slot='sheet-content'] {
     --popup-width: min(320px, calc(100vw - 32px));

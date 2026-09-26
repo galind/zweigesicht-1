@@ -1,6 +1,7 @@
 import type { MovementViewer } from './MovementViewer';
 
 export interface Benchmark {
+  onFrame: (viewer: MovementViewer, now: number, interval: number) => void;
   start: number;
   duration: number;
   phase: number;
@@ -12,6 +13,9 @@ export function startBenchmark(v: MovementViewer, seconds: number): Benchmark {
   v.reset();
   v.frameIntervals = [];
   return {
+    onFrame(viewer, now, interval) {
+      benchmarkFrame(viewer, this, now, interval);
+    },
     start: performance.now(),
     duration: seconds * 1000,
     phase: -1,

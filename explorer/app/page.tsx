@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { loadingMessage } from '@/src/experience/loading';
+import { useTextScalePreview } from '@/src/experience/useTextScalePreview';
 import {
   MovementViewer,
   type ViewerSnapshot,
@@ -92,6 +93,7 @@ const empty: ViewerSnapshot = {
   stats: {},
 };
 export default function Home() {
+  useTextScalePreview();
   const exploreButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -210,12 +212,6 @@ export default function Home() {
     if (!host.current) return;
     const flags = new URLSearchParams(location.search);
     queueMicrotask(() => setInspect(flags.has('inspect')));
-    document.documentElement.style.fontSize =
-      flags.get('text') === '200' ? '200%' : '';
-    document.documentElement.classList.toggle(
-      'text-enlarged',
-      flags.get('text') === '200',
-    );
     if (flags.has('no3d')) {
       queueMicrotask(() =>
         set((prev) => ({

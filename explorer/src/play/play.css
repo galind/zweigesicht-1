@@ -3,6 +3,14 @@
   inset: 0;
   overflow: hidden;
   --overlay-tint: rgb(24 24 24 / 40%);
+  --play-edge: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  --play-safe-left: env(safe-area-inset-left, 0px);
+  --play-safe-right: env(safe-area-inset-right, 0px);
+  --play-footer-bottom: max(8px, env(safe-area-inset-bottom));
+  --play-dock-bottom: max(
+    34px,
+    calc(var(--play-footer-bottom) + var(--storage-height, 14px) + 8px)
+  );
   background: var(--background);
   color: var(--foreground);
   font-family: inherit;
@@ -36,8 +44,8 @@
 .play-heading {
   position: absolute;
   top: max(16px, env(safe-area-inset-top));
-  left: 24px;
-  right: 24px;
+  left: max(24px, env(safe-area-inset-left));
+  right: max(24px, env(safe-area-inset-right));
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
@@ -68,9 +76,13 @@
 .play-dock {
   position: absolute;
   left: 50%;
-  bottom: 34px;
+  bottom: var(--play-dock-bottom);
   transform: translateX(-50%);
-  width: min(580px, calc(100% - 32px));
+  width: min(580px, calc(100% - var(--play-edge) * 2));
+  max-height: calc(
+    100% - var(--play-header-bottom, 80px) - var(--play-dock-bottom) - 12px
+  );
+  overflow: auto;
   padding: 14px 16px;
   border: 0;
   border-radius: 9px;
@@ -85,7 +97,9 @@
   line-height: 1.2;
   margin: 8px 0;
 }
-.play-app p {
+.play-app p,
+.play-loading output {
+  display: block;
   color: #c4c2be;
   font-size: 0.875em;
   line-height: 1.5;
@@ -205,9 +219,9 @@
 }
 .play-storage {
   position: absolute;
-  bottom: 8px;
-  left: 12px;
-  right: 12px;
+  bottom: var(--play-footer-bottom);
+  left: var(--play-edge);
+  right: var(--play-edge);
   text-align: center;
   font-size: 0.625em;
   color: var(--muted-foreground);
@@ -246,18 +260,10 @@
   gap: 10px;
   flex-wrap: wrap;
 }
-.play-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
 @media (max-width: 600px) {
   .play-heading {
-    left: 16px;
-    right: 16px;
+    left: var(--play-edge);
+    right: var(--play-edge);
     gap: 8px;
   }
   .play-heading > span:nth-child(2) {
@@ -269,9 +275,20 @@
   .play-choice,
   .play-dock {
     padding: 14px;
-    width: calc(100% - 24px);
-    bottom: 30px;
-    max-height: 43%;
+    width: calc(
+      100% - max(12px, env(safe-area-inset-left), env(safe-area-inset-right)) *
+        2
+    );
+    bottom: max(
+      30px,
+      calc(var(--play-footer-bottom) + var(--storage-height, 14px) + 8px)
+    );
+    max-height: min(
+      43%,
+      calc(
+        100% - var(--play-header-bottom, 80px) - var(--play-dock-bottom) - 12px
+      )
+    );
     overflow: auto;
   }
   .play-dock h1 {
@@ -297,10 +314,15 @@
   .play-dock,
   .play-choice {
     left: auto;
-    right: 16px;
+    right: var(--play-edge);
     transform: none;
     width: min(330px, 48%);
-    max-height: 65%;
+    max-height: min(
+      65%,
+      calc(
+        100% - var(--play-header-bottom, 80px) - var(--play-dock-bottom) - 12px
+      )
+    );
     overflow: auto;
   }
   .play-stage {
@@ -308,8 +330,19 @@
     top: 62%;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .play-app * {
-    scroll-behavior: auto;
+
+/* Short portrait scenes keep room for the offered piece and its complete caption. */
+@media (max-width: 600px) and (max-aspect-ratio: 4/3) {
+  .play-app[data-active='true'] .play-dock {
+    max-height: min(
+      43%,
+      max(
+        140px,
+        calc(
+          100% - var(--play-header-bottom, 80px) - var(--play-dock-bottom) -
+            var(--play-stage-reserve, 128px) - 40px
+        )
+      )
+    );
   }
 }

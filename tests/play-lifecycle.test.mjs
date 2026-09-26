@@ -15,6 +15,15 @@ const require = createRequire(import.meta.url);
 const ts = require('../explorer/node_modules/typescript');
 const source = ts.createSourceFile('PlayViewer.ts', fs.readFileSync(new URL('../explorer/src/play/PlayViewer.ts', import.meta.url), 'utf8'), ts.ScriptTarget.Latest, true);
 const declaration = source.statements.find(ts.isClassDeclaration);
+const graphicsSource = fs.readFileSync(new URL('../explorer/src/viewer/GraphicsResources.ts', import.meta.url), 'utf8');
+function graphics(overrides = {}) {
+  const module = {exports: {}};
+  vm.runInNewContext(ts.transpileModule(graphicsSource, {compilerOptions: {target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS}}).outputText, {
+    module, exports: module.exports, devicePixelRatio: 1,
+    require(name) { return name === 'three' ? (overrides.THREE ?? THREE) : {StudioEnvironment: overrides.StudioEnvironment}; },
+  });
+  return module.exports;
+}
 function actual(name, fixture, globals = {}) {
   const member = declaration.members.find((node) => node.name?.getText(source) === name);
   assert.ok(member, `Actual controller member ${name} exists`);
@@ -26,7 +35,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, ...CameraFrame, motionEase, MOTION, console: {error() {}}, ...globals,
+    module, THREE, performance, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }
@@ -122,12 +131,13 @@ test('missing geometry cannot enable play or silently declare a complete asset s
 });
 
 test('a route exit while requests are pending releases late geometry without state notifications', async () => {
-  let finish;
+  let finish, started;
   const slow = new Promise((resolve) => { finish = resolve; });
+  const loadingStarted = new Promise((resolve) => { started = resolve; });
   const resources = [scene('leaf'), scene('other'), scene('diamond')];
-  const v = fixture(loadGlobals({overview: async () => { await slow; return resources[0].object; }, catalog: async () => resources[1].object, diamond: async () => resources[2].object}));
+  const v = fixture(loadGlobals({overview: async () => { started(); await slow; return resources[0].object; }, catalog: async () => resources[1].object, diamond: async () => resources[2].object}));
   const loading = v.load();
-  await Promise.resolve(); await Promise.resolve();
+  await loadingStarted;
   v.dead = true; v.generation++;
   const notifications = v.notifications.length;
   finish(); await loading;
@@ -238,6 +248,38 @@ test('measured staging captions clear the dock at narrow widths without resettin
   }
   assert.equal(reframes, 2, 'Only initial framing and the real caption-size change reframe');
   v.controls.dispose();
+});
+
+test('short enlarged scenes keep the full staged caption beside a positive assembly region', () => {
+  for (const [width, height, headerBottom, dockTop, dockLeft, storageTop] of [
+    [320, 568, 130, 340, 12, 530],
+    [568, 320, 78, 80, 280, 282],
+    [844, 390, 78, 110, 470, 348],
+  ]) {
+    const rect = {left: 0, top: 0, width, height, right: width, bottom: height};
+    const chrome = {
+      '.play-heading': {bottom: headerBottom},
+      '.play-dock': {top: dockTop, left: dockLeft},
+      '.play-storage': {top: storageTop, height: 30},
+    };
+    const v = fixture();
+    Object.assign(v, {
+      active: true, current: {id: 'offered-part'}, frameRegion: {top: 0, bottom: 0, left: 0, width: 0},
+      stage: {offsetHeight: 84, style: {}, querySelector: () => ({offsetLeft: -20, getBoundingClientRect: () => ({height: 66})})},
+      host: {getBoundingClientRect: () => rect, parentElement: {querySelector: (selector) => ({getBoundingClientRect: () => chrome[selector]})}},
+      reframe() {}, invalidate() {},
+    });
+    const safeLeft = width === 844 ? 44 : 0;
+    actual('layout', v, {getComputedStyle: () => ({getPropertyValue: () => `${safeLeft}px`})})();
+    const stageTop = parseFloat(v.stage.style.top), stageLeft = parseFloat(v.stage.style.left);
+    assert.ok(stageTop >= headerBottom + 18, 'The full staged piece clears the heading');
+    assert.ok(stageLeft - 20 >= safeLeft, 'The wrapped caption remains inside the safe viewport');
+    assert.ok(stageTop + 84 + 8 + 66 <= (width > height ? storageTop - 12 : dockTop - 20), 'Caption clears the dock or landscape storage warning');
+    assert.ok(v.frameRegion.left >= stageLeft + 84 + 24, 'Short layouts reserve a separate horizontal assembly region');
+    assert.ok(v.frameRegion.bottom - v.frameRegion.top >= 80, 'The camera never frames an inverted vertical region');
+    assert.ok(v.frameRegion.width >= 100, 'Assembly region retains space for its target');
+    v.controls.dispose();
+  }
 });
 
 function renderedFixture() {
@@ -508,7 +550,7 @@ test('controller disposal releases geometry, cloned materials, listeners, observ
   v.scene.add(display); v.pieces.set('leaf', {mesh: display}); v.loadedObjects.push(original.object);
   Object.assign(v, {
     frame: 19, releaseCapture() {releases.push('capture');}, observer: {disconnect() {releases.push('observer');}},
-    controls: {dispose() {releases.push('controls');}}, environment: {dispose() {releases.push('environment');}}, surfaceOcclusion: {dispose() {releases.push('occlusion');}},
+    controls: {removeEventListener() {}, dispose() {releases.push('controls');}}, environment: {dispose() {releases.push('environment');}}, surfaceOcclusion: {dispose() {releases.push('occlusion');}},
     stage: {removeEventListener(name) {releases.push(`stage:${name}`);}},
     media: {removeEventListener(name) {releases.push(`media:${name}`);}},
     renderer: {dispose() {releases.push('renderer');}, domElement: {removeEventListener(name) {releases.push(`canvas:${name}`);}, remove() {releases.push('canvas');}}},
@@ -584,7 +626,7 @@ test('failed controller construction frees the renderer, controls, canvas and te
   const released = [];
   const canvas = {setAttribute() {}, removeEventListener() {}, remove() {released.push('canvas');}};
   class Renderer {domElement = canvas; setPixelRatio() {} setClearColor() {} dispose() {released.push('renderer');}}
-  class Controls {touches = {}; addEventListener() {} dispose() {released.push('controls');}}
+  class Controls {touches = {}; addEventListener() {} removeEventListener() {} dispose() {released.push('controls');}}
   class Room {dispose() {released.push('room');}}
   class Pmrem {fromScene() {throw Error('Injected environment failure');} dispose() {released.push('pmrem');}}
   const globals = {THREE: {...THREE, WebGLRenderer: Renderer, PMREMGenerator: Pmrem}, OrbitControls: Controls, StudioEnvironment: Room, devicePixelRatio: 1, cancelAnimationFrame() {}};
@@ -592,8 +634,71 @@ test('failed controller construction frees the renderer, controls, canvas and te
   Object.assign(v, {stage: {removeEventListener() {}}, destination: {dataset: {}}, media: {removeEventListener() {}}});
   for (const name of ['makeEnvironment', 'dispose', 'releaseCapture']) v[name] = actual(name, v, globals);
   const constructor = declaration.members.find(ts.isConstructorDeclaration), module = {exports: {}};
-  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, ...globals});
+  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, ...graphics(globals), ...globals});
   assert.throws(() => module.exports.call(v, {appendChild() {}}, v.stage, v.destination, v.manifest, () => {}, () => {}, () => {}), /Injected environment failure/);
   assert.equal(v.dead, true);
   for (const key of ['renderer', 'controls', 'canvas', 'room', 'pmrem']) assert.equal(released.filter((value) => value === key).length, 1, key);
+});
+
+
+test('route exit during metadata loading never starts geometry or recovery requests', async () => {
+  let finish, requests = 0;
+  const gate = new Promise((resolve) => {finish = resolve;});
+  const globals = loadGlobals({overview: async () => {requests++;}, catalog: async () => {requests++;}, diamond: async () => {requests++;}, surfaces: async () => {requests++;}});
+  const fetch = globals.fetch;
+  globals.fetch = async (...args) => { await gate; return fetch(...args); };
+  const v = fixture(globals);
+  const loading = v.load();
+  v.dead = true; v.generation++;
+  const notifications = v.notifications.length;
+  finish(); await loading;
+  assert.equal(requests, 0);
+  assert.equal(v.notifications.length, notifications);
+  assert.equal(v.pieces.size, 0);
+});
+
+test('leaf preparation failure keeps the previous complete scene and releases new resources exactly once', async () => {
+  for (const fault of ['surface', 'pose', 'finish']) {
+    const original = scene('leaf'), next = scene('leaf'), second = scene('second');
+    next.object.add(second.object);
+    let attempt = 0, materialsReleased = 0;
+    const globals = loadGlobals({overview: async () => attempt ? next.object : original.object, catalog: async () => new THREE.Group(), diamond: async () => new THREE.Group()});
+    const fetch = globals.fetch;
+    globals.fetch = async (...args) => {
+      const response = await fetch(...args), json = response.json;
+      response.json = async () => {
+        const value = await json();
+        if (value.instances) value.instances.push({id: 'second', name: 'second', definitionId: 'second'});
+        return value;
+      };
+      return response;
+    };
+    globals.setFinishEnabled = () => { if (attempt && fault === 'finish') throw Error('Injected finish initialization failure'); };
+    globals.attachSourceSurface = (_geometry, data) => { if (data === 'bad') throw Error('Injected surface error'); };
+    globals.loadSourceSurfaces = async () => new Map(attempt && fault === 'surface' ? [['second', 'bad']] : []);
+    globals.createMaterial = () => {
+      const material = new THREE.MeshBasicMaterial();
+      material.addEventListener('dispose', () => materialsReleased++);
+      return material;
+    };
+    const v = fixture(globals);
+    await v.load();
+    assert.equal(v.ready, true);
+    const previous = v.pieces.get('leaf').mesh;
+    attempt++;
+    v.manifest.finalLeafIds.push('second');
+    if (fault === 'surface') v.manifest.targetPoses.second = identity;
+    await v.load();
+    assert.equal(v.ready, false);
+    assert.match(v.error, /could not load/);
+    assert.equal(v.pieces.size, 1);
+    assert.equal(v.pieces.get('leaf').mesh, previous);
+    assert.equal(previous.parent, v.scene);
+    assert.deepEqual(original.disposal, {geometry: 0, material: 0});
+    assert.deepEqual(next.disposal, {geometry: 1, material: 1});
+    assert.deepEqual(second.disposal, {geometry: 1, material: 1});
+    assert.equal(materialsReleased, fault === 'pose' ? 2 : 1);
+    v.clearPieces();
+    assert.deepEqual(original.disposal, {geometry: 1, material: 1});
+  }
 });

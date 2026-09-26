@@ -2,6 +2,10 @@
 
 The application lives in `explorer/`. It uses React/TypeScript, vinext/Vite and a framework-independent Three.js scene controller. `explorer/vite.config.ts` configures local CAD middleware and enables Nitro when a build preset is supplied. The root `vercel.json` selects the Vercel build; current domain status is in [PROGRESS.md](../PROGRESS.md).
 
+The [website review](WEBSITE_REVIEW.md) maps both routes and the ownership
+decisions behind their shared modules. The homepage remains independent of the
+Play manifest, session state and completion UI.
+
 ## Source and asset boundary
 
 Original STEP files remain in ignored `assets/source-originals/`. The conversion pipeline writes ignored `assets/generated/`. Runtime files are copied into `explorer/public/models/`; `.gitignore` lists the explicitly approved deployment payloads that are tracked, with other generated files excluded. Screenshot/reference evidence is also local-only. Provenance, authored parameter files, source extraction scripts and textual audit reports can be versioned.
@@ -42,3 +46,39 @@ Source exceptions, fitting and material evidence are summarized in [CAD_NOTES.md
 `CasePose.ts` stages the maker’s face-changing sequence: upper attachment withdraws, lower withdraws, case turns about CAD X, lower reseats, upper reseats. Its inverse X transform and the observer frame share one phase clock, so attachments translate without rotating in the viewing frame and source case/movement matrices remain unchanged. Exact endpoints reuse original opposite-end occurrences, with identical definition IDs. Hidden-case flips use the same clock; reversals start from the displayed phase and reduced motion snaps camera and fitted poses together. Configuration loading does not restart the flip. Disassembly remains independent; fitted lug separation vectors rotate with their attachment frame at the current Flip phase, and camera bounds use the same transformed endpoints. Other packets retain watch-local offsets. Camera refits requested during turnover defer until it finishes. The four unresolved ring-mounted locking pins remain seated. Source correspondence and interpretation limits are recorded in `assets/authored/motion-evidence.json` and `assets/source-manifest/face-flip.json`.
 
 Crown d46 compiles the existing frosting relief only for the recessed M background: original face 468, local X=3.4 mm with an X-facing normal. Relief uses the local YZ plane and matching tangent basis. Raised lettering at X=3.5 mm, rim and knurling remain unchanged.
+
+## Assembly route and shared boundaries
+
+`app/play/page.tsx` supplies separate canonical/noindex metadata. `Play.tsx`
+owns the validated ordered session prefix and storage feedback; `PlayViewer.ts`
+owns fitted/staged meshes, projection, camera transitions and pointer capture.
+The versioned authored manifest supplies exact membership and target poses.
+Both levels finish with 265 physical leaves, starting from 16 fitted leaves and
+placing 89 Easy packets/components or 249 Hard components. Geometry, sequence
+and saved-session schema remain unchanged by the website review.
+
+`GraphicsResources.ts` owns the identical renderer settings, studio lights,
+temporary PMREM generation and deduplicated scene-resource disposal. Controllers
+retain the resulting environment and scene lifetimes. Their loading policies
+remain distinct: the explorer adds optional catalog geometry without losing
+configuration intent; Play prepares every required piece before committing a
+complete replacement scene, disposing successful siblings after a failed load.
+Late metadata cannot start further loads after disposal.
+
+Both controllers schedule frames when needed and settle after damping and
+transitions. The explorer also sustains explicitly enabled inspection captures
+and benchmarks; benchmark implementation comes from the lazy inspection chunk.
+Visibility, context recovery, resizing and interaction wake rendering again.
+An idle check must count scheduled callbacks as well as rendered frames.
+
+`CameraFrame.ts`, the native viewer controls and Sheet remain the shared
+interaction primitives. `useTextScalePreview` applies the explicit `?text=200`
+mode at the document root, including portaled panels, and restores previous
+styling on unmount. Play retains native confirmations with accessible names and
+explicit focus destinations. Its measured footer and caption bounds inform
+staging layout, without changing source geometry or the fitted endpoints.
+When a short scene cannot vertically stack the assembly and staged piece, Play
+uses the clear space beside staging and reserves enough scrolling-dock clearance
+for the complete caption. Normal tall layouts retain their prior framing. The
+homepage phone dock wraps according to actual label width, so enlarged text
+does not depend on a query-only CSS class to remain readable.
