@@ -701,6 +701,8 @@ documented rather than treated as feature-health evidence.
 
 Verification: all 67 tests, inventory validation, TypeScript, lint and the
 production build pass. The new regression check covers linear-to-display color
-encoding and unchanged alpha. Next action is to update PR #15 for user review;
-physical-device, Safari and representative enjoyment/accessibility review
-remain outstanding.
+encoding and unchanged alpha. Commit `07e48cd` was pushed over SSH and PR #15's
+summary/verification were updated through the GitHub connector. The production
+preview at http://127.0.0.1:4187/play was rebuilt and left on the corrected
+gallery. Next action is user review; physical-device, Safari and representative
+enjoyment/accessibility review remain outstanding.
