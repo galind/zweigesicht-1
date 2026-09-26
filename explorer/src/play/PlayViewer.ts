@@ -12,7 +12,12 @@ import {
 } from '../viewer/CameraFrame';
 import { motionEase, MOTION } from '../experience/motion';
 import { SurfaceOcclusion } from '../viewer/SurfaceOcclusion';
-import { StudioEnvironment } from '../viewer/StudioEnvironment';
+import {
+  configureRenderer,
+  addStudioLights,
+  createStudioEnvironment,
+  disposeObjectResources,
+} from '../viewer/GraphicsResources';
 import {
   attachSourceSurface,
   loadSourceSurfaces,
@@ -108,10 +113,7 @@ export class PlayViewer {
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     try {
-      this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-      this.renderer.setClearColor(0, 0);
-      this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      this.renderer.toneMappingExposure = 1.05;
+      configureRenderer(this.renderer);
       host.appendChild(this.renderer.domElement);
       this.renderer.domElement.tabIndex = 0;
       this.renderer.domElement.setAttribute(
@@ -127,12 +129,8 @@ export class PlayViewer {
       this.controls.maxDistance = 1500;
       this.controls.addEventListener('change', this.cameraChanged);
       this.makeEnvironment();
-      this.scene.add(new THREE.HemisphereLight(0xc8e0ed, 0x29221b, 0.25));
-      const key = new THREE.DirectionalLight(0xffecd6, 0.8);
-      key.position.set(-25, 40, -45);
-      const rim = new THREE.DirectionalLight(0xc0dff3, 0.6);
-      rim.position.set(30, -10, 35);
-      this.scene.add(key, rim, this.staged);
+      addStudioLights(this.scene);
+      this.scene.add(this.staged);
       this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
       stage.addEventListener('pointerdown', this.pointerDown);
       stage.addEventListener('pointermove', this.pointerMove);
@@ -169,17 +167,11 @@ export class PlayViewer {
       });
   }
   makeEnvironment() {
+    const environment = createStudioEnvironment(this.renderer);
     this.environment?.dispose();
-    const pmrem = new THREE.PMREMGenerator(this.renderer),
-      room = new StudioEnvironment();
-    try {
-      this.environment = pmrem.fromScene(room, 0.015);
-      this.scene.environment = this.environment.texture;
-      this.scene.environmentIntensity = 0.9;
-    } finally {
-      room.dispose();
-      pmrem.dispose();
-    }
+    this.environment = environment;
+    this.scene.environment = environment.texture;
+    this.scene.environmentIntensity = 0.9;
   }
   async load() {
     const generation = ++this.generation;
@@ -187,6 +179,8 @@ export class PlayViewer {
     this.error = '';
     this.emit();
     const loaded: THREE.Object3D[] = [];
+    const prepared = new Map<string, Piece>();
+    let committed = false;
     try {
       const get = async (url: string) => {
         const r = await fetch(url);
@@ -200,6 +194,7 @@ export class PlayViewer {
           catalog: string;
         }>,
       ]);
+      if (this.dead || generation !== this.generation) return;
       const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
       // All chosen leaves are required. A partial catalog can never enable completion.
       const results = await Promise.allSettled([
@@ -218,7 +213,6 @@ export class PlayViewer {
         loadSourceSurfaces(paths.overview),
       ]);
       if (this.dead || generation !== this.generation) {
-        loaded.forEach((o) => this.disposeObject(o));
         return;
       }
       for (const result of results)
@@ -249,7 +243,6 @@ export class PlayViewer {
       const missing = this.manifest.finalLeafIds.filter((id) => !found.has(id));
       if (missing.length)
         throw new Error(`Required geometry missing: ${missing.join(', ')}`);
-      this.clearPieces();
       for (const [id, { mesh: original, record }] of found) {
         attachSourceSurface(
           original.geometry,
@@ -261,6 +254,14 @@ export class PlayViewer {
           original.geometry,
           id,
         );
+        const mesh = new THREE.Mesh(original.geometry, material);
+        // Track the clone immediately so any later preparation failure releases it.
+        const piece = {
+          mesh,
+          pose: new THREE.Matrix4(),
+          bounds: new THREE.Box3(),
+        };
+        prepared.set(id, piece);
         setFinishEnabled(material, true);
         if (DIALS.presentationOverrides.some((o) => o.leafId === id)) {
           const enamel = material as THREE.MeshPhysicalMaterial;
@@ -275,7 +276,6 @@ export class PlayViewer {
             polygonOffsetUnits: -1,
           });
         }
-        const mesh = new THREE.Mesh(original.geometry, material);
         const pose = new THREE.Matrix4().set(
           ...(this.manifest.targetPoses[id].flat() as Parameters<
             THREE.Matrix4['set']
@@ -289,22 +289,32 @@ export class PlayViewer {
             original.geometry.getAttribute('position') as THREE.BufferAttribute,
           )
           .applyMatrix4(pose);
-        this.pieces.set(id, { mesh, pose, bounds });
-        this.scene.add(mesh);
+        piece.pose = pose;
+        piece.bounds = bounds;
       }
+      // Only replace the last complete scene once every required leaf is prepared.
+      this.clearPieces();
+      this.pieces = prepared;
+      for (const { mesh } of prepared.values()) this.scene.add(mesh);
       this.loadedObjects = loaded;
+      committed = true;
       this.ready = !this.contextUnavailable;
       if (this.ready) this.error = '';
       this.update(this.fitted, this.current, this.active);
       this.emit();
     } catch (error) {
-      loaded.forEach((o) => this.disposeObject(o));
       if (!this.dead && generation === this.generation) {
         this.error =
           'The watch could not load completely. Retry to restore your assembly.';
         this.ready = false;
         this.emit();
         console.error('Play asset load', error);
+      }
+    } finally {
+      if (!committed) {
+        for (const { mesh } of prepared.values())
+          (mesh.material as THREE.Material).dispose();
+        loaded.forEach((object) => this.disposeObject(object));
       }
     }
   }
@@ -319,17 +329,7 @@ export class PlayViewer {
     this.loadedObjects = [];
   }
   disposeObject(object: THREE.Object3D) {
-    const geometries = new Set<THREE.BufferGeometry>(),
-      materials = new Set<THREE.Material>();
-    object.traverse((n) => {
-      if (n instanceof THREE.Mesh) {
-        geometries.add(n.geometry);
-        for (const m of Array.isArray(n.material) ? n.material : [n.material])
-          materials.add(m);
-      }
-    });
-    geometries.forEach((g) => g.dispose());
-    materials.forEach((m) => m.dispose());
+    disposeObjectResources(object);
   }
   update(fitted: Set<string>, step: PlayStep | null, active: boolean) {
     this.cancel();
@@ -762,28 +762,56 @@ export class PlayViewer {
     const dock = root
       ?.querySelector(this.active ? '.play-dock' : '.play-choice')
       ?.getBoundingClientRect();
+    // These inherited variables contain plain env lengths, without CSS max/calc.
+    const style = getComputedStyle(this.host);
+    const safeLeft =
+      parseFloat(style.getPropertyValue('--play-safe-left')) || 0;
+    const safeRight =
+      parseFloat(style.getPropertyValue('--play-safe-right')) || 0;
     const top = (header?.bottom ?? 64) - rect.top + 18;
     const landscape = rect.height <= 550 && rect.width / rect.height >= 1.33;
+    const storage = root
+      ?.querySelector('.play-storage')
+      ?.getBoundingClientRect();
     const bottom = landscape
-      ? rect.height - 20
+      ? Math.min(
+          rect.height - 20,
+          storage?.height ? storage.top - rect.top - 12 : rect.height - 20,
+        )
       : (dock?.top ?? rect.bottom - 160) - rect.top - 20;
     const width = landscape
       ? Math.max(120, (dock?.left ?? rect.right) - rect.left - 16)
       : rect.width;
     const stageHeight =
       this.stage.offsetHeight || (rect.width <= 600 ? 84 : 96);
-    const captionHeight =
-      this.stage.querySelector?.('.play-stage-caption')?.getBoundingClientRect()
-        .height ?? 0;
+    const caption = this.stage.querySelector?.<HTMLElement>(
+      '.play-stage-caption',
+    );
+    const captionHeight = caption?.getBoundingClientRect().height ?? 0;
     const stageY = bottom - stageHeight / 2 - Math.max(20, captionHeight + 8);
+    const stageLeft = Math.max(
+      12,
+      width * 0.22 - stageHeight / 2,
+      safeLeft - (caption?.offsetLeft ?? 0),
+    );
     this.stage.style.top = `${stageY - stageHeight / 2}px`;
-    this.stage.style.left = `${Math.max(stageHeight / 2 + 12, width * 0.22) - stageHeight / 2}px`;
+    this.stage.style.left = `${stageLeft}px`;
+    const verticalBottom = stageY - stageHeight / 2 - 36;
+    // A short scene cannot stack the assembly, staged piece and full caption.
+    // Keep staging lower-left and use the clear region beside it instead.
+    const compact = this.active && this.current && verticalBottom - top < 100;
+    const left = compact ? stageLeft + stageHeight + 24 : safeLeft;
     const region = {
-      top,
-      bottom:
-        this.active && this.current ? stageY - stageHeight / 2 - 36 : bottom,
-      left: 0,
-      width,
+      top: compact ? top + 28 : top,
+      bottom: compact
+        ? bottom - 28
+        : this.active && this.current
+          ? verticalBottom
+          : bottom,
+      left,
+      width: compact
+        ? Math.max(56, width - left - 12 - (landscape ? 0 : safeRight))
+        : width - safeLeft - (landscape ? 0 : safeRight),
     };
     const changed = Object.entries(region).some(
       ([key, value]) =>
@@ -1001,6 +1029,7 @@ export class PlayViewer {
     this.releaseCapture();
     if (this.frame) cancelAnimationFrame(this.frame);
     this.observer?.disconnect();
+    this.controls?.removeEventListener('change', this.cameraChanged);
     this.controls?.dispose();
     this.clearPieces();
     this.environment?.dispose();

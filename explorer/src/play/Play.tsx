@@ -38,6 +38,7 @@ import {
 } from './state';
 import type { PlayLevel, PlayManifest, PlaySession } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
+import { useTextScalePreview } from '../experience/useTextScalePreview';
 import './play.css';
 
 const manifest = authored as PlayManifest;
@@ -49,6 +50,11 @@ const blank: PlayViewStatus = {
   side: 'front',
 };
 export default function Play() {
+  useTextScalePreview();
+  const app = useRef<HTMLElement>(null);
+  const choiceTitle = useRef<HTMLHeadingElement>(null);
+  const progressTitle = useRef<HTMLHeadingElement>(null);
+  const nextFocus = useRef<'piece' | 'choice' | null>(null);
   const host = useRef<HTMLDivElement>(null),
     stage = useRef<HTMLButtonElement>(null),
     destination = useRef<HTMLButtonElement>(null);
@@ -139,6 +145,11 @@ export default function Play() {
           const next = commitPlacement(manifest, previous, id);
           if (next === previous) return;
           const step = currentStep(manifest, previous);
+          if (
+            document.activeElement === stage.current ||
+            document.activeElement === destination.current
+          )
+            nextFocus.current = 'piece';
           apply(next);
           setNotice(
             `${step?.label} placed. ${next.completedStepIds.length} of ${manifest.levels[next.level].steps.length}.`,
@@ -186,42 +197,64 @@ export default function Play() {
     };
   }, [apply, attempt]);
   useEffect(() => {
-    if (new URLSearchParams(location.search).get('text') === '200')
-      document
-        .querySelector<HTMLElement>('.play-app')
-        ?.style.setProperty('font-size', '200%');
-    viewer.current?.layout();
-  }, []);
-  useEffect(() => {
     if (confirm) {
       lastFocus.current = document.activeElement as HTMLElement;
       dialog.current?.showModal();
     } else {
       dialog.current?.close();
-      lastFocus.current?.focus();
+      if (!nextFocus.current && lastFocus.current?.isConnected)
+        lastFocus.current.focus();
+      lastFocus.current = null;
     }
   }, [confirm]);
   useLayoutEffect(() => {
     const layout = () => {
+      const storageMessage = app.current?.querySelector('.play-storage');
+      app.current?.style.setProperty(
+        '--storage-height',
+        `${storageMessage?.getBoundingClientRect().height ?? 0}px`,
+      );
+      const caption = app.current?.querySelector('.play-stage-caption');
+      app.current?.style.setProperty(
+        '--play-stage-reserve',
+        `${(stage.current?.offsetHeight || 84) + (caption?.getBoundingClientRect().height ?? 0) + 8}px`,
+      );
+      const heading = app.current?.querySelector('.play-heading');
+      if (heading) {
+        const bottom = heading.getBoundingClientRect().bottom;
+        setHeaderBottom(bottom);
+        app.current?.style.setProperty('--play-header-bottom', `${bottom}px`);
+      }
       viewer.current?.layout();
-      const heading =
-        host.current?.parentElement?.querySelector('.play-heading');
-      if (heading) setHeaderBottom(heading.getBoundingClientRect().bottom);
     };
     layout();
     const observer = new ResizeObserver(layout);
     host.current?.parentElement
       ?.querySelectorAll(
-        '.play-heading, .play-dock, .play-choice, .play-stage-caption',
+        '.play-heading, .play-dock, .play-choice, .play-stage-caption, .play-storage',
       )
       .forEach((element) => observer.observe(element));
     return () => observer.disconnect();
-  }, [active, session, hint, status.ready]);
+  }, [active, session, hint, storage, status.ready]);
   const step = session && active ? currentStep(manifest, session) : null;
   const total = session ? manifest.levels[session.level].steps.length : 0;
   const completed = !!session && active && !step;
   const disabled = !status.ready || status.busy;
+  useEffect(() => {
+    if (confirm || disabled || !nextFocus.current) return;
+    const target =
+      nextFocus.current === 'choice'
+        ? choiceTitle.current
+        : step
+          ? stage.current
+          : progressTitle.current;
+    if (target) {
+      target.focus({ preventScroll: true });
+      nextFocus.current = null;
+    }
+  }, [confirm, disabled, active, step]);
   const start = (level: PlayLevel) => {
+    nextFocus.current = 'piece';
     apply(createSession(manifest, level));
     setNotice(`${level === 'easy' ? 'Easy' : 'Hard'} assembly started.`);
   };
@@ -241,6 +274,7 @@ export default function Play() {
   };
   const discard = () => {
     if (confirm === 'levels') {
+      nextFocus.current = 'choice';
       activeRef.current = false;
       setActive(false);
       setSelected(false);
@@ -250,7 +284,7 @@ export default function Play() {
     setConfirm(null);
   };
   return (
-    <main className="play-app" data-active={active}>
+    <main ref={app} className="play-app" data-active={active}>
       <div className="play-canvas" ref={host} />
       <header className="play-heading">
         <span>Zweigesicht–1</span>
@@ -291,19 +325,27 @@ export default function Play() {
         }
         disabled={disabled || !selected || !step}
         hidden={!step}
-        onClick={() => viewer.current?.place()}
+        onClick={() => {
+          nextFocus.current = 'piece';
+          viewer.current?.place();
+        }}
       >
         <span aria-hidden="true">＋</span>
       </Control>
       {!active && (
         <section className="play-choice" aria-labelledby="play-title">
-          <h1 id="play-title">Assemble the movement</h1>
+          <h1 ref={choiceTitle} id="play-title" tabIndex={-1}>
+            Assemble the movement
+          </h1>
           <p>Choose how much you assemble. Take your time.</p>
           {session && (
             <Control
               className="play-primary"
               disabled={disabled}
-              onClick={() => apply(session, true, false)}
+              onClick={() => {
+                nextFocus.current = 'piece';
+                apply(session, true, false);
+              }}
             >
               Continue {session.level === 'easy' ? 'Easy' : 'Hard'} ·{' '}
               {session.completedStepIds.length} / {total}
@@ -345,7 +387,9 @@ export default function Play() {
                     : 'Skeleton face'}
             </span>
           </div>
-          <h1>{completed ? 'Every piece in place.' : step?.label}</h1>
+          <h1 ref={progressTitle} tabIndex={-1}>
+            {completed ? 'Every piece in place.' : step?.label}
+          </h1>
           <p>
             {completed
               ? 'Your watch is assembled. Turn it over and take a look.'
@@ -425,7 +469,7 @@ export default function Play() {
       )}
       {(!status.ready || status.error) && (
         <section className="play-loading" aria-label="Loading status">
-          <p>{status.error || 'Preparing the watch…'}</p>
+          <output>{status.error || 'Preparing the watch…'}</output>
           {status.error && (
             <Control
               onClick={() => {
@@ -438,7 +482,7 @@ export default function Play() {
           )}
         </section>
       )}
-      <div className="play-storage">{storage}</div>
+      <output className="play-storage">{storage}</output>
       <Sheet modal={false} open={help} onOpenChange={setHelp}>
         <SheetContent
           id="play-help"
@@ -478,18 +522,20 @@ export default function Play() {
           </div>
         </SheetContent>
       </Sheet>
-      <output className="play-sr" aria-live="polite" aria-atomic="true">
+      <output className="sr-only" aria-live="polite" aria-atomic="true">
         {notice}
       </output>
       <dialog
         ref={dialog}
         className="play-confirm"
+        aria-labelledby="play-confirm-title"
+        aria-describedby="play-confirm-description"
         onCancel={() => setConfirm(null)}
       >
-        <h2>
+        <h2 id="play-confirm-title">
           {confirm === 'levels' ? 'Choose a different level?' : 'Start again?'}
         </h2>
-        <p>
+        <p id="play-confirm-description">
           {confirm === 'levels'
             ? 'You can continue your saved assembly from the level screen. Starting another level replaces it.'
             : 'This replaces your current progress with a fresh assembly.'}

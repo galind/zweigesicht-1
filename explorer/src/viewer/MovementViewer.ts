@@ -28,7 +28,7 @@ import {
   type DialFace,
   type DialPreferences,
 } from '../experience/dials';
-import { benchmarkFrame, type Benchmark } from './benchmark';
+import type { Benchmark } from './benchmark';
 import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -41,7 +41,12 @@ import {
   zoomCamera,
 } from './CameraFrame';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { StudioEnvironment } from './StudioEnvironment';
+import {
+  configureRenderer,
+  addStudioLights,
+  createStudioEnvironment,
+  disposeObjectResources,
+} from './GraphicsResources';
 import {
   attachSourceSurface,
   loadSourceSurfaces,
@@ -140,7 +145,16 @@ export interface ViewerSnapshot extends ExperienceState {
   stats: Record<string, unknown>;
 }
 export class MovementViewer {
-  inspectionFrame?: (now: number, rendered: boolean) => void;
+  private inspectionCallback?: (now: number, rendered: boolean) => void;
+  get inspectionFrame() {
+    return this.inspectionCallback;
+  }
+  set inspectionFrame(
+    callback: ((now: number, rendered: boolean) => void) | undefined,
+  ) {
+    this.inspectionCallback = callback;
+    if (callback) this.scheduleFrame();
+  }
   benchmark: Benchmark | null = null;
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
@@ -248,10 +262,7 @@ export class MovementViewer {
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     try {
-      this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-      this.renderer.setClearColor(0, 0);
-      this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      this.renderer.toneMappingExposure = 1.05;
+      configureRenderer(this.renderer);
       host.appendChild(this.renderer.domElement);
       this.renderer.domElement.setAttribute(
         'aria-label',
@@ -267,24 +278,10 @@ export class MovementViewer {
       this.controls.maxDistance = 200;
       this.controls.addEventListener('start', this.manual);
       this.controls.addEventListener('change', this.invalidate);
-      const pmrem = new THREE.PMREMGenerator(this.renderer);
-      let room: StudioEnvironment | undefined;
-      try {
-        room = new StudioEnvironment();
-        this.environment = pmrem.fromScene(room, 0.015);
-        this.scene.environment = this.environment.texture;
-        this.scene.environmentIntensity = 0.9;
-      } finally {
-        room?.dispose();
-        pmrem.dispose();
-      }
-      this.scene.add(new THREE.HemisphereLight(0xc8e0ed, 0x29221b, 0.25));
-      const key = new THREE.DirectionalLight(0xffecd6, 0.8);
-      key.position.set(-25, 40, -45);
-      this.scene.add(key);
-      const rim = new THREE.DirectionalLight(0xc0dff3, 0.6);
-      rim.position.set(30, -10, 35);
-      this.scene.add(rim);
+      this.environment = createStudioEnvironment(this.renderer);
+      this.scene.environment = this.environment.texture;
+      this.scene.environmentIntensity = 0.9;
+      addStudioLights(this.scene);
       this.scene.add(this.root, this.selectionBox);
       this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
       this.selectionBox.visible = false;
@@ -322,7 +319,7 @@ export class MovementViewer {
       document.addEventListener('visibilitychange', this.onVisibility);
       this.motionPreference.addEventListener('change', this.onMotionPreference);
       void this.load();
-      this.frame = requestAnimationFrame(this.tick);
+      this.scheduleFrame();
     } catch (error) {
       // Initialization can fail after attaching the canvas or creating controls.
       // Release whichever resources exist before the UI offers a fresh retry.
@@ -509,24 +506,44 @@ export class MovementViewer {
     }
     return error;
   }
-  invalidate = () => {
+  scheduleFrame() {
+    if (
+      this.dead ||
+      this.frame ||
+      document.hidden ||
+      this.contextLost ||
+      this.loadStage === 'error'
+    )
+      return;
+    this.frame = requestAnimationFrame(this.tick);
+  }
+  requestRender() {
     this.needsRender = true;
-  };
+    this.scheduleFrame();
+  }
+  invalidate = () => this.requestRender();
   manual = () => {
     this.cameraGeneration = (this.cameraGeneration ?? 0) + 1;
     this.selectionGeneration++;
     this.restoringCamera = null;
     this.cameraUserOwned = true;
     this.travel = null;
-    this.needsRender = true;
+    this.requestRender();
   };
   onVisibility = () => {
     this.lastFrame = 0;
+    if (document.hidden && this.frame) {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+    }
     this.invalidate();
   };
   onContextLost = (e: Event) => {
     e.preventDefault();
     this.contextLost = true;
+    if (this.frame) cancelAnimationFrame(this.frame);
+    this.frame = 0;
+    this.lastFrame = 0;
     this.contextLosses++;
     this.ready = false;
     this.loadStage = 'recovering';
@@ -535,12 +552,9 @@ export class MovementViewer {
     this.emit();
   };
   onContextRestored = () => {
-    let pmrem: THREE.PMREMGenerator | undefined;
-    let room: StudioEnvironment | undefined;
+    if (this.dead) return;
     try {
-      pmrem = new THREE.PMREMGenerator(this.renderer);
-      room = new StudioEnvironment();
-      const environment = pmrem.fromScene(room, 0.015);
+      const environment = createStudioEnvironment(this.renderer);
       this.environment.dispose();
       this.environment = environment;
       this.scene.environment = environment.texture;
@@ -550,15 +564,12 @@ export class MovementViewer {
         'The graphics environment could not recover. Reload the 3D view.';
       this.emit();
       return;
-    } finally {
-      room?.dispose();
-      pmrem?.dispose();
     }
     this.contextLost = false;
     this.error = '';
     this.awaitingFirstFrame = this.contentPrepared;
     if (!this.contentPrepared) this.loadStage = 'preparing';
-    this.needsRender = true;
+    this.requestRender();
     this.emit();
   };
   async load() {
@@ -779,7 +790,7 @@ export class MovementViewer {
           material.dispose();
       }
     });
-    this.needsRender = true;
+    this.requestRender();
   }
   async loadCatalog() {
     if (this.catalogLoaded) return;
@@ -1445,7 +1456,7 @@ export class MovementViewer {
       this.controls.update();
       this.travel = null;
     } else this.travel = { position, target, up, duration: this.poseDuration };
-    this.needsRender = true;
+    this.requestRender();
   }
   frameGroup(g: Mechanism) {
     const bounds = this.targetBounds(
@@ -1969,7 +1980,7 @@ export class MovementViewer {
         p.motion = undefined;
       }
     }
-    this.needsRender = true;
+    this.requestRender();
   }
   applyPose(dt: number) {
     let moving = false;
@@ -2317,8 +2328,8 @@ export class MovementViewer {
     }
   }
   tick = (now: number) => {
+    this.frame = 0;
     if (this.dead) return;
-    this.frame = requestAnimationFrame(this.tick);
     if (document.hidden || this.contextLost || this.loadStage === 'error') {
       this.lastFrame = 0;
       return;
@@ -2326,7 +2337,7 @@ export class MovementViewer {
     const interval = this.lastFrame ? now - this.lastFrame : 0;
     const dt = Math.min(interval / 1000, 0.1);
     this.lastFrame = now;
-    if (this.benchmark) benchmarkFrame(this, this.benchmark, now, interval);
+    this.benchmark?.onFrame(this, now, interval);
     let moving = false;
     const poseWasMoving = this.presentationMoving,
       cameraWasMoving = !!this.travel;
@@ -2409,6 +2420,9 @@ export class MovementViewer {
         this.travel = null;
         this.presentationMoving = false;
         this.needsRender = false;
+        if (this.frame) cancelAnimationFrame(this.frame);
+        this.frame = 0;
+        this.lastFrame = 0;
         this.emit();
         return;
       }
@@ -2438,11 +2452,20 @@ export class MovementViewer {
           : 'whole';
       this.emit();
     }
-    if (this.snapshotPending && now - this.lastNotify > 400) {
+    const continuing =
+      moving ||
+      controlsChanged ||
+      !!this.travel ||
+      this.presentationMoving ||
+      !!this.inspectionFrame ||
+      !!(this.benchmark && !this.benchmark.done);
+    if (this.snapshotPending && (!continuing || now - this.lastNotify > 400)) {
       this.lastNotify = now;
       this.adjustQuality(now);
       this.emit();
     }
+    if (continuing || this.needsRender) this.scheduleFrame();
+    if (!this.frame) this.lastFrame = 0;
   };
   partVisible(p: RenderPart) {
     const id = p.source.id,
@@ -2492,7 +2515,7 @@ export class MovementViewer {
       const visible = this.partVisible(p);
       if (p.mesh.visible !== visible) {
         p.mesh.visible = visible;
-        this.needsRender = true;
+        this.requestRender();
       }
     }
   }
@@ -2518,17 +2541,7 @@ export class MovementViewer {
     }
   }
   disposeObject(o: THREE.Object3D) {
-    const geometries = new Set<THREE.BufferGeometry>();
-    const materials = new Set<THREE.Material>();
-    o.traverse((p) => {
-      if (p instanceof THREE.Mesh) {
-        geometries.add(p.geometry);
-        for (const m of Array.isArray(p.material) ? p.material : [p.material])
-          materials.add(m);
-      }
-    });
-    for (const geometry of geometries) geometry.dispose();
-    for (const material of materials) material.dispose();
+    disposeObjectResources(o);
   }
   dispose() {
     if (this.dead) return;
