@@ -821,9 +821,10 @@ ordinary production path. The branch policy is documented in
 
 Added GitHub Actions CI for pull requests and pushes involving `develop` or
 `main`: automated tests, Workshop inventory validation, TypeScript, lint and the
-production build. A separate Prepare release workflow runs after pushes to
-`develop`, maintains one release PR to `main`, and leaves the actual merge
-manual behind staging, performance and publication checks. Vercel's existing
-Git integration remains the sole deployer: feature/develop pushes create Preview
-deployments, while a reviewed merge to `main` creates production. No Vercel
-token or parallel deployment path was introduced.
+production build. A separate, manually dispatched Prepare production release
+workflow can open one draft release PR to `main` only after an explicit
+confirmation; pushes to `develop` never initiate production promotion. The
+actual merge remains manual behind staging, performance and publication checks.
+Vercel's existing Git integration remains the sole deployer: feature/develop
+pushes create Preview deployments, while a reviewed merge to `main` creates
+production. No Vercel token or parallel deployment path was introduced.
