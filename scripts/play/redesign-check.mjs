@@ -36,6 +36,7 @@ try {
    await page.locator('.play-selection').getByRole('button',{name:selected.workspaceId?'Open workbench':'Return to watch',exact:true}).click();await settle();
   }
   await page.getByRole('button',{name:'Show destination',exact:true}).click();await settle();
+  await page.locator('.play-card-drag').scrollIntoViewIfNeeded();
   s=await inspect();
   check(`${i+1} ${selected.label}: actual seat exposed`,s.seatVisible,{id:selected.id,workspace:s.workspace,occluders:s.occluders});
   check(`${i+1}: source fitted visibility exact`,same(s.visible,s.fitted));

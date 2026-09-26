@@ -212,8 +212,14 @@
   scrollbar-width: thin;
   padding: 2px;
 }
-.play-card {
+.play-card-item {
   flex: 0 0 max(120px, 7.5em);
+  position: relative;
+  min-width: 0;
+}
+.play-card {
+  width: 100%;
+  height: 100%;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -309,17 +315,46 @@
   min-height: 44px;
   white-space: normal;
 }
-.play-selection .play-drag-control {
+.play-card-drag {
+  position: absolute;
+  bottom: 3px;
+  left: 4px;
+  right: 4px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   touch-action: none;
   user-select: none;
   cursor: grab;
+  font: inherit;
+  font-size: 0.6875em;
+  border-radius: 4px;
   border: 1px solid #e8c88e80;
-  background: #e8c88e18;
+  background: #302b22;
   color: #f6d8a2;
-  min-width: 105px;
 }
-.play-selection .play-drag-control:active {
+.play-card-drag svg {
+  width: 14px;
+  height: 14px;
+}
+.play-card-drag:active {
   cursor: grabbing;
+}
+.play-card-drag:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.play-card-item[data-selected='true'] .play-card {
+  padding-bottom: 48px;
+}
+.play-card-item[data-selected='true'] .play-thumbnail {
+  height: 30px;
+  flex-basis: 30px;
+}
+.play-card-item[data-selected='true'] .play-card-state {
+  display: none;
 }
 .play-actions {
   display: flex;
@@ -334,27 +369,6 @@
   min-height: 44px;
   font-size: 0.75em;
   padding: 8px 10px;
-}
-.play-stage {
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  touch-action: none;
-  font-size: 1em;
-  user-select: none;
-  background: transparent !important;
-  border: 1px dashed #eeece44d !important;
-  border-radius: 50% !important;
-  z-index: 1;
-}
-.play-stage-caption {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: -8px;
-  width: 80px;
-  font-size: 0.625em;
-  text-align: center;
-  pointer-events: none;
 }
 .play-target {
   position: absolute;
@@ -469,7 +483,7 @@
   .play-progress > span:last-child {
     display: none;
   }
-  .play-card {
+  .play-card-item {
     flex-basis: max(106px, 6.625em);
   }
   .play-workspace {
@@ -491,7 +505,7 @@
     right: 51%;
     flex-wrap: wrap;
   }
-  .play-card {
+  .play-card-item {
     flex-basis: max(94px, 5.875em);
   }
 }

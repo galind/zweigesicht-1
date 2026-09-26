@@ -55,6 +55,11 @@ validated action history and storage feedback. `state.ts` owns the dependency
 checks, replay validation, physical accounting and Undo. Selection never determines
 progress. `PlayViewer.ts` owns the source meshes, independent thumbnail render
 targets, source-seat visibility checks, pointer capture and camera lifetime.
+Dragged meshes retain source scale and are hidden between interactions. Gallery
+cards supply the drag origin and failed-drop return point. Pickup is independent
+of workspace membership; hints and placement validation retain their dependency
+rules, and fitting/guidance additionally require the correct active workspace.
+Fresh games begin on the negative-Z movement side.
 
 The versioned `play-4` manifest retains all source endpoints and the 265-leaf
 finished watch. It starts with 16 fitted leaves. Easy has 89 direct placements;
@@ -95,9 +100,9 @@ An idle check must count scheduled callbacks as well as rendered frames.
 interaction primitives. `useTextScalePreview` applies the explicit `?text=200`
 mode at the document root, including portaled panels, and restores previous
 styling on unmount. Play retains native confirmations with accessible names. Gallery cards remain
-in stable slots after placement and unavailable cards stay inspectable. A separate
-picked-up-piece handle distinguishes touch dragging from gallery scrolling.
-Enlarged text grows within the bounded, scrollable inventory; measured workspace
-and stage captions stay clear of the assembly. The homepage phone dock continues
+in stable slots after placement and unavailable cards stay inspectable. A selected
+card contains a touch drag handle; swipes on the rest of the gallery browse.
+There is no detached drag tray. Enlarged text grows within the bounded,
+scrollable inventory; measured workspace controls stay clear of the assembly. The homepage phone dock continues
 to wrap according to actual label width. Both routes share only the established
 camera helpers, graphics resources, native buttons and Sheet components.

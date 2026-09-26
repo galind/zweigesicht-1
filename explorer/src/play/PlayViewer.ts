@@ -105,10 +105,9 @@ export class PlayViewer {
   target = new THREE.Vector3();
   frameFocus = new THREE.Vector3();
   stepBounds = new THREE.Box3();
-  stageScale = 1;
   hasFramed = false;
   frameRegion = { top: 80, bottom: 500, left: 0, width: 1000 };
-  side: 'front' | 'back' = 'front';
+  side: 'front' | 'back' = 'back';
   drag?: {
     pointer: number;
     grab: Point;
@@ -129,7 +128,7 @@ export class PlayViewer {
   generation = 0;
   constructor(
     public host: HTMLElement,
-    public stage: HTMLElement,
+    public source: () => HTMLElement | null,
     public destination: HTMLElement,
     public manifest: PlayManifest,
     public notify: (status: PlayViewStatus) => void,
@@ -158,12 +157,6 @@ export class PlayViewer {
       addStudioLights(this.scene);
       this.scene.add(this.staged, this.ghost);
       this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
-      stage.addEventListener('pointerdown', this.pointerDown);
-      stage.addEventListener('pointermove', this.pointerMove);
-      stage.addEventListener('pointerup', this.pointerUp);
-      stage.addEventListener('pointercancel', this.cancel);
-      stage.addEventListener('lostpointercapture', this.cancel);
-      stage.addEventListener('keydown', this.stageKeyDown);
       window.addEventListener('keydown', this.escapeDrag);
       this.renderer.domElement.addEventListener(
         'webglcontextlost',
@@ -404,7 +397,7 @@ export class PlayViewer {
           );
       }
     }
-    this.staged.visible = !!step && active;
+    this.staged.visible = false;
     this.presentContext();
     if (!this.hasFramed) {
       this.layout();
@@ -419,7 +412,11 @@ export class PlayViewer {
     this.hints = hints;
     this.available = available;
     this.assistance = assistance;
-    this.ghost.visible = !!this.current && available && (hints || assistance);
+    this.ghost.visible =
+      !!this.current &&
+      this.current.workspaceId === this.workspace &&
+      available &&
+      (hints || assistance);
     this.destination.dataset.assisted = String(hints || assistance);
     this.updateSeat();
     this.invalidate();
@@ -481,7 +478,7 @@ export class PlayViewer {
       this.mainView = undefined;
     } else {
       this.side =
-        this.manifest.packets.find((p) => p.id === workspace)?.side ?? 'front';
+        this.manifest.packets.find((p) => p.id === workspace)?.side ?? 'back';
       this.reframe(false, true);
     }
     this.invalidate();
@@ -566,7 +563,10 @@ export class PlayViewer {
     for (const [id, p] of this.pieces) p.mesh.visible = this.fitted.has(id);
     this.cutaway = false;
     this.ghost.visible =
-      !!this.current && this.available && (this.hints || this.assistance);
+      !!this.current &&
+      this.current.workspaceId === this.workspace &&
+      this.available &&
+      (this.hints || this.assistance);
   }
   updateProjection() {
     const w = this.host.clientWidth,
@@ -605,7 +605,12 @@ export class PlayViewer {
     return this.occludersAt(point).length === 0;
   }
   updateSeat() {
-    if (!this.current || !this.ready) {
+    if (
+      !this.current ||
+      !this.ready ||
+      this.current.workspaceId !== this.workspace
+    ) {
+      this.destination.style.visibility = 'hidden';
       this.seatVisible = false;
       this.seatInView = false;
       return;
@@ -657,12 +662,12 @@ export class PlayViewer {
   };
   stagePoint(): Point {
     const a = this.host.getBoundingClientRect(),
-      b = this.stage.getBoundingClientRect();
-    return {
-      x: b.left + b.width / 2 - a.left,
-      y: b.top + b.height / 2 - a.top,
-    };
+      b = this.source()?.getBoundingClientRect();
+    return b
+      ? { x: b.left + b.width / 2 - a.left, y: b.top + b.height / 2 - a.top }
+      : { x: a.width / 2, y: a.height };
   }
+
   project(point: THREE.Vector3): Point {
     const p = point.clone().project(this.camera);
     return {
@@ -687,30 +692,16 @@ export class PlayViewer {
       ray.ray.intersectPlane(plane, new THREE.Vector3()) ?? this.target.clone()
     );
   }
-  positionStage(point = this.stagePoint(), scale?: number) {
+  positionStage(point = this.stagePoint(), _scale?: number) {
     if (!this.current || !this.ready) return;
-    if (scale === undefined) {
-      const distance = this.camera.position.distanceTo(this.target);
-      const mmPerPixel =
-        (2 * distance * Math.tan(THREE.MathUtils.degToRad(16.5))) /
-        this.host.clientHeight;
-      const size = this.stepBounds.getSize(new THREE.Vector3());
-      this.stageScale = THREE.MathUtils.clamp(
-        (64 * mmPerPixel) / Math.max(size.x, size.y, size.z, 0.05),
-        0.06,
-        120,
-      );
-    }
     this.staged.position.copy(this.planePoint(point));
-    this.staged.scale.setScalar(scale ?? this.stageScale);
+    // Source geometry is already in world units. Pickup must not enlarge it.
+    this.staged.scale.setScalar(1);
   }
   point(event: PointerEvent): Point {
     const r = this.host.getBoundingClientRect();
     return { x: event.clientX - r.left, y: event.clientY - r.top };
   }
-  pointerDown = (event: PointerEvent) => {
-    this.beginDrag(event, this.stage, this.stagePoint());
-  };
   /** Gallery and touch controls share the same placement/cancellation path. */
   beginDrag(
     event: PointerEvent,
@@ -740,13 +731,14 @@ export class PlayViewer {
     this.stopOrbitMotion();
     this.controls.enabled = false;
     this.captureElement = origin;
-    if (origin !== this.stage) {
+    {
       origin.addEventListener('pointermove', this.pointerMove);
       origin.addEventListener('pointerup', this.pointerUp);
       origin.addEventListener('pointercancel', this.cancel);
       origin.addEventListener('lostpointercapture', this.cancel);
     }
     this.captureElement.setPointerCapture(event.pointerId);
+    this.staged.visible = true;
     this.positionStage(center);
     this.invalidate();
     this.selected();
@@ -764,7 +756,7 @@ export class PlayViewer {
       this.available &&
       this.isNear(this.drag.position);
     this.destination.dataset.near = String(near);
-    this.positionStage(this.drag.position, this.stageScale);
+    this.positionStage(this.drag.position);
     this.invalidate();
   };
   isNear(point: Point) {
@@ -788,18 +780,27 @@ export class PlayViewer {
     const drag = this.drag,
       p = this.point(event);
     const center = dragCenter(p, drag.grab);
-    const valid = drag.moved && this.isNear(center) && this.available;
+    const valid =
+      drag.moved &&
+      this.current?.workspaceId === this.workspace &&
+      this.isNear(center) &&
+      this.available;
     this.releaseCapture();
     if (valid) this.place();
     else if (!drag.moved) {
+      this.staged.visible = false;
       this.positionStage();
       this.invalidate();
     } else {
       if (drag.moved)
         this.feedback(
-          this.available
-            ? 'No placement there. Try another view or position.'
-            : 'That piece cannot be fitted yet.',
+          this.current?.workspaceId !== this.workspace
+            ? this.current?.workspaceId
+              ? 'This part belongs on its workbench. Choose Open workbench.'
+              : 'Return to the watch to fit this piece.'
+            : this.available
+              ? 'No placement there. Try another view or position.'
+              : 'That piece cannot be fitted yet.',
         );
       this.animateToStage(drag.position);
     }
@@ -807,7 +808,7 @@ export class PlayViewer {
   releaseCapture() {
     const pointer = this.drag?.pointer;
     this.drag = undefined;
-    if (this.captureElement && this.captureElement !== this.stage) {
+    if (this.captureElement) {
       this.captureElement.removeEventListener('pointermove', this.pointerMove);
       this.captureElement.removeEventListener('pointerup', this.pointerUp);
       this.captureElement.removeEventListener('pointercancel', this.cancel);
@@ -828,17 +829,12 @@ export class PlayViewer {
   cancel = () => {
     if (!this.drag) return;
     this.releaseCapture();
+    this.staged.visible = false;
     this.positionStage();
     this.invalidate();
   };
   animateToStage(from: Point) {
-    this.animate(
-      from,
-      this.stagePoint(),
-      this.staged.scale.x,
-      this.stageScale,
-      () => {},
-    );
+    this.animate(from, this.stagePoint(), this.staged.scale.x, 1, () => {});
   }
   animate(
     from: Point,
@@ -847,6 +843,7 @@ export class PlayViewer {
     toScale: number,
     complete: () => void,
   ) {
+    this.staged.visible = true;
     this.busy = true;
     this.controls.enabled = false;
     this.animation = {
@@ -863,6 +860,14 @@ export class PlayViewer {
   place = () => {
     if (!this.ready || !this.active || !this.current || this.busy || this.drag)
       return;
+    if (this.current.workspaceId !== this.workspace) {
+      this.feedback(
+        this.current.workspaceId
+          ? 'Open the workbench to fit this part.'
+          : 'Return to the watch to fit this piece.',
+      );
+      return;
+    }
     this.updateSeat();
     if (!this.available || !this.seatVisible || !this.seatInView) {
       this.feedback(
@@ -874,6 +879,7 @@ export class PlayViewer {
     }
     this.stopOrbitMotion();
     const id = this.current.id;
+    if (!this.staged.visible) this.positionStage();
     this.animate(
       this.project(this.staged.position),
       this.project(this.target),
@@ -888,6 +894,7 @@ export class PlayViewer {
   };
   guide = () => {
     if (this.drag || this.busy || !this.current) return;
+    if (this.current.workspaceId !== this.workspace) return;
     if (!this.available) {
       this.feedback('That piece cannot be fitted yet.');
       return;
@@ -1012,12 +1019,6 @@ export class PlayViewer {
       event.preventDefault();
     }
   };
-  stageKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.cancel();
-      event.preventDefault();
-    }
-  };
   keyDown = (event: KeyboardEvent) => {
     if (this.drag || this.busy) {
       if (event.key === 'Escape') this.cancel();
@@ -1079,12 +1080,6 @@ export class PlayViewer {
         width - left - Math.max(12, landscape ? 12 : safeRight + 8),
       ),
     };
-    const size = this.stage.offsetHeight || 64;
-    const caption =
-      this.stage.querySelector('.play-stage-caption')?.getBoundingClientRect()
-        .height ?? 16;
-    this.stage.style.top = `${Math.max(top, this.frameRegion.bottom - size - caption - 8)}px`;
-    this.stage.style.left = `${Math.max(20, safeLeft + 16)}px`;
     if (this.hasFramed) this.updateProjection();
     this.updateSeat();
     this.positionStage();
@@ -1159,6 +1154,7 @@ export class PlayViewer {
       );
       if (t === 1) {
         this.animation = undefined;
+        this.staged.visible = false;
         this.busy = false;
         this.controls.enabled = this.ready;
         a.complete();
@@ -1352,6 +1348,8 @@ export class PlayViewer {
       stage: this.stagePoint(),
       stageRendered: this.project(this.staged.position),
       stageCount: this.staged.children.length,
+      stageVisible: this.staged.visible,
+      stageScale: this.staged.scale.toArray(),
       busy: this.busy,
       dragging: !!this.drag,
       controlsEnabled: this.controls.enabled,
@@ -1374,12 +1372,6 @@ export class PlayViewer {
     this.environment?.dispose();
     this.ghostMaterial.dispose();
     this.surfaceOcclusion?.dispose();
-    this.stage.removeEventListener('pointerdown', this.pointerDown);
-    this.stage.removeEventListener('pointermove', this.pointerMove);
-    this.stage.removeEventListener('pointerup', this.pointerUp);
-    this.stage.removeEventListener('pointercancel', this.cancel);
-    this.stage.removeEventListener('lostpointercapture', this.cancel);
-    this.stage.removeEventListener('keydown', this.stageKeyDown);
     window.removeEventListener('keydown', this.escapeDrag);
     this.renderer.domElement.removeEventListener(
       'webglcontextlost',

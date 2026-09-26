@@ -505,3 +505,37 @@ Local preview remains http://127.0.0.1:4185/play; reload to use the new controls
 Next action: user review of the more discoverable gesture. Physical-device/Safari
 review remains outstanding. No push, PR or deployment; the two original untracked
 prompt files remain excluded.
+
+## Gallery-only dragging at source scale — 26 September 2026
+
+Implemented the next user review: carried parts now retain actual source scale
+relative to the watch throughout pickup, movement and settling. New games start
+on the movement side (negative Z). Removed the left-side loose piece and its DOM
+control completely. Mouse dragging starts on gallery cards; a selected card
+contains the gold touch Drag handle. Between interactions the carried mesh is
+hidden; failed drops return to the gallery and cancellation leaves no loose copy.
+
+Hard-mode pickup previously required the selected leaf's workspace to match the
+current view. That prevented even trying a barrel cover from the watch view.
+With hints off, every unfitted leaf can now be picked up without switching the
+camera or workspace. Placement and destination guidance still require the right
+workspace and supports. Wrong-workspace drops explain Open workbench/Return to
+watch. With hints on, missing prerequisites still disable dragging and remain
+inspectable. Both barrel covers require their arbor and mainspring; no dependency,
+source geometry, physical count or saved-session format changed.
+
+Verification: 61 unit tests, typecheck, lint and production build pass. The
+production drag suite passes 331 checks, including real mouse pickup of all 249
+Hard leaves, source scale of each carried mesh, startup side, no detached tray,
+hints off/on, mouse/touch and cancellation at 1440/390/320 px. The barrel cover
+can be carried from the gallery before workspace entry, is rejected in the wrong
+view, explains missing supports with hints on, and fits after its internals on
+its workbench. The existing focused suite passes all 111 camera, interaction,
+responsive, enlarged-text, resume and recovery checks. Screenshots were reviewed,
+including the carried cover at actual scale. Evidence is ignored under
+`artifacts/browser/play-gallery-only/production/`.
+
+The updated production preview is http://127.0.0.1:4185/play. Reload for the new
+controls; saves remain compatible. Next action: user review. Physical-device
+and Safari review remain outstanding. Local commit only; no push, PR or deployment.
+The two original untracked prompt files remain excluded.

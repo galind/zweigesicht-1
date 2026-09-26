@@ -13,10 +13,13 @@ fitted, so scroll and keyboard focus remain predictable. Repeated labels receive
 occurrence numbers within their group. Thumbnails render the actual source CAD.
 
 With a mouse, drag a card directly into the assembly. On touch, swipe the gallery
-to browse, tap a card, then hold the gold **Drag part** button beside its details
-and move into the assembly. The separate touch control keeps browsing unambiguous.
-The original loose-piece handle remains usable. In Hard, parts belonging to a
-workbench first show **Open workbench**; entering it is always explicit.
+to browse, tap a card, then hold the gold **Drag** handle within that card and
+move into the assembly. There is no detached loose-piece tray. The carried
+geometry appears only during dragging/settling, at source scale (1:1 with the
+watch geometry); thumbnails remain enlarged previews. New games start on the
+movement side. In Hard, all unfitted parts can be picked up with hints off, even
+before entering their workbench. Fitting still requires the correct workspace
+and supports; **Open workbench** remains explicit, with no camera jump on pickup.
 Placement clears the held piece without choosing a successor. A persistent Hints
 toggle starts off and is saved with the session. Continue restores that choice;
 Restart and a new difficulty start with hints off.
@@ -186,11 +189,11 @@ recorded with the final progress entry.
 
 ## Drag discoverability follow-up
 
-User review found that selecting a gallery card did not make the separate
-loose-piece handle obvious. Mouse cards now start dragging directly, and a gold
-**Drag part** control beside the selected part starts a mouse/touch drag. Touch
-swipes on cards continue browsing. Hard selection explains the explicit
-workbench entry required before dragging. Show destination remains an explicit
+The first user review found that selecting a gallery card did not make the separate
+loose-piece handle obvious. That follow-up added direct mouse card dragging and a gold
+**Drag part** control beside the selected part for mouse/touch dragging. Touch
+swipes continued browsing. Hard selection explained the explicit
+workbench entry then required before dragging. Show destination remained an explicit
 keyboard/tap alternative in the action row.
 
 All origins use the same capture, cancellation and placement validation. The
@@ -198,6 +201,30 @@ pointer-generated click is suppressed after a card drag so it cannot cancel the
 settling animation. Temporary listeners are removed on release, cancellation,
 recovery and disposal. New regression coverage is in `scripts/play/drag-check.mjs`
 and the controller lifecycle suite; evidence is under `artifacts/browser/play-drag/`.
+
+## Gallery-only dragging and source scale
+
+The next review supersedes the separate handle described above. Dragging now
+starts entirely from the gallery; a selected card contains the touch handle.
+Removed the old left-hand DOM control and idle 3D preview, including its 64 px
+auto-enlargement. Failed drops return to the gallery and cancellation hides the
+carried mesh. Pickup, motion and settling all retain source scale. The initial
+view and fresh-game reset use the movement side (source negative Z).
+
+Hard previously excluded a selected leaf from the drag controller when its
+workspace did not match the view. Pickup now works independently of that match.
+Hints-off players can try every unfitted leaf, including both barrel covers;
+wrong-workspace drops explain how to open the workbench. Hints on still disables
+unsupported placements and shows their dependencies. Barrel covers require
+their arbor and mainspring; a cover can be fitted normally after those internals
+on its workbench. Ghosts, explicit guidance, tap placement and drag acceptance
+all require the correct workspace, preventing a loose component from being
+silently counted in the wrong assembly. Source geometry and graph rules are unchanged.
+
+Regression evidence is under `artifacts/browser/play-gallery-only/production/`.
+The drag suite now checks every Hard leaf's pickup, true scale, gallery origin,
+movement-side startup, cover rejection before supports and cover assembly after
+supports at desktop and phone sizes.
 
 ## Remaining limits
 

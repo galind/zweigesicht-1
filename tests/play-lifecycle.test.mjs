@@ -166,7 +166,7 @@ test('idle rendering schedules one frame for coalesced invalidations and then sl
   assert.equal(scheduled, 1);
 });
 
-test('chrome layout changes preserve camera ownership and keep gallery staging outside the dock', () => {
+test('chrome layout changes preserve camera ownership without a detached drag tray', () => {
   for (const [width,height] of [[1440,900],[390,844],[320,568],[568,320]]) {
     const v=fixture(); let updates=0;
     const rect={left:0,top:0,width,height,right:width,bottom:height};
@@ -180,7 +180,6 @@ test('chrome layout changes preserve camera ownership and keep gallery staging o
     layout();dock.top-=10;layout();heading.bottom+=5;layout();
     assert.ok(v.camera.position.equals(before));assert.ok(v.controls.target.equals(target));
     assert.equal(updates,3);assert.ok(v.frameRegion.bottom>v.frameRegion.top);
-    assert.ok(parseFloat(v.stage.style.top)+64<=v.frameRegion.bottom);
     v.controls.dispose();
   }
 });
@@ -332,15 +331,15 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
   const {v, callbacks, settle} = renderedFixture();
   Object.assign(v, {
     active: true, current: {id: 'offered-part'}, point: () => ({x: 40, y: 50}), stagePoint: () => ({x: 40, y: 50}),
-    stage: {setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
+    stage: {addEventListener() {}, removeEventListener() {}, setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
     destination: {dataset: {}, style: {}}, selected() {}, project() {return {x: 100, y: 100};},
   });
-  for (const name of ['pointerDown', 'beginDrag', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
+  for (const name of ['beginDrag', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
   v.controls._sphericalDelta.theta = .6;
   v.controls.update();
   assert.ok(v.controls._sphericalDelta.theta !== 0, 'A real damped orbit has inertia');
   const before = v.camera.position.clone(), side = v.side;
-  v.pointerDown({button: 0, pointerId: 7, preventDefault() {}, stopPropagation() {}});
+  v.beginDrag({button: 0, pointerId: 7, preventDefault() {}, stopPropagation() {}}, v.stage);
   assert.equal(v.controls.enabled, false); assert.ok(v.drag);
   assert.equal(v.controls._sphericalDelta.theta, 0); assert.equal(v.controls._sphericalDelta.phi, 0);
   v.flip(); assert.equal(v.cameraMotion, undefined); assert.equal(v.side, side);
@@ -351,6 +350,19 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
   v.cancel(); settle(performance.now());
   assert.equal(v.drag, undefined); assert.equal(v.controls.enabled, true);
   assert.ok(v.camera.position.distanceTo(before) < 1e-10, 'Old inertia does not resume after cancellation');
+  v.controls.dispose();
+});
+
+test('drag positioning preserves source scale independently of viewport or part size', () => {
+  const v=fixture();
+  Object.assign(v,{ready:true,current:{id:'tiny-jewel'},stagePoint:()=>({x:10,y:20}),planePoint:p=>new THREE.Vector3(p.x,p.y,3)});
+  v.positionStage=actual('positionStage',v);
+  for(const oldScale of [.01,1,8,120]) {
+    v.staged.scale.setScalar(oldScale);
+    v.positionStage({x:30,y:50},oldScale);
+    assert.deepEqual(v.staged.scale.toArray(),[1,1,1]);
+    assert.deepEqual(v.staged.position.toArray(),[30,50,3]);
+  }
   v.controls.dispose();
 });
 
@@ -445,7 +457,7 @@ test('the production settle commits once, blocks duplicate activation and stops 
       positionStage(point, scale) {if (scale !== undefined) scales.push(scale);},
       placed(stepId) {assert.equal(stepId, 'offered-part'); commits++; this.current = null;},
     });
-    v.staged.scale.setScalar(8);
+    v.staged.scale.setScalar(1);
     for (const name of ['invalidate', 'render', 'animate', 'place']) v[name] = actual(name, v, globals);
     v.place(); v.place(); v.place();
     assert.equal(v.busy, true); assert.equal(v.controls.enabled, false); assert.equal(commits, 0);
@@ -455,7 +467,7 @@ test('the production settle commits once, blocks duplicate activation and stops 
     if (!reduced) callbacks.shift()(start + 240);
     assert.equal(commits, 1); assert.equal(v.busy, false); assert.equal(v.controls.enabled, true);
     assert.equal(v.animation, undefined); assert.equal(callbacks.length, 0); assert.equal(v.frame, 0);
-    assert.equal(scales.at(-1), 1, 'The authored target ends at true physical scale');
+    assert.ok(scales.length && scales.every(s=>s===1), 'Pickup and settling both retain true physical scale');
   }
 });
 
@@ -495,7 +507,6 @@ test('controller disposal releases geometry, cloned materials, listeners, observ
   assert.equal(v.dead, true); assert.equal(v.pieces.size, 0); assert.equal(v.loadedObjects.length, 0);
   assert.deepEqual(original.disposal, {geometry: 1, material: 1}); assert.equal(displayDisposed, 1);
   for (const key of ['capture', 'observer', 'controls', 'environment', 'occlusion', 'renderer', 'canvas', 'frame', 'media:change',
-    'stage:pointerdown', 'stage:pointermove', 'stage:pointerup', 'stage:pointercancel', 'stage:lostpointercapture', 'stage:keydown',
     'canvas:webglcontextlost', 'canvas:webglcontextrestored', 'canvas:keydown']) assert.equal(releases.filter((value) => value === key).length, 1, key);
 });
 

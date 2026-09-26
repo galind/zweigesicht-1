@@ -55,7 +55,7 @@ const blank: PlayViewStatus = {
   busy: false,
   error: '',
   cutaway: false,
-  side: 'front',
+  side: 'back',
 };
 
 function Thumbnail({
@@ -99,8 +99,7 @@ export default function Play() {
   useTextScalePreview();
   const app = useRef<HTMLElement>(null),
     host = useRef<HTMLDivElement>(null);
-  const stage = useRef<HTMLButtonElement>(null),
-    destination = useRef<HTMLButtonElement>(null);
+  const destination = useRef<HTMLButtonElement>(null);
   const savedCamera = useRef<ReturnType<PlayViewer['captureCamera']> | null>(
     null,
   );
@@ -145,11 +144,7 @@ export default function Play() {
           )
         : null;
     const held =
-      selected &&
-      !current!.actionIds.includes(selected.id) &&
-      selected.workspaceId === workspaceRef.current
-        ? selected
-        : null;
+      selected && !current!.actionIds.includes(selected.id) ? selected : null;
     controller.setAssistance(
       current?.hints ?? false,
       !!current && !!held && canPlace(manifest, current, held.id),
@@ -225,14 +220,21 @@ export default function Play() {
     };
   }, [sync]);
   useEffect(() => {
-    if (!host.current || !stage.current || !destination.current) return;
+    if (!host.current || !destination.current) return;
     let controller: PlayViewer;
     try {
       if (new URLSearchParams(location.search).get('no3d') === '1')
         throw new Error('3D disabled');
       controller = new PlayViewer(
         host.current,
-        stage.current,
+        () =>
+          app.current?.querySelector<HTMLElement>(
+            `[data-drag-id="${selectionRef.current}"]`,
+          ) ??
+          app.current?.querySelector<HTMLElement>(
+            `[data-action-id="${selectionRef.current}"]`,
+          ) ??
+          null,
         destination.current,
         manifest,
         setStatus,
@@ -250,7 +252,7 @@ export default function Play() {
           );
           // Keep focus on the player's chosen card; never select the next correct item.
           if (
-            document.activeElement === stage.current ||
+            document.activeElement?.hasAttribute('data-drag-id') ||
             document.activeElement === destination.current
           )
             app.current
@@ -336,8 +338,8 @@ export default function Play() {
   const fitted = selected ? done.has(selected.id) : false;
   const available =
     !!session && !!selected && canPlace(manifest, session, selected.id);
-  const held =
-    selected && !fitted && selected.workspaceId === workspace ? selected : null;
+  const held = selected && !fitted ? selected : null;
+  const inWorkspace = held?.workspaceId === workspace;
   const hints = session?.hints ?? false;
   const missing =
     selected && session && hints
@@ -384,6 +386,7 @@ export default function Play() {
     apply(createSession(manifest, level));
     requestAnimationFrame(() => {
       viewer.current?.layout();
+      if (viewer.current) viewer.current.side = 'back';
       viewer.current?.resetView();
       inventory.current?.querySelector('button')?.focus();
     });
@@ -460,31 +463,19 @@ export default function Play() {
             </>
           ) : (
             <span>
-              Watch ·{' '}
-              {status.side === 'front' ? 'Three-hands face' : 'Skeleton face'}
+              Watch · {status.side === 'front' ? 'Dial side' : 'Movement side'}
             </span>
           )}
         </div>
       )}
-      <Control
-        ref={stage}
-        className="play-stage"
-        aria-label={held ? `Drag ${held.label}` : 'Picked-up piece'}
-        disabled={disabled || !held || (hints && !available)}
-        hidden={!held}
-      >
-        <span className="play-stage-caption" aria-hidden="true">
-          Drag piece
-        </span>
-      </Control>
       <Control
         ref={destination}
         className="play-target"
         aria-label={
           held ? `Place ${held.label} at its destination` : 'Destination'
         }
-        disabled={disabled || !held || !available}
-        hidden={!held || !(hints || assistance)}
+        disabled={disabled || !held || !inWorkspace || !available}
+        hidden={!held || !inWorkspace || !(hints || assistance)}
         onClick={() => viewer.current?.place()}
       >
         <span aria-hidden="true">＋</span>
@@ -584,7 +575,7 @@ export default function Play() {
           <div
             className="play-gallery"
             ref={inventory}
-            aria-label="Parts gallery. Swipe to browse, select a card to pick up a piece."
+            aria-label="Parts gallery. Drag a card with a mouse. On touch, select a card then use its Drag handle. Swipe elsewhere to browse."
             onScroll={() => {
               if (inventory.current)
                 scrollPositions.current.set(
@@ -604,65 +595,97 @@ export default function Play() {
                   !placed &&
                   !canPlace(manifest, session, s.id);
               return (
-                <button
+                <div
+                  className="play-card-item"
                   key={s.id}
-                  type="button"
-                  className="play-card"
-                  data-action-id={s.id}
-                  data-unavailable={unavailable}
-                  data-fitted={placed}
-                  data-draggable={
-                    !placed && !unavailable && s.workspaceId === workspace
-                  }
-                  aria-pressed={selection === s.id}
-                  aria-label={`${s.label}${contextLabel ? `, ${contextLabel}` : ''}${s.kind === 'transfer' ? ', seat assembly' : ''}${placed ? ', fitted' : unavailable ? ', unavailable; select for details' : ''}`}
-                  onPointerDown={(event) => {
-                    cardPointerHandled.current = null;
-                    // Touch swipes browse the gallery. The labeled drag control
-                    // below it owns touch dragging without delaying scrolling.
-                    if (event.pointerType !== 'mouse' || event.button !== 0)
-                      return;
-                    event.currentTarget.focus({ preventScroll: true });
-                    if (selectionRef.current !== s.id) pick(s.id);
-                    if (
-                      !placed &&
-                      !unavailable &&
-                      s.workspaceId === workspace &&
-                      viewer.current?.beginDrag(
-                        event.nativeEvent,
-                        event.currentTarget,
-                      )
-                    )
-                      cardPointerHandled.current = s.id;
-                  }}
-                  onClick={(event) => {
-                    // Captured pointerup also produces click. Do not let that
-                    // click cancel the piece's settling animation or reselect it.
-                    if (event.detail > 0 && cardPointerHandled.current === s.id)
-                      return;
-                    pick(s.id);
-                  }}
-                  disabled={disabled}
+                  data-selected={selection === s.id && !placed}
                 >
-                  <Thumbnail step={s} viewer={getViewer} ready={status.ready} />
-                  <span className="play-card-label">{s.label}</span>
-                  <span className="play-card-state">
-                    {contextLabel ? `${contextLabel} · ` : ''}
-                    {placed
-                      ? s.kind === 'transfer' || !s.workspaceId
-                        ? 'Fitted'
-                        : 'Assembled'
-                      : unavailable
-                        ? 'Not yet'
-                        : s.kind === 'transfer'
-                          ? 'Seat assembly'
-                          : s.workspaceId
-                            ? 'Part'
-                            : s.leafIds.length > 1
-                              ? 'Prepared assembly'
-                              : 'Part'}
-                  </span>
-                </button>
+                  <button
+                    type="button"
+                    className="play-card"
+                    data-action-id={s.id}
+                    data-unavailable={unavailable}
+                    data-fitted={placed}
+                    data-draggable={!placed && !unavailable}
+                    aria-pressed={selection === s.id}
+                    aria-label={`${s.label}${contextLabel ? `, ${contextLabel}` : ''}${s.kind === 'transfer' ? ', seat assembly' : ''}${placed ? ', fitted' : unavailable ? ', unavailable; select for details' : ''}`}
+                    onPointerDown={(event) => {
+                      cardPointerHandled.current = null;
+                      // Touch swipes browse the gallery. The labeled drag control
+                      // below it owns touch dragging without delaying scrolling.
+                      if (event.pointerType !== 'mouse' || event.button !== 0)
+                        return;
+                      event.currentTarget.focus({ preventScroll: true });
+                      if (selectionRef.current !== s.id) pick(s.id);
+                      if (
+                        !placed &&
+                        !unavailable &&
+                        viewer.current?.beginDrag(
+                          event.nativeEvent,
+                          event.currentTarget,
+                        )
+                      )
+                        cardPointerHandled.current = s.id;
+                    }}
+                    onClick={(event) => {
+                      // Captured pointerup also produces click. Do not let that
+                      // click cancel the piece's settling animation or reselect it.
+                      if (
+                        event.detail > 0 &&
+                        cardPointerHandled.current === s.id
+                      )
+                        return;
+                      pick(s.id);
+                    }}
+                    disabled={disabled}
+                  >
+                    <Thumbnail
+                      step={s}
+                      viewer={getViewer}
+                      ready={status.ready}
+                    />
+                    <span className="play-card-label">{s.label}</span>
+                    <span className="play-card-state">
+                      {contextLabel ? `${contextLabel} · ` : ''}
+                      {placed
+                        ? s.kind === 'transfer' || !s.workspaceId
+                          ? 'Fitted'
+                          : 'Assembled'
+                        : unavailable
+                          ? 'Not yet'
+                          : s.kind === 'transfer'
+                            ? 'Seat assembly'
+                            : s.workspaceId
+                              ? 'Part'
+                              : s.leafIds.length > 1
+                                ? 'Prepared assembly'
+                                : 'Part'}
+                    </span>
+                  </button>
+                  {selection === s.id && !placed && (
+                    <button
+                      type="button"
+                      className="play-card-drag"
+                      data-drag-id={s.id}
+                      aria-label={`Drag part: ${s.label}`}
+                      disabled={disabled || unavailable}
+                      onPointerDown={(event) =>
+                        viewer.current?.beginDrag(
+                          event.nativeEvent,
+                          event.currentTarget,
+                        )
+                      }
+                      onClick={(event) => {
+                        if (event.detail === 0)
+                          setNotice(
+                            'Hold and move the card’s Drag handle. To place with the keyboard, choose Show destination.',
+                          );
+                      }}
+                    >
+                      <MoveUpRight aria-hidden="true" /> Drag
+                    </button>
+                  )}
+                </div>
               );
             })}
             {!gallery.length && (
@@ -689,15 +712,15 @@ export default function Play() {
                       ? 'Placed. Choose another piece, or undo the last action.'
                       : selected && selected.workspaceId !== workspace
                         ? selected.workspaceId
-                          ? 'Open the workbench first, then drag this part into the assembly.'
+                          ? 'This part fits on its workbench. Open workbench to assemble it.'
                           : 'This piece belongs in the watch.'
                         : held
                           ? hints || assistance
                             ? status.obstructed
                               ? 'The seat is obscured or outside this view. Orbit or use Show destination.'
-                              : 'Hold Drag part and move it onto the highlighted seat.'
-                            : 'Hold Drag part and move it into the assembly. With a mouse, you can also drag the card.'
-                          : 'Select a part, then hold Drag part and move it into the assembly.')}
+                              : 'Drag this card onto the highlighted seat.'
+                            : 'Drag the card into the assembly. On touch, hold its Drag handle.'
+                          : 'Drag a card into the assembly. On touch, select a card, then hold its Drag handle.')}
               </p>
             </div>
             {selected && !fitted && selected.workspaceId !== workspace && (
@@ -706,27 +729,6 @@ export default function Play() {
                 onClick={() => enterWorkspace(selected.workspaceId)}
               >
                 {selectedPacket ? 'Open workbench' : 'Return to watch'}
-              </Control>
-            )}
-            {held && !fitted && (
-              <Control
-                className="play-drag-control"
-                disabled={disabled || (hints && !available)}
-                aria-label={`Drag part: ${held.label}`}
-                onPointerDown={(event) =>
-                  viewer.current?.beginDrag(
-                    event.nativeEvent,
-                    event.currentTarget,
-                  )
-                }
-                onClick={(event) => {
-                  if (event.detail === 0)
-                    setNotice(
-                      'Hold and move Drag part to drag. For keyboard or tap placement, choose Show destination below.',
-                    );
-                }}
-              >
-                <MoveUpRight aria-hidden="true" /> Drag part
               </Control>
             )}
             {workspace &&
@@ -745,7 +747,7 @@ export default function Play() {
               )}
           </div>
           <div className="play-actions">
-            {held && !fitted && (
+            {held && !fitted && inWorkspace && (
               <Control
                 disabled={disabled || (hints && !available)}
                 onClick={reveal}
@@ -823,10 +825,11 @@ export default function Play() {
           <div className="panel-body play-help-copy">
             <p>
               With a mouse, drag a card straight into the assembly. On touch,
-              swipe the gallery to browse, tap a card, then hold the gold Drag
-              part button and move your finger into the assembly. A missed drop
-              returns the piece. Supports must be fitted before their
-              attachments, and internals before covers.
+              swipe the gallery to browse, tap a card, then hold its gold Drag
+              handle and move your finger into the assembly. Parts keep their
+              actual size relative to the watch. A missed drop returns the
+              piece. Supports must be fitted before their attachments, and
+              internals before covers.
             </p>
             <p>
               Hints starts off. Turn it on to inspect missing prerequisites and
