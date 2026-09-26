@@ -14,6 +14,7 @@ import {
   Lightbulb,
   Gauge,
   ArrowLeft,
+  MoveUpRight,
   Wrench,
 } from 'lucide-react';
 import {
@@ -131,6 +132,7 @@ export default function Play() {
   const inventory = useRef<HTMLDivElement>(null),
     [headerBottom, setHeaderBottom] = useState(70);
   const scrollPositions = useRef(new Map<string, number>());
+  const cardPointerHandled = useRef<string | null>(null);
 
   const sync = useCallback(() => {
     const controller = viewer.current,
@@ -609,9 +611,37 @@ export default function Play() {
                   data-action-id={s.id}
                   data-unavailable={unavailable}
                   data-fitted={placed}
+                  data-draggable={
+                    !placed && !unavailable && s.workspaceId === workspace
+                  }
                   aria-pressed={selection === s.id}
                   aria-label={`${s.label}${contextLabel ? `, ${contextLabel}` : ''}${s.kind === 'transfer' ? ', seat assembly' : ''}${placed ? ', fitted' : unavailable ? ', unavailable; select for details' : ''}`}
-                  onClick={() => pick(s.id)}
+                  onPointerDown={(event) => {
+                    cardPointerHandled.current = null;
+                    // Touch swipes browse the gallery. The labeled drag control
+                    // below it owns touch dragging without delaying scrolling.
+                    if (event.pointerType !== 'mouse' || event.button !== 0)
+                      return;
+                    event.currentTarget.focus({ preventScroll: true });
+                    if (selectionRef.current !== s.id) pick(s.id);
+                    if (
+                      !placed &&
+                      !unavailable &&
+                      s.workspaceId === workspace &&
+                      viewer.current?.beginDrag(
+                        event.nativeEvent,
+                        event.currentTarget,
+                      )
+                    )
+                      cardPointerHandled.current = s.id;
+                  }}
+                  onClick={(event) => {
+                    // Captured pointerup also produces click. Do not let that
+                    // click cancel the piece's settling animation or reselect it.
+                    if (event.detail > 0 && cardPointerHandled.current === s.id)
+                      return;
+                    pick(s.id);
+                  }}
                   disabled={disabled}
                 >
                   <Thumbnail step={s} viewer={getViewer} ready={status.ready} />
@@ -659,15 +689,15 @@ export default function Play() {
                       ? 'Placed. Choose another piece, or undo the last action.'
                       : selected && selected.workspaceId !== workspace
                         ? selected.workspaceId
-                          ? 'Build this individual part on its workbench.'
+                          ? 'Open the workbench first, then drag this part into the assembly.'
                           : 'This piece belongs in the watch.'
                         : held
                           ? hints || assistance
                             ? status.obstructed
                               ? 'The seat is obscured or outside this view. Orbit or use Show destination.'
-                              : 'The cue marks the seat. Drag there, or tap the destination.'
-                            : 'Drag the picked-up piece to where you think it belongs.'
-                          : 'Swipe to browse · select a card · drag the picked-up piece.')}
+                              : 'Hold Drag part and move it onto the highlighted seat.'
+                            : 'Hold Drag part and move it into the assembly. With a mouse, you can also drag the card.'
+                          : 'Select a part, then hold Drag part and move it into the assembly.')}
               </p>
             </div>
             {selected && !fitted && selected.workspaceId !== workspace && (
@@ -680,10 +710,23 @@ export default function Play() {
             )}
             {held && !fitted && (
               <Control
+                className="play-drag-control"
                 disabled={disabled || (hints && !available)}
-                onClick={reveal}
+                aria-label={`Drag part: ${held.label}`}
+                onPointerDown={(event) =>
+                  viewer.current?.beginDrag(
+                    event.nativeEvent,
+                    event.currentTarget,
+                  )
+                }
+                onClick={(event) => {
+                  if (event.detail === 0)
+                    setNotice(
+                      'Hold and move Drag part to drag. For keyboard or tap placement, choose Show destination below.',
+                    );
+                }}
               >
-                <LocateFixed aria-hidden="true" /> Show destination
+                <MoveUpRight aria-hidden="true" /> Drag part
               </Control>
             )}
             {workspace &&
@@ -702,6 +745,14 @@ export default function Play() {
               )}
           </div>
           <div className="play-actions">
+            {held && !fitted && (
+              <Control
+                disabled={disabled || (hints && !available)}
+                onClick={reveal}
+              >
+                <LocateFixed aria-hidden="true" /> Show destination
+              </Control>
+            )}
             <Control
               disabled={disabled || !session?.actionIds.length}
               onClick={() => {
@@ -771,10 +822,11 @@ export default function Play() {
           </SheetHeader>
           <div className="panel-body play-help-copy">
             <p>
-              Browse freely. Select a card, then drag the picked-up piece into
-              the watch. Gallery swipes only browse. A missed drop returns the
-              piece. Supports must be fitted before their attachments, and
-              internals before covers.
+              With a mouse, drag a card straight into the assembly. On touch,
+              swipe the gallery to browse, tap a card, then hold the gold Drag
+              part button and move your finger into the assembly. A missed drop
+              returns the piece. Supports must be fitted before their
+              attachments, and internals before covers.
             </p>
             <p>
               Hints starts off. Turn it on to inspect missing prerequisites and

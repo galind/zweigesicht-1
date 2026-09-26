@@ -709,6 +709,14 @@ export class PlayViewer {
     return { x: event.clientX - r.left, y: event.clientY - r.top };
   }
   pointerDown = (event: PointerEvent) => {
+    this.beginDrag(event, this.stage, this.stagePoint());
+  };
+  /** Gallery and touch controls share the same placement/cancellation path. */
+  beginDrag(
+    event: PointerEvent,
+    origin: HTMLElement,
+    center = this.point(event),
+  ) {
     if (
       !this.ready ||
       !this.active ||
@@ -718,11 +726,10 @@ export class PlayViewer {
       this.drag ||
       event.button !== 0
     )
-      return;
+      return false;
     event.preventDefault();
     event.stopPropagation();
-    const p = this.point(event),
-      center = this.stagePoint();
+    const p = this.point(event);
     this.drag = {
       pointer: event.pointerId,
       grab: { x: p.x - center.x, y: p.y - center.y },
@@ -732,10 +739,19 @@ export class PlayViewer {
     };
     this.stopOrbitMotion();
     this.controls.enabled = false;
-    this.captureElement = this.stage;
+    this.captureElement = origin;
+    if (origin !== this.stage) {
+      origin.addEventListener('pointermove', this.pointerMove);
+      origin.addEventListener('pointerup', this.pointerUp);
+      origin.addEventListener('pointercancel', this.cancel);
+      origin.addEventListener('lostpointercapture', this.cancel);
+    }
     this.captureElement.setPointerCapture(event.pointerId);
+    this.positionStage(center);
+    this.invalidate();
     this.selected();
-  };
+    return true;
+  }
   pointerMove = (event: PointerEvent) => {
     if (!this.drag || event.pointerId !== this.drag.pointer) return;
     const p = this.point(event);
@@ -775,7 +791,10 @@ export class PlayViewer {
     const valid = drag.moved && this.isNear(center) && this.available;
     this.releaseCapture();
     if (valid) this.place();
-    else {
+    else if (!drag.moved) {
+      this.positionStage();
+      this.invalidate();
+    } else {
       if (drag.moved)
         this.feedback(
           this.available
@@ -788,6 +807,15 @@ export class PlayViewer {
   releaseCapture() {
     const pointer = this.drag?.pointer;
     this.drag = undefined;
+    if (this.captureElement && this.captureElement !== this.stage) {
+      this.captureElement.removeEventListener('pointermove', this.pointerMove);
+      this.captureElement.removeEventListener('pointerup', this.pointerUp);
+      this.captureElement.removeEventListener('pointercancel', this.cancel);
+      this.captureElement.removeEventListener(
+        'lostpointercapture',
+        this.cancel,
+      );
+    }
     if (
       pointer !== undefined &&
       this.captureElement?.hasPointerCapture(pointer)

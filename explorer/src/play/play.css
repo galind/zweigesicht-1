@@ -231,6 +231,12 @@
 .play-card:hover {
   background: #ffffff0b;
 }
+.play-card[data-draggable='true'] {
+  cursor: grab;
+}
+.play-card[data-draggable='true']:active {
+  cursor: grabbing;
+}
 .play-card[aria-pressed='true'] {
   border-color: #e8c88e;
   background: #e8c88e0b;
@@ -302,6 +308,18 @@
   max-width: min(145px, 45%);
   min-height: 44px;
   white-space: normal;
+}
+.play-selection .play-drag-control {
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  border: 1px solid #e8c88e80;
+  background: #e8c88e18;
+  color: #f6d8a2;
+  min-width: 105px;
+}
+.play-selection .play-drag-control:active {
+  cursor: grabbing;
 }
 .play-actions {
   display: flex;

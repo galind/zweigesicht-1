@@ -335,7 +335,7 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
     stage: {setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
     destination: {dataset: {}, style: {}}, selected() {}, project() {return {x: 100, y: 100};},
   });
-  for (const name of ['pointerDown', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
+  for (const name of ['pointerDown', 'beginDrag', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
   v.controls._sphericalDelta.theta = .6;
   v.controls.update();
   assert.ok(v.controls._sphericalDelta.theta !== 0, 'A real damped orbit has inertia');
@@ -351,6 +351,38 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
   v.cancel(); settle(performance.now());
   assert.equal(v.drag, undefined); assert.equal(v.controls.enabled, true);
   assert.ok(v.camera.position.distanceTo(before) < 1e-10, 'Old inertia does not resume after cancellation');
+  v.controls.dispose();
+});
+
+test('inventory drag capture owns and removes its temporary listeners on cancel and release', () => {
+  const {v, settle} = renderedFixture();
+  const listeners = new Map(), captured = new Set();
+  const origin = {
+    addEventListener(name, listener) {listeners.set(name, listener);},
+    removeEventListener(name, listener) {assert.equal(listeners.get(name), listener); listeners.delete(name);},
+    setPointerCapture(id) {captured.add(id);}, hasPointerCapture(id) {return captured.has(id);},
+    releasePointerCapture(id) {captured.delete(id);},
+  };
+  Object.assign(v, {
+    active: true, current: {id: 'gallery-part'}, point: () => ({x: 160, y: 500}),
+    stage: {}, destination: {dataset: {}}, selected() {},
+  });
+  for (const name of ['beginDrag', 'cancel', 'releaseCapture']) v[name] = actual(name, v);
+  const event = {button: 0, pointerId: 9, preventDefault() {}, stopPropagation() {}};
+  for (const finish of ['cancel', 'releaseCapture']) {
+    assert.equal(v.beginDrag(event, origin), true);
+    assert.equal(listeners.size, 4); assert.equal(captured.size, 1);
+    assert.equal(v.drag.position.x, 160); assert.equal(v.drag.position.y, 500);
+    assert.equal(v.drag.grab.x, 0); assert.equal(v.drag.grab.y, 0);
+    assert.equal(v.controls.enabled, false);
+    v[finish](); settle(performance.now());
+    assert.equal(listeners.size, 0); assert.equal(captured.size, 0);
+    assert.equal(v.captureElement, undefined); assert.equal(v.drag, undefined);
+    assert.equal(v.controls.enabled, true);
+  }
+  v.hints = true; v.available = false;
+  assert.equal(v.beginDrag(event, origin), false);
+  assert.equal(listeners.size, 0); assert.equal(captured.size, 0);
   v.controls.dispose();
 });
 

@@ -73,6 +73,9 @@ http://127.0.0.1:4185 all` with those environment variables. Individual modes ar
 directory; `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternative legal
 orders and narrow Hard viewports. The older guided browser reports describe
 historical `play-2`/`play-3` code, not the current free-choice interaction.
+`node scripts/play/drag-check.mjs http://127.0.0.1:4185` uses the same environment
+variables to check direct card dragging, the labeled touch control and gallery
+swiping at desktop, 390 px and 320 px widths.
 
 ## Hosting and source boundaries
 

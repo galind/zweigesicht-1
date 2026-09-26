@@ -477,3 +477,31 @@ Working local production preview: http://127.0.0.1:4185/play (homepage at the
 same origin). Next action: user review of the local experience. Changes are
 committed locally only; no push, PR, merge or deployment. The two pre-existing
 untracked prompt files remain local and excluded from the commit.
+
+## Play drag discoverability follow-up — 26 September 2026
+
+User review found that selecting a gallery card did not make the separate loose
+piece's drag handle discoverable. Mouse users can now drag directly from a card,
+including an unselected card. The selected-part details expose a gold **Drag
+part** button for mouse and touch; native gallery swipes still browse. Hard
+parts requiring a workbench explicitly explain that entry step. Show destination
+remains an explicit keyboard/tap alternative in the action row. All drag origins
+share placement rules, camera preservation, cancellation and capture cleanup.
+The click generated after a card drop cannot cancel its settling animation.
+
+Verification: all 60 unit tests pass, including new temporary-listener lifecycle
+coverage; TypeScript, lint and production build pass. The new browser drag suite
+passes 49 checks at 1440 px, 390 px and 320 px, including hints off/on, direct
+unselected-card pickup, touch placement, unavailable inspection, Escape/touch
+cancellation, native gallery scrolling, Hard workbench entry and unchanged
+camera pose. The existing focused suite also passes all 111 interaction,
+responsive, resume and renderer-recovery checks on the final production build.
+Screenshots and reports are ignored under `artifacts/browser/play-drag/final/`.
+An earlier focused run overlapped a rebuild and timed out at the asset-retry
+check; the complete run passes after restarting the preview against the final
+bundle. No runtime failure remains reproduced.
+
+Local preview remains http://127.0.0.1:4185/play; reload to use the new controls.
+Next action: user review of the more discoverable gesture. Physical-device/Safari
+review remains outstanding. No push, PR or deployment; the two original untracked
+prompt files remain excluded.

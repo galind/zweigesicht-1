@@ -12,8 +12,11 @@ components. Navigation never follows readiness. Cards keep their positions when
 fitted, so scroll and keyboard focus remain predictable. Repeated labels receive
 occurrence numbers within their group. Thumbnails render the actual source CAD.
 
-Tap/click a card to inspect and pick up a piece. Swipe the gallery to browse;
-drag the separate, clearly labelled picked-up piece into the view. The separate drag handle keeps touch browsing unambiguous.
+With a mouse, drag a card directly into the assembly. On touch, swipe the gallery
+to browse, tap a card, then hold the gold **Drag part** button beside its details
+and move into the assembly. The separate touch control keeps browsing unambiguous.
+The original loose-piece handle remains usable. In Hard, parts belonging to a
+workbench first show **Open workbench**; entering it is always explicit.
 Placement clears the held piece without choosing a successor. A persistent Hints
 toggle starts off and is saved with the session. Continue restores that choice;
 Restart and a new difficulty start with hints off.
@@ -180,6 +183,21 @@ The last build after these complete traversals adds the lazy read-only access
 audit hook/module and removes a duplicate live announcement. It does not change gameplay, graph rules, source geometry,
 materials or layout. Its build/type/lint checks and targeted browser checks are
 recorded with the final progress entry.
+
+## Drag discoverability follow-up
+
+User review found that selecting a gallery card did not make the separate
+loose-piece handle obvious. Mouse cards now start dragging directly, and a gold
+**Drag part** control beside the selected part starts a mouse/touch drag. Touch
+swipes on cards continue browsing. Hard selection explains the explicit
+workbench entry required before dragging. Show destination remains an explicit
+keyboard/tap alternative in the action row.
+
+All origins use the same capture, cancellation and placement validation. The
+pointer-generated click is suppressed after a card drag so it cannot cancel the
+settling animation. Temporary listeners are removed on release, cancellation,
+recovery and disposal. New regression coverage is in `scripts/play/drag-check.mjs`
+and the controller lifecycle suite; evidence is under `artifacts/browser/play-drag/`.
 
 ## Remaining limits
 
