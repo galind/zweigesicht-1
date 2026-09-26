@@ -11,7 +11,6 @@ import {
   Undo2,
   LocateFixed,
   ListRestart,
-  Lightbulb,
   ArrowLeft,
   Wrench,
   Menu,
@@ -42,7 +41,6 @@ import {
   fittedLeafIds,
   getSavedSession,
   isComplete,
-  missingPrerequisites,
   saveSession,
   undoPlacement,
   workspaceLeafIds,
@@ -181,7 +179,7 @@ export default function Play() {
     const held =
       selected && !current!.actionIds.includes(selected.id) ? selected : null;
     controller.setAssistance(
-      current?.hints ?? false,
+      false,
       !!current && !!held && canPlace(manifest, current, held.id),
       assistanceRef.current,
     );
@@ -349,7 +347,6 @@ export default function Play() {
           const finishedSystem = groupSteps.every((item) =>
             next.actionIds.includes(item.id),
           );
-          const fittedWithoutClue = !previous.hints && !assistanceRef.current;
           apply(next);
           setPlacementPulse((value) => value + 1);
           setNotice(
@@ -359,7 +356,7 @@ export default function Play() {
                 ? `${packet.label} is complete. Return to the watch and seat the assembly.`
                 : finishedSystem
                   ? `${manifest.groups.find((item) => item.id === step.groupId)?.label ?? 'System'} complete.`
-                  : `${step.label} ${step.kind === 'transfer' ? 'seated in the watch' : `fitted${fittedWithoutClue ? ' without a clue' : ''}`}.`,
+                  : `${step.label} ${step.kind === 'transfer' ? 'seated in the watch' : 'fitted'}.`,
           );
           // Keep focus on the player's chosen card; never select the next correct item.
           if (
@@ -452,11 +449,6 @@ export default function Play() {
     !!session && !!selected && canPlace(manifest, session, selected.id);
   const held = selected && !fitted ? selected : null;
   const inWorkspace = held?.workspaceId === workspace;
-  const hints = session?.hints ?? false;
-  const missing =
-    selected && session && hints
-      ? missingPrerequisites(manifest, session, selected.id)
-      : [];
   const complete = !!session && isComplete(manifest, session);
   const count = session
     ? assembledLeafIds(manifest, session).length -
@@ -602,7 +594,7 @@ export default function Play() {
   const reveal = () => {
     assistanceRef.current = true;
     setAssistance(true);
-    viewer.current?.setAssistance(hints, available, true);
+    viewer.current?.setAssistance(false, available, true);
     viewer.current?.guide();
   };
 
@@ -626,24 +618,6 @@ export default function Play() {
             by Marco Lang
           </a>
         </div>
-        {active && (
-          <Control
-            aria-label={`Hints ${hints ? 'on' : 'off'}`}
-            aria-pressed={hints}
-            disabled={disabled}
-            onClick={() => {
-              assistanceRef.current = false;
-              setAssistance(false);
-              setNotice('');
-              if (session) apply({ ...session, hints: !hints });
-            }}
-          >
-            <Lightbulb aria-hidden="true" />
-            <span className="play-control-label">
-              Clues {hints ? 'on' : 'off'}
-            </span>
-          </Control>
-        )}
         <Control
           ref={menuButton}
           aria-label="Menu"
@@ -701,7 +675,7 @@ export default function Play() {
           held ? `Place ${held.label} at its destination` : 'Destination'
         }
         disabled={disabled || !held || !inWorkspace || !available}
-        hidden={!held || !inWorkspace || !(hints || assistance)}
+        hidden={!held || !inWorkspace || !assistance}
         onClick={() => viewer.current?.place()}
       >
         <span aria-hidden="true">＋</span>
@@ -832,7 +806,6 @@ export default function Play() {
                   )?.label;
                   const placed = done.has(step.id);
                   const unavailable =
-                    hints &&
                     !!session &&
                     !placed &&
                     !canPlace(manifest, session, step.id);
@@ -960,15 +933,8 @@ export default function Play() {
                 <div>
                   <strong>{selected?.label ?? 'Choose your next fit'}</strong>
                   <p>
-                    {hints && missing.length
-                      ? `Needs ${missing
-                          .slice(0, 3)
-                          .map((step) => step.label)
-                          .join(
-                            ', ',
-                          )}${missing.length > 3 ? ` and ${missing.length - 3} more` : ''}.`
-                      : notice ||
-                        (fitted
+                    {notice ||
+                      (fitted
                           ? 'Fitted. Choose another piece or undo the last move.'
                           : held?.viewDirectionWorld &&
                               inWorkspace &&
@@ -978,10 +944,12 @@ export default function Play() {
                               ? selected.workspaceId
                                 ? 'Build this part on its dedicated bench first.'
                                 : 'Return to the watch to fit this piece.'
+                              : held && !available
+                                ? 'This part is waiting for earlier work. Choose Ready now for pieces you can fit.'
                               : held
-                                ? hints || assistance
+                                ? assistance
                                   ? status.obstructed
-                                    ? 'The seat is hidden on this face. Flip or show the seat.'
+                                    ? 'The seat is hidden from this angle. Rotate the movement or show the seat again.'
                                     : 'Drag the highlighted part onto its seat.'
                                   : 'Study the part, then drag its image to the matching seat.'
                                 : inventoryView === 'ready'
@@ -1023,7 +991,7 @@ export default function Play() {
                   inWorkspace &&
                   (!held.viewDirectionWorld || status.detail === held.id) && (
                     <Control
-                      disabled={disabled || (hints && !available)}
+                      disabled={disabled || !available}
                       onClick={reveal}
                     >
                       <LocateFixed aria-hidden="true" /> Show seat
@@ -1089,28 +1057,13 @@ export default function Play() {
           </SheetHeader>
           <div className="panel-body play-menu-actions">
             {active && (
-              <>
-                <Control
-                  aria-label={`Hints ${hints ? 'on' : 'off'}`}
-                  aria-pressed={hints}
-                  disabled={disabled}
-                  onClick={() => {
-                    assistanceRef.current = false;
-                    setAssistance(false);
-                    setNotice('');
-                    if (session) apply({ ...session, hints: !hints });
-                  }}
-                >
-                  <Lightbulb aria-hidden="true" /> Clues {hints ? 'on' : 'off'}
-                </Control>
-                <ResetViewButton
-                  disabled={disabled}
-                  onClick={() => {
-                    viewer.current?.resetView();
-                    setMenu(false);
-                  }}
-                />
-              </>
+              <ResetViewButton
+                disabled={disabled}
+                onClick={() => {
+                  viewer.current?.resetView();
+                  setMenu(false);
+                }}
+              />
             )}
             <Control
               onClick={() => {
@@ -1257,12 +1210,11 @@ export default function Play() {
               puzzle. A missed drop simply returns the piece.
             </p>
             <p>
-              Clues start off. Turn them on to inspect missing prerequisites and
-              see the selected seat. Show seat is explicit assistance: it
-              reveals and reframes the fitting point. You can then tap the
-              destination, or Tab to it and press Enter, to place without
-              dragging. A fit made without either aid receives a quiet
-              acknowledgement.
+              Ready now shows only pieces that can be fitted immediately; All
+              parts keeps the complete dependency view available. Show seat is
+              optional assistance: it reveals and reframes the fitting point.
+              You can then tap the destination, or Tab to it and press Enter,
+              to place without dragging.
             </p>
             <p>
               In Hard mode, open a subassembly card to build it one component
@@ -1271,10 +1223,11 @@ export default function Play() {
               transfer. Dial-edge screws have an explicit fitting view.
             </p>
             <p>
-              Flip switches between the two fixed sides. Scroll or pinch to zoom
-              toward the center. On the canvas, F flips, + / − zoom, and Home
-              resets the view. Flip and Reset preserve progress. Workbench
-              return restores your watch camera.
+              Drag the canvas to rotate the movement freely, and scroll or pinch
+              to zoom toward the center. Flip still gives you a quick change of
+              side. On the canvas, F flips, + / − zoom, and Home resets the view.
+              Camera controls preserve progress. Workbench return restores your
+              watch camera.
             </p>
             <small>
               A source-based puzzle using Marco Lang’s CAD. Assembly rules are
@@ -1306,7 +1259,7 @@ export default function Play() {
             ? `This device has ${startupConflict.saved.actionIds.length} completed action${startupConflict.saved.actionIds.length === 1 ? '' : 's'} in ${startupConflict.saved.level === 'hard' ? 'Hard' : 'Easy'}. Starting the selected mode will replace that progress.`
             : startupConflict?.kind === 'replace'
               ? `The saved assembly is ${startupConflict.reason === 'corrupt' ? 'damaged' : 'from an incompatible version'}. It must be replaced before a new build can start.`
-              : 'This replaces your saved progress with a fresh assembly. Clues will start off.'}
+              : 'This replaces your saved progress with a fresh assembly.'}
         </p>
         <div>
           <Control

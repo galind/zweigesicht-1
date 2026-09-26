@@ -98,6 +98,7 @@ export default function Home() {
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const assembleButton = useRef<HTMLButtonElement>(null);
+  const easyModeButton = useRef<HTMLButtonElement>(null);
   const moreButton = useRef<HTMLButtonElement>(null);
   const visibleTrigger = (
     selector: string,
@@ -456,7 +457,6 @@ export default function Home() {
           </a>
         </div>
         <Sheet
-          modal={false}
           open={assemble}
           onOpenChange={(open) => openPanel(setAssemble, open)}
         >
@@ -474,8 +474,8 @@ export default function Home() {
             side="top"
             style={panelStyle}
             className="explorer-panel settings-panel header-panel assembly-chooser"
-            showOverlay={false}
             scrollContent
+            initialFocus={easyModeButton}
             finalFocus={assembleButton}
           >
             <SheetHeader>
@@ -486,6 +486,7 @@ export default function Home() {
             </SheetHeader>
             <div className="panel-body assembly-mode-list">
               <button
+                ref={easyModeButton}
                 type="button"
                 onClick={() => location.assign('/workshop?mode=easy')}
               >

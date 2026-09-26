@@ -20,7 +20,7 @@ const drift=(a,b)=>Math.max(...JSON.parse(a).flat().map((n,i)=>Math.abs(n-JSON.p
 const same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
 try {
  await page.goto(`${base}/workshop?mode=${level}&inspect=1`,{waitUntil:'networkidle'});await settle();
- check('Hints start off',(await inspect()).session.hints===false);
+ check('Workshop starts with free rotation and no hints toggle',(await inspect()).rotationEnabled===true&&await page.getByRole('button',{name:/Hints|Clues/}).count()===0);
  const initial=await inspect();check('Mainplate centred in usable viewport',Math.hypot(initial.mainplateCenter.x-initial.frameRegion.left-initial.frameRegion.width/2,initial.mainplateCenter.y-(initial.frameRegion.top+initial.frameRegion.bottom)/2)<.01,initial.mainplateCenter);
  await page.screenshot({path:path.join(out,`${level}-inventory-off.png`)});
  const all=actions(manifest,level);

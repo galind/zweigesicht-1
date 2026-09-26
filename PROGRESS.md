@@ -780,3 +780,33 @@ representative assistive-technology/human usability, mechanical certification
 and publication/redistribution release gates remain outstanding. The final
 local production preview is http://127.0.0.1:4187/workshop. No merge or manual
 deployment was performed.
+
+## Workshop interaction refinement — 26 September 2026
+
+Refined the homepage entry and Workshop after hands-on review. The Easy/Hard
+chooser is now a true centered modal decision with a dimmed, blurred backdrop,
+clear option cards, direct initial focus and consistent desktop/phone margins;
+it no longer borrows the informational edge-panel placement. Gallery thumbnails
+now use one straight-on watch-axis camera and a final transparent-pixel centering
+pass, so neighboring parts share a stable orientation and visual center.
+
+Removed the Hints/Clues toggle from both the header and menu. Ready now remains
+the actionable tray; All parts keeps unavailable work inspectable but prevents
+premature dragging and directs players back to Ready now. Show seat remains the
+single optional placement aid. The saved-session shape stays compatible, while
+the removed preference no longer affects Workshop presentation or placement.
+
+Workshop OrbitControls now match the homepage movement view: mouse or one-finger
+drag rotates freely, pinch/wheel zoom remains available, and Flip/Reset stay as
+quick camera actions. Help and feedback copy describe the new behavior. Updated
+browser runners cover readiness, disabled unavailable work, Show seat and free
+orbit instead of the removed hint states.
+
+Verification passes TypeScript, lint, all 67 automated tests, production build
+and targeted production Chrome checks. The chooser is mathematically centered
+at 1440×900 and 390×844 with 16 px phone margins; eight sampled visible
+thumbnails have identical rendered centers; a real canvas drag changes the
+camera while Show seat remains available. The maintained homepage, focused and
+drag/workbench suites pass 15, 87 and 87 checks respectively, with no uncaught
+browser errors. The rebuilt preview remains at
+http://127.0.0.1:4187/workshop.

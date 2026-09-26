@@ -17,7 +17,6 @@ const preserved=(name,a,b)=>{const drift=Math.max(...pose(a).map((v,i)=>Math.abs
 const same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
 const card=id=>page.locator(`[data-action-id="${id}"]`);
 const pick=async id=>{await card(id).click();await settle();};
-const toggle=async()=>{await page.getByRole('button',{name:/^Hints (on|off)$/}).click();await settle();};
 const reveal=async()=>{await page.getByRole('button',{name:'Show seat',exact:true}).click();await settle();};
 const drag=async(s,target=s.target,offset={x:0,y:0},finish=true)=>{await page.locator('.play-card-drag').scrollIntoViewIfNeeded();s={...s,stage:(await inspect()).stage};await page.mouse.move(s.stage.x+offset.x,s.stage.y+offset.y);await page.mouse.down();await page.mouse.move(target.x+offset.x,target.y+offset.y,{steps:6});if(finish){await page.mouse.up();await settle();}};
 const touch=async(from,to,cancel=false)=>{const cdp=await context.newCDPSession(page),pts=p=>[{x:p.x,y:p.y,id:1}];await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:pts(from)});for(let i=1;i<=6;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:pts({x:from.x+(to.x-from.x)*i/6,y:from.y+(to.y-from.y)*i/6})});await cdp.send('Input.dispatchTouchEvent',{type:cancel?'touchCancel':'touchEnd',touchPoints:[]});await cdp.detach();await settle();};
@@ -28,47 +27,42 @@ try {
  await page.getByText('All parts',{exact:true}).click();await settle();
  check('All parts keeps all 89 Easy actions inspectable',await page.locator('.play-card').count()===89);
  await pick('movement-60');preserved('Selecting unavailable bridge preserves camera',initial,await inspect());
- check('Hints off does not expose destination',await page.locator('.play-target').isHidden());
- let s=await inspect();await drag(s,{x:195,y:220});check('Unsupported drop is rejected',!(await inspect()).session.actionIds.length);preserved('Failed unsupported drop preserves camera',s,await inspect());
- check('Hints off neutral feedback omits prerequisites',/cannot be fitted yet/.test(await page.locator('.play-selection').innerText())&&!/Needs/.test(await page.locator('.play-selection').innerText()));
- await toggle();preserved('Hint toggle preserves camera',s,await inspect());
- check('Hints expose prerequisite details and disable dragging',/Needs Barrel assembly/.test(await page.locator('.play-selection').innerText())&&await page.locator('.play-card-drag').isDisabled());
+ check('Unavailable work has no destination and cannot be dragged',await page.locator('.play-target').isHidden()&&await page.locator('.play-card-drag').isDisabled());
+ let s=await inspect();check('Unavailable copy points back to Ready now',/waiting for earlier work/.test(await page.locator('.play-selection').innerText()));preserved('Unavailable selection preserves camera',s,await inspect());
  check('Unavailable inventory remains keyboard inspectable',await card('movement-60').isEnabled());
  await card('movement-60').focus();await page.keyboard.press('Enter');
- await page.screenshot({path:path.join(out,'phone-easy-hints-on.png')});
- await toggle();await pick('movement-1');s=await inspect();
- check('Available selection with hints off has no cue',await page.locator('.play-target').isHidden());
+ await page.screenshot({path:path.join(out,'phone-easy-all-parts.png')});
+ await pick('movement-1');s=await inspect();
+ check('Available selection has no cue until Show seat',await page.locator('.play-target').isHidden());
  await drag(s,{x:25,y:100});preserved('Missed destination preserves camera',s,await inspect());check('Missed drop leaves progress unchanged',!(await inspect()).session.actionIds.length);
  await drag(await inspect(),{x:250,y:180},{x:0,y:0},false);await page.keyboard.press('Escape');await page.mouse.up();await settle();check('Escape cancels mouse capture',!(await inspect()).dragging&&!(await inspect()).session.actionIds.length);
  s=await inspect();await touch(s.stage,{x:260,y:170},true);check('Touch cancellation leaves no placement',!(await inspect()).session.actionIds.length);preserved('Touch cancellation preserves camera',s,await inspect());
- s=await inspect();const scroll=await page.locator('.play-gallery').evaluate(e=>e.scrollLeft);await drag(s,s.target,{x:18,y:-12});check('Hints-off mouse drop with grab offset commits once',(await inspect()).session.actionIds.length===1);preserved('Hints-off successful placement preserves camera',s,await inspect());
+ s=await inspect();const scroll=await page.locator('.play-gallery').evaluate(e=>e.scrollLeft);await drag(s,s.target,{x:18,y:-12});check('Mouse drop with grab offset commits once',(await inspect()).session.actionIds.length===1);preserved('Successful placement preserves camera',s,await inspect());
  check('Placement preserves gallery position',Math.abs(await page.locator('.play-gallery').evaluate(e=>e.scrollLeft)-scroll)<1);
  check('Placement does not choose another item',!(await inspect()).stepId&&(await inspect()).selection==='movement-1');
- await toggle();s=await inspect();await page.getByRole('button',{name:'Undo',exact:true}).click();await settle();preserved('Undo preserves camera',s,await inspect());check('Hints persist through Undo',(await inspect()).session.hints);
- await toggle();
+ s=await inspect();await page.getByRole('button',{name:'Undo',exact:true}).click();await settle();preserved('Undo preserves camera',s,await inspect());
  const rect=await page.locator('.play-gallery').boundingBox();await touch({x:rect.x+rect.width-30,y:rect.y+40},{x:rect.x+30,y:rect.y+40});check('Gallery swipe browses without placing',await page.locator('.play-gallery').evaluate(e=>e.scrollLeft)>scroll&&!(await inspect()).session.actionIds.length);
  s=await inspect();await page.getByRole('button',{name:'Filter',exact:true}).click();await page.getByLabel('Find a part',{exact:true}).fill('Barrel');preserved('Search preserves camera',s,await inspect());check('Search filters labels without readiness',await page.locator('.play-card').count()>=3);await page.getByLabel('Find a part',{exact:true}).fill('');await page.keyboard.press('Escape');
- await pick('movement-2');await reveal();s=await inspect();await page.locator('.play-target').focus();await page.keyboard.press('Enter');await settle();check('Explicit assistance permits keyboard placement with hints off',(await inspect()).session.actionIds.includes('movement-2'));preserved('Keyboard placement preserves camera',s,await inspect());
+ await pick('movement-2');await reveal();s=await inspect();await page.locator('.play-target').focus();await page.keyboard.press('Enter');await settle();check('Show seat permits keyboard placement',(await inspect()).session.actionIds.includes('movement-2'));preserved('Keyboard placement preserves camera',s,await inspect());
  await pick('movement-1');await reveal();s=await inspect();await touch(s.stage,s.target);check('Touch drop commits once',(await inspect()).session.actionIds.length===2);preserved('Touch placement preserves camera',s,await inspect());
- await pick('movement-60');await toggle();check('Bridge becomes available after both barrels',await card('movement-60').getAttribute('data-unavailable')==='false');
+ await pick('movement-60');check('Bridge becomes available after both barrels',await card('movement-60').getAttribute('data-unavailable')==='false');
  await page.getByRole('button',{name:'Undo',exact:true}).click();await settle();check('Undo recomputes bridge availability',await card('movement-60').getAttribute('data-unavailable')==='true');
- // Fixed views ignore orbit/pan input; centered zoom survives state updates.
- s=await inspect();await page.locator('canvas').focus();await page.keyboard.press('ArrowRight');await settle();preserved('Arrow keys cannot rotate the fixed view',s,await inspect());await page.keyboard.press('+');await settle();
- s=await inspect();await page.mouse.move(200,260);await page.mouse.down({button:'right'});await page.mouse.move(225,278,{steps:5});await page.mouse.up({button:'right'});await settle();preserved('Right dragging cannot pan the fixed view',s,await inspect());s=await inspect();
- await pick('movement-3');preserved('Selection preserves fixed view and zoom',s,await inspect());await toggle();preserved('Hints preserve fixed view and zoom',s,await inspect());
+ // The canvas orbits freely; keyboard shortcuts and selection preserve that view.
+ s=await inspect();await page.mouse.move(195,220);await page.mouse.down();await page.mouse.move(245,255,{steps:6});await page.mouse.up();await settle();const orbited=await inspect();check('Pointer drag freely orbits the movement',Math.max(...pose(s).map((v,i)=>Math.abs(v-pose(orbited)[i])))>.01);s=orbited;await page.locator('canvas').focus();await page.keyboard.press('ArrowRight');await settle();preserved('Arrow keys leave the orbit unchanged',s,await inspect());await page.keyboard.press('+');await settle();
+ s=await inspect();await page.mouse.move(200,260);await page.mouse.down({button:'right'});await page.mouse.move(225,278,{steps:5});await page.mouse.up({button:'right'});await settle();preserved('Right dragging cannot pan the orbit view',s,await inspect());s=await inspect();
+ await pick('movement-3');preserved('Selection preserves free orbit and zoom',s,await inspect());
  const fitted=await inspect();const materials=JSON.stringify(fitted.materials);
  for(let i=0;i<4;i++) {await page.getByRole('button',{name:'Flip movement',exact:true}).click();await settle();const orbit=await inspect();check(`Flip ${i+1}: fitted meshes and materials stable`,same(orbit.visible,fitted.fitted)&&JSON.stringify(orbit.materials)===materials);}
  await page.getByRole('button',{name:'Reset view',exact:true}).click();await settle();
  s=await inspect();check('Reset recentres immutable mainplate',Math.hypot(s.mainplateCenter.x-s.frameRegion.left-s.frameRegion.width/2,s.mainplateCenter.y-(s.frameRegion.top+s.frameRegion.bottom)/2)<.01);
  await page.getByRole('button',{name:'Flip movement',exact:true}).click();await settle();const flipped=await inspect();check('Flip preserves projected mainplate centre',Math.hypot(flipped.mainplateCenter.x-s.mainplateCenter.x,flipped.mainplateCenter.y-s.mainplateCenter.y)<.01);
- // Resume a nonlinear history, including the persistent hint preference.
- await toggle();s=await inspect();await page.reload({waitUntil:'networkidle'});await settle();check('Nonlinear resume restores exact history and hints',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
+ // Resume a nonlinear history without changing its committed action order.
+ s=await inspect();await page.reload({waitUntil:'networkidle'});await settle();check('Nonlinear resume restores exact history',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
  await page.evaluate(()=>window.__playContext());await page.waitForFunction(()=>!window.__playInspect().ready);await page.evaluate(()=>window.__playContext(true));await settle();check('Renderer recovery preserves nonlinear session',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
  await start('hard');await page.locator('canvas').focus();await page.keyboard.press('ArrowLeft');await page.keyboard.press('-');await settle();const main=await inspect();
  check('Hard watch level exposes three ready subassembly projects',await page.locator('[data-packet-id]').count()===3);
  await page.locator('[data-packet-id="movement-1"]').click();await settle();await pick(manifest.levels.hard.steps[0].id);check('Workbench is an explicit labelled view',(await inspect()).workspace==='movement-1'&&/Workbench/.test(await page.locator('.play-workspace').innerText()));
- await page.screenshot({path:path.join(out,'phone-hard-workbench-off.png')});
- await toggle();await page.screenshot({path:path.join(out,'phone-hard-workbench-on.png')});
+ await page.screenshot({path:path.join(out,'phone-hard-workbench.png')});
  await page.getByRole('button',{name:'Return to watch',exact:true}).first().click();await settle();preserved('Returning restores previous main camera exactly',main,await inspect());
  await page.getByRole('button',{name:'Filter',exact:true}).click();await page.getByLabel('Parts group',{exact:true}).selectOption('train');preserved('Hard group browsing preserves camera',main,await inspect());
  await page.getByLabel('Parts group',{exact:true}).selectOption('power');await page.keyboard.press('Escape');await page.screenshot({path:path.join(out,'phone-hard-inventory-on.png')});

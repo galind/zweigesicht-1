@@ -15,7 +15,7 @@ in [PLAY_INVENTORY.md](PLAY_INVENTORY.md).
 | --- | --- | --- |
 | Production Easy | 87/87 placements; 1,094 assertions passed | 1440×900, sampled 320×844 stages, transition undo/replay, refresh, both final faces, idle rendering |
 | Production Hard | 247/247 placements; 4,615 assertions passed | Every step at both 390×844 and 320×844, with real source geometry, transition undo/replay, refresh, both final faces, idle rendering |
-| Production focused interactions | 51 assertions passed | Real mouse and CDP touch drags, misses, preview without commit, grab offset, cancellation/capture loss/resize, camera lock, keyboard orbit, wheel zoom, placement at changed zoom, tap alternative, hints, confirmations, persistence failure and recovery |
+| Production focused interactions | 51 assertions passed | Real mouse and CDP touch drags, misses, preview without commit, grab offset, cancellation/capture loss/resize, free orbit, keyboard controls, wheel zoom, placement at changed zoom, Ready now/All parts, Show seat, confirmations, persistence failure and recovery |
 | Homepage regression | 5 wrapper checks including all 71 existing UX assertions passed | No game link; actual requested script bodies exclude game state, manifest and completion UI; no game module requests; unchanged source and reviewed screenshots |
 | Development direct route | 11 assertions passed | Direct `/workshop?mode=easy`, actual first placement, automatic refresh/resume, exact next step and fitted-set restoration |
 
