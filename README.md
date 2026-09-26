@@ -6,6 +6,17 @@ The movement opens fully assembled. Reveal six functional groups, configure a fi
 
 See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
+`/play` is a separate free-choice assembly puzzle. Easy offers 89 prepared
+assemblies and parts; Hard offers 249 individual parts grouped by mechanism,
+with explicit workbenches and 35 assembly transfers. Hints start off. Both levels
+retain the same 16-leaf foundation and finish with 265 physical leaves. Nonlinear
+progress and the hint preference save locally. Earlier guided saves require an
+explicit fresh start. See the [redesign](docs/PLAY_REDESIGN.md),
+[dependency ledger](docs/PLAY_DEPENDENCIES.md) and
+[source inventory](docs/PLAY_INVENTORY.md). It is not a servicing procedure.
+
+Current local production preview: **http://127.0.0.1:4185/play**.
+
 ## Run the prepared checkout
 
 For a prepared checkout with dependencies and generated assets:
@@ -38,6 +49,7 @@ A new checkout needs the pinned `explorer/` and `scripts/assets/` dependencies, 
 ```sh
 node --test tests/*.test.mjs
 node scripts/cad/review-runtime.mjs
+node scripts/play/validate-inventory.mjs
 cd explorer
 npm run typecheck
 npm run lint
@@ -48,6 +60,24 @@ npm start -- --hostname 127.0.0.1 --port 4176
 
 `http://127.0.0.1:4173/?inspect=1` exposes browser regression, benchmark, optional-asset failure and WebGL recovery checks. `?no3d=1` exercises the static fallback; `?text=200` exercises a 200% root-font layout. These are explicit test modes, not real-device certification. Screenshots and numeric traces remain local in ignored `artifacts/` paths. The CPU source/runtime suite also requires the prepared ignored CAD audit inputs documented in [cleanup review](docs/CLEANUP_REVIEW.md); it is not a clean-clone test. The inspection UI and browser regression modules load only with `?inspect=1`.
 
+The [website review](docs/WEBSITE_REVIEW.md) maps both routes and records the
+regression commands, measured comparisons and remaining verification limits.
+`scripts/play/browser-check.mjs` runs both levels and focused checks through real DOM inputs;
+`scripts/review/explorer-check.mjs` runs the opt-in homepage suites. Both accept
+an existing local Playwright installation through `PLAYWRIGHT_MODULE` and Chrome
+through `CHROME_PATH`; they do not add runtime or project dependencies.
+
+For the redesigned Play flow, run `node scripts/play/browser-check.mjs
+http://127.0.0.1:4185 all` with those environment variables. Individual modes are
+`easy`, `hard`, `focused` and `home`. `PLAY_QA_OUTPUT` selects the ignored evidence
+directory; `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternative legal
+orders and narrow Hard viewports. The older guided browser reports describe
+historical `play-2`/`play-3` code, not the current free-choice interaction.
+`node scripts/play/drag-check.mjs http://127.0.0.1:4185` uses the same environment
+variables to check actual-scale card dragging, touch dragging from thumbnails and swiping
+at desktop, 390 px and 320 px widths, plus every Hard component's pickup and the
+barrel cover's workspace/support requirements.
+
 ## Hosting and source boundaries
 
 The repository has a Vercel build configuration (`vercel.json`, `npm run build:vercel` in `explorer/`). Domain cutover status is recorded in [PROGRESS.md](PROGRESS.md).
@@ -55,3 +85,9 @@ The repository has a Vercel build configuration (`vercel.json`, `npm run build:v
 Original CAD, source imagery, caches and environments remain outside Git. Most generated assets are local; explicitly approved runtime payloads are tracked through the exceptions in `.gitignore`. Source provenance is under `assets/source-manifest/`; hand-authored overrides are under `assets/authored/`. Publication and redistribution remain subject to the [release gates](docs/RELEASE_GATES.md).
 
 Both build targets prune their output to the current runtime manifests, reject missing required assets and exclude local reference imagery. Local originals/generated evidence are never pruned. `npm start` serves the standard build; `build:vercel` only creates deployment output. For audit scope, removals and measured improvements, see [cleanup review](docs/CLEANUP_REVIEW.md).
+
+
+Play uses two fixed faces with Flip and centered zoom. The shock-indicator
+workbench has a fixed angled pair; radial dial screws expose a fixed edge view.
+`node scripts/play/fixed-access-check.mjs` checks source-surface access for all
+373 actions at three sampled distances using the prepared local runtime assets.

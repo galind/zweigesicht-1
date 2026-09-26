@@ -2,6 +2,10 @@
 
 The application lives in `explorer/`. It uses React/TypeScript, vinext/Vite and a framework-independent Three.js scene controller. `explorer/vite.config.ts` configures local CAD middleware and enables Nitro when a build preset is supplied. The root `vercel.json` selects the Vercel build; current domain status is in [PROGRESS.md](../PROGRESS.md).
 
+The [website review](WEBSITE_REVIEW.md) maps both routes and the ownership
+decisions behind their shared modules. The homepage remains independent of the
+Play manifest, session state and completion UI.
+
 ## Source and asset boundary
 
 Original STEP files remain in ignored `assets/source-originals/`. The conversion pipeline writes ignored `assets/generated/`. Runtime files are copied into `explorer/public/models/`; `.gitignore` lists the explicitly approved deployment payloads that are tracked, with other generated files excluded. Screenshot/reference evidence is also local-only. Provenance, authored parameter files, source extraction scripts and textual audit reports can be versioned.
@@ -42,3 +46,68 @@ Source exceptions, fitting and material evidence are summarized in [CAD_NOTES.md
 `CasePose.ts` stages the maker’s face-changing sequence: upper attachment withdraws, lower withdraws, case turns about CAD X, lower reseats, upper reseats. Its inverse X transform and the observer frame share one phase clock, so attachments translate without rotating in the viewing frame and source case/movement matrices remain unchanged. Exact endpoints reuse original opposite-end occurrences, with identical definition IDs. Hidden-case flips use the same clock; reversals start from the displayed phase and reduced motion snaps camera and fitted poses together. Configuration loading does not restart the flip. Disassembly remains independent; fitted lug separation vectors rotate with their attachment frame at the current Flip phase, and camera bounds use the same transformed endpoints. Other packets retain watch-local offsets. Camera refits requested during turnover defer until it finishes. The four unresolved ring-mounted locking pins remain seated. Source correspondence and interpretation limits are recorded in `assets/authored/motion-evidence.json` and `assets/source-manifest/face-flip.json`.
 
 Crown d46 compiles the existing frosting relief only for the recessed M background: original face 468, local X=3.4 mm with an X-facing normal. Relief uses the local YZ plane and matching tangent basis. Raised lettering at X=3.5 mm, rim and knurling remain unchanged.
+
+## Assembly route and shared boundaries
+
+`app/play/page.tsx` supplies separate canonical/noindex metadata. `Play.tsx`
+owns inventory selection, group/search position, explicit workspace navigation,
+validated action history and storage feedback. `state.ts` owns the dependency
+checks, replay validation, physical accounting and Undo. Selection never determines
+progress. `PlayViewer.ts` owns the source meshes, independent thumbnail render
+targets, source-seat visibility checks, pointer capture and camera lifetime.
+Dragged meshes retain source scale and are hidden between interactions. Gallery
+cards supply the drag origin and failed-drop return point. Pickup is independent
+of workspace membership; hints and placement validation retain their dependency
+rules, and fitting/guidance additionally require the correct active workspace.
+Fresh games begin on the negative-Z movement side.
+
+The versioned `play-4` manifest retains all source endpoints and the 265-leaf
+finished watch. It starts with 16 fitted leaves. Easy has 89 direct placements;
+Hard has 249 individual placements and 35 explicit packet transfers. Hard leaves
+assembled on the workbench remain separate from fitted leaves until transfer.
+Transfers add no physical count. Undo reverses the action history, including
+transfers; completion requires the exact fitted set and a valid graph history.
+Legacy linear saves are explicitly incompatible and are retained until the
+player confirms a fresh start. Hints persist with a nonlinear save; restart
+sets them off. The [dependency ledger](PLAY_DEPENDENCIES.md) distinguishes source
+evidence from conservative puzzle assumptions.
+
+The mainplate gives a fixed framing reference. The orbit pivot stays on that
+geometry; a camera projection offset reserves the measured inventory/header
+space. Selection, placement, failed drops, hints and Undo never reframe. Explicit
+workbench entry captures the main camera and return restores it. Resize updates
+projection while preserving camera direction and distance. Play disables orbit
+and pan and allows bounded centered zoom plus two fixed faces via Flip/F.
+`fixedViews.ts` supplies face directions, including a fixed tilted pair for the
+shock-indicator workbench. The radial dial screws have explicit View dial edge
+presets using their source-authored vectors; Return to faces restores the prior
+normal pose and zoom limits. Reset, Flip and Show destination are explicit camera
+actions; guidance can only choose between the current two presets. No camera event hides fitted meshes
+or changes their materials. Hint meshes have a separate material, and drops
+require an actual source-surface sample with a clear ray past fitted opaque
+geometry. This is visual validation, not swept-solid collision certification.
+
+`GraphicsResources.ts` owns the identical renderer settings, studio lights,
+temporary PMREM generation and deduplicated scene-resource disposal. Controllers
+retain the resulting environment and scene lifetimes. Their loading policies
+remain distinct: the explorer adds optional catalog geometry without losing
+configuration intent; Play prepares every required piece before committing a
+complete replacement scene, disposing successful siblings after a failed load.
+Late metadata cannot start further loads after disposal.
+
+Both controllers schedule frames when needed and settle after damping and
+transitions. The explorer also sustains explicitly enabled inspection captures
+and benchmarks; benchmark implementation comes from the lazy inspection chunk.
+Visibility, context recovery, resizing and interaction wake rendering again.
+An idle check must count scheduled callbacks as well as rendered frames.
+
+`CameraFrame.ts`, the native viewer controls and Sheet remain the shared
+interaction primitives. `useTextScalePreview` applies the explicit `?text=200`
+mode at the document root, including portaled panels, and restores previous
+styling on unmount. Play retains native confirmations with accessible names. Gallery cards remain
+in stable slots after placement and unavailable cards stay inspectable. A selected
+card’s thumbnail is its touch drag surface; swipes on the rest of the gallery browse.
+There is no detached drag tray. Enlarged text grows within the bounded,
+scrollable inventory; measured workspace controls stay clear of the assembly. The homepage phone dock continues
+to wrap according to actual label width. Both routes share only the established
+camera helpers, graphics resources, native buttons and Sheet components.
