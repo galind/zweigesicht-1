@@ -97,6 +97,8 @@ export default function Home() {
   const exploreButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const assembleButton = useRef<HTMLButtonElement>(null);
+  const easyModeButton = useRef<HTMLButtonElement>(null);
   const moreButton = useRef<HTMLButtonElement>(null);
   const visibleTrigger = (
     selector: string,
@@ -172,7 +174,19 @@ export default function Home() {
     [dials, setDials] = useState(false),
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
+    [assemble, setAssemble] = useState(false),
     [inspect, setInspect] = useState(false);
+  useEffect(() => {
+    const url = new URL(location.href);
+    if (url.searchParams.get('assemble') !== '1') return;
+    url.searchParams.delete('assemble');
+    history.replaceState(
+      history.state,
+      '',
+      `${url.pathname}${url.search}${url.hash}`,
+    );
+    queueMicrotask(() => setAssemble(true));
+  }, []);
   useEffect(() => {
     const breakpoint = window.matchMedia('(max-width: 600px)');
     const dismissNavigation = () => {
@@ -325,7 +339,8 @@ export default function Home() {
         separate ||
         dials ||
         options ||
-        details
+        details ||
+        assemble
       )
         return;
       event.preventDefault();
@@ -345,6 +360,7 @@ export default function Home() {
     dials,
     options,
     details,
+    assemble,
   ]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
@@ -381,6 +397,7 @@ export default function Home() {
     setDetails(false);
     setCatalog(false);
     setAbout(false);
+    setAssemble(false);
   };
   const openPanel = (update: (open: boolean) => void, open: boolean) => {
     if (open) {
@@ -439,6 +456,60 @@ export default function Home() {
             by Marco Lang
           </a>
         </div>
+        <Sheet
+          open={assemble}
+          onOpenChange={(open) => openPanel(setAssemble, open)}
+        >
+          <SheetTrigger
+            ref={assembleButton}
+            className="text-button assemble-trigger"
+            aria-label="Assemble the movement"
+          >
+            <span className="assemble-label-desktop">Assemble the movement</span>
+            <span className="assemble-label-phone" aria-hidden="true">
+              Assemble
+            </span>
+          </SheetTrigger>
+          <SheetContent
+            side="top"
+            style={panelStyle}
+            className="explorer-panel settings-panel header-panel assembly-chooser"
+            scrollContent
+            initialFocus={easyModeButton}
+            finalFocus={assembleButton}
+          >
+            <SheetHeader>
+              <SheetTitle>Assemble the movement</SheetTitle>
+              <SheetDescription>
+                Choose how much of the movement you want to build.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="panel-body assembly-mode-list">
+              <button
+                ref={easyModeButton}
+                type="button"
+                onClick={() => location.assign('/workshop?mode=easy')}
+              >
+                <span>
+                  <strong>Easy</strong>
+                  <small>89 prepared fits · Best for a first build</small>
+                </span>
+                <ChevronRight aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => location.assign('/workshop?mode=hard')}
+              >
+                <span>
+                  <strong>Hard</strong>
+                  <small>249 individual parts · 35 subassemblies</small>
+                </span>
+                <ChevronRight aria-hidden="true" />
+              </button>
+              <p>Progress is saved on this device.</p>
+            </div>
+          </SheetContent>
+        </Sheet>
         <nav className="header-actions" aria-label="Information and settings">
           <InformationPanel
             style={panelStyle}

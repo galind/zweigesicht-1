@@ -45,9 +45,11 @@ async function geometry(page) {
   });
 }
 async function start(page, route, suffix='') {
-  await page.goto(`${base}/${route==='play'?'play':''}${suffix}`, {waitUntil:'networkidle'});
-  if(route==='play') await page.getByRole('button',{name:/^Easy\b/}).click();
-  else await page.getByRole('button',{name:'Disassemble',exact:true}).waitFor();
+  const routeSuffix = route==='play'
+    ? `/workshop?mode=easy${suffix ? `&${suffix.replace(/^\?/, '')}` : ''}`
+    : `/${suffix}`;
+  await page.goto(`${base}${routeSuffix}`, {waitUntil:'networkidle'});
+  if(route==='home') await page.getByRole('button',{name:'Disassemble',exact:true}).waitFor();
   await pause(page,2500);
 }
 try {
@@ -132,17 +134,15 @@ try {
   }
   {
     const {context,page}=await pageFor({width:1440,height:900});await start(page,'play');
-    await page.getByRole('button',{name:'Choose difficulty',exact:true}).click();await pause(page,300);
-    const dialog=page.locator('dialog[open]');const name=await dialog.getAttribute('aria-labelledby');check('Confirmation dialog has accessible name',Boolean(name&&await page.locator(`[id="${name}"]`).textContent()));
-    await page.getByRole('button',{name:'Choose level',exact:true}).click();await pause(page,300);
-    const focus=await page.evaluate(()=>({tag:document.activeElement?.tagName,text:document.activeElement?.textContent?.slice(0,100)}));check('Difficulty confirmation moves focus into choice UI',focus.tag!=='BODY',focus);await context.close();
+    await page.getByRole('button',{name:'Menu',exact:true}).click();await page.getByRole('button',{name:'Change difficulty',exact:true}).click();await pause(page,300);
+    check('Change difficulty returns to the homepage chooser',new URL(page.url()).pathname==='/'&&await page.getByText('Choose how much of the movement you want to build.',{exact:true}).isVisible());await context.close();
   }
   {
     const {context,page}=await pageFor({width:390,height:844});
-    await page.goto(`${base}/play?text=200`,{waitUntil:'networkidle'});
+    await page.goto(`${base}/workshop?mode=easy&text=200`,{waitUntil:'networkidle'});
     await page.getByRole('button',{name:'How to play',exact:true}).click();await pause(page,300);
     const fonts=await page.evaluate(()=>({url:location.href,root:getComputedStyle(document.documentElement).fontSize,app:getComputedStyle(document.querySelector('.play-app')).fontSize,help:getComputedStyle(document.querySelector('.play-help-copy')).fontSize}));
-    await page.goto(`${base}/play`,{waitUntil:'networkidle'});
+    await page.goto(`${base}/workshop`,{waitUntil:'networkidle'});
     await page.getByRole('button',{name:'How to play',exact:true}).click();await pause(page,300);
     const normal=await page.evaluate(()=>({root:getComputedStyle(document.documentElement).fontSize,app:getComputedStyle(document.querySelector('.play-app')).fontSize,help:getComputedStyle(document.querySelector('.play-help-copy')).fontSize}));
     check('Text query scales app and portal consistently',['root','app','help'].every(k=>parseFloat(fonts[k])===2*parseFloat(normal[k])),{enlarged:fonts,normal});
@@ -160,8 +160,8 @@ try {
     check('Starting assembly focuses staged part',await page.locator('.play-stage').evaluate(el=>el===document.activeElement));
     await page.locator('.play-stage').focus();await page.keyboard.press('Enter');await page.locator('.play-target').focus();await page.keyboard.press('Enter');await pause(page,700);
     check('Keyboard placement focuses next staged part',await page.locator('.play-stage').evaluate(el=>el===document.activeElement));
-    await page.reload({waitUntil:'networkidle'});await page.getByRole('button',{name:/^Continue /}).click();await pause(page,1800);
-    check('Continue focuses staged part',await page.locator('.play-stage').evaluate(el=>el===document.activeElement));
+    await page.reload({waitUntil:'networkidle'});await pause(page,1800);
+    check('Saved Workshop resumes without an entry chooser',await page.locator('.play-choice').count()===0);
     await context.close();
   }
   if(phase==='final')for(const route of ['home','play'])for(const view of [{name:'portrait',width:390,height:844,insets:{top:44,bottom:34,left:0,right:0}},{name:'landscape',width:844,height:390,insets:{top:0,bottom:21,left:44,right:44}}]) {

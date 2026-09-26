@@ -1944,6 +1944,127 @@ canvas:focus-visible {
   }
 }
 
+/* Deliberate homepage entry to the separately loaded Workshop route. */
+.assemble-label-phone {
+  display: none;
+}
+.assemble-trigger {
+  min-height: 44px;
+  margin-left: auto;
+  padding-inline: 14px;
+  border-radius: 10px;
+  background: rgb(38 38 38 / 82%);
+  font-weight: 600;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.assembly-chooser[data-slot='sheet-content'] {
+  --popup-width: min(420px, calc(100vw - 32px));
+}
+.assembly-mode-list {
+  display: grid;
+  gap: 10px;
+}
+.assembly-mode-list > button {
+  width: 100%;
+  min-height: 76px;
+  padding: 14px 16px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: inherit;
+  background: rgb(255 255 255 / 3%);
+  text-align: left;
+  cursor: pointer;
+}
+.assembly-mode-list > button span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+.assembly-mode-list strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.assembly-mode-list small,
+.assembly-mode-list p {
+  color: #aaa8a4;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.assembly-mode-list p {
+  margin: 6px 2px 0;
+  text-align: center;
+}
+@media (hover: hover) {
+  .assemble-trigger:hover,
+  .assembly-mode-list > button:hover {
+    color: #fff;
+    background: rgb(255 255 255 / 8%);
+  }
+}
+
+/* The assembly choice is a decision, not another informational edge sheet. */
+[data-slot='sheet-overlay']:has(+ .assembly-chooser) {
+  background: rgb(0 0 0 / 58%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.explorer-panel.settings-panel.assembly-chooser[data-slot='sheet-content'],
+.text-enlarged
+  .explorer-panel.settings-panel.assembly-chooser[data-slot='sheet-content'] {
+  inset: 50% auto auto 50% !important;
+  width: var(--popup-width) !important;
+  max-width: calc(100vw - 32px) !important;
+  max-height: calc(100dvh - 32px) !important;
+  transform: translate(-50%, -50%) !important;
+  translate: 0 0;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 18px;
+  background: rgb(22 22 22 / 96%) !important;
+  box-shadow:
+    0 28px 80px rgb(0 0 0 / 52%),
+    inset 0 1px rgb(255 255 255 / 5%);
+}
+.explorer-panel.assembly-chooser[data-slot='sheet-content'][data-starting-style],
+.explorer-panel.assembly-chooser[data-slot='sheet-content'][data-ending-style] {
+  translate: 0 0;
+  transform: translate(-50%, calc(-50% + 8px)) scale(0.985) !important;
+  opacity: 0;
+}
+.assembly-chooser[data-slot='sheet-content'] > [data-slot='sheet-header'] {
+  padding: 22px 24px 16px !important;
+  border-bottom: 0;
+  text-align: center;
+}
+.assembly-chooser [data-slot='sheet-title'],
+.assembly-chooser [data-slot='sheet-description']:not(.sr-only) {
+  padding-inline: 30px;
+}
+.assembly-chooser [data-slot='sheet-title'] {
+  font-size: 1.125rem;
+}
+.assembly-chooser .panel-body {
+  padding: 4px 20px 20px;
+}
+@media (max-width: 600px) {
+  .topbar .assemble-trigger {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-inline: 12px;
+  }
+  .assemble-label-desktop {
+    display: none;
+  }
+  .assemble-label-phone {
+    display: inline;
+  }
+}
+
 /* Phones keep only primary actions on the canvas; secondary actions are on demand. */
 .mobile-menu-trigger,
 .mobile-more-trigger,

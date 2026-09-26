@@ -1,5 +1,10 @@
 # Choosing and assembling parts
 
+> Historical implementation report. The watch-level inventory and control
+> presentation described here were superseded by the
+> [Play experience review](PLAY_EXPERIENCE_REVIEW.md). The geometry, dependency
+> and reachability evidence below remains relevant.
+
 Implemented and reviewed locally, 26 September 2026. This records puzzle rules, not a
 certified servicing procedure. The original inventory, immutable source poses,
 16-leaf foundation and 265-leaf finished configuration remain authoritative.

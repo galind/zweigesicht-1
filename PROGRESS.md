@@ -630,3 +630,200 @@ Pushed `codex/play-free-assembly` over SSH and opened
 The PR describes the redesign, gallery dragging, fixed views, opening orientation,
 verification evidence and remaining review limits. No merge or manual deployment.
 Next action: review PR #14. Original prompt files remain untracked.
+
+## Play workshop experience redesign — 26 September 2026
+
+Completed an experience-led review of the current free-assembly branch. The
+[review and plan](docs/PLAY_EXPERIENCE_REVIEW.md) identifies the main product
+failure: exact mechanics and exhaustive inventory were presented as a CAD-style
+database before the player reached a satisfying fit. Existing production logs
+remain useful regression evidence but were explicitly rejected as evidence of
+enjoyment or comprehension.
+
+The new primary loop is **Ready now**: it offers only unplaced actions whose
+authored prerequisites pass, without revealing their seats. **All parts** keeps
+the full searchable dependency puzzle. Workshop retains 89 prepared fits.
+Master bench still contains all 249 individual parts and 35 transfers, but the
+watch-level tray now presents named subassembly projects; child leaves appear
+only inside their focused workbench. Empty workbenches show an intentional
+fixture cue rather than a blank canvas. Source endpoints, the dependency graph,
+snap validation, fixed views, save schema and finished 265-leaf movement are
+unchanged.
+
+The interface now sets honest mode expectations, gives the watch priority, uses
+a warmer workshop hierarchy, shows physical-part / fit / mechanism progress,
+marks selected thumbnails as draggable, acknowledges clue-free fits, calls out
+subassembly and mechanism milestones, and provides a dedicated completion
+state. Undo, Flip and Reset remain in the fitting path. Help, clue preference,
+restart and challenge selection live in a compact labeled menu. Successful
+saves no longer occupy a permanent footer; storage failures remain visible.
+
+Verification on the final build: inventory validation passes with 16 foundation,
+89 Workshop, 249 Master-bench and 265 final leaves; the maximal-obstruction
+access audit passes all 373 actions / 1,119 camera checks; all 66 unit and
+lifecycle tests, TypeScript, lint and production build pass. Browser review on
+the local production build covered entry/resume, Ready now, All parts, menu,
+Master-bench projects, an empty workbench, explicit Show seat, a successful fit
+and advancing prerequisite tray at 1440×900 and 390×844. The 320×740 / 200% text
+layout has zero horizontal overflow, an in-viewport dock and icon-only labelled
+header controls. No browser warnings or errors were recorded. The maintained
+Play browser scripts were updated for project cards and the renamed controls;
+their full Playwright traversals were not rerun because this checkout has no
+Playwright runtime.
+
+Physical-phone, Safari and representative human enjoyment/accessibility review
+remain outstanding. The fixed-view surface audit is not collision or servicing
+certification. Final production preview: http://127.0.0.1:4187/play. This work
+is on `codex/play-workshop-redesign`, based directly on `codex/play-assembly`.
+
+PR publication: pushed the branch over the configured SSH remote and opened
+[PR #15](https://github.com/galind/zweigesicht-1/pull/15) against
+`codex/play-assembly` through the connected GitHub app. No merge or deployment
+was performed. Next action: human play review, followed by the outstanding
+physical-device and Safari checks.
+
+### Gallery finish correction — 26 September 2026
+
+User review identified the gallery parts as visually unpleasant. The previews
+were materially faithful but colorimetrically wrong: WebGL render-target bytes
+are in linear-sRGB, while the generated PNG was interpreted by the browser as
+display-sRGB. That crushed metallic midtones toward black and left isolated
+warm highlights, producing the dark orange silhouettes seen in the tray.
+
+Thumbnail pixels now receive the missing display encoding before PNG export.
+The fix keeps the shared authored materials, source geometry, environment,
+camera, layout and drag behavior unchanged; it does not introduce a separate
+game-only finish. Desktop review across the full Ready-now tray and a 390×844
+phone review confirm legible steel, brass, rose-gold, blued and ruby parts.
+Browser warning/error logs remain empty. Existing build notices about chunk
+size and route classification are unrelated to this visual defect and remain
+documented rather than treated as feature-health evidence.
+
+Verification: all 67 tests, inventory validation, TypeScript, lint and the
+production build pass. The new regression check covers linear-to-display color
+encoding and unchanged alpha. Commit `07e48cd` was pushed over SSH and PR #15's
+summary/verification were updated through the GitHub connector. The production
+preview at http://127.0.0.1:4187/play was rebuilt and left on the corrected
+gallery. Next action is user review; physical-device, Safari and representative
+enjoyment/accessibility review remain outstanding.
+
+## Play and homepage cohesion plan — 26 September 2026
+
+Completed a matching-size desktop and phone comparison of the homepage and the
+current Play production build. User feedback simplified the resulting
+[cohesion plan](docs/PLAY_HOMEPAGE_COHESION_PLAN.md): the homepage receives one
+weighted `Assemble the movement` action, its shared popup chooses Easy or Hard,
+and the selected mode opens directly at `/workshop`. The large route-level
+choice screen is removed rather than redesigned. `/play` becomes a compatibility
+redirect.
+
+The plan defines deterministic new/resume/cross-mode/corrupt/unavailable-save
+behavior, retains the current storage key, keeps the ordinary homepage free of
+Workshop payload, and avoids an all-at-once rename of renderer internals. A
+direct `/workshop` visit resumes a valid save; a visit without a save or mode
+returns to the homepage chooser. Switching away from a progressed mode remains
+explicitly confirmed.
+
+The active assembly UI still needs the measured cohesion work: homepage shell
+and identity, a compact 220–240 px part rail, one persistent progress value,
+simpler cards and on-demand filter/progress Sheets. Ready-now logic, exact
+endpoints, source-scale dragging, fixed views, workbenches, saves, recovery and
+the corrected authored gallery finishes remain unchanged. No product UI was
+changed; this revised plan is awaiting feedback before implementation.
+
+## Homepage entry and Workshop implementation — 26 September 2026
+
+Implemented the approved cohesion plan on `codex/play-workshop-redesign`.
+The homepage header now keeps a restrained **Assemble the movement** action
+visible at desktop and an accessible **Assemble** adaptation on narrow phones.
+Its shared Sheet contains only Easy, Hard and the final scope/save copy. The
+ordinary homepage still requests no Workshop component, manifest or CAD. The
+one-shot `/?assemble=1` hint opens the chooser after hydration and removes
+itself with history replacement.
+
+The public assembly route is now `/workshop`, with updated noindex metadata,
+canonical and Open Graph URL. `/play` returns a permanent 308 redirect and
+preserves query parameters. Easy and Hard links boot the assembly directly.
+Valid saves resume without another chooser; no-progress cross-mode saves are
+replaced directly; progressed cross-mode saves offer the requested and saved
+modes; corrupt/incompatible saves require confirmation before replacement;
+direct entry without a valid mode/save returns to the homepage chooser. Change
+difficulty preserves the save. Unavailable storage permits the current-tab
+build, keeps the mode query and warns that leaving or reloading may lose work.
+The storage key remains `zweigesicht:play:session:v1`.
+
+Workshop now uses the homepage's neutral field and identity. Easy/Hard context,
+Ready now, All parts and one mode-specific progress value occupy the compact
+rail; detailed progress and All-parts search/grouping use shared Sheets. Default
+cards prioritize their authored thumbnail and name without repeated ready-state
+metadata. Undo, Flip and Reset are the only persistent actions. Desktop rail
+height is 226 px; normal phone height is 232 px. Enlarged narrow layouts wrap
+and scroll vertically without rail-wide horizontal overflow. The menu includes
+Return to the movement viewer, and completion offers Explore the movement,
+Build again and Change difficulty while leaving the assembled movement visible.
+
+Final verification passes: 67 automated state/lifecycle/build tests; inventory
+validation at 16 foundation leaves, 89 Easy fits, 249 Hard parts and the exact
+265-leaf final set; fixed-view access at 373 actions / 1,119 camera checks;
+TypeScript; lint; production build; and production SEO/HTTP. Isolated Chrome
+passes 15 homepage-entry/payload/focus/navigation checks, 91 focused startup,
+storage, responsive, recovery and interaction checks, and 93 desktop/390/320
+drag/workbench checks, with no uncaught errors. Complete real-DOM traversals
+pass all 89 Easy actions / 538 checks and all 284 Hard actions / 1,708 checks
+in reverse order at 320 px. Visual review covers matching homepage/Workshop
+desktop and phone captures plus 320×568 at 200% text; the enlarged rail issue
+found during review was corrected and rerun.
+
+The production build retains the existing Node module-registration deprecation,
+large-chunk and vinext route-classification notices. Physical-phone, Safari,
+representative assistive-technology/human usability, mechanical certification
+and publication/redistribution release gates remain outstanding. The final
+local production preview is http://127.0.0.1:4187/workshop. No merge or manual
+deployment was performed.
+
+## Workshop interaction refinement — 26 September 2026
+
+Refined the homepage entry and Workshop after hands-on review. The Easy/Hard
+chooser is now a true centered modal decision with a dimmed, blurred backdrop,
+clear option cards, direct initial focus and consistent desktop/phone margins;
+it no longer borrows the informational edge-panel placement. Gallery thumbnails
+now use one straight-on watch-axis camera and a final transparent-pixel centering
+pass, so neighboring parts share a stable orientation and visual center.
+
+Removed the Hints/Clues toggle from both the header and menu. Ready now remains
+the actionable tray; All parts keeps unavailable work inspectable but prevents
+premature dragging and directs players back to Ready now. Show seat remains the
+single optional placement aid. The saved-session shape stays compatible, while
+the removed preference no longer affects Workshop presentation or placement.
+
+Workshop OrbitControls now match the homepage movement view: mouse or one-finger
+drag rotates freely, pinch/wheel zoom remains available, and Flip/Reset stay as
+quick camera actions. Help and feedback copy describe the new behavior. Updated
+browser runners cover readiness, disabled unavailable work, Show seat and free
+orbit instead of the removed hint states.
+
+Verification passes TypeScript, lint, all 67 automated tests, production build
+and targeted production Chrome checks. The chooser is mathematically centered
+at 1440×900 and 390×844 with 16 px phone margins; eight sampled visible
+thumbnails have identical rendered centers; a real canvas drag changes the
+camera while Show seat remains available. The maintained homepage, focused and
+drag/workbench suites pass 15, 87 and 87 checks respectively, with no uncaught
+browser errors. The rebuilt preview remains at
+http://127.0.0.1:4187/workshop.
+
+## Develop/staging release workflow — 26 September 2026
+
+Established `develop` as the long-lived integration branch and Vercel Preview
+source for staging, while `main` remains the production branch. Feature, fix and
+Codex branches now target `develop`; only a `develop` → `main` release PR is an
+ordinary production path. The branch policy is documented in
+`docs/BRANCHING_AND_RELEASES.md` and reinforced by the pull-request template.
+
+Added GitHub Actions CI for pull requests and pushes involving `develop` or
+`main`: automated tests, Workshop inventory validation, TypeScript, lint and the
+production build. A separate Prepare release workflow runs after pushes to
+`develop`, maintains one release PR to `main`, and leaves the actual merge
+manual behind staging, performance and publication checks. Vercel's existing
+Git integration remains the sole deployer: feature/develop pushes create Preview
+deployments, while a reviewed merge to `main` creates production. No Vercel
+token or parallel deployment path was introduced.

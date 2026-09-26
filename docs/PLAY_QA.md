@@ -15,9 +15,9 @@ in [PLAY_INVENTORY.md](PLAY_INVENTORY.md).
 | --- | --- | --- |
 | Production Easy | 87/87 placements; 1,094 assertions passed | 1440×900, sampled 320×844 stages, transition undo/replay, refresh, both final faces, idle rendering |
 | Production Hard | 247/247 placements; 4,615 assertions passed | Every step at both 390×844 and 320×844, with real source geometry, transition undo/replay, refresh, both final faces, idle rendering |
-| Production focused interactions | 51 assertions passed | Real mouse and CDP touch drags, misses, preview without commit, grab offset, cancellation/capture loss/resize, camera lock, keyboard orbit, wheel zoom, placement at changed zoom, tap alternative, hints, confirmations, persistence failure and recovery |
+| Production focused interactions | 51 assertions passed | Real mouse and CDP touch drags, misses, preview without commit, grab offset, cancellation/capture loss/resize, free orbit, keyboard controls, wheel zoom, placement at changed zoom, Ready now/All parts, Show seat, confirmations, persistence failure and recovery |
 | Homepage regression | 5 wrapper checks including all 71 existing UX assertions passed | No game link; actual requested script bodies exclude game state, manifest and completion UI; no game module requests; unchanged source and reviewed screenshots |
-| Development direct route | 11 assertions passed | Direct `/play`, actual first placement, refresh/Continue, exact next step and fitted-set restoration |
+| Development direct route | 11 assertions passed | Direct `/workshop?mode=easy`, actual first placement, automatic refresh/resume, exact next step and fitted-set restoration |
 
 The focused run includes 320×844 at **200% document-root text size** with reduced
 motion. Full header bounds, actual staged CAD alignment, separate staging and
@@ -36,7 +36,7 @@ unnecessary animation frames. Deliberately induced loading/context console
 messages are expected; final runs contain no uncaught page errors.
 
 The coordinator additionally verified TypeScript, lint, production build,
-production SEO/HTTP (own `/play` canonical, `noindex`, homepage-only sitemap),
+production SEO/HTTP (own `/workshop` canonical, `noindex`, homepage-only sitemap),
 and 38 tests: 8 play-state, 13 play-lifecycle and 17 existing tests. The existing
 CPU source/runtime suite passed; shared explorer implementation remains
 unchanged. Lifecycle tests include resource disposal, asynchronous recovery and
@@ -71,7 +71,7 @@ and browser. Neither is added as a project dependency:
 ```sh
 PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs \
 CHROME_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' \
-node scripts/play/browser-check.mjs http://127.0.0.1:4181 all
+node scripts/play/browser-check.mjs http://127.0.0.1:4187 all
 ```
 
 Individual modes are `easy`, `hard`, `focused`, `home`, and `dev`. The latter was

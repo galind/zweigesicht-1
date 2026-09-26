@@ -27,6 +27,20 @@ test('independent barrels and train branches can start freely; a premature bridg
   assert.equal(canPlace(manifest,undoPlacement(manifest,completed),'movement-17'),false);
   assert.equal(canPlace(manifest,s,'central-dial'),false,'Dial cannot cover unfinished movement work');
 });
+test('the default bench offers meaningful legal choices without revealing their seats',()=>{
+  const easy=createSession(manifest,'easy');
+  const easyReady=actions(manifest,'easy').filter(step=>canPlace(manifest,easy,step.id));
+  assert.equal(easyReady.length,19);
+  assert.ok(easyReady.every(step=>!step.prerequisiteStepIds.length));
+  assert.ok(!easyReady.some(step=>step.id==='movement-60'),'A premature cover is not put on the ready bench');
+
+  const hard=createSession(manifest,'hard');
+  const hardReady=actions(manifest,'hard').filter(step=>canPlace(manifest,hard,step.id));
+  assert.equal(hardReady.length,40);
+  const powerProjects=new Set(hardReady.filter(step=>step.groupId==='power'&&step.workspaceId).map(step=>step.workspaceId));
+  assert.deepEqual(powerProjects,new Set(['movement-1','movement-2','movement-60']));
+  assert.equal(hardReady.filter(step=>step.groupId==='power'&&!step.workspaceId).length,0);
+});
 test('hard internals cannot be placed unsupported, transferred early, double-counted or auto-transferred',()=>{
   const packet=manifest.packets.find(p=>p.id==='movement-1');
   const steps=manifest.levels.hard.steps.filter(s=>s.workspaceId===packet.id);

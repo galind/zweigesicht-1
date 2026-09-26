@@ -32,6 +32,7 @@ import type { Manifest, Part } from '../experience/catalog';
 import type { PlayManifest, PlayStep } from './types';
 import { dragCenter, snapDrop } from './state';
 import { fixedViewDirection } from './fixedViews';
+import { encodeThumbnailForDisplay } from './thumbnailColor';
 
 type Piece = { mesh: THREE.Mesh; pose: THREE.Matrix4; bounds: THREE.Box3 };
 type Point = { x: number; y: number };
@@ -146,16 +147,17 @@ export class PlayViewer {
       this.renderer.domElement.tabIndex = 0;
       this.renderer.domElement.setAttribute(
         'aria-label',
-        'Watch assembly. Flip switches sides. Pinch or scroll to zoom. F flips; plus and minus zoom; Home resets.',
+        'Watch assembly. Drag to orbit; pinch or scroll to zoom. F flips; plus and minus zoom; Home resets.',
       );
       this.camera.up.set(0, -1, 0);
       // Match the movement-side preset before controls can report a camera change.
       this.camera.position.set(0, 0, -60);
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.controls.enablePan = false;
-      this.controls.enableRotate = false;
+      this.controls.enableRotate = true;
       this.controls.zoomToCursor = false;
       this.controls.enableDamping = true;
+      this.controls.touches.ONE = THREE.TOUCH.ROTATE;
       this.controls.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
       this.controls.minDistance = 3;
       this.controls.maxDistance = 1500;
@@ -786,7 +788,7 @@ export class PlayViewer {
       !this.ready ||
       !this.active ||
       !this.current ||
-      (this.hints && !this.available) ||
+      !this.available ||
       this.busy ||
       this.drag ||
       event.button !== 0
@@ -824,7 +826,7 @@ export class PlayViewer {
     this.drag.moved ||=
       Math.hypot(p.x - this.drag.start.x, p.y - this.drag.start.y) > 5;
     this.drag.position = dragCenter(p, this.drag.grab);
-    // No magnetic preview with hints off: acceptance happens only on release.
+    // Keep the seat quiet until the player explicitly asks for assistance.
     const near =
       (this.hints || this.assistance) &&
       this.available &&
@@ -870,10 +872,10 @@ export class PlayViewer {
               ? 'This part belongs on its workbench. Choose Open workbench.'
               : 'Return to the watch to fit this piece.'
             : !this.available
-              ? 'That piece cannot be fitted yet. Turn hints on to see what it needs.'
+              ? 'That piece cannot be fitted yet. Choose Ready now for available parts.'
               : !this.seatVisible || !this.seatInView
-                ? 'The fitting point is hidden from this view. Flip the watch or use Show destination.'
-                : 'Not close enough to its fitting point. Try nearer, or use Show destination.',
+                ? 'The fitting point is hidden from this view. Rotate the movement or use Show seat.'
+                : 'Not close enough to its fitting point. Try nearer, or use Show seat.',
         );
       this.animateToStage(drag.position);
     }
@@ -985,7 +987,7 @@ export class PlayViewer {
     this.assistance = true;
     this.side = this.current.side;
     this.reframe(false);
-    // Guidance is limited to the same two fixed faces available through Flip.
+    // Guidance briefly returns to a clear face; the player can orbit again after it.
     this.updateSeat();
     if (!this.seatVisible || !this.seatInView) {
       this.side = this.side === 'front' ? 'back' : 'front';
@@ -1100,9 +1102,7 @@ export class PlayViewer {
     const heading = root
       ?.querySelector('.play-heading')
       ?.getBoundingClientRect();
-    const dock = root
-      ?.querySelector(this.active ? '.play-dock' : '.play-choice')
-      ?.getBoundingClientRect();
+    const dock = root?.querySelector('.play-dock')?.getBoundingClientRect();
     const landscape = rect.width / rect.height > 1.4 && rect.height < 600;
     const workspace = root
       ?.querySelector('.play-workspace')
@@ -1303,7 +1303,9 @@ export class PlayViewer {
       scene.add(mesh);
     }
     const size = bounds.getSize(new THREE.Vector3());
-    const span = Math.max(size.x, size.y, size.z, 0.1) * 0.72;
+    // Gallery pieces share the watch axes and a straight-on face. The old
+    // oblique camera made neighboring cards look arbitrarily tilted.
+    const span = Math.max(size.x, size.y, 0.1) * 0.72;
     const camera = new THREE.OrthographicCamera(
       -span,
       span,
@@ -1316,9 +1318,9 @@ export class PlayViewer {
     camera.position
       .copy(center)
       .add(
-        new THREE.Vector3(0.2, -0.35, step.side === 'front' ? 1 : -1)
-          .normalize()
-          .multiplyScalar(span * 4 + 20),
+        new THREE.Vector3(0, 0, step.side === 'front' ? 1 : -1).multiplyScalar(
+          span * 4 + 20,
+        ),
       );
     camera.lookAt(center);
     const target = new THREE.WebGLRenderTarget(128, 128);
@@ -1329,6 +1331,7 @@ export class PlayViewer {
       this.renderer.render(scene, camera);
       const buffer = new Uint8Array(128 * 128 * 4);
       this.renderer.readRenderTargetPixels(target, 0, 0, 128, 128, buffer);
+      encodeThumbnailForDisplay(buffer);
       const canvas = document.createElement('canvas');
       canvas.width = 128;
       canvas.height = 128;
@@ -1340,7 +1343,29 @@ export class PlayViewer {
           y * 512,
         );
       context.putImageData(data, 0, 0);
-      const url = canvas.toDataURL();
+      let left = 128,
+        right = -1,
+        top = 128,
+        bottom = -1;
+      for (let y = 0; y < 128; y++)
+        for (let x = 0; x < 128; x++)
+          if (data.data[(y * 128 + x) * 4 + 3] > 7) {
+            left = Math.min(left, x);
+            right = Math.max(right, x);
+            top = Math.min(top, y);
+            bottom = Math.max(bottom, y);
+          }
+      const aligned = document.createElement('canvas');
+      aligned.width = 128;
+      aligned.height = 128;
+      aligned
+        .getContext('2d')!
+        .drawImage(
+          canvas,
+          right >= left ? Math.round((127 - left - right) / 2) : 0,
+          bottom >= top ? Math.round((127 - top - bottom) / 2) : 0,
+        );
+      const url = aligned.toDataURL();
       this.thumbnails.set(step.id, url);
       return url;
     } catch {

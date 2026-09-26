@@ -35,8 +35,8 @@ try{
  for(const route of ['home','play']){
   const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage();
   page.on('pageerror',e=>report.errors.push({route,error:String(e)}));
-  await page.goto(`${base}/${route==='play'?'play':''}?inspect=1`,{waitUntil:'networkidle'});
-  if(route==='play'){await page.getByRole('button',{name:/^Easy\b/}).click();await page.waitForFunction(()=>window.__playInspect()?.ready);}
+  await page.goto(`${base}/${route==='play'?'workshop?mode=easy&':'?'}inspect=1`,{waitUntil:'networkidle'});
+  if(route==='play')await page.waitForFunction(()=>window.__playInspect()?.ready);
   else await page.locator('#benchmark-report').waitFor({state:'attached'});
   const rows=[];report.routes[route]={rows};
   for(const side of ['back','front']){
@@ -61,7 +61,7 @@ try{
   await context.close();await fs.writeFile(path.join(out,`${phase}-report.json`),JSON.stringify(report,null,2));
  }
  if(phase==='final')for(const width of [390,320]){
-  const page=await browser.newPage({viewport:{width,height:844}});await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await page.getByRole('button',{name:/^Easy\b/}).click();await wait(2300);
+  const page=await browser.newPage({viewport:{width,height:844}});await page.goto(`${base}/workshop?mode=easy&inspect=1`,{waitUntil:'networkidle'});await wait(2300);
   for(const side of ['front','back']){const before=await snapshot(page,'play');await page.getByRole('button',{name:'Flip movement',exact:true}).click();await wait(1800);const after=await snapshot(page,'play');checkFlipFraming(before,after,width,844,`${width}px to ${side}`);await page.screenshot({path:path.join(out,`${phase}-play-${width}-${side}.png`)});}
   await page.close();
  }

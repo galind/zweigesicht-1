@@ -19,9 +19,8 @@ const camera=s=>JSON.stringify([s.camera,s.cameraTarget,s.cameraUp,s.projection]
 const drift=(a,b)=>Math.max(...JSON.parse(a).flat().map((n,i)=>Math.abs(n-JSON.parse(b).flat()[i])));
 const same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
 try {
- await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await settle();
- await page.locator('.play-levels button').nth(level==='easy'?0:1).click();await settle();
- check('Hints start off',(await inspect()).session.hints===false);
+ await page.goto(`${base}/workshop?mode=${level}&inspect=1`,{waitUntil:'networkidle'});await settle();
+ check('Workshop starts with free rotation and no hints toggle',(await inspect()).rotationEnabled===true&&await page.getByRole('button',{name:/Hints|Clues/}).count()===0);
  const initial=await inspect();check('Mainplate centred in usable viewport',Math.hypot(initial.mainplateCenter.x-initial.frameRegion.left-initial.frameRegion.width/2,initial.mainplateCenter.y-(initial.frameRegion.top+initial.frameRegion.bottom)/2)<.01,initial.mainplateCenter);
  await page.screenshot({path:path.join(out,`${level}-inventory-off.png`)});
  const all=actions(manifest,level);
@@ -29,14 +28,23 @@ try {
  while(!isComplete(manifest,expected)) {
   const ready=all.filter(s=>canPlace(manifest,expected,s.id));
   const selected=process.env.PLAY_ORDER==='reverse' ? ready.at(-1) : ready.find(s=>s.kind==='transfer')??ready[0];assert.ok(selected,'No graph dead end');
-  if(level==='hard')await page.getByLabel('Parts group',{exact:true}).selectOption(selected.groupId);
+  if(level==='hard') {
+   const current=await inspect();
+   if(current.workspace!==selected.workspaceId&&current.workspace) {await page.getByRole('button',{name:'Return to watch',exact:true}).first().click();await settle();}
+   if(!(await inspect()).workspace) {
+    await page.getByRole('button',{name:'Filter',exact:true}).click();
+    await page.getByLabel('Parts group',{exact:true}).selectOption(selected.groupId);
+    await page.keyboard.press('Escape');
+   }
+   if(selected.workspaceId&&(await inspect()).workspace!==selected.workspaceId) {await page.locator(`[data-packet-id="${selected.workspaceId}"]`).click();await settle();}
+  }
   await page.locator(`[data-action-id="${selected.id}"]`).click();await settle();
   let s=await inspect();
   if(s.workspace!==selected.workspaceId) {
    await page.locator('.play-selection').getByRole('button',{name:selected.workspaceId?'Open workbench':'Return to watch',exact:true}).click();await settle();
   }
-  if(await page.getByRole('button',{name:'View dial edge',exact:true}).count()) {await page.getByRole('button',{name:'View dial edge',exact:true}).click();await settle();}
-  await page.getByRole('button',{name:'Show destination',exact:true}).click();await settle();
+  if(await page.getByRole('button',{name:'View fitting edge',exact:true}).count()) {await page.getByRole('button',{name:'View fitting edge',exact:true}).click();await settle();}
+  await page.getByRole('button',{name:'Show seat',exact:true}).click();await settle();
   await page.locator('.play-card-drag').scrollIntoViewIfNeeded();
   s=await inspect();
   check(`${i+1} ${selected.label}: actual seat exposed`,s.seatVisible,{id:selected.id,workspace:s.workspace,occluders:s.occluders});
@@ -53,7 +61,7 @@ try {
     await page.mouse.move(s.stage.x,s.stage.y);await page.mouse.down();await page.mouse.move(s.target.x,s.target.y,{steps:4});await page.mouse.up();
   }
   await settle();const after=await inspect();
-  check(`${i+1}: single committed placement`,after.session.actionIds.length===oldCount+1,{id:selected.id,notice:await page.locator('.play-selection').innerText()});
+  check(`${i+1}: single committed placement`,after.session.actionIds.length===oldCount+1,{id:selected.id,notice:await page.locator('.play-selection, .play-complete').innerText()});
   check(`${i+1}: camera preserved through placement`,drift(camera(after),before)<1e-9,{before:JSON.parse(before),after:JSON.parse(camera(after)),maxDrift:drift(camera(after),before)});
   check(`${i+1}: no next selected piece`,!after.stepId);
   expected=after.session;

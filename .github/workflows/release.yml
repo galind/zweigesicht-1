@@ -1,0 +1,74 @@
+name: Prepare release
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: prepare-release
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  release-pr:
+    name: Open develop to main release PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or find release PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const comparison = await github.rest.repos.compareCommits({
+              owner,
+              repo,
+              base: 'main',
+              head: 'develop',
+            });
+
+            if (comparison.data.ahead_by === 0) {
+              core.notice('develop has no unreleased commits.');
+              return;
+            }
+
+            const existing = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+              base: 'main',
+              head: `${owner}:develop`,
+            });
+
+            if (existing.data.length > 0) {
+              core.notice(`Release PR #${existing.data[0].number} already tracks develop.`);
+              return;
+            }
+
+            const created = await github.rest.pulls.create({
+              owner,
+              repo,
+              base: 'main',
+              head: 'develop',
+              title: 'Release develop to production',
+              body: [
+                '## Release',
+                '',
+                'Promotes the exact state currently deployed from `develop` to production.',
+                '',
+                '## Before merging',
+                '',
+                '- [ ] CI is green',
+                '- [ ] The latest `develop` Vercel deployment has been reviewed',
+                '- [ ] Sustained movement and Workshop performance have been checked on representative devices',
+                '- [ ] Applicable publication and redistribution gates are cleared',
+                '',
+                'Merging this PR updates `main`; the Vercel Git integration then creates the production deployment.',
+              ].join('\n'),
+            });
+
+            core.notice(`Created release PR #${created.data.number}.`);

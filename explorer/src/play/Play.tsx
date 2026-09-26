@@ -11,10 +11,13 @@ import {
   Undo2,
   LocateFixed,
   ListRestart,
-  Lightbulb,
-  Gauge,
   ArrowLeft,
   Wrench,
+  Menu,
+  Sparkles,
+  CircleHelp,
+  Boxes,
+  SlidersHorizontal,
 } from 'lucide-react';
 import {
   TextButton as Control,
@@ -38,7 +41,6 @@ import {
   fittedLeafIds,
   getSavedSession,
   isComplete,
-  missingPrerequisites,
   saveSession,
   undoPlacement,
   workspaceLeafIds,
@@ -46,6 +48,7 @@ import {
 import type { PlayLevel, PlayManifest, PlaySession, PlayStep } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
 import { useTextScalePreview } from '../experience/useTextScalePreview';
+import { makerUrl } from '../content/about';
 import './play.css';
 
 const manifest = authored as PlayManifest;
@@ -55,6 +58,30 @@ const blank: PlayViewStatus = {
   error: '',
   cutaway: false,
   side: 'back',
+};
+
+type StartupConflict =
+  | { kind: 'switch'; requested: PlayLevel; saved: PlaySession }
+  | {
+      kind: 'replace';
+      requested: PlayLevel;
+      reason: 'corrupt' | 'incompatible';
+    };
+
+const requestedMode = (): PlayLevel | null => {
+  const value = new URLSearchParams(location.search).get('mode');
+  return value === 'easy' || value === 'hard' ? value : null;
+};
+
+const clearVisibleMode = () => {
+  const url = new URL(location.href);
+  if (!url.searchParams.has('mode')) return;
+  url.searchParams.delete('mode');
+  history.replaceState(
+    history.state,
+    '',
+    `${url.pathname}${url.search}${url.hash}`,
+  );
 };
 
 function Thumbnail({
@@ -110,6 +137,9 @@ export default function Play() {
     assistanceRef = useRef(false);
   const [session, setSession] = useState<PlaySession | null>(null),
     [active, setActive] = useState(false);
+  const [bootResolved, setBootResolved] = useState(false);
+  const [startupConflict, setStartupConflict] =
+    useState<StartupConflict | null>(null);
   const [selection, setSelection] = useState<string | null>(null),
     [workspace, setWorkspace] = useState<string | null>(null);
   const [assistance, setAssistance] = useState(false),
@@ -119,14 +149,18 @@ export default function Play() {
     [storage, setStorage] = useState(''),
     [notice, setNotice] = useState('');
   const [help, setHelp] = useState(false),
+    [menu, setMenu] = useState(false),
+    [filters, setFilters] = useState(false),
+    [progressOpen, setProgressOpen] = useState(false),
+    [inventoryView, setInventoryView] = useState<'ready' | 'all'>('ready'),
+    [placementPulse, setPlacementPulse] = useState(0),
     [attempt, setAttempt] = useState(0);
-  const [confirm, setConfirm] = useState<
-    'restart' | 'levels' | PlayLevel | null
-  >(null);
+  const [confirm, setConfirm] = useState<'restart' | null>(null);
   const dialog = useRef<HTMLDialogElement>(null),
     lastFocus = useRef<HTMLElement | null>(null);
-  const helpButton = useRef<HTMLButtonElement>(null),
-    choiceTitle = useRef<HTMLHeadingElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null),
+    filterButton = useRef<HTMLButtonElement>(null),
+    progressButton = useRef<HTMLButtonElement>(null);
   const inventory = useRef<HTMLDivElement>(null),
     [headerBottom, setHeaderBottom] = useState(70);
   const scrollPositions = useRef(new Map<string, number>());
@@ -145,7 +179,7 @@ export default function Play() {
     const held =
       selected && !current!.actionIds.includes(selected.id) ? selected : null;
     controller.setAssistance(
-      current?.hints ?? false,
+      false,
       !!current && !!held && canPlace(manifest, current, held.id),
       assistanceRef.current,
     );
@@ -165,11 +199,15 @@ export default function Play() {
   const persist = useCallback((next: PlaySession) => {
     sessionRef.current = next;
     setSession(next);
-    setStorage(
-      saveSession(manifest, next).status === 'saved'
-        ? 'Saved on this device'
-        : 'Saving is unavailable. Keep playing in this tab.',
-    );
+    const result = saveSession(manifest, next);
+    if (result.status === 'saved') {
+      setStorage('');
+      clearVisibleMode();
+    } else {
+      setStorage(
+        'Saving is unavailable. Leaving or reloading may lose progress in this tab.',
+      );
+    }
   }, []);
   const apply = useCallback(
     (next: PlaySession) => {
@@ -194,32 +232,86 @@ export default function Play() {
     assistanceRef.current = false;
     setAssistance(false);
     setNotice('');
+    setInventoryView('ready');
+    setQuery('');
     sync();
   };
   useEffect(() => {
     let mounted = true;
     queueMicrotask(() => {
       if (!mounted) return;
+      const requested = requestedMode();
       const saved = getSavedSession(manifest);
       if (saved.status === 'saved') {
         sessionRef.current = saved.session;
         setSession(saved.session);
+        if (
+          requested &&
+          requested !== saved.session.level &&
+          saved.session.actionIds.length
+        ) {
+          setStartupConflict({
+            kind: 'switch',
+            requested,
+            saved: saved.session,
+          });
+        } else if (requested && requested !== saved.session.level) {
+          const next = createSession(manifest, requested);
+          activeRef.current = true;
+          setActive(true);
+          persist(next);
+        } else {
+          activeRef.current = true;
+          setActive(true);
+          if (requested) clearVisibleMode();
+        }
+        setBootResolved(true);
         sync();
-      } else if (saved.status === 'corrupt' || saved.status === 'incompatible')
+        return;
+      }
+      if (saved.status === 'corrupt' || saved.status === 'incompatible') {
+        if (!requested) {
+          location.replace('/?assemble=1');
+          return;
+        }
         setStorage(
           saved.status === 'incompatible'
-            ? 'Your saved linear assembly is incompatible with free assembly. It stays saved until you explicitly start a new game.'
-            : 'Your previous session cannot be restored. Choose a level to start again.',
+            ? 'This saved assembly is from an incompatible version and must be replaced before Workshop can start.'
+            : 'This saved assembly cannot be restored and must be replaced before Workshop can start.',
         );
-      else if (saved.status === 'unavailable')
-        setStorage('Saving is unavailable. You can play in this tab.');
+        setStartupConflict({
+          kind: 'replace',
+          requested,
+          reason: saved.status,
+        });
+        setBootResolved(true);
+        return;
+      }
+      if (!requested) {
+        location.replace('/?assemble=1');
+        return;
+      }
+      const next = createSession(manifest, requested);
+      sessionRef.current = next;
+      setSession(next);
+      activeRef.current = true;
+      setActive(true);
+      if (saved.status === 'unavailable') {
+        setStorage(
+          'Saving is unavailable. Leaving or reloading may lose progress in this tab.',
+        );
+      } else {
+        persist(next);
+      }
+      setBootResolved(true);
+      sync();
     });
     return () => {
       mounted = false;
     };
-  }, [sync]);
+  }, [persist, sync]);
   useEffect(() => {
-    if (!host.current || !destination.current) return;
+    if (!bootResolved || !host.current || !destination.current) return;
     let controller: PlayViewer;
     try {
       if (new URLSearchParams(location.search).get('no3d') === '1')
@@ -243,11 +335,28 @@ export default function Play() {
           const next = commitPlacement(manifest, previous, id);
           if (next === previous) return;
           const step = actions(manifest, next.level).find((s) => s.id === id)!;
+          const packet = step.workspaceId
+            ? manifest.packets.find((item) => item.id === step.workspaceId)
+            : null;
+          const finishedPacket =
+            packet &&
+            packet.stepIds.every((stepId) => next.actionIds.includes(stepId));
+          const groupSteps = actions(manifest, next.level).filter(
+            (item) => item.groupId === step.groupId,
+          );
+          const finishedSystem = groupSteps.every((item) =>
+            next.actionIds.includes(item.id),
+          );
           apply(next);
+          setPlacementPulse((value) => value + 1);
           setNotice(
             isComplete(manifest, next)
-              ? 'Your watch is assembled. Turn it over and take a look.'
-              : `${step.label} ${step.kind === 'transfer' ? 'seated in the watch' : 'placed'}. Choose another piece.`,
+              ? 'The movement is complete. Turn it over and enjoy what you built.'
+              : finishedPacket
+                ? `${packet.label} is complete. Return to the watch and seat the assembly.`
+                : finishedSystem
+                  ? `${manifest.groups.find((item) => item.id === step.groupId)?.label ?? 'System'} complete.`
+                  : `${step.label} ${step.kind === 'transfer' ? 'seated in the watch' : 'fitted'}.`,
           );
           // Keep focus on the player's chosen card; never select the next correct item.
           if (
@@ -300,7 +409,7 @@ export default function Play() {
       delete w.__playContext;
       delete w.__playAccessAudit;
     };
-  }, [apply, sync, attempt]);
+  }, [apply, sync, attempt, bootResolved]);
   useLayoutEffect(() => {
     const layout = () => {
       const bottom =
@@ -314,13 +423,13 @@ export default function Play() {
     const observer = new ResizeObserver(layout);
     app.current
       ?.querySelectorAll(
-        '.play-heading, .play-dock, .play-choice, .play-workspace',
+        '.play-heading, .play-dock, .play-workspace',
       )
       .forEach((e) => observer.observe(e));
     return () => observer.disconnect();
   }, [active, status.ready]);
   useEffect(() => {
-    if (confirm) {
+    if (confirm || startupConflict) {
       lastFocus.current = document.activeElement as HTMLElement;
       dialog.current?.showModal();
     } else {
@@ -328,10 +437,11 @@ export default function Play() {
       if (lastFocus.current?.isConnected) lastFocus.current.focus();
       lastFocus.current = null;
     }
-  }, [confirm]);
+  }, [confirm, startupConflict]);
 
   const disabled = !status.ready || status.busy;
   const all = session ? actions(manifest, session.level) : [];
+  const levelSteps = session ? manifest.levels[session.level].steps : [];
   const selected = all.find((s) => s.id === selection) ?? null;
   const done = new Set(session?.actionIds ?? []);
   const fitted = selected ? done.has(selected.id) : false;
@@ -339,11 +449,6 @@ export default function Play() {
     !!session && !!selected && canPlace(manifest, session, selected.id);
   const held = selected && !fitted ? selected : null;
   const inWorkspace = held?.workspaceId === workspace;
-  const hints = session?.hints ?? false;
-  const missing =
-    selected && session && hints
-      ? missingPrerequisites(manifest, session, selected.id)
-      : [];
   const complete = !!session && isComplete(manifest, session);
   const count = session
     ? assembledLeafIds(manifest, session).length -
@@ -352,15 +457,82 @@ export default function Play() {
   const physicalTotal =
     manifest.finalLeafIds.length - manifest.initialLeafIds.length;
   const packet = manifest.packets.find((p) => p.id === workspace);
+  const packetComplete =
+    !!packet && packet.stepIds.every((stepId) => done.has(stepId));
   const selectedPacket = manifest.packets.find(
     (p) => p.id === selected?.workspaceId,
   );
-  const gallery = all.filter(
-    (s) =>
-      (session?.level !== 'hard' || s.groupId === group) &&
-      (!query || s.label.toLowerCase().includes(query.toLowerCase())),
+  const normalizedQuery = query.trim().toLowerCase();
+  const inHardMode = session?.level === 'hard';
+  const contextActions = inHardMode
+    ? workspace
+      ? all.filter((step) => step.workspaceId === workspace)
+      : all.filter((step) => !step.workspaceId)
+    : all;
+  const gallery = contextActions.filter(
+    (step) =>
+      (!inHardMode || !!workspace || step.groupId === group) &&
+      (!normalizedQuery ||
+        step.label.toLowerCase().includes(normalizedQuery)) &&
+      (inventoryView === 'all' ||
+        (!done.has(step.id) &&
+          !!session &&
+          canPlace(manifest, session, step.id))),
   );
-  const scrollKey = `${session?.level}:${group}:${query}`;
+  const projects =
+    inHardMode && !workspace
+      ? manifest.packets.filter((candidate) => {
+          if (candidate.groupId !== group || done.has(candidate.transferId))
+            return false;
+          if (candidate.stepIds.every((stepId) => done.has(stepId)))
+            return false;
+          const steps = all.filter((step) => step.workspaceId === candidate.id);
+          const matches =
+            !normalizedQuery ||
+            candidate.label.toLowerCase().includes(normalizedQuery) ||
+            steps.some((step) =>
+              step.label.toLowerCase().includes(normalizedQuery),
+            );
+          if (!matches) return false;
+          return (
+            inventoryView === 'all' ||
+            steps.some(
+              (step) =>
+                !done.has(step.id) &&
+                !!session &&
+                canPlace(manifest, session, step.id),
+            )
+          );
+        })
+      : [];
+  const completedFits = levelSteps.filter((step) => done.has(step.id)).length;
+  const completedSystems = manifest.groups.filter((candidate) =>
+    all
+      .filter((step) => step.groupId === candidate.id)
+      .every((step) => done.has(step.id)),
+  ).length;
+  const readyInGroup = (groupId: string) => {
+    if (!session) return 0;
+    const direct = all.filter(
+      (step) =>
+        !step.workspaceId &&
+        step.groupId === groupId &&
+        !done.has(step.id) &&
+        canPlace(manifest, session, step.id),
+    ).length;
+    const benches = manifest.packets.filter((candidate) => {
+      if (candidate.groupId !== groupId || done.has(candidate.transferId))
+        return false;
+      return all.some(
+        (step) =>
+          step.workspaceId === candidate.id &&
+          !done.has(step.id) &&
+          canPlace(manifest, session, step.id),
+      );
+    }).length;
+    return direct + benches;
+  };
+  const scrollKey = `${session?.level}:${workspace ?? group}:${inventoryView}:${query}`;
   useLayoutEffect(() => {
     const element = inventory.current;
     if (!element) return;
@@ -383,6 +555,7 @@ export default function Play() {
     setActive(true);
     setQuery('');
     setGroup(manifest.groups[0].id);
+    setInventoryView('ready');
     apply(createSession(manifest, level));
     requestAnimationFrame(() => {
       viewer.current?.layout();
@@ -391,28 +564,37 @@ export default function Play() {
       inventory.current?.querySelector('button')?.focus();
     });
     setNotice(
-      `${level === 'easy' ? 'Easy' : 'Hard'} assembly started. Choose any piece.`,
+      `${level === 'easy' ? 'Easy' : 'Hard'} started. Choose a ready piece and find its seat.`,
     );
   };
-  const choose = (level: PlayLevel) =>
-    session?.actionIds.length || storage.includes('incompatible')
-      ? setConfirm(level)
-      : start(level);
   const discard = () => {
-    if (confirm === 'levels') {
-      if (workspace) enterWorkspace(null);
-      activeRef.current = false;
-      setActive(false);
-      sync();
-      requestAnimationFrame(() => choiceTitle.current?.focus());
-    } else if (confirm === 'restart' && session) start(session.level);
-    else if (confirm === 'easy' || confirm === 'hard') start(confirm);
+    if (confirm === 'restart' && session) start(session.level);
     setConfirm(null);
+  };
+  const keepSavedStartup = () => {
+    if (startupConflict?.kind !== 'switch') {
+      location.assign('/?assemble=1');
+      return;
+    }
+    sessionRef.current = startupConflict.saved;
+    setSession(startupConflict.saved);
+    activeRef.current = true;
+    setActive(true);
+    clearVisibleMode();
+    setStartupConflict(null);
+    sync();
+  };
+  const acceptStartup = () => {
+    if (!startupConflict) return;
+    const requested = startupConflict.requested;
+    setStartupConflict(null);
+    setStorage('');
+    start(requested);
   };
   const reveal = () => {
     assistanceRef.current = true;
     setAssistance(true);
-    viewer.current?.setAssistance(hints, available, true);
+    viewer.current?.setAssistance(false, available, true);
     viewer.current?.guide();
   };
 
@@ -425,29 +607,26 @@ export default function Play() {
     >
       <div className="play-canvas" ref={host} />
       <header className="play-heading">
-        <span>Zweigesicht–1</span>
-        <span>Assembly</span>
-        {active && (
-          <Control
-            aria-pressed={hints}
-            disabled={disabled}
-            onClick={() => {
-              assistanceRef.current = false;
-              setAssistance(false);
-              setNotice('');
-              if (session) apply({ ...session, hints: !hints });
-            }}
+        <div className="play-brand">
+          <h1>Zweigesicht-1</h1>
+          <a
+            href={makerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="by Marco Lang — official website, opens in a new tab"
           >
-            <Lightbulb aria-hidden="true" /> Hints {hints ? 'on' : 'off'}
-          </Control>
-        )}
+            by Marco Lang
+          </a>
+        </div>
         <Control
-          ref={helpButton}
-          onClick={() => setHelp(!help)}
-          aria-expanded={help}
-          aria-controls="play-help"
+          ref={menuButton}
+          aria-label="Menu"
+          onClick={() => setMenu(!menu)}
+          aria-expanded={menu}
+          aria-controls="play-menu"
         >
-          How to play
+          <Menu aria-hidden="true" />
+          <span className="play-control-label">Menu</span>
         </Control>
       </header>
       {active && (
@@ -480,6 +659,15 @@ export default function Play() {
           )}
         </div>
       )}
+      {active &&
+        workspace &&
+        session &&
+        workspaceLeafIds(manifest, session, workspace).length === 0 && (
+          <div className="play-empty-fixture" aria-hidden="true">
+            <span />
+            <small>Empty fixture · fit the first bench piece</small>
+          </div>
+        )}
       <Control
         ref={destination}
         className="play-target"
@@ -487,338 +675,356 @@ export default function Play() {
           held ? `Place ${held.label} at its destination` : 'Destination'
         }
         disabled={disabled || !held || !inWorkspace || !available}
-        hidden={!held || !inWorkspace || !(hints || assistance)}
+        hidden={!held || !inWorkspace || !assistance}
         onClick={() => viewer.current?.place()}
       >
         <span aria-hidden="true">＋</span>
       </Control>
-      {!active && (
-        <section className="play-choice" aria-labelledby="play-title">
-          <h1 ref={choiceTitle} id="play-title" tabIndex={-1}>
-            Assemble the movement
-          </h1>
-          <p>Choose the parts. Find their places. Take your time.</p>
-          {session && (
-            <Control
-              className="play-primary"
-              disabled={disabled}
-              onClick={() => {
-                activeRef.current = true;
-                setActive(true);
-                sync();
-                requestAnimationFrame(() => {
-                  viewer.current?.layout();
-                  viewer.current?.resetView();
-                });
-              }}
-            >
-              Continue {session.level === 'easy' ? 'Easy' : 'Hard'} · {count} /{' '}
-              {physicalTotal} parts
-            </Control>
-          )}
-          <div className="play-levels">
-            <Control disabled={disabled} onClick={() => choose('easy')}>
-              <strong>Easy</strong>
-              <span>Prepared assemblies · 89 choices</span>
-            </Control>
-            <Control disabled={disabled} onClick={() => choose('hard')}>
-              <strong>Hard</strong>
-              <span>249 individual parts · workbench</span>
-            </Control>
-          </div>
-          <small>
-            The fitted mainplate is ready in both levels. Hints start off.
-          </small>
-        </section>
-      )}
       {active && (
-        <section className="play-dock" aria-label="Assembly inventory">
+        <section
+          className="play-dock"
+          aria-label="Assembly workbench"
+          data-pulse={placementPulse}
+        >
           <div className="play-progress">
-            <span>
-              {session?.level === 'easy' ? 'Easy' : 'Hard'} · {count} /{' '}
-              {physicalTotal} parts assembled
-            </span>
-            <span>
-              {complete
-                ? 'Complete'
-                : `${session ? fittedLeafIds(manifest, session).length : 16} in watch`}
-            </span>
-          </div>
-          <div className="play-inventory-tools">
-            {session?.level === 'hard' && (
-              <label>
-                <span className="sr-only">Parts group</span>
-                <select
-                  aria-label="Parts group"
-                  value={group}
-                  onChange={(e) => setGroup(e.target.value)}
-                >
-                  {manifest.groups.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.label} ·{' '}
-                      {
-                        manifest.levels.hard.steps.filter(
-                          (s) => s.groupId === g.id && !done.has(s.id),
-                        ).length
-                      }{' '}
-                      parts ·{' '}
-                      {
-                        manifest.levels.hard.transfers.filter(
-                          (s) => s.groupId === g.id && !done.has(s.id),
-                        ).length
-                      }{' '}
-                      to seat
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-            <label className="play-search">
-              <span className="sr-only">Find a part</span>
-              <input
-                type="search"
-                aria-label="Find a part"
-                placeholder="Find a part…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </label>
-          </div>
-          <div
-            className="play-gallery"
-            ref={inventory}
-            aria-label="Parts gallery. Drag a card with a mouse. On touch, select a card then drag its image. Swipe elsewhere to browse."
-            onScroll={() => {
-              if (inventory.current)
-                scrollPositions.current.set(
-                  scrollKey,
-                  inventory.current.scrollLeft,
-                );
-            }}
-          >
-            {gallery.map((s) => {
-              const contextLabel = manifest.packets.find(
-                (p) => p.id === s.workspaceId,
-              )?.label;
-              const placed = done.has(s.id),
-                unavailable =
-                  hints &&
-                  !!session &&
-                  !placed &&
-                  !canPlace(manifest, session, s.id);
-              return (
-                <div
-                  className="play-card-item"
-                  key={s.id}
-                  data-selected={selection === s.id && !placed}
-                >
-                  <button
-                    type="button"
-                    className="play-card"
-                    data-action-id={s.id}
-                    data-unavailable={unavailable}
-                    data-fitted={placed}
-                    data-draggable={!placed && !unavailable}
-                    aria-pressed={selection === s.id}
-                    aria-label={`${s.label}${contextLabel ? `, ${contextLabel}` : ''}${s.kind === 'transfer' ? ', seat assembly' : ''}${placed ? ', fitted' : unavailable ? ', unavailable; select for details' : ''}`}
-                    onPointerDown={(event) => {
-                      cardPointerHandled.current = null;
-                      // Touch swipes browse the gallery. The selected thumbnail
-                      // owns touch dragging without delaying scrolling elsewhere.
-                      if (event.pointerType !== 'mouse' || event.button !== 0)
-                        return;
-                      event.currentTarget.focus({ preventScroll: true });
-                      if (selectionRef.current !== s.id) pick(s.id);
-                      if (
-                        !placed &&
-                        !unavailable &&
-                        viewer.current?.beginDrag(
-                          event.nativeEvent,
-                          event.currentTarget,
-                        )
-                      )
-                        cardPointerHandled.current = s.id;
-                    }}
-                    onClick={(event) => {
-                      // Captured pointerup also produces click. Do not let that
-                      // click cancel the piece's settling animation or reselect it.
-                      if (
-                        event.detail > 0 &&
-                        cardPointerHandled.current === s.id
-                      )
-                        return;
-                      pick(s.id);
-                    }}
-                    disabled={disabled}
-                  >
-                    <Thumbnail
-                      step={s}
-                      viewer={getViewer}
-                      ready={status.ready}
-                    />
-                    <span className="play-card-label">{s.label}</span>
-                    <span className="play-card-state">
-                      {contextLabel ? `${contextLabel} · ` : ''}
-                      {placed
-                        ? s.kind === 'transfer' || !s.workspaceId
-                          ? 'Fitted'
-                          : 'Assembled'
-                        : unavailable
-                          ? 'Not yet'
-                          : s.kind === 'transfer'
-                            ? 'Seat assembly'
-                            : s.workspaceId
-                              ? 'Part'
-                              : s.leafIds.length > 1
-                                ? 'Prepared assembly'
-                                : 'Part'}
-                    </span>
-                  </button>
-                  {selection === s.id && !placed && (
-                    <button
-                      type="button"
-                      className="play-card-drag"
-                      data-drag-id={s.id}
-                      aria-label={`Drag part: ${s.label}`}
-                      disabled={disabled || unavailable}
-                      onPointerDown={(event) =>
-                        viewer.current?.beginDrag(
-                          event.nativeEvent,
-                          event.currentTarget,
-                        )
-                      }
-                      onClick={(event) => {
-                        if (event.detail === 0)
-                          setNotice(
-                            'Drag the part image into the assembly. To place with the keyboard, choose Show destination.',
-                          );
-                      }}
-                    />
-                  )}
-                </div>
-              );
-            })}
-            {!gallery.length && (
-              <p>No parts match. Try another name or group.</p>
-            )}
-          </div>
-          <div className="play-selection" aria-live="polite" aria-atomic="true">
-            <div>
-              <strong>
-                {complete
-                  ? 'Every piece in place.'
-                  : (selected?.label ?? 'Choose a piece to begin')}
-              </strong>
-              <p>
-                {hints && missing.length
-                  ? `Needs ${missing
-                      .slice(0, 3)
-                      .map((s) => s.label)
-                      .join(
-                        ', ',
-                      )}${missing.length > 3 ? ` and ${missing.length - 3} more` : ''}.`
-                  : notice ||
-                    (fitted
-                      ? 'Placed. Choose another piece, or undo the last action.'
-                      : held?.viewDirectionWorld &&
-                          inWorkspace &&
-                          status.detail !== held.id
-                        ? 'This screw fits at the dial edge. Open its fixed edge view.'
-                        : selected && selected.workspaceId !== workspace
-                          ? selected.workspaceId
-                            ? 'This part fits on its workbench. Open workbench to assemble it.'
-                            : 'This piece belongs in the watch.'
-                          : held
-                            ? hints || assistance
-                              ? status.obstructed
-                                ? 'The fitting point is hidden. Flip the watch or use Show destination.'
-                                : 'Drag this card onto the highlighted seat.'
-                              : 'Drag the card into the assembly. On touch, drag its image.'
-                            : 'Drag a card into the assembly. On touch, select a card, then drag its image.')}
-              </p>
+            <button
+              type="button"
+              className="play-mode-mark"
+              ref={progressButton}
+              onClick={() => setProgressOpen(true)}
+              aria-label={`View ${session?.level === 'hard' ? 'Hard' : 'Easy'} progress`}
+            >
+              {session?.level === 'hard' ? 'Hard' : 'Easy'}
+            </button>
+            <div className="play-inventory-switch" aria-label="Parts view">
+              <button
+                type="button"
+                aria-pressed={inventoryView === 'ready'}
+                onClick={() => {
+                  setInventoryView('ready');
+                  setQuery('');
+                }}
+              >
+                <Sparkles aria-hidden="true" /> Ready now
+              </button>
+              <button
+                type="button"
+                aria-pressed={inventoryView === 'all'}
+                onClick={() => setInventoryView('all')}
+              >
+                <Boxes aria-hidden="true" /> All parts
+              </button>
             </div>
-            {held?.viewDirectionWorld &&
-              inWorkspace &&
-              status.detail !== held.id && (
-                <Control
-                  disabled={disabled}
-                  onClick={() => viewer.current?.setDetail(held)}
-                >
-                  View dial edge
-                </Control>
-              )}
-            {selected && !fitted && selected.workspaceId !== workspace && (
+            {(inHardMode || inventoryView === 'all') && (
+              <button
+                type="button"
+                className="play-filter-trigger"
+                ref={filterButton}
+                onClick={() => setFilters(true)}
+              >
+                <SlidersHorizontal aria-hidden="true" /> Filter
+              </button>
+            )}
+            <strong>
+              {completedFits} of {levelSteps.length}{' '}
+              {session?.level === 'hard' ? 'parts' : 'fits'}
+            </strong>
+          </div>
+          {complete ? (
+            <div className="play-complete" aria-live="polite">
+              <div>
+                <strong>You completed the movement.</strong>
+                <p>
+                  All 265 physical pieces are in place. The assembled movement
+                  remains yours to explore.
+                </p>
+              </div>
+              <Control onClick={() => location.assign('/')}>
+                Explore the movement
+              </Control>
               <Control
                 disabled={disabled}
-                onClick={() => enterWorkspace(selected.workspaceId)}
+                onClick={() => setConfirm('restart')}
               >
-                {selectedPacket ? 'Open workbench' : 'Return to watch'}
+                Build again
               </Control>
-            )}
-            {workspace &&
-              packet &&
-              done.has(packet.stepIds[packet.stepIds.length - 1]) &&
-              packet.stepIds.every((id) => done.has(id)) && (
-                <Control
-                  disabled={disabled}
-                  onClick={() => {
-                    enterWorkspace(null);
-                    pick(packet.transferId);
-                  }}
+              <Control onClick={() => location.assign('/?assemble=1')}>
+                Change difficulty
+              </Control>
+            </div>
+          ) : (
+            <>
+              <div
+                className="play-gallery"
+                ref={inventory}
+                aria-label="Parts gallery. Drag a card with a mouse. On touch, select a card then drag its image. Swipe elsewhere to browse."
+                onScroll={() => {
+                  if (inventory.current)
+                    scrollPositions.current.set(
+                      scrollKey,
+                      inventory.current.scrollLeft,
+                    );
+                }}
+              >
+                {projects.map((candidate) => {
+                  const transfer = all.find(
+                    (step) => step.id === candidate.transferId,
+                  );
+                  const projectDone = candidate.stepIds.filter((id) =>
+                    done.has(id),
+                  ).length;
+                  return (
+                    <button
+                      type="button"
+                      className="play-project"
+                      key={candidate.id}
+                      data-packet-id={candidate.id}
+                      disabled={disabled}
+                      onClick={() => {
+                        selectionRef.current = null;
+                        setSelection(null);
+                        enterWorkspace(candidate.id);
+                      }}
+                    >
+                      {transfer && (
+                        <Thumbnail
+                          step={transfer}
+                          viewer={getViewer}
+                          ready={status.ready}
+                        />
+                      )}
+                      <span className="play-card-label">{candidate.label}</span>
+                      <span className="play-card-state">
+                        {projectDone} / {candidate.stepIds.length} · Open bench
+                      </span>
+                    </button>
+                  );
+                })}
+                {gallery.map((step) => {
+                  const contextLabel = manifest.packets.find(
+                    (candidate) => candidate.id === step.workspaceId,
+                  )?.label;
+                  const placed = done.has(step.id);
+                  const unavailable =
+                    !!session &&
+                    !placed &&
+                    !canPlace(manifest, session, step.id);
+                  const stateLabel = placed
+                    ? 'Fitted'
+                    : unavailable
+                      ? 'Waiting for earlier work'
+                      : step.kind === 'transfer'
+                        ? 'Seat completed assembly'
+                        : contextLabel
+                          ? `Workbench · ${contextLabel}`
+                          : '';
+                  return (
+                    <div
+                      className="play-card-item"
+                      key={step.id}
+                      data-selected={selection === step.id && !placed}
+                    >
+                      <button
+                        type="button"
+                        className="play-card"
+                        data-action-id={step.id}
+                        data-unavailable={unavailable}
+                        data-fitted={placed}
+                        data-draggable={!placed && !unavailable}
+                        aria-pressed={selection === step.id}
+                        aria-label={`${step.label}${contextLabel ? `, ${contextLabel}` : ''}${step.kind === 'transfer' ? ', seat assembly' : ''}${placed ? ', fitted' : unavailable ? ', unavailable; select for details' : ''}`}
+                        onPointerDown={(event) => {
+                          cardPointerHandled.current = null;
+                          if (
+                            event.pointerType !== 'mouse' ||
+                            event.button !== 0
+                          )
+                            return;
+                          event.currentTarget.focus({ preventScroll: true });
+                          if (selectionRef.current !== step.id) pick(step.id);
+                          if (
+                            !placed &&
+                            !unavailable &&
+                            viewer.current?.beginDrag(
+                              event.nativeEvent,
+                              event.currentTarget,
+                            )
+                          )
+                            cardPointerHandled.current = step.id;
+                        }}
+                        onClick={(event) => {
+                          if (
+                            event.detail > 0 &&
+                            cardPointerHandled.current === step.id
+                          )
+                            return;
+                          pick(step.id);
+                        }}
+                        disabled={disabled}
+                      >
+                        <Thumbnail
+                          step={step}
+                          viewer={getViewer}
+                          ready={status.ready}
+                        />
+                        <span className="play-card-label">{step.label}</span>
+                        {stateLabel && (
+                          <span className="play-card-state">{stateLabel}</span>
+                        )}
+                      </button>
+                      {selection === step.id && !placed && (
+                        <button
+                          type="button"
+                          className="play-card-drag"
+                          data-drag-id={step.id}
+                          aria-label={`Drag part: ${step.label}`}
+                          disabled={disabled || unavailable}
+                          onPointerDown={(event) =>
+                            viewer.current?.beginDrag(
+                              event.nativeEvent,
+                              event.currentTarget,
+                            )
+                          }
+                          onClick={(event) => {
+                            if (event.detail === 0)
+                              setNotice(
+                                'Drag the part image into the movement, or choose Show seat for keyboard placement.',
+                              );
+                          }}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+                {!projects.length && !gallery.length && (
+                  <div className="play-empty">
+                    <strong>
+                      {inventoryView === 'ready'
+                        ? packetComplete
+                          ? 'This assembly is ready for the watch.'
+                          : 'This bench is waiting on another system.'
+                        : 'No parts match this search.'}
+                    </strong>
+                    <span>
+                      {inventoryView === 'ready'
+                        ? packetComplete
+                          ? 'Seat it to continue the movement build.'
+                          : 'Choose another mechanism or browse all parts to inspect what comes next.'
+                        : 'Try a broader part name.'}
+                    </span>
+                    {inventoryView === 'ready' && !packetComplete && (
+                      <button
+                        type="button"
+                        onClick={() => setInventoryView('all')}
+                      >
+                        Browse all parts
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="play-rail-footer">
+                <div
+                  className="play-selection"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  key={`selection-${placementPulse}`}
                 >
-                  Pick up assembly
-                </Control>
-              )}
-          </div>
-          <div className="play-actions">
-            {held &&
-              !fitted &&
-              inWorkspace &&
-              (!held.viewDirectionWorld || status.detail === held.id) && (
-                <Control
-                  disabled={disabled || (hints && !available)}
-                  onClick={reveal}
-                >
-                  <LocateFixed aria-hidden="true" /> Show destination
-                </Control>
-              )}
-            <Control
-              disabled={disabled || !session?.actionIds.length}
-              onClick={() => {
-                if (session) {
-                  apply(undoPlacement(manifest, session));
-                  setNotice('Last action undone.');
-                }
-              }}
-            >
-              <Undo2 aria-hidden="true" /> Undo
-            </Control>
-            <FlipButton
-              disabled={disabled}
-              onClick={() => viewer.current?.flip()}
-            />
-            <ResetViewButton
-              disabled={disabled}
-              onClick={() => viewer.current?.resetView()}
-            />
-            <Control
-              disabled={disabled}
-              aria-label="Restart assembly"
-              onClick={() => setConfirm('restart')}
-            >
-              <ListRestart aria-hidden="true" /> Restart
-            </Control>
-            <Control
-              disabled={disabled}
-              aria-label="Choose difficulty"
-              onClick={() => setConfirm('levels')}
-            >
-              <Gauge aria-hidden="true" /> Difficulty
-            </Control>
-          </div>
+                <div>
+                  <strong>{selected?.label ?? 'Choose your next fit'}</strong>
+                  <p>
+                    {notice ||
+                      (fitted
+                          ? 'Fitted. Choose another piece or undo the last move.'
+                          : held?.viewDirectionWorld &&
+                              inWorkspace &&
+                              status.detail !== held.id
+                            ? 'This screw enters from the dial edge. Open its fitting view.'
+                            : selected && selected.workspaceId !== workspace
+                              ? selected.workspaceId
+                                ? 'Build this part on its dedicated bench first.'
+                                : 'Return to the watch to fit this piece.'
+                              : held && !available
+                                ? 'This part is waiting for earlier work. Choose Ready now for pieces you can fit.'
+                              : held
+                                ? assistance
+                                  ? status.obstructed
+                                    ? 'The seat is hidden from this angle. Rotate the movement or show the seat again.'
+                                    : 'Drag the highlighted part onto its seat.'
+                                  : 'Study the part, then drag its image to the matching seat.'
+                                : inventoryView === 'ready'
+                                  ? 'Every piece in this tray can be fitted now. Pick one and find its seat.'
+                                  : 'Browse the full inventory, or return to Ready now for a focused challenge.')}
+                  </p>
+                </div>
+                {held?.viewDirectionWorld &&
+                  inWorkspace &&
+                  status.detail !== held.id && (
+                    <Control
+                      disabled={disabled}
+                      onClick={() => viewer.current?.setDetail(held)}
+                    >
+                      View fitting edge
+                    </Control>
+                  )}
+                {selected && !fitted && selected.workspaceId !== workspace && (
+                  <Control
+                    disabled={disabled}
+                    onClick={() => enterWorkspace(selected.workspaceId)}
+                  >
+                    {selectedPacket ? 'Open workbench' : 'Return to watch'}
+                  </Control>
+                )}
+                {workspace && packet && packetComplete && (
+                  <Control
+                    disabled={disabled}
+                    onClick={() => {
+                      enterWorkspace(null);
+                      pick(packet.transferId);
+                    }}
+                  >
+                    Seat completed assembly
+                  </Control>
+                )}
+                {held &&
+                  !fitted &&
+                  inWorkspace &&
+                  (!held.viewDirectionWorld || status.detail === held.id) && (
+                    <Control
+                      disabled={disabled || !available}
+                      onClick={reveal}
+                    >
+                      <LocateFixed aria-hidden="true" /> Show seat
+                    </Control>
+                  )}
+                </div>
+                <div className="play-actions">
+                  <Control
+                    disabled={disabled || !session?.actionIds.length}
+                    onClick={() => {
+                      if (session) {
+                        apply(undoPlacement(manifest, session));
+                        setNotice('Last fit undone.');
+                      }
+                    }}
+                  >
+                    <Undo2 aria-hidden="true" /> Undo
+                  </Control>
+                  <FlipButton
+                    disabled={disabled}
+                    onClick={() => viewer.current?.flip()}
+                  />
+                  <ResetViewButton
+                    disabled={disabled}
+                    onClick={() => viewer.current?.resetView()}
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </section>
       )}
-      {(!status.ready || status.error) && (
+      {bootResolved && (!status.ready || status.error) && (
         <section className="play-loading" aria-label="Loading status">
           <output>{status.error || 'Preparing the watch…'}</output>
           {status.error && (
@@ -834,6 +1040,152 @@ export default function Play() {
         </section>
       )}
       <output className="play-storage">{storage}</output>
+      <Sheet modal={false} open={menu} onOpenChange={setMenu}>
+        <SheetContent
+          id="play-menu"
+          className="explorer-panel settings-panel header-panel play-menu-panel"
+          style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+          showOverlay={false}
+          scrollContent
+          finalFocus={menuButton}
+        >
+          <SheetHeader>
+            <SheetTitle>Workshop menu</SheetTitle>
+            <SheetDescription>
+              View controls and assembly options
+            </SheetDescription>
+          </SheetHeader>
+          <div className="panel-body play-menu-actions">
+            {active && (
+              <ResetViewButton
+                disabled={disabled}
+                onClick={() => {
+                  viewer.current?.resetView();
+                  setMenu(false);
+                }}
+              />
+            )}
+            <Control
+              onClick={() => {
+                setMenu(false);
+                setHelp(true);
+              }}
+              aria-expanded={help}
+              aria-controls="play-help"
+            >
+              <CircleHelp aria-hidden="true" /> How to play
+            </Control>
+            {active && (
+              <>
+                <Control
+                  disabled={disabled}
+                  aria-label="Restart assembly"
+                  onClick={() => {
+                    setMenu(false);
+                    setConfirm('restart');
+                  }}
+                >
+                  <ListRestart aria-hidden="true" /> Restart build
+                </Control>
+                <Control
+                  disabled={disabled}
+                  onClick={() => {
+                    setMenu(false);
+                    location.assign('/?assemble=1');
+                  }}
+                >
+                  Change difficulty
+                </Control>
+                <Control onClick={() => location.assign('/')}>
+                  Return to the movement viewer
+                </Control>
+              </>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Sheet modal={false} open={filters} onOpenChange={setFilters}>
+        <SheetContent
+          className="explorer-panel settings-panel header-panel play-filter-panel"
+          style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+          showOverlay={false}
+          scrollContent
+          finalFocus={filterButton}
+        >
+          <SheetHeader>
+            <SheetTitle>Filter parts</SheetTitle>
+            <SheetDescription>
+              Choose a mechanism or search the complete inventory.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="panel-body play-filter-fields">
+            {inHardMode && !workspace && (
+              <label>
+                <span>Mechanism</span>
+                <select
+                  aria-label="Parts group"
+                  value={group}
+                  onChange={(event) => {
+                    setGroup(event.target.value);
+                    setQuery('');
+                  }}
+                >
+                  {manifest.groups.map((candidate) => (
+                    <option key={candidate.id} value={candidate.id}>
+                      {candidate.label} · {readyInGroup(candidate.id)} ready
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {inventoryView === 'all' && (
+              <label>
+                <span>Find a part</span>
+                <input
+                  type="search"
+                  aria-label="Find a part"
+                  placeholder="Find a part…"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </label>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Sheet
+        modal={false}
+        open={progressOpen}
+        onOpenChange={setProgressOpen}
+      >
+        <SheetContent
+          className="explorer-panel settings-panel header-panel play-progress-panel"
+          style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+          showOverlay={false}
+          scrollContent
+          finalFocus={progressButton}
+        >
+          <SheetHeader>
+            <SheetTitle>Assembly progress</SheetTitle>
+            <SheetDescription>
+              {session?.level === 'hard' ? 'Hard' : 'Easy'} build details
+            </SheetDescription>
+          </SheetHeader>
+          <div className="panel-body play-progress-details">
+            <p>
+              <strong>{completedFits}</strong> of {levelSteps.length}{' '}
+              {session?.level === 'hard' ? 'individual parts' : 'prepared fits'}
+            </p>
+            <p>
+              <strong>{count}</strong> of {physicalTotal} physical parts added
+            </p>
+            <p>
+              <strong>{completedSystems}</strong> of {manifest.groups.length}{' '}
+              mechanisms complete
+            </p>
+          </div>
+        </SheetContent>
+      </Sheet>
       <Sheet modal={false} open={help} onOpenChange={setHelp}>
         <SheetContent
           id="play-help"
@@ -841,7 +1193,7 @@ export default function Play() {
           style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
           showOverlay={false}
           scrollContent
-          finalFocus={helpButton}
+          finalFocus={menuButton}
         >
           <SheetHeader>
             <SheetTitle>How to play</SheetTitle>
@@ -852,31 +1204,30 @@ export default function Play() {
           <div className="panel-body play-help-copy">
             <p>
               With a mouse, drag a card straight into the assembly. On touch,
-              swipe the gallery to browse, tap a card, then drag its part image
-              into the assembly. Parts keep their actual size relative to the
-              watch. A missed drop returns the piece. Supports must be fitted
-              before their attachments, and internals before covers.
+              swipe the tray to browse, tap a card, then drag its part image
+              into the assembly. Ready now contains pieces that can be fitted
+              immediately. All parts lets you inspect the wider dependency
+              puzzle. A missed drop simply returns the piece.
             </p>
             <p>
-              Hints starts off. Turn it on to inspect missing prerequisites and
-              see selected seats. Your choice is saved and restored by Continue.
-              Show destination is explicit assistance: it reveals the seat and
-              reframes the view. You can then tap the destination, or Tab to it
-              and press Enter, to place without dragging.
+              Ready now shows only pieces that can be fitted immediately; All
+              parts keeps the complete dependency view available. Show seat is
+              optional assistance: it reveals and reframes the fitting point.
+              You can then tap the destination, or Tab to it and press Enter,
+              to place without dragging.
             </p>
             <p>
-              In Hard, open a part’s workbench to build its assembly one
-              component at a time. Return whenever you like. Pick up a complete
-              assembly and seat it in the watch; the transfer adds no parts.
-              Undo reverses the last placement or transfer. Dial-edge screws
-              have an explicit fixed edge view; Return to faces restores your
-              view.
+              In Hard mode, open a subassembly card to build it one component
+              at a time on its workbench. Return whenever you like, then seat
+              the finished assembly in the watch. Undo reverses the last fit or
+              transfer. Dial-edge screws have an explicit fitting view.
             </p>
             <p>
-              Flip switches between the two fixed sides. Scroll or pinch to zoom
-              toward the center. On the canvas, F flips, + / − zoom, and Home
-              resets the view. Flip and Reset preserve progress. Workbench
-              return restores your watch camera.
+              Drag the canvas to rotate the movement freely, and scroll or pinch
+              to zoom toward the center. Flip still gives you a quick change of
+              side. On the canvas, F flips, + / − zoom, and Home resets the view.
+              Camera controls preserve progress. Workbench return restores your
+              watch camera.
             </p>
             <small>
               A source-based puzzle using Marco Lang’s CAD. Assembly rules are
@@ -890,22 +1241,43 @@ export default function Play() {
         className="play-confirm"
         aria-labelledby="play-confirm-title"
         aria-describedby="play-confirm-description"
-        onCancel={() => setConfirm(null)}
+        onCancel={(event) => {
+          event.preventDefault();
+          if (startupConflict) keepSavedStartup();
+          else setConfirm(null);
+        }}
       >
         <h2 id="play-confirm-title">
-          {confirm === 'levels' ? 'Choose a different level?' : 'Start again?'}
+          {startupConflict?.kind === 'switch'
+            ? `Start ${startupConflict.requested === 'hard' ? 'Hard' : 'Easy'} instead?`
+            : startupConflict?.kind === 'replace'
+              ? 'Replace the saved assembly?'
+              : 'Start again?'}
         </h2>
         <p id="play-confirm-description">
-          {confirm === 'levels'
-            ? 'Your save remains available until you start another assembly.'
-            : 'This replaces your saved progress with a fresh assembly. Hints will start off.'}
+          {startupConflict?.kind === 'switch'
+            ? `This device has ${startupConflict.saved.actionIds.length} completed action${startupConflict.saved.actionIds.length === 1 ? '' : 's'} in ${startupConflict.saved.level === 'hard' ? 'Hard' : 'Easy'}. Starting the selected mode will replace that progress.`
+            : startupConflict?.kind === 'replace'
+              ? `The saved assembly is ${startupConflict.reason === 'corrupt' ? 'damaged' : 'from an incompatible version'}. It must be replaced before a new build can start.`
+              : 'This replaces your saved progress with a fresh assembly.'}
         </p>
         <div>
-          <Control onClick={() => setConfirm(null)} autoFocus>
-            Keep playing
+          <Control
+            onClick={() =>
+              startupConflict ? keepSavedStartup() : setConfirm(null)
+            }
+            autoFocus
+          >
+            {startupConflict?.kind === 'switch'
+              ? `Resume ${startupConflict.saved.level === 'hard' ? 'Hard' : 'Easy'}`
+              : startupConflict?.kind === 'replace'
+                ? 'Return to chooser'
+                : 'Keep playing'}
           </Control>
-          <Control onClick={discard}>
-            {confirm === 'levels' ? 'Choose level' : 'Start again'}
+          <Control onClick={startupConflict ? acceptStartup : discard}>
+            {startupConflict
+              ? `Start ${startupConflict.requested === 'hard' ? 'Hard' : 'Easy'}`
+              : 'Start again'}
           </Control>
         </div>
       </dialog>
