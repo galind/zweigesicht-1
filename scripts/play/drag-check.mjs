@@ -47,7 +47,7 @@ try {
   await page.getByRole('button',{name:'Hints on',exact:true}).click();await settle();
   await card('movement-1').tap();await settle();
   const dragControl=page.locator('.play-card-drag');
-  check(`${width}: selected piece exposes named drag control`,await dragControl.isVisible()&&await dragControl.isEnabled()&&/Drag/.test(await dragControl.innerText()));
+  check(`${width}: selected thumbnail is draggable without a visible Drag label`,await dragControl.isVisible()&&await dragControl.isEnabled()&&(await dragControl.innerText())===''&&/Drag part:/.test(await dragControl.getAttribute('aria-label')));
   p=await center(dragControl);s=await inspect();
   await touch(p,{x:s.target.x+20,y:s.target.y},true);
   check(`${width}: touch cancel releases capture without placement`,!(await inspect()).dragging&&!(await inspect()).session.actionIds.length&&!(await inspect()).stageVisible);

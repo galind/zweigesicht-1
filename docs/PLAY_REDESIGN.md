@@ -13,8 +13,8 @@ fitted, so scroll and keyboard focus remain predictable. Repeated labels receive
 occurrence numbers within their group. Thumbnails render the actual source CAD.
 
 With a mouse, drag a card directly into the assembly. On touch, swipe the gallery
-to browse, tap a card, then hold the gold **Drag** handle within that card and
-move into the assembly. There is no detached loose-piece tray. The carried
+to browse, tap a card, then drag the part image within that card into
+the assembly. There is no detached loose-piece tray. The carried
 geometry appears only during dragging/settling, at source scale (1:1 with the
 watch geometry); thumbnails remain enlarged previews. New games start on the
 movement side. In Hard, all unfitted parts can be picked up with hints off, even
@@ -205,7 +205,7 @@ and the controller lifecycle suite; evidence is under `artifacts/browser/play-dr
 ## Gallery-only dragging and source scale
 
 The next review supersedes the separate handle described above. Dragging now
-starts entirely from the gallery; a selected card contains the touch handle.
+starts entirely from the gallery; the selected card’s image is the touch drag surface.
 Removed the old left-hand DOM control and idle 3D preview, including its 64 px
 auto-enlargement. Failed drops return to the gallery and cancellation hides the
 carried mesh. Pickup, motion and settling all retain source scale. The initial

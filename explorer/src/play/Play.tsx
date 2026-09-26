@@ -14,7 +14,6 @@ import {
   Lightbulb,
   Gauge,
   ArrowLeft,
-  MoveUpRight,
   Wrench,
 } from 'lucide-react';
 import {
@@ -575,7 +574,7 @@ export default function Play() {
           <div
             className="play-gallery"
             ref={inventory}
-            aria-label="Parts gallery. Drag a card with a mouse. On touch, select a card then use its Drag handle. Swipe elsewhere to browse."
+            aria-label="Parts gallery. Drag a card with a mouse. On touch, select a card then drag its image. Swipe elsewhere to browse."
             onScroll={() => {
               if (inventory.current)
                 scrollPositions.current.set(
@@ -611,8 +610,8 @@ export default function Play() {
                     aria-label={`${s.label}${contextLabel ? `, ${contextLabel}` : ''}${s.kind === 'transfer' ? ', seat assembly' : ''}${placed ? ', fitted' : unavailable ? ', unavailable; select for details' : ''}`}
                     onPointerDown={(event) => {
                       cardPointerHandled.current = null;
-                      // Touch swipes browse the gallery. The labeled drag control
-                      // below it owns touch dragging without delaying scrolling.
+                      // Touch swipes browse the gallery. The selected thumbnail
+                      // owns touch dragging without delaying scrolling elsewhere.
                       if (event.pointerType !== 'mouse' || event.button !== 0)
                         return;
                       event.currentTarget.focus({ preventScroll: true });
@@ -678,12 +677,10 @@ export default function Play() {
                       onClick={(event) => {
                         if (event.detail === 0)
                           setNotice(
-                            'Hold and move the card’s Drag handle. To place with the keyboard, choose Show destination.',
+                            'Drag the part image into the assembly. To place with the keyboard, choose Show destination.',
                           );
                       }}
-                    >
-                      <MoveUpRight aria-hidden="true" /> Drag
-                    </button>
+                    />
                   )}
                 </div>
               );
@@ -719,8 +716,8 @@ export default function Play() {
                             ? status.obstructed
                               ? 'The seat is obscured or outside this view. Orbit or use Show destination.'
                               : 'Drag this card onto the highlighted seat.'
-                            : 'Drag the card into the assembly. On touch, hold its Drag handle.'
-                          : 'Drag a card into the assembly. On touch, select a card, then hold its Drag handle.')}
+                            : 'Drag the card into the assembly. On touch, drag its image.'
+                          : 'Drag a card into the assembly. On touch, select a card, then drag its image.')}
               </p>
             </div>
             {selected && !fitted && selected.workspaceId !== workspace && (
@@ -825,11 +822,10 @@ export default function Play() {
           <div className="panel-body play-help-copy">
             <p>
               With a mouse, drag a card straight into the assembly. On touch,
-              swipe the gallery to browse, tap a card, then hold its gold Drag
-              handle and move your finger into the assembly. Parts keep their
-              actual size relative to the watch. A missed drop returns the
-              piece. Supports must be fitted before their attachments, and
-              internals before covers.
+              swipe the gallery to browse, tap a card, then drag its part image
+              into the assembly. Parts keep their actual size relative to the
+              watch. A missed drop returns the piece. Supports must be fitted
+              before their attachments, and internals before covers.
             </p>
             <p>
               Hints starts off. Turn it on to inspect missing prerequisites and

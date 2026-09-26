@@ -101,7 +101,7 @@ interaction primitives. `useTextScalePreview` applies the explicit `?text=200`
 mode at the document root, including portaled panels, and restores previous
 styling on unmount. Play retains native confirmations with accessible names. Gallery cards remain
 in stable slots after placement and unavailable cards stay inspectable. A selected
-card contains a touch drag handle; swipes on the rest of the gallery browse.
+card’s thumbnail is its touch drag surface; swipes on the rest of the gallery browse.
 There is no detached drag tray. Enlarged text grows within the bounded,
 scrollable inventory; measured workspace controls stay clear of the assembly. The homepage phone dock continues
 to wrap according to actual label width. Both routes share only the established

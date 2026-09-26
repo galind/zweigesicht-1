@@ -317,44 +317,27 @@
 }
 .play-card-drag {
   position: absolute;
-  bottom: 3px;
-  left: 4px;
-  right: 4px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
+  top: 5px;
+  left: calc(50% - 30px);
+  width: 60px;
+  height: 52px;
+  padding: 0;
   touch-action: none;
   user-select: none;
   cursor: grab;
-  font: inherit;
-  font-size: 0.6875em;
-  border-radius: 4px;
-  border: 1px solid #e8c88e80;
-  background: #302b22;
-  color: #f6d8a2;
+  border: 0;
+  background: transparent;
 }
-.play-card-drag svg {
-  width: 14px;
-  height: 14px;
+.play-card-drag:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 .play-card-drag:active {
   cursor: grabbing;
 }
 .play-card-drag:disabled {
-  opacity: 0.45;
   cursor: default;
-}
-.play-card-item[data-selected='true'] .play-card {
-  padding-bottom: 48px;
-}
-.play-card-item[data-selected='true'] .play-thumbnail {
-  height: 30px;
-  flex-basis: 30px;
-}
-.play-card-item[data-selected='true'] .play-card-state {
-  display: none;
 }
 .play-actions {
   display: flex;

@@ -539,3 +539,16 @@ The updated production preview is http://127.0.0.1:4185/play. Reload for the new
 controls; saves remain compatible. Next action: user review. Physical-device
 and Safari review remain outstanding. Local commit only; no push, PR or deployment.
 The two original untracked prompt files remain excluded.
+
+## Remove the Drag label — 26 September 2026
+
+Removed the visible Drag text, arrow and gold button from gallery cards at the
+user's request. The selected part's existing thumbnail is now the touch drag
+surface. Selected cards retain their full-size thumbnail and assembly context.
+Accessible naming and keyboard placement remain available. Updated help copy,
+architecture notes and the regression assertion to match.
+
+TypeScript and production build pass. A targeted production browser check passes
+mouse placement at 1440 px and touch placement at 390 px from the thumbnail,
+with no visible Drag label. Preview refreshed at http://127.0.0.1:4185/play.
+Next action: user review; local commit only, no publication.
