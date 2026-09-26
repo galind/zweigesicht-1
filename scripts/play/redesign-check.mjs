@@ -19,8 +19,7 @@ const camera=s=>JSON.stringify([s.camera,s.cameraTarget,s.cameraUp,s.projection]
 const drift=(a,b)=>Math.max(...JSON.parse(a).flat().map((n,i)=>Math.abs(n-JSON.parse(b).flat()[i])));
 const same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
 try {
- await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await settle();
- await page.locator('.play-levels button').nth(level==='easy'?0:1).click();await settle();
+ await page.goto(`${base}/workshop?mode=${level}&inspect=1`,{waitUntil:'networkidle'});await settle();
  check('Hints start off',(await inspect()).session.hints===false);
  const initial=await inspect();check('Mainplate centred in usable viewport',Math.hypot(initial.mainplateCenter.x-initial.frameRegion.left-initial.frameRegion.width/2,initial.mainplateCenter.y-(initial.frameRegion.top+initial.frameRegion.bottom)/2)<.01,initial.mainplateCenter);
  await page.screenshot({path:path.join(out,`${level}-inventory-off.png`)});
@@ -32,7 +31,11 @@ try {
   if(level==='hard') {
    const current=await inspect();
    if(current.workspace!==selected.workspaceId&&current.workspace) {await page.getByRole('button',{name:'Return to watch',exact:true}).first().click();await settle();}
-   if(!(await inspect()).workspace)await page.getByLabel('Parts group',{exact:true}).selectOption(selected.groupId);
+   if(!(await inspect()).workspace) {
+    await page.getByRole('button',{name:'Filter',exact:true}).click();
+    await page.getByLabel('Parts group',{exact:true}).selectOption(selected.groupId);
+    await page.keyboard.press('Escape');
+   }
    if(selected.workspaceId&&(await inspect()).workspace!==selected.workspaceId) {await page.locator(`[data-packet-id="${selected.workspaceId}"]`).click();await settle();}
   }
   await page.locator(`[data-action-id="${selected.id}"]`).click();await settle();

@@ -21,7 +21,7 @@ const toggle=async()=>{await page.getByRole('button',{name:/^Hints (on|off)$/}).
 const reveal=async()=>{await page.getByRole('button',{name:'Show seat',exact:true}).click();await settle();};
 const drag=async(s,target=s.target,offset={x:0,y:0},finish=true)=>{await page.locator('.play-card-drag').scrollIntoViewIfNeeded();s={...s,stage:(await inspect()).stage};await page.mouse.move(s.stage.x+offset.x,s.stage.y+offset.y);await page.mouse.down();await page.mouse.move(target.x+offset.x,target.y+offset.y,{steps:6});if(finish){await page.mouse.up();await settle();}};
 const touch=async(from,to,cancel=false)=>{const cdp=await context.newCDPSession(page),pts=p=>[{x:p.x,y:p.y,id:1}];await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:pts(from)});for(let i=1;i<=6;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:pts({x:from.x+(to.x-from.x)*i/6,y:from.y+(to.y-from.y)*i/6})});await cdp.send('Input.dispatchTouchEvent',{type:cancel?'touchCancel':'touchEnd',touchPoints:[]});await cdp.detach();await settle();};
-const start=async level=>{await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await settle();await page.locator('.play-levels button').nth(level==='easy'?0:1).click();if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:'Start again',exact:true}).click();await settle();};
+const start=async level=>{await page.goto(`${base}/workshop?mode=${level}&inspect=1`,{waitUntil:'networkidle'});if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:`Start ${level==='easy'?'Easy':'Hard'}`,exact:true}).click();await settle();};
 try {
  await start('easy');const initial=await inspect();
  check('Ready now starts with 19 legal Easy choices',await page.locator('.play-card').count()===19&&await page.locator('.play-card:disabled').count()===0&&await page.locator('.play-card[data-unavailable=true]').count()===0);
@@ -47,7 +47,7 @@ try {
  await toggle();s=await inspect();await page.getByRole('button',{name:'Undo',exact:true}).click();await settle();preserved('Undo preserves camera',s,await inspect());check('Hints persist through Undo',(await inspect()).session.hints);
  await toggle();
  const rect=await page.locator('.play-gallery').boundingBox();await touch({x:rect.x+rect.width-30,y:rect.y+40},{x:rect.x+30,y:rect.y+40});check('Gallery swipe browses without placing',await page.locator('.play-gallery').evaluate(e=>e.scrollLeft)>scroll&&!(await inspect()).session.actionIds.length);
- s=await inspect();await page.getByLabel('Find a part',{exact:true}).fill('Barrel');preserved('Search preserves camera',s,await inspect());check('Search filters labels without readiness',await page.locator('.play-card').count()>=3);await page.getByLabel('Find a part',{exact:true}).fill('');
+ s=await inspect();await page.getByRole('button',{name:'Filter',exact:true}).click();await page.getByLabel('Find a part',{exact:true}).fill('Barrel');preserved('Search preserves camera',s,await inspect());check('Search filters labels without readiness',await page.locator('.play-card').count()>=3);await page.getByLabel('Find a part',{exact:true}).fill('');await page.keyboard.press('Escape');
  await pick('movement-2');await reveal();s=await inspect();await page.locator('.play-target').focus();await page.keyboard.press('Enter');await settle();check('Explicit assistance permits keyboard placement with hints off',(await inspect()).session.actionIds.includes('movement-2'));preserved('Keyboard placement preserves camera',s,await inspect());
  await pick('movement-1');await reveal();s=await inspect();await touch(s.stage,s.target);check('Touch drop commits once',(await inspect()).session.actionIds.length===2);preserved('Touch placement preserves camera',s,await inspect());
  await pick('movement-60');await toggle();check('Bridge becomes available after both barrels',await card('movement-60').getAttribute('data-unavailable')==='false');
@@ -62,7 +62,7 @@ try {
  s=await inspect();check('Reset recentres immutable mainplate',Math.hypot(s.mainplateCenter.x-s.frameRegion.left-s.frameRegion.width/2,s.mainplateCenter.y-(s.frameRegion.top+s.frameRegion.bottom)/2)<.01);
  await page.getByRole('button',{name:'Flip movement',exact:true}).click();await settle();const flipped=await inspect();check('Flip preserves projected mainplate centre',Math.hypot(flipped.mainplateCenter.x-s.mainplateCenter.x,flipped.mainplateCenter.y-s.mainplateCenter.y)<.01);
  // Resume a nonlinear history, including the persistent hint preference.
- await toggle();s=await inspect();await page.reload({waitUntil:'networkidle'});await settle();await page.getByRole('button',{name:/^Continue /}).click();await settle();check('Nonlinear resume restores exact history and hints',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
+ await toggle();s=await inspect();await page.reload({waitUntil:'networkidle'});await settle();check('Nonlinear resume restores exact history and hints',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
  await page.evaluate(()=>window.__playContext());await page.waitForFunction(()=>!window.__playInspect().ready);await page.evaluate(()=>window.__playContext(true));await settle();check('Renderer recovery preserves nonlinear session',JSON.stringify((await inspect()).session)===JSON.stringify(s.session));
  await start('hard');await page.locator('canvas').focus();await page.keyboard.press('ArrowLeft');await page.keyboard.press('-');await settle();const main=await inspect();
  check('Hard watch level exposes three ready subassembly projects',await page.locator('[data-packet-id]').count()===3);
@@ -70,23 +70,23 @@ try {
  await page.screenshot({path:path.join(out,'phone-hard-workbench-off.png')});
  await toggle();await page.screenshot({path:path.join(out,'phone-hard-workbench-on.png')});
  await page.getByRole('button',{name:'Return to watch',exact:true}).first().click();await settle();preserved('Returning restores previous main camera exactly',main,await inspect());
- await page.getByLabel('Parts group',{exact:true}).selectOption('train');preserved('Hard group browsing preserves camera',main,await inspect());
- await page.getByLabel('Parts group',{exact:true}).selectOption('power');await page.screenshot({path:path.join(out,'phone-hard-inventory-on.png')});
+ await page.getByRole('button',{name:'Filter',exact:true}).click();await page.getByLabel('Parts group',{exact:true}).selectOption('train');preserved('Hard group browsing preserves camera',main,await inspect());
+ await page.getByLabel('Parts group',{exact:true}).selectOption('power');await page.keyboard.press('Escape');await page.screenshot({path:path.join(out,'phone-hard-inventory-on.png')});
  // Responsive visual/geometry review, including root text enlargement.
  for(const [width,height,text] of [[1440,900,100],[390,844,100],[320,568,100],[320,568,200],[568,320,100]]) {
    const resizeBefore=await inspect();
    await page.setViewportSize({width,height});await settle();
    const resizeAfter=await inspect();
    check(`${width}×${height} resize preserves camera direction, pan and distance`,Math.max(...[...resizeBefore.camera,...resizeBefore.cameraTarget,...resizeBefore.cameraUp].map((n,i)=>Math.abs(n-[...resizeAfter.camera,...resizeAfter.cameraTarget,...resizeAfter.cameraUp][i])))<1e-8);
-   if(text===200)await page.goto(`${base}/play?inspect=1&text=200`,{waitUntil:'networkidle'});
-   else if(page.url().includes('text=200'))await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});
-   await settle();if(!(await inspect()).active){await page.getByRole('button',{name:/^Continue /}).click();await settle();}
+   if(text===200)await page.goto(`${base}/workshop?inspect=1&text=200`,{waitUntil:'networkidle'});
+   else if(page.url().includes('text=200'))await page.goto(`${base}/workshop?inspect=1`,{waitUntil:'networkidle'});
+   await settle();
    await page.getByRole('button',{name:'Reset view',exact:true}).click();await settle();
    await page.locator('.play-dock').evaluate(e=>e.scrollTop=0);
    const view=await inspect();check(`${width}×${height}/${text}% mainplate centered`,Math.hypot(view.mainplateCenter.x-view.frameRegion.left-view.frameRegion.width/2,view.mainplateCenter.y-(view.frameRegion.top+view.frameRegion.bottom)/2)<.01);
    check(`${width}×${height}/${text}% no page overflow`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    check(`${width}×${height}/${text}% header stays inside viewport`,await page.locator('.play-heading button').evaluateAll(es=>es.every(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0})));
-   const cardLayout=await page.locator('.play-card').first().evaluate(e=>{const label=e.querySelector('.play-card-label').getBoundingClientRect(),r=e.getBoundingClientRect();return {inside:label.top>=r.top&&label.bottom<=r.bottom,cardBottom:r.bottom};});
+   const cardLayout=await page.locator('.play-card, .play-project').first().evaluate(e=>{const label=e.querySelector('.play-card-label').getBoundingClientRect(),r=e.getBoundingClientRect();return {inside:label.top>=r.top&&label.bottom<=r.bottom,cardBottom:r.bottom};});
    const detailTop=await page.locator('.play-selection').evaluate(e=>e.getBoundingClientRect().top);
    check(`${width}×${height}/${text}% card labels stay inside gallery, above details`,cardLayout.inside&&cardLayout.cardBottom<=detailTop,{cardLayout,detailTop});
    await page.screenshot({path:path.join(out,`hard-${width}-${height}-text${text}.png`)});
@@ -94,19 +94,21 @@ try {
  }
  await page.waitForTimeout(400);const count=(await inspect()).renderCount;await page.waitForTimeout(700);check('Settled renderer returns to idle',(await inspect()).renderCount===count);
  const old=JSON.stringify({manifestVersion:'play-3',level:'easy',completedStepIds:['movement-1']});await page.evaluate(raw=>localStorage.setItem('zweigesicht:play:session:v1',raw),old);
- await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await settle();check('Legacy save receives explicit incompatibility message',/incompatible/.test(await page.locator('.play-storage').innerText()));check('Legacy save remains intact before explicit replacement',await page.evaluate(()=>localStorage.getItem('zweigesicht:play:session:v1'))===old);
- await page.locator('.play-levels button').first().click();check('Replacing old save requires explicit confirmation',await page.locator('dialog').isVisible());await page.getByRole('button',{name:'Keep playing',exact:true}).click();check('Cancelling replacement retains original save',await page.evaluate(()=>localStorage.getItem('zweigesicht:play:session:v1'))===old);
- await page.goto(`${base}/play?no3d=1`,{waitUntil:'networkidle'});check('No-3D failure offers retry',await page.getByRole('button',{name:'Retry 3D',exact:true}).isVisible());
+ await page.goto(`${base}/workshop?mode=easy&inspect=1`,{waitUntil:'networkidle'});check('Legacy save receives explicit incompatibility message',/incompatible/.test(await page.locator('.play-storage').innerText()));check('Legacy save remains intact before explicit replacement',await page.evaluate(()=>localStorage.getItem('zweigesicht:play:session:v1'))===old);
+ check('Replacing old save requires explicit confirmation',await page.locator('dialog').isVisible());await page.getByRole('button',{name:'Return to chooser',exact:true}).click();await page.waitForURL(/assemble=1|\/$/);check('Cancelling replacement retains original save',await page.evaluate(()=>localStorage.getItem('zweigesicht:play:session:v1'))===old);
+ await page.goto(`${base}/workshop?mode=easy&no3d=1`,{waitUntil:'networkidle'});check('No-3D failure offers retry',await page.getByRole('button',{name:'Retry 3D',exact:true}).isVisible());
  // Required asset retry and unavailable storage use fresh contexts; never fake fitted progress.
- const retryPage=await context.newPage();retryPage.on('pageerror',e=>report.errors.push(String(e)));
+ const retryContext=await browser.newContext({viewport:{width:390,height:844}});const retryPage=await retryContext.newPage();retryPage.on('pageerror',e=>report.errors.push(String(e)));
  let failAssets=true;await retryPage.route('**/models/catalog-*.glb*',route=>failAssets?route.abort():route.continue());
- await retryPage.goto(`${base}/play?inspect=1`);await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).waitFor({timeout:60000});
- check('Incomplete catalog disables starting',await retryPage.locator('.play-levels button').first().isDisabled());
+ await retryPage.goto(`${base}/workshop?mode=easy&inspect=1`);if(await retryPage.locator('dialog[open]').count())await retryPage.getByRole('button',{name:'Start Easy',exact:true}).click();await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).waitFor({timeout:60000});
+ check('Incomplete catalog disables assembly controls',await retryPage.getByRole('button',{name:'Undo',exact:true}).isDisabled());
  failAssets=false;await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).click();await retryPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
- check('Asset retry prepares the full inventory',(await retryPage.evaluate(()=>window.__playInspect())).geometryCount===265);await retryPage.close();
+ check('Asset retry prepares the full inventory',(await retryPage.evaluate(()=>window.__playInspect())).geometryCount===265);await retryContext.close();
  const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('blocked for QA')}}));
- const blockedPage=await blocked.newPage();await blockedPage.goto(`${base}/play?inspect=1`);await blockedPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
- await blockedPage.locator('.play-levels button').first().click();check('Storage failure permits play with honest feedback',/unavailable/.test(await blockedPage.locator('.play-storage').innerText()));await blocked.close();
+ const blockedPage=await blocked.newPage();await blockedPage.goto(`${base}/workshop?mode=easy&inspect=1`);await blockedPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
+ check('Storage failure permits play with honest feedback',/unavailable/.test(await blockedPage.locator('.play-storage').innerText())&&blockedPage.url().includes('mode=easy'));await blocked.close();
+ const corrupt=await browser.newContext({viewport:{width:390,height:844}});await corrupt.addInitScript(()=>localStorage.setItem('zweigesicht:play:session:v1','{broken'));const corruptPage=await corrupt.newPage();await corruptPage.goto(`${base}/workshop?mode=hard&inspect=1`);await corruptPage.locator('dialog[open]').waitFor();check('Corrupt save requires replacement confirmation',/damaged/.test(await corruptPage.locator('#play-confirm-description').innerText())&&await corruptPage.evaluate(()=>localStorage.getItem('zweigesicht:play:session:v1'))==='{broken');await corruptPage.getByRole('button',{name:'Start Hard',exact:true}).click();await corruptPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});check('Confirmed corrupt replacement starts selected mode',(await corruptPage.evaluate(()=>window.__playInspect())).session.level==='hard');await corrupt.close();
+ for(const suffix of ['', '?mode=expert']) {const direct=await browser.newContext({viewport:{width:390,height:844}}),directPage=await direct.newPage();await directPage.goto(`${base}/workshop${suffix}`);await directPage.waitForURL(url=>url.pathname==='/'&&!url.searchParams.has('assemble'));check(`${suffix?'Invalid mode':'Missing mode'} without a save returns to the homepage chooser`,await directPage.getByText('Choose how much of the movement you want to build.',{exact:true}).isVisible());await direct.close();}
  check('No uncaught browser errors',report.errors.length===0,report.errors);console.log(`${report.checks.length} focused checks passed`);
 } catch(error){report.failure=String(error);console.error(error);await page.screenshot({path:path.join(out,'focused-failure.png')});process.exitCode=1;}
 finally{await fs.writeFile(path.join(out,'focused-redesign-report.json'),JSON.stringify(report,null,2));await browser.close();}

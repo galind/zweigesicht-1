@@ -1101,9 +1101,7 @@ export class PlayViewer {
     const heading = root
       ?.querySelector('.play-heading')
       ?.getBoundingClientRect();
-    const dock = root
-      ?.querySelector(this.active ? '.play-dock' : '.play-choice')
-      ?.getBoundingClientRect();
+    const dock = root?.querySelector('.play-dock')?.getBoundingClientRect();
     const landscape = rect.width / rect.height > 1.4 && rect.height < 600;
     const workspace = root
       ?.querySelector('.play-workspace')

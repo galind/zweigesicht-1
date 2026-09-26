@@ -6,9 +6,10 @@ The movement opens fully assembled. Reveal six functional groups, configure a fi
 
 See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
-`/play` is a separate free-choice assembly puzzle. Workshop offers 89 prepared
-fits; Master bench exposes 249 individual parts through 35 focused subassembly
-projects. The primary Ready now tray contains constructible choices without
+`/workshop` is the separate free-choice assembly feature, entered from the
+homepage through **Assemble the movement**. Easy offers 89 prepared fits; Hard
+exposes 249 individual parts through 35 focused subassembly projects. The
+primary Ready now tray contains constructible choices without
 revealing their seats; All parts keeps the complete searchable inventory and
 dependency clues available. Both experiences retain the same 16-leaf foundation
 and finish with 265 physical leaves. Nonlinear progress and the clue preference
@@ -17,7 +18,7 @@ save locally. Earlier guided saves require an explicit fresh start. See the
 [dependency ledger](docs/PLAY_DEPENDENCIES.md) and [source inventory](docs/PLAY_INVENTORY.md).
 It is a puzzle, not a servicing procedure.
 
-Current local production preview: **http://127.0.0.1:4187/play**.
+Current local production preview: **http://127.0.0.1:4187/workshop**.
 
 ## Run the prepared checkout
 
@@ -69,7 +70,7 @@ regression commands, measured comparisons and remaining verification limits.
 an existing local Playwright installation through `PLAYWRIGHT_MODULE` and Chrome
 through `CHROME_PATH`; they do not add runtime or project dependencies.
 
-For the redesigned Play flow, run `node scripts/play/browser-check.mjs
+For the Workshop flow, run `node scripts/play/browser-check.mjs
 http://127.0.0.1:4187 all` with those environment variables. Individual modes are
 `easy`, `hard`, `focused` and `home`. `PLAY_QA_OUTPUT` selects the ignored evidence
 directory; `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternative legal
@@ -77,7 +78,7 @@ orders and narrow Hard viewports. The older guided browser reports describe
 historical `play-2`/`play-3` code, not the current free-choice interaction.
 `node scripts/play/drag-check.mjs http://127.0.0.1:4187` uses the same environment
 variables to check actual-scale card dragging, the selected touch affordance,
-gallery swiping at desktop, 390 px and 320 px widths, the Master bench project
+gallery swiping at desktop, 390 px and 320 px widths, the Hard workbench project
 boundary and the barrel cover's workspace/support requirements.
 
 ## Hosting and source boundaries
@@ -89,7 +90,7 @@ Original CAD, source imagery, caches and environments remain outside Git. Most g
 Both build targets prune their output to the current runtime manifests, reject missing required assets and exclude local reference imagery. Local originals/generated evidence are never pruned. `npm start` serves the standard build; `build:vercel` only creates deployment output. For audit scope, removals and measured improvements, see [cleanup review](docs/CLEANUP_REVIEW.md).
 
 
-Play uses two fixed faces with Flip and centered zoom. The shock-indicator
+Workshop uses two fixed faces with Flip and centered zoom. The shock-indicator
 workbench has a fixed angled pair; radial dial screws expose a fixed edge view.
 `node scripts/play/fixed-access-check.mjs` checks source-surface access for all
 373 actions at three sampled distances using the prepared local runtime assets.

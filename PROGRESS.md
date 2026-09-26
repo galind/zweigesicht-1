@@ -706,3 +706,77 @@ summary/verification were updated through the GitHub connector. The production
 preview at http://127.0.0.1:4187/play was rebuilt and left on the corrected
 gallery. Next action is user review; physical-device, Safari and representative
 enjoyment/accessibility review remain outstanding.
+
+## Play and homepage cohesion plan — 26 September 2026
+
+Completed a matching-size desktop and phone comparison of the homepage and the
+current Play production build. User feedback simplified the resulting
+[cohesion plan](docs/PLAY_HOMEPAGE_COHESION_PLAN.md): the homepage receives one
+weighted `Assemble the movement` action, its shared popup chooses Easy or Hard,
+and the selected mode opens directly at `/workshop`. The large route-level
+choice screen is removed rather than redesigned. `/play` becomes a compatibility
+redirect.
+
+The plan defines deterministic new/resume/cross-mode/corrupt/unavailable-save
+behavior, retains the current storage key, keeps the ordinary homepage free of
+Workshop payload, and avoids an all-at-once rename of renderer internals. A
+direct `/workshop` visit resumes a valid save; a visit without a save or mode
+returns to the homepage chooser. Switching away from a progressed mode remains
+explicitly confirmed.
+
+The active assembly UI still needs the measured cohesion work: homepage shell
+and identity, a compact 220–240 px part rail, one persistent progress value,
+simpler cards and on-demand filter/progress Sheets. Ready-now logic, exact
+endpoints, source-scale dragging, fixed views, workbenches, saves, recovery and
+the corrected authored gallery finishes remain unchanged. No product UI was
+changed; this revised plan is awaiting feedback before implementation.
+
+## Homepage entry and Workshop implementation — 26 September 2026
+
+Implemented the approved cohesion plan on `codex/play-workshop-redesign`.
+The homepage header now keeps a restrained **Assemble the movement** action
+visible at desktop and an accessible **Assemble** adaptation on narrow phones.
+Its shared Sheet contains only Easy, Hard and the final scope/save copy. The
+ordinary homepage still requests no Workshop component, manifest or CAD. The
+one-shot `/?assemble=1` hint opens the chooser after hydration and removes
+itself with history replacement.
+
+The public assembly route is now `/workshop`, with updated noindex metadata,
+canonical and Open Graph URL. `/play` returns a permanent 308 redirect and
+preserves query parameters. Easy and Hard links boot the assembly directly.
+Valid saves resume without another chooser; no-progress cross-mode saves are
+replaced directly; progressed cross-mode saves offer the requested and saved
+modes; corrupt/incompatible saves require confirmation before replacement;
+direct entry without a valid mode/save returns to the homepage chooser. Change
+difficulty preserves the save. Unavailable storage permits the current-tab
+build, keeps the mode query and warns that leaving or reloading may lose work.
+The storage key remains `zweigesicht:play:session:v1`.
+
+Workshop now uses the homepage's neutral field and identity. Easy/Hard context,
+Ready now, All parts and one mode-specific progress value occupy the compact
+rail; detailed progress and All-parts search/grouping use shared Sheets. Default
+cards prioritize their authored thumbnail and name without repeated ready-state
+metadata. Undo, Flip and Reset are the only persistent actions. Desktop rail
+height is 226 px; normal phone height is 232 px. Enlarged narrow layouts wrap
+and scroll vertically without rail-wide horizontal overflow. The menu includes
+Return to the movement viewer, and completion offers Explore the movement,
+Build again and Change difficulty while leaving the assembled movement visible.
+
+Final verification passes: 67 automated state/lifecycle/build tests; inventory
+validation at 16 foundation leaves, 89 Easy fits, 249 Hard parts and the exact
+265-leaf final set; fixed-view access at 373 actions / 1,119 camera checks;
+TypeScript; lint; production build; and production SEO/HTTP. Isolated Chrome
+passes 15 homepage-entry/payload/focus/navigation checks, 91 focused startup,
+storage, responsive, recovery and interaction checks, and 93 desktop/390/320
+drag/workbench checks, with no uncaught errors. Complete real-DOM traversals
+pass all 89 Easy actions / 538 checks and all 284 Hard actions / 1,708 checks
+in reverse order at 320 px. Visual review covers matching homepage/Workshop
+desktop and phone captures plus 320×568 at 200% text; the enlarged rail issue
+found during review was corrected and rerun.
+
+The production build retains the existing Node module-registration deprecation,
+large-chunk and vinext route-classification notices. Physical-phone, Safari,
+representative assistive-technology/human usability, mechanical certification
+and publication/redistribution release gates remain outstanding. The final
+local production preview is http://127.0.0.1:4187/workshop. No merge or manual
+deployment was performed.

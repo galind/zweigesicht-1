@@ -1944,6 +1944,85 @@ canvas:focus-visible {
   }
 }
 
+/* Deliberate homepage entry to the separately loaded Workshop route. */
+.assemble-label-phone {
+  display: none;
+}
+.assemble-trigger {
+  min-height: 44px;
+  margin-left: auto;
+  padding-inline: 14px;
+  border-radius: 10px;
+  background: rgb(38 38 38 / 82%);
+  font-weight: 600;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.assembly-chooser[data-slot='sheet-content'] {
+  --popup-width: min(390px, calc(100vw - 32px));
+}
+.assembly-mode-list {
+  display: grid;
+  gap: 0;
+}
+.assembly-mode-list > button {
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 4px;
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.assembly-mode-list > button:last-of-type {
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+.assembly-mode-list > button span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+.assembly-mode-list strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.assembly-mode-list small,
+.assembly-mode-list p {
+  color: #aaa8a4;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.assembly-mode-list p {
+  margin: 14px 0 0;
+}
+@media (hover: hover) {
+  .assemble-trigger:hover,
+  .assembly-mode-list > button:hover {
+    color: #fff;
+    background: rgb(255 255 255 / 8%);
+  }
+}
+@media (max-width: 600px) {
+  .topbar .assemble-trigger {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-inline: 12px;
+  }
+  .assemble-label-desktop {
+    display: none;
+  }
+  .assemble-label-phone {
+    display: inline;
+  }
+}
+
 /* Phones keep only primary actions on the canvas; secondary actions are on demand. */
 .mobile-menu-trigger,
 .mobile-more-trigger,

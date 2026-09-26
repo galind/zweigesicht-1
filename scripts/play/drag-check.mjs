@@ -21,8 +21,7 @@ try {
   const center=async locator=>{await locator.scrollIntoViewIfNeeded();const r=await locator.boundingBox();return {x:r.x+r.width/2,y:r.y+r.height/2};};
   const pose=s=>JSON.stringify([s.camera,s.cameraTarget,s.cameraUp,s.projection]);
   const touch=async(from,to,cancel=false)=>{const cdp=await context.newCDPSession(page),pts=p=>[{x:p.x,y:p.y,id:1}];await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:pts(from)});for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:pts({x:from.x+(to.x-from.x)*i/8,y:from.y+(to.y-from.y)*i/8})});await cdp.send('Input.dispatchTouchEvent',{type:cancel?'touchCancel':'touchEnd',touchPoints:[]});await cdp.detach();await settle();};
-  await page.goto(`${base}/play?inspect=1`,{waitUntil:'networkidle'});await settle();
-  await page.locator('.play-levels button').first().click();await settle();
+  await page.goto(`${base}/workshop?mode=easy&inspect=1`,{waitUntil:'networkidle'});await settle();
   const camera=pose(await inspect());
   check(`${width}: starts on movement side`,(await inspect()).side==='back');
   check(`${width}: detached tray is removed`,await page.locator('.play-stage').count()===0);
@@ -48,7 +47,7 @@ try {
   await page.getByRole('button',{name:'Hints on',exact:true}).click();await settle();
   await card('movement-1').tap();await settle();
   const dragControl=page.locator('.play-card-drag');
-  check(`${width}: selected thumbnail exposes a labelled Drag affordance`,await dragControl.isVisible()&&await dragControl.isEnabled()&&/Drag part:/.test(await dragControl.getAttribute('aria-label'))&&await dragControl.evaluate(e=>getComputedStyle(e,'::after').opacity==='1'));
+  check(`${width}: selected thumbnail is a labelled drag surface without visible Drag text`,await dragControl.isVisible()&&await dragControl.isEnabled()&&/Drag part:/.test(await dragControl.getAttribute('aria-label'))&&await dragControl.evaluate(e=>getComputedStyle(e,'::after').content==='none'));
   p=await center(dragControl);s=await inspect();
   await touch(p,{x:s.target.x+20,y:s.target.y},true);
   check(`${width}: touch cancel releases capture without placement`,!(await inspect()).dragging&&!(await inspect()).session.actionIds.length&&!(await inspect()).stageVisible);
@@ -66,18 +65,22 @@ try {
   const r=await page.locator('.play-gallery').boundingBox(),scroll=await page.locator('.play-gallery').evaluate(e=>e.scrollLeft);
   await touch({x:r.x+r.width-20,y:r.y+35},{x:r.x+20,y:r.y+35});
   check(`${width}: gallery swipe still scrolls without dragging or placing`,await page.locator('.play-gallery').evaluate(e=>e.scrollLeft)>scroll&&!(await inspect()).session.actionIds.length&&!(await inspect()).dragging);
-  await card('movement-1').tap();await settle();await page.locator('.play-card-drag').scrollIntoViewIfNeeded();
+  await page.locator('.play-card-drag').scrollIntoViewIfNeeded();
   await page.screenshot({path:path.join(out,`drag-control-${width}.png`)});
   // Hard deliberately requires entering the part's workspace; selection alone cannot move the camera.
-  await page.getByRole('button',{name:'Menu',exact:true}).click();await page.getByRole('button',{name:'Choose difficulty',exact:true}).click();await page.getByRole('button',{name:'Choose challenge',exact:true}).click();await settle();await page.locator('.play-levels button').nth(1).click();if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:'Start again',exact:true}).click();await settle();
+  await page.goto(`${base}/workshop?mode=hard&inspect=1`,{waitUntil:'networkidle'});if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:'Start Hard',exact:true}).click();await settle();
   const hardCamera=pose(await inspect());
   check(`${width}: Hard watch level presents subassembly projects instead of child leaves`,await page.locator('[data-packet-id]').count()===3&&await card(manifest.levels.hard.steps[0].id).count()===0&&pose(await inspect())===hardCamera);
   if(width===1440) {
     for(const group of manifest.groups) {
+      await page.getByRole('button',{name:'Filter',exact:true}).click();
       await page.getByLabel('Parts group',{exact:true}).selectOption(group.id);
+      await page.keyboard.press('Escape');
       check(`Hard group exposes meaningful ready work: ${group.label}`,await page.locator('[data-packet-id], .play-card').count()>0);
     }
+    await page.getByRole('button',{name:'Filter',exact:true}).click();
     await page.getByLabel('Parts group',{exact:true}).selectOption('power');
+    await page.keyboard.press('Escape');
   }
   await page.locator('[data-packet-id="movement-1"]').click();await settle();
   check(`${width}: project opens its labelled workbench`,(await inspect()).workspace==='movement-1'&&/Barrel assembly 2/.test(await page.locator('.play-workspace').innerText()));

@@ -12,15 +12,13 @@ import {
   LocateFixed,
   ListRestart,
   Lightbulb,
-  Gauge,
   ArrowLeft,
   Wrench,
   Menu,
-  PackageOpen,
   Sparkles,
-  Trophy,
   CircleHelp,
   Boxes,
+  SlidersHorizontal,
 } from 'lucide-react';
 import {
   TextButton as Control,
@@ -52,6 +50,7 @@ import {
 import type { PlayLevel, PlayManifest, PlaySession, PlayStep } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
 import { useTextScalePreview } from '../experience/useTextScalePreview';
+import { makerUrl } from '../content/about';
 import './play.css';
 
 const manifest = authored as PlayManifest;
@@ -61,6 +60,30 @@ const blank: PlayViewStatus = {
   error: '',
   cutaway: false,
   side: 'back',
+};
+
+type StartupConflict =
+  | { kind: 'switch'; requested: PlayLevel; saved: PlaySession }
+  | {
+      kind: 'replace';
+      requested: PlayLevel;
+      reason: 'corrupt' | 'incompatible';
+    };
+
+const requestedMode = (): PlayLevel | null => {
+  const value = new URLSearchParams(location.search).get('mode');
+  return value === 'easy' || value === 'hard' ? value : null;
+};
+
+const clearVisibleMode = () => {
+  const url = new URL(location.href);
+  if (!url.searchParams.has('mode')) return;
+  url.searchParams.delete('mode');
+  history.replaceState(
+    history.state,
+    '',
+    `${url.pathname}${url.search}${url.hash}`,
+  );
 };
 
 function Thumbnail({
@@ -116,6 +139,9 @@ export default function Play() {
     assistanceRef = useRef(false);
   const [session, setSession] = useState<PlaySession | null>(null),
     [active, setActive] = useState(false);
+  const [bootResolved, setBootResolved] = useState(false);
+  const [startupConflict, setStartupConflict] =
+    useState<StartupConflict | null>(null);
   const [selection, setSelection] = useState<string | null>(null),
     [workspace, setWorkspace] = useState<string | null>(null);
   const [assistance, setAssistance] = useState(false),
@@ -126,16 +152,17 @@ export default function Play() {
     [notice, setNotice] = useState('');
   const [help, setHelp] = useState(false),
     [menu, setMenu] = useState(false),
+    [filters, setFilters] = useState(false),
+    [progressOpen, setProgressOpen] = useState(false),
     [inventoryView, setInventoryView] = useState<'ready' | 'all'>('ready'),
     [placementPulse, setPlacementPulse] = useState(0),
     [attempt, setAttempt] = useState(0);
-  const [confirm, setConfirm] = useState<
-    'restart' | 'levels' | PlayLevel | null
-  >(null);
+  const [confirm, setConfirm] = useState<'restart' | null>(null);
   const dialog = useRef<HTMLDialogElement>(null),
     lastFocus = useRef<HTMLElement | null>(null);
   const menuButton = useRef<HTMLButtonElement>(null),
-    choiceTitle = useRef<HTMLHeadingElement>(null);
+    filterButton = useRef<HTMLButtonElement>(null),
+    progressButton = useRef<HTMLButtonElement>(null);
   const inventory = useRef<HTMLDivElement>(null),
     [headerBottom, setHeaderBottom] = useState(70);
   const scrollPositions = useRef(new Map<string, number>());
@@ -174,11 +201,15 @@ export default function Play() {
   const persist = useCallback((next: PlaySession) => {
     sessionRef.current = next;
     setSession(next);
-    setStorage(
-      saveSession(manifest, next).status === 'saved'
-        ? ''
-        : 'Saving is unavailable. Keep playing in this tab.',
-    );
+    const result = saveSession(manifest, next);
+    if (result.status === 'saved') {
+      setStorage('');
+      clearVisibleMode();
+    } else {
+      setStorage(
+        'Saving is unavailable. Leaving or reloading may lose progress in this tab.',
+      );
+    }
   }, []);
   const apply = useCallback(
     (next: PlaySession) => {
@@ -211,26 +242,78 @@ export default function Play() {
     let mounted = true;
     queueMicrotask(() => {
       if (!mounted) return;
+      const requested = requestedMode();
       const saved = getSavedSession(manifest);
       if (saved.status === 'saved') {
         sessionRef.current = saved.session;
         setSession(saved.session);
+        if (
+          requested &&
+          requested !== saved.session.level &&
+          saved.session.actionIds.length
+        ) {
+          setStartupConflict({
+            kind: 'switch',
+            requested,
+            saved: saved.session,
+          });
+        } else if (requested && requested !== saved.session.level) {
+          const next = createSession(manifest, requested);
+          activeRef.current = true;
+          setActive(true);
+          persist(next);
+        } else {
+          activeRef.current = true;
+          setActive(true);
+          if (requested) clearVisibleMode();
+        }
+        setBootResolved(true);
         sync();
-      } else if (saved.status === 'corrupt' || saved.status === 'incompatible')
+        return;
+      }
+      if (saved.status === 'corrupt' || saved.status === 'incompatible') {
+        if (!requested) {
+          location.replace('/?assemble=1');
+          return;
+        }
         setStorage(
           saved.status === 'incompatible'
-            ? 'Your saved linear assembly is incompatible with free assembly. It stays saved until you explicitly start a new game.'
-            : 'Your previous session cannot be restored. Choose a level to start again.',
+            ? 'This saved assembly is from an incompatible version and must be replaced before Workshop can start.'
+            : 'This saved assembly cannot be restored and must be replaced before Workshop can start.',
         );
-      else if (saved.status === 'unavailable')
-        setStorage('Saving is unavailable. You can play in this tab.');
+        setStartupConflict({
+          kind: 'replace',
+          requested,
+          reason: saved.status,
+        });
+        setBootResolved(true);
+        return;
+      }
+      if (!requested) {
+        location.replace('/?assemble=1');
+        return;
+      }
+      const next = createSession(manifest, requested);
+      sessionRef.current = next;
+      setSession(next);
+      activeRef.current = true;
+      setActive(true);
+      if (saved.status === 'unavailable') {
+        setStorage(
+          'Saving is unavailable. Leaving or reloading may lose progress in this tab.',
+        );
+      } else {
+        persist(next);
+      }
+      setBootResolved(true);
+      sync();
     });
     return () => {
       mounted = false;
     };
-  }, [sync]);
+  }, [persist, sync]);
   useEffect(() => {
-    if (!host.current || !destination.current) return;
+    if (!bootResolved || !host.current || !destination.current) return;
     let controller: PlayViewer;
     try {
       if (new URLSearchParams(location.search).get('no3d') === '1')
@@ -329,7 +412,7 @@ export default function Play() {
       delete w.__playContext;
       delete w.__playAccessAudit;
     };
-  }, [apply, sync, attempt]);
+  }, [apply, sync, attempt, bootResolved]);
   useLayoutEffect(() => {
     const layout = () => {
       const bottom =
@@ -343,13 +426,13 @@ export default function Play() {
     const observer = new ResizeObserver(layout);
     app.current
       ?.querySelectorAll(
-        '.play-heading, .play-dock, .play-choice, .play-workspace',
+        '.play-heading, .play-dock, .play-workspace',
       )
       .forEach((e) => observer.observe(e));
     return () => observer.disconnect();
   }, [active, status.ready]);
   useEffect(() => {
-    if (confirm) {
+    if (confirm || startupConflict) {
       lastFocus.current = document.activeElement as HTMLElement;
       dialog.current?.showModal();
     } else {
@@ -357,7 +440,7 @@ export default function Play() {
       if (lastFocus.current?.isConnected) lastFocus.current.focus();
       lastFocus.current = null;
     }
-  }, [confirm]);
+  }, [confirm, startupConflict]);
 
   const disabled = !status.ready || status.busy;
   const all = session ? actions(manifest, session.level) : [];
@@ -489,23 +572,32 @@ export default function Play() {
       inventory.current?.querySelector('button')?.focus();
     });
     setNotice(
-      `${level === 'easy' ? 'Workshop' : 'Master bench'} started. Choose a ready piece and find its seat.`,
+      `${level === 'easy' ? 'Easy' : 'Hard'} started. Choose a ready piece and find its seat.`,
     );
   };
-  const choose = (level: PlayLevel) =>
-    session?.actionIds.length || storage.includes('incompatible')
-      ? setConfirm(level)
-      : start(level);
   const discard = () => {
-    if (confirm === 'levels') {
-      if (workspace) enterWorkspace(null);
-      activeRef.current = false;
-      setActive(false);
-      sync();
-      requestAnimationFrame(() => choiceTitle.current?.focus());
-    } else if (confirm === 'restart' && session) start(session.level);
-    else if (confirm === 'easy' || confirm === 'hard') start(confirm);
+    if (confirm === 'restart' && session) start(session.level);
     setConfirm(null);
+  };
+  const keepSavedStartup = () => {
+    if (startupConflict?.kind !== 'switch') {
+      location.assign('/?assemble=1');
+      return;
+    }
+    sessionRef.current = startupConflict.saved;
+    setSession(startupConflict.saved);
+    activeRef.current = true;
+    setActive(true);
+    clearVisibleMode();
+    setStartupConflict(null);
+    sync();
+  };
+  const acceptStartup = () => {
+    if (!startupConflict) return;
+    const requested = startupConflict.requested;
+    setStartupConflict(null);
+    setStorage('');
+    start(requested);
   };
   const reveal = () => {
     assistanceRef.current = true;
@@ -524,14 +616,15 @@ export default function Play() {
       <div className="play-canvas" ref={host} />
       <header className="play-heading">
         <div className="play-brand">
-          <span>Zweigesicht–1</span>
-          <span>
-            {active
-              ? session?.level === 'hard'
-                ? 'Master bench'
-                : 'Workshop'
-              : 'Assembly workshop'}
-          </span>
+          <h1>Zweigesicht-1</h1>
+          <a
+            href={makerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="by Marco Lang — official website, opens in a new tab"
+          >
+            by Marco Lang
+          </a>
         </div>
         {active && (
           <Control
@@ -613,70 +706,6 @@ export default function Play() {
       >
         <span aria-hidden="true">＋</span>
       </Control>
-      {!active && (
-        <section className="play-choice" aria-labelledby="play-title">
-          <span className="play-kicker">A mechanical puzzle in real CAD</span>
-          <h1 ref={choiceTitle} id="play-title" tabIndex={-1}>
-            Build the movement, piece by piece
-          </h1>
-          <p>
-            Choose a part from the bench, study the movement, and find the seat
-            it was made for. There is no timer and no penalty for looking
-            closer.
-          </p>
-          {session && (
-            <Control
-              className="play-primary play-continue"
-              disabled={disabled}
-              onClick={() => {
-                activeRef.current = true;
-                setActive(true);
-                sync();
-                requestAnimationFrame(() => {
-                  viewer.current?.layout();
-                  viewer.current?.resetView();
-                });
-              }}
-            >
-              Continue {session.level === 'easy' ? 'Workshop' : 'Master bench'}
-              <span>
-                {count} of {physicalTotal} parts fitted
-              </span>
-            </Control>
-          )}
-          <div className="play-levels">
-            <Control
-              data-level="easy"
-              disabled={disabled}
-              onClick={() => choose('easy')}
-            >
-              <span className="play-level-icon" aria-hidden="true">
-                <PackageOpen />
-              </span>
-              <strong>Workshop</strong>
-              <span>89 considered fits using prepared subassemblies</span>
-              <small>Best place to learn the movement</small>
-            </Control>
-            <Control
-              data-level="hard"
-              disabled={disabled}
-              onClick={() => choose('hard')}
-            >
-              <span className="play-level-icon" aria-hidden="true">
-                <Wrench />
-              </span>
-              <strong>Master bench</strong>
-              <span>249 individual parts across 35 subassemblies</span>
-              <small>A long-form challenge; progress saves locally</small>
-            </Control>
-          </div>
-          <div className="play-choice-notes">
-            <span>Clues start off</span>
-            <span>Forgiving placement</span>
-            <span>Pick up where you left off</span>
-          </div>
-        </section>
-      )}
       {active && (
         <section
           className="play-dock"
@@ -684,138 +713,73 @@ export default function Play() {
           data-pulse={placementPulse}
         >
           <div className="play-progress">
-            <div className="play-progress-copy">
-              <span className="play-mode-mark">
-                {workspace
-                  ? packet?.label
-                  : session?.level === 'hard'
-                    ? manifest.groups.find((item) => item.id === group)?.label
-                    : 'Ready bench'}
-              </span>
-              <strong>
-                {complete
-                  ? 'Movement complete'
-                  : `${count} of ${physicalTotal} parts fitted`}
-              </strong>
+            <button
+              type="button"
+              className="play-mode-mark"
+              ref={progressButton}
+              onClick={() => setProgressOpen(true)}
+              aria-label={`View ${session?.level === 'hard' ? 'Hard' : 'Easy'} progress`}
+            >
+              {session?.level === 'hard' ? 'Hard' : 'Easy'}
+            </button>
+            <div className="play-inventory-switch" aria-label="Parts view">
+              <button
+                type="button"
+                aria-pressed={inventoryView === 'ready'}
+                onClick={() => {
+                  setInventoryView('ready');
+                  setQuery('');
+                }}
+              >
+                <Sparkles aria-hidden="true" /> Ready now
+              </button>
+              <button
+                type="button"
+                aria-pressed={inventoryView === 'all'}
+                onClick={() => setInventoryView('all')}
+              >
+                <Boxes aria-hidden="true" /> All parts
+              </button>
             </div>
-            <div className="play-progress-score">
-              <span>
-                {completedFits} / {levelSteps.length} fits
-              </span>
-              <span>
-                {completedSystems} / {manifest.groups.length} systems
-              </span>
-            </div>
-          </div>
-          <progress
-            className="play-progress-bar"
-            aria-label="Assembly progress"
-            max={physicalTotal}
-            value={count}
-          />
-          <div className="play-system-track" aria-label="Mechanism progress">
-            {manifest.groups.map((candidate) => {
-              const systemActions = all.filter(
-                (step) => step.groupId === candidate.id,
-              );
-              const systemDone = systemActions.filter((step) =>
-                done.has(step.id),
-              ).length;
-              return (
-                <span
-                  key={candidate.id}
-                  data-active={!workspace && candidate.id === group}
-                  data-complete={
-                    !!systemActions.length &&
-                    systemDone === systemActions.length
-                  }
-                  style={
-                    {
-                      '--system-progress': `${systemActions.length ? (systemDone / systemActions.length) * 100 : 0}%`,
-                    } as CSSProperties
-                  }
-                  title={`${candidate.label}: ${systemDone} of ${systemActions.length}`}
-                />
-              );
-            })}
+            {(inHardMode || inventoryView === 'all') && (
+              <button
+                type="button"
+                className="play-filter-trigger"
+                ref={filterButton}
+                onClick={() => setFilters(true)}
+              >
+                <SlidersHorizontal aria-hidden="true" /> Filter
+              </button>
+            )}
+            <strong>
+              {completedFits} of {levelSteps.length}{' '}
+              {session?.level === 'hard' ? 'parts' : 'fits'}
+            </strong>
           </div>
           {complete ? (
             <div className="play-complete" aria-live="polite">
-              <span className="play-complete-icon" aria-hidden="true">
-                <Trophy />
-              </span>
               <div>
                 <strong>You completed the movement.</strong>
                 <p>
-                  All 265 physical pieces are in place. Flip it over and take in
-                  both faces—or begin a fresh build when you are ready.
+                  All 265 physical pieces are in place. The assembled movement
+                  remains yours to explore.
                 </p>
               </div>
-              <FlipButton
-                disabled={disabled}
-                onClick={() => viewer.current?.flip()}
-              />
+              <Control onClick={() => location.assign('/')}>
+                Explore the movement
+              </Control>
               <Control
                 disabled={disabled}
                 onClick={() => setConfirm('restart')}
               >
                 Build again
               </Control>
+              <Control onClick={() => location.assign('/?assemble=1')}>
+                Change difficulty
+              </Control>
             </div>
           ) : (
             <>
-              <div className="play-inventory-tools">
-                <div className="play-inventory-switch" aria-label="Parts view">
-                  <button
-                    type="button"
-                    aria-pressed={inventoryView === 'ready'}
-                    onClick={() => {
-                      setInventoryView('ready');
-                      setQuery('');
-                    }}
-                  >
-                    <Sparkles aria-hidden="true" /> Ready now
-                  </button>
-                  <button
-                    type="button"
-                    aria-pressed={inventoryView === 'all'}
-                    onClick={() => setInventoryView('all')}
-                  >
-                    <Boxes aria-hidden="true" /> All parts
-                  </button>
-                </div>
-                {inHardMode && !workspace && (
-                  <label>
-                    <span className="sr-only">Parts group</span>
-                    <select
-                      aria-label="Parts group"
-                      value={group}
-                      onChange={(event) => {
-                        setGroup(event.target.value);
-                        setQuery('');
-                      }}
-                    >
-                      {manifest.groups.map((candidate) => (
-                        <option key={candidate.id} value={candidate.id}>
-                          {candidate.label} · {readyInGroup(candidate.id)} ready
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                )}
-                {inventoryView === 'all' && (
-                  <label className="play-search">
-                    <span className="sr-only">Find a part</span>
-                    <input
-                      type="search"
-                      aria-label="Find a part"
-                      placeholder="Find a part…"
-                      value={query}
-                      onChange={(event) => setQuery(event.target.value)}
-                    />
-                  </label>
-                )}
-              </div>
               <div
                 className="play-gallery"
                 ref={inventory}
@@ -872,6 +836,15 @@ export default function Play() {
                     !!session &&
                     !placed &&
                     !canPlace(manifest, session, step.id);
+                  const stateLabel = placed
+                    ? 'Fitted'
+                    : unavailable
+                      ? 'Waiting for earlier work'
+                      : step.kind === 'transfer'
+                        ? 'Seat completed assembly'
+                        : contextLabel
+                          ? `Workbench · ${contextLabel}`
+                          : '';
                   return (
                     <div
                       className="play-card-item"
@@ -922,17 +895,9 @@ export default function Play() {
                           ready={status.ready}
                         />
                         <span className="play-card-label">{step.label}</span>
-                        <span className="play-card-state">
-                          {placed
-                            ? 'Fitted'
-                            : unavailable
-                              ? 'Waiting for earlier work'
-                              : step.kind === 'transfer'
-                                ? 'Ready to seat'
-                                : step.leafIds.length > 1
-                                  ? 'Prepared assembly'
-                                  : 'Ready to fit'}
-                        </span>
+                        {stateLabel && (
+                          <span className="play-card-state">{stateLabel}</span>
+                        )}
                       </button>
                       {selection === step.id && !placed && (
                         <button
@@ -985,12 +950,13 @@ export default function Play() {
                   </div>
                 )}
               </div>
-              <div
-                className="play-selection"
-                aria-live="polite"
-                aria-atomic="true"
-                key={`selection-${placementPulse}`}
-              >
+              <div className="play-rail-footer">
+                <div
+                  className="play-selection"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  key={`selection-${placementPulse}`}
+                >
                 <div>
                   <strong>{selected?.label ?? 'Choose your next fit'}</strong>
                   <p>
@@ -1052,8 +1018,6 @@ export default function Play() {
                     Seat completed assembly
                   </Control>
                 )}
-              </div>
-              <div className="play-actions">
                 {held &&
                   !fitted &&
                   inWorkspace &&
@@ -1065,31 +1029,34 @@ export default function Play() {
                       <LocateFixed aria-hidden="true" /> Show seat
                     </Control>
                   )}
-                <Control
-                  disabled={disabled || !session?.actionIds.length}
-                  onClick={() => {
-                    if (session) {
-                      apply(undoPlacement(manifest, session));
-                      setNotice('Last fit undone.');
-                    }
-                  }}
-                >
-                  <Undo2 aria-hidden="true" /> Undo
-                </Control>
-                <FlipButton
-                  disabled={disabled}
-                  onClick={() => viewer.current?.flip()}
-                />
-                <ResetViewButton
-                  disabled={disabled}
-                  onClick={() => viewer.current?.resetView()}
-                />
+                </div>
+                <div className="play-actions">
+                  <Control
+                    disabled={disabled || !session?.actionIds.length}
+                    onClick={() => {
+                      if (session) {
+                        apply(undoPlacement(manifest, session));
+                        setNotice('Last fit undone.');
+                      }
+                    }}
+                  >
+                    <Undo2 aria-hidden="true" /> Undo
+                  </Control>
+                  <FlipButton
+                    disabled={disabled}
+                    onClick={() => viewer.current?.flip()}
+                  />
+                  <ResetViewButton
+                    disabled={disabled}
+                    onClick={() => viewer.current?.resetView()}
+                  />
+                </div>
               </div>
             </>
           )}
         </section>
       )}
-      {(!status.ready || status.error) && (
+      {bootResolved && (!status.ready || status.error) && (
         <section className="play-loading" aria-label="Loading status">
           <output>{status.error || 'Preparing the watch…'}</output>
           {status.error && (
@@ -1169,16 +1136,100 @@ export default function Play() {
                 </Control>
                 <Control
                   disabled={disabled}
-                  aria-label="Choose difficulty"
                   onClick={() => {
                     setMenu(false);
-                    setConfirm('levels');
+                    location.assign('/?assemble=1');
                   }}
                 >
-                  <Gauge aria-hidden="true" /> Change challenge
+                  Change difficulty
+                </Control>
+                <Control onClick={() => location.assign('/')}>
+                  Return to the movement viewer
                 </Control>
               </>
             )}
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Sheet modal={false} open={filters} onOpenChange={setFilters}>
+        <SheetContent
+          className="explorer-panel settings-panel header-panel play-filter-panel"
+          style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+          showOverlay={false}
+          scrollContent
+          finalFocus={filterButton}
+        >
+          <SheetHeader>
+            <SheetTitle>Filter parts</SheetTitle>
+            <SheetDescription>
+              Choose a mechanism or search the complete inventory.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="panel-body play-filter-fields">
+            {inHardMode && !workspace && (
+              <label>
+                <span>Mechanism</span>
+                <select
+                  aria-label="Parts group"
+                  value={group}
+                  onChange={(event) => {
+                    setGroup(event.target.value);
+                    setQuery('');
+                  }}
+                >
+                  {manifest.groups.map((candidate) => (
+                    <option key={candidate.id} value={candidate.id}>
+                      {candidate.label} · {readyInGroup(candidate.id)} ready
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {inventoryView === 'all' && (
+              <label>
+                <span>Find a part</span>
+                <input
+                  type="search"
+                  aria-label="Find a part"
+                  placeholder="Find a part…"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </label>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Sheet
+        modal={false}
+        open={progressOpen}
+        onOpenChange={setProgressOpen}
+      >
+        <SheetContent
+          className="explorer-panel settings-panel header-panel play-progress-panel"
+          style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+          showOverlay={false}
+          scrollContent
+          finalFocus={progressButton}
+        >
+          <SheetHeader>
+            <SheetTitle>Assembly progress</SheetTitle>
+            <SheetDescription>
+              {session?.level === 'hard' ? 'Hard' : 'Easy'} build details
+            </SheetDescription>
+          </SheetHeader>
+          <div className="panel-body play-progress-details">
+            <p>
+              <strong>{completedFits}</strong> of {levelSteps.length}{' '}
+              {session?.level === 'hard' ? 'individual parts' : 'prepared fits'}
+            </p>
+            <p>
+              <strong>{count}</strong> of {physicalTotal} physical parts added
+            </p>
+            <p>
+              <strong>{completedSystems}</strong> of {manifest.groups.length}{' '}
+              mechanisms complete
+            </p>
           </div>
         </SheetContent>
       </Sheet>
@@ -1214,10 +1265,10 @@ export default function Play() {
               acknowledgement.
             </p>
             <p>
-              In Master bench, open a subassembly card to build it one component
-              at a time. Return whenever you like, then seat the finished
-              assembly in the watch. Undo reverses the last fit or transfer.
-              Dial-edge screws have an explicit fitting view.
+              In Hard mode, open a subassembly card to build it one component
+              at a time on its workbench. Return whenever you like, then seat
+              the finished assembly in the watch. Undo reverses the last fit or
+              transfer. Dial-edge screws have an explicit fitting view.
             </p>
             <p>
               Flip switches between the two fixed sides. Scroll or pinch to zoom
@@ -1237,24 +1288,43 @@ export default function Play() {
         className="play-confirm"
         aria-labelledby="play-confirm-title"
         aria-describedby="play-confirm-description"
-        onCancel={() => setConfirm(null)}
+        onCancel={(event) => {
+          event.preventDefault();
+          if (startupConflict) keepSavedStartup();
+          else setConfirm(null);
+        }}
       >
         <h2 id="play-confirm-title">
-          {confirm === 'levels'
-            ? 'Choose a different challenge?'
-            : 'Start again?'}
+          {startupConflict?.kind === 'switch'
+            ? `Start ${startupConflict.requested === 'hard' ? 'Hard' : 'Easy'} instead?`
+            : startupConflict?.kind === 'replace'
+              ? 'Replace the saved assembly?'
+              : 'Start again?'}
         </h2>
         <p id="play-confirm-description">
-          {confirm === 'levels'
-            ? 'Your save remains available until you start another assembly.'
-            : 'This replaces your saved progress with a fresh assembly. Clues will start off.'}
+          {startupConflict?.kind === 'switch'
+            ? `This device has ${startupConflict.saved.actionIds.length} completed action${startupConflict.saved.actionIds.length === 1 ? '' : 's'} in ${startupConflict.saved.level === 'hard' ? 'Hard' : 'Easy'}. Starting the selected mode will replace that progress.`
+            : startupConflict?.kind === 'replace'
+              ? `The saved assembly is ${startupConflict.reason === 'corrupt' ? 'damaged' : 'from an incompatible version'}. It must be replaced before a new build can start.`
+              : 'This replaces your saved progress with a fresh assembly. Clues will start off.'}
         </p>
         <div>
-          <Control onClick={() => setConfirm(null)} autoFocus>
-            Keep playing
+          <Control
+            onClick={() =>
+              startupConflict ? keepSavedStartup() : setConfirm(null)
+            }
+            autoFocus
+          >
+            {startupConflict?.kind === 'switch'
+              ? `Resume ${startupConflict.saved.level === 'hard' ? 'Hard' : 'Easy'}`
+              : startupConflict?.kind === 'replace'
+                ? 'Return to chooser'
+                : 'Keep playing'}
           </Control>
-          <Control onClick={discard}>
-            {confirm === 'levels' ? 'Choose challenge' : 'Start again'}
+          <Control onClick={startupConflict ? acceptStartup : discard}>
+            {startupConflict
+              ? `Start ${startupConflict.requested === 'hard' ? 'Hard' : 'Easy'}`
+              : 'Start again'}
           </Control>
         </div>
       </dialog>
