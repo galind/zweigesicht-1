@@ -50,12 +50,12 @@ try {
  await pick('movement-1');await reveal();s=await inspect();await touch(s.stage,s.target);check('Touch drop commits once',(await inspect()).session.actionIds.length===2);preserved('Touch placement preserves camera',s,await inspect());
  await pick('movement-60');await toggle();check('Bridge becomes available after both barrels',await card('movement-60').getAttribute('data-unavailable')==='false');
  await page.getByRole('button',{name:'Undo',exact:true}).click();await settle();check('Undo recomputes bridge availability',await card('movement-60').getAttribute('data-unavailable')==='true');
- // User orbit, zoom and pan must survive ordinary state updates.
- await page.locator('canvas').focus();await page.keyboard.press('ArrowRight');await page.keyboard.press('+');await settle();
- await page.mouse.move(200,260);await page.mouse.down({button:'right'});await page.mouse.move(225,278,{steps:5});await page.mouse.up({button:'right'});await settle();s=await inspect();
- await pick('movement-3');preserved('Selection preserves user orbit, zoom and pan',s,await inspect());await toggle();preserved('Hints preserve user orbit, zoom and pan',s,await inspect());
+ // Fixed views ignore orbit/pan input; centered zoom survives state updates.
+ s=await inspect();await page.locator('canvas').focus();await page.keyboard.press('ArrowRight');await settle();preserved('Arrow keys cannot rotate the fixed view',s,await inspect());await page.keyboard.press('+');await settle();
+ s=await inspect();await page.mouse.move(200,260);await page.mouse.down({button:'right'});await page.mouse.move(225,278,{steps:5});await page.mouse.up({button:'right'});await settle();preserved('Right dragging cannot pan the fixed view',s,await inspect());s=await inspect();
+ await pick('movement-3');preserved('Selection preserves fixed view and zoom',s,await inspect());await toggle();preserved('Hints preserve fixed view and zoom',s,await inspect());
  const fitted=await inspect();const materials=JSON.stringify(fitted.materials);
- for(let i=0;i<32;i++) {await page.locator('canvas').focus();await page.keyboard.press('ArrowRight');await settle();const orbit=await inspect();check(`Orbit ${i+1}: fitted meshes and materials stable`,same(orbit.visible,fitted.fitted)&&JSON.stringify(orbit.materials)===materials);}
+ for(let i=0;i<4;i++) {await page.getByRole('button',{name:'Flip movement',exact:true}).click();await settle();const orbit=await inspect();check(`Flip ${i+1}: fitted meshes and materials stable`,same(orbit.visible,fitted.fitted)&&JSON.stringify(orbit.materials)===materials);}
  await page.getByRole('button',{name:'Reset view',exact:true}).click();await settle();
  s=await inspect();check('Reset recentres immutable mainplate',Math.hypot(s.mainplateCenter.x-s.frameRegion.left-s.frameRegion.width/2,s.mainplateCenter.y-(s.frameRegion.top+s.frameRegion.bottom)/2)<.01);
  await page.getByRole('button',{name:'Flip movement',exact:true}).click();await settle();const flipped=await inspect();check('Flip preserves projected mainplate centre',Math.hypot(flipped.mainplateCenter.x-s.mainplateCenter.x,flipped.mainplateCenter.y-s.mainplateCenter.y)<.01);

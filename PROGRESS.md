@@ -577,3 +577,37 @@ records the concrete code-level inconsistency found during investigation.
 Preview refreshed at http://127.0.0.1:4185/play; user reload preserves saved actions.
 Next action: retry the reported placement and identify any remaining rejection.
 Local commit only; no publishing.
+
+
+## Fixed Play views — 26 September 2026
+
+Replaced free orbit and pan in Play with two prescribed faces, Flip/F and bounded
+centered scroll/pinch or keyboard zoom. The movement side remains the default;
+selection, hints and ordinary placements preserve the view. Workbench return and
+renderer recovery preserve the camera and its zoom limits. Help and canvas
+accessibility text describe the new controls. The homepage controls are unchanged.
+
+Straight-on views alone leave four physical parts inaccessible in maximal legal
+assemblies: two radial dial screws and two shock-indicator washers. The screws
+now expose an explicit View dial edge action using the existing authored vectors;
+Return to faces restores the prior normal camera. The shock-indicator workbench
+uses a fixed tilted pair. Guidance checks only the two current presets and never
+hides fitted geometry or enters an edge view automatically. No source geometry,
+dependency, physical count or save format changed.
+
+Verification: all 65 CPU tests, typecheck, lint and production build pass. The
+new fixed-access geometry script checks all 373 Easy/Hard actions against every
+legal opaque predecessor at three sampled distances: all 1,119 checks pass.
+An isolated production browser session confirmed that empty-space drag plus
+arrow input leaves the rendered view identical, centered zoom and Flip work,
+a barrel can be dragged from its gallery thumbnail into place, and explicit edge
+view entry/return works. All 39 shock-indicator parts were placed through visible
+UI controls, including both washers, and the completed packet was transferred
+into the watch. The browser completion scripts were updated for fixed views but
+not rerun in full; mobile touch and Safari remain unverified for this change.
+The CPU ray-access audit is not physical collision certification.
+
+Preview refreshed at http://127.0.0.1:4185/play; reload to receive the new controls.
+The user's existing save was not touched; browser review used port 4186.
+Next action: user review of fixed views and fitting. Local commit only, no push,
+PR or deployment. Original untracked prompt files remain excluded.

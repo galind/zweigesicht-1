@@ -10,6 +10,7 @@ import * as THREE from '../explorer/node_modules/three/build/three.module.js';
 import {OrbitControls} from '../explorer/node_modules/three/examples/jsm/controls/OrbitControls.js';
 import * as CameraFrame from '../explorer/src/viewer/CameraFrame.ts';
 import {motionEase, MOTION} from '../explorer/src/experience/motion.ts';
+import {fixedViewDirection} from '../explorer/src/play/fixedViews.ts';
 import {snapDrop} from '../explorer/src/play/state.ts';
 
 const require = createRequire(import.meta.url);
@@ -36,7 +37,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
+    module, THREE, performance, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, fixedViewDirection, motionEase, MOTION, ...graphics(globals), console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }
@@ -285,13 +286,13 @@ test('off-center assembly framing keeps its projected center fixed throughout fl
   }
 });
 
-test('Reset and Home preserve the viewed side and assembly while Guide restores the authored screw view', () => {
+test('Reset and Home use fixed faces; edge guidance requires explicit detail entry', () => {
   for (const authoredSide of ['front', 'back']) for (const viewedSide of ['front', 'back']) for (const reduced of [false, true]) for (const action of ['reset', 'home']) {
     const {v, settle} = renderedFixture();
-    const authoredSign = authoredSide === 'front' ? 1 : -1, viewedSign = viewedSide === 'front' ? 1 : -1;
+    const viewedSign = viewedSide === 'front' ? 1 : -1;
     const screw = {
       id: 'radial-retaining-screw', side: authoredSide, leafIds: ['leaf'], focusLeafIds: ['leaf'],
-      contextLeafIds: ['foundation'], viewDirectionWorld: [.8, .25, authoredSign * .45],
+      contextLeafIds: ['foundation'], viewDirectionWorld: [.8, .25, .45],
     };
     const part = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 2), new THREE.MeshBasicMaterial());
     const foundation = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 1), new THREE.MeshBasicMaterial());
@@ -319,9 +320,12 @@ test('Reset and Home preserve the viewed side and assembly while Guide restores 
     assert.deepEqual([...v.fitted], ['foundation']); assert.equal(commits, 0);
     assert.equal(prevented, action === 'home' ? 1 : 0);
     v.guide(); settle(v.cameraMotion?.start ?? performance.now());
-    assert.equal(v.side, authoredSide, 'Guide deliberately restores the part’s authored side');
+    assert.equal(v.side, viewedSide, 'Guide cannot silently open an edge view');
+    v.detail=screw;
+    v.guide(); settle(v.cameraMotion?.start ?? performance.now());
+    assert.equal(v.side, authoredSide, 'Explicit detail guidance selects the preset face');
     const guided = v.camera.position.clone().sub(v.controls.target).normalize();
-    assert.ok(guided.distanceTo(new THREE.Vector3().fromArray(screw.viewDirectionWorld).normalize()) < 1e-8, 'Guide restores the oblique radial-screw destination');
+    assert.ok(guided.distanceTo(fixedViewDirection(authoredSide,null,screw)) < 1e-8, 'Guide stays on the explicit fixed edge preset');
     assert.equal(v.current, current); assert.equal(v.fitted, fitted); assert.equal(commits, 0);
     assert.equal(v.busy, false); assert.equal(v.frame, 0);
     part.geometry.dispose(); part.material.dispose(); foundation.geometry.dispose(); foundation.material.dispose(); v.controls.dispose();
@@ -709,4 +713,54 @@ test('a visible in-frame seat is accepted even when the centre-nearest source sa
     v.place();assert.equal(commits,1,'Final placement uses the same view bounds as the drop');
     v.controls.dispose();
   }
+});
+
+
+test('fixed workspace and edge presets have two exact Flip endpoints', () => {
+  for (const workspace of [null, 'movement-29', 'movement-4']) {
+    for (const detail of [null, {viewDirectionWorld: [.34, -.76, .54]}]) {
+      const front = fixedViewDirection('front', workspace, detail);
+      const back = fixedViewDirection('back', workspace, detail);
+      assert.ok(Math.abs(front.length() - 1) < 1e-12);
+      assert.ok(front.clone().applyAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI).distanceTo(back) < 1e-12);
+      assert.ok(front.z > 0 && back.z < 0);
+    }
+  }
+});
+
+test('Play keyboard ignores orbit arrows, zooms around its target and flips with F', () => {
+  const v = fixture();
+  let flips = 0, invalidations = 0;
+  v.flip = () => flips++;
+  v.invalidate = () => invalidations++;
+  v.keyDown = actual('keyDown', v);
+  const position = v.camera.position.clone(), target = v.controls.target.clone();
+  for (const key of ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']) v.keyDown({key, preventDefault() {assert.fail('Arrow key intercepted');}});
+  assert.ok(v.camera.position.equals(position));
+  v.keyDown({key: '+', preventDefault() {}});
+  assert.ok(v.camera.position.distanceTo(target) < position.distanceTo(target));
+  assert.ok(v.controls.target.equals(target));
+  v.keyDown({key: 'F', preventDefault() {}});
+  assert.equal(flips, 1); assert.equal(invalidations, 1);
+  v.controls.dispose();
+});
+
+test('leaving an explicit edge view restores the normal camera and zoom bounds', () => {
+  const v = fixture();
+  v.workspace = null; v.detail = null; v.side = 'back';
+  v.invalidate = () => {};
+  v.setDetail = actual('setDetail', v);
+  const position = v.camera.position.clone(), target = v.controls.target.clone(), up = v.camera.up.clone();
+  v.reframe = () => {
+    v.camera.position.set(3, 4, 5); v.controls.target.set(1, 2, 3);
+    v.controls.minDistance = 1; v.controls.maxDistance = 8;
+  };
+  v.setDetail({id: 'edge-1', side: 'front', viewDirectionWorld: [.3, -.7, .5]});
+  assert.equal(v.detail.id, 'edge-1');
+  v.setDetail({id: 'edge-2', side: 'front', viewDirectionWorld: [-.1, .8, .5]});
+  v.setDetail(null);
+  assert.equal(v.detail, null); assert.equal(v.side, 'back');
+  assert.ok(v.camera.position.equals(position)); assert.ok(v.controls.target.equals(target)); assert.ok(v.camera.up.equals(up));
+  assert.equal(v.controls.minDistance, 3); assert.equal(v.controls.maxDistance, 1500);
+  v.controls.dispose();
 });

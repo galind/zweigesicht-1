@@ -371,6 +371,7 @@ export default function Play() {
     };
   }, [scrollKey]);
   const start = (level: PlayLevel) => {
+    viewer.current?.setDetail(null);
     if (workspaceRef.current) enterWorkspace(null);
     selectionRef.current = null;
     setSelection(null);
@@ -451,7 +452,19 @@ export default function Play() {
       </header>
       {active && (
         <div className="play-workspace" style={{ top: headerBottom + 6 }}>
-          {workspace ? (
+          {status.detail ? (
+            <>
+              <span>
+                Dial edge · {all.find((s) => s.id === status.detail)?.label}
+              </span>
+              <Control
+                disabled={disabled}
+                onClick={() => viewer.current?.setDetail(null)}
+              >
+                <ArrowLeft aria-hidden="true" /> Return to faces
+              </Control>
+            </>
+          ) : workspace ? (
             <>
               <span>
                 <Wrench aria-hidden="true" /> Workbench · {packet?.label}
@@ -707,19 +720,33 @@ export default function Play() {
                   : notice ||
                     (fitted
                       ? 'Placed. Choose another piece, or undo the last action.'
-                      : selected && selected.workspaceId !== workspace
-                        ? selected.workspaceId
-                          ? 'This part fits on its workbench. Open workbench to assemble it.'
-                          : 'This piece belongs in the watch.'
-                        : held
-                          ? hints || assistance
-                            ? status.obstructed
-                              ? 'The seat is obscured or outside this view. Orbit or use Show destination.'
-                              : 'Drag this card onto the highlighted seat.'
-                            : 'Drag the card into the assembly. On touch, drag its image.'
-                          : 'Drag a card into the assembly. On touch, select a card, then drag its image.')}
+                      : held?.viewDirectionWorld &&
+                          inWorkspace &&
+                          status.detail !== held.id
+                        ? 'This screw fits at the dial edge. Open its fixed edge view.'
+                        : selected && selected.workspaceId !== workspace
+                          ? selected.workspaceId
+                            ? 'This part fits on its workbench. Open workbench to assemble it.'
+                            : 'This piece belongs in the watch.'
+                          : held
+                            ? hints || assistance
+                              ? status.obstructed
+                                ? 'The fitting point is hidden. Flip the watch or use Show destination.'
+                                : 'Drag this card onto the highlighted seat.'
+                              : 'Drag the card into the assembly. On touch, drag its image.'
+                            : 'Drag a card into the assembly. On touch, select a card, then drag its image.')}
               </p>
             </div>
+            {held?.viewDirectionWorld &&
+              inWorkspace &&
+              status.detail !== held.id && (
+                <Control
+                  disabled={disabled}
+                  onClick={() => viewer.current?.setDetail(held)}
+                >
+                  View dial edge
+                </Control>
+              )}
             {selected && !fitted && selected.workspaceId !== workspace && (
               <Control
                 disabled={disabled}
@@ -744,14 +771,17 @@ export default function Play() {
               )}
           </div>
           <div className="play-actions">
-            {held && !fitted && inWorkspace && (
-              <Control
-                disabled={disabled || (hints && !available)}
-                onClick={reveal}
-              >
-                <LocateFixed aria-hidden="true" /> Show destination
-              </Control>
-            )}
+            {held &&
+              !fitted &&
+              inWorkspace &&
+              (!held.viewDirectionWorld || status.detail === held.id) && (
+                <Control
+                  disabled={disabled || (hints && !available)}
+                  onClick={reveal}
+                >
+                  <LocateFixed aria-hidden="true" /> Show destination
+                </Control>
+              )}
             <Control
               disabled={disabled || !session?.actionIds.length}
               onClick={() => {
@@ -838,13 +868,15 @@ export default function Play() {
               In Hard, open a part’s workbench to build its assembly one
               component at a time. Return whenever you like. Pick up a complete
               assembly and seat it in the watch; the transfer adds no parts.
-              Undo reverses the last placement or transfer.
+              Undo reverses the last placement or transfer. Dial-edge screws
+              have an explicit fixed edge view; Return to faces restores your
+              view.
             </p>
             <p>
-              Drag empty space to orbit; right-drag to pan; scroll or pinch to
-              zoom. On the canvas, arrow keys orbit, + / − zoom, and Home resets
-              the view. Flip and Reset preserve progress. Workbench return
-              restores your watch camera.
+              Flip switches between the two fixed sides. Scroll or pinch to zoom
+              toward the center. On the canvas, F flips, + / − zoom, and Home
+              resets the view. Flip and Reset preserve progress. Workbench
+              return restores your watch camera.
             </p>
             <small>
               A source-based puzzle using Marco Lang’s CAD. Assembly rules are

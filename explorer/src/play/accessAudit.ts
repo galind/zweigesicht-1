@@ -1,6 +1,7 @@
 /** Opt-in, read-only geometry audit. It never changes the game, camera or source meshes. */
 import * as THREE from 'three';
 import { actions } from './state';
+import { fixedViewDirection } from './fixedViews';
 import type { PlayManifest, PlayStep } from './types';
 import type { PlayViewer } from './PlayViewer';
 
@@ -18,20 +19,6 @@ export async function auditAccess(
       return [id, mesh] as const;
     }),
   );
-  const directions: THREE.Vector3[] = [];
-  for (let latitude = -80; latitude <= 80; latitude += 20)
-    for (let longitude = 0; longitude < 360; longitude += 30) {
-      const a = THREE.MathUtils.degToRad(latitude),
-        b = THREE.MathUtils.degToRad(longitude);
-      directions.push(
-        new THREE.Vector3(
-          Math.cos(a) * Math.cos(b),
-          Math.cos(a) * Math.sin(b),
-          Math.sin(a),
-        ),
-      );
-    }
-  directions.unshift(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, -1));
   const results: {
     level: string;
     id: string;
@@ -77,14 +64,32 @@ export async function auditAccess(
           const material = mesh.material as THREE.Material;
           return !(material.transparent && material.opacity < 0.5);
         });
-      const points = sample(step),
-        center = new THREE.Box3()
-          .setFromPoints(points)
-          .getCenter(new THREE.Vector3());
+      const points = sample(step);
+      const frameBounds = new THREE.Box3();
+      const frameIds = step.workspaceId
+        ? manifest.packets.find((p) => p.id === step.workspaceId)!.leafIds
+        : manifest.initialLeafIds;
+      for (const id of frameIds) frameBounds.union(pieces.get(id)!.bounds);
+      const center = frameBounds.getCenter(new THREE.Vector3());
+      const frameSize = frameBounds.getSize(new THREE.Vector3());
+      const distance =
+        Math.max(
+          frameSize.x,
+          frameSize.y,
+          frameSize.z,
+          step.workspaceId ? 1 : 25,
+        ) * 4;
+      const directions = (['front', 'back'] as const).map((side) =>
+        fixedViewDirection(
+          side,
+          step.workspaceId,
+          step.viewDirectionWorld ? step : null,
+        ),
+      );
       const blockers = new Map<string, number>();
       let pass = false;
       for (const direction of directions) {
-        const eye = center.clone().addScaledVector(direction, 200);
+        const eye = center.clone().addScaledVector(direction, distance);
         for (const point of points) {
           const offset = point.clone().sub(eye),
             distance = offset.length();

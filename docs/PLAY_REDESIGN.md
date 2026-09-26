@@ -71,15 +71,24 @@ player explicitly starts over; the level screen explains their incompatibility.
 Initial framing and Reset use only the immutable mainplate geometry (the packet
 bounds in a workbench), centred in the measured usable viewport. The orbit target
 is the actual geometry centre; camera projection offsets reserve the controls.
-User orbit, zoom and pan survive all ordinary state changes. Resize adjusts
-projection without taking camera ownership. Only Reset, Flip, explicit Reveal
-and explicit workbench entry/return control the camera.
+Play uses two fixed faces, starting on the movement side. Free orbit and pan
+are disabled; scroll/pinch and +/− provide bounded centered zoom. F or Flip turns
+to the other face. Selection, hints and placement preserve the view. Resize
+adjusts projection without taking camera ownership. Reset, Flip, Show destination,
+explicit detail views and workbench entry/return control the camera.
+
+`fixedViews.ts` supplies the prescribed directions. Ordinary workspaces use ±Z;
+the shock-indicator workbench uses normalized [−1, 1, 1] and its 180° X-axis
+rotation so both washers remain reachable after their independent retainers.
+The two radial central-dial screws expose **View dial edge**, using their existing
+source-authored directions. Selection never enters that view automatically.
+**Return to faces** restores the previous normal camera and zoom limits.
 
 The old `presentContext` hides sightline intersections on every camera change.
 Remove that path. Installed meshes retain their visibility and source materials
 within their explicit workspace. Hint meshes use separate overlay materials.
 Drops require a visible sample on the actual selected geometry; opacity is never
-changed to make a blocked seat accessible. Explicit Reveal searches viewpoints
+changed to make a blocked seat accessible. Show destination checks only the two current fixed presets
 without hiding an obstruction. Mechanical dependencies and workspace preparation
 must prevent inaccessible late internals, rather than accepting through covers.
 
@@ -234,3 +243,15 @@ support dependencies and conservative dial closure remain documented puzzle
 choices requiring mechanical review before any servicing claim. The source CAD
 exceptions and publication/redistribution gates remain unchanged. No push, PR,
 merge or deployment is authorized or performed under this brief.
+
+
+## Fixed-view follow-up — 26 September 2026
+
+`node scripts/play/fixed-access-check.mjs` audits all 373 Easy/Hard actions using
+the prepared runtime meshes and actual fixed direction helper. For each action,
+it places every legal predecessor, treats all surfaces as opaque, and requires
+an exposed source sample at 2×, 4× and 6× the frame span. All 1,119 checks pass.
+The four physical exceptions to straight-on views are handled by the explicit
+edge views and fixed shock-indicator workbench angle described above. This is a
+ray-access check at sampled distances, not exhaustive drag or physical assembly
+certification. Historical orbit/pan review counts above describe earlier code.

@@ -85,3 +85,9 @@ The repository has a Vercel build configuration (`vercel.json`, `npm run build:v
 Original CAD, source imagery, caches and environments remain outside Git. Most generated assets are local; explicitly approved runtime payloads are tracked through the exceptions in `.gitignore`. Source provenance is under `assets/source-manifest/`; hand-authored overrides are under `assets/authored/`. Publication and redistribution remain subject to the [release gates](docs/RELEASE_GATES.md).
 
 Both build targets prune their output to the current runtime manifests, reject missing required assets and exclude local reference imagery. Local originals/generated evidence are never pruned. `npm start` serves the standard build; `build:vercel` only creates deployment output. For audit scope, removals and measured improvements, see [cleanup review](docs/CLEANUP_REVIEW.md).
+
+
+Play uses two fixed faces with Flip and centered zoom. The shock-indicator
+workbench has a fixed angled pair; radial dial screws expose a fixed edge view.
+`node scripts/play/fixed-access-check.mjs` checks source-surface access for all
+373 actions at three sampled distances using the prepared local runtime assets.

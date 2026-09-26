@@ -76,8 +76,13 @@ The mainplate gives a fixed framing reference. The orbit pivot stays on that
 geometry; a camera projection offset reserves the measured inventory/header
 space. Selection, placement, failed drops, hints and Undo never reframe. Explicit
 workbench entry captures the main camera and return restores it. Resize updates
-projection while preserving camera direction, distance and pan. Reset, Flip and
-Show destination are explicit camera actions. No camera event hides fitted meshes
+projection while preserving camera direction and distance. Play disables orbit
+and pan and allows bounded centered zoom plus two fixed faces via Flip/F.
+`fixedViews.ts` supplies face directions, including a fixed tilted pair for the
+shock-indicator workbench. The radial dial screws have explicit View dial edge
+presets using their source-authored vectors; Return to faces restores the prior
+normal pose and zoom limits. Reset, Flip and Show destination are explicit camera
+actions; guidance can only choose between the current two presets. No camera event hides fitted meshes
 or changes their materials. Hint meshes have a separate material, and drops
 require an actual source-surface sample with a clear ray past fitted opaque
 geometry. This is visual validation, not swept-solid collision certification.

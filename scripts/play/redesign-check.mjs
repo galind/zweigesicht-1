@@ -35,6 +35,7 @@ try {
   if(s.workspace!==selected.workspaceId) {
    await page.locator('.play-selection').getByRole('button',{name:selected.workspaceId?'Open workbench':'Return to watch',exact:true}).click();await settle();
   }
+  if(await page.getByRole('button',{name:'View dial edge',exact:true}).count()) {await page.getByRole('button',{name:'View dial edge',exact:true}).click();await settle();}
   await page.getByRole('button',{name:'Show destination',exact:true}).click();await settle();
   await page.locator('.play-card-drag').scrollIntoViewIfNeeded();
   s=await inspect();

@@ -4,9 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
   syncOrbitUp,
-  orbitCamera,
   zoomCamera,
-  KEYBOARD_ORBIT_MOVES,
   KEYBOARD_ZOOM_IN,
   KEYBOARD_ZOOM_OUT,
 } from '../viewer/CameraFrame';
@@ -33,6 +31,7 @@ import { assetRequestUrl } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
 import type { PlayManifest, PlayStep } from './types';
 import { dragCenter, snapDrop } from './state';
+import { fixedViewDirection } from './fixedViews';
 
 type Piece = { mesh: THREE.Mesh; pose: THREE.Matrix4; bounds: THREE.Box3 };
 type Point = { x: number; y: number };
@@ -43,6 +42,7 @@ export type PlayViewStatus = {
   cutaway: boolean;
   obstructed?: boolean;
   side: 'front' | 'back';
+  detail?: string;
 };
 
 /** A route-local controller. Source matrices and shared geometry are never mutated. */
@@ -83,7 +83,10 @@ export class PlayViewer {
     up: THREE.Vector3;
     focus: THREE.Vector3;
     side: 'front' | 'back';
+    zoomLimits: [number, number];
   };
+  detail: PlayStep | null = null;
+  detailView?: PlayViewer['mainView'];
   captureElement?: HTMLElement;
   thumbnails = new Map<string, string>();
   seatSamples: THREE.Vector3[] = [];
@@ -143,11 +146,13 @@ export class PlayViewer {
       this.renderer.domElement.tabIndex = 0;
       this.renderer.domElement.setAttribute(
         'aria-label',
-        'Watch assembly. Drag empty space to orbit; pinch or scroll to zoom. Arrow keys orbit; plus and minus zoom.',
+        'Watch assembly. Flip switches sides. Pinch or scroll to zoom. F flips; plus and minus zoom; Home resets.',
       );
       this.camera.up.set(0, -1, 0);
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      this.controls.enablePan = true;
+      this.controls.enablePan = false;
+      this.controls.enableRotate = false;
+      this.controls.zoomToCursor = false;
       this.controls.enableDamping = true;
       this.controls.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
       this.controls.minDistance = 3;
@@ -185,6 +190,7 @@ export class PlayViewer {
         cutaway: this.cutaway,
         obstructed: !!this.current && (!this.seatVisible || !this.seatInView),
         side: this.side,
+        detail: this.detail?.id,
       });
   }
   makeEnvironment() {
@@ -425,6 +431,9 @@ export class PlayViewer {
     return {
       workspace: this.workspace,
       mainView: this.mainView,
+      detail: this.detail,
+      detailView: this.detailView,
+      zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
       position: this.camera.position.clone(),
       target: this.controls.target.clone(),
       up: this.camera.up.clone(),
@@ -436,6 +445,9 @@ export class PlayViewer {
   restoreCamera(saved: ReturnType<PlayViewer['captureCamera']>) {
     this.workspace = saved.workspace;
     this.mainView = saved.mainView;
+    this.detail = saved.detail;
+    this.detailView = saved.detailView;
+    [this.controls.minDistance, this.controls.maxDistance] = saved.zoomLimits;
     this.camera.position.copy(saved.position);
     this.controls.target.copy(saved.target);
     this.camera.up.copy(saved.up);
@@ -449,8 +461,52 @@ export class PlayViewer {
     this.layout();
     this.invalidate();
   }
+  setDetail(step: PlayStep | null) {
+    if (
+      this.busy ||
+      this.drag ||
+      this.workspace ||
+      (step && !step.viewDirectionWorld)
+    )
+      return;
+    if (step?.id === this.detail?.id) return;
+    this.stopOrbitMotion();
+    if (step) {
+      if (!this.detail)
+        this.detailView = {
+          position: this.camera.position.clone(),
+          target: this.controls.target.clone(),
+          up: this.camera.up.clone(),
+          focus: this.frameFocus.clone(),
+          side: this.side,
+          zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
+        };
+      this.detail = step;
+      this.side = step.side;
+      this.reframe(false, true);
+    } else {
+      this.detail = null;
+      if (this.detailView) {
+        this.camera.position.copy(this.detailView.position);
+        this.controls.target.copy(this.detailView.target);
+        this.camera.up.copy(this.detailView.up);
+        this.frameFocus.copy(this.detailView.focus);
+        this.side = this.detailView.side;
+        [this.controls.minDistance, this.controls.maxDistance] =
+          this.detailView.zoomLimits;
+        syncOrbitUp(this.camera, this.controls);
+        this.camera.lookAt(this.controls.target);
+        this.camera.updateMatrixWorld();
+        this.detailView = undefined;
+      }
+      this.updateSeat();
+      this.invalidate();
+    }
+    this.emit();
+  }
   setWorkspace(workspace: string | null) {
     if (workspace === this.workspace || this.busy || this.drag) return;
+    if (this.detail) this.setDetail(null);
     if (!this.workspace)
       this.mainView = {
         position: this.camera.position.clone(),
@@ -458,6 +514,7 @@ export class PlayViewer {
         up: this.camera.up.clone(),
         focus: this.frameFocus.clone(),
         side: this.side,
+        zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
       };
     this.workspace = workspace;
     this.current = null;
@@ -471,6 +528,8 @@ export class PlayViewer {
       this.camera.up.copy(this.mainView.up);
       this.frameFocus.copy(this.mainView.focus);
       this.side = this.mainView.side;
+      [this.controls.minDistance, this.controls.maxDistance] =
+        this.mainView.zoomLimits;
       syncOrbitUp(this.camera, this.controls);
       this.camera.lookAt(this.controls.target);
       this.camera.updateMatrixWorld();
@@ -492,14 +551,13 @@ export class PlayViewer {
     }
     return b;
   }
-  reframe = (animate = false, straightOn = false) => {
+  reframe = (animate = false, _straightOn = false) => {
     if (!this.ready || this.drag || (this.busy && !this.cameraMotion)) return;
     const transition = (animate || !!this.cameraMotion) && this.hasFramed;
     this.hasFramed = true;
     const fromPosition = this.camera.position.clone(),
       fromTarget = this.controls.target.clone(),
       fromUp = this.camera.up.clone();
-    const step = !straightOn ? this.current : null;
     const ids = this.workspace
       ? this.manifest.packets.find((p) => p.id === this.workspace)!.leafIds
       : this.manifest.initialLeafIds;
@@ -519,10 +577,14 @@ export class PlayViewer {
         (1.35 * this.host.clientHeight) / this.frameRegion.width,
       );
     const up = new THREE.Vector3(0, this.side === 'front' ? 1 : -1, 0);
-    const direction =
-      !straightOn && step?.viewDirectionWorld && this.side === step.side
-        ? new THREE.Vector3().fromArray(step.viewDirectionWorld).normalize()
-        : new THREE.Vector3(0, 0, this.side === 'front' ? 1 : -1);
+    const direction = fixedViewDirection(
+      this.side,
+      this.workspace,
+      this.detail,
+    );
+    // Centered zoom cannot enter the movement or lose it in the distance.
+    this.controls.minDistance = distance / 2;
+    this.controls.maxDistance = distance * 1.5;
     this.camera.up.copy(up);
     syncOrbitUp(this.camera, this.controls);
     this.controls.target.copy(center);
@@ -808,7 +870,7 @@ export class PlayViewer {
             : !this.available
               ? 'That piece cannot be fitted yet. Turn hints on to see what it needs.'
               : !this.seatVisible || !this.seatInView
-                ? 'The fitting point is hidden from this view. Orbit or flip the watch, or use Show destination.'
+                ? 'The fitting point is hidden from this view. Flip the watch or use Show destination.'
                 : 'Not close enough to its fitting point. Try nearer, or use Show destination.',
         );
       this.animateToStage(drag.position);
@@ -908,52 +970,26 @@ export class PlayViewer {
       this.feedback('That piece cannot be fitted yet.');
       return;
     }
+    if (
+      this.current.viewDirectionWorld &&
+      this.detail?.id !== this.current.id
+    ) {
+      this.feedback('Use View dial edge to inspect this fitting point.');
+      return;
+    }
     const fromPosition = this.camera.position.clone(),
       fromTarget = this.controls.target.clone(),
       fromUp = this.camera.up.clone();
     this.assistance = true;
     this.side = this.current.side;
     this.reframe(false);
-    // Explicit reveal searches for an unobstructed source seat, never a cutaway.
-    const distance = this.camera.position.distanceTo(this.controls.target);
-    const directions: THREE.Vector3[] = [];
-    if (this.current.viewDirectionWorld)
-      directions.push(
-        new THREE.Vector3().fromArray(this.current.viewDirectionWorld),
-      );
-    for (const z of [
-      this.side === 'front' ? 1 : -1,
-      this.side === 'front' ? -1 : 1,
-    ])
-      for (const [x, y] of [
-        [0, 0],
-        [0.65, 0],
-        [-0.65, 0],
-        [0, 0.65],
-        [0, -0.65],
-        [1, 1],
-        [-1, 1],
-        [1, -1],
-        [-1, -1],
-        [3, 0],
-        [-3, 0],
-        [0, 3],
-        [0, -3],
-      ])
-        directions.push(new THREE.Vector3(x, y, z).normalize());
-    for (const direction of directions) {
-      this.camera.position
-        .copy(this.controls.target)
-        .addScaledVector(direction, distance);
-      this.camera.up.set(0, direction.z > 0 ? 1 : -1, 0);
-      syncOrbitUp(this.camera, this.controls);
-      this.camera.lookAt(this.controls.target);
-      this.camera.updateMatrixWorld();
+    // Guidance is limited to the same two fixed faces available through Flip.
+    this.updateSeat();
+    if (!this.seatVisible || !this.seatInView) {
+      this.side = this.side === 'front' ? 'back' : 'front';
+      this.reframe(false, true);
       this.updateSeat();
-      if (this.seatVisible) break;
     }
-    this.side =
-      this.camera.position.z > this.controls.target.z ? 'front' : 'back';
     if (!this.media.matches) {
       this.cameraMotion = {
         start: performance.now(),
@@ -978,7 +1014,9 @@ export class PlayViewer {
     this.invalidate();
     this.emit();
     if (!this.seatVisible)
-      this.feedback('This seat is obscured. Orbit to inspect the assembly.');
+      this.feedback(
+        'This fitting point is obscured. Try Flip to inspect the other side.',
+      );
   };
   flip = () => {
     if (!this.ready || this.drag || this.busy) return;
@@ -1038,11 +1076,12 @@ export class PlayViewer {
       this.resetView();
       return;
     }
-    const move = KEYBOARD_ORBIT_MOVES[event.key];
-    if (move) {
+    if (event.key.toLowerCase() === 'f') {
       event.preventDefault();
-      orbitCamera(this.camera, this.controls, ...move);
-    } else if (['+', '=', '-'].includes(event.key)) {
+      this.flip();
+      return;
+    }
+    if (['+', '=', '-'].includes(event.key)) {
       event.preventDefault();
       zoomCamera(
         this.camera,
@@ -1338,6 +1377,9 @@ export class PlayViewer {
       available: this.available,
       hints: this.hints,
       workspace: this.workspace,
+      detail: this.detail?.id,
+      rotationEnabled: this.controls.enableRotate,
+      panEnabled: this.controls.enablePan,
       frameRegion: this.frameRegion,
       mainplateCenter: this.project(
         this.boundsFor(this.manifest.initialLeafIds).getCenter(
