@@ -621,3 +621,12 @@ before first framing and replace the intended back-side default with front.
 The difficulty-selection screen now starts with the same movement-side
 orientation as gameplay. Production build passes; no additional tests run.
 Preview refreshed on port 4185. Local change only; no publishing.
+
+## Play redesign pull request — 26 September 2026
+
+Pushed `codex/play-free-assembly` over SSH and opened
+[PR #14](https://github.com/galind/zweigesicht-1/pull/14), targeting
+`codex/play-assembly` because the original Play PR #12 remains open.
+The PR describes the redesign, gallery dragging, fixed views, opening orientation,
+verification evidence and remaining review limits. No merge or manual deployment.
+Next action: review PR #14. Original prompt files remain untracked.
