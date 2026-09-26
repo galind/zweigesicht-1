@@ -552,3 +552,28 @@ TypeScript and production build pass. A targeted production browser check passes
 mouse placement at 1440 px and touch placement at 390 px from the thumbnail,
 with no visible Drag label. Preview refreshed at http://127.0.0.1:4185/play.
 Next action: user review; local commit only, no publication.
+
+## Consistent visible-seat placement — 26 September 2026
+
+Investigated the reported difficulty fitting pieces. The existing user session
+was inspected read-only; its progress was left intact. Identified an inconsistency
+in the controller: drag validation accepted any exposed source sample inside the
+assembly viewport, while final placement selected the sample closest to the
+part's center and could reject it as offscreen. The two paths also used different
+horizontal margins. A partly visible or panned part could therefore reject an
+otherwise valid drop.
+
+Seat selection now prefers an exposed sample within the assembly viewport and
+uses exactly the same viewport boundaries as snapping. Opaque occlusion and
+support/workspace rules remain enforced. Failed drops distinguish missing
+supports, an obscured/offscreen fitting point, and a missed fitting point, with
+explicit hints/reveal options instead of one generic rejection message.
+
+All 62 unit tests pass. The new controller regression covers an offscreen
+center-nearest sample plus a visible valid sample, including both horizontal
+viewport boundaries, through final placement. TypeScript, lint and production
+build pass. The exact original rejected gesture has not been identified; this
+records the concrete code-level inconsistency found during investigation.
+Preview refreshed at http://127.0.0.1:4185/play; user reload preserves saved actions.
+Next action: retry the reported placement and identify any remaining rejection.
+Local commit only; no publishing.

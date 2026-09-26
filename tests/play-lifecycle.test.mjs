@@ -10,6 +10,7 @@ import * as THREE from '../explorer/node_modules/three/build/three.module.js';
 import {OrbitControls} from '../explorer/node_modules/three/examples/jsm/controls/OrbitControls.js';
 import * as CameraFrame from '../explorer/src/viewer/CameraFrame.ts';
 import {motionEase, MOTION} from '../explorer/src/experience/motion.ts';
+import {snapDrop} from '../explorer/src/play/state.ts';
 
 const require = createRequire(import.meta.url);
 const ts = require('../explorer/node_modules/typescript');
@@ -686,4 +687,26 @@ test('a source seat behind an opaque fitted surface rejects placement without hi
   mesh.material.transparent=true;mesh.material.opacity=.2;
   assert.equal(v.visibleSeat(new THREE.Vector3()),true,'Genuinely authored transparency is retained');
   assert.equal(mesh.material.opacity,.2);mesh.geometry.dispose();mesh.material.dispose();v.controls.dispose();
+});
+
+test('a visible in-frame seat is accepted even when the centre-nearest source sample is offscreen',()=>{
+  for(const x of [12,50,212]) {
+    const v=fixture();let commits=0;
+    Object.assign(v,{
+      ready:true,active:true,current:{id:'part',workspaceId:null},workspace:null,
+      frameRegion:{left:12,width:200,top:80,bottom:200},
+      target:new THREE.Vector3(x,70,0),seatPoint:new THREE.Vector3(),
+      seatSamples:[new THREE.Vector3(x,70,0),new THREE.Vector3(x,100,0)],
+      destination:{style:{}},project:p=>({x:p.x,y:p.y}),visibleSeat:()=>true,
+      animate(_from,_to,_a,_b,complete){complete();},placed(){commits++;},
+      feedback(message){throw Error(`Valid drop was rejected: ${message}`);},
+    });
+    for(const name of ['inAssemblyView','updateSeat','isNear','place'])v[name]=actual(name,v,{snapDrop});
+    v.updateSeat();
+    assert.equal(v.seatVisible,true);assert.equal(v.seatInView,true);
+    assert.equal(v.seatPoint.y,100,'Offscreen centre sample must not veto the visible seat');
+    assert.equal(v.isNear({x,y:100}),true);
+    v.place();assert.equal(commits,1,'Final placement uses the same view bounds as the drop');
+    v.controls.dispose();
+  }
 });

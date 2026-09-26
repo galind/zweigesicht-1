@@ -604,6 +604,14 @@ export class PlayViewer {
   visibleSeat(point: THREE.Vector3) {
     return this.occludersAt(point).length === 0;
   }
+  inAssemblyView(point: Point) {
+    return (
+      point.x >= this.frameRegion.left &&
+      point.x <= this.frameRegion.left + this.frameRegion.width &&
+      point.y >= this.frameRegion.top &&
+      point.y <= this.frameRegion.bottom
+    );
+  }
   updateSeat() {
     if (
       !this.current ||
@@ -626,15 +634,17 @@ export class PlayViewer {
         Math.hypot(q.x - center.x, q.y - center.y)
       );
     });
-    const best = samples.find((point) => this.visibleSeat(point));
+    // Prefer an exposed point inside the usable view. The closest sample to
+    // the source centre can be offscreen while another valid seat is visible.
+    const best =
+      samples.find(
+        (point) =>
+          this.inAssemblyView(this.project(point)) && this.visibleSeat(point),
+      ) ?? samples.find((point) => this.visibleSeat(point));
     this.seatVisible = !!best;
     this.seatPoint.copy(best ?? this.target);
     const p = this.project(this.seatPoint);
-    const inView =
-      p.x > 20 &&
-      p.x < this.host.clientWidth - 20 &&
-      p.y > this.frameRegion.top &&
-      p.y < this.frameRegion.bottom;
+    const inView = this.inAssemblyView(p);
     this.seatInView = inView;
     this.destination.style.visibility =
       this.seatVisible &&
@@ -765,10 +775,7 @@ export class PlayViewer {
       this.seatSamples.some((sample) => {
         const target = this.project(sample);
         return (
-          target.x >= this.frameRegion.left &&
-          target.x <= this.frameRegion.left + this.frameRegion.width &&
-          target.y >= this.frameRegion.top &&
-          target.y <= this.frameRegion.bottom &&
+          this.inAssemblyView(target) &&
           snapDrop({ pointer: point, grabOffset: { x: 0, y: 0 }, target }) &&
           this.visibleSeat(sample)
         );
@@ -798,9 +805,11 @@ export class PlayViewer {
             ? this.current?.workspaceId
               ? 'This part belongs on its workbench. Choose Open workbench.'
               : 'Return to the watch to fit this piece.'
-            : this.available
-              ? 'No placement there. Try another view or position.'
-              : 'That piece cannot be fitted yet.',
+            : !this.available
+              ? 'That piece cannot be fitted yet. Turn hints on to see what it needs.'
+              : !this.seatVisible || !this.seatInView
+                ? 'The fitting point is hidden from this view. Orbit or flip the watch, or use Show destination.'
+                : 'Not close enough to its fitting point. Try nearer, or use Show destination.',
         );
       this.animateToStage(drag.position);
     }
