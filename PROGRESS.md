@@ -836,3 +836,26 @@ actual merge remains manual behind staging, performance and publication checks.
 Vercel's existing Git integration remains the sole deployer: feature/develop
 pushes create Preview deployments, while a reviewed merge to `main` creates
 production. No Vercel token or parallel deployment path was introduced.
+
+## Homepage/Workshop shared UI consolidation — 27 September 2026
+
+Consolidated the homepage and Workshop after a second duplication audit. Both
+routes now render one shared site header, identity and header-actions structure;
+use one glass-surface utility and the same site control/muted tokens; and share
+the complete movement loading/error/retry treatment. Workshop-only aliases for
+the same colors and glass recipe were removed, its duplicated dock rules were
+merged, and responsive identity typography now has one source of truth.
+
+Layout effects now use one resize-observer utility that performs the initial
+measurement and owns observer/window cleanup. Shared text controls use the
+existing class-name helper instead of a second class-merging implementation.
+The distinct homepage viewer and Workshop assembly/session controllers remain
+separate because their state and lifecycle contracts differ.
+
+Verification passes all 67 automated tests, Workshop inventory validation,
+TypeScript, lint and the production build. Headless Chrome passes all 15
+homepage checks, 87 Workshop drag/touch/workbench checks and 35 cross-route
+desktop, phone, narrow, landscape, 200% text, popup and animated-loader parity
+checks with no browser errors. Generated desktop, phone, enlarged-text and
+loader captures were visually reviewed. The build retains the existing Vinext
+module-registration, chunk-size and route-classification notices.

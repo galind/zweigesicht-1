@@ -48,8 +48,9 @@ import {
 import type { PlayLevel, PlayManifest, PlaySession, PlayStep } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
 import { useTextScalePreview } from '../experience/useTextScalePreview';
-import { makerUrl } from '../content/about';
-import { MovementLoadingMark } from '../../components/MovementLoadingMark';
+import { observeElementResize } from '../experience/observeElementResize';
+import { MovementLoadingState } from '../../components/MovementLoadingMark';
+import { SiteHeader, SiteHeaderActions } from '../../components/site-chrome';
 import './play.css';
 
 const manifest = authored as PlayManifest;
@@ -420,12 +421,12 @@ export default function Play() {
       app.current?.style.setProperty('--play-header-bottom', `${bottom}px`);
       viewer.current?.layout();
     };
-    layout();
-    const observer = new ResizeObserver(layout);
-    app.current
-      ?.querySelectorAll('.play-heading, .play-dock, .play-workspace')
-      .forEach((e) => observer.observe(e));
-    return () => observer.disconnect();
+    return observeElementResize(
+      app.current?.querySelectorAll(
+        '.play-heading, .play-dock, .play-workspace',
+      ) ?? [],
+      layout,
+    );
   }, [active, status.ready]);
   useEffect(() => {
     if (confirm || startupConflict) {
@@ -605,19 +606,11 @@ export default function Play() {
       data-workspace={!!workspace}
     >
       <div className="play-canvas" ref={host} />
-      <header className="play-heading">
-        <div className="play-brand">
-          <h1>Zweigesicht-1</h1>
-          <a
-            href={makerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="by Marco Lang — official website, opens in a new tab"
-          >
-            by Marco Lang
-          </a>
-        </div>
-        <nav className="play-header-actions" aria-label="Workshop navigation">
+      <SiteHeader className="play-heading" identityClassName="play-brand">
+        <SiteHeaderActions
+          className="play-header-actions"
+          aria-label="Workshop navigation"
+        >
           <Control
             ref={menuButton}
             aria-label="Menu"
@@ -628,8 +621,8 @@ export default function Play() {
             <Menu aria-hidden="true" />
             <span className="play-control-label">Menu</span>
           </Control>
-        </nav>
-      </header>
+        </SiteHeaderActions>
+      </SiteHeader>
       {active && (
         <div className="play-workspace" style={{ top: headerBottom + 6 }}>
           {status.detail ? (
@@ -683,7 +676,7 @@ export default function Play() {
       </Control>
       {active && (
         <section
-          className="play-dock"
+          className="play-dock site-glass"
           aria-label="Assembly workbench"
           data-pulse={placementPulse}
         >
@@ -1029,21 +1022,15 @@ export default function Play() {
       )}
       {bootResolved && (!status.ready || status.error) && (
         <section className="play-loading" aria-label="Loading status">
-          {status.error ? (
-            <>
-              <output>{status.error}</output>
-              <Control
-                onClick={() => {
-                  setStatus(blank);
-                  setAttempt((n) => n + 1);
-                }}
-              >
-                Retry 3D
-              </Control>
-            </>
-          ) : (
-            <MovementLoadingMark label="Preparing the movement" />
-          )}
+          <MovementLoadingState
+            tone={status.error ? 'error' : 'loading'}
+            label={status.error || 'Preparing the movement'}
+            actionLabel={status.error ? 'Retry 3D' : undefined}
+            onAction={() => {
+              setStatus(blank);
+              setAttempt((n) => n + 1);
+            }}
+          />
         </section>
       )}
       <output className="play-storage">{storage}</output>

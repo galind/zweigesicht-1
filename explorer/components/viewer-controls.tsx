@@ -1,12 +1,10 @@
 import type { ComponentProps } from 'react';
 import { FlipHorizontal2, RotateCcw } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 /** Native controls shared by the explorer and assembly route. */
 export function TextButton({ className, ...props }: ComponentProps<'button'>) {
-  const classes = className?.split(/\s+/).includes('text-button')
-    ? className
-    : ['text-button', className].filter(Boolean).join(' ');
-  return <button className={classes} {...props} />;
+  return <button className={cn('text-button', className)} {...props} />;
 }
 
 export function FlipButton(props: ComponentProps<'button'>) {

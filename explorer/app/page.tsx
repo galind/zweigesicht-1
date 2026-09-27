@@ -37,8 +37,10 @@ import {
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { ConfigurationControls } from '@/components/ConfigurationControls';
-import { MovementLoadingMark } from '@/components/MovementLoadingMark';
+import { MovementLoadingState } from '@/components/MovementLoadingMark';
+import { SiteHeader, SiteHeaderActions } from '@/components/site-chrome';
 import { FlipButton, ResetViewButton } from '@/components/viewer-controls';
+import { observeElementResize } from '@/src/experience/observeElementResize';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
@@ -148,18 +150,17 @@ export default function Home() {
           : { top, bottom },
       );
     };
-    window.addEventListener('resize', measure);
     viewport?.addEventListener('resize', measureViewport);
     viewport?.addEventListener('scroll', measureViewport);
     measureViewport();
-    const observer = new ResizeObserver(measure);
     const dock = document.querySelector('.action-dock');
-    if (dock) observer.observe(dock);
+    const stopObserving = observeElementResize([dock], measure, {
+      observeWindow: true,
+    });
     return () => {
-      window.removeEventListener('resize', measure);
       viewport?.removeEventListener('resize', measureViewport);
       viewport?.removeEventListener('scroll', measureViewport);
-      observer.disconnect();
+      stopObserving();
     };
   }, []);
   const host = useRef<HTMLDivElement>(null),
@@ -313,15 +314,9 @@ export default function Home() {
           : { header: headerBottom, context: contextBottom },
       );
     };
-    const observer = new ResizeObserver(measure);
-    if (header) observer.observe(header);
-    if (context) observer.observe(context);
-    window.addEventListener('resize', measure);
-    measure();
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', measure);
-    };
+    return observeElementResize([header, context], measure, {
+      observeWindow: true,
+    });
   }, [group, selected, s.layout, topBounds.header]);
   useEffect(() => {
     queueMicrotask(() => setDetails(false));
@@ -444,26 +439,14 @@ export default function Home() {
         (group || selected || s.layout === 'spread' ? ' has-focus' : '')
       }
     >
-      <header className="topbar">
-        <div className="identity">
-          <h1>Zweigesicht-1</h1>
-          <a
-            className="maker-credit"
-            href={makerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="by Marco Lang — official website, opens in a new tab"
-          >
-            by Marco Lang
-          </a>
-        </div>
+      <SiteHeader className="topbar" identityClassName="identity">
         <Sheet
           open={assemble}
           onOpenChange={(open) => openPanel(setAssemble, open)}
         >
           <SheetTrigger
             ref={assembleButton}
-            className="text-button assemble-trigger"
+            className="text-button assemble-trigger site-glass"
             aria-label="Assemble the movement"
           >
             <span className="assemble-label-desktop">
@@ -513,7 +496,10 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
-        <nav className="header-actions" aria-label="Information and settings">
+        <SiteHeaderActions
+          className="header-actions"
+          aria-label="Information and settings"
+        >
           <InformationPanel
             style={panelStyle}
             open={about}
@@ -540,7 +526,7 @@ export default function Home() {
           >
             Settings
           </button>
-        </nav>
+        </SiteHeaderActions>
         <Sheet
           modal={false}
           open={menu}
@@ -548,7 +534,7 @@ export default function Home() {
         >
           <SheetTrigger
             ref={menuButton}
-            className="text-button mobile-menu-trigger"
+            className="text-button mobile-menu-trigger site-glass"
             aria-label="Menu"
           >
             <Menu aria-hidden="true" />
@@ -597,7 +583,7 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
-      </header>
+      </SiteHeader>
       <section className="workspace" aria-label="Movement explorer">
         <div
           className="stage"
@@ -613,37 +599,33 @@ export default function Home() {
         {!available && (
           <div className="fallback">
             <div className="load-message">
-              {s.error ? (
-                <>
-                  <p>{loadingMessage(s.loadStage)}</p>
-                  <p className="secondary">{s.error}</p>
-                </>
-              ) : (
-                <MovementLoadingMark
-                  label={loadingMessage(s.loadStage)}
-                  detail={
-                    s.loadStage === 'movement' && s.transfer !== null
-                      ? `Movement file · ${s.transfer}%`
-                      : undefined
+              <MovementLoadingState
+                tone={s.error ? 'error' : 'loading'}
+                label={loadingMessage(s.loadStage)}
+                detail={
+                  s.error ||
+                  (s.loadStage === 'movement' && s.transfer !== null
+                    ? `Movement file · ${s.transfer}%`
+                    : undefined)
+                }
+                actionClassName="tool"
+                actionLabel={
+                  s.error || s.loadStage === 'recovering'
+                    ? s.loadStage === 'recovering'
+                      ? 'Reload 3D'
+                      : 'Retry 3D'
+                    : undefined
+                }
+                onAction={() => {
+                  if (viewer.current && !viewer.current.contextLost)
+                    void viewer.current.load();
+                  else {
+                    const url = new URL(location.href);
+                    url.searchParams.delete('no3d');
+                    location.assign(url.href);
                   }
-                />
-              )}
-              {(s.error || s.loadStage === 'recovering') && (
-                <button
-                  className="tool"
-                  onClick={() => {
-                    if (viewer.current && !viewer.current.contextLost)
-                      void viewer.current.load();
-                    else {
-                      const url = new URL(location.href);
-                      url.searchParams.delete('no3d');
-                      location.assign(url.href);
-                    }
-                  }}
-                >
-                  {s.loadStage === 'recovering' ? 'Reload 3D' : 'Retry 3D'}
-                </button>
-              )}
+                }}
+              />
             </div>
           </div>
         )}
@@ -725,7 +707,7 @@ export default function Home() {
           )}
         </section>
       )}
-      <nav className="action-dock" aria-label="Movement controls">
+      <nav className="action-dock site-glass" aria-label="Movement controls">
         <Sheet
           modal={false}
           open={separate}
