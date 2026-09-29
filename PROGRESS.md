@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 26 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
+Updated 30 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
 
 ## Implemented
 
@@ -828,3 +828,50 @@ actual merge remains manual behind staging, performance and publication checks.
 Vercel's existing Git integration remains the sole deployer: feature/develop
 pushes create Preview deployments, while a reviewed merge to `main` creates
 production. No Vercel token or parallel deployment path was introduced.
+
+## Independent component CAD fidelity audit — 30 September 2026
+
+Completed the authorized local audit on `codex/cad-component-fidelity`. The
+[report](docs/CAD_COMPONENT_FIDELITY.md) and [machine ledger](docs/cad-component-ledger.json)
+cover all 202 unique physical definitions / 365 leaf occurrences, including
+source identities, variants and immutable placements. All three maker catalog
+sections were retrieved: 162 packages / 324 STEP/STL files, with zero failures,
+recorded URLs/dates/hashes and reused original downloads. CAD sources and bulky
+visual/numeric evidence remain ignored; decisions are authored separately.
+
+Final dispositions: 139 equivalent, one individual source more detailed (the
+already recovered diamond), two incompatible variants, 49 missing exact sources
+and 11 unresolved. No new geometry replacement is justified. Twelve matched
+screw definitions / 41 occurrences contain exactly the same smooth STEP geometry;
+23 screw definitions / 72 total occurrences are inventoried. Separate STLs have
+finer curved-surface tessellation, but no added helical threads. Fresh source
+meshes and decoded runtime geometry confirm no thread detail was lost. Existing
+source exceptions, materials, separation paths and Workshop mappings are preserved.
+
+Major/functionally critical proposals are report-only: confirm the main plate's
+setting-slot variant (individual slot 0.30 mm narrower, +0.9585 mm³); validate the
+independent inner-dial STL before changing the invalid/recovered dial; validate
+missing eccentric surfaces and mechanical interfaces before using its closed STL.
+The catalog buckle screw differs in head/shoulder dimensions and is explicitly
+excluded. Other missing/unresolved sources remain unchanged.
+
+Fresh verification passes 67 automated tests, 114 CPU source/runtime checks,
+Workshop inventory/graph validation, CAD asset checks, exact raw/Meshopt byte and
+identity checks, TypeScript, lint, production build and local SEO/HTTP. Chrome
+passes 311 explorer checks and 87 focused Workshop checks, with no uncaught
+errors. Labeled isolated/assembled screw pairs, two occurrence orientations and
+plate-slot evidence are visually reviewed in ignored
+`artifacts/cad/component-fidelity/visuals/`. All 16 tracked runtime/configuration
+files checked match their Git baseline. Payload/triangle growth is zero; a
+60-second local diagnostic records p95 frame times near 16.7–16.8 ms. It ran
+alongside CAD jobs and is not an isolated speed comparison or physical-device test.
+
+The eccentric's invalid-BRep surface query failed after 160/466 vertices; this
+limitation is recorded and no substitute was applied. The initial broad Boolean
+sweep was stopped after completed clutch/plate/empty-diamond results; invalid dial
+booleans were not used. The targeted reproducible review checks source hashes.
+Physical-device, mechanical, human accessibility and release-gate limits remain.
+Local production preview is http://127.0.0.1:4191/ (4190 was unsuitable for Node's
+fetch-based SEO verifier). Next action: review the report-only proposals with the
+maker/mechanical reviewer. Local audit commit only; no push or deployment. The two
+pre-existing untracked Play prompt files remain excluded.

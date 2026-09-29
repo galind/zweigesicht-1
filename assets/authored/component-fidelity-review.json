@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-30",
+  "assemblySha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "geometryOverrides": [],
+  "implementationDecision": "No verified compatible small-part source adds meaningful geometry. Keep every runtime geometry and existing recovery unchanged. Finer STL tessellation of the same smooth surfaces is not modeled thread detail.",
+  "reviews": {
+    "d_0_1_1_144": {
+      "classification": "equivalent",
+      "confidence": "high",
+      "findings": ["Same unscaled source frame, volume and area; symmetric BRep cuts are empty. Mesh vertex differences reflect tessellation of equivalent source geometry."],
+      "disposition": "unchanged; equivalent BRep geometry",
+      "evidence": ["artifacts/cad/component-fidelity/d_0_1_1_144-difference.json"]
+    },
+    "d_0_1_1_195": {
+      "classification": "incompatible variant",
+      "confidence": "high",
+      "findings": ["Individual main plate adds 0.9585 mm3 in the setting-region slot. Assembly slot boundaries at Y=+/-1.30 mm move to +/-1.15 mm in the individual file (0.30 mm narrower). X=10.5502356933..14.1002356933, Z=-2.0..-1.1 mm. Outer bounds and other face signatures agree; the change is an interface difference, not added cosmetic detail."],
+      "disposition": "major-part proposal only: ask the maker/mechanical reviewer which slot variant belongs with the supplied setting mechanism before authorizing a plate replacement; retain assembly variant",
+      "evidence": ["artifacts/cad/component-fidelity/d_0_1_1_195-difference.json", "artifacts/cad/component-fidelity/visuals/d_0_1_1_195-paired.png"]
+    },
+    "d_0_1_1_61": {
+      "classification": "incompatible variant",
+      "confidence": "high",
+      "findings": ["No exact individual source for k190x90 a140x120. The catalog k220x120 a140x50 candidate has a 2.2 mm head versus 1.9 mm in assembly and bottom Z=-3.3 versus -3.7 mm. Both symmetric differences are nonempty. Excluded despite similar shaft naming."],
+      "disposition": "unchanged; explicitly exclude catalog buckle-screw variant from replacement",
+      "evidence": ["artifacts/cad/component-fidelity/d_0_1_1_61-difference.json"]
+    },
+    "d_0_1_1_111": {
+      "classification": "unresolved",
+      "confidence": "medium",
+      "findings": ["Assembly and individual STEP are identical, invalid BReps with 3 of 23 faces missing tessellation. Independent STL is watertight (932 triangles versus 591 in STEP tessellation), but point-to-BRep comparison failed after 160 of 466 vertices. Closed STL volume is 0.3817365 mm3; invalid BRep mass is 0.3501205 mm3 and is not reliable physical mass evidence."],
+      "disposition": "functionally critical small-part proposal only: verify missing surfaces, weight/shaft interfaces and face/material correspondence with the maker before adopting the independent STL; preserve all four occurrences and current gold finish",
+      "evidence": ["artifacts/cad/component-fidelity/supplemental-stl.json"]
+    },
+    "d_0_1_1_225": {
+      "classification": "individual source more detailed",
+      "confidence": "high",
+      "findings": ["Both assembly and individual STEP definitions are empty. The independent maker STL provides the existing diamond recovery; its SHA-256 c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a matches the runtime asset. Already implemented before this audit."],
+      "disposition": "unchanged; preserve existing maker-STL diamond recovery and optical approximation",
+      "evidence": ["assets/source-manifest/component-appearance-references.json", "explorer/public/models/diamond-c74ee2731a1f.stl"]
+    },
+    "d_0_1_1_27": {
+      "classification": "unresolved",
+      "confidence": "medium",
+      "findings": ["Both STEP imports are invalid and have 10090 faces with identical volume/area and face signatures at 1e-7 mm rounding; mesh vertices differ by up to 0.0062208321 mm. Separate STL is closed with 22900 triangles; 1500 sampled vertices differ from STEP surfaces by up to 0.0049432177 mm. This does not prove geometric/interface equivalence or a better variant."],
+      "disposition": "major-part proposal only: validate the independent dial STL boundaries, topology and interfaces before considering a conversion change; preserve current recovered mesh",
+      "evidence": ["artifacts/cad/component-fidelity/supplemental-stl.json"]
+    }
+  }
+}
