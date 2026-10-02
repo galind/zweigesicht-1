@@ -11,8 +11,10 @@ const decode = (text) =>
     .replaceAll('&#x27;', "'")
     .replaceAll('&#39;', "'")
     .replaceAll('&amp;', '&');
-const get = async (path) => {
-  const response = await fetch(new URL(path, base));
+const get = async (path, userAgent = 'Twitterbot') => {
+  const response = await fetch(new URL(path, base), {
+    headers: { 'User-Agent': userAgent },
+  });
   assert.equal(response.status, 200, `${path} status`);
   assert.doesNotMatch(response.headers.get('x-robots-tag') || '', /noindex/i);
   return response.text();
@@ -44,6 +46,12 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
     );
   }
   assert.equal(meta('og:url'), `${origin}/`);
+  assert.equal(meta('og:type'), 'website');
+  assert.equal(meta('og:image:width'), '1200');
+  assert.equal(meta('og:image:height'), '900');
+  assert.equal(meta('og:image:type'), 'image/webp');
+  assert.ok(meta('og:image:alt'));
+  assert.equal(meta('twitter:image:alt'), meta('og:image:alt'));
   assert.equal(meta('twitter:card'), 'summary_large_image');
   const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];
   assert.equal(headings.length, 1);
@@ -85,6 +93,95 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
   console.log(
     `PASS ${path}: initial metadata, H1, schema and maker links; no footer`,
   );
+}
+// Social crawlers read the initial head, not client-rendered metadata. Nested
+// route metadata must retain the image and large-card fields on Workshop.
+for (const userAgent of [
+  'Twitterbot',
+  'facebookexternalhit/1.1',
+  'LinkedInBot/1.0',
+]) {
+  for (const path of [
+    '/',
+    '/?utm_source=share',
+    '/workshop',
+    '/workshop?mode=hard&utm_source=share',
+  ]) {
+    const raw = await get(path, userAgent);
+    const head = raw.split('</head>')[0];
+    const tags = [...head.matchAll(/<(?:meta|link)\b([^>]+)>/g)].map(
+      ([, attrs]) =>
+        Object.fromEntries(
+          [...attrs.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [
+            key,
+            decode(value),
+          ]),
+        ),
+    );
+    const meta = (key) => {
+      const matches = tags.filter(
+        (tag) => tag.name === key || tag.property === key,
+      );
+      assert.equal(
+        matches.length,
+        1,
+        `${path}: exactly one ${key} in initial head`,
+      );
+      return matches[0].content;
+    };
+    const workshop = path.startsWith('/workshop');
+    const expectedTitle = workshop
+      ? 'Workshop — Assemble Zweigesicht-1'
+      : title;
+    const expectedDescription = workshop
+      ? 'Assemble the Zweigesicht-1 movement in Easy or Hard mode using the original ML-01 components.'
+      : description;
+    const url = `${origin}${workshop ? '/workshop' : '/'}`;
+    const canonicals = tags.filter((tag) => tag.rel === 'canonical');
+    assert.equal(canonicals.length, 1);
+    assert.equal(canonicals[0].href, url);
+    assert.equal(meta('og:url'), url);
+    assert.equal(meta('og:type'), 'website');
+    assert.equal(meta('og:site_name'), 'Marco Lang Zweigesicht-1');
+    assert.equal(meta('description'), expectedDescription);
+    assert.equal(
+      decode(head.match(/<title>([^<]+)<\/title>/)?.[1] || ''),
+      expectedTitle,
+    );
+    for (const prefix of ['og', 'twitter']) {
+      assert.equal(meta(`${prefix}:title`), expectedTitle);
+      assert.equal(meta(`${prefix}:description`), expectedDescription);
+      assert.equal(
+        meta(`${prefix}:image`),
+        `${origin}/images/marco-lang-ml01-movement.webp`,
+      );
+      assert.equal(
+        meta(`${prefix}:image:alt`),
+        'CAD-based view of Calibre ML-01 with authored surface finishes',
+      );
+    }
+    assert.equal(meta('og:image:width'), '1200');
+    assert.equal(meta('og:image:height'), '900');
+    assert.equal(meta('og:image:type'), 'image/webp');
+    assert.equal(meta('twitter:card'), 'summary_large_image');
+    if (workshop) {
+      assert.match(meta('robots'), /noindex/);
+      assert.match(meta('robots'), /nofollow/);
+    }
+    console.log(
+      `PASS ${userAgent} ${path}: complete social card in initial head`,
+    );
+  }
+}
+for (const path of ['/play', '/play?mode=hard&utm_source=share']) {
+  const response = await fetch(new URL(path, base), { redirect: 'manual' });
+  assert.ok(
+    [301, 308].includes(response.status),
+    `${path}: permanent redirect`,
+  );
+  const destination = new URL(response.headers.get('location'), base);
+  assert.equal(destination.pathname, '/workshop');
+  assert.equal(destination.search, new URL(path, base).search);
 }
 const robots = await get('/robots.txt');
 assert.match(robots, /User-agent: \*/i);

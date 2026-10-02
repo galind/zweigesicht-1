@@ -11,9 +11,12 @@ Updated 3 October 2026. The current application is the static CAD explorer at `/
 - The homepage header centers “Be a watchmaker”; compact layouts preserve the full label and use a second row when needed. The shared loader anchors its visible letterforms to the viewport center from first paint, independently of header/dock measurements and transfer detail. Its SVG view box compensates for the letterforms’ offset within the font line box.
 - Homepage startup waits for two prepared draws at stable dimensions before revealing the watch. A viewport change during preparation refits immediately while hidden, preventing an initial size correction after reveal.
 - `develop` is integration/staging; `main` is production. The root Vercel configuration and existing CI/release workflows are authoritative. Canonical metadata uses `https://zweigesicht-1.guillemgalindo.com/`.
+- Social sharing: homepage and Workshop now use complete route-specific Open Graph and large-image X cards in the initial HTML, including image MIME type and alt text. Workshop retains its noindex/nofollow policy. The existing provenance-recorded CAD image is unchanged.
 - The repository cleanup from PR #20 is incorporated. Historical reports, generated ledgers, abandoned timing/smoke experiments and obsolete review tools are removed. Current asset generation, source provenance, authored decisions and meaningful checks remain. PR #19 was not merged; its consequential findings are in [CAD notes](docs/CAD_NOTES.md).
 
 ## Verification
+
+Social-sharing review on 3 October: production build, typecheck, lint and changed-file formatting pass. The expanded HTTP check passes for both routes and query-string variants under X, Facebook and LinkedIn crawler user agents, with exactly one of each required social tag in the initial head. It also verifies permanent `/play` redirects with query preservation, canonical URLs, image delivery, robots and sitemap behavior. This checks crawler-facing responses, not platform cache/rendering behavior. Live read-only checks returned 200 for the public homepage and its 52,226-byte WebP image, but 404 for `/workshop`; the deployment does not yet expose that route.
 
 Verified on 3 October: 68 automated tests, typecheck, lint, changed-file formatting and production build pass after the final PR cleanup. The real-renderer timing probe forces a viewport change between preparation frames and records zero camera drift after reveal. A separate measurement confirms the homepage watch’s projected central axis is exactly at the viewport center over its first 30 visible frames at five desktop/mobile sizes. All 175 loading/header checks and the homepage suite (15 checks including 71 embedded UX checks) pass.
 
@@ -31,6 +34,7 @@ The final PR audit against `develop` retains only shared UI parity, the approved
 
 ## Outstanding limitations and next actions
 
+- Social follow-up: compose a dedicated wide preview from the actual renderer; the current 1200×900 image risks cropping in wide cards. After an authorized release, verify public `/workshop` delivery and inspect real platform previews/cache refreshes. No deployment was performed during this review.
 - Complete physical iPhone/Android, Safari/WebKit, sustained GPU/thermal and representative accessibility/usability review. Desktop viewport and synthetic-touch checks do not qualify those gates.
 - CAD exceptions, uncertain alloys/finishes, middle-ring interference and unresolved lock actuation remain in [CAD notes](docs/CAD_NOTES.md). Separation and Workshop dependencies are illustrative; mechanical review remains required for mechanical claims.
 - Clean-machine CAD reproduction is unverified; prepared source regression inputs remain local and ignored. Public redistribution/publication needs the applicable [release gates](docs/RELEASE_GATES.md).

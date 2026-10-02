@@ -6,27 +6,55 @@ const title = 'Marco Lang Zweigesicht-1 — Interactive ML-01 Movement';
 const description =
   "Explore Marco Lang's Zweigesicht-1 and Calibre ML-01 in an interactive 3D movement viewer. Inspect its components, construction and movement architecture.";
 const image = `${ORIGIN}/images/marco-lang-ml01-movement.webp`;
+const imageAlt =
+  'CAD-based view of Calibre ML-01 with authored surface finishes';
 
-export const homepageMetadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: `${ORIGIN}/` },
-  openGraph: {
-    type: 'website',
+// Route metadata replaces nested social objects rather than merging them.
+// Keep each route's card complete in the initial HTML, without client JS.
+function pageMetadata(
+  title: string,
+  description: string,
+  pathname: string,
+): Metadata {
+  const url = `${ORIGIN}${pathname}`;
+  return {
     title,
     description,
-    url: `${ORIGIN}/`,
-    siteName: 'Marco Lang Zweigesicht-1',
-    images: [
-      {
-        url: image,
-        width: 1200,
-        height: 900,
-        alt: 'CAD-based view of Calibre ML-01 with authored surface finishes',
-      },
-    ],
-  },
-  twitter: { card: 'summary_large_image', title, description, images: [image] },
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'website',
+      title,
+      description,
+      url,
+      siteName: 'Marco Lang Zweigesicht-1',
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 900,
+          type: 'image/webp',
+          alt: imageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [{ url: image, alt: imageAlt }],
+    },
+  };
+}
+
+export const homepageMetadata = pageMetadata(title, description, '/');
+
+export const workshopMetadata: Metadata = {
+  ...pageMetadata(
+    'Workshop — Assemble Zweigesicht-1',
+    'Assemble the Zweigesicht-1 movement in Easy or Hard mode using the original ML-01 components.',
+    '/workshop',
+  ),
+  robots: { index: false, follow: false },
 };
 
 export const websiteSchema = {
