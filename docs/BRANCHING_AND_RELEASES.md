@@ -47,6 +47,25 @@ custom staging domain or separate staging environment variables can be assigned
 to the `develop` Preview branch in Vercel Project Settings. That dashboard-only
 configuration is optional; the branch deployment itself is automatic.
 
+## Workshop entry configuration
+
+Before release, check **Vercel Project Settings → Environment Variables**:
+
+- **Production:** leave `WORKSHOP_ENTRY_ENABLED` unset or set it to `false`.
+- **Preview:** leave it unset with **Automatically expose System Environment
+  Variables** enabled (`VERCEL_ENV=preview`), or explicitly set it to `true`.
+  Check branch-specific overrides too; do not enable it for all environments.
+- Release through the normal `develop` → `main` flow, which rebuilds for
+  Production. Do not reuse/promote a Preview artifact: its visible flag is baked in.
+- Verify the new Preview shows the entry and both choices; Production must omit
+  it, including at `/?assemble=1`. Direct Workshop access, `/play`, noindex and
+  social cards must remain intact.
+
+To introduce it later, set `WORKSHOP_ENTRY_ENABLED=true` for **Production** and
+rebuild/redeploy. Set `false` and rebuild/redeploy to hide it again. See
+[defaults and local commands](../README.md#homepage-workshop-entry).
+No settings, release or deployment are changed by this feature.
+
 ## Hotfixes
 
 Urgent fixes still target `develop` first and use the same release PR. If a

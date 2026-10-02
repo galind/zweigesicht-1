@@ -1,7 +1,8 @@
 import tailwindcss from '@tailwindcss/postcss';
 import vinext from 'vinext';
 import { nitro } from 'nitro/vite';
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
+import { workshopEntryEnabled } from './config/workshop-entry.mjs';
 import { existsSync, createReadStream, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 // Serve prepared, content-addressed CAD on loopback with real gzip transfer.
@@ -98,7 +99,20 @@ function localCad(): Plugin {
     },
   };
 }
-export default defineConfig({
+export default defineConfig(({ command, mode }) => ({
+  // Only this resolved public boolean reaches application code. Process env wins
+  // over explorer/.env files; no Next.js client-env convention is required.
+  define: {
+    __WORKSHOP_ENTRY_ENABLED__: JSON.stringify(
+      workshopEntryEnabled(command, {
+        ...loadEnv(mode, process.cwd(), [
+          'WORKSHOP_ENTRY_ENABLED',
+          'VERCEL_ENV',
+        ]),
+        ...process.env,
+      }),
+    ),
+  },
   css: { postcss: { plugins: [tailwindcss()] } },
   server: {
     host: '127.0.0.1',
@@ -111,4 +125,4 @@ export default defineConfig({
     vinext(),
     ...(process.env.NITRO_PRESET ? [nitro()] : []),
   ],
-});
+}));
