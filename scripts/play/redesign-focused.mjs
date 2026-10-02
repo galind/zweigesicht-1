@@ -80,9 +80,11 @@ try {
    const view=await inspect();check(`${width}×${height}/${text}% mainplate centered`,Math.hypot(view.mainplateCenter.x-view.frameRegion.left-view.frameRegion.width/2,view.mainplateCenter.y-(view.frameRegion.top+view.frameRegion.bottom)/2)<.01);
    check(`${width}×${height}/${text}% no page overflow`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    check(`${width}×${height}/${text}% header stays inside viewport`,await page.locator('.play-heading button').evaluateAll(es=>es.every(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0})));
-   const cardLayout=await page.locator('.play-card, .play-project').first().evaluate(e=>{const label=e.querySelector('.play-card-label').getBoundingClientRect(),r=e.getBoundingClientRect();return {inside:label.top>=r.top&&label.bottom<=r.bottom,cardBottom:r.bottom};});
+   const cardLayout=await page.locator('.play-card, .play-project').first().evaluate(e=>{const r=e.getBoundingClientRect(),content=[...e.children].map(child=>child.getBoundingClientRect());return {inside:content.every(child=>child.top>=r.top&&child.bottom<=r.bottom),cardBottom:r.bottom};});
    const detailTop=await page.locator('.play-selection').evaluate(e=>e.getBoundingClientRect().top);
-   check(`${width}×${height}/${text}% card labels stay inside gallery, above details`,cardLayout.inside&&cardLayout.cardBottom<=detailTop,{cardLayout,detailTop});
+   check(`${width}×${height}/${text}% card content stays inside gallery, above details`,cardLayout.inside&&cardLayout.cardBottom<=detailTop,{cardLayout,detailTop});
+   const railLayout=await page.locator('.play-dock').evaluate(e=>{const dock=e.getBoundingClientRect(),footer=e.querySelector('.play-rail-footer').getBoundingClientRect(),selection=e.querySelector('.play-selection').getBoundingClientRect(),actions=e.querySelector('.play-actions').getBoundingClientRect(),buttons=[...e.querySelectorAll('.play-actions button')].map(button=>button.getBoundingClientRect()),compact=innerWidth<=420||(innerHeight<=600&&innerWidth/innerHeight>=4/3);return {horizontal:[footer,selection,actions,...buttons].every(r=>r.left>=dock.left-1&&r.right<=dock.right+1),stacked:!compact||(selection.width>=footer.width-1&&actions.width>=footer.width-1&&selection.bottom<=actions.top+1),buttonsInside:buttons.every(r=>r.top>=dock.top&&r.bottom<=dock.bottom)};});
+   check(`${width}×${height}/${text}% rail details and actions stay readable`,railLayout.horizontal&&(text!==100||railLayout.stacked&&railLayout.buttonsInside),railLayout);
    await page.screenshot({path:path.join(out,`hard-${width}-${height}-text${text}.png`)});
    await page.getByRole('button',{name:'Reset view',exact:true}).focus();check(`${width}×${height}/${text}% keyboard reaches last dock control`,await page.getByRole('button',{name:'Reset view',exact:true}).evaluate(e=>e===document.activeElement));
  }
@@ -95,7 +97,7 @@ try {
  const retryContext=await browser.newContext({viewport:{width:390,height:844}});const retryPage=await retryContext.newPage();retryPage.on('pageerror',e=>report.errors.push(String(e)));
  let failAssets=true;await retryPage.route('**/models/catalog-*.glb*',route=>failAssets?route.abort():route.continue());
  await retryPage.goto(`${base}/workshop?mode=easy&inspect=1`);if(await retryPage.locator('dialog[open]').count())await retryPage.getByRole('button',{name:'Start Easy',exact:true}).click();await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).waitFor({timeout:60000});
- check('Incomplete catalog disables assembly controls',await retryPage.getByRole('button',{name:'Undo',exact:true}).isDisabled());
+ check('Incomplete catalog disables assembly controls',await retryPage.locator('.play-actions button').evaluateAll(buttons=>buttons.length>0&&buttons.every(button=>button.disabled)));
  failAssets=false;await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).click();await retryPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
  check('Asset retry prepares the full inventory',(await retryPage.evaluate(()=>window.__playInspect())).geometryCount===265);await retryContext.close();
  const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('blocked for QA')}}));

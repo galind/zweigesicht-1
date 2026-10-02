@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 /** Opt-in root text preview also reaches portaled panels; restore it on exit. */
 export function useTextScalePreview() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (new URLSearchParams(location.search).get('text') !== '200') return;
     const root = document.documentElement;
     const previousSize = root.style.fontSize;

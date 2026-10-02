@@ -31,7 +31,7 @@ async function home() {
   check('Homepage has no /play link', await page.locator('a[href="/play"]').count() === 0);
   check('Homepage does not request play modules/data', !requests.some(url => /\/src\/play\/|\/app\/play\/|play-manifest/.test(url)), requests);
   check('Homepage JavaScript excludes game state, manifest and completion UI',!(await Promise.all(scriptBodies)).some(body=>body.includes('zweigesicht:play:session:v1')||body.includes('Every piece in place.')||body.includes('foundationRootId')));
-  const trigger=page.getByRole('button',{name:'Assemble the movement',exact:true});
+  const trigger=page.getByRole('button',{name:'Be a watchmaker',exact:true});
   check('Homepage exposes the assembly action',await trigger.isVisible());
   await trigger.click();
   check('Mode popup has final copy',await page.getByText('Choose how much of the movement you want to build.',{exact:true}).isVisible()&&await page.getByText('89 prepared fits · Best for a first build',{exact:true}).isVisible()&&await page.getByText('249 individual parts · 35 subassemblies',{exact:true}).isVisible()&&await page.getByText('Progress is saved on this device.',{exact:true}).isVisible());
@@ -40,7 +40,7 @@ async function home() {
   check('Escape closes chooser and restores trigger focus',await trigger.evaluate(element=>element===document.activeElement));
   for(const width of [390,320]) {
     await page.setViewportSize({width,height:width===390?844:740});
-    check(`${width}px homepage keeps the short visible assembly label`,await trigger.isVisible()&&await trigger.innerText()==='Assemble');
+    check(`${width}px homepage keeps the watchmaker label`,await trigger.isVisible()&&await trigger.innerText()==='Be a watchmaker');
     check(`${width}px homepage has no horizontal overflow`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   }
   await page.goto(`${base}/?assemble=1`,{waitUntil:'networkidle'});
@@ -49,7 +49,7 @@ async function home() {
   for(const level of ['easy','hard']) {
     const navigation=await browser.newPage({viewport:{width:1440,height:900}});
     await navigation.goto(`${base}/`,{waitUntil:'networkidle'});
-    await navigation.getByRole('button',{name:'Assemble the movement',exact:true}).click();
+    await navigation.getByRole('button',{name:'Be a watchmaker',exact:true}).click();
     await navigation.getByRole('button',{name:new RegExp(`^${level==='easy'?'Easy':'Hard'}`)}).click();
     await navigation.waitForURL(new RegExp(`/workshop(?:\\?|$)`));
     check(`${level} chooser navigates to Workshop`,navigation.url().includes(`/workshop?mode=${level}`)||navigation.url().endsWith('/workshop'));

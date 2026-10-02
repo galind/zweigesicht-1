@@ -48,7 +48,9 @@ import {
 import type { PlayLevel, PlayManifest, PlaySession, PlayStep } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
 import { useTextScalePreview } from '../experience/useTextScalePreview';
-import { makerUrl } from '../content/about';
+import { observeElementResize } from '../experience/observeElementResize';
+import { MovementLoadingState } from '../../components/MovementLoadingMark';
+import { SiteHeader, SiteHeaderActions } from '../../components/site-chrome';
 import './play.css';
 
 const manifest = authored as PlayManifest;
@@ -419,14 +421,12 @@ export default function Play() {
       app.current?.style.setProperty('--play-header-bottom', `${bottom}px`);
       viewer.current?.layout();
     };
-    layout();
-    const observer = new ResizeObserver(layout);
-    app.current
-      ?.querySelectorAll(
+    return observeElementResize(
+      app.current?.querySelectorAll(
         '.play-heading, .play-dock, .play-workspace',
-      )
-      .forEach((e) => observer.observe(e));
-    return () => observer.disconnect();
+      ) ?? [],
+      layout,
+    );
   }, [active, status.ready]);
   useEffect(() => {
     if (confirm || startupConflict) {
@@ -606,29 +606,20 @@ export default function Play() {
       data-workspace={!!workspace}
     >
       <div className="play-canvas" ref={host} />
-      <header className="play-heading">
-        <div className="play-brand">
-          <h1>Zweigesicht-1</h1>
-          <a
-            href={makerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="by Marco Lang — official website, opens in a new tab"
+      <SiteHeader className="play-heading">
+        <SiteHeaderActions aria-label="Workshop navigation">
+          <Control
+            ref={menuButton}
+            aria-label="Menu"
+            onClick={() => setMenu(!menu)}
+            aria-expanded={menu}
+            aria-controls="play-menu"
           >
-            by Marco Lang
-          </a>
-        </div>
-        <Control
-          ref={menuButton}
-          aria-label="Menu"
-          onClick={() => setMenu(!menu)}
-          aria-expanded={menu}
-          aria-controls="play-menu"
-        >
-          <Menu aria-hidden="true" />
-          <span className="play-control-label">Menu</span>
-        </Control>
-      </header>
+            <Menu aria-hidden="true" />
+            <span className="play-control-label">Menu</span>
+          </Control>
+        </SiteHeaderActions>
+      </SiteHeader>
       {active && (
         <div className="play-workspace" style={{ top: headerBottom + 6 }}>
           {status.detail ? (
@@ -682,9 +673,10 @@ export default function Play() {
       </Control>
       {active && (
         <section
-          className="play-dock"
+          className="play-dock site-glass"
           aria-label="Assembly workbench"
           data-pulse={placementPulse}
+          data-filters={inHardMode || inventoryView === 'all'}
         >
           <div className="play-progress">
             <button
@@ -930,11 +922,11 @@ export default function Play() {
                   aria-atomic="true"
                   key={`selection-${placementPulse}`}
                 >
-                <div>
-                  <strong>{selected?.label ?? 'Choose your next fit'}</strong>
-                  <p>
-                    {notice ||
-                      (fitted
+                  <div>
+                    <strong>{selected?.label ?? 'Choose your next fit'}</strong>
+                    <p>
+                      {notice ||
+                        (fitted
                           ? 'Fitted. Choose another piece or undo the last move.'
                           : held?.viewDirectionWorld &&
                               inWorkspace &&
@@ -946,57 +938,59 @@ export default function Play() {
                                 : 'Return to the watch to fit this piece.'
                               : held && !available
                                 ? 'This part is waiting for earlier work. Choose Ready now for pieces you can fit.'
-                              : held
-                                ? assistance
-                                  ? status.obstructed
-                                    ? 'The seat is hidden from this angle. Rotate the movement or show the seat again.'
-                                    : 'Drag the highlighted part onto its seat.'
-                                  : 'Study the part, then drag its image to the matching seat.'
-                                : inventoryView === 'ready'
-                                  ? 'Every piece in this tray can be fitted now. Pick one and find its seat.'
-                                  : 'Browse the full inventory, or return to Ready now for a focused challenge.')}
-                  </p>
-                </div>
-                {held?.viewDirectionWorld &&
-                  inWorkspace &&
-                  status.detail !== held.id && (
+                                : held
+                                  ? assistance
+                                    ? status.obstructed
+                                      ? 'The seat is hidden from this angle. Rotate the movement or show the seat again.'
+                                      : 'Drag the highlighted part onto its seat.'
+                                    : 'Study the part, then drag its image to the matching seat.'
+                                  : inventoryView === 'ready'
+                                    ? 'Every piece in this tray can be fitted now. Pick one and find its seat.'
+                                    : 'Browse the full inventory, or return to Ready now for a focused challenge.')}
+                    </p>
+                  </div>
+                  {held?.viewDirectionWorld &&
+                    inWorkspace &&
+                    status.detail !== held.id && (
+                      <Control
+                        disabled={disabled}
+                        onClick={() => viewer.current?.setDetail(held)}
+                      >
+                        View fitting edge
+                      </Control>
+                    )}
+                  {selected &&
+                    !fitted &&
+                    selected.workspaceId !== workspace && (
+                      <Control
+                        disabled={disabled}
+                        onClick={() => enterWorkspace(selected.workspaceId)}
+                      >
+                        {selectedPacket ? 'Open workbench' : 'Return to watch'}
+                      </Control>
+                    )}
+                  {workspace && packet && packetComplete && (
                     <Control
                       disabled={disabled}
-                      onClick={() => viewer.current?.setDetail(held)}
+                      onClick={() => {
+                        enterWorkspace(null);
+                        pick(packet.transferId);
+                      }}
                     >
-                      View fitting edge
+                      Seat completed assembly
                     </Control>
                   )}
-                {selected && !fitted && selected.workspaceId !== workspace && (
-                  <Control
-                    disabled={disabled}
-                    onClick={() => enterWorkspace(selected.workspaceId)}
-                  >
-                    {selectedPacket ? 'Open workbench' : 'Return to watch'}
-                  </Control>
-                )}
-                {workspace && packet && packetComplete && (
-                  <Control
-                    disabled={disabled}
-                    onClick={() => {
-                      enterWorkspace(null);
-                      pick(packet.transferId);
-                    }}
-                  >
-                    Seat completed assembly
-                  </Control>
-                )}
-                {held &&
-                  !fitted &&
-                  inWorkspace &&
-                  (!held.viewDirectionWorld || status.detail === held.id) && (
-                    <Control
-                      disabled={disabled || !available}
-                      onClick={reveal}
-                    >
-                      <LocateFixed aria-hidden="true" /> Show seat
-                    </Control>
-                  )}
+                  {held &&
+                    !fitted &&
+                    inWorkspace &&
+                    (!held.viewDirectionWorld || status.detail === held.id) && (
+                      <Control
+                        disabled={disabled || !available}
+                        onClick={reveal}
+                      >
+                        <LocateFixed aria-hidden="true" /> Show seat
+                      </Control>
+                    )}
                 </div>
                 <div className="play-actions">
                   <Control
@@ -1026,17 +1020,15 @@ export default function Play() {
       )}
       {bootResolved && (!status.ready || status.error) && (
         <section className="play-loading" aria-label="Loading status">
-          <output>{status.error || 'Preparing the watch…'}</output>
-          {status.error && (
-            <Control
-              onClick={() => {
-                setStatus(blank);
-                setAttempt((n) => n + 1);
-              }}
-            >
-              Retry 3D
-            </Control>
-          )}
+          <MovementLoadingState
+            tone={status.error ? 'error' : 'loading'}
+            label={status.error || 'Preparing the movement'}
+            actionLabel={status.error ? 'Retry 3D' : undefined}
+            onAction={() => {
+              setStatus(blank);
+              setAttempt((n) => n + 1);
+            }}
+          />
         </section>
       )}
       <output className="play-storage">{storage}</output>
@@ -1153,11 +1145,7 @@ export default function Play() {
           </div>
         </SheetContent>
       </Sheet>
-      <Sheet
-        modal={false}
-        open={progressOpen}
-        onOpenChange={setProgressOpen}
-      >
+      <Sheet modal={false} open={progressOpen} onOpenChange={setProgressOpen}>
         <SheetContent
           className="explorer-panel settings-panel header-panel play-progress-panel"
           style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
@@ -1213,21 +1201,21 @@ export default function Play() {
               Ready now shows only pieces that can be fitted immediately; All
               parts keeps the complete dependency view available. Show seat is
               optional assistance: it reveals and reframes the fitting point.
-              You can then tap the destination, or Tab to it and press Enter,
-              to place without dragging.
+              You can then tap the destination, or Tab to it and press Enter, to
+              place without dragging.
             </p>
             <p>
-              In Hard mode, open a subassembly card to build it one component
-              at a time on its workbench. Return whenever you like, then seat
-              the finished assembly in the watch. Undo reverses the last fit or
+              In Hard mode, open a subassembly card to build it one component at
+              a time on its workbench. Return whenever you like, then seat the
+              finished assembly in the watch. Undo reverses the last fit or
               transfer. Dial-edge screws have an explicit fitting view.
             </p>
             <p>
               Drag the canvas to rotate the movement freely, and scroll or pinch
               to zoom toward the center. Flip still gives you a quick change of
-              side. On the canvas, F flips, + / − zoom, and Home resets the view.
-              Camera controls preserve progress. Workbench return restores your
-              watch camera.
+              side. On the canvas, F flips, + / − zoom, and Home resets the
+              view. Camera controls preserve progress. Workbench return restores
+              your watch camera.
             </p>
             <small>
               A source-based puzzle using Marco Lang’s CAD. Assembly rules are

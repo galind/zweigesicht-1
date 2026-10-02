@@ -175,6 +175,8 @@ export class MovementViewer {
   loadStage: LoadStage = 'movement';
   transfer: number | null = null;
   awaitingFirstFrame = false;
+  firstFrameSize = '';
+  initialFraming = true;
   contentPrepared = false;
   reloadState: ExperienceState | null = null;
   status = '';
@@ -544,6 +546,7 @@ export class MovementViewer {
     if (this.frame) cancelAnimationFrame(this.frame);
     this.frame = 0;
     this.lastFrame = 0;
+    this.firstFrameSize = '';
     this.contextLosses++;
     this.ready = false;
     this.loadStage = 'recovering';
@@ -581,6 +584,7 @@ export class MovementViewer {
     this.selectionGeneration++;
     this.ready = false;
     this.awaitingFirstFrame = false;
+    this.firstFrameSize = '';
     this.contentPrepared = false;
     this.loadStart = performance.now();
     this.loadStage = 'movement';
@@ -2256,7 +2260,11 @@ export class MovementViewer {
       this.rebuildSpread();
       this.retarget();
     }
-    if (this.restoringCamera && Math.abs(old - this.camera.aspect) > 0.01) {
+    if (this.initialFraming && this.contentPrepared) {
+      // Layout can settle after assets arrive but before the canvas is revealed.
+      // Fit the prepared view immediately instead of exposing a camera correction.
+      this.homeCamera(true);
+    } else if (this.restoringCamera && Math.abs(old - this.camera.aspect) > 0.01) {
       const saved = this.restoringCamera;
       const factor =
         Math.min(1, saved.aspect ?? this.camera.aspect) /
@@ -2333,6 +2341,13 @@ export class MovementViewer {
     if (document.hidden || this.contextLost || this.loadStage === 'error') {
       this.lastFrame = 0;
       return;
+    }
+    if (this.awaitingFirstFrame) {
+      const width = this.host.clientWidth,
+        height = this.host.clientHeight;
+      if (width < 1 || height < 1) return;
+      const size = this.renderer.getSize(new THREE.Vector2());
+      if (size.x !== width || size.y !== height) this.resize();
     }
     const interval = this.lastFrame ? now - this.lastFrame : 0;
     const dt = Math.min(interval / 1000, 0.1);
@@ -2434,13 +2449,22 @@ export class MovementViewer {
       }
       this.needsRender = false;
       if (this.awaitingFirstFrame) {
-        this.awaitingFirstFrame = false;
-        this.ready = true;
-        const recovering = this.loadStage === 'recovering';
-        this.loadStage = 'ready';
-        this.controls.enabled = true;
-        if (!recovering) this.loadMs = performance.now() - this.loadStart;
-        this.emit();
+        const size = `${this.host.clientWidth}x${this.host.clientHeight}`;
+        if (this.firstFrameSize !== size) {
+          // Give layout/ResizeObserver a frame to settle before revealing WebGL.
+          // Redraw at the final dimensions; never reveal a stretched old buffer.
+          this.firstFrameSize = size;
+          this.requestRender();
+        } else {
+          this.awaitingFirstFrame = false;
+          this.initialFraming = false;
+          this.ready = true;
+          const recovering = this.loadStage === 'recovering';
+          this.loadStage = 'ready';
+          this.controls.enabled = true;
+          if (!recovering) this.loadMs = performance.now() - this.loadStart;
+          this.emit();
+        }
       }
     }
     this.inspectionFrame?.(now, !!rendered);
