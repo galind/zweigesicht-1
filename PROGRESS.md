@@ -36,7 +36,7 @@ The final PR audit against `develop` retains only shared UI parity, the approved
 
 ## Outstanding limitations and next actions
 
-- Social follow-up: inspect real platform previews/cache refreshes for the replacement homepage image after an authorized homepage-only release. Keep Workshop unreleased; do not promote the current `develop` branch wholesale, because it includes Workshop. No push or deployment is part of the social-image update.
+- Social follow-up: merge the social-sharing PR into `develop`, then add environment-specific homepage visibility for Workshop before releasing staging to production. The user accepts direct access to `/workshop`, but wants its homepage button hidden in production; keep the existing sitemap exclusion and noindex policy. The visibility setting is not part of this PR. Inspect real platform previews/cache refreshes after release; opening this PR does not deploy to production.
 - Complete physical iPhone/Android, Safari/WebKit, sustained GPU/thermal and representative accessibility/usability review. Desktop viewport and synthetic-touch checks do not qualify those gates.
 - CAD exceptions, uncertain alloys/finishes, middle-ring interference and unresolved lock actuation remain in [CAD notes](docs/CAD_NOTES.md). Separation and Workshop dependencies are illustrative; mechanical review remains required for mechanical claims.
 - Clean-machine CAD reproduction is unverified; prepared source regression inputs remain local and ignored. Public redistribution/publication needs the applicable [release gates](docs/RELEASE_GATES.md).
