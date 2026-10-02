@@ -20,7 +20,7 @@ const check = (name, pass, detail) => {
   report.checks.push({ name, pass: Boolean(pass), detail });
   assert.ok(pass, name);
 };
-const concepts = ["balance", "register", "calibre", "impulse"];
+const concepts = ["poise", "breath", "converge", "engraved"];
 try {
   for (const surface of ["home", "workshop"]) {
     for (const concept of concepts) {
@@ -103,14 +103,12 @@ try {
         if (text === 200 || height === 320)
           await page.screenshot({ path: path.join(out, `${key}.png`) });
         await page.emulateMedia({ reducedMotion: "reduce" });
-        const staticState = await page
-          .locator(".study-mark")
-          .evaluate((e) => ({
-            animations: e.getAnimations({ subtree: true }).length,
-            visible: [...e.querySelectorAll("svg, .study-inscription")].every(
-              (n) => getComputedStyle(n).opacity === "1",
-            ),
-          }));
+        const staticState = await page.locator(".study-mark").evaluate((e) => ({
+          animations: e.getAnimations({ subtree: true }).length,
+          visible: [...e.querySelectorAll(".study-gg, .study-gg > span")].every(
+            (n) => getComputedStyle(n).opacity === "1",
+          ),
+        }));
         check(
           `${key}: reduced motion keeps a visible static motif`,
           staticState.animations === 0 && staticState.visible,

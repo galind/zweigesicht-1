@@ -1,157 +1,131 @@
-/* No production import. Marks have one fixed envelope; only decoration moves. */
+/* No production import. Every gg shares a fixed envelope. */
 .study-mark {
   display: grid;
   place-items: center;
   width: 120px;
   height: 80px;
-  color: #cfcdc6;
 }
-.study-mark svg,
-.play-app .study-mark svg {
-  display: block;
-  width: 120px;
-  height: 80px;
-  stroke: currentColor;
-  stroke-width: 1.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.study-accent {
-  color: var(--site-accent);
-  stroke: currentColor;
-}
-.study-muted {
-  color: #78756f;
-  stroke: currentColor;
-}
-.study-pin {
-  fill: var(--site-accent-foreground);
-  stroke: none;
-}
-.study-wheel {
-  transform-origin: 60px 40px;
-  animation: study-balance 4.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-}
-@keyframes study-balance {
-  0%,
-  100% {
-    transform: rotate(-18deg);
-  }
-  50% {
-    transform: rotate(18deg);
-  }
-}
-.study-plate-top {
-  animation: study-register-top 6s ease-in-out infinite;
-}
-.study-plate-bottom {
-  animation: study-register-bottom 6s ease-in-out infinite;
-}
-@keyframes study-register-top {
-  0%,
-  12%,
-  88%,
-  100% {
-    transform: translateX(-7px);
-    opacity: 0.65;
-  }
-  36%,
-  64% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-@keyframes study-register-bottom {
-  0%,
-  12%,
-  88%,
-  100% {
-    transform: translateX(7px);
-    opacity: 0.65;
-  }
-  36%,
-  64% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-.study-inscription {
+.study-gg {
   display: flex;
   align-items: baseline;
-  gap: 9px;
+  justify-content: center;
+  width: 96px;
+  height: 64px;
   font:
-    30px/1 Georgia,
-    'Times New Roman',
-    serif;
-  letter-spacing: -1px;
+    600 56px/1 Arial,
+    Helvetica,
+    sans-serif;
+  letter-spacing: -12px;
+  padding-right: 12px;
+  color: #eeece4;
 }
-.study-type-left {
-  animation: study-type-left 6.4s ease-in-out infinite;
+.study-gg > span {
+  display: block;
+  transform-origin: 50% 55%;
 }
-.study-type-right {
-  animation: study-type-right 6.4s ease-in-out infinite;
+.study-gg > span + span {
+  color: var(--site-accent-foreground);
 }
-.study-type-rule {
-  color: var(--site-accent);
-  font:
-    16px/1 Georgia,
-    serif;
-  letter-spacing: 0;
+.study-poise .study-gg > span {
+  animation: study-poise-left 4.8s ease-in-out infinite;
 }
-@keyframes study-type-left {
+.study-poise .study-gg > span + span {
+  animation-name: study-poise-right;
+}
+@keyframes study-poise-left {
+  0%,
+  15%,
+  85%,
+  100% {
+    transform: none;
+  }
+  35% {
+    transform: translateY(1px) rotate(-2deg);
+  }
+  65% {
+    transform: translateY(-1px) rotate(2deg);
+  }
+}
+@keyframes study-poise-right {
+  0%,
+  15%,
+  85%,
+  100% {
+    transform: none;
+  }
+  35% {
+    transform: translateY(-1px) rotate(2deg);
+  }
+  65% {
+    transform: translateY(1px) rotate(-2deg);
+  }
+}
+.study-breath .study-gg {
+  animation: study-breath 4.4s ease-in-out infinite;
+}
+@keyframes study-breath {
   0%,
   100% {
-    transform: translateY(-2px);
-    opacity: 0.6;
+    opacity: 0.65;
   }
-  25%,
-  75% {
-    transform: translateY(0);
+  50% {
     opacity: 1;
   }
 }
-@keyframes study-type-right {
+.study-converge .study-gg > span {
+  animation: study-converge-left 5.6s ease-in-out infinite;
+}
+.study-converge .study-gg > span + span {
+  animation-name: study-converge-right;
+}
+@keyframes study-converge-left {
   0%,
+  12%,
+  88%,
   100% {
-    transform: translateY(2px);
-    opacity: 1;
-  }
-  25%,
-  75% {
-    transform: translateY(0);
-    opacity: 0.75;
-  }
-}
-.study-lever-left {
-  transform-origin: 34px 57px;
-  animation: study-impulse-left 5.6s ease-in-out infinite;
-}
-.study-lever-right {
-  transform-origin: 86px 57px;
-  animation: study-impulse-right 5.6s ease-in-out infinite;
-}
-@keyframes study-impulse-left {
-  0%,
-  8%,
-  44%,
-  100% {
-    transform: rotate(0);
-  }
-  20%,
-  28% {
-    transform: rotate(7deg);
-  }
-}
-@keyframes study-impulse-right {
-  0%,
-  24%,
-  60%,
-  100% {
-    transform: rotate(0);
+    transform: translateX(-4px);
   }
   36%,
-  44% {
-    transform: rotate(-7deg);
+  64% {
+    transform: none;
+  }
+}
+@keyframes study-converge-right {
+  0%,
+  12%,
+  88%,
+  100% {
+    transform: translateX(4px);
+  }
+  36%,
+  64% {
+    transform: none;
+  }
+}
+.study-engraved .study-gg > span {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+  animation: study-engraved-left 5.2s ease-in-out infinite;
+}
+.study-engraved .study-gg > span + span {
+  animation-name: study-engraved-right;
+}
+@keyframes study-engraved-left {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes study-engraved-right {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) {

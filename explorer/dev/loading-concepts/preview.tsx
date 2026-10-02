@@ -121,10 +121,11 @@ function Preview() {
       {!isolated && (
         <header className="study-intro">
           <p className="study-eyebrow">Local design study · 02 October 2026</p>
-          <h1>Time, before the movement.</h1>
+          <h1>The gg studies.</h1>
           <p>
-            Four quiet loading proposals. Shared status and recovery components;
-            no CAD or simulated progress. The production loader is unchanged.
+            Four variations on the original gg. Shared status and recovery
+            components; no CAD or simulated progress. The production loader is
+            unchanged.
           </p>
           <nav aria-label="Study controls">
             <a
