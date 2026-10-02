@@ -9,13 +9,11 @@ export interface PlayStep {
   side: PlaySide;
   viewDirectionWorld?: readonly number[];
   assemblyId: string;
-  staging: 'lower-left';
   prerequisiteStepIds: readonly string[];
   kind: 'place' | 'transfer';
   groupId: string;
   packetId: string;
   workspaceId: string | null;
-  instruction?: string;
 }
 
 export interface PlayPacket {
@@ -42,7 +40,7 @@ export interface PlayManifest {
   >;
 }
 
-/** Persist committed actions and hints; selection, renderer and animation state are transient. */
+/** Persist actions and the legacy hints field for save compatibility; selection and rendering are transient. */
 export interface PlaySession {
   readonly manifestVersion: string;
   readonly level: PlayLevel;

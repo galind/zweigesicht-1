@@ -34,9 +34,6 @@ raw=json.dumps(runtime,separators=(',',':')).encode()
 (target/'assembly-manifest.json.gz').write_bytes(gzip.compress(raw,compresslevel=9,mtime=0))
 (target/'asset-paths.tmp').write_text(json.dumps(paths,separators=(',',':')))
 (target/'asset-paths.tmp').replace(target/'asset-paths.json')
-reference=root/'artifacts/cad/reference-renders/movement-back.png'
-if reference.is_file():
-    out=root/'explorer/public/reference';out.mkdir(parents=True,exist_ok=True);shutil.copy2(reference,out/'movement-back.png')
 print(json.dumps({'localOnly':True,'paths':paths,'manifestBytes':len(raw),'manifestGzipBytes':(target/'assembly-manifest.json.gz').stat().st_size},indent=2))
 
 # Source normals/face regions are a separate reversible local enhancement.

@@ -139,8 +139,8 @@
     }
   ],
   "historicalAudit": {
-    "path": "docs/appearance/cad-finishing-audit.json",
-    "meaning": "Historical source/reference investigation and browser-review snapshot. Runtime values, approval status and correction locks in this snapshot are not the current material specification. Its source geometry evidence remains available; current assignments are generated in docs/appearance/ledger.json.",
+    "path": "git:4566341:docs/appearance/cad-finishing-audit.json",
+    "meaning": "Historical source evidence is recoverable from Git. Current decisions are recorded here; runtime assignments and exact occurrence exceptions are in explorer/src/viewer/materials.ts.",
     "supersededClaims": [
       {
         "id": "USER-STEEL-2026-09-10",
@@ -427,5 +427,13 @@
       "limits": "Authored presentation lighting, not a measured reconstruction of the supplied photograph. Reflections change on all materials even though material parameters are fixed. Does not claim physically matched photographic illumination.",
       "localComparison": "artifacts/browser/lighting-refinement/comparison.png; 4300c6b baseline and current environment, both faces at normal distance and two zoom steps."
     }
-  }
+  },
+  "authoredConstraints": [
+    "Steel cannon pinions/hubs d137/d183/d142/d188/d235 and both d117 studs remain distinct from warm wheels; d155 is ruby under the later material review.",
+    "d159 blue arms retain their reviewed full-thickness source regions; the spine remains steel. d156 gauge inlays are dark ruby red. See assets/source-manifest/finish-adjustment-references.json.",
+    "d240 straight grain compensates its source eight-degree rotation. Barrel/lid d85/d86/d90/d91 snailing uses opposite local parity for the same accepted visible handedness.",
+    "d105 grain follows local +Y from the screw-pair midpoint to the jewel; d99 cap-plate seat face 54 at local Z=-0.3 stays smooth satin.",
+    "Where an occurrence is blue, its entire screw remains blue; exact neutral-steel rear, radial dial, shock and horizontal stud screws are separate occurrence overrides in materials.ts.",
+    "Crown-wheel circular-brushing instructions and the later mirror-polish implementation remain an unresolved finish decision; retain the current appearance pending explicit review."
+  ]
 }
