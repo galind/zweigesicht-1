@@ -36,10 +36,11 @@ function fixture() {
   const v = {
     frame: 0, dead: false, contextLost: false, contextLosses: 0, loadStage: 'ready', ready: true,
     needsRender: false, lastFrame: 0, lastNotify: 0, renderCount: 0, frameIntervals: [], snapshotPending: false,
+    host: {clientWidth: 800, clientHeight: 800}, firstFrameSize: '', initialFraming: false,
     state: {quality: 'high', phase: 'whole'}, scene: new THREE.Scene(), camera, controls,
     presentationMoving: false, travel: null, benchmark: null,
     applyPose() {return false;}, retargetVisibility() {}, ensureFramingRange() {}, adjustQuality() {},
-    renderer: {render() {draws++;}, info: {render: {triangles: 1, calls: 1}}},
+    renderer: {getSize(out) {return out.set(800, 800);}, render() {draws++;}, info: {render: {triangles: 1, calls: 1}}},
     surfaceOcclusion: {render() {}}, emit() {snapshots++; this.snapshotPending = false;},
   };
   for (const name of ['scheduleFrame', 'requestRender', 'invalidate', 'tick', 'onVisibility', 'onContextLost'])
@@ -116,7 +117,7 @@ test('hidden and lost-context viewers suspend callbacks and wake for a new visib
   f.v.contextLost = false; f.v.loadStage = 'recovering'; f.v.awaitingFirstFrame = true;
   f.v.requestRender(); f.settle();
   assert.equal(f.v.ready, true); assert.equal(f.v.loadStage, 'ready');
-  assert.equal(f.draws(), 2); f.v.controls.dispose();
+  assert.equal(f.draws(), 3); f.v.controls.dispose();
 });
 
 test('render failure cancels a queued damping tail and a successful retry returns to sleep', () => {
@@ -152,4 +153,46 @@ test('opt-in inspection wakes a sleeping viewer and benchmarks sustain only thei
   f.v.requestRender(); f.settle();
   assert.equal(benchmarkFrames, 5);
   f.v.controls.dispose();
+});
+
+test('first reveal waits for stable dimensions and refits before exposing a resized startup frame', () => {
+  const f = fixture(), v = f.v;
+  v.ready = false;
+  v.contentPrepared = true;
+  v.initialFraming = true;
+  v.awaitingFirstFrame = true;
+  v.loadStage = 'preparing';
+  v.loadStart = performance.now();
+  v.controls.enabled = false;
+  v.homeCamera = (immediate) => {
+    assert.equal(immediate, true, 'Startup corrections must not animate after reveal');
+    v.camera.position.set(0, 0, 80 / Math.min(1, v.camera.aspect));
+    v.controls.update();
+    v.requestRender();
+  };
+  v.renderer.getSize = out => out.copy(size);
+  v.renderer.setSize = (width, height) => size.set(width, height);
+  v.surfaceOcclusion.resize = () => {};
+  const size = new THREE.Vector2(800, 800);
+  v.resize = actual('resize', v, {});
+  v.requestRender();
+  f.frame();
+  assert.equal(v.ready, false, 'One draw is not enough to reveal the canvas');
+  assert.equal(v.controls.enabled, false);
+  // Simulate browser layout settling between WebGL's first draw and ResizeObserver.
+  v.host.clientWidth = 390;
+  v.host.clientHeight = 844;
+  f.frame();
+  assert.equal(v.ready, false, 'Changed dimensions require a fresh stable draw');
+  assert.equal(v.camera.aspect, 390 / 844);
+  assert.ok(Math.abs(v.camera.position.z - 80 * 844 / 390) < 1e-8);
+  assert.equal(v.travel, null);
+  const prepared = v.camera.position.clone();
+  f.settle();
+  assert.equal(v.ready, true);
+  assert.equal(v.initialFraming, false);
+  assert.equal(v.controls.enabled, true);
+  assert.ok(v.camera.position.distanceTo(prepared) < 1e-8);
+  assert.equal(v.frame, 0, 'The extra preparation draw must return to idle');
+  v.controls.dispose();
 });

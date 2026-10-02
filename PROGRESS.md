@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 2 October 2026. The current application is the static CAD explorer at `/` and free-choice Workshop at `/workshop`; `/play` redirects. Setup and verification commands are in [README](README.md); implementation boundaries are in [architecture](docs/LOCAL_ARCHITECTURE.md).
+Updated 3 October 2026. The current application is the static CAD explorer at `/` and free-choice Workshop at `/workshop`; `/play` redirects. Setup and verification commands are in [README](README.md); implementation boundaries are in [architecture](docs/LOCAL_ARCHITECTURE.md).
 
 ## Current state
 
@@ -8,10 +8,13 @@ Updated 2 October 2026. The current application is the static CAD explorer at `/
 - Workshop: free orbit, Ready now/All parts, optional Show seat, source-scale gallery dragging, explicit workbenches, Undo and local nonlinear saves. Easy has 89 fits; Hard has 249 parts and 35 transfers. Both retain 16 foundation leaves and finish with 265. There is no Hints toggle; its legacy save field remains compatible.
 - Homepage and Workshop share typography, header/navigation geometry, glass surfaces, palette, controls, buttons, popovers, focus treatment and the movement-loading presentation. The Workshop retains its route-specific assembly rail, now with dedicated compact and short-landscape layouts.
 - Homepage and Workshop now use the approved Section loading animation: the outlined gg starts closed for about 1.25 seconds, then its sections separate and realign on two axes. The loading phrase is visually hidden and retained for screen readers; transfer details and recovery messages remain visible. The 5.2-second CSS loop is independent of transfer progress; reduced motion shows the complete static mark. Workshop assembly controls remain hidden during loading and recovery to keep the status readable. The development comparison, unused variants and study-only documentation/evidence have been removed.
+- Homepage startup waits for two prepared draws at stable dimensions before revealing the watch. A viewport change during preparation refits immediately while hidden, preventing an initial size correction after reveal.
 - `develop` is integration/staging; `main` is production. The root Vercel configuration and existing CI/release workflows are authoritative. Canonical metadata uses `https://zweigesicht-1.guillemgalindo.com/`.
 - The repository cleanup from PR #20 is incorporated. Historical reports, generated ledgers, abandoned timing/smoke experiments and obsolete review tools are removed. Current asset generation, source provenance, authored decisions and meaningful checks remain. PR #19 was not merged; its consequential findings are in [CAD notes](docs/CAD_NOTES.md).
 
 ## Verification
+
+Verified on 3 October: 68 automated tests, typecheck, lint and production build pass after the startup framing fix. The real-renderer timing probe forces a viewport change between preparation frames and records zero camera drift after reveal. All 133 loading checks and the homepage suite (15 checks including 71 embedded UX checks) pass.
 
 Verified on 2 October: 67 automated tests, Workshop inventory/graph validation, 114 prepared source/runtime checks and 1,119 sampled access checks pass. TypeScript, lint, production and Vercel builds pass; required packaged asset paths/hashes and documentation links pass. A tracked-only checkout also builds with freshly installed application dependencies.
 
