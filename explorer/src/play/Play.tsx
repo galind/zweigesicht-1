@@ -606,11 +606,8 @@ export default function Play() {
       data-workspace={!!workspace}
     >
       <div className="play-canvas" ref={host} />
-      <SiteHeader className="play-heading" identityClassName="play-brand">
-        <SiteHeaderActions
-          className="play-header-actions"
-          aria-label="Workshop navigation"
-        >
+      <SiteHeader className="play-heading">
+        <SiteHeaderActions aria-label="Workshop navigation">
           <Control
             ref={menuButton}
             aria-label="Menu"
