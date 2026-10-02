@@ -112,6 +112,7 @@ export default function Home() {
   };
   const selectionFocus = useRef(false);
   const panelAnchor = useRef<HTMLElement | null>(null);
+  const [chromeMeasured, setChromeMeasured] = useState(false);
   const [topBounds, setTopBounds] = useState({ header: 88, context: 150 });
   const [panelX, setPanelX] = useState<number | null>(null);
   const [panelBottom, setPanelBottom] = useState<number | null>(null);
@@ -126,7 +127,7 @@ export default function Home() {
         : `${Math.max(panelBottom, viewportInsets.bottom + 12)}px`,
     '--viewport-top': `${viewportInsets.top}px`,
   } as CSSProperties;
-  useEffect(() => {
+  useLayoutEffect(() => {
     const measure = () => {
       const rect = panelAnchor.current?.getBoundingClientRect();
       if (rect) setPanelX(rect.left + rect.width / 2);
@@ -308,6 +309,7 @@ export default function Home() {
       const headerBottom = header?.getBoundingClientRect().bottom ?? 88;
       const contextBottom =
         context?.getBoundingClientRect().bottom ?? headerBottom;
+      setChromeMeasured(true);
       setTopBounds((previous) =>
         previous.header === headerBottom && previous.context === contextBottom
           ? previous
@@ -447,14 +449,8 @@ export default function Home() {
           <SheetTrigger
             ref={assembleButton}
             className="text-button assemble-trigger site-glass"
-            aria-label="Assemble the movement"
           >
-            <span className="assemble-label-desktop">
-              Assemble the movement
-            </span>
-            <span className="assemble-label-phone" aria-hidden="true">
-              Assemble
-            </span>
+            Be a watchmaker
           </SheetTrigger>
           <SheetContent
             side="top"
@@ -465,7 +461,7 @@ export default function Home() {
             finalFocus={assembleButton}
           >
             <SheetHeader>
-              <SheetTitle>Assemble the movement</SheetTitle>
+              <SheetTitle>Be a watchmaker</SheetTitle>
               <SheetDescription>
                 Choose how much of the movement you want to build.
               </SheetDescription>
@@ -597,7 +593,7 @@ export default function Home() {
           {loadingMessage(s.loadStage)}
         </output>
         {!available && (
-          <div className="fallback">
+          <div className="fallback" data-measured={chromeMeasured}>
             <div className="load-message">
               <MovementLoadingState
                 tone={s.error ? 'error' : 'loading'}

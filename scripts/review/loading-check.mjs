@@ -30,6 +30,18 @@ try {
       [568, 320, 200],
     ]) {
       const context = await browser.newContext({ viewport: { width, height } });
+      await context.addInitScript(() => {
+        window.__loadingPositions = [];
+        const sample = () => {
+          const mark = document.querySelector(".movement-loader-mark");
+          if (mark && getComputedStyle(mark).visibility === "visible") {
+            const r = mark.getBoundingClientRect();
+            window.__loadingPositions.push([r.x, r.y, r.width, r.height]);
+          }
+          if (window.__loadingPositions.length < 120) requestAnimationFrame(sample);
+        };
+        requestAnimationFrame(sample);
+      });
       page = await context.newPage();
       page.on("pageerror", (e) => report.errors.push(String(e)));
       let release;
@@ -52,6 +64,44 @@ try {
       await mark.waitFor();
       // The route measures its real header/dock, including enlarged text.
       await page.waitForTimeout(250);
+      const initialPositions = await page.evaluate(() => window.__loadingPositions);
+      check(
+        `${key}: loader stays fixed from its first visible frame`,
+        initialPositions.length > 1 &&
+          initialPositions.every((p) =>
+            p.every((v, i) => Math.abs(v - initialPositions[0][i]) < 1),
+          ),
+        initialPositions,
+      );
+      if (surface === "home") {
+        const headerLayout = await page.locator(".topbar").evaluate((header) => {
+          const box = (s) => header.querySelector(s).getBoundingClientRect();
+          const action = box(".assemble-trigger"),
+            brand = box(".identity");
+          const controls = box(
+            innerWidth <= 1100 || document.documentElement.classList.contains("text-enlarged")
+              ? ".mobile-menu-trigger"
+              : ".header-actions",
+          );
+          const apart = (a, b) =>
+            a.right <= b.left + 1 ||
+            b.right <= a.left + 1 ||
+            a.bottom <= b.top + 1 ||
+            b.bottom <= a.top + 1;
+          return {
+            centered: Math.abs((action.left + action.right) / 2 - innerWidth / 2) < 1,
+            separated: apart(action, brand) && apart(action, controls),
+            label: header.querySelector(".assemble-trigger").textContent.trim(),
+          };
+        });
+        check(
+          `${key}: watchmaker action is centered and clear of its neighbors`,
+          headerLayout.centered &&
+            headerLayout.separated &&
+            headerLayout.label === "Be a watchmaker",
+          headerLayout,
+        );
+      }
       const geometry = await page.evaluate((surface) => {
         const rect = (selector) => {
           const r = document.querySelector(selector).getBoundingClientRect();
