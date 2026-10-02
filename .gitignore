@@ -9,16 +9,15 @@ dist/
 .env*
 !.env.example
 *.log
-scripts/preflight/smoke/public/
+# Retain local outputs from the retired smoke experiment outside Git.
+scripts/preflight/smoke/
 
 # Preserve provenance in assets/source-manifest/, but not the large upstream CAD.
 assets/source-originals/
 
 # Local-only derived CAD, reference imagery, and visual evidence (release gated).
 assets/generated/
-artifacts/cad/
-artifacts/analysis/
-artifacts/browser/
+artifacts/
 explorer/public/models/
 explorer/public/reference/
 
@@ -35,30 +34,11 @@ explorer/public/models/*
 !explorer/public/models/overview-2337df2dca58.glb.gz
 
 *.tsbuildinfo
-artifacts/mechanics/
-artifacts/assets/
-artifacts/finishing-cad/
 assets/reference/finishing/
-
-artifacts/dial-cad/
-artifacts/dial-time/
-
-artifacts/explode-cad/
-artifacts/disassembly-cad/
-
-artifacts/explode-depth-audit/
-
-# Local exhaustive CAD audit extraction/evidence.
-artifacts/cad-finishing-audit/
-
-
 
 # Current verified dial surface annotations.
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz
-
-# Local fitted-case source recovery and reference evidence.
-artifacts/case-cad/
 
 # Required fitted-case runtime sidecar for the requested branch deployment.
 !explorer/public/models/case-lug-recovery.json
