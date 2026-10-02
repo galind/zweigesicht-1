@@ -312,8 +312,9 @@ canvas:focus-visible {
   max-width: 360px;
 }
 .movement-loader {
+  position: relative;
   display: grid;
-  grid-template-rows: 80px auto;
+  grid-template-rows: 80px;
   place-items: center;
   gap: 10px;
   color: var(--site-control);
@@ -321,7 +322,7 @@ canvas:focus-visible {
 }
 .load-message .movement-loader {
   /* Reserve transfer detail before the first percentage arrives. */
-  grid-template-rows: 80px auto minmax(1.125rem, auto);
+  grid-template-rows: 80px minmax(1.125rem, auto);
 }
 /* Section: a fixed drawing envelope, independent of transfer progress. */
 .movement-loader-mark {
@@ -377,66 +378,61 @@ canvas:focus-visible {
       cubic-bezier(0.65, 0, 0.35, 1) infinite,
     movement-loader-fragments var(--movement-loader-cycle) step-end infinite;
 }
+/* Begin with a 1.25-second assembled hold so cached loads never flash apart. */
 @keyframes movement-loader-refined-top {
   0%,
-  10%,
-  94%,
-  100% {
-    transform: translate(-9px, -8px);
-  }
   24%,
-  84% {
+  86%,
+  100% {
+    transform: none;
+  }
+  36%,
+  76% {
     transform: translate(0, -8px);
   }
-  34%,
-  72% {
-    transform: none;
+  46%,
+  62% {
+    transform: translate(-9px, -8px);
   }
 }
 @keyframes movement-loader-refined-bottom {
   0%,
-  18%,
-  94%,
+  24%,
+  96%,
   100% {
-    transform: translate(9px, 8px);
+    transform: none;
   }
-  32%,
+  36%,
   84% {
     transform: translate(0, 8px);
   }
-  44%,
-  72% {
-    transform: none;
+  46%,
+  70% {
+    transform: translate(9px, 8px);
   }
 }
 /* One unsliced contour takes over during the assembled hold, avoiding clip seams. */
 .movement-loader-whole {
-  opacity: 0;
+  opacity: 1;
   animation: movement-loader-resolved var(--movement-loader-cycle) step-end
     infinite;
 }
 @keyframes movement-loader-resolved {
   0%,
-  44%,
-  72%,
   100% {
-    opacity: 0;
-  }
-  48%,
-  70% {
     opacity: 1;
+  }
+  24% {
+    opacity: 0;
   }
 }
 @keyframes movement-loader-fragments {
   0%,
-  44%,
-  72%,
   100% {
-    opacity: 1;
-  }
-  48%,
-  70% {
     opacity: 0;
+  }
+  24% {
+    opacity: 1;
   }
 }
 .movement-loader-cut-lines {
@@ -445,14 +441,14 @@ canvas:focus-visible {
 }
 @keyframes movement-loader-datums {
   0%,
-  30%,
-  94%,
+  24%,
+  96%,
   100% {
-    opacity: 0.8;
-  }
-  44%,
-  72% {
     opacity: 0;
+  }
+  46%,
+  82% {
+    opacity: 0.8;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -466,10 +462,6 @@ canvas:focus-visible {
   .movement-loader-whole {
     opacity: 1;
   }
-}
-.movement-loader-label {
-  font-size: 0.875rem;
-  line-height: 1.5;
 }
 .movement-loader-detail {
   color: var(--site-muted);

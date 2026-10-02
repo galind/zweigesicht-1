@@ -77,7 +77,7 @@ export function MovementLoadingMark({
           />
         </svg>
       </span>
-      <span className="movement-loader-label">{label}</span>
+      <span className="movement-loader-label sr-only">{label}</span>
       {detail && <span className="movement-loader-detail">{detail}</span>}
     </output>
   );

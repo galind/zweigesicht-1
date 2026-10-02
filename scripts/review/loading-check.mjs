@@ -75,12 +75,13 @@ try {
         };
       }, surface);
       check(
-        `${key}: fixed drawing and status gap`,
+        `${key}: fixed drawing without a visible loading label`,
         geometry.mark.width === 120 &&
           geometry.mark.height === 80 &&
           geometry.drawing.width === 120 &&
           geometry.drawing.height === 80 &&
-          geometry.label.y >= geometry.mark.bottom + 9,
+          geometry.label.width <= 1 &&
+          geometry.label.height <= 1,
         geometry,
       );
       check(
@@ -96,7 +97,7 @@ try {
       );
       check(
         `${key}: copy and decorative semantics preserved`,
-        (await page.locator(".movement-loader-label").innerText()) ===
+        (await page.locator(".movement-loader-label").textContent()) ===
           (surface === "home" ? "Loading the movement" : "Preparing the movement") &&
           (await page.locator('.movement-loader[aria-live="polite"]').count()) === 1 &&
           (await mark.getAttribute("aria-hidden")) === "true",
@@ -114,7 +115,7 @@ try {
         );
       const phases = await mark.evaluate((e) => {
         const animations = e.getAnimations({ subtree: true });
-        const label = e.parentElement.querySelector(".movement-loader-label");
+        const shell = e.parentElement;
         return {
           count: animations.length,
           positions: [0, 900, 2200, 3120, 4800].map((time) => {
@@ -122,7 +123,7 @@ try {
               a.pause();
               a.currentTime = time;
             });
-            const r = label.getBoundingClientRect();
+            const r = shell.getBoundingClientRect();
             return [r.x, r.y, r.width, r.height];
           }),
         };
@@ -132,23 +133,48 @@ try {
         phases.count > 0 &&
           phases.positions.every((p) => JSON.stringify(p) === JSON.stringify(phases.positions[0])),
       );
-      const resolved = await mark.evaluate((e) => {
-        e.getAnimations({ subtree: true }).forEach((a) => {
-          a.currentTime = 3120;
+      const closedStart = await mark.evaluate((e) => {
+        const animations = e.getAnimations({ subtree: true });
+        return [0, 200, 800, 1200, 5200, 5400].every((time) => {
+          animations.forEach((a) => {
+            a.currentTime = time;
+          });
+          return (
+            getComputedStyle(e.querySelector(".movement-loader-whole")).opacity === "1" &&
+            [...e.querySelectorAll(".movement-loader-slice, .movement-loader-cut-lines")].every(
+              (n) => getComputedStyle(n).opacity === "0",
+            )
+          );
         });
-        return (
-          getComputedStyle(e.querySelector(".movement-loader-whole")).opacity === "1" &&
-          [...e.querySelectorAll(".movement-loader-slice, .movement-loader-cut-lines")].every(
-            (n) => getComputedStyle(n).opacity === "0",
-          )
-        );
       });
-      check(`${key}: assembled hold is one uninterrupted outline`, resolved);
-      await page.screenshot({ path: path.join(out, `${key}.png`) });
-      await page.locator(".movement-loader-label").scrollIntoViewIfNeeded();
+      check(`${key}: initial and repeated hold show the closed gg`, closedStart);
       check(
-        `${key}: status remains reachable`,
-        await page.locator(".movement-loader-label").isVisible(),
+        `${key}: longer loads still separate the sections`,
+        await mark.evaluate((e) => {
+          e.getAnimations({ subtree: true }).forEach((a) => {
+            a.currentTime = 2600;
+          });
+          return (
+            getComputedStyle(e.querySelector(".movement-loader-whole")).opacity === "0" &&
+            getComputedStyle(e.querySelector(".movement-loader-slice-0")).transform ===
+              "matrix(1, 0, 0, 1, -9, -8)" &&
+            getComputedStyle(e.querySelector(".movement-loader-slice-2")).transform ===
+              "matrix(1, 0, 0, 1, 9, 8)"
+          );
+        }),
+      );
+      await page.screenshot({ path: path.join(out, `${key}-open.png`) });
+      await mark.evaluate((e) =>
+        e.getAnimations({ subtree: true }).forEach((a) => {
+          a.currentTime = 600;
+        }),
+      );
+      await page.screenshot({ path: path.join(out, `${key}.png`) });
+      check(
+        `${key}: loading announcement remains in the accessibility tree`,
+        (await page.locator(".movement-loader").ariaSnapshot()).includes(
+          surface === "home" ? "Loading the movement" : "Preparing the movement",
+        ),
       );
       await page.emulateMedia({ reducedMotion: "reduce" });
       check(
