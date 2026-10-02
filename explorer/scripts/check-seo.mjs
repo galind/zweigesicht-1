@@ -1,6 +1,7 @@
 // Check initial HTTP HTML without executing client JavaScript.
 // node scripts/check-seo.mjs [local origin]
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 const base = process.argv[2] || 'http://127.0.0.1:4173';
 const origin = 'https://zweigesicht-1.guillemgalindo.com';
 const title = 'Marco Lang Zweigesicht-1 — Interactive ML-01 Movement';
@@ -42,14 +43,14 @@ for (const path of ['/', '/?no3d=1&part=unknown']) {
     assert.equal(meta(`${prefix}:description`), description);
     assert.equal(
       meta(`${prefix}:image`),
-      `${origin}/images/marco-lang-ml01-movement.webp`,
+      `${origin}/images/zweigesicht-1-separated-71ba2d171225.jpg`,
     );
   }
   assert.equal(meta('og:url'), `${origin}/`);
   assert.equal(meta('og:type'), 'website');
-  assert.equal(meta('og:image:width'), '1200');
-  assert.equal(meta('og:image:height'), '900');
-  assert.equal(meta('og:image:type'), 'image/webp');
+  assert.equal(meta('og:image:width'), '2560');
+  assert.equal(meta('og:image:height'), '1440');
+  assert.equal(meta('og:image:type'), 'image/jpeg');
   assert.ok(meta('og:image:alt'));
   assert.equal(meta('twitter:image:alt'), meta('og:image:alt'));
   assert.equal(meta('twitter:card'), 'summary_large_image');
@@ -153,16 +154,16 @@ for (const userAgent of [
       assert.equal(meta(`${prefix}:description`), expectedDescription);
       assert.equal(
         meta(`${prefix}:image`),
-        `${origin}/images/marco-lang-ml01-movement.webp`,
+        `${origin}/images/zweigesicht-1-separated-71ba2d171225.jpg`,
       );
       assert.equal(
         meta(`${prefix}:image:alt`),
-        'CAD-based view of Calibre ML-01 with authored surface finishes',
+        'Exploded CAD view of the Zweigesicht-1 Calibre ML-01 movement with authored surface finishes',
       );
     }
-    assert.equal(meta('og:image:width'), '1200');
-    assert.equal(meta('og:image:height'), '900');
-    assert.equal(meta('og:image:type'), 'image/webp');
+    assert.equal(meta('og:image:width'), '2560');
+    assert.equal(meta('og:image:height'), '1440');
+    assert.equal(meta('og:image:type'), 'image/jpeg');
     assert.equal(meta('twitter:card'), 'summary_large_image');
     if (workshop) {
       assert.match(meta('robots'), /noindex/);
@@ -193,11 +194,17 @@ assert.deepEqual(
   [`${origin}/`],
 );
 const image = await fetch(
-  new URL('/images/marco-lang-ml01-movement.webp', base),
+  new URL('/images/zweigesicht-1-separated-71ba2d171225.jpg', base),
 );
 assert.equal(image.status, 200);
-assert.match(image.headers.get('content-type'), /image\/webp/);
-assert.equal((await image.arrayBuffer()).byteLength, 52226);
+assert.match(image.headers.get('content-type'), /image\/jpeg/);
+const imageBytes = Buffer.from(await image.arrayBuffer());
+assert.equal(imageBytes.byteLength, 238639);
+assert.equal(
+  createHash('sha256').update(imageBytes).digest('hex'),
+  '71ba2d17122578edad6cbecdac4685158cec38a40c837ecf1cdfa211dddff970',
+  'social image matches the user-supplied capture',
+);
 for (const path of [
   '/movement/',
   '/movement/shock-indicator/',
@@ -214,5 +221,5 @@ for (const path of [
   );
 }
 console.log(
-  'PASS robots, homepage-only sitemap, one social image and removed routes/assets',
+  'PASS robots, homepage-only sitemap, current social image hash and removed routes/assets',
 );

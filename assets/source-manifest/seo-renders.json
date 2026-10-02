@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-11",
+  "date": "2026-10-03",
   "status": "Prepared locally; publication remains subject to project release gates",
   "images": [
     {
@@ -11,6 +11,21 @@
       "source": "Local renderer viewport capture; cropped to remove interface, 11 September 2026",
       "view": "movement",
       "classification": "Project reconstruction; authored finishes, not a photograph",
+      "source_geometry_manifest": "assets/source-manifest/sources.json",
+      "usage": "Retained legacy image URL for previously cached social cards; no longer referenced by current metadata"
+    },
+    {
+      "path": "explorer/public/images/zweigesicht-1-separated-71ba2d171225.jpg",
+      "sha256": "71ba2d17122578edad6cbecdac4685158cec38a40c837ecf1cdfa211dddff970",
+      "bytes": 238639,
+      "width": 2560,
+      "height": 1440,
+      "source": "User-supplied zweigesicht-1-separated-hires.jpg, received 3 October 2026; copied byte-for-byte without edits",
+      "source_filename": "zweigesicht-1-separated-hires.jpg",
+      "source_sha256": "71ba2d17122578edad6cbecdac4685158cec38a40c837ecf1cdfa211dddff970",
+      "view": "Exploded movement with application interface",
+      "classification": "Project reconstruction; authored finishes, not a photograph",
+      "usage": "Current Open Graph, X card and structured-data image",
       "source_geometry_manifest": "assets/source-manifest/sources.json"
     }
   ]

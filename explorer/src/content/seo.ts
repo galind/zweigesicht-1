@@ -5,9 +5,9 @@ export const ORIGIN = 'https://zweigesicht-1.guillemgalindo.com';
 const title = 'Marco Lang Zweigesicht-1 — Interactive ML-01 Movement';
 const description =
   "Explore Marco Lang's Zweigesicht-1 and Calibre ML-01 in an interactive 3D movement viewer. Inspect its components, construction and movement architecture.";
-const image = `${ORIGIN}/images/marco-lang-ml01-movement.webp`;
+const image = `${ORIGIN}/images/zweigesicht-1-separated-71ba2d171225.jpg`;
 const imageAlt =
-  'CAD-based view of Calibre ML-01 with authored surface finishes';
+  'Exploded CAD view of the Zweigesicht-1 Calibre ML-01 movement with authored surface finishes';
 
 // Route metadata replaces nested social objects rather than merging them.
 // Keep each route's card complete in the initial HTML, without client JS.
@@ -30,9 +30,9 @@ function pageMetadata(
       images: [
         {
           url: image,
-          width: 1200,
-          height: 900,
-          type: 'image/webp',
+          width: 2560,
+          height: 1440,
+          type: 'image/jpeg',
           alt: imageAlt,
         },
       ],
