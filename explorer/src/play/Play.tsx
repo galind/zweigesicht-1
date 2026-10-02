@@ -679,6 +679,7 @@ export default function Play() {
           className="play-dock site-glass"
           aria-label="Assembly workbench"
           data-pulse={placementPulse}
+          data-filters={inHardMode || inventoryView === 'all'}
         >
           <div className="play-progress">
             <button

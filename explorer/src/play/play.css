@@ -695,7 +695,60 @@
   }
 }
 
+@media (max-width: 420px), (max-height: 600px) and (min-aspect-ratio: 4/3) {
+  .play-progress {
+    gap: 4px;
+  }
+  .play-inventory-switch svg {
+    display: none;
+  }
+  .play-progress strong {
+    font-size: 0.6875rem;
+  }
+  .play-gallery {
+    height: 94px;
+  }
+  .play-rail-footer {
+    flex-direction: column;
+    gap: 2px;
+    margin-top: auto;
+  }
+  .play-selection {
+    width: 100%;
+    min-height: 16px;
+  }
+  .play-actions {
+    width: 100%;
+    overflow: visible;
+  }
+  .play-actions button {
+    min-width: 0;
+    flex: 1 1 0;
+    padding-inline: 4px;
+  }
+}
+
+@media (max-width: 420px) {
+  .play-dock {
+    height: 266px;
+  }
+  .play-dock[data-filters='true'] .play-progress {
+    flex-wrap: wrap;
+  }
+  .play-dock[data-filters='true'] .play-progress strong {
+    flex-basis: 100%;
+    margin-left: 0;
+    text-align: right;
+  }
+}
+
 @media (max-width: 360px) {
+  .play-selection p {
+    max-height: 1.3em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   .play-filter-trigger {
     width: 44px;
     padding-inline: 0;
@@ -725,6 +778,9 @@
 .text-enlarged .play-filter-trigger {
   flex: 0 0 44px;
 }
+.text-enlarged .play-gallery {
+  height: max(94px, 5.875em);
+}
 .text-enlarged .play-rail-footer {
   flex-wrap: wrap;
 }
@@ -734,6 +790,12 @@
 }
 .text-enlarged .play-actions button {
   min-width: 44px;
+}
+
+@media (max-width: 420px), (max-height: 600px) and (min-aspect-ratio: 4/3) {
+  .text-enlarged .play-rail-footer {
+    flex-wrap: nowrap;
+  }
 }
 
 @media (max-height: 600px) and (min-aspect-ratio: 4/3) {
@@ -746,13 +808,24 @@
     max-height: calc(100% - 76px);
     transform: none;
   }
+  .play-progress {
+    flex-wrap: wrap;
+  }
+  .play-progress strong {
+    flex-basis: 100%;
+    margin-left: 0;
+    text-align: right;
+  }
+  .play-selection p {
+    display: none;
+  }
   .play-workspace {
     right: 52%;
     flex-wrap: wrap;
   }
   .play-card-item,
   .play-project {
-    flex-basis: max(100px, 6.25em);
+    flex-basis: max(126px, 7.875em);
   }
 }
 
