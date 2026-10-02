@@ -20,7 +20,7 @@ const check = (name, pass, detail) => {
   report.checks.push({ name, pass: Boolean(pass), detail });
   assert.ok(pass, name);
 };
-const concepts = ["exchange", "turn", "lock"];
+const concepts = ["datum", "section", "fit"];
 try {
   for (const surface of ["home", "workshop"]) {
     for (const concept of concepts) {
@@ -105,7 +105,7 @@ try {
         await page.emulateMedia({ reducedMotion: "reduce" });
         const staticState = await page.locator(".study-mark").evaluate((e) => ({
           animations: e.getAnimations({ subtree: true }).length,
-          visible: [...e.querySelectorAll(".study-gg, .study-gg > span")].every(
+          visible: [...e.querySelectorAll(".study-drawing, .study-drawing > g")].every(
             (n) => getComputedStyle(n).opacity === "1",
           ),
         }));
@@ -138,11 +138,17 @@ try {
   await page.goto(`${base}/__loading`);
   await page.locator(".study-mark").first().waitFor();
   const label = page.locator(".movement-loader-label").first();
-  const before = await label.boundingBox();
+  // Clicking the gallery control can scroll the page. Compare document coordinates.
+  const labelPosition = () =>
+    label.evaluate((e) => {
+      const r = e.getBoundingClientRect();
+      return { x: r.x + scrollX, y: r.y + scrollY, width: r.width, height: r.height };
+    });
+  const before = await labelPosition();
   await page.getByRole("button", { name: "Toggle transfer detail" }).first().click();
   check(
     "Transfer detail arrival/removal keeps label in place",
-    JSON.stringify(before) === JSON.stringify(await label.boundingBox()),
+    JSON.stringify(before) === JSON.stringify(await labelPosition()),
   );
   await page.getByRole("button", { name: "Toggle transfer detail" }).first().click();
   await page.screenshot({ path: path.join(out, "comparison-desktop.png"), fullPage: true });

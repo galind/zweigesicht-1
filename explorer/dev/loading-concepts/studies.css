@@ -1,142 +1,111 @@
-/* Development-only gg choreography, with a fixed envelope and stationary copy. */
+/* Local technical drawing studies. Geometry is illustrative, never telemetry. */
 .study-mark {
   display: grid;
   place-items: center;
   width: 120px;
   height: 80px;
+  color: #d8d6ce;
 }
-.study-gg {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  width: 96px;
-  height: 64px;
+.study-mark .study-drawing,
+.play-app .study-mark .study-drawing {
+  display: block;
+  width: 120px;
+  height: 80px;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+.study-glyph {
   font:
-    600 56px/1 Arial,
+    600 52px/1 Arial,
     Helvetica,
     sans-serif;
-  color: #eeece4;
+  fill: none;
+  stroke-width: 0.9;
 }
-.study-gg > span {
-  display: block;
-  width: 32px;
-  flex: none;
-  text-align: center;
-  transform-origin: 50% 58%;
+.study-brass {
+  color: var(--site-accent);
+  stroke: currentColor;
 }
-.study-gg > span + span {
-  margin-left: -10px;
-  color: var(--site-accent-foreground);
+.study-guide {
+  stroke: #656660;
+  stroke-width: 0.65;
 }
-.study-exchange .study-gg > span {
-  animation: study-exchange-left 3.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+.study-rule {
+  stroke: #9a9b92;
+  stroke-width: 0.8;
 }
-.study-exchange .study-gg > span + span {
-  animation-name: study-exchange-right;
+.study-register {
+  animation: study-register 4.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
-@keyframes study-exchange-left {
+@keyframes study-register {
   0%,
-  10%,
-  90%,
+  12%,
   100% {
-    transform: translate(0, 0);
+    transform: translate(8px, -6px);
   }
-  24% {
-    transform: translate(11px, -14px);
-  }
-  38%,
-  60% {
-    transform: translate(22px, 0);
-  }
-  75% {
-    transform: translate(11px, 14px);
-  }
-}
-@keyframes study-exchange-right {
-  0%,
-  10%,
-  90%,
-  100% {
-    transform: translate(0, 0);
-  }
-  24% {
-    transform: translate(-11px, 14px);
-  }
-  38%,
-  60% {
-    transform: translate(-22px, 0);
-  }
-  75% {
-    transform: translate(-11px, -14px);
-  }
-}
-.study-turn .study-gg > span {
-  animation: study-turn-left 3.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-.study-turn .study-gg > span + span {
-  animation-name: study-turn-right;
-}
-@keyframes study-turn-left {
-  0%,
-  10% {
-    transform: perspective(160px) rotateY(0);
+  30% {
+    transform: translate(0, -6px);
   }
   46%,
-  100% {
-    transform: perspective(160px) rotateY(360deg);
-  }
-}
-@keyframes study-turn-right {
-  0%,
-  24% {
-    transform: perspective(160px) rotateY(0);
-  }
-  60%,
-  100% {
-    transform: perspective(160px) rotateY(360deg);
-  }
-}
-.study-lock .study-gg > span {
-  animation: study-lock-left 3.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-.study-lock .study-gg > span + span {
-  animation-name: study-lock-right;
-}
-@keyframes study-lock-left {
-  0%,
-  12%,
-  88%,
-  100% {
-    transform: none;
-  }
-  30%,
-  38% {
-    transform: translate(-12px, -3px) rotate(-18deg);
-  }
-  51% {
-    transform: translate(-3px, 0) rotate(-18deg);
-  }
-  62%,
-  88% {
+  78% {
     transform: none;
   }
 }
-@keyframes study-lock-right {
+.study-slice-0 {
+  animation: study-section-top 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+.study-slice-2 {
+  animation: study-section-bottom 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes study-section-top {
   0%,
-  12%,
-  88%,
+  14%,
   100% {
+    transform: translate(-8px, -8px);
+  }
+  35%,
+  78% {
     transform: none;
   }
-  30%,
-  38% {
-    transform: translate(12px, 3px) rotate(18deg);
+}
+@keyframes study-section-bottom {
+  0%,
+  25%,
+  100% {
+    transform: translate(8px, 8px);
   }
-  51% {
-    transform: translate(3px, 0) rotate(18deg);
+  49%,
+  78% {
+    transform: none;
   }
-  62%,
-  88% {
+}
+.study-collar-left {
+  animation: study-fit-left 4.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+.study-collar-right {
+  animation: study-fit-right 4.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes study-fit-left {
+  0%,
+  10%,
+  100% {
+    transform: translateX(-18px);
+  }
+  34%,
+  76% {
+    transform: none;
+  }
+}
+@keyframes study-fit-right {
+  0%,
+  26%,
+  100% {
+    transform: translateX(18px);
+  }
+  50%,
+  76% {
     transform: none;
   }
 }

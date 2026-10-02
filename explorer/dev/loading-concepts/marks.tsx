@@ -1,53 +1,138 @@
-/** Decorative proposals only. Imported exclusively by the development preview. */
+import { useId } from 'react';
+/** Decorative technical studies only; not dimensions or a mechanism simulation. */
 export const concepts = [
   {
-    id: 'exchange',
-    name: 'Exchange',
+    id: 'datum',
+    name: 'Datum',
     rationale:
-      'The two g forms trade places, passing above and below each other like a compact moving monogram.',
+      'Treat gg as geometry being registered to a drawing datum. One letter stays fixed while the other resolves onto the reference axes.',
     motion:
-      'Ivory and champagne exchange positions along opposing arcs, pause, then exchange again. A 3.6-second loop with 22px of horizontal travel and 14px of lift.',
+      'The champagne g approaches from an 8px horizontal and 6px vertical offset, corrects each axis in sequence, then holds in register. A 4.2-second loop.',
     strength:
-      'A recognisable gesture and a changing colour arrangement, even during a short wait.',
+      'Keeps the identity but gives its movement an explicit geometric purpose.',
     drawback:
-      'The overlapping midpoint is deliberately dense. More conspicuous than the previous studies.',
-    reduced: 'A static ivory-and-champagne gg in its original order.',
+      'Fine construction lines and outlined letters are less prominent than solid typography.',
+    reduced: 'Both letters remain registered to the visible drawing datums.',
   },
   {
-    id: 'turn',
-    name: 'Turn',
+    id: 'section',
+    name: 'Section',
     rationale:
-      'Each letter turns like a small piece being inspected, with the second following the first.',
+      'An exploded drawing of the gg itself: three horizontal sections settle into one continuous contour.',
     motion:
-      'Two staggered 360° turns around the vertical axis, followed by a long shared pause. A 3.8-second loop; the letters become edge-on and briefly mirrored mid-turn.',
+      'Upper and lower sections separate, then slide into alignment in sequence around a fixed middle section. The complete gg holds before the next 4.8-second cycle.',
     strength:
-      'The clearest three-dimensional gesture while keeping the mark in one place.',
+      'A more distinctive connection between typography and CAD, with a clearly readable assembled state.',
     drawback:
-      'Brief mirrored forms interrupt legibility; the most theatrical option.',
-    reduced: 'Both letters face forward, fully readable.',
+      'The letters are intentionally fragmented during the exploded phase.',
+    reduced: 'All three sections form one complete, aligned gg.',
   },
   {
-    id: 'lock',
-    name: 'Lock',
+    id: 'fit',
+    name: 'Fit',
     rationale:
-      'Two offset letters square up and engage, giving the gg a definite assembly rhythm.',
+      'A small sectional drawing replaces the monogram: two hatched collars register against a central shaft shoulder.',
     motion:
-      'The letters separate by 12px each and counter-rotate by 18°, then close and straighten in two stages. They hold interlocked for half of a 3.2-second loop.',
+      'The left collar slides onto the shaft, then the right; both remain seated before withdrawing. A 4.4-second loop along a fixed centreline.',
     strength:
-      'A decisive, legible action with a long rest; a natural fit for Workshop.',
+      'The most explicitly engineering-led option; the motion reads as fitting rather than decoration.',
     drawback:
-      'A stronger mechanical metaphor than the homepage requires; the closing action attracts attention.',
-    reduced: 'The completed, upright interlocked gg.',
+      'Drops gg and introduces a generic assembly schematic, not a verified component of the watch.',
+    reduced:
+      'The shaft and both collars remain assembled, with section hatching and centreline visible.',
   },
 ] as const;
 export type Concept = (typeof concepts)[number]['id'];
 export function ConceptMark({ concept }: { concept: Concept }) {
+  const id = useId().replace(/:/g, '');
   return (
     <span className={`study-mark study-${concept}`} data-concept={concept}>
-      <span className="study-gg">
-        <span>g</span>
-        <span>g</span>
-      </span>
+      <svg
+        className="study-drawing"
+        viewBox="0 0 120 80"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {concept === 'datum' && (
+          <>
+            <path
+              className="study-guide"
+              d="M20 57H104M60 12v58"
+              strokeDasharray="3 4"
+            />
+            <path
+              className="study-rule"
+              d="M26 17v-4h68v4M26 65v4h68v-4M18 26h-4v30h4M102 26h4v30h-4"
+            />
+            <text className="study-glyph" x="33" y="55">
+              g
+            </text>
+            <g className="study-register">
+              <text className="study-glyph study-brass" x="56" y="55">
+                g
+              </text>
+              <path className="study-brass" d="M88 19v8M84 23h8" />
+            </g>
+            <path className="study-rule" d="m12 57 3-3 3 3-3 3Z" />
+          </>
+        )}
+        {concept === 'section' && (
+          <>
+            <defs>
+              {[0, 1, 2].map((n) => (
+                <clipPath key={n} id={`${id}-slice-${n}`}>
+                  <rect
+                    x="0"
+                    y={[10, 35, 50][n]}
+                    width="120"
+                    height={[25, 15, 20][n]}
+                  />
+                </clipPath>
+              ))}
+            </defs>
+            <path
+              className="study-guide"
+              d="M18 35h84M18 50h84M60 8v64"
+              strokeDasharray="2 4"
+            />
+            {[0, 1, 2].map((n) => (
+              <g key={n} className={`study-slice study-slice-${n}`}>
+                <g clipPath={`url(#${id}-slice-${n})`}>
+                  <text className="study-glyph" x="33" y="55">
+                    g
+                  </text>
+                  <text className="study-glyph study-brass" x="56" y="55">
+                    g
+                  </text>
+                </g>
+              </g>
+            ))}
+            <path className="study-rule" d="M22 29v6h5M93 50h5v6" />
+          </>
+        )}
+        {concept === 'fit' && (
+          <>
+            <path
+              className="study-guide"
+              d="M5 40h110"
+              strokeDasharray="6 3 1 3"
+            />
+            <path
+              className="study-rule"
+              d="M15 32h36V22h18v10h36v16H69v10H51V48H15ZM56 23v10M63 23v10M56 47v10M63 47v10"
+            />
+            <path className="study-guide" d="M51 13v-5M69 13v-5M51 10h18" />
+            <g className="study-collar-left study-brass">
+              <path d="M35 20h14v12H35ZM35 48h14v12H35ZM36 27l6-6M41 31l7-7M36 55l6-6M41 59l7-7M35 20v40M49 20v40" />
+            </g>
+            <g className="study-collar-right">
+              <path d="M71 20h14v12H71ZM71 48h14v12H71ZM72 27l6-6M77 31l7-7M72 55l6-6M77 59l7-7M71 20v40M85 20v40" />
+            </g>
+            <path className="study-rule" d="M51 65v5M69 65v5M51 68h18" />
+          </>
+        )}
+      </svg>
     </span>
   );
 }
