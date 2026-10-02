@@ -26,13 +26,6 @@
   --radius-sm: 6px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .movement-loader-mark span {
-    animation: none !important;
-    opacity: 1;
-    transform: none;
-  }
-}
 :root,
 .dark {
   --background: #181818;
@@ -320,33 +313,159 @@ canvas:focus-visible {
 }
 .movement-loader {
   display: grid;
+  grid-template-rows: 80px auto;
   place-items: center;
   gap: 10px;
   color: var(--site-control);
   text-align: center;
 }
+.load-message .movement-loader {
+  /* Reserve transfer detail before the first percentage arrives. */
+  grid-template-rows: 80px auto minmax(1.125rem, auto);
+}
+/* Section: a fixed drawing envelope, independent of transfer progress. */
 .movement-loader-mark {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  width: 1.65em;
-  height: 1em;
-  color: #eeece4;
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 80px;
+  color: #d8d6ce;
+  --movement-loader-cycle: 5.2s;
+}
+.movement-loader-mark .movement-loader-drawing {
+  display: block;
+  width: 120px;
+  height: 80px;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+.movement-loader-glyph {
   font:
-    600 3.5rem/1 Arial,
+    600 56px/1 Arial,
     Helvetica,
     sans-serif;
-  letter-spacing: -0.22em;
-  transform: translateX(-0.1em);
+  fill: none;
+  stroke-width: 1.2;
 }
-.movement-loader-mark span {
-  display: block;
-  transform-origin: 50% 55%;
-  animation: movement-loader-left 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+.movement-loader-brass {
+  color: var(--site-accent);
+  stroke: currentColor;
 }
-.movement-loader-mark span + span {
-  color: var(--site-accent-foreground);
-  animation-name: movement-loader-right;
+.movement-loader-cut-lines {
+  stroke: #656660;
+  stroke-width: 0.65;
+}
+.movement-loader-rule {
+  stroke: #9a9b92;
+  stroke-width: 0.8;
+}
+.movement-loader-slice {
+  animation: movement-loader-fragments var(--movement-loader-cycle) step-end
+    infinite;
+}
+.movement-loader-slice-0 {
+  animation:
+    movement-loader-refined-top var(--movement-loader-cycle)
+      cubic-bezier(0.65, 0, 0.35, 1) infinite,
+    movement-loader-fragments var(--movement-loader-cycle) step-end infinite;
+}
+.movement-loader-slice-2 {
+  animation:
+    movement-loader-refined-bottom var(--movement-loader-cycle)
+      cubic-bezier(0.65, 0, 0.35, 1) infinite,
+    movement-loader-fragments var(--movement-loader-cycle) step-end infinite;
+}
+@keyframes movement-loader-refined-top {
+  0%,
+  10%,
+  94%,
+  100% {
+    transform: translate(-9px, -8px);
+  }
+  24%,
+  84% {
+    transform: translate(0, -8px);
+  }
+  34%,
+  72% {
+    transform: none;
+  }
+}
+@keyframes movement-loader-refined-bottom {
+  0%,
+  18%,
+  94%,
+  100% {
+    transform: translate(9px, 8px);
+  }
+  32%,
+  84% {
+    transform: translate(0, 8px);
+  }
+  44%,
+  72% {
+    transform: none;
+  }
+}
+/* One unsliced contour takes over during the assembled hold, avoiding clip seams. */
+.movement-loader-whole {
+  opacity: 0;
+  animation: movement-loader-resolved var(--movement-loader-cycle) step-end
+    infinite;
+}
+@keyframes movement-loader-resolved {
+  0%,
+  44%,
+  72%,
+  100% {
+    opacity: 0;
+  }
+  48%,
+  70% {
+    opacity: 1;
+  }
+}
+@keyframes movement-loader-fragments {
+  0%,
+  44%,
+  72%,
+  100% {
+    opacity: 1;
+  }
+  48%,
+  70% {
+    opacity: 0;
+  }
+}
+.movement-loader-cut-lines {
+  animation: movement-loader-datums var(--movement-loader-cycle) ease-in-out
+    infinite;
+}
+@keyframes movement-loader-datums {
+  0%,
+  30%,
+  94%,
+  100% {
+    opacity: 0.8;
+  }
+  44%,
+  72% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .movement-loader-mark * {
+    animation: none !important;
+  }
+  .movement-loader-slice,
+  .movement-loader-cut-lines {
+    display: none;
+  }
+  .movement-loader-whole {
+    opacity: 1;
+  }
 }
 .movement-loader-label {
   font-size: 0.875rem;
@@ -372,28 +491,6 @@ canvas:focus-visible {
 .movement-loader + .text-button,
 .movement-loader-error + .text-button {
   margin-top: 14px;
-}
-@keyframes movement-loader-left {
-  0%,
-  100% {
-    opacity: 0.42;
-    transform: translate3d(-3px, 2px, 0) rotate(-4deg);
-  }
-  50% {
-    opacity: 1;
-    transform: translate3d(2px, -2px, 0) rotate(2deg);
-  }
-}
-@keyframes movement-loader-right {
-  0%,
-  100% {
-    opacity: 1;
-    transform: translate3d(-2px, -2px, 0) rotate(-2deg);
-  }
-  50% {
-    opacity: 0.42;
-    transform: translate3d(3px, 2px, 0) rotate(4deg);
-  }
 }
 .load-message > .text-button {
   display: flex;

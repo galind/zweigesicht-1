@@ -3,31 +3,7 @@ import vinext from 'vinext';
 import { nitro } from 'nitro/vite';
 import { defineConfig, type Plugin } from 'vite';
 import { existsSync, createReadStream, statSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-// A Vite-only HTML entry: absent from the application route graph and builds.
-function loadingStudies(): Plugin {
-  return {
-    name: 'local-loading-studies',
-    apply: 'serve',
-    configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        if ((req.url || '').split('?')[0] !== '/__loading') return next();
-        try {
-          const html = await readFile(
-            resolve('dev/loading-concepts/index.html'),
-            'utf8',
-          );
-          res.setHeader('Content-Type', 'text/html');
-          res.setHeader('Cache-Control', 'no-store');
-          res.end(await server.transformIndexHtml('/__loading', html));
-        } catch (error) {
-          next(error);
-        }
-      });
-    },
-  };
-}
 // Serve prepared, content-addressed CAD on loopback with real gzip transfer.
 // This plugin has no remote storage, account, upload or publishing capability.
 function localCad(): Plugin {
@@ -131,7 +107,6 @@ export default defineConfig({
     watch: { useFsEvents: false, usePolling: true },
   },
   plugins: [
-    loadingStudies(),
     localCad(),
     vinext(),
     ...(process.env.NITRO_PRESET ? [nitro()] : []),

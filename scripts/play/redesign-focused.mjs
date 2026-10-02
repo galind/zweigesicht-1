@@ -98,7 +98,7 @@ try {
  const retryContext=await browser.newContext({viewport:{width:390,height:844}});const retryPage=await retryContext.newPage();retryPage.on('pageerror',e=>report.errors.push(String(e)));
  let failAssets=true;await retryPage.route('**/models/catalog-*.glb*',route=>failAssets?route.abort():route.continue());
  await retryPage.goto(`${base}/workshop?mode=easy&inspect=1`);if(await retryPage.locator('dialog[open]').count())await retryPage.getByRole('button',{name:'Start Easy',exact:true}).click();await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).waitFor({timeout:60000});
- check('Incomplete catalog disables assembly controls',await retryPage.getByRole('button',{name:'Undo',exact:true}).isDisabled());
+ check('Incomplete catalog disables assembly controls',await retryPage.locator('.play-actions button').evaluateAll(buttons=>buttons.length>0&&buttons.every(button=>button.disabled)));
  failAssets=false;await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).click();await retryPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
  check('Asset retry prepares the full inventory',(await retryPage.evaluate(()=>window.__playInspect())).geometryCount===265);await retryContext.close();
  const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('blocked for QA')}}));

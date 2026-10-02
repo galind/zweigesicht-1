@@ -52,6 +52,7 @@ node scripts/play/browser-check.mjs http://127.0.0.1:4176 all
 node scripts/play/drag-check.mjs http://127.0.0.1:4176
 node scripts/play/access-check.mjs http://127.0.0.1:4176
 node scripts/review/explorer-check.mjs http://127.0.0.1:4176
+node scripts/review/loading-check.mjs http://127.0.0.1:4176
 node explorer/scripts/measure-build.mjs
 ```
 
