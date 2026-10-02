@@ -26,33 +26,11 @@ npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 
 ### Homepage Workshop entry
 
-`WORKSHOP_ENTRY_ENABLED=true` or `false` explicitly shows or hides **Be a
-watchmaker** and its Easy/Hard chooser. Unset/empty defaults to:
-
-- **Hidden:** Vercel Production, local production builds, unknown Vercel targets.
-- **Visible:** Vercel Preview (including `develop` staging), Vercel Development,
-  and local `npm run dev`.
-
-Vite resolves this once from `VERCEL_ENV` and the command, then compiles the same
-boolean into vinext's server and client. It does not use Next.js public-env
-conventions or a client effect. Hidden builds omit the whole entry from initial
-HTML and disable `/?assemble=1`; `/workshop`, `/play` and indexing/social metadata
-are unchanged. Invalid override values fail configuration.
-
-Set the flag in the shell, Vercel settings, or ignored `explorer/.env.local`
-(Vite mode-specific files also work; process variables win). Restart dev after a
-change; built deployments require a **rebuild/redeploy**. Runtime variables on
-`vinext start` cannot change it. For a staging-like local build:
-
-```sh
-VERCEL_ENV=preview npm --prefix explorer run build
-# Or explicitly enable it in any target:
-WORKSHOP_ENTRY_ENABLED=true npm --prefix explorer run build
-```
-
-[Release configuration](docs/BRANCHING_AND_RELEASES.md#workshop-entry-configuration).
-Mechanism: [Vite define](https://vite.dev/config/shared-options#define) and
-[Vercel system variables](https://vercel.com/docs/environment-variables/system-environment-variables).
+Two code guards hide **Be a watchmaker**, its chooser and `/?assemble=1` in
+production. Vite compiles the same boolean for server and client: visible during
+local development or a Vercel Preview build (`VERCEL_ENV=preview`), hidden otherwise.
+To enable it in production when ready, change the boolean in `explorer/vite.config.ts`
+to `true` and release the code. There is no configuration override.
 
 ## Verification
 
@@ -92,7 +70,7 @@ node explorer/scripts/measure-build.mjs
 ```
 
 The `home` and loading browser suites expect the entry to be visible; use a
-Preview/explicitly enabled build for those suites.
+Preview build for those suites.
 
 Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
 

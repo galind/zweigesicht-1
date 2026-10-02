@@ -1,8 +1,7 @@
 import tailwindcss from '@tailwindcss/postcss';
 import vinext from 'vinext';
 import { nitro } from 'nitro/vite';
-import { defineConfig, loadEnv, type Plugin } from 'vite';
-import { workshopEntryEnabled } from './config/workshop-entry.mjs';
+import { defineConfig, type Plugin } from 'vite';
 import { existsSync, createReadStream, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 // Serve prepared, content-addressed CAD on loopback with real gzip transfer.
@@ -99,18 +98,12 @@ function localCad(): Plugin {
     },
   };
 }
-export default defineConfig(({ command, mode }) => ({
-  // Only this resolved public boolean reaches application code. Process env wins
-  // over explorer/.env files; no Next.js client-env convention is required.
+export default defineConfig(({ command }) => ({
+  // Keep Workshop unlisted in production until it is ready for a code release.
+  // Vite supplies the same literal to the server and client.
   define: {
     __WORKSHOP_ENTRY_ENABLED__: JSON.stringify(
-      workshopEntryEnabled(command, {
-        ...loadEnv(mode, process.cwd(), [
-          'WORKSHOP_ENTRY_ENABLED',
-          'VERCEL_ENV',
-        ]),
-        ...process.env,
-      }),
+      command === 'serve' || process.env.VERCEL_ENV === 'preview',
     ),
   },
   css: { postcss: { plugins: [tailwindcss()] } },
