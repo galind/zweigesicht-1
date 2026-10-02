@@ -1,59 +1,46 @@
 /** Decorative proposals only. Imported exclusively by the development preview. */
 export const concepts = [
   {
-    id: 'poise',
-    name: 'Poise',
+    id: 'exchange',
+    name: 'Exchange',
     rationale:
-      'The original interlocking gg, with a slower, smaller counter-motion that feels poised rather than buoyant.',
+      'The two g forms trade places, passing above and below each other like a compact moving monogram.',
     motion:
-      'The letters tilt by 2° and rise or fall by 1px in opposition, then settle together. A 4.8-second loop with a quiet rest.',
+      'Ivory and champagne exchange positions along opposing arcs, pause, then exchange again. A 3.6-second loop with 22px of horizontal travel and 14px of lift.',
     strength:
-      'Closest to the original character; still clearly alive without a busy rhythm.',
+      'A recognisable gesture and a changing colour arrangement, even during a short wait.',
     drawback:
-      'Retains a little of the original rocking character. Choose Breath if any rocking feels too playful.',
-    reduced: 'Both letters sit upright, interlocked and fully visible.',
+      'The overlapping midpoint is deliberately dense. More conspicuous than the previous studies.',
+    reduced: 'A static ivory-and-champagne gg in its original order.',
   },
   {
-    id: 'breath',
-    name: 'Breath',
+    id: 'turn',
+    name: 'Turn',
     rationale:
-      'Treat gg as a single, settled monogram. Its presence changes softly while its silhouette stays completely still.',
+      'Each letter turns like a small piece being inspected, with the second following the first.',
     motion:
-      'The complete mark moves between 65% and full opacity over 4.4 seconds. No movement, scaling or glow.',
+      'Two staggered 360° turns around the vertical axis, followed by a long shared pause. A 3.8-second loop; the letters become edge-on and briefly mirrored mid-turn.',
     strength:
-      'The quietest option, with a stable silhouette and no competing gestures.',
+      'The clearest three-dimensional gesture while keeping the mark in one place.',
     drawback:
-      'Subtle enough to look static during a short load; the darkest phase has less visual weight.',
-    reduced: 'The complete monogram remains at full opacity.',
+      'Brief mirrored forms interrupt legibility; the most theatrical option.',
+    reduced: 'Both letters face forward, fully readable.',
   },
   {
-    id: 'converge',
-    name: 'Converge',
+    id: 'lock',
+    name: 'Lock',
     rationale:
-      'Two letters gently find their shared position, echoing the act of bringing two components together.',
+      'Two offset letters square up and engage, giving the gg a definite assembly rhythm.',
     motion:
-      'Each g travels 4px inward, holds in the interlocked position, then releases. A 5.6-second loop with a long central dwell.',
+      'The letters separate by 12px each and counter-rotate by 18°, then close and straighten in two stages. They hold interlocked for half of a 3.2-second loop.',
     strength:
-      'A clear assembly-related gesture that keeps the familiar gg identity.',
-    drawback: 'The changing spacing draws more attention than Poise or Breath.',
-    reduced: 'The letters remain in their final interlocked position.',
-  },
-  {
-    id: 'engraved',
-    name: 'Engraved',
-    rationale:
-      'Fine outlines give the same gg a lighter, engraved character, with ivory and champagne taking turns in emphasis.',
-    motion:
-      'The outlined letters exchange opacity between 55% and full strength over 5.2 seconds. Their positions never move.',
-    strength:
-      'The most delicate treatment; distinctly different without introducing another symbol or typeface.',
+      'A decisive, legible action with a long rest; a natural fit for Workshop.',
     drawback:
-      'Thin contours have less presence on small or low-contrast screens and need physical-device review.',
-    reduced: 'Both outlines remain fully visible, one ivory and one champagne.',
+      'A stronger mechanical metaphor than the homepage requires; the closing action attracts attention.',
+    reduced: 'The completed, upright interlocked gg.',
   },
 ] as const;
 export type Concept = (typeof concepts)[number]['id'];
-
 export function ConceptMark({ concept }: { concept: Concept }) {
   return (
     <span className={`study-mark study-${concept}`} data-concept={concept}>

@@ -20,7 +20,7 @@ const check = (name, pass, detail) => {
   report.checks.push({ name, pass: Boolean(pass), detail });
   assert.ok(pass, name);
 };
-const concepts = ["poise", "breath", "converge", "engraved"];
+const concepts = ["exchange", "turn", "lock"];
 try {
   for (const surface of ["home", "workshop"]) {
     for (const concept of concepts) {

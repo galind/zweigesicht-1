@@ -1,12 +1,12 @@
-# gg loading studies
+# gg loading studies: stronger choreography
 
-2 October 2026. The first four non-gg directions were rejected. This second pass returns to the original gg letterforms. These remain development-only proposals; the production loader is unchanged.
+2 October 2026. The previous options were too subdued. This pass gives the original gg three more visible gestures, each with a resting interval. These remain development-only proposals; the production loader is unchanged.
 
 ## Compare locally
 
-Run `npm --prefix explorer run dev` and open [the comparison](http://127.0.0.1:4173/__loading). Switch between Homepage and Workshop, preview reduced motion, toggle transfer detail/error, or open a full view. System reduced motion always takes precedence.
+Run `npm --prefix explorer run dev` and open [the comparison](http://127.0.0.1:4173/__loading). All three options appear side by side on desktop. Switch between Homepage and Workshop, preview reduced motion, toggle transfer detail/error, or open a full view. System reduced motion always takes precedence.
 
-Direct view: `/__loading?concept=poise&surface=workshop`. Concepts: `poise`, `breath`, `converge`, `engraved`. Optional parameters: `text=200`, `motion=reduce`, `state=error`, `detail=none`. Omit `concept` for the gallery.
+Direct view: `/__loading?concept=exchange&surface=workshop`. Concepts: `exchange`, `turn`, `lock`. Optional parameters: `text=200`, `motion=reduce`, `state=error`, `detail=none`. Omit `concept` for the gallery.
 
 The preview uses the existing header, status and retry components and both route shells, without CAD, navigation or docks. Homepage retains “Loading the movement” and “Movement file · 37%”; Workshop retains “Preparing the movement”. The percentage is a fixed specimen and never drives motion. Preview retry returns to loading; application asset retries remain unchanged.
 
@@ -14,31 +14,29 @@ The preview uses the existing header, status and retry components and both route
 
 | Concept | Rationale and loop | Strength | Tradeoff | Reduced motion |
 | --- | --- | --- | --- | --- |
-| **Poise** | Refine the original counter-motion: opposing 2° tilts and 1px vertical shifts, then a shared rest. 4.8 seconds. | Closest to the original character, with less activity. | Retains some rocking; may still feel too buoyant. | Upright, interlocked, fully visible gg. |
-| **Breath** | A settled monogram fades gently between 65% and full opacity over 4.4 seconds. No translation, scaling or glow. | Quietest option with a completely stable silhouette. | Can look static during a brief load; lower visual weight at its darkest phase. | Fully opaque gg. |
-| **Converge** | Each letter moves 4px inward, holds in the interlocked position, then releases. 5.6 seconds. | Suggests bringing components together while retaining gg. | Changing spacing attracts more attention. | Interlocked letters. |
-| **Engraved** | Fine ivory/champagne contours alternate between 55% and full opacity over 5.2 seconds. No positional motion. | The lightest visual treatment without a new symbol or typeface. | Outline legibility needs physical-device review. | Both outlines fully visible. |
+| **Exchange** | Letters trade positions along opposing arcs, pause, and trade again. 22px horizontal travel and 14px lift; 3.6 seconds. | A distinctive moving monogram with a visible ivory/champagne exchange. | The overlapping midpoint is dense and conspicuous. | Static gg in its original order. |
+| **Turn** | Each letter makes a staggered 360° turn around its vertical axis, then both rest. 3.8 seconds. | The strongest depth gesture without moving the whole mark. | Letters become edge-on and briefly mirrored, interrupting legibility. | Both letters face forward. |
+| **Lock** | Letters separate by 12px each and counter-rotate 18°, then close and straighten in two stages. They rest interlocked for half of the 3.2-second cycle. | Decisive assembly rhythm with a long readable rest. | Draws attention; its mechanical metaphor fits Workshop more directly than the homepage. | Completed, upright interlocked gg. |
 
-**Recommendation: Poise.** It keeps the distinctive original gesture and palette while reducing travel, rotation and frequency. **Breath** is the alternative if the priority is maximum stillness.
+**Start the review with Exchange.** It gives the two-letter identity a recognisable action, stays typographic and works in both contexts. Turn is the more theatrical direction; Lock makes the assembly reference most explicit. All remain unapproved.
 
 ## Screenshots and complete-loop captures
 
-These local files are intentionally ignored by Git in `artifacts/browser/loading-gg/`. GIFs sample the actual CSS animation at 10 fps; judge smoothness in the live preview. GIFs do not respond to reduced-motion settings; the live preview does.
+Local evidence is ignored by Git in `artifacts/browser/loading-gg-bold/`. GIFs capture one complete CSS loop at 10 fps; judge smoothness in the live preview. GIFs do not respect reduced-motion settings; the live preview does.
 
 | Concept | Homepage | Workshop | One loop |
 | --- | --- | --- | --- |
-| Poise | [Desktop](../artifacts/browser/loading-gg/poise-home-desktop.png) · [390px](../artifacts/browser/loading-gg/poise-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg/poise-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg/poise-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg/poise.gif) |
-| Breath | [Desktop](../artifacts/browser/loading-gg/breath-home-desktop.png) · [390px](../artifacts/browser/loading-gg/breath-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg/breath-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg/breath-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg/breath.gif) |
-| Converge | [Desktop](../artifacts/browser/loading-gg/converge-home-desktop.png) · [390px](../artifacts/browser/loading-gg/converge-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg/converge-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg/converge-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg/converge.gif) |
-| Engraved | [Desktop](../artifacts/browser/loading-gg/engraved-home-desktop.png) · [390px](../artifacts/browser/loading-gg/engraved-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg/engraved-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg/engraved-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg/engraved.gif) |
+| Exchange | [Desktop](../artifacts/browser/loading-gg-bold/exchange-home-desktop.png) · [390px](../artifacts/browser/loading-gg-bold/exchange-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg-bold/exchange-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg-bold/exchange-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg-bold/exchange.gif) |
+| Turn | [Desktop](../artifacts/browser/loading-gg-bold/turn-home-desktop.png) · [390px](../artifacts/browser/loading-gg-bold/turn-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg-bold/turn-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg-bold/turn-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg-bold/turn.gif) |
+| Lock | [Desktop](../artifacts/browser/loading-gg-bold/lock-home-desktop.png) · [390px](../artifacts/browser/loading-gg-bold/lock-home-mobile.png) | [Desktop](../artifacts/browser/loading-gg-bold/lock-workshop-desktop.png) · [390px](../artifacts/browser/loading-gg-bold/lock-workshop-mobile.png) | [Animation](../artifacts/browser/loading-gg-bold/lock.gif) |
 
-[Desktop comparison](../artifacts/browser/loading-gg/comparison-desktop.png) · [Mobile comparison](../artifacts/browser/loading-gg/comparison-mobile.png). Additional captures cover 320px, short landscape and 200% text, including landscape combined with 200% text.
+[Desktop comparison](../artifacts/browser/loading-gg-bold/comparison-desktop.png) · [Mobile comparison](../artifacts/browser/loading-gg-bold/comparison-mobile.png). Captures also cover 320px, short landscape and 200% text, including landscape combined with 200% text.
 
 ## Verification and boundaries
 
 - Typecheck, lint and production build pass. Existing large-chunk and vinext route-classification notices remain.
-- All **210 study checks** pass again with the new gg options: both surfaces, desktop/390px/320px/short landscape/200% text, reduced motion, polite status semantics, keyboard retry, transfer-detail reservation and animation-phase layout stability. No uncaught browser errors.
-- All concepts and styles remain under `explorer/dev/loading-concepts/`, served by a Vite-only `/__loading` entry. The new animation selectors and page content are absent from the production build. The first pass already verified production 404s and actual loader/retry behavior on both routes; this pass changes only the development studies, their checks and documentation.
+- All **158 study checks** pass again with the new gg options: both surfaces, desktop/390px/320px/short landscape/200% text, reduced motion, polite status semantics, keyboard retry, transfer-detail reservation and animation-phase layout stability. No uncaught browser errors.
+- All three concepts and styles remain under `explorer/dev/loading-concepts/`, served by a Vite-only `/__loading` entry. The new animation selectors and page content are absent from the production build. The first pass already verified production 404s and actual loader/retry behavior on both routes; the current pass changes only the development studies, their checks and documentation.
 - The shared production loader, globals and application integrations are unchanged in this pass. The previous pass's optional decorative slot keeps status and recovery in one component. No new dependencies, JavaScript animation loops, images, filters or glow.
 - Each gg uses a fixed 120×80px envelope. Transforms and opacity cannot shift the label. Homepage reserves the transfer-detail row. The preview retains the header-aware short-landscape placement from the first pass.
 

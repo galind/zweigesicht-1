@@ -1,4 +1,4 @@
-/* No production import. Every gg shares a fixed envelope. */
+/* Development-only gg choreography, with a fixed envelope and stationary copy. */
 .study-mark {
   display: grid;
   place-items: center;
@@ -15,117 +15,129 @@
     600 56px/1 Arial,
     Helvetica,
     sans-serif;
-  letter-spacing: -12px;
-  padding-right: 12px;
   color: #eeece4;
 }
 .study-gg > span {
   display: block;
-  transform-origin: 50% 55%;
+  width: 32px;
+  flex: none;
+  text-align: center;
+  transform-origin: 50% 58%;
 }
 .study-gg > span + span {
+  margin-left: -10px;
   color: var(--site-accent-foreground);
 }
-.study-poise .study-gg > span {
-  animation: study-poise-left 4.8s ease-in-out infinite;
+.study-exchange .study-gg > span {
+  animation: study-exchange-left 3.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
-.study-poise .study-gg > span + span {
-  animation-name: study-poise-right;
+.study-exchange .study-gg > span + span {
+  animation-name: study-exchange-right;
 }
-@keyframes study-poise-left {
+@keyframes study-exchange-left {
   0%,
-  15%,
-  85%,
+  10%,
+  90%,
   100% {
-    transform: none;
+    transform: translate(0, 0);
   }
-  35% {
-    transform: translateY(1px) rotate(-2deg);
+  24% {
+    transform: translate(11px, -14px);
   }
-  65% {
-    transform: translateY(-1px) rotate(2deg);
+  38%,
+  60% {
+    transform: translate(22px, 0);
+  }
+  75% {
+    transform: translate(11px, 14px);
   }
 }
-@keyframes study-poise-right {
+@keyframes study-exchange-right {
   0%,
-  15%,
-  85%,
+  10%,
+  90%,
   100% {
-    transform: none;
+    transform: translate(0, 0);
   }
-  35% {
-    transform: translateY(-1px) rotate(2deg);
+  24% {
+    transform: translate(-11px, 14px);
   }
-  65% {
-    transform: translateY(1px) rotate(-2deg);
+  38%,
+  60% {
+    transform: translate(-22px, 0);
+  }
+  75% {
+    transform: translate(-11px, -14px);
   }
 }
-.study-breath .study-gg {
-  animation: study-breath 4.4s ease-in-out infinite;
+.study-turn .study-gg > span {
+  animation: study-turn-left 3.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
-@keyframes study-breath {
+.study-turn .study-gg > span + span {
+  animation-name: study-turn-right;
+}
+@keyframes study-turn-left {
   0%,
+  10% {
+    transform: perspective(160px) rotateY(0);
+  }
+  46%,
   100% {
-    opacity: 0.65;
-  }
-  50% {
-    opacity: 1;
+    transform: perspective(160px) rotateY(360deg);
   }
 }
-.study-converge .study-gg > span {
-  animation: study-converge-left 5.6s ease-in-out infinite;
+@keyframes study-turn-right {
+  0%,
+  24% {
+    transform: perspective(160px) rotateY(0);
+  }
+  60%,
+  100% {
+    transform: perspective(160px) rotateY(360deg);
+  }
 }
-.study-converge .study-gg > span + span {
-  animation-name: study-converge-right;
+.study-lock .study-gg > span {
+  animation: study-lock-left 3.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
-@keyframes study-converge-left {
+.study-lock .study-gg > span + span {
+  animation-name: study-lock-right;
+}
+@keyframes study-lock-left {
   0%,
   12%,
   88%,
   100% {
-    transform: translateX(-4px);
+    transform: none;
   }
-  36%,
-  64% {
+  30%,
+  38% {
+    transform: translate(-12px, -3px) rotate(-18deg);
+  }
+  51% {
+    transform: translate(-3px, 0) rotate(-18deg);
+  }
+  62%,
+  88% {
     transform: none;
   }
 }
-@keyframes study-converge-right {
+@keyframes study-lock-right {
   0%,
   12%,
   88%,
   100% {
-    transform: translateX(4px);
-  }
-  36%,
-  64% {
     transform: none;
   }
-}
-.study-engraved .study-gg > span {
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px currentColor;
-  animation: study-engraved-left 5.2s ease-in-out infinite;
-}
-.study-engraved .study-gg > span + span {
-  animation-name: study-engraved-right;
-}
-@keyframes study-engraved-left {
-  0%,
-  100% {
-    opacity: 1;
+  30%,
+  38% {
+    transform: translate(12px, 3px) rotate(18deg);
   }
-  50% {
-    opacity: 0.55;
+  51% {
+    transform: translate(3px, 0) rotate(18deg);
   }
-}
-@keyframes study-engraved-right {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
+  62%,
+  88% {
+    transform: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -185,7 +197,7 @@ body.study-gallery {
 }
 .study-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px;
   max-width: 1400px;
   margin: auto;
@@ -248,7 +260,7 @@ body.study-gallery {
   border: 0;
   border-radius: 0;
 }
-@media (max-width: 760px) {
+@media (max-width: 1000px) {
   .study-grid {
     grid-template-columns: 1fr;
     padding: 0 20px 32px;
