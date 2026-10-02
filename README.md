@@ -4,7 +4,7 @@ A real-CAD construction explorer for Marco Lang’s ml–01 movement, with a sep
 
 The explorer addresses all 426 source instances. It supports six functional groups, inspection/isolation, All parts, disassembly/reassembly, fitted case appearances, shared dial visibility and independent hand shapes. Fine hands follow the case material. Reset preserves side and configuration.
 
-Workshop starts through **Assemble the movement** on the homepage. Easy offers 89 prepared fits; Hard has 249 individual parts and 35 explicit workbench transfers. Both start with 16 fitted leaves and finish with the same 265 leaves. Ready now offers constructible choices; All parts is searchable and keeps unavailable parts inspectable. Show seat is optional assistance. Free orbit, source-scale gallery dragging, Flip, Reset, Undo and local nonlinear saves are supported. `/play` redirects permanently to `/workshop`.
+Workshop starts through **Be a watchmaker** on the homepage when its entry is enabled (staging and local development by default). Production keeps the entry unlisted; `/workshop` remains directly accessible. Easy offers 89 prepared fits; Hard has 249 individual parts and 35 explicit workbench transfers. Both start with 16 fitted leaves and finish with the same 265 leaves. Ready now offers constructible choices; All parts is searchable and keeps unavailable parts inspectable. Show seat is optional assistance. Free orbit, source-scale gallery dragging, Flip, Reset, Undo and local nonlinear saves are supported. `/play` redirects permanently to `/workshop`.
 
 See [current status](PROGRESS.md), [architecture](docs/LOCAL_ARCHITECTURE.md), [CAD constraints and reproduction](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
@@ -23,6 +23,14 @@ Development binds to **http://127.0.0.1:4173/**. The local middleware serves the
 npm --prefix explorer run build
 npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 ```
+
+### Homepage Workshop entry
+
+Two code guards hide **Be a watchmaker**, its chooser and `/?assemble=1` in
+production. Vite compiles the same boolean for server and client: visible during
+local development or a Vercel Preview build (`VERCEL_ENV=preview`), hidden otherwise.
+To enable it in production when ready, change the boolean in `explorer/vite.config.ts`
+to `true` and release the code. There is no configuration override.
 
 ## Verification
 
@@ -60,6 +68,9 @@ node scripts/review/explorer-check.mjs http://127.0.0.1:4176
 node scripts/review/loading-check.mjs http://127.0.0.1:4176
 node explorer/scripts/measure-build.mjs
 ```
+
+The `home` and loading browser suites expect the entry to be visible; use a
+Preview build for those suites.
 
 Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
 

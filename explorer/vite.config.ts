@@ -98,7 +98,14 @@ function localCad(): Plugin {
     },
   };
 }
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // Keep Workshop unlisted in production until it is ready for a code release.
+  // Vite supplies the same literal to the server and client.
+  define: {
+    __WORKSHOP_ENTRY_ENABLED__: JSON.stringify(
+      command === 'serve' || process.env.VERCEL_ENV === 'preview',
+    ),
+  },
   css: { postcss: { plugins: [tailwindcss()] } },
   server: {
     host: '127.0.0.1',
@@ -111,4 +118,4 @@ export default defineConfig({
     vinext(),
     ...(process.env.NITRO_PRESET ? [nitro()] : []),
   ],
-});
+}));

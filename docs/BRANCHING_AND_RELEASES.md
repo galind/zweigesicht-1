@@ -47,6 +47,14 @@ custom staging domain or separate staging environment variables can be assigned
 to the `develop` Preview branch in Vercel Project Settings. That dashboard-only
 configuration is optional; the branch deployment itself is automatic.
 
+## Workshop entry
+
+Workshop's homepage entry is code-controlled: visible in local development and
+Vercel Preview (`VERCEL_ENV=preview`), hidden in production. No feature setting
+is needed. Release via the normal `develop` → `main` build; do not promote a
+Preview artifact whose visible entry is already compiled in. Enabling the entry
+later requires a code release. Direct `/workshop` access remains available.
+
 ## Hotfixes
 
 Urgent fixes still target `develop` first and use the same release PR. If a

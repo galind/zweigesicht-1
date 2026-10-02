@@ -2347,3 +2347,15 @@ canvas:focus-visible {
     grid-row: 2;
   }
 }
+
+/* Without Workshop there is no centre track or reserved compact second row. */
+.topbar[data-workshop-entry='false'] {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.topbar[data-workshop-entry='false'] .identity {
+  grid-column: 1;
+}
+.topbar[data-workshop-entry='false'] .header-actions,
+.topbar[data-workshop-entry='false'] .mobile-menu-trigger {
+  grid-column: 2;
+}
