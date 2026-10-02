@@ -5,7 +5,7 @@
     "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b"
   },
   "units": "mm",
-  "evidence": "docs/DIAL_CAD_FINDINGS.md",
+  "evidence": "docs/CAD_NOTES.md",
   "defaults": {
     "central": "fine",
     "small": "lance"

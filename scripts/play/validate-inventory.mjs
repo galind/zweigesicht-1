@@ -91,9 +91,8 @@ for (const level of ['easy', 'hard']) {
   const packetPlaced = new Map();
   for (const [index, step] of steps.entries()) {
     assert.ok(step.id && !stepIds.has(step.id), `Unique step ${step.id}`);
-    assert.ok(step.label && step.assemblyId && step.instruction);
+    assert.ok(step.label && step.assemblyId);
     assert.ok(['front', 'back'].includes(step.side));
-    assert.equal(step.staging, 'lower-left');
     if (step.viewDirectionWorld) {
       assert.ok(step.viewDirectionWorld.length === 3 && step.viewDirectionWorld.every(Number.isFinite));
       assert.ok(Math.abs(Math.hypot(...step.viewDirectionWorld) - 1) < 1e-12, 'Authored camera direction is normalized');

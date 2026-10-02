@@ -72,7 +72,7 @@
       "areaMm2": 5.828602376499894,
       "plane": "local X=3.4 mm",
       "exclusions": "Raised M planes at X=3.5, bevels, rim and knurling",
-      "probe": "scripts/cad/crown_finish_probe.py"
+      "probe": "git:4566341:scripts/cad/crown_finish_probe.py"
     },
     "bushings": "15 September 2026: explicit user direction extends the gold hand color to the three fitted central Zeigerbuchse bushings on rose-gold/platinum Fine configurations.",
     "polishedHandsAndLugHardware": {

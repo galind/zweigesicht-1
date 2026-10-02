@@ -136,8 +136,11 @@ def main():
     document,tool=load_xcaf(args.source)
     roots=TDF_LabelSequence();tool.GetFreeShapes(roots)
     glb=Glb(); instances=[]; definitions={}; meshes={}; node_indices={}; exceptions=[]
-    world_points=[]; max_world_error=0.; reference=json.loads((ROOT/'artifacts/preflight/assembly-inventory.json').read_text())
-    previous={i['instance_id']:i for i in reference['instances'] if args.subset=='full' or i['instance_id'].startswith('0:1:1:1/0:1:1:1:4')}
+    # Compare fresh source traversal against the reviewed runtime placements,
+    # rather than retaining a second generated inventory of the same matrices.
+    world_points=[]; max_world_error=0.; reference=json.loads((ROOT/'explorer/public/models/assembly-manifest.json').read_text())
+    assert reference['source']['sha256'] == digest, 'Reference/source hash mismatch'
+    previous={i['sourceInstanceId']:i for i in reference['instances'] if i['parentId'] and (args.subset=='full' or i['sourceInstanceId'].startswith('0:1:1:1/0:1:1:1:4'))}
     root_ids=[]
     def walk(label,parent_id,parent_world,path,is_root=False):
         nonlocal max_world_error
@@ -150,7 +153,7 @@ def main():
         is_assembly=bool(XCAFDoc_ShapeTool.IsAssembly_s(definition))
         name=label_name(label) or label_name(definition) or key
         if source_id in previous:
-            max_world_error=max(max_world_error,float(np.max(np.abs(world-np.asarray(previous[source_id]['world_transform'])))))
+            max_world_error=max(max_world_error,float(np.max(np.abs(world-np.asarray(previous[source_id]['worldTransform'])))))
         record={'id':key,'sourceInstanceId':source_id,'name':name,'parentId':parent_id,'definitionId':defid,'isAssembly':is_assembly,'localTransform':local.tolist(),'worldTransform':world.tolist(),'boundsWorldMm':None}
         node={'name':key,'matrix':local.T.ravel().tolist(),'extras':{'partId':key,'sourceName':name,'definitionId':defid,'isAssembly':is_assembly}}
         if defid not in definitions:
@@ -241,8 +244,8 @@ def main():
     glb.write(args.output/'zweigesicht.glb')
     source_bounds=bbox(tool.GetOneShape()) if args.subset=='full' else bounds.copy()
     leaf_instances=[i for i in instances if not i['isAssembly']]
-    summary={'hierarchyInstancesExcludingRoot':len(instances)-roots.Length(),'assemblyInstancesExcludingRoot':sum(i['isAssembly'] for i in instances)-roots.Length(),'leafInstances':len(leaf_instances),'uniqueLeafDefinitions':len(meshes),'renderedLeafInstances':sum(i['triangles']>0 for i in leaf_instances),'renderedLeafDefinitions':sum(len(m.faces)>0 for m in meshes.values()),'uniqueDefinitionsExcludingRoot':len(definitions)-roots.Length(),'uniqueTriangles':sum(len(m.faces) for m in meshes.values()),'instancedTriangles':sum(i['triangles'] for i in leaf_instances),'boundsWorldMm':bounds.tolist(),'extentsMm':(bounds[1]-bounds[0]).tolist(),'sourceBrepBoundsWorldMm':source_bounds.tolist() if source_bounds is not None and args.subset=='full' else None,'sourceBoundsComparisonAvailable':args.subset=='full' and source_bounds is not None,'sourceBoundsDifferenceMm':float(np.max(np.abs(bounds-source_bounds))) if args.subset=='full' and source_bounds is not None else None,'sourceDefinitionBoundsComparisons':sum(d.get('boundsDifferenceMm') is not None for d in definitions.values()),'maximumValidDefinitionBoundsDifferenceMm':max((d['boundsDifferenceMm'] for d in definitions.values() if d.get('boundsDifferenceMm') is not None),default=None),'finiteTransforms':bool(np.isfinite(transforms).all()),'minimumDeterminant':float(det.min()),'maximumDeterminant':float(det.max()),'maxPreflightWorldTransformDifference':max_world_error,'sourceInstanceSetMatchesPreflight':set(previous)=={i['sourceInstanceId'] for i in instances if i['parentId']},'allInstanceIdsUnique':len(byid)==len(instances),'exceptions':len(exceptions)}
-    assert summary['finiteTransforms'] and summary['allInstanceIdsUnique'] and summary['sourceInstanceSetMatchesPreflight']
+    summary={'hierarchyInstancesExcludingRoot':len(instances)-roots.Length(),'assemblyInstancesExcludingRoot':sum(i['isAssembly'] for i in instances)-roots.Length(),'leafInstances':len(leaf_instances),'uniqueLeafDefinitions':len(meshes),'renderedLeafInstances':sum(i['triangles']>0 for i in leaf_instances),'renderedLeafDefinitions':sum(len(m.faces)>0 for m in meshes.values()),'uniqueDefinitionsExcludingRoot':len(definitions)-roots.Length(),'uniqueTriangles':sum(len(m.faces) for m in meshes.values()),'instancedTriangles':sum(i['triangles'] for i in leaf_instances),'boundsWorldMm':bounds.tolist(),'extentsMm':(bounds[1]-bounds[0]).tolist(),'sourceBrepBoundsWorldMm':source_bounds.tolist() if source_bounds is not None and args.subset=='full' else None,'sourceBoundsComparisonAvailable':args.subset=='full' and source_bounds is not None,'sourceBoundsDifferenceMm':float(np.max(np.abs(bounds-source_bounds))) if args.subset=='full' and source_bounds is not None else None,'sourceDefinitionBoundsComparisons':sum(d.get('boundsDifferenceMm') is not None for d in definitions.values()),'maximumValidDefinitionBoundsDifferenceMm':max((d['boundsDifferenceMm'] for d in definitions.values() if d.get('boundsDifferenceMm') is not None),default=None),'finiteTransforms':bool(np.isfinite(transforms).all()),'minimumDeterminant':float(det.min()),'maximumDeterminant':float(det.max()),'maxReferenceWorldTransformDifference':max_world_error,'sourceInstanceSetMatchesReference':set(previous)=={i['sourceInstanceId'] for i in instances if i['parentId']},'allInstanceIdsUnique':len(byid)==len(instances),'exceptions':len(exceptions)}
+    assert summary['finiteTransforms'] and summary['allInstanceIdsUnique'] and summary['sourceInstanceSetMatchesReference']
     assert np.max(abs(det-1))<1e-8 and max_world_error<1e-8
     glbpath=args.output/'zweigesicht.glb';glb.write(glbpath)
     summary.update(glbBytes=glbpath.stat().st_size,glbSha256=hashlib.sha256(glbpath.read_bytes()).hexdigest(),conversionSeconds=round(time.monotonic()-started,2))
