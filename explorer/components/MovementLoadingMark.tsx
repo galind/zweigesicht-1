@@ -25,7 +25,8 @@ export function MovementLoadingMark({
       <span className="movement-loader-mark" aria-hidden="true">
         <svg
           className="movement-loader-drawing"
-          viewBox="0 0 120 80"
+          // Centre the visible Arial letterforms rather than their line box.
+          viewBox="0.461 5.045 120 80"
           fill="none"
           focusable="false"
         >

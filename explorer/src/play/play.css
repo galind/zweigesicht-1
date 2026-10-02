@@ -551,6 +551,14 @@
     align-content: safe center;
   }
 }
+/* Match the shared mark's viewport anchor, independent of the assembly rail. */
+.play-loading:has(.movement-loader) {
+  top: 50%;
+  bottom: auto;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
 .play-storage {
   position: absolute;
   left: var(--site-edge-left);

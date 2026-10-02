@@ -114,7 +114,27 @@ try {
             height: r.height,
           };
         };
+        const drawing = document.querySelector(".movement-loader-drawing");
+        const glyphs = [...drawing.querySelectorAll("defs text")];
+        const context = document.createElement("canvas").getContext("2d");
+        const ink = glyphs.map((glyph) => {
+          context.font = getComputedStyle(glyph).font;
+          const m = context.measureText(glyph.textContent.trim());
+          const x = Number(glyph.getAttribute("x")),
+            y = Number(glyph.getAttribute("y"));
+          return {
+            left: x - m.actualBoundingBoxLeft,
+            right: x + m.actualBoundingBoxRight,
+            top: y - m.actualBoundingBoxAscent,
+            bottom: y + m.actualBoundingBoxDescent,
+          };
+        });
+        const center = new DOMPoint(
+          (Math.min(...ink.map((r) => r.left)) + Math.max(...ink.map((r) => r.right))) / 2,
+          (Math.min(...ink.map((r) => r.top)) + Math.max(...ink.map((r) => r.bottom))) / 2,
+        ).matrixTransform(drawing.getScreenCTM());
         return {
+          inkOffset: [center.x - innerWidth / 2, center.y - innerHeight / 2],
           mark: rect(".movement-loader-mark"),
           drawing: rect(".movement-loader-drawing"),
           label: rect(".movement-loader-label"),
@@ -124,6 +144,11 @@ try {
           scroll: document.documentElement.scrollWidth,
         };
       }, surface);
+      check(
+        `${key}: visible gg letters are centered in the viewport`,
+        geometry.inkOffset.every((n) => Math.abs(n) < 0.1),
+        geometry.inkOffset,
+      );
       check(
         `${key}: fixed drawing without a visible loading label`,
         geometry.mark.width === 120 &&
@@ -163,6 +188,19 @@ try {
                 elements.every((e) => getComputedStyle(e).visibility === "hidden"),
             ),
         );
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await mark.waitFor();
+      await page.waitForTimeout(250);
+      const reloadPositions = await page.evaluate(() => window.__loadingPositions);
+      check(
+        `${key}: warm reload starts and remains at the viewport center`,
+        reloadPositions.length > 1 &&
+          reloadPositions.every(
+            ([x, y, w, h]) =>
+              Math.abs(x + w / 2 - width / 2) < 0.1 && Math.abs(y + h / 2 - height / 2) < 0.1,
+          ),
+        reloadPositions,
+      );
       const phases = await mark.evaluate((e) => {
         const animations = e.getAnimations({ subtree: true });
         const shell = e.parentElement;

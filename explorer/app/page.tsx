@@ -112,7 +112,6 @@ export default function Home() {
   };
   const selectionFocus = useRef(false);
   const panelAnchor = useRef<HTMLElement | null>(null);
-  const [chromeMeasured, setChromeMeasured] = useState(false);
   const [topBounds, setTopBounds] = useState({ header: 88, context: 150 });
   const [panelX, setPanelX] = useState<number | null>(null);
   const [panelBottom, setPanelBottom] = useState<number | null>(null);
@@ -309,7 +308,6 @@ export default function Home() {
       const headerBottom = header?.getBoundingClientRect().bottom ?? 88;
       const contextBottom =
         context?.getBoundingClientRect().bottom ?? headerBottom;
-      setChromeMeasured(true);
       setTopBounds((previous) =>
         previous.header === headerBottom && previous.context === contextBottom
           ? previous
@@ -593,7 +591,7 @@ export default function Home() {
           {loadingMessage(s.loadStage)}
         </output>
         {!available && (
-          <div className="fallback" data-measured={chromeMeasured}>
+          <div className="fallback">
             <div className="load-message">
               <MovementLoadingState
                 tone={s.error ? 'error' : 'loading'}

@@ -290,13 +290,6 @@ canvas:focus-visible {
   pointer-events: none;
   overflow: hidden;
 }
-/* Start the loader at its measured position and its closed animation frame. */
-.fallback[data-measured='false'] {
-  visibility: hidden;
-}
-.fallback[data-measured='false'] .movement-loader-mark * {
-  animation-play-state: paused;
-}
 .load-message,
 .load-toast {
   position: absolute;
@@ -318,6 +311,15 @@ canvas:focus-visible {
   padding: 20px;
   max-width: 360px;
 }
+/* The mark shares the viewport centre with the watch; status text cannot move it. */
+.fallback:has(.movement-loader),
+.text-enlarged .fallback:has(.movement-loader) {
+  inset: 0;
+}
+.fallback:has(.movement-loader) .load-message {
+  padding: 0;
+  overflow: visible;
+}
 .movement-loader {
   position: relative;
   display: grid;
@@ -326,10 +328,6 @@ canvas:focus-visible {
   gap: 10px;
   color: var(--site-control);
   text-align: center;
-}
-.load-message .movement-loader {
-  /* Reserve transfer detail before the first percentage arrives. */
-  grid-template-rows: 80px minmax(1.125rem, auto);
 }
 /* Section: a fixed drawing envelope, independent of transfer progress. */
 .movement-loader-mark {
@@ -471,6 +469,10 @@ canvas:focus-visible {
   }
 }
 .movement-loader-detail {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
   color: var(--site-muted);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
