@@ -116,14 +116,15 @@ function Study({ concept }: { concept: (typeof concepts)[number] }) {
   );
 }
 function Preview() {
+  const [paused, setPaused] = useState(false);
   return (
     <>
       {!isolated && (
         <header className="study-intro">
           <p className="study-eyebrow">Local design study · 02 October 2026</p>
-          <h1>Constructing the movement.</h1>
+          <h1>Section, refined.</h1>
           <p>
-            Three technical studies: datums, sections and a fitted assembly.
+            The previous Section beside a refinement of its geometry and motion.
             Shared status and recovery components; no CAD or simulated progress.
             The production loader is unchanged.
           </p>
@@ -143,10 +144,13 @@ function Preview() {
             <a href={`?surface=${surface}${reduced ? '' : '&motion=reduce'}`}>
               {reduced ? 'Use system motion setting' : 'Preview reduced motion'}
             </a>
+            <button onClick={() => setPaused((p) => !p)}>
+              {paused ? 'Resume motion' : 'Pause motion'}
+            </button>
           </nav>
         </header>
       )}
-      <main className="study-grid">
+      <main className={`study-grid${paused ? ' study-paused' : ''}`}>
         {(selected ? [selected] : concepts).map((c) => (
           <Study key={c.id} concept={c} />
         ))}

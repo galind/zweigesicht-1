@@ -1,4 +1,4 @@
-/* Local technical drawing studies. Geometry is illustrative, never telemetry. */
+/* Section studies only. The original and refinement share one SVG definition. */
 .study-mark {
   display: grid;
   place-items: center;
@@ -36,30 +36,13 @@
   stroke: #9a9b92;
   stroke-width: 0.8;
 }
-.study-register {
-  animation: study-register 4.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+.study-section-original .study-slice-0 {
+  animation: study-original-top 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
-@keyframes study-register {
-  0%,
-  12%,
-  100% {
-    transform: translate(8px, -6px);
-  }
-  30% {
-    transform: translate(0, -6px);
-  }
-  46%,
-  78% {
-    transform: none;
-  }
+.study-section-original .study-slice-2 {
+  animation: study-original-bottom 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
-.study-slice-0 {
-  animation: study-section-top 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-.study-slice-2 {
-  animation: study-section-bottom 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-@keyframes study-section-top {
+@keyframes study-original-top {
   0%,
   14%,
   100% {
@@ -70,7 +53,7 @@
     transform: none;
   }
 }
-@keyframes study-section-bottom {
+@keyframes study-original-bottom {
   0%,
   25%,
   100% {
@@ -81,33 +64,106 @@
     transform: none;
   }
 }
-.study-collar-left {
-  animation: study-fit-left 4.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+.study-section .study-glyph {
+  font-size: 56px;
+  stroke-width: 1.2;
 }
-.study-collar-right {
-  animation: study-fit-right 4.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+.study-section {
+  --section-cycle: 5.2s;
 }
-@keyframes study-fit-left {
+.study-section .study-slice {
+  animation: study-fragments var(--section-cycle) step-end infinite;
+}
+.study-section .study-slice-0 {
+  animation:
+    study-refined-top var(--section-cycle) cubic-bezier(0.65, 0, 0.35, 1)
+      infinite,
+    study-fragments var(--section-cycle) step-end infinite;
+}
+.study-section .study-slice-2 {
+  animation:
+    study-refined-bottom var(--section-cycle) cubic-bezier(0.65, 0, 0.35, 1)
+      infinite,
+    study-fragments var(--section-cycle) step-end infinite;
+}
+@keyframes study-refined-top {
   0%,
   10%,
+  94%,
   100% {
-    transform: translateX(-18px);
+    transform: translate(-9px, -8px);
+  }
+  24%,
+  84% {
+    transform: translate(0, -8px);
   }
   34%,
-  76% {
+  72% {
     transform: none;
   }
 }
-@keyframes study-fit-right {
+@keyframes study-refined-bottom {
   0%,
-  26%,
+  18%,
+  94%,
   100% {
-    transform: translateX(18px);
+    transform: translate(9px, 8px);
   }
-  50%,
-  76% {
+  32%,
+  84% {
+    transform: translate(0, 8px);
+  }
+  44%,
+  72% {
     transform: none;
   }
+}
+/* One unsliced contour takes over during the assembled hold, avoiding clip seams. */
+.study-whole {
+  opacity: 0;
+  animation: study-resolved var(--section-cycle) step-end infinite;
+}
+@keyframes study-resolved {
+  0%,
+  44%,
+  72%,
+  100% {
+    opacity: 0;
+  }
+  48%,
+  70% {
+    opacity: 1;
+  }
+}
+@keyframes study-fragments {
+  0%,
+  44%,
+  72%,
+  100% {
+    opacity: 1;
+  }
+  48%,
+  70% {
+    opacity: 0;
+  }
+}
+.study-section .study-cut-lines {
+  animation: study-datums var(--section-cycle) ease-in-out infinite;
+}
+@keyframes study-datums {
+  0%,
+  30%,
+  94%,
+  100% {
+    opacity: 0.8;
+  }
+  44%,
+  72% {
+    opacity: 0;
+  }
+}
+.study-paused .study-mark * {
+  animation-play-state: paused !important;
 }
 @media (prefers-reduced-motion: reduce) {
   .study-mark * {
@@ -115,11 +171,19 @@
     transform: none !important;
     opacity: 1 !important;
   }
+  .study-section .study-slice,
+  .study-section .study-cut-lines {
+    display: none;
+  }
 }
 .study-reduced .study-mark * {
   animation: none !important;
   transform: none !important;
   opacity: 1 !important;
+}
+.study-reduced .study-section .study-slice,
+.study-reduced .study-section .study-cut-lines {
+  display: none;
 }
 /* The comparison UI is also local-only. Context shells reuse application CSS. */
 html:has(.study-gallery),
@@ -154,6 +218,7 @@ body.study-gallery {
   flex-wrap: wrap;
   gap: 12px 22px;
 }
+.study-intro button,
 .study-intro a,
 .study-links a,
 .study-links button {
@@ -166,7 +231,7 @@ body.study-gallery {
 }
 .study-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 32px;
   max-width: 1400px;
   margin: auto;
@@ -264,4 +329,11 @@ body.study-gallery {
   .study-isolated .study-viewport .fallback {
     bottom: 44px;
   }
+}
+
+.study-intro button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
 }

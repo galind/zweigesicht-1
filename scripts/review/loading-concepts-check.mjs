@@ -20,7 +20,7 @@ const check = (name, pass, detail) => {
   report.checks.push({ name, pass: Boolean(pass), detail });
   assert.ok(pass, name);
 };
-const concepts = ["datum", "section", "fit"];
+const concepts = ["section-original", "section"];
 try {
   for (const surface of ["home", "workshop"]) {
     for (const concept of concepts) {
@@ -151,9 +151,54 @@ try {
     JSON.stringify(before) === JSON.stringify(await labelPosition()),
   );
   await page.getByRole("button", { name: "Toggle transfer detail" }).first().click();
+  await page.getByRole("button", { name: "Pause motion", exact: true }).click();
+  check(
+    "Pause control freezes all comparison animations",
+    await page
+      .locator(".study-grid")
+      .evaluate((e) => e.getAnimations({ subtree: true }).every((a) => a.playState === "paused")),
+  );
+  await page.keyboard.press("Enter");
+  check(
+    "Keyboard resumes comparison animations",
+    await page
+      .locator(".study-grid")
+      .evaluate((e) => e.getAnimations({ subtree: true }).every((a) => a.playState === "running")),
+  );
   await page.screenshot({ path: path.join(out, "comparison-desktop.png"), fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: path.join(out, "comparison-mobile.png"), fullPage: true });
+  await page.goto(`${base}/__loading?concept=section`);
+  await page.locator(".study-mark").waitFor();
+  const resolved = await page.locator(".study-mark").evaluate((e) => {
+    e.getAnimations({ subtree: true }).forEach((a) => {
+      a.pause();
+      a.currentTime = 3120;
+    });
+    return {
+      whole: getComputedStyle(e.querySelector(".study-whole")).opacity,
+      fragments: [...e.querySelectorAll(".study-slice")].map((n) => getComputedStyle(n).opacity),
+      guides: getComputedStyle(e.querySelector(".study-cut-lines")).opacity,
+    };
+  });
+  check(
+    "Resolved hold uses one continuous contour with no crossing guides",
+    resolved.whole === "1" && resolved.fragments.every((o) => o === "0") && resolved.guides === "0",
+    resolved,
+  );
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  check(
+    "Reduced motion uses the whole contour without overlaid fragments",
+    await page
+      .locator(".study-mark")
+      .evaluate(
+        (e) =>
+          getComputedStyle(e.querySelector(".study-whole")).opacity === "1" &&
+          [...e.querySelectorAll(".study-slice, .study-cut-lines")].every(
+            (n) => getComputedStyle(n).display === "none",
+          ),
+      ),
+  );
   check("No uncaught browser errors", report.errors.length === 0, report.errors);
   console.log(`${report.checks.length} loading concept checks passed`);
 } catch (error) {
