@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 30 September 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
+Updated 2 October 2026. This file summarizes the checkout. Earlier milestone reports are recoverable from Git at `e5c890f`.
 
 ## Implemented
 
@@ -875,3 +875,12 @@ Local production preview is http://127.0.0.1:4191/ (4190 was unsuitable for Node
 fetch-based SEO verifier). Next action: review the report-only proposals with the
 maker/mechanical reviewer. Local audit commit only; no push or deployment. The two
 pre-existing untracked Play prompt files remain excluded.
+
+### Audit pull request — 2 October 2026
+
+At the user's request, pushed `codex/cad-component-fidelity` over SSH and opened
+[PR #19](https://github.com/galind/zweigesicht-1/pull/19) against `develop` through
+the connected GitHub app. The PR preserves the audit as provenance, reviewed
+variant exclusions and reusable tooling; it includes no runtime CAD or product
+changes. Original downloads and local visual evidence remain ignored. Next action:
+review PR #19 and its CI/Preview results. No merge or production release was performed.
