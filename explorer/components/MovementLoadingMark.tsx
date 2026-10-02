@@ -1,8 +1,11 @@
 import { TextButton } from './viewer-controls';
+import type { ReactNode } from 'react';
 
 type MovementLoadingMarkProps = {
   label: string;
   detail?: string;
+  /** Optional decorative study; callers retain the shared status semantics. */
+  mark?: ReactNode;
 };
 
 type MovementLoadingStateProps = MovementLoadingMarkProps & {
@@ -16,13 +19,18 @@ type MovementLoadingStateProps = MovementLoadingMarkProps & {
 export function MovementLoadingMark({
   label,
   detail,
+  mark,
 }: MovementLoadingMarkProps) {
   return (
     <output className="movement-loader" aria-live="polite">
-      <span className="movement-loader-mark" aria-hidden="true">
-        <span>g</span>
-        <span>g</span>
-      </span>
+      {mark ? (
+        <span aria-hidden="true">{mark}</span>
+      ) : (
+        <span className="movement-loader-mark" aria-hidden="true">
+          <span>g</span>
+          <span>g</span>
+        </span>
+      )}
       <span className="movement-loader-label">{label}</span>
       {detail && <span className="movement-loader-detail">{detail}</span>}
     </output>
@@ -35,6 +43,7 @@ export function MovementLoadingState({
   actionLabel,
   detail,
   label,
+  mark,
   onAction,
   tone = 'loading',
 }: MovementLoadingStateProps) {
@@ -46,7 +55,7 @@ export function MovementLoadingState({
           {detail && <span>{detail}</span>}
         </output>
       ) : (
-        <MovementLoadingMark label={label} detail={detail} />
+        <MovementLoadingMark label={label} detail={detail} mark={mark} />
       )}
       {actionLabel && onAction && (
         <TextButton className={actionClassName} onClick={onAction}>

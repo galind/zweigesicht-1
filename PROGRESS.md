@@ -7,6 +7,7 @@ Updated 2 October 2026. The current application is the static CAD explorer at `/
 - Explorer: 426 source instances, six groups, source inspection/isolation, All parts, disassembly, shared dial visibility, independent hands and a 41-leaf fitted case. Source geometry, finishes and exact placements are retained.
 - Workshop: free orbit, Ready now/All parts, optional Show seat, source-scale gallery dragging, explicit workbenches, Undo and local nonlinear saves. Easy has 89 fits; Hard has 249 parts and 35 transfers. Both retain 16 foundation leaves and finish with 265. There is no Hints toggle; its legacy save field remains compatible.
 - Homepage and Workshop share typography, header/navigation geometry, glass surfaces, palette, controls, buttons, popovers, focus treatment and the movement-loading presentation. The Workshop retains its route-specific assembly rail, now with dedicated compact and short-landscape layouts.
+- Four unapproved movement-loading studies (Balance, Register, Calibre and Impulse) are available locally at `/__loading` during development. [Comparison, captures and rationale](docs/LOADING_CONCEPTS.md). Balance is the recommendation; both production loaders remain unchanged.
 - `develop` is integration/staging; `main` is production. The root Vercel configuration and existing CI/release workflows are authoritative. Canonical metadata uses `https://zweigesicht-1.guillemgalindo.com/`.
 - The repository cleanup from PR #20 is incorporated. Historical reports, generated ledgers, abandoned timing/smoke experiments and obsolete review tools are removed. Current asset generation, source provenance, authored decisions and meaningful checks remain. PR #19 was not merged; its consequential findings are in [CAD notes](docs/CAD_NOTES.md).
 
@@ -18,11 +19,13 @@ Desktop Chrome checks pass for both routes: explorer controls, all 89 Easy and 2
 
 The homepage/Workshop UI follow-up passes 93 focused responsive checks across desktop, 390 px, 320 px, short landscape and 200% text; 87 inventory drag/touch checks; and the maintained homepage suite. Coverage includes compact progress/filter wrapping, card-content containment, footer/action geometry, keyboard reachability and separation between the enlarged loading label and `gg` mark. The loading animation itself is unchanged in this follow-up.
 
+The local loading-study pass adds 210 browser checks across four concepts and both contexts, including reduced motion, keyboard retry, fixed animation geometry, transfer-detail reservation and short landscape combined with 200% text. Typecheck, lint and production build pass; the maintained 93-check focused suite and homepage suite pass again. Ten additional production checks confirm actual asset-failure retry on both routes and study isolation. Study code/styles are excluded from production output and the preview URL returns 404 there. Local screenshots and complete-loop GIFs remain ignored evidence.
+
 The retained CAD pipeline, Meshopt verification and asset preparation pass in an isolated workspace with the reduced locked dependencies, recorded originals and copied prepared caches/face sidecars. Reproduced geometry/recovery/finish payload hashes match; this does not establish an uncached clean-machine CAD rebuild.
 
 ## Outstanding limitations and next actions
 
-- Redesign the `gg` movement-loading animation in a separate visual pass; this UI follow-up changes only its responsive geometry.
+- Review the four loading concepts and approve a direction before replacing `gg`. Any adoption should include the study's detail reservation and header-aware short-screen placement, then remove the development comparison and unused concepts.
 - Complete physical iPhone/Android, Safari/WebKit, sustained GPU/thermal and representative accessibility/usability review. Desktop viewport and synthetic-touch checks do not qualify those gates.
 - CAD exceptions, uncertain alloys/finishes, middle-ring interference and unresolved lock actuation remain in [CAD notes](docs/CAD_NOTES.md). Separation and Workshop dependencies are illustrative; mechanical review remains required for mechanical claims.
 - Clean-machine CAD reproduction is unverified; prepared source regression inputs remain local and ignored. Public redistribution/publication needs the applicable [release gates](docs/RELEASE_GATES.md).

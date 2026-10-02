@@ -1,0 +1,312 @@
+/* No production import. Marks have one fixed envelope; only decoration moves. */
+.study-mark {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 80px;
+  color: #cfcdc6;
+}
+.study-mark svg,
+.play-app .study-mark svg {
+  display: block;
+  width: 120px;
+  height: 80px;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.study-accent {
+  color: var(--site-accent);
+  stroke: currentColor;
+}
+.study-muted {
+  color: #78756f;
+  stroke: currentColor;
+}
+.study-pin {
+  fill: var(--site-accent-foreground);
+  stroke: none;
+}
+.study-wheel {
+  transform-origin: 60px 40px;
+  animation: study-balance 4.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes study-balance {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+.study-plate-top {
+  animation: study-register-top 6s ease-in-out infinite;
+}
+.study-plate-bottom {
+  animation: study-register-bottom 6s ease-in-out infinite;
+}
+@keyframes study-register-top {
+  0%,
+  12%,
+  88%,
+  100% {
+    transform: translateX(-7px);
+    opacity: 0.65;
+  }
+  36%,
+  64% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes study-register-bottom {
+  0%,
+  12%,
+  88%,
+  100% {
+    transform: translateX(7px);
+    opacity: 0.65;
+  }
+  36%,
+  64% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.study-inscription {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font:
+    30px/1 Georgia,
+    'Times New Roman',
+    serif;
+  letter-spacing: -1px;
+}
+.study-type-left {
+  animation: study-type-left 6.4s ease-in-out infinite;
+}
+.study-type-right {
+  animation: study-type-right 6.4s ease-in-out infinite;
+}
+.study-type-rule {
+  color: var(--site-accent);
+  font:
+    16px/1 Georgia,
+    serif;
+  letter-spacing: 0;
+}
+@keyframes study-type-left {
+  0%,
+  100% {
+    transform: translateY(-2px);
+    opacity: 0.6;
+  }
+  25%,
+  75% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes study-type-right {
+  0%,
+  100% {
+    transform: translateY(2px);
+    opacity: 1;
+  }
+  25%,
+  75% {
+    transform: translateY(0);
+    opacity: 0.75;
+  }
+}
+.study-lever-left {
+  transform-origin: 34px 57px;
+  animation: study-impulse-left 5.6s ease-in-out infinite;
+}
+.study-lever-right {
+  transform-origin: 86px 57px;
+  animation: study-impulse-right 5.6s ease-in-out infinite;
+}
+@keyframes study-impulse-left {
+  0%,
+  8%,
+  44%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  28% {
+    transform: rotate(7deg);
+  }
+}
+@keyframes study-impulse-right {
+  0%,
+  24%,
+  60%,
+  100% {
+    transform: rotate(0);
+  }
+  36%,
+  44% {
+    transform: rotate(-7deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .study-mark * {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+.study-reduced .study-mark * {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+/* The comparison UI is also local-only. Context shells reuse application CSS. */
+html:has(.study-gallery),
+body.study-gallery {
+  height: auto;
+  overflow: auto;
+}
+.study-intro {
+  max-width: 1400px;
+  margin: auto;
+  padding: 56px 40px 32px;
+}
+.study-eyebrow {
+  color: var(--site-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.study-intro h1 {
+  font:
+    normal clamp(2rem, 4vw, 3.5rem)/1.15 Georgia,
+    serif;
+  margin: 18px 0;
+}
+.study-intro > p:not(.study-eyebrow) {
+  max-width: 680px;
+  color: var(--site-muted);
+}
+.study-intro nav,
+.study-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+}
+.study-intro a,
+.study-links a,
+.study-links button {
+  color: var(--site-control);
+  font-size: 0.8125rem;
+  text-underline-offset: 5px;
+}
+.study-intro a[aria-current] {
+  color: var(--site-accent-foreground);
+}
+.study-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  max-width: 1400px;
+  margin: auto;
+  padding: 0 40px 56px;
+}
+.study-card {
+  min-width: 0;
+}
+.study-caption h2 {
+  margin: 0 0 8px;
+  font-weight: 400;
+  font-size: 1.25rem;
+}
+.study-caption p {
+  min-height: 3em;
+  color: var(--site-muted);
+  font-size: 0.875rem;
+}
+.study-viewport {
+  position: relative;
+  height: 410px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.study-gallery .study-viewport .site-header {
+  --site-edge-left: 18px;
+  --site-edge-right: 18px;
+}
+.study-notes {
+  color: var(--site-muted);
+  font-size: 0.8125rem;
+}
+.study-notes strong {
+  font-weight: 400;
+  color: var(--site-control);
+}
+.study-links button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+}
+.study-context {
+  position: absolute;
+  bottom: 20px;
+  left: 24px;
+  color: #99958c;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+}
+.study-isolated .study-grid {
+  display: block;
+  padding: 0;
+  max-width: none;
+}
+.study-isolated .study-viewport {
+  width: 100%;
+  height: 100dvh;
+  border: 0;
+  border-radius: 0;
+}
+@media (max-width: 760px) {
+  .study-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px 32px;
+  }
+  .study-intro {
+    padding: 28px 20px;
+  }
+}
+/* Reserve transfer detail even before its first value arrives. */
+.study-viewport .movement-loader {
+  grid-template-rows: 80px auto minmax(1.125rem, auto);
+}
+.study-notes p {
+  margin: 8px 0;
+}
+.study-links {
+  margin-top: 14px;
+}
+.study-viewport.play-app .movement-loader {
+  grid-template-rows: 80px auto;
+}
+/* Proposed loading-only placement on short screens; leave production untouched. */
+@media (max-height: 400px) {
+  .study-isolated .study-viewport .play-loading {
+    top: calc(var(--header-bottom, 88px) + 12px);
+    bottom: 44px;
+    transform: translateX(-50%);
+    padding: 0 20px;
+    overflow-y: auto;
+    align-content: safe center;
+  }
+  .study-isolated .study-viewport .fallback {
+    bottom: 44px;
+  }
+}
