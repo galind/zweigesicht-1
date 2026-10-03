@@ -11,8 +11,8 @@ The following upstream notices cover the UI scaffold and application libraries
 when distributing builds. Installed tooling retains its own licenses in npm
 packages; CAD tooling is installed separately and is not vendored here.
 The project MIT notice follows, then the upstream notices.
-System Arial/Helvetica fonts are referenced, not bundled. The favicon and gg
-loading mark are project-authored; no maker photographs or webfonts are bundled.
+System Arial/Helvetica fonts are referenced, not bundled. The gg loading
+mark is project-authored; no maker photographs or webfonts are bundled.
 
 Project software — Guillem Galindo
 ------------------------------------------------------------

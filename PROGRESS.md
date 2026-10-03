@@ -31,8 +31,8 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
 - Patched the one moderate npm advisory by changing only transitive `fast-uri`
   3.1.7 → 3.1.8 in the app lockfile. App and asset-tool npm audits report zero
   advisories. No framework migration or broad dependency upgrade.
-- Replaced the unattributed scaffold favicon with an authored SVG gg monogram
-  and recorded provenance. Historical icon rights remain a review item. Removed
+- Removed the favicon at the user's request; no favicon asset or HTML reference
+  remains. Historical icon rights remain a review item. Removed
   unused Select scroll-button exports (the internally used controls
   remain), consolidated obsolete verification/release history here, and corrected
   README's production browser commands. Existing meaningful tools remain; the
@@ -103,10 +103,13 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
   query behavior, direct Workshop routes and noindex metadata. Local development
   also passes 64 visible-entry checks. The SEO HTTP suite passes for both compiled
   builds, preserving `/play`, canonical/social tags, sitemap and the exact JPEG.
-- 24 packaging/delivery checks pass for complete MIT/upstream notices, authored
-  favicon, unchanged social image, exact tracked model inventories and reference
+- 24 packaging/delivery checks pass for complete MIT/upstream notices,
+  authored favicon before its requested removal, unchanged social image, exact
+  tracked model inventories and reference
   exclusion across both application/Vercel build formats and local HTTP delivery.
   All 13 tracked model/image payload hashes match the integration baseline.
+- Favicon removal: no favicon asset or application reference remains; the source
+  manifest parses and asset, notices and documentation diffs pass whitespace checks.
 - Workflow branch policy passes four trusted/fork/target scenarios. Release tests
   exercise the actual promotion script and shell preflight with mocked GitHub refs:
   exact SHA, non-force update, retained develop, stale reviews, branch races,

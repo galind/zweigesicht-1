@@ -38,8 +38,8 @@ Publication review must also decide whether to retain historical internal prompt
 for example `ebc5807`). These prompts contain local workstation paths. They are
 absent from current `develop` but remain in reachable history/local branches.
 Historical CAD is present from `5b0af33`. The former scaffold favicon at
-`00fb905:explorer/public/favicon.svg` has no recorded origin/license; the current
-icon is now an authored SVG monogram. Historical images on local review branches include
+`00fb905:explorer/public/favicon.svg` has no recorded origin/license; the favicon
+asset has been removed from the current tree. Historical images on local review branches include
 `explorer/public/images/ml01-balance-assembly.webp` and
 `zweigesicht-1-shock-indicator.webp` at `a88c0b2`.
 
