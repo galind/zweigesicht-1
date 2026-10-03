@@ -1,6 +1,8 @@
 # Release gates
 
-These preserve the project's publication and evidence boundaries. Existing authorizations remain valid, including the tracked private-deployment payload exceptions in `.gitignore`. A build alone does not establish new redistribution rights or mechanical certification.
+These gates distinguish repository publication, site deployment and mechanical
+claims. Tracked runtime assets support the existing private deployment; a build
+does not establish public redistribution rights or mechanical certification.
 
 | Gate                              | Evidence needed                                                                                                                                                                                                 |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -21,7 +23,7 @@ Upstream UI/library notices are shipped at `/third-party-notices.txt`.
 The [source rights review](../assets/source-manifest/sources.json) still records
 no explicit public redistribution grant. Current maker CAD/catalog/download
 pages offer downloads without establishing that grant; the imprint timed out.
-Private-deployment authorization and PR #23's merge do not clear this gate.
+Private deployment and merging code do not clear this gate.
 
 The smallest resolution is written maker permission covering the retained
 Git history when made public, current CAD-derived models/recoveries/metadata and reconstruction
@@ -48,6 +50,40 @@ rewrite or a fresh reviewed repository before visibility changes: back up refs,
 filter every affected path and author identity across retained refs, rescan the
 result, then coordinate replacement refs and old-clone handling. GitHub PR
 references, comments, logs and attachments need a separate removal/support review;
-a rewritten branch alone cannot clear those surfaces. No history rewrite, remote
-branch deletion, credential rotation or visibility change is authorized here.
-No credential was identified that currently requires rotation.
+a rewritten branch alone cannot clear those surfaces. The preparation review
+did not rewrite history, delete remote branches, rotate credentials or change
+visibility. Its pattern scan found no credential requiring
+rotation; that is not proof that every possible secret is absent.
+
+## Exposure review coverage
+
+The initial 3 October review scanned 264 reachable local commits and 1,693 blobs,
+including local branches and checkpoint refs, for common credential patterns.
+It read PRs #1–#23 and accessible discussion/review content, plus 16 job logs from
+eight latest PR-head runs; no checked credential patterns matched. PR #24 was
+reviewed in the documentation follow-up. These are dated checks, not a continuous
+security guarantee.
+
+Before changing visibility, review intervening commits and GitHub surfaces again.
+Earlier checks exclude older/push/manual run logs, unavailable or deleted content,
+external attachments, deployment logs, repository secrets/settings and provider
+caches. Decide whether public author-email metadata and historical internal
+material are acceptable, and obtain the asset rights evidence above. Deleting
+current files does not remove historical or GitHub-hosted copies.
+
+The follow-up examined 525 unique reachable Markdown blobs for workstation paths.
+Additional examples, absent from the current tree, need the same history decision:
+
+| Historical path                      | Example commit | Reachability at review          |
+| ------------------------------------ | -------------- | ------------------------------- |
+| `docs/WATCH_CONFIGURATION_GOAL.md`   | `8a6cdc0`      | `main` history                  |
+| `docs/WEBSITE_POLISH_REVIEW.md`      | `1ec2f53`      | `main` history                  |
+| `PREFLIGHT_REPORT.md`                | `ebc5807`      | `main` history                  |
+| `UX_UI_POLISH_GOAL.md`               | `ff6b514`      | `main` history                  |
+| Earlier `PROGRESS.md`                | `548620a`      | `main` history                  |
+| `docs/running-movement/M2_REPORT.md` | `45fa9d3`      | Running-movement branch history |
+
+The current tracked-text scan found no workstation-path or checked GitHub/AWS
+credential/private-key signatures. It did not repeat every earlier binary/log
+check. Two local prompt briefs remain untouched and are now ignored; that does
+not remove their copies from local checkpoint history.

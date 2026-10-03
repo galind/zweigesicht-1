@@ -9,7 +9,8 @@
 ## Branch target
 
 - [ ] This feature/fix targets `develop`.
-- [ ] If this targets `main`, the head branch is `develop` and this is a release PR.
+
+<!-- Production promotion uses the manual release workflow, not a release PR. -->
 
 ## Release considerations
 

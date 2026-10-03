@@ -21,7 +21,7 @@ artifacts/
 explorer/public/models/
 explorer/public/reference/
 
-# Reviewed derived CAD payload authorized for the private Vercel deployment.
+# Runtime CAD allowlist; public redistribution remains release-gated.
 !explorer/public/models/
 explorer/public/models/*
 !explorer/public/models/assembly-manifest.json
@@ -40,5 +40,8 @@ assets/reference/finishing/
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin
 !explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz
 
-# Required fitted-case runtime sidecar for the requested branch deployment.
+# Required fitted-case runtime sidecar.
 !explorer/public/models/case-lug-recovery.json
+
+# Local working briefs are not project documentation.
+docs/*_PROMPT.md
