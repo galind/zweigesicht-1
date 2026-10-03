@@ -46,7 +46,8 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
   SSH from current `main` (`c7e8f23`) on 3 October 2026. Existing staging Git
   integration may react to that restoration. `main` has not been changed.
 - Preparation changes are pushed on `codex/public-repository-preparation`.
-  The restored base makes the requested feature draft PR possible again.
+  [Draft PR #24](https://github.com/galind/zweigesicht-1/pull/24) targets the
+  restored `develop` base. Release workflow changes are committed at `3a065be`.
 - Future production promotion uses the manual **Release verified develop**
   workflow instead of a release PR: enter the full reviewed SHA and `release`.
   A read-only job verifies that exact commit; a separate write job checks current
