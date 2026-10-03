@@ -241,7 +241,6 @@ def main():
             parent['boundsWorldMm']=[b.min(axis=0).tolist(),b.max(axis=0).tolist()]
     transforms=np.asarray([i['worldTransform'] for i in instances]);det=np.linalg.det(transforms[:,:3,:3])
     bounds=np.array([np.min(world_points,axis=0),np.max(world_points,axis=0)])
-    glb.write(args.output/'zweigesicht.glb')
     source_bounds=bbox(tool.GetOneShape()) if args.subset=='full' else bounds.copy()
     leaf_instances=[i for i in instances if not i['isAssembly']]
     summary={'hierarchyInstancesExcludingRoot':len(instances)-roots.Length(),'assemblyInstancesExcludingRoot':sum(i['isAssembly'] for i in instances)-roots.Length(),'leafInstances':len(leaf_instances),'uniqueLeafDefinitions':len(meshes),'renderedLeafInstances':sum(i['triangles']>0 for i in leaf_instances),'renderedLeafDefinitions':sum(len(m.faces)>0 for m in meshes.values()),'uniqueDefinitionsExcludingRoot':len(definitions)-roots.Length(),'uniqueTriangles':sum(len(m.faces) for m in meshes.values()),'instancedTriangles':sum(i['triangles'] for i in leaf_instances),'boundsWorldMm':bounds.tolist(),'extentsMm':(bounds[1]-bounds[0]).tolist(),'sourceBrepBoundsWorldMm':source_bounds.tolist() if source_bounds is not None and args.subset=='full' else None,'sourceBoundsComparisonAvailable':args.subset=='full' and source_bounds is not None,'sourceBoundsDifferenceMm':float(np.max(np.abs(bounds-source_bounds))) if args.subset=='full' and source_bounds is not None else None,'sourceDefinitionBoundsComparisons':sum(d.get('boundsDifferenceMm') is not None for d in definitions.values()),'maximumValidDefinitionBoundsDifferenceMm':max((d['boundsDifferenceMm'] for d in definitions.values() if d.get('boundsDifferenceMm') is not None),default=None),'finiteTransforms':bool(np.isfinite(transforms).all()),'minimumDeterminant':float(det.min()),'maximumDeterminant':float(det.max()),'maxReferenceWorldTransformDifference':max_world_error,'sourceInstanceSetMatchesReference':set(previous)=={i['sourceInstanceId'] for i in instances if i['parentId']},'allInstanceIdsUnique':len(byid)==len(instances),'exceptions':len(exceptions)}
@@ -252,6 +251,9 @@ def main():
     manifest={'schemaVersion':1,'subset':args.subset,'source':{'path':str(args.source.relative_to(ROOT)),'sha256':digest},'coordinateSystem':{'units':'mm','axes':'unchanged STEP X/Y/Z, right-handed','matrices':'row-major nested 4x4; column-vector convention; world = parentWorld @ local','normalization':'none; apply once at viewer root'},'rootIds':root_ids,'asset':'zweigesicht.glb','tessellation':{'linearDeflectionMm':args.linear_deflection,'angularDeflectionRadians':args.angular_deflection,'relativeDeflection':False},'summary':summary,'instances':instances,'definitions':list(definitions.values()),'exceptions':exceptions}
     (args.output/'assembly-manifest.json').write_text(json.dumps(manifest,indent=2,allow_nan=False)+'\n')
     (args.audit/'geometry-audit.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
+    # Partial checkpoints are useful only until both final output records succeed.
+    for name in ('checkpoint.glb', 'checkpoint-manifest.json'):
+        (args.output/name).unlink(missing_ok=True)
     print(json.dumps(summary,indent=2),flush=True)
 
 if __name__=='__main__':main()

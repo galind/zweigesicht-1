@@ -35,6 +35,14 @@ the verified preparation milestone was committed and pushed over SSH.
 
 ## Verification
 
+Workspace cleanup: archived 1.47 GB of old local reviews, comparison downloads and
+legacy briefs outside the checkout with per-file hashes. Removed 54 MB of generated
+leftovers. Assets now occupy 145 MB; artifacts 175 MB. Tracked assets, provenance
+and licenses are unchanged. Export removes completed checkpoints and avoids a
+duplicate GLB write; optimization leaves gzip packaging to runtime preparation.
+Cached CAD pipeline, Meshopt byte-identity verification, 114 retained-input runtime
+checks, original-source hashes, 82 tests, inventory and production build passed.
+
 Exposure review: 267 remote commits / 1,680 blobs; 273 local commits / 1,727 blobs;
 seven decoded gzip versions; commit messages and email metadata; PR #1–#25
 patches/discussions; 20 logs and empty artifact listings from 10 PR-head runs.

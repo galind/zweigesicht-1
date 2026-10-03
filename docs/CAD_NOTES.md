@@ -93,6 +93,12 @@ python3 scripts/prepare_local_assets.py
 
 `finish_audit.py` and `appearance_target_probe.py` produce the 59 source-sidecar definitions consumed by `prepare-finishes.mjs`; preparation packs their analytic normals and exact face roles. Keep both despite their historical names. `case_fit_probe.py`, called by the pipeline, regenerates the required original-face lug recovery. `verify-three.mjs` compares raw and Meshopt-decoded position/normal/index bytes and identities. Preparation does not delete local originals or evidence. A hash change requires investigation and review before updating runtime manifests or `.gitignore` exceptions.
 
+Successful exports remove their partial checkpoint files after writing the final
+manifest and audit. Optimization retains the two optimized GLBs; runtime preparation
+creates gzip copies directly in `explorer/public/models/`. Old screenshots and
+comparison audits can be archived separately. Preserve current source files,
+definition caches, source-sidecar annotations and the regression inputs below.
+
 The prepared CPU regression suite also reads ignored dial/hand and mounting evidence. Recreate that evidence with:
 
 ```sh
