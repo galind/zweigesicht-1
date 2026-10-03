@@ -22,6 +22,8 @@ extended checks are in [architecture](docs/LOCAL_ARCHITECTURE.md).
 
 ## Documentation review
 
+[Draft PR #25](https://github.com/galind/zweigesicht-1/pull/25) targets `develop`.
+
 - Shortened the README to purpose, setup, basic checks, deployment and licensing.
   Moved detailed browser/source verification instructions to the architecture
   guide. CAD measurements, caveats and provenance remain in their existing files.
