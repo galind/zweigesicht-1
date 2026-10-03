@@ -19,6 +19,8 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains pri
 `codex/publication-blockers` starts from refreshed `develop` at `90b606e`.
 Remote `main` is `0037646`; `codex/running-movement` is `45fa9d3`; no remote tags.
 PR #25 is merged. The preparation branch has Vercel Git deployment disabled.
+[Draft PR #26](https://github.com/galind/zweigesicht-1/pull/26) targets `develop`;
+the verified preparation milestone was committed and pushed over SSH.
 
 - Recorded version hashes and branch reachability for runtime assets, source-linked
   decisions and audit metadata in the [publication inventory](assets/source-manifest/publication-inventory.json).
@@ -28,7 +30,7 @@ PR #25 is merged. The preparation branch has Vercel Git deployment disabled.
   proposed path removals, author-email treatment, hosted-surface coverage and a
   comparison of coordinated rewriting versus a fresh public snapshot.
 - Essential assets, provenance and notices remain intact. No history rewrite,
-  remote deletion, visibility change, release, deployment or message was sent.
+  remote deletion, visibility change, release, deployment or permission-request sending occurred.
   Ignored local briefs and unrelated work remain untouched.
 
 ## Verification
