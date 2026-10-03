@@ -34,7 +34,7 @@ function sourceModules({loader=GLTFLoader,fetchImpl=globalThis.fetch}={}){
    if(id.startsWith('.')){const p=path.resolve(path.dirname(file),id);return fs.existsSync(p+'.ts')?load(p+'.ts'):require(p)}
    return require(path.join(ROOT,'explorer/node_modules',id));
   };
-  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,Float32Array,Uint8Array,TextDecoder,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
+  vm.runInNewContext(code,{module,exports:module.exports,require:localRequire,console,performance,crypto:webcrypto,document:{hidden:false},devicePixelRatio:1,requestAnimationFrame:()=>1,cancelAnimationFrame(){},Float32Array,Uint8Array,TextDecoder,URLSearchParams,location:{search:''},fetch:fetchImpl},{filename:file});
   cache.set(file,module.exports);return module.exports;
  };
 }
@@ -792,8 +792,16 @@ class PmremStub{
  fromScene(room,sigma){assert.ok(room instanceof RoomStub);assert.equal(sigma,.015);if(pmremFails)throw Error('environment allocation failed');environmentCreated++;return {texture:replacementTexture,dispose(){}}}
  dispose(){generatorDisposed++}
 }
-vm.runInNewContext(restoreCode,{module:restoreModule,THREE:{PMREMGenerator:PmremStub},StudioEnvironment:RoomStub});
-const restoreFixture={renderer:rendererFixture,environment:{texture:oldTexture,dispose(){oldDisposed++}},scene:{environment:oldTexture,environmentIntensity:.8},contextLost:true,error:'Graphics interruption',needsRender:false,emit(){notifications++}};
+const graphicsPath=path.join(ROOT,'explorer/src/viewer/GraphicsResources.ts');
+const graphicsSource=ts.createSourceFile(graphicsPath,fs.readFileSync(graphicsPath,'utf8'),ts.ScriptTarget.Latest,true);
+function studioAllocator(three,room){
+ const declaration=graphicsSource.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='createStudioEnvironment');
+ const module={exports:{}};
+ const code=ts.transpileModule('module.exports='+declaration.getText(graphicsSource).replace('export function','function'),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+ vm.runInNewContext(code,{module,THREE:three,StudioEnvironment:room});return module.exports;
+}
+vm.runInNewContext(restoreCode,{module:restoreModule,createStudioEnvironment:studioAllocator({PMREMGenerator:PmremStub},RoomStub)});
+const restoreFixture={renderer:rendererFixture,environment:{texture:oldTexture,dispose(){oldDisposed++}},scene:{environment:oldTexture,environmentIntensity:.8},contextLost:true,error:'Graphics interruption',needsRender:false,requestRender(){this.needsRender=true},emit(){notifications++}};
 restoreModule.exports.call(restoreFixture)();
 assert.equal(oldDisposed,1);assert.equal(environmentCreated,1);assert.equal(restoreFixture.environment.texture,replacementTexture);assert.equal(restoreFixture.scene.environment,replacementTexture);assert.notEqual(restoreFixture.scene.environment,oldTexture);assert.equal(restoreFixture.scene.environmentIntensity,.8);assert.equal(roomDisposed,1);assert.equal(generatorDisposed,1);assert.equal(restoreFixture.contextLost,false);assert.equal(restoreFixture.error,'');assert.equal(restoreFixture.needsRender,true);assert.equal(notifications,1);
 results.push({check:'context restore replaces environment texture and releases temporary PMREM resources',status:'pass',scope:'actual handler with CPU PMREM/room stubs; not WebGL reflection proof'});
@@ -816,17 +824,17 @@ results.push({check:'unknown or invalid transfer totals remain indeterminate; me
 const tickField=viewerClass.members.find(n=>ts.isPropertyDeclaration(n)&&n.name.getText(viewerSource)==='tick');
 const tickModule={exports:{}};
 const tickCode=ts.transpileModule('module.exports=function(){return '+tickField.initializer.getText(viewerSource)+';};',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
-vm.runInNewContext(tickCode,{module:tickModule,THREE,...load('explorer/src/experience/motion.ts'),performance,console,requestAnimationFrame:()=>1,document:{hidden:false}});
+vm.runInNewContext(tickCode,{module:tickModule,THREE,...load('explorer/src/experience/motion.ts'),performance,console,requestAnimationFrame:()=>1,cancelAnimationFrame(){},document:{hidden:false}});
 const renderOrder=[];
 const frameFixture={dead:false,contextLost:false,lastFrame:0,lastNotify:1e9,benchmark:null,needsRender:true,presentationMoving:false,travel:null,ready:false,awaitingFirstFrame:true,loadStart:performance.now(),frameIntervals:[],renderCount:0,
  state:{...initialState,phase:'whole'},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
  renderer:{render(){renderOrder.push('beauty')},info:{render:{triangles:1,calls:1}}},surfaceOcclusion:{render(){renderOrder.push('surface')}},
- applyPose:()=>false,retargetVisibility(){},ensureFramingRange(){},emit(){renderOrder.push(this.ready?'ready':'pending')}};
+ applyPose:()=>false,retargetVisibility(){},ensureFramingRange(){},adjustQuality(){},scheduleFrame(){this.frame=1},emit(){this.snapshotPending=false;renderOrder.push(this.ready?'ready':'pending')}};
 const tick=tickModule.exports.call(frameFixture);
 assert.equal(frameFixture.ready,false);tick(100);
 assert.deepEqual(renderOrder,['beauty','surface','ready']);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
 frameFixture.needsRender=false;frameFixture.presentationMoving=true;renderOrder.length=0;tick(108);
-assert.deepEqual(renderOrder,['beauty','surface'],'The terminal pose sample must be painted even when moving becomes false');
+assert.deepEqual(renderOrder,['beauty','surface','ready'],'The terminal pose sample must be painted and its final snapshot published before sleeping');
 renderOrder.length=0;tick(112);assert.equal(renderOrder.length,0,'After the terminal sample the viewer must be idle');
 frameFixture.ready=false;frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.renderer.render=()=>{throw Error('No valid frame')};
 assert.doesNotThrow(()=>tick(116));assert.equal(frameFixture.ready,false);assert.equal(frameFixture.awaitingFirstFrame,false);assert.equal(frameFixture.loadStage,'error');assert.equal(frameFixture.controls.enabled,false);assert.ok(frameFixture.error);assert.equal(frameFixture.travel,null);assert.equal(frameFixture.presentationMoving,false);
@@ -1276,7 +1284,7 @@ class FailedControls{addEventListener(){}removeEventListener(){}dispose(){failed
 class FailedRoom{dispose(){failedRoomDisposals++}}
 class FailedPmrem{fromScene(){throw Error('injected environment failure')}dispose(){failedPmremDisposals++}}
 vm.runInNewContext(ts.transpileModule('module.exports=function(host,notify)'+constructorNode.body.getText(viewerSource),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,
- {module:constructorModule,THREE:{WebGLRenderer:FailedRenderer,PMREMGenerator:FailedPmrem},OrbitControls:FailedControls,StudioEnvironment:FailedRoom,devicePixelRatio:1});
+ {module:constructorModule,THREE:{WebGLRenderer:FailedRenderer},OrbitControls:FailedControls,configureRenderer:load('explorer/src/viewer/GraphicsResources.ts').configureRenderer,createStudioEnvironment:studioAllocator({PMREMGenerator:FailedPmrem},FailedRoom),devicePixelRatio:1});
 const partial={dead:false,loadGeneration:0,root:new THREE.Group(),camera:new THREE.PerspectiveCamera(),scene:new THREE.Scene(),selectionBox:new THREE.Box3Helper(new THREE.Box3()),dispose:disposalModule.exports,disposeObject:Viewer.prototype.disposeObject};
 assert.throws(()=>constructorModule.exports.call(partial,{appendChild(){}},()=>{}),/injected environment failure/);
 assert.equal(partial.dead,true);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
-  "evidence": "docs/HAND_TIME_REVIEW.md",
+  "evidence": "docs/CAD_NOTES.md",
   "time": "10:10:00",
   "clockAnglesDegrees": {
     "hour": 305,

@@ -1,6 +1,25 @@
 {
   "retrieved_at": "2026-09-08T23:54:16+02:00",
   "catalog_url": "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/movement/",
+  "componentComparison": {
+    "review": "https://github.com/galind/zweigesicht-1/pull/19",
+    "commit": "5b27e623b5c779daafdafbeb09a5b4f205e9bd3f",
+    "status": "Historical comparison; no runtime replacements approved.",
+    "excludedVariants": [
+      {
+        "definitionId": "d_0_1_1_61",
+        "url": "https://www.marcolangwatches.com/cad/010-linzylans-s120x160-k220x120-a140x50/?wpdmdl=1761&ind=1690106878484",
+        "sha256": "12d50af1c9ea4ce95eb0017135a4cfa6922c1ec2c1a9e5ed6cdebe8f6c2bae28",
+        "reason": "Buckle screw: catalog head 2.2 mm versus assembly 1.9 mm; incompatible shoulders and axial extent."
+      },
+      {
+        "definitionId": "d_0_1_1_195",
+        "url": "https://www.marcolangwatches.com/cad/ml01-grundplatine/?wpdmdl=2141&ind=1690646997019",
+        "sha256": "3db074a6dd2a96247baa94ca02f836ed83ffb94ce3f714a5b4fc6a446bf45d31",
+        "reason": "Main plate: independent setting slot is 0.30 mm narrower; retain the assembly variant pending mechanical review."
+      }
+    ]
+  },
   "files": [
     {
       "role": "complete_assembly",

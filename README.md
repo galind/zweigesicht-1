@@ -1,57 +1,85 @@
 # Zweigesicht-1
 
-Local real-CAD explorer for Marco Lang's ml–01 movement. Open **http://127.0.0.1:4173/** while the local development server is running.
+A real-CAD construction explorer for Marco Lang’s ml–01 movement, with a separate assembly puzzle at `/workshop`. This is static exploration, not a running-watch simulation or servicing procedure.
 
-The movement opens fully assembled. Reveal six functional groups, configure a fitted case in stainless steel, rose-gold or platinum appearances, show or hide both dials together and choose their hands independently, inspect and isolate components, separate layers or mechanism parts, flip the movement, and return to the original assembly. Fine Three hands follow the case: blue for steel, gold for rose gold and platinum; other shapes retain blue. Flip withdraws the fitted attachments, turns the case about the CAD X/crown axis, then reseats them following the maker animation. Selecting a fitted case part keeps the configured watch visible. Reset preserves configuration. Focus and All parts temporarily hide the case. The catalog addresses all 426 source instances. The accepted experience is a static construction explorer; it does not present a running-watch simulation.
+The explorer addresses all 426 source instances. It supports six functional groups, inspection/isolation, All parts, disassembly/reassembly, fitted case appearances, shared dial visibility and independent hand shapes. Fine hands follow the case material. Reset preserves side and configuration.
 
-See [current status](PROGRESS.md), [runtime architecture](docs/LOCAL_ARCHITECTURE.md), [CAD maintenance notes](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
+Workshop starts through **Be a watchmaker** on the homepage when its entry is enabled (staging and local development by default). Production keeps the entry unlisted; `/workshop` remains directly accessible. Easy offers 89 prepared fits; Hard has 249 individual parts and 35 explicit workbench transfers. Both start with 16 fitted leaves and finish with the same 265 leaves. Ready now offers constructible choices; All parts is searchable and keeps unavailable parts inspectable. Show seat is optional assistance. Free orbit, source-scale gallery dragging, Flip, Reset, Undo and local nonlinear saves are supported. `/play` redirects permanently to `/workshop`.
 
-## Run the prepared checkout
+See [current status](PROGRESS.md), [architecture](docs/LOCAL_ARCHITECTURE.md), [CAD constraints and reproduction](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
 
-For a prepared checkout with dependencies and generated assets:
+## Setup and run
 
-```sh
-cd explorer
-npm run dev
-```
-
-The server binds to `127.0.0.1:4173`. The local middleware serves prepared gzip assets with content-hashed URLs.
-
-## Reproduce local assets when needed
-
-For an existing prepared checkout adding watch configuration, first run `.venv-cad/bin/python scripts/cad/case_fit_probe.py` and `python3 scripts/prepare_local_assets.py`. The case recovery sidecar is generated from the original STEP; its verified runtime copy is tracked under the existing deployment authorization. Regeneration requires the local original source.
-
-Preserve the original STEP files and the URLs and hashes in `assets/source-manifest/`. CAD tooling uses the existing `.venv-cad` environment and Blender installation; the exporter reuses its geometry cache unless source files or conversion settings require regeneration.
+Use Node.js 24 (CI’s version; minimum 22.13). The tracked runtime assets are sufficient to run and build the application; original CAD and Python are needed only for source reproduction.
 
 ```sh
-scripts/cad/run_pipeline.sh
-/Applications/Blender.app/Contents/MacOS/Blender --background --python scripts/cad/render_references.py
-node scripts/assets/optimize.mjs
-node scripts/assets/verify-three.mjs
-python3 scripts/prepare_local_assets.py
+npm ci --prefix explorer
+npm --prefix explorer run dev
 ```
 
-A new checkout needs the pinned `explorer/` and `scripts/assets/` dependencies, the recorded original sources, and the preflight CAD environment before those commands can run. Clean-machine reproduction has not been claimed. See [CAD maintenance notes](docs/CAD_NOTES.md) for optimization details.
+Development binds to **http://127.0.0.1:4173/**. The local middleware serves the prepared gzip CAD with content-hashed URLs. Production preview:
 
-## Verify
+```sh
+npm --prefix explorer run build
+npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
+```
+
+### Homepage Workshop entry
+
+Two code guards hide **Be a watchmaker**, its chooser and `/?assemble=1` in
+production. Vite compiles the same boolean for server and client: visible during
+local development or a Vercel Preview build (`VERCEL_ENV=preview`), hidden otherwise.
+To enable it in production when ready, change the boolean in `explorer/vite.config.ts`
+to `true` and release the code. There is no configuration override.
+
+## Verification
+
+Run from the repository root:
 
 ```sh
 node --test tests/*.test.mjs
-node scripts/cad/review-runtime.mjs
-cd explorer
-npm run typecheck
-npm run lint
-npm run build
-npm start -- --hostname 127.0.0.1 --port 4176
-# In another terminal: node explorer/scripts/check-seo.mjs http://127.0.0.1:4176 (from repository root)
+node scripts/play/validate-inventory.mjs
+npm --prefix explorer run typecheck
+npm --prefix explorer run lint
+npm --prefix explorer run build
+# With the production server above running:
+node explorer/scripts/check-seo.mjs http://127.0.0.1:4176
 ```
 
-`http://127.0.0.1:4173/?inspect=1` exposes browser regression, benchmark, optional-asset failure and WebGL recovery checks. `?no3d=1` exercises the static fallback; `?text=200` exercises a 200% root-font layout. These are explicit test modes, not real-device certification. Screenshots and numeric traces remain local in ignored `artifacts/` paths. The CPU source/runtime suite also requires the prepared ignored CAD audit inputs documented in [cleanup review](docs/CLEANUP_REVIEW.md); it is not a clean-clone test. The inspection UI and browser regression modules load only with `?inspect=1`.
+The HTTP metadata check covers homepage and Workshop social cards in the initial
+HTML for X, Facebook and LinkedIn crawler user agents, clean canonical URLs for
+query-string links, the `/play` redirect, and delivery of the preview image.
+Actual platform preview rendering and cache refreshes still need a deployed check.
 
-## Hosting and source boundaries
+The source/runtime regression suite additionally needs the ignored CAD inputs described in [CAD notes](docs/CAD_NOTES.md):
 
-The repository has a Vercel build configuration (`vercel.json`, `npm run build:vercel` in `explorer/`). Domain cutover status is recorded in [PROGRESS.md](PROGRESS.md).
+```sh
+node scripts/cad/review-runtime.mjs
+node scripts/play/fixed-access-check.mjs
+```
 
-Original CAD, source imagery, caches and environments remain outside Git. Most generated assets are local; explicitly approved runtime payloads are tracked through the exceptions in `.gitignore`. Source provenance is under `assets/source-manifest/`; hand-authored overrides are under `assets/authored/`. Publication and redistribution remain subject to the [release gates](docs/RELEASE_GATES.md).
+Browser runners use an existing Playwright installation and Chrome. Set `PLAYWRIGHT_MODULE` to its absolute `index.mjs` path and `CHROME_PATH` to the Chrome executable when they are not available through the defaults. No browser dependency is required by the application.
 
-Both build targets prune their output to the current runtime manifests, reject missing required assets and exclude local reference imagery. Local originals/generated evidence are never pruned. `npm start` serves the standard build; `build:vercel` only creates deployment output. For audit scope, removals and measured improvements, see [cleanup review](docs/CLEANUP_REVIEW.md).
+```sh
+node scripts/play/browser-check.mjs http://127.0.0.1:4176 all
+node scripts/play/drag-check.mjs http://127.0.0.1:4176
+node scripts/play/access-check.mjs http://127.0.0.1:4176
+node scripts/review/explorer-check.mjs http://127.0.0.1:4176
+node scripts/review/loading-check.mjs http://127.0.0.1:4176
+node explorer/scripts/measure-build.mjs
+```
+
+The `home` and loading browser suites expect the entry to be visible; use a
+Preview build for those suites.
+
+Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
+
+`/?inspect=1` exposes lazy browser regression/benchmark tools and local delivery-failure fixtures. `?no3d=1` exercises fallback and `?text=200` enlarges root text. Browser viewport and synthetic touch checks do not establish physical-device or accessibility certification.
+
+## Deployment and source boundaries
+
+The root `vercel.json` is the deployment configuration. `npm --prefix explorer run build:vercel` produces `explorer/.vercel/output`; the root build command copies it to `.vercel/output`. Standard and Vercel builds use the same manifest-driven asset pruner, reject missing required assets and exclude local reference imagery. Build output pruning never deletes original/generated inputs.
+
+Feature branches start from and target `develop`; its Vercel Preview is staging. Reviewed `develop` → `main` releases use the existing Git integration. See [branching and releases](docs/BRANCHING_AND_RELEASES.md). Building locally does not authorize publishing.
+
+Source URLs/hashes stay under `assets/source-manifest/`; authored membership, placements and decisions stay under `assets/authored/`. Original CAD, reference imagery, evidence, caches and environments remain ignored. Only the reviewed runtime payloads allowed by `.gitignore` are tracked. Public redistribution and publication remain subject to the [release gates](docs/RELEASE_GATES.md).

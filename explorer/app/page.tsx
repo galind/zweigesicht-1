@@ -27,17 +27,20 @@ import {
   Grid2X2,
   Layers,
   Clock3,
-  FlipHorizontal2,
-  RotateCcw,
 } from 'lucide-react';
 import { Select as SelectPrimitive } from '@base-ui/react/select';
 import { loadingMessage } from '@/src/experience/loading';
+import { useTextScalePreview } from '@/src/experience/useTextScalePreview';
 import {
   MovementViewer,
   type ViewerSnapshot,
 } from '@/src/viewer/MovementViewer';
 import { registerMovementTools } from '@/src/experience/webmcp';
 import { ConfigurationControls } from '@/components/ConfigurationControls';
+import { MovementLoadingState } from '@/components/MovementLoadingMark';
+import { SiteHeader, SiteHeaderActions } from '@/components/site-chrome';
+import { FlipButton, ResetViewButton } from '@/components/viewer-controls';
+import { observeElementResize } from '@/src/experience/observeElementResize';
 import { initialState } from '@/src/experience/state';
 import {
   GROUPS,
@@ -93,9 +96,12 @@ const empty: ViewerSnapshot = {
   stats: {},
 };
 export default function Home() {
+  useTextScalePreview();
   const exploreButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const assembleButton = useRef<HTMLButtonElement>(null);
+  const easyModeButton = useRef<HTMLButtonElement>(null);
   const moreButton = useRef<HTMLButtonElement>(null);
   const visibleTrigger = (
     selector: string,
@@ -120,7 +126,7 @@ export default function Home() {
         : `${Math.max(panelBottom, viewportInsets.bottom + 12)}px`,
     '--viewport-top': `${viewportInsets.top}px`,
   } as CSSProperties;
-  useEffect(() => {
+  useLayoutEffect(() => {
     const measure = () => {
       const rect = panelAnchor.current?.getBoundingClientRect();
       if (rect) setPanelX(rect.left + rect.width / 2);
@@ -144,18 +150,17 @@ export default function Home() {
           : { top, bottom },
       );
     };
-    window.addEventListener('resize', measure);
     viewport?.addEventListener('resize', measureViewport);
     viewport?.addEventListener('scroll', measureViewport);
     measureViewport();
-    const observer = new ResizeObserver(measure);
     const dock = document.querySelector('.action-dock');
-    if (dock) observer.observe(dock);
+    const stopObserving = observeElementResize([dock], measure, {
+      observeWindow: true,
+    });
     return () => {
-      window.removeEventListener('resize', measure);
       viewport?.removeEventListener('resize', measureViewport);
       viewport?.removeEventListener('scroll', measureViewport);
-      observer.disconnect();
+      stopObserving();
     };
   }, []);
   const host = useRef<HTMLDivElement>(null),
@@ -171,7 +176,20 @@ export default function Home() {
     [dials, setDials] = useState(false),
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
+    [assemble, setAssemble] = useState(false),
     [inspect, setInspect] = useState(false);
+  useEffect(() => {
+    if (!__WORKSHOP_ENTRY_ENABLED__) return;
+    const url = new URL(location.href);
+    if (url.searchParams.get('assemble') !== '1') return;
+    url.searchParams.delete('assemble');
+    history.replaceState(
+      history.state,
+      '',
+      `${url.pathname}${url.search}${url.hash}`,
+    );
+    queueMicrotask(() => setAssemble(true));
+  }, []);
   useEffect(() => {
     const breakpoint = window.matchMedia('(max-width: 600px)');
     const dismissNavigation = () => {
@@ -211,12 +229,6 @@ export default function Home() {
     if (!host.current) return;
     const flags = new URLSearchParams(location.search);
     queueMicrotask(() => setInspect(flags.has('inspect')));
-    document.documentElement.style.fontSize =
-      flags.get('text') === '200' ? '200%' : '';
-    document.documentElement.classList.toggle(
-      'text-enlarged',
-      flags.get('text') === '200',
-    );
     if (flags.has('no3d')) {
       queueMicrotask(() =>
         set((prev) => ({
@@ -303,15 +315,9 @@ export default function Home() {
           : { header: headerBottom, context: contextBottom },
       );
     };
-    const observer = new ResizeObserver(measure);
-    if (header) observer.observe(header);
-    if (context) observer.observe(context);
-    window.addEventListener('resize', measure);
-    measure();
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', measure);
-    };
+    return observeElementResize([header, context], measure, {
+      observeWindow: true,
+    });
   }, [group, selected, s.layout, topBounds.header]);
   useEffect(() => {
     queueMicrotask(() => setDetails(false));
@@ -330,7 +336,8 @@ export default function Home() {
         separate ||
         dials ||
         options ||
-        details
+        details ||
+        assemble
       )
         return;
       event.preventDefault();
@@ -350,6 +357,7 @@ export default function Home() {
     dials,
     options,
     details,
+    assemble,
   ]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
@@ -375,7 +383,6 @@ export default function Home() {
     viewer.current?.frameSpread(name);
     setExplore(false);
   };
-  const sideLabel = 'Flip movement';
   const closePanels = () => {
     setMenu(false);
     setMore(false);
@@ -387,6 +394,7 @@ export default function Home() {
     setDetails(false);
     setCatalog(false);
     setAbout(false);
+    setAssemble(false);
   };
   const openPanel = (update: (open: boolean) => void, open: boolean) => {
     if (open) {
@@ -432,20 +440,67 @@ export default function Home() {
         (group || selected || s.layout === 'spread' ? ' has-focus' : '')
       }
     >
-      <header className="topbar">
-        <div className="identity">
-          <h1>Zweigesicht-1</h1>
-          <a
-            className="maker-credit"
-            href={makerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="by Marco Lang — official website, opens in a new tab"
+      <SiteHeader
+        className="topbar"
+        identityClassName="identity"
+        data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
+      >
+        {__WORKSHOP_ENTRY_ENABLED__ && (
+          <Sheet
+            open={assemble}
+            onOpenChange={(open) => openPanel(setAssemble, open)}
           >
-            by Marco Lang
-          </a>
-        </div>
-        <nav className="header-actions" aria-label="Information and settings">
+            <SheetTrigger
+              ref={assembleButton}
+              className="text-button assemble-trigger site-glass"
+            >
+              Be a watchmaker
+            </SheetTrigger>
+            <SheetContent
+              side="top"
+              style={panelStyle}
+              className="explorer-panel settings-panel header-panel assembly-chooser"
+              scrollContent
+              initialFocus={easyModeButton}
+              finalFocus={assembleButton}
+            >
+              <SheetHeader>
+                <SheetTitle>Be a watchmaker</SheetTitle>
+                <SheetDescription>
+                  Choose how much of the movement you want to build.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="panel-body assembly-mode-list">
+                <button
+                  ref={easyModeButton}
+                  type="button"
+                  onClick={() => location.assign('/workshop?mode=easy')}
+                >
+                  <span>
+                    <strong>Easy</strong>
+                    <small>89 prepared fits · Best for a first build</small>
+                  </span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => location.assign('/workshop?mode=hard')}
+                >
+                  <span>
+                    <strong>Hard</strong>
+                    <small>249 individual parts · 35 subassemblies</small>
+                  </span>
+                  <ChevronRight aria-hidden="true" />
+                </button>
+                <p>Progress is saved on this device.</p>
+              </div>
+            </SheetContent>
+          </Sheet>
+        )}
+        <SiteHeaderActions
+          className="header-actions"
+          aria-label="Information and settings"
+        >
           <InformationPanel
             style={panelStyle}
             open={about}
@@ -472,7 +527,7 @@ export default function Home() {
           >
             Settings
           </button>
-        </nav>
+        </SiteHeaderActions>
         <Sheet
           modal={false}
           open={menu}
@@ -480,7 +535,7 @@ export default function Home() {
         >
           <SheetTrigger
             ref={menuButton}
-            className="text-button mobile-menu-trigger"
+            className="text-button mobile-menu-trigger site-glass"
             aria-label="Menu"
           >
             <Menu aria-hidden="true" />
@@ -529,7 +584,7 @@ export default function Home() {
             </div>
           </SheetContent>
         </Sheet>
-      </header>
+      </SiteHeader>
       <section className="workspace" aria-label="Movement explorer">
         <div
           className="stage"
@@ -545,47 +600,33 @@ export default function Home() {
         {!available && (
           <div className="fallback">
             <div className="load-message">
-              <p>{loadingMessage(s.loadStage)}</p>
-              {s.error ? (
-                <p className="secondary">{s.error}</p>
-              ) : (
-                <>
-                  <progress
-                    aria-label={
-                      s.loadStage === 'movement'
-                        ? 'Movement file transfer'
-                        : loadingMessage(s.loadStage)
-                    }
-                    max={100}
-                    value={
-                      s.loadStage === 'movement' && s.transfer !== null
-                        ? s.transfer
-                        : undefined
-                    }
-                  />
-                  {s.loadStage === 'movement' && s.transfer !== null && (
-                    <span className="transfer-scope" aria-hidden="true">
-                      Movement file · {s.transfer}%
-                    </span>
-                  )}
-                </>
-              )}
-              {(s.error || s.loadStage === 'recovering') && (
-                <button
-                  className="tool"
-                  onClick={() => {
-                    if (viewer.current && !viewer.current.contextLost)
-                      void viewer.current.load();
-                    else {
-                      const url = new URL(location.href);
-                      url.searchParams.delete('no3d');
-                      location.assign(url.href);
-                    }
-                  }}
-                >
-                  {s.loadStage === 'recovering' ? 'Reload 3D' : 'Retry 3D'}
-                </button>
-              )}
+              <MovementLoadingState
+                tone={s.error ? 'error' : 'loading'}
+                label={loadingMessage(s.loadStage)}
+                detail={
+                  s.error ||
+                  (s.loadStage === 'movement' && s.transfer !== null
+                    ? `Movement file · ${s.transfer}%`
+                    : undefined)
+                }
+                actionClassName="tool"
+                actionLabel={
+                  s.error || s.loadStage === 'recovering'
+                    ? s.loadStage === 'recovering'
+                      ? 'Reload 3D'
+                      : 'Retry 3D'
+                    : undefined
+                }
+                onAction={() => {
+                  if (viewer.current && !viewer.current.contextLost)
+                    void viewer.current.load();
+                  else {
+                    const url = new URL(location.href);
+                    url.searchParams.delete('no3d');
+                    location.assign(url.href);
+                  }
+                }}
+              />
             </div>
           </div>
         )}
@@ -667,7 +708,7 @@ export default function Home() {
           )}
         </section>
       )}
-      <nav className="action-dock" aria-label="Movement controls">
+      <nav className="action-dock site-glass" aria-label="Movement controls">
         <Sheet
           modal={false}
           open={separate}
@@ -911,7 +952,7 @@ export default function Home() {
           </SheetContent>
         </Sheet>
         <div className="side-slot">
-          <button
+          <FlipButton
             className="side-switch text-button"
             disabled={!available}
             onClick={() => {
@@ -919,31 +960,16 @@ export default function Home() {
               viewer.current?.flipMovement();
             }}
             aria-pressed={s.layout === 'spread' ? s.inventoryBack : undefined}
-            aria-label={sideLabel}
-            title={sideLabel}
-          >
-            <FlipHorizontal2
-              className="dock-icon"
-              style={{ transform: 'rotate(90deg)' }}
-              aria-hidden="true"
-            />
-            <span>Flip</span>
-          </button>
+          />
         </div>
-        <button
+        <ResetViewButton
           className="text-button reset-button"
           data-reset-idle={!s.canReset && !s.group}
           disabled={s.loadStage === 'recovering' || (!available && !s.group)}
           aria-label="Reset view"
           title="Return to the straight-on view; keep watch configuration"
           onClick={resetView}
-        >
-          <RotateCcw className="dock-icon" aria-hidden="true" />
-          <span className="reset-desktop-label">Reset view</span>
-          <span className="reset-mobile-label" aria-hidden="true">
-            Reset
-          </span>
-        </button>
+        />
         <Sheet
           modal={false}
           open={more}
