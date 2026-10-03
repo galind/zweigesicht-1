@@ -47,6 +47,9 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
   branch starts at the last verified integration head `fe449ec`, which is PR #23's
   second parent and has the same tracked tree as current `main`. Restoring the
   missing PR base requires a delivery decision; no branch is silently recreated.
+  Preparation changes are committed at `2cd8d06` and pushed over SSH on
+  `codex/public-repository-preparation`. Draft PR creation is blocked by the
+  absent `develop` base, not by SSH or the GitHub app; both connections work.
 
 ## Exposure review
 
