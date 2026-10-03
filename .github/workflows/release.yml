@@ -1,82 +1,109 @@
-name: Prepare production release
+name: Release verified develop
 
 on:
   workflow_dispatch:
     inputs:
+      commit:
+        description: Full SHA of the develop commit reviewed in staging
+        required: true
+        type: string
       confirmation:
-        description: Type "release" to open a draft develop to main pull request
+        description: Type "release" after checking staging and applicable release gates
         required: true
         type: string
 
 concurrency:
-  group: prepare-release
-  cancel-in-progress: true
+  group: production-release
+  cancel-in-progress: false
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
-  release-pr:
-    name: Open develop to main release PR
+  verify:
+    name: Verify reviewed commit
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Create or find release PR
+      - name: Require a reviewed develop commit
+        env:
+          REVIEWED_COMMIT: ${{ inputs.commit }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/develop" || "$CONFIRMATION" != "release" || ! "$REVIEWED_COMMIT" =~ ^[0-9a-f]{40}$ || "$REVIEWED_COMMIT" != "$GITHUB_SHA" ]]; then
+            echo "Run from develop, enter its reviewed full SHA, and confirm release."
+            exit 1
+          fi
+      - name: Check out reviewed commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: explorer/package-lock.json
+      - name: Install dependencies
+        run: npm ci --prefix explorer
+      - name: Run automated tests
+        run: node --test tests/*.test.mjs
+      - name: Validate Workshop inventory
+        run: node scripts/play/validate-inventory.mjs
+      - name: Type-check
+        run: npm --prefix explorer run typecheck
+      - name: Lint
+        run: npm --prefix explorer run lint
+      - name: Build production output
+        run: npm --prefix explorer run build
+      - name: Build Vercel production output
+        run: npm --prefix explorer run build:vercel
+
+  promote:
+    name: Promote verified commit to main
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Fast-forward main and retain develop
         uses: actions/github-script@v7
         with:
           script: |
-            if (context.payload.inputs?.confirmation !== 'release') {
-              core.setFailed('Production release was not confirmed. Enter "release" to continue.');
-              return;
-            }
-
             const { owner, repo } = context.repo;
-            const comparison = await github.rest.repos.compareCommits({
-              owner,
-              repo,
-              base: 'main',
-              head: 'develop',
+            const target = context.payload.inputs?.commit;
+            if (context.ref !== 'refs/heads/develop' ||
+                context.payload.inputs?.confirmation !== 'release' ||
+                !/^[0-9a-f]{40}$/.test(target ?? '') || target !== context.sha) {
+              throw new Error('Release must use the reviewed develop workflow commit.');
+            }
+            const read = async branch => (await github.rest.git.getRef({
+              owner, repo, ref: `heads/${branch}`,
+            })).data.object.sha;
+            if (await read('develop') !== target) {
+              throw new Error('develop advanced during verification. Review and rerun.');
+            }
+            const base = await read('main');
+            const { data: comparison } = await github.rest.repos.compareCommits({
+              owner, repo, base, head: target,
             });
-
-            if (comparison.data.ahead_by === 0) {
-              core.notice('develop has no unreleased commits.');
+            if (comparison.status === 'identical') {
+              core.notice('main already contains this commit; develop is retained.');
               return;
             }
-
-            const existing = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: 'open',
-              base: 'main',
-              head: `${owner}:develop`,
-            });
-
-            if (existing.data.length > 0) {
-              core.notice(`Release PR #${existing.data[0].number} already tracks develop.`);
-              return;
+            if (comparison.status !== 'ahead') {
+              throw new Error('main has changes outside develop. Reconcile and review first.');
             }
-
-            const created = await github.rest.pulls.create({
-              owner,
-              repo,
-              base: 'main',
-              head: 'develop',
-              draft: true,
-              title: 'Release develop to production',
-              body: [
-                '## Release',
-                '',
-                'Promotes the exact state currently deployed from `develop` to production.',
-                '',
-                '## Before merging',
-                '',
-                '- [ ] CI is green',
-                '- [ ] The latest `develop` Vercel deployment has been reviewed',
-                '- [ ] Sustained movement and Workshop performance have been checked on representative devices',
-                '- [ ] Applicable publication and redistribution gates are cleared',
-                '',
-                'Merging this PR updates `main`; the Vercel Git integration then creates the production deployment.',
-              ].join('\n'),
+            if (await read('main') !== base || await read('develop') !== target) {
+              throw new Error('A branch changed before promotion. Review and rerun.');
+            }
+            await github.rest.git.updateRef({
+              owner, repo, ref: 'heads/main', sha: target, force: false,
             });
-
-            core.notice(`Created release PR #${created.data.number}.`);
+            if (await read('main') !== target) {
+              throw new Error('Could not verify the resulting main commit.');
+            }
+            await read('develop');
+            core.notice(`Released ${target} to main. develop is retained.`);

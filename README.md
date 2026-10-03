@@ -61,16 +61,20 @@ node scripts/play/fixed-access-check.mjs
 Browser runners use an existing Playwright installation and Chrome. Set `PLAYWRIGHT_MODULE` to its absolute `index.mjs` path and `CHROME_PATH` to the Chrome executable when they are not available through the defaults. No browser dependency is required by the application.
 
 ```sh
-node scripts/play/browser-check.mjs http://127.0.0.1:4176 all
+node scripts/play/browser-check.mjs http://127.0.0.1:4176 easy
+node scripts/play/browser-check.mjs http://127.0.0.1:4176 hard
 node scripts/play/drag-check.mjs http://127.0.0.1:4176
 node scripts/play/access-check.mjs http://127.0.0.1:4176
 node scripts/review/explorer-check.mjs http://127.0.0.1:4176
-node scripts/review/loading-check.mjs http://127.0.0.1:4176
 node explorer/scripts/measure-build.mjs
 ```
 
-The `home` and loading browser suites expect the entry to be visible; use a
-Preview build for those suites.
+The `focused`, `home` and loading suites expect the entry to be visible. Build
+with `VERCEL_ENV=preview npm --prefix explorer run build`, restart the local server,
+then run `node scripts/play/browser-check.mjs http://127.0.0.1:4176 focused`,
+the same runner with `home`, and
+`node scripts/review/loading-check.mjs http://127.0.0.1:4176`. These are local
+checks; do not deploy or promote the compiled Preview artifact to production.
 
 Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
 
@@ -83,3 +87,17 @@ The root `vercel.json` is the deployment configuration. `npm --prefix explorer r
 Feature branches start from and target `develop`; its Vercel Preview is staging. Reviewed `develop` → `main` releases use the existing Git integration. See [branching and releases](docs/BRANCHING_AND_RELEASES.md). Building locally does not authorize publishing.
 
 Source URLs/hashes stay under `assets/source-manifest/`; authored membership, placements and decisions stay under `assets/authored/`. Original CAD, reference imagery, evidence, caches and environments remain ignored. Only the reviewed runtime payloads allowed by `.gitignore` are tracked. Public redistribution and publication remain subject to the [release gates](docs/RELEASE_GATES.md).
+
+## Licensing and attribution
+
+Guillem Galindo's original code and documentation are available under the
+standard [MIT License](LICENSE), including commercial reuse. Third-party code
+keeps its upstream licenses; [notices](explorer/public/third-party-notices.txt)
+are included in both application build formats at `/third-party-notices.txt`.
+
+Marco Lang / Atelier Marco Lang owns the watch design and supplied CAD. The
+CAD, derived runtime geometry/metadata and reconstruction images are **excluded**
+from this MIT grant. Source links and hashes remain in `assets/source-manifest/`.
+Public CAD/derived-asset redistribution permission is still unresolved; keep the
+repository private until the [publication gates](docs/RELEASE_GATES.md) are cleared.
+This independent explorer is not affiliated with or endorsed by the maker.

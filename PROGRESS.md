@@ -1,47 +1,139 @@
 # Current project status
 
-Updated 3 October 2026. The current application is the static CAD explorer at `/` and free-choice Workshop at `/workshop`; `/play` redirects. Setup and verification commands are in [README](README.md); implementation boundaries are in [architecture](docs/LOCAL_ARCHITECTURE.md).
+Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permanent
+`/play` redirect. See [README](README.md) for setup/checks,
+[architecture](docs/LOCAL_ARCHITECTURE.md) for implementation and
+[CAD notes](docs/CAD_NOTES.md) for mechanical/source constraints.
 
-## Current state
+## Verified product
 
-- Explorer: 426 source instances, six groups, source inspection/isolation, All parts, disassembly, shared dial visibility, independent hands and a 41-leaf fitted case. Source geometry, finishes and exact placements are retained.
-- Workshop: free orbit, Ready now/All parts, optional Show seat, source-scale gallery dragging, explicit workbenches, Undo and local nonlinear saves. Easy has 89 fits; Hard has 249 parts and 35 transfers. Both retain 16 foundation leaves and finish with 265. There is no Hints toggle; its legacy save field remains compatible.
-- Homepage and Workshop share typography, header/navigation geometry, glass surfaces, palette, controls, buttons, popovers, focus treatment and the movement-loading presentation. The Workshop retains its route-specific assembly rail, now with dedicated compact and short-landscape layouts.
-- Homepage and Workshop now use the approved Section loading animation: the outlined gg starts closed for about 1.25 seconds, then its sections separate and realign on two axes. The loading phrase is visually hidden and retained for screen readers; transfer details and recovery messages remain visible. The 5.2-second CSS loop is independent of transfer progress; reduced motion shows the complete static mark. Workshop assembly controls remain hidden during loading and recovery to keep the status readable. The development comparison, unused variants and study-only documentation/evidence have been removed.
-- The homepage header centers “Be a watchmaker”; compact layouts preserve the full label and use a second row when needed. The shared loader anchors its visible letterforms to the viewport center from first paint, independently of header/dock measurements and transfer detail. Its SVG view box compensates for the letterforms’ offset within the font line box.
-- Two code guards hide the homepage Workshop entry/chooser and `?assemble=1` shortcut in production. Local development and Vercel Preview show them. Vite compiles one shared server/client boolean; there is no configuration override. Enabling production later requires a code release. Hidden headers reserve no button column or second row. Direct `/workshop`, `/play`, Workshop functionality and indexing/social metadata are unchanged.
-- Homepage startup waits for two prepared draws at stable dimensions before revealing the watch. A viewport change during preparation refits immediately while hidden, preventing an initial size correction after reveal.
-- `develop` is integration/staging; `main` is production. The root Vercel configuration and existing CI/release workflows are authoritative. Canonical metadata uses `https://zweigesicht-1.guillemgalindo.com/`.
-- Social sharing: homepage and Workshop now use complete route-specific Open Graph and large-image X cards in the initial HTML, including image MIME type and alt text. Workshop retains its noindex/nofollow policy. The current card uses the user-supplied exploded-view JPEG (2560×1440, 238,639 bytes), copied without edits and served under a content-hashed filename. Its provenance is recorded in `assets/source-manifest/seo-renders.json`; the legacy image remains available for cached cards.
-- The repository cleanup from PR #20 is incorporated. Historical reports, generated ledgers, abandoned timing/smoke experiments and obsolete review tools are removed. Current asset generation, source provenance, authored decisions and meaningful checks remain. PR #19 was not merged; its consequential findings are in [CAD notes](docs/CAD_NOTES.md).
+- Explorer retains all 426 source instances, six functional groups, inspection,
+  isolation, All parts, separation, fitted case/dials and independent hand shapes.
+- Workshop retains 89 Easy fits, 249 Hard parts and 35 transfers; both start with
+  16 foundation leaves and finish with 265. Free orbit, searchable inventory,
+  Show seat, dragging, workbenches, Undo and local nonlinear saves remain.
+- Shared responsive controls/loading mark, reduced motion and failure recovery
+  remain. Explorer readiness requires two stable preparation frames.
+- Two compiled code guards hide the homepage Workshop entry/chooser and
+  `?assemble=1` in production, and show them in local development/Vercel Preview.
+  No feature configuration override exists. Direct routes remain available;
+  Workshop retains noindex/nofollow and sitemap exclusion.
+- PR #21 social metadata and exact replacement JPEG are preserved, along with
+  the legacy image URL. Source/runtime geometry, hashes and authored choices
+  are unchanged by public-repository preparation.
+
+## Public-repository preparation
+
+- Standard MIT License: copyright 2026 Guillem Galindo, covering his original
+  contributions. CAD/source-derived assets are excluded. Upstream UI, icon and
+  library license notices ship in both builds at `/third-party-notices.txt`.
+  Fonts use the system stack; no maker reference photographs/webfonts are bundled.
+- Patched the one moderate npm advisory by changing only transitive `fast-uri`
+  3.1.7 → 3.1.8 in the app lockfile. App and asset-tool npm audits report zero
+  advisories. No framework migration or broad dependency upgrade.
+- Removed the favicon at the user's request; no favicon asset or HTML reference
+  remains. Historical icon rights remain a review item. Removed
+  unused Select scroll-button exports (the internally used controls
+  remain), consolidated obsolete verification/release history here, and corrected
+  README's production browser commands. Existing meaningful tools remain; the
+  CAD regression fixture now verifies the retained two-frame startup contract.
+- PR CI has read-only permissions and drops checkout credentials. The `main`
+  branch policy requires this repository's `develop`, rejecting a fork with that
+  name. Manual release dispatch runs only from `develop`; untrusted PR code is
+  never run with the release write token. Preparation-branch Git deployments
+  are disabled in `vercel.json` to honor the instruction not to deploy.
+- PR #23 is merged. At the user's request, remote `develop` was restored over
+  SSH from current `main` (`c7e8f23`) on 3 October 2026. Existing staging Git
+  integration may react to that restoration. `main` has not been changed.
+- Preparation changes are pushed on `codex/public-repository-preparation`.
+  [Draft PR #24](https://github.com/galind/zweigesicht-1/pull/24) targets the
+  restored `develop` base. Release workflow changes are committed at `3a065be`.
+- Future production promotion uses the manual **Release verified develop**
+  workflow instead of a release PR: enter the full reviewed SHA and `release`.
+  A read-only job verifies that exact commit; a separate write job checks current
+  branch heads and fast-forwards `main` without force. It never deletes `develop`.
+  The workflow has been tested locally, not dispatched. Existing main protection
+  may reject the direct update; no bypass has been configured.
+- Server-side deletion protection is still unconfirmed. The connected GitHub app
+  exposes no repository settings/ruleset mutation tool, and the browser settings
+  session exposes no usable controls. Configure an active rule matching exactly
+  `develop`, disallowing deletion and force pushes, to protect it against deletion
+  outside this workflow. The workflow alone cannot enforce that repository rule.
+
+## Exposure review
+
+- Scanned all 264 reachable local commits / 1,693 blobs (19 binary blobs), including
+  local branches, stale remote refs and Codex checkpoints; current live remote
+  heads reach 258 of those commits. No matches for the checked GitHub/AWS/service
+  token, private-key, credential-URL or quoted secret-assignment patterns.
+  This is a pattern scan, not proof that every possible secret is absent.
+- Current tracked files exclude originals, local reference imagery, environments,
+  caches and build/evidence output. Historical prompts and generated preflight
+  reports remain reachable from `main`; personal author email metadata remains
+  (redacted: `g***@gmail.com`). Historical runtime CAD and reconstruction images
+  also require rights coverage. Paths/commits and remediation are in the existing
+  [release gates](docs/RELEASE_GATES.md). The two untracked prompt files are untouched;
+  copies in local Codex checkpoint refs are not remote publication refs.
+- Read all 23 PR bodies and their accessible discussion/review timelines; no
+  standalone issues were returned. Checked 16 job logs from eight latest
+  PR-head CI runs; no checked credential patterns matched and no artifacts were
+  listed. Vercel bot comments expose project/team IDs and Preview URLs, not
+  identified credentials. Coverage excludes older run attempts, push/manual runs,
+  unavailable/deleted content, external attachments/deployment logs, repository
+  settings/secrets and provider caches. Recheck those surfaces before publication.
 
 ## Verification
 
-Workshop entry guards verified on 3 October on `codex/workshop-homepage-flag`, based on `develop` at `8792929` (PR #21 already merged; its branch untouched). All 68 automated tests, typecheck, lint, formatting, production build and Preview Vercel build pass. The simplified production build passes 159 HTTP/browser checks and Preview passes 41: initial HTML, served client scripts, hydration, query shortcut, keyboard reachability, responsive desktop/mobile layouts and direct Easy/Hard access. Local-development HTML shows the entry. The SEO HTTP suite passes, preserving redirects, noindex/nofollow, sitemap exclusion and PR #21's social metadata/exact JPEG hash. Local browser evidence remains ignored under `artifacts/browser/workshop-entry-simple-*`. No production setting, merge or release was performed.
+- 82 automated tests (including 14 release workflow tests), Workshop inventory/graph validation, 114 prepared CPU
+  source/runtime checks and 1,119 sampled access checks pass.
+- TypeScript, lint, app/docs/config formatting and diff whitespace checks pass.
+  The legacy compact CAD runner has pre-existing whole-file formatter drift;
+  its scoped fixture fix passes syntax and runtime checks without a broad rewrite.
+- Fresh `npm ci`, tests, inventory, typecheck, lint, production application and
+  Vercel builds pass in an exported staged tracked-only checkout, with no ignored
+  CAD/reference inputs. An independent compiled Preview application/Vercel build
+  also passes. npm audits for both locked JavaScript projects report zero advisories.
+- Chrome: all 89 Easy / 284 Hard actions (538 / 1,708 checks), 92 focused responsive
+  checks, 87 drag checks, 373 visible-seat access actions, 175 loading/recovery
+  checks and the 15-check homepage suite (including 71 embedded UX checks) pass.
+  Explorer suites pass 350 checks; real-frame capture and the 60-second desktop
+  benchmark complete. These are local Chrome results, not device certification.
+- Final tracked-only production and compiled Preview each pass 64 entry checks
+  across desktop, 390 px, 320 px and landscape: initial HTML, hydration, alternate
+  query behavior, direct Workshop routes and noindex metadata. Local development
+  also passes 64 visible-entry checks. The SEO HTTP suite passes for both compiled
+  builds, preserving `/play`, canonical/social tags, sitemap and the exact JPEG.
+- 24 packaging/delivery checks pass for complete MIT/upstream notices,
+  authored favicon before its requested removal, unchanged social image, exact
+  tracked model inventories and reference
+  exclusion across both application/Vercel build formats and local HTTP delivery.
+  All 13 tracked model/image payload hashes match the integration baseline.
+- Favicon removal: no favicon asset or application reference remains; the source
+  manifest parses and asset, notices and documentation diffs pass whitespace checks.
+- Workflow branch policy passes four trusted/fork/target scenarios. Release tests
+  exercise the actual promotion script and shell preflight with mocked GitHub refs:
+  exact SHA, non-force update, retained develop, stale reviews, branch races,
+  divergent history and protection rejection. No live production dispatch was run.
 
-Replacement social image verified on 3 October: build, typecheck, lint and formatting pass. The HTTP checks confirm updated JPEG dimensions, MIME type, alt text and URLs for Open Graph and X; the delivered image SHA-256 exactly matches the user-supplied capture. Workshop remains local/unreleased, with no publication action taken.
+Prepared source/runtime and sampled access checks use ignored local source inputs;
+an application build from tracked assets is a separate reproducibility claim.
+Build notices still include large chunks, framework route classification and
+Vercel transform timing warnings. No physical-device, Safari/WebKit, sustained
+GPU/thermal, human accessibility or mechanical certification is claimed.
 
-Social-sharing review on 3 October: production build, typecheck, lint and changed-file formatting pass. The expanded HTTP check passes for both routes and query-string variants under X, Facebook and LinkedIn crawler user agents, with exactly one of each required social tag in the initial head. It also verifies permanent `/play` redirects with query preservation, canonical URLs, image delivery, robots and sitemap behavior. This checks crawler-facing responses, not platform cache/rendering behavior. Live read-only checks returned 200 for the public homepage and its 52,226-byte WebP image, but 404 for `/workshop`; the deployment does not expose that route. Workshop is intentionally unreleased at the user’s request; its public 404 is expected and is not a release blocker for homepage-only work.
+## Remaining blockers
 
-Verified on 3 October: 68 automated tests, typecheck, lint, changed-file formatting and production build pass after the final PR cleanup. The real-renderer timing probe forces a viewport change between preparation frames and records zero camera drift after reveal. A separate measurement confirms the homepage watch’s projected central axis is exactly at the viewport center over its first 30 visible frames at five desktop/mobile sizes. All 175 loading/header checks and the homepage suite (15 checks including 71 embedded UX checks) pass.
-
-Verified on 2 October: 67 automated tests, Workshop inventory/graph validation, 114 prepared source/runtime checks and 1,119 sampled access checks pass. TypeScript, lint, production and Vercel builds pass; required packaged asset paths/hashes and documentation links pass. A tracked-only checkout also builds with freshly installed application dependencies.
-
-Desktop Chrome checks pass for both routes: explorer controls, all 89 Easy and 284 Hard actions, focused/mobile-viewport interactions, dragging, access and homepage configuration. The sheet Close control matches the starting appearance and dismisses correctly. Tracked runtime geometry, finish buffers, recoveries and asset hashes are unchanged.
-
-The homepage/Workshop UI follow-up passes 93 focused responsive checks across desktop, 390 px, 320 px, short landscape and 200% text; 87 inventory drag/touch checks; and the maintained homepage suite. Coverage includes compact progress/filter wrapping, card-content containment, footer/action geometry, keyboard reachability and fixed loading-mark geometry with visually hidden status at enlarged text sizes. The separate Section animation adoption is verified below.
-
-The integrated loader and centered header pass 175 production browser checks across both routes at desktop, 390px, 320px, short landscape and 200% text (including combined landscape/enlargement). Checks cover actual held/failed asset requests, keyboard retry through to readiness, position stability from the first visible frame, exact visible-letter centering on cold and warm reloads, centered watchmaker entry, closed initial/repeated holds, longer-load motion, fixed animation geometry, reduced motion, screen-reader status, assembly controls returning after recovery, and removal of development routes. The maintained 92-check Workshop suite passes after cleanup (its duplicate loading probe is covered by the dedicated loading suite); the homepage suite (15 checks including 71 embedded UX checks) passes with the renamed watchmaker entry. Typecheck, lint and production build pass. Current local evidence is ignored under `artifacts/browser/movement-loading/`.
-
-The retained CAD pipeline, Meshopt verification and asset preparation pass in an isolated workspace with the reduced locked dependencies, recorded originals and copied prepared caches/face sidecars. Reproduced geometry/recovery/finish payload hashes match; this does not establish an uncached clean-machine CAD rebuild.
-
-The final PR audit against `develop` retains only shared UI parity, the approved loader, centered watchmaker entry, startup framing, regression coverage and current documentation. Obsolete flex header declarations and unused Workshop class aliases are removed. No concept previews, study assets, dependencies, CAD changes or deployment configuration are included. Existing untracked prompt documents remain untouched.
-
-## Outstanding limitations and next actions
-
-- Before release: review and merge PR #22 into `develop`, check the visible staging entry, then use the normal production build/release flow. No feature setting is required. Vercel Preview uses its system `VERCEL_ENV=preview`; production builds hide the entry. Do not promote a compiled Preview artifact. Inspect real platform previews/cache refreshes after an authorized release.
-- Complete physical iPhone/Android, Safari/WebKit, sustained GPU/thermal and representative accessibility/usability review. Desktop viewport and synthetic-touch checks do not qualify those gates.
-- CAD exceptions, uncertain alloys/finishes, middle-ring interference and unresolved lock actuation remain in [CAD notes](docs/CAD_NOTES.md). Separation and Workshop dependencies are illustrative; mechanical review remains required for mechanical claims.
-- Clean-machine CAD reproduction is unverified; prepared source regression inputs remain local and ignored. Public redistribution/publication needs the applicable [release gates](docs/RELEASE_GATES.md).
-- Existing build notices include large client chunks and vinext route/framework notices. No runtime performance improvement is claimed from repository cleanup.
-- Next: review the simplified entry guards and staging, then complete applicable device/human reviews before release decisions. No publication or production deployment is part of this work.
+- Public CAD/derived-model/metadata and reconstruction-image redistribution is
+  unresolved after checking current maker download pages. Obtain written maker
+  permission covering present assets and retained public history; private-site
+  permission and download availability do not establish this right. If permission
+  cannot be obtained, separately authorize a code-only distribution with external
+  assets. Essential runtime assets have been preserved.
+- Decide whether historical internal prompts/reports and personal author email
+  metadata can become public. Any necessary history rewrite, old-ref removal or
+  credential rotation needs separate authorization; none was performed.
+- Enforce the `develop` deletion/force-push rule in repository settings; API/browser
+  access is insufficient to configure it here. Repository visibility remains
+  private. No production merge, release, deployment or publication was performed.
+- Applicable physical-device, representative accessibility/usability, deployment
+  and mechanical claim gates remain. Clean-machine CAD reproduction is unverified.
