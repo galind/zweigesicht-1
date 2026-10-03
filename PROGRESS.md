@@ -42,14 +42,22 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
   name. Manual release dispatch runs only from `develop`; untrusted PR code is
   never run with the release write token. Preparation-branch Git deployments
   are disabled in `vercel.json` to honor the instruction not to deploy.
-- PR #23 is merged. Live SSH refs are `main` (`c7e8f23`) and
-  `codex/running-movement` (`45fa9d3`); remote `develop` was deleted. The preparation
-  branch starts at the last verified integration head `fe449ec`, which is PR #23's
-  second parent and has the same tracked tree as current `main`. Restoring the
-  missing PR base requires a delivery decision; no branch is silently recreated.
-  Preparation changes are committed at `2cd8d06` and pushed over SSH on
-  `codex/public-repository-preparation`. Draft PR creation is blocked by the
-  absent `develop` base, not by SSH or the GitHub app; both connections work.
+- PR #23 is merged. At the user's request, remote `develop` was restored over
+  SSH from current `main` (`c7e8f23`) on 3 October 2026. Existing staging Git
+  integration may react to that restoration. `main` has not been changed.
+- Preparation changes are pushed on `codex/public-repository-preparation`.
+  The restored base makes the requested feature draft PR possible again.
+- Future production promotion uses the manual **Release verified develop**
+  workflow instead of a release PR: enter the full reviewed SHA and `release`.
+  A read-only job verifies that exact commit; a separate write job checks current
+  branch heads and fast-forwards `main` without force. It never deletes `develop`.
+  The workflow has been tested locally, not dispatched. Existing main protection
+  may reject the direct update; no bypass has been configured.
+- Server-side deletion protection is still unconfirmed. The connected GitHub app
+  exposes no repository settings/ruleset mutation tool, and the browser settings
+  session exposes no usable controls. Configure an active rule matching exactly
+  `develop`, disallowing deletion and force pushes, to protect it against deletion
+  outside this workflow. The workflow alone cannot enforce that repository rule.
 
 ## Exposure review
 
@@ -75,7 +83,7 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
 
 ## Verification
 
-- 68 automated tests, Workshop inventory/graph validation, 114 prepared CPU
+- 82 automated tests (including 14 release workflow tests), Workshop inventory/graph validation, 114 prepared CPU
   source/runtime checks and 1,119 sampled access checks pass.
 - TypeScript, lint, app/docs/config formatting and diff whitespace checks pass.
   The legacy compact CAD runner has pre-existing whole-file formatter drift;
@@ -98,8 +106,10 @@ Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permane
   favicon, unchanged social image, exact tracked model inventories and reference
   exclusion across both application/Vercel build formats and local HTTP delivery.
   All 13 tracked model/image payload hashes match the integration baseline.
-- Workflow branch policy passes four trusted/fork/target scenarios. No GitHub CI
-  run for this feature can start until a PR base/delivery decision is resolved.
+- Workflow branch policy passes four trusted/fork/target scenarios. Release tests
+  exercise the actual promotion script and shell preflight with mocked GitHub refs:
+  exact SHA, non-force update, retained develop, stale reviews, branch races,
+  divergent history and protection rejection. No live production dispatch was run.
 
 Prepared source/runtime and sampled access checks use ignored local source inputs;
 an application build from tracked assets is a separate reproducibility claim.
@@ -118,8 +128,8 @@ GPU/thermal, human accessibility or mechanical certification is claimed.
 - Decide whether historical internal prompts/reports and personal author email
   metadata can become public. Any necessary history rewrite, old-ref removal or
   credential rotation needs separate authorization; none was performed.
-- Decide how to restore or change the missing `develop` PR target without violating
-  the no-deployment instruction. Repository visibility remains private. No merge,
-  release, deployment or publication is part of this preparation.
+- Enforce the `develop` deletion/force-push rule in repository settings; API/browser
+  access is insufficient to configure it here. Repository visibility remains
+  private. No production merge, release, deployment or publication was performed.
 - Applicable physical-device, representative accessibility/usability, deployment
   and mechanical claim gates remain. Clean-machine CAD reproduction is unverified.
