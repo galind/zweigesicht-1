@@ -3,11 +3,11 @@
 The repository uses one production branch, one long-lived integration branch
 and short-lived feature branches.
 
-| Branch | Role | Vercel target |
-| --- | --- | --- |
-| `main` | Production source of truth | Production deployment and public domains |
-| `develop` | Integrated, release-candidate state | Persistent branch-specific Preview deployment used as staging |
-| `feature/*`, `fix/*`, `codex/*` | Isolated work | Per-branch and pull-request Preview deployments |
+| Branch                          | Role                                | Vercel target                                                 |
+| ------------------------------- | ----------------------------------- | ------------------------------------------------------------- |
+| `main`                          | Production source of truth          | Production deployment and public domains                      |
+| `develop`                       | Integrated, release-candidate state | Persistent branch-specific Preview deployment used as staging |
+| `feature/*`, `fix/*`, `codex/*` | Isolated work                       | Per-branch and pull-request Preview deployments               |
 
 ## Feature flow
 
@@ -19,14 +19,16 @@ and short-lived feature branches.
 
 The CI workflow runs tests, inventory validation, TypeScript, lint and the
 production build for pull requests and pushes involving `develop` or `main`.
-It rejects direct feature pull requests to `main`; only `develop` may be
-promoted there.
+It rejects direct feature pull requests to `main`; only this repository’s
+`develop` may be promoted there, including when a fork names its branch `develop`.
+PR CI uses read-only permissions and does not persist checkout credentials.
+Never run untrusted PR code with repository secrets or `pull_request_target`.
 
 ## Release flow
 
 Pushing or merging into `develop` never proposes or starts a production release.
 When a release is actually wanted, manually run the **Prepare production
-release** workflow and enter `release` as its confirmation. If unreleased
+release** workflow from `develop` and enter `release` as its confirmation. If unreleased
 commits exist and no release pull request is open, it creates a draft
 `develop` → `main` pull request. The release PR is deliberately not auto-merged:
 staging, sustained rendering performance, applicable release gates and the
@@ -61,3 +63,10 @@ Urgent fixes still target `develop` first and use the same release PR. If a
 production-only emergency forces a direct `main` change, immediately merge that
 change back into `develop` before accepting more feature work. This exception
 should remain rare and explicit.
+
+## Preparation without deployment
+
+`vercel.json` disables automatic Git deployments only for
+`codex/public-repository-preparation`, so its requested push/draft PR does not
+publish a Preview. Other branches retain the normal deployment flow. This uses
+[Vercel's branch deployment setting](https://vercel.com/docs/project-configuration/git-configuration#gitdeploymentenabled).

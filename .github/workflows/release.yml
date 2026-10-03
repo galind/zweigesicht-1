@@ -19,6 +19,7 @@ permissions:
 jobs:
   release-pr:
     name: Open develop to main release PR
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - name: Create or find release PR

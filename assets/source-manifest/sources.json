@@ -49,5 +49,22 @@
       "format": "STEP ISO-10303-21"
     }
   ],
-  "redistribution_note": "Public download access was verified. Explicit redistribution terms were not established during preflight; resolve before publishing source or derived assets."
+  "redistribution_note": "Public download access was verified. Explicit redistribution terms were not established during preflight; resolve before publishing source or derived assets.",
+  "rights_review": {
+    "checked_at": "2026-10-03",
+    "status": "unresolved; public repository redistribution not authorized by recorded evidence",
+    "pages_checked": [
+      "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/",
+      "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+      "https://www.marcolangwatches.com/en/downloads-2/"
+    ],
+    "finding": "CAD/download pages offer files but establish no explicit public redistribution grant. Imprint retrieval timed out. No additional permission document is tracked in the repository. Existing private-deployment authorization is not a public-repository grant.",
+    "affected": [
+      "explorer/public/models/ (geometry, recoveries and source-derived manifests/buffers)",
+      "assets/derived/complete-separation.json and source-derived portions of assets/authored/",
+      "explorer/public/images/ (current and historical CAD reconstruction renders)",
+      "historical runtime payload versions and renders in reachable Git history"
+    ],
+    "smallest_resolution": "Obtain and record maker permission covering public Git history, current source-derived geometry/metadata, modification and redistribution, and reconstruction images. If unavailable, prepare a separately authorized code-only distribution with externally supplied assets; do not delete essential runtime assets from this preparation branch."
+  }
 }

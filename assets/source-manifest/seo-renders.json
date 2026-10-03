@@ -28,5 +28,11 @@
       "usage": "Current Open Graph, X card and structured-data image",
       "source_geometry_manifest": "assets/source-manifest/sources.json"
     }
-  ]
+  ],
+  "favicon": {
+    "path": "explorer/public/favicon.svg",
+    "sha256": "a87273fbb5886d7474ecb8d20ed8c81db41e7f6f7ba9bd5462737f8de98f56a3",
+    "source": "Project-authored SVG gg monogram, 3 October 2026; system Arial/Helvetica glyphs, no bundled font",
+    "supersedes": "Unattributed blue scaffold icon introduced at 00fb905; historical copies still require publication review"
+  }
 }

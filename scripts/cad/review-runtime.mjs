@@ -827,12 +827,13 @@ const tickCode=ts.transpileModule('module.exports=function(){return '+tickField.
 vm.runInNewContext(tickCode,{module:tickModule,THREE,...load('explorer/src/experience/motion.ts'),performance,console,requestAnimationFrame:()=>1,cancelAnimationFrame(){},document:{hidden:false}});
 const renderOrder=[];
 const frameFixture={dead:false,contextLost:false,lastFrame:0,lastNotify:1e9,benchmark:null,needsRender:true,presentationMoving:false,travel:null,ready:false,awaitingFirstFrame:true,loadStart:performance.now(),frameIntervals:[],renderCount:0,
- state:{...initialState,phase:'whole'},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
- renderer:{render(){renderOrder.push('beauty')},info:{render:{triangles:1,calls:1}}},surfaceOcclusion:{render(){renderOrder.push('surface')}},
- applyPose:()=>false,retargetVisibility(){},ensureFramingRange(){},adjustQuality(){},scheduleFrame(){this.frame=1},emit(){this.snapshotPending=false;renderOrder.push(this.ready?'ready':'pending')}};
+ state:{...initialState,phase:'whole'},host:{clientWidth:800,clientHeight:800},camera:new THREE.PerspectiveCamera(),scene:{},controls:{enabled:false,target:new THREE.Vector3(),update:()=>false},
+ renderer:{getSize(out){return out.set(800,800)},render(){renderOrder.push('beauty')},info:{render:{triangles:1,calls:1}}},surfaceOcclusion:{render(){renderOrder.push('surface')}},
+ applyPose:()=>false,retargetVisibility(){},ensureFramingRange(){},adjustQuality(){},requestRender(){this.needsRender=true},scheduleFrame(){this.frame=1},emit(){this.snapshotPending=false;renderOrder.push(this.ready?'ready':'pending')}};
 const tick=tickModule.exports.call(frameFixture);
 assert.equal(frameFixture.ready,false);tick(100);
-assert.deepEqual(renderOrder,['beauty','surface','ready']);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
+assert.deepEqual(renderOrder,['beauty','surface','pending']);assert.equal(frameFixture.ready,false);assert.equal(frameFixture.controls.enabled,false);
+renderOrder.length=0;tick(104);assert.deepEqual(renderOrder,['beauty','surface','ready']);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
 frameFixture.needsRender=false;frameFixture.presentationMoving=true;renderOrder.length=0;tick(108);
 assert.deepEqual(renderOrder,['beauty','surface','ready'],'The terminal pose sample must be painted and its final snapshot published before sleeping');
 renderOrder.length=0;tick(112);assert.equal(renderOrder.length,0,'After the terminal sample the viewer must be idle');
@@ -840,14 +841,14 @@ frameFixture.ready=false;frameFixture.awaitingFirstFrame=true;frameFixture.needs
 assert.doesNotThrow(()=>tick(116));assert.equal(frameFixture.ready,false);assert.equal(frameFixture.awaitingFirstFrame,false);assert.equal(frameFixture.loadStage,'error');assert.equal(frameFixture.controls.enabled,false);assert.ok(frameFixture.error);assert.equal(frameFixture.travel,null);assert.equal(frameFixture.presentationMoving,false);
 let errorFrameAttempts=0;frameFixture.renderer.render=()=>{errorFrameAttempts++};tick(120);assert.equal(errorFrameAttempts,0,'A failed renderer must stay idle until retry');
 // Re-enter preparation as load() does, then require both passes before ready.
-frameFixture.loadStage='preparing';frameFixture.error='';frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;tick(124);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
+frameFixture.loadStage='preparing';frameFixture.error='';frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.firstFrameSize='';tick(124);assert.equal(frameFixture.ready,false);tick(126);assert.equal(frameFixture.ready,true);assert.equal(frameFixture.loadStage,'ready');assert.equal(frameFixture.controls.enabled,true);
 frameFixture.ready=false;frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.surfaceOcclusion.render=()=>{throw Error('No valid contact frame')};tick(128);assert.equal(frameFixture.loadStage,'error');assert.equal(frameFixture.ready,false);assert.equal(frameFixture.controls.enabled,false);
-frameFixture.surfaceOcclusion.render=()=>{};frameFixture.loadStage='preparing';frameFixture.error='';frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;tick(132);assert.equal(frameFixture.ready,true);
+frameFixture.surfaceOcclusion.render=()=>{};frameFixture.loadStage='preparing';frameFixture.error='';frameFixture.awaitingFirstFrame=true;frameFixture.needsRender=true;frameFixture.firstFrameSize='';tick(132);assert.equal(frameFixture.ready,false);tick(134);assert.equal(frameFixture.ready,true);
 frameFixture.renderer.render=()=>{};frameFixture.awaitingFirstFrame=false;frameFixture.ready=true;
 frameFixture.camera.position.set(0,0,70);frameFixture.travel={position:new THREE.Vector3(0,0,-70),target:new THREE.Vector3()};
 for(let i=1;i<=12;i++){tick(116+i*100);assert.ok(frameFixture.camera.position.distanceTo(frameFixture.controls.target)>69.999,'Side reversal must not cut through the movement');}
 assert.equal(frameFixture.travel,null);assert.ok(frameFixture.camera.position.equals(new THREE.Vector3(0,0,-70)));
-results.push({check:'readiness follows complete beauty/contact frame; beauty/contact failures expose a retry state and stop rendering until successful retry; camera side reversal keeps safe radius and settles exactly',status:'pass',scope:'actual frame callback with CPU renderer facade'});
+results.push({check:'readiness follows two stable beauty/contact frames; beauty/contact failures expose a retry state and stop rendering until successful retry; camera side reversal keeps safe radius and settles exactly',status:'pass',scope:'actual frame callback with CPU renderer facade'});
 
 // Exercise the actual frame callback with real OrbitControls: opposite faces
 // must turn over without the sideways roll caused by independent up/view arcs.
