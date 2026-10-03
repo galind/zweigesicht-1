@@ -56,15 +56,19 @@
     "pages_checked": [
       "https://www.marcolangwatches.com/en/cad-2/zweigesicht-1/",
       "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
-      "https://www.marcolangwatches.com/en/downloads-2/"
+      "https://www.marcolangwatches.com/en/downloads-2/",
+      "https://www.marcolangwatches.com/en/impressum-2/"
     ],
-    "finding": "CAD/download pages offer files but establish no explicit public redistribution grant. Imprint retrieval timed out. No additional permission document is tracked in the repository. Existing private-deployment authorization is not a public-repository grant.",
+    "finding": "Rechecked CAD assembly/catalog and downloads pages on 3 October 2026: downloads are offered without an explicit public redistribution grant. Movement catalog and the actual linked imprint timed out. No public-redistribution permission document is recorded in tracked provenance; private-deployment permission does not cover public Git history, forks or asset redistribution.",
     "affected": [
       "explorer/public/models/ (geometry, recoveries and source-derived manifests/buffers)",
       "assets/derived/complete-separation.json and source-derived portions of assets/authored/",
       "explorer/public/images/ (current and historical CAD reconstruction renders)",
       "historical runtime payload versions and renders in reachable Git history"
     ],
-    "smallest_resolution": "Obtain and record maker permission covering public Git history, current source-derived geometry/metadata, modification and redistribution, and reconstruction images. If unavailable, prepare a separately authorized code-only distribution with externally supplied assets; do not delete essential runtime assets from this preparation branch."
+    "smallest_resolution": "Obtain and record maker permission covering public Git history, current source-derived geometry/metadata, modification and redistribution, and reconstruction images. If unavailable, prepare a separately authorized code-only distribution with externally supplied assets; do not delete essential runtime assets from this preparation branch.",
+    "inventory": "assets/source-manifest/publication-inventory.json",
+    "permission_request_draft": "docs/ASSET_PERMISSION_REQUEST.md",
+    "code_only_plan": "docs/RELEASE_GATES.md#code-only-alternative"
   }
 }

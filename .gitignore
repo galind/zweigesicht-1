@@ -45,3 +45,9 @@ assets/reference/finishing/
 
 # Local working briefs are not project documentation.
 docs/*_PROMPT.md
+
+# Keep revived internal working briefs/reports local; history requires separate remediation.
+/*_PROMPT.md
+/*_GOAL.md
+/PREFLIGHT_REPORT.md
+/docs/*_GOAL.md

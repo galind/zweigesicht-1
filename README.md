@@ -73,6 +73,11 @@ recorded evidence. Keep the repository private until the
 [publication gates](docs/RELEASE_GATES.md) are cleared. This independent project
 is not affiliated with or endorsed by the maker.
 
+The [publication inventory](assets/source-manifest/publication-inventory.json)
+records remote-reachable asset versions. The gates include a reviewable history
+remediation plan and a code-only setup alternative; the
+[permission request](docs/ASSET_PERMISSION_REQUEST.md) is an unsent draft.
+
 Source URLs and hashes live in `assets/source-manifest/`; authored decisions
 live in `assets/authored/`. Original CAD, reference imagery, environments and
 build/evidence output remain ignored. [CAD notes](docs/CAD_NOTES.md) document
