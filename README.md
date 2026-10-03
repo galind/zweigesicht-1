@@ -1,40 +1,38 @@
 # Zweigesicht-1
 
-A real-CAD construction explorer for Marco Lang’s ml–01 movement, with a separate assembly puzzle at `/workshop`. This is static exploration, not a running-watch simulation or servicing procedure.
+An interactive 3D explorer of Marco Lang's Zweigesicht-1 / ML-01 watch movement,
+built with React, TypeScript and Three.js from the maker's CAD assembly.
 
-The explorer addresses all 426 source instances. It supports six functional groups, inspection/isolation, All parts, disassembly/reassembly, fitted case appearances, shared dial visibility and independent hand shapes. Fine hands follow the case material. Reset preserves side and configuration.
+Inspect and isolate components, explore six mechanism groups, separate the
+assembly, and choose case, dial and hand appearances. A separate Workshop at
+`/workshop` offers Easy and Hard assembly puzzles with optional placement help,
+Undo and local saves. This is static construction exploration; movement timing,
+assembly paths and finishes are interpretations, not a servicing guide.
 
-Workshop starts through **Be a watchmaker** on the homepage when its entry is enabled (staging and local development by default). Production keeps the entry unlisted; `/workshop` remains directly accessible. Easy offers 89 prepared fits; Hard has 249 individual parts and 35 explicit workbench transfers. Both start with 16 fitted leaves and finish with the same 265 leaves. Ready now offers constructible choices; All parts is searchable and keeps unavailable parts inspectable. Show seat is optional assistance. Free orbit, source-scale gallery dragging, Flip, Reset, Undo and local nonlinear saves are supported. `/play` redirects permanently to `/workshop`.
+## Run locally
 
-See [current status](PROGRESS.md), [architecture](docs/LOCAL_ARCHITECTURE.md), [CAD constraints and reproduction](docs/CAD_NOTES.md), and [release gates](docs/RELEASE_GATES.md).
-
-## Setup and run
-
-Use Node.js 24 (CI’s version; minimum 22.13). The tracked runtime assets are sufficient to run and build the application; original CAD and Python are needed only for source reproduction.
+Use Node.js 24 (minimum 22.13). Run from the repository root:
 
 ```sh
 npm ci --prefix explorer
 npm --prefix explorer run dev
 ```
 
-Development binds to **http://127.0.0.1:4173/**. The local middleware serves the prepared gzip CAD with content-hashed URLs. Production preview:
+Open <http://127.0.0.1:4173/>. Tracked runtime models are sufficient to run the
+application; original CAD and Python are needed only to regenerate assets.
+
+To build and serve the production application locally:
 
 ```sh
 npm --prefix explorer run build
 npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 ```
 
-### Homepage Workshop entry
+Workshop's homepage entry appears in development and Vercel Preview builds;
+it is hidden in production. Direct `/workshop` access remains available and
+`/play` redirects there. Workshop is excluded from indexing and the sitemap.
 
-Two code guards hide **Be a watchmaker**, its chooser and `/?assemble=1` in
-production. Vite compiles the same boolean for server and client: visible during
-local development or a Vercel Preview build (`VERCEL_ENV=preview`), hidden otherwise.
-To enable it in production when ready, change the boolean in `explorer/vite.config.ts`
-to `true` and release the code. There is no configuration override.
-
-## Verification
-
-Run from the repository root:
+## Check changes
 
 ```sh
 node --test tests/*.test.mjs
@@ -42,62 +40,42 @@ node scripts/play/validate-inventory.mjs
 npm --prefix explorer run typecheck
 npm --prefix explorer run lint
 npm --prefix explorer run build
-# With the production server above running:
+# With the production server running:
 node explorer/scripts/check-seo.mjs http://127.0.0.1:4176
 ```
 
-The HTTP metadata check covers homepage and Workshop social cards in the initial
-HTML for X, Facebook and LinkedIn crawler user agents, clean canonical URLs for
-query-string links, the `/play` redirect, and delivery of the preview image.
-Actual platform preview rendering and cache refreshes still need a deployed check.
+See [architecture and extended checks](docs/LOCAL_ARCHITECTURE.md) for browser
+and loading suites, and [CAD notes](docs/CAD_NOTES.md) for asset reproduction.
+Desktop browser checks do not establish physical-device, accessibility or
+mechanical certification.
 
-The source/runtime regression suite additionally needs the ignored CAD inputs described in [CAD notes](docs/CAD_NOTES.md):
+## Deployment
 
-```sh
-node scripts/cad/review-runtime.mjs
-node scripts/play/fixed-access-check.mjs
-```
+`develop` is integration/staging and `main` is production. Feature PRs target
+`develop`; the manual release workflow verifies a reviewed commit before
+fast-forwarding `main`. See [branching and releases](docs/BRANCHING_AND_RELEASES.md).
 
-Browser runners use an existing Playwright installation and Chrome. Set `PLAYWRIGHT_MODULE` to its absolute `index.mjs` path and `CHROME_PATH` to the Chrome executable when they are not available through the defaults. No browser dependency is required by the application.
+The root `vercel.json` packages `npm --prefix explorer run build:vercel` output
+for Vercel's Git integration. Canonical/social URLs are set in
+`explorer/src/content/seo.ts` and `explorer/app/sitemap.ts`; review them before
+hosting a fork. Building locally does not authorize publication.
 
-```sh
-node scripts/play/browser-check.mjs http://127.0.0.1:4176 easy
-node scripts/play/browser-check.mjs http://127.0.0.1:4176 hard
-node scripts/play/drag-check.mjs http://127.0.0.1:4176
-node scripts/play/access-check.mjs http://127.0.0.1:4176
-node scripts/review/explorer-check.mjs http://127.0.0.1:4176
-node explorer/scripts/measure-build.mjs
-```
+## Licensing and source assets
 
-The `focused`, `home` and loading suites expect the entry to be visible. Build
-with `VERCEL_ENV=preview npm --prefix explorer run build`, restart the local server,
-then run `node scripts/play/browser-check.mjs http://127.0.0.1:4176 focused`,
-the same runner with `home`, and
-`node scripts/review/loading-check.mjs http://127.0.0.1:4176`. These are local
-checks; do not deploy or promote the compiled Preview artifact to production.
+Guillem Galindo's original code and documentation use the standard
+[MIT License](LICENSE). Third-party code retains its upstream licenses;
+[notices](explorer/public/third-party-notices.txt) ship at `/third-party-notices.txt`.
 
-Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
-
-`/?inspect=1` exposes lazy browser regression/benchmark tools and local delivery-failure fixtures. `?no3d=1` exercises fallback and `?text=200` enlarges root text. Browser viewport and synthetic touch checks do not establish physical-device or accessibility certification.
-
-## Deployment and source boundaries
-
-The root `vercel.json` is the deployment configuration. `npm --prefix explorer run build:vercel` produces `explorer/.vercel/output`; the root build command copies it to `.vercel/output`. Standard and Vercel builds use the same manifest-driven asset pruner, reject missing required assets and exclude local reference imagery. Build output pruning never deletes original/generated inputs.
-
-Feature branches start from and target `develop`; its Vercel Preview is staging. Reviewed `develop` → `main` releases use the existing Git integration. See [branching and releases](docs/BRANCHING_AND_RELEASES.md). Building locally does not authorize publishing.
-
-Source URLs/hashes stay under `assets/source-manifest/`; authored membership, placements and decisions stay under `assets/authored/`. Original CAD, reference imagery, evidence, caches and environments remain ignored. Only the reviewed runtime payloads allowed by `.gitignore` are tracked. Public redistribution and publication remain subject to the [release gates](docs/RELEASE_GATES.md).
-
-## Licensing and attribution
-
-Guillem Galindo's original code and documentation are available under the
-standard [MIT License](LICENSE), including commercial reuse. Third-party code
-keeps its upstream licenses; [notices](explorer/public/third-party-notices.txt)
-are included in both application build formats at `/third-party-notices.txt`.
-
-Marco Lang / Atelier Marco Lang owns the watch design and supplied CAD. The
+Marco Lang / Atelier Marco Lang owns the watch design and supplied CAD.
 CAD, derived runtime geometry/metadata and reconstruction images are **excluded**
-from this MIT grant. Source links and hashes remain in `assets/source-manifest/`.
-Public CAD/derived-asset redistribution permission is still unresolved; keep the
-repository private until the [publication gates](docs/RELEASE_GATES.md) are cleared.
-This independent explorer is not affiliated with or endorsed by the maker.
+from this MIT grant. Public redistribution permission is not established by the
+recorded evidence. Keep the repository private until the
+[publication gates](docs/RELEASE_GATES.md) are cleared. This independent project
+is not affiliated with or endorsed by the maker.
+
+Source URLs and hashes live in `assets/source-manifest/`; authored decisions
+live in `assets/authored/`. Original CAD, reference imagery, environments and
+build/evidence output remain ignored. [CAD notes](docs/CAD_NOTES.md) document
+source defects, recoveries and interpretation limits.
+
+See [current status](PROGRESS.md) for verified results and remaining work.

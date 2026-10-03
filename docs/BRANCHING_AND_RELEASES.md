@@ -44,19 +44,16 @@ Vercel's existing Git integration is responsible for production delivery from
 `main`; no Vercel token or deploy command is added. Do not promote a Preview
 artifact. GitHub's `GITHUB_TOKEN` updates do not trigger another push CI run,
 so the release workflow performs its own production verification before updating
-`main`. Confirm the Vercel integration reacts to the workflow's update during the
-first separately authorized release. Branch protection that requires a PR can
-reject this direct update; do not bypass protections or force-push to work around it.
+`main`. Verify the resulting Vercel production deployment after promotion.
+Branch protection that requires a PR can reject this direct update; do not bypass protections or force-push to work around it.
 
 ## Retaining develop
 
-`develop` was restored from current `main` (`c7e8f23`) on 3 October 2026 after
-PR #23's release removed the remote branch. Workflow promotion avoids the
-release-PR automatic head-deletion path. For enforced protection against other
-deletions, set an active branch rule for exactly `develop` with deletion and
-force pushes disallowed. GitHub protection/rulesets can also prevent automatic
-head deletion while allowing disposable feature branches to be removed.
-Repository settings protection is separate from these tracked workflow changes.
+Workflow promotion updates `main` without creating a release PR or deleting
+`develop`. Protect the long-lived `develop` branch with an active rule that
+blocks deletion and force pushes. This repository setting also guards against
+other deletion paths; the workflow alone cannot enforce it. Its current setting
+has not been verified by this review.
 
 The generated Vercel branch URL for `develop` is the default staging URL. A
 custom staging domain or separate staging environment variables can be assigned
@@ -78,9 +75,9 @@ production-only emergency forces a direct `main` change, immediately merge that
 change back into `develop` before accepting more feature work. This exception
 should remain rare and explicit.
 
-## Preparation without deployment
+## Reviews without deployment
 
-`vercel.json` disables automatic Git deployments only for
-`codex/public-repository-preparation`, so its requested push/draft PR does not
-publish a Preview. Other branches retain the normal deployment flow. This uses
-[Vercel's branch deployment setting](https://vercel.com/docs/project-configuration/git-configuration#gitdeploymentenabled).
+A push or PR can trigger Vercel Preview deployment. For preparation work that
+must stay local, disable Git deployment for its exact branch in `vercel.json`
+before pushing. Current preparation branch exceptions are listed in that file.
+See [Vercel's branch deployment setting](https://vercel.com/docs/project-configuration/git-configuration#gitdeploymentenabled).
