@@ -21,10 +21,13 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
   through another checked PR. It aborts on branch changes and never bypasses rules.
 - The release job runs only from `main`, using a private app token restricted to
   this repository and a `release-automation` environment restricted to main.
-  PR CI remains read-only. App/environment credential provisioning is pending;
-  no release app credentials have been created or added.
+  PR CI remains read-only. The environment is created with only the `main` branch
+  allowed (zero tags) and administrator protection bypass disabled. App creation,
+  installation and credential provisioning are pending; no release app credentials
+  have been created or added.
 - Current validation: all 92 tests and lint pass. Prior inventory, typecheck and
   both production builds passed; app code and build configuration are unchanged.
+  GitHub CI also passed for implementation commit `14f34b0` (run 37358264288).
   The one-click controller adds mocked GitHub tests for release/sync,
   branch races, forbidden invocations, blocked CI and failed/partial merges.
   Full integration validation requires the app setup and an authorized release.
