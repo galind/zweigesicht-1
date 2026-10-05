@@ -1,15 +1,11 @@
-name: Verify release candidate
+name: Release to production
 
 on:
   workflow_dispatch:
     inputs:
       commit:
-        description: Full SHA of the develop commit reviewed in staging
-        required: true
-        type: string
-      confirmation:
-        description: Type "release" after checking staging and applicable release gates
-        required: true
+        description: Optional reviewed develop SHA; leave empty to release its current head
+        required: false
         type: string
 
 concurrency:
@@ -20,51 +16,44 @@ permissions:
   contents: read
 
 jobs:
-  verify:
-    name: Verify reviewed commit
+  release:
+    name: Release through protected PRs
+    if: github.ref == 'refs/heads/main' && github.repository == 'galind/zweigesicht-1'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
+    # This environment must allow only main, with the app key stored here.
+    environment: release-automation
     steps:
-      - name: Require a reviewed develop commit
-        env:
-          REVIEWED_COMMIT: ${{ inputs.commit }}
-          CONFIRMATION: ${{ inputs.confirmation }}
-        run: |
-          if [[ "$GITHUB_REF" != "refs/heads/develop" || "$CONFIRMATION" != "release" || ! "$REVIEWED_COMMIT" =~ ^[0-9a-f]{40}$ || "$REVIEWED_COMMIT" != "$GITHUB_SHA" ]]; then
-            echo "Run from develop, enter its reviewed full SHA, and confirm release."
-            exit 1
-          fi
-      - name: Check out reviewed commit
+      - name: Check out trusted release controller
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: explorer/package-lock.json
-      - name: Install dependencies
-        run: npm ci --prefix explorer
-      - name: Run automated tests
-        run: node --test tests/*.test.mjs
-      - name: Validate Workshop inventory
-        run: node scripts/play/validate-inventory.mjs
-      - name: Type-check
-        run: npm --prefix explorer run typecheck
-      - name: Lint
-        run: npm --prefix explorer run lint
-      - name: Build production output
-        run: npm --prefix explorer run build
-      - name: Build Vercel production output
-        run: npm --prefix explorer run build:vercel
-
-      - name: Record candidate for a release pull request
+          sparse-checkout: .github/scripts
+      - name: Require release app configuration
+        env:
+          APP_ID: ${{ vars.RELEASE_APP_ID }}
+          APP_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
         run: |
-          {
-            echo '## Verified release candidate'
-            echo "Commit: $GITHUB_SHA"
-            echo 'Open a develop → main pull request and review the exact head SHA before merging.'
-            echo 'This workflow does not update main or publish a release.'
-          } >> "$GITHUB_STEP_SUMMARY"
+          if [[ -z "$APP_ID" || -z "$APP_KEY" ]]; then
+            echo 'Configure RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY in the main-only release-automation environment.'
+            exit 1
+          fi
+      - name: Create repository-scoped release token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
+      - name: Release exact commit and synchronize develop
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const release = require('./.github/scripts/release.cjs');
+            await release({ github, context, core });

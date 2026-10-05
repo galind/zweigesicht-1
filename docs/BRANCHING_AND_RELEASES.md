@@ -24,26 +24,60 @@ It rejects direct feature pull requests to `main`; only this repository’s
 PR CI uses read-only permissions and does not persist checkout credentials.
 Never run untrusted PR code with repository secrets or `pull_request_target`.
 
-## Release flow
+## One-click release
 
-Pushing or merging into `develop` never starts a production release. Review
-staging, the exact commit set and applicable [release gates](RELEASE_GATES.md).
-Optionally run `release.yml` (**Verify release candidate**) from `develop`, enter
-its reviewed full SHA and confirm with `release`. This read-only workflow runs
-both production builds and records the verified SHA; it cannot promote branches,
-create GitHub Releases or deploy.
+After staging review and the applicable [release gates](RELEASE_GATES.md), open
+Actions → **Release to production**, select `main`, and click **Run workflow**.
+No text input is required. The optional `commit` field pins an explicitly reviewed
+`develop` SHA; otherwise the controller captures the current head when it starts.
+Do not merge more work into either branch while a release is running.
 
-Open a PR from this repository's `develop` to `main`. CI rejects other source
-branches/repositories and runs tests, inventory validation, TypeScript, lint,
-the production build and the Vercel production build on the PR merge result.
-Review the exact head SHA in staging again if `develop` changes. Merge only after
-required checks and applicable release gates pass. Use a merge commit to retain
-the shared branch history, and retain `develop` after merging.
+The controller opens or reuses a `develop` → `main` PR, waits up to 20 minutes
+for GitHub to report it clean/mergeable under the active rules, then merges with
+an expected-head SHA and `merge` method. It does not enable auto-merge, approve
+its own PR, push refs directly or bypass protection. A changed head/base, draft,
+closed PR, conflict or rejected merge stops the run. CI verifies tests, inventory,
+types, lint and both production builds on release PRs.
 
-Vercel's existing Git integration delivers production changes from `main`.
-Verify the resulting deployment after an authorized release. Do not promote a
-Preview artifact or bypass branch protection. The candidate workflow is advisory;
-the required PR checks are the enforceable gate at merge time.
+After promotion, Vercel's Git integration handles deployment. A second checked
+`main` → `develop` PR synchronizes the merge commit back, preserving the ancestry
+needed by the strict up-to-date rule for the next release. Both branches are
+retained. If synchronization fails, the run explicitly reports that production
+was already released; resolve the sync PR before trying another release. A
+successful workflow establishes branch promotion, not deployment health: verify
+Vercel's resulting production deployment separately.
+
+## One-time release app setup
+
+The app setup and initial adoption are required before the button is operational.
+Use a private GitHub App installed only on `galind/zweigesicht-1`, with repository
+**Contents: read/write**, **Pull requests: read/write**, and **Workflows: write**
+(the latter lets releases include workflow changes). Metadata read access is
+implicit. No administration, checks-write, webhooks or account permissions are
+needed. Do not add the app to any ruleset bypass list.
+
+Create a `release-automation` GitHub environment. Under deployment branches/tags,
+select **Selected branches and tags**, add only the branch `main`, and no tags.
+Keep reviewer approval unset for one-click operation. Set environment variable
+`RELEASE_APP_ID` and environment secret `RELEASE_APP_PRIVATE_KEY` from the app.
+Do not put the private key in a repository-wide secret, the source tree or logs.
+The branch restriction is essential: it prevents PR/feature workflows from
+obtaining the credential by naming this environment.
+
+The release job checks out only the controller from its immutable `main` workflow
+commit. It does not install dependencies or run build/PR code with the app key.
+The pinned token action grants the requested permissions only for this repository,
+creates a short-lived token and revokes it at job completion. The normal
+`GITHUB_TOKEN` remains read-only. The app token lets PR CI and downstream Git
+integrations receive normal events without a separate bot-workflow approval click.
+
+Initially merge the hardening PR into `develop`, then review a bootstrap
+`develop` → `main` PR with passing CI before merging it. That bootstrap merge
+is a production promotion and requires release authorization. Sync `main` back
+into `develop` through a PR afterwards. Do not run the old unpinned workflow or
+add a bypass to bootstrap the new one. The workflow cannot be tested end-to-end
+without intentionally updating production; automated tests use a mocked GitHub
+API to exercise the success path, races, refusals and partial synchronization.
 
 ## GitHub protections
 
@@ -75,8 +109,8 @@ There are no repository deploy keys. Keep these settings when maintaining the re
   deploy keys. Retain only explicitly trusted access. Public visibility grants
   reading/forking, not writing or release-management permission.
 
-All workflow actions use full commit hashes. Review and update pins deliberately;
-no workflow needs repository write permissions. CODEOWNERS requests review from
+All workflow actions use full commit hashes. Review and update pins deliberately.
+PR CI has no write token or secrets; only the main-only release job has an app token. CODEOWNERS requests review from
 `@galind` for all files; server-side rules determine whether approval is required.
 
 The generated Vercel branch URL for `develop` is the default staging URL. A

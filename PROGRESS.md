@@ -15,18 +15,24 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
 - Actions require full commit SHAs, allow owner/GitHub-created actions, and require
   approval for every external contributor. Default token permissions remain
   read-only; workflow PR creation/approval remains disabled.
-- `codex/public-repo-hardening` pins workflow actions, removes direct production
-  branch writes, adds Vercel build verification to release PR CI and records code
-  ownership. The manual workflow only verifies candidates; promotion uses a
-  reviewed `develop` → `main` PR. This branch has Vercel Git deployment disabled.
-- Validation: 71 tests, inventory validation, typecheck, lint, production and
-  Vercel production builds passed. The old promotion tests were replaced by
-  read-only workflow and branch-policy tests. Builds temporarily excluded an
-  ignored local reference directory containing broken symlinks, then restored it.
-- Next: review and merge the hardening PR into `develop`; promote to `main` only
-  through an authorized release. Until then old unpinned workflows are blocked by
-  the new Actions policy. Server settings apply immediately across both branches.
-  No production deployment or GitHub release was performed.
+- [PR #27](https://github.com/galind/zweigesicht-1/pull/27) pins actions and adds a
+  one-click **Release to production** workflow. It creates/reuses the release PR,
+  waits for protected CI and merges only the captured head; then syncs main back
+  through another checked PR. It aborts on branch changes and never bypasses rules.
+- The release job runs only from `main`, using a private app token restricted to
+  this repository and a `release-automation` environment restricted to main.
+  PR CI remains read-only. App/environment credential provisioning is pending;
+  no release app credentials have been created or added.
+- Current validation: all 92 tests and lint pass. Prior inventory, typecheck and
+  both production builds passed; app code and build configuration are unchanged.
+  The one-click controller adds mocked GitHub tests for release/sync,
+  branch races, forbidden invocations, blocked CI and failed/partial merges.
+  Full integration validation requires the app setup and an authorized release.
+- Next: complete app setup, merge PR #27 into develop, then perform a separately
+  authorized bootstrap release PR to main and sync main back into develop.
+  Old unpinned workflows remain blocked by the Actions policy until replaced.
+  The preparation branch has Vercel Git deployment disabled; no production
+  deployment or release was performed.
 
 The publication preparation below is historical evidence from 3 October. Public
 visibility does not resolve its outstanding asset/production release gates.
