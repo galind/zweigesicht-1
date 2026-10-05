@@ -1,15 +1,11 @@
-name: Release verified develop
+name: Release to production
 
 on:
   workflow_dispatch:
     inputs:
       commit:
-        description: Full SHA of the develop commit reviewed in staging
-        required: true
-        type: string
-      confirmation:
-        description: Type "release" after checking staging and applicable release gates
-        required: true
+        description: Optional reviewed develop SHA; leave empty to release its current head
+        required: false
         type: string
 
 concurrency:
@@ -20,90 +16,44 @@ permissions:
   contents: read
 
 jobs:
-  verify:
-    name: Verify reviewed commit
+  release:
+    name: Release through protected PRs
+    if: github.ref == 'refs/heads/main' && github.repository == 'galind/zweigesicht-1'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
+    # This environment must allow only main, with the app key stored here.
+    environment: release-automation
     steps:
-      - name: Require a reviewed develop commit
-        env:
-          REVIEWED_COMMIT: ${{ inputs.commit }}
-          CONFIRMATION: ${{ inputs.confirmation }}
-        run: |
-          if [[ "$GITHUB_REF" != "refs/heads/develop" || "$CONFIRMATION" != "release" || ! "$REVIEWED_COMMIT" =~ ^[0-9a-f]{40}$ || "$REVIEWED_COMMIT" != "$GITHUB_SHA" ]]; then
-            echo "Run from develop, enter its reviewed full SHA, and confirm release."
-            exit 1
-          fi
-      - name: Check out reviewed commit
-        uses: actions/checkout@v4
+      - name: Check out trusted release controller
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+          sparse-checkout: .github/scripts
+      - name: Require release app configuration
+        env:
+          APP_ID: ${{ vars.RELEASE_APP_ID }}
+          APP_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+        run: |
+          if [[ -z "$APP_ID" || -z "$APP_KEY" ]]; then
+            echo 'Configure RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY in the main-only release-automation environment.'
+            exit 1
+          fi
+      - name: Create repository-scoped release token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
         with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: explorer/package-lock.json
-      - name: Install dependencies
-        run: npm ci --prefix explorer
-      - name: Run automated tests
-        run: node --test tests/*.test.mjs
-      - name: Validate Workshop inventory
-        run: node scripts/play/validate-inventory.mjs
-      - name: Type-check
-        run: npm --prefix explorer run typecheck
-      - name: Lint
-        run: npm --prefix explorer run lint
-      - name: Build production output
-        run: npm --prefix explorer run build
-      - name: Build Vercel production output
-        run: npm --prefix explorer run build:vercel
-
-  promote:
-    name: Promote verified commit to main
-    needs: verify
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: write
-    steps:
-      - name: Fast-forward main and retain develop
-        uses: actions/github-script@v7
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
+      - name: Release exact commit and synchronize develop
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
-            const { owner, repo } = context.repo;
-            const target = context.payload.inputs?.commit;
-            if (context.ref !== 'refs/heads/develop' ||
-                context.payload.inputs?.confirmation !== 'release' ||
-                !/^[0-9a-f]{40}$/.test(target ?? '') || target !== context.sha) {
-              throw new Error('Release must use the reviewed develop workflow commit.');
-            }
-            const read = async branch => (await github.rest.git.getRef({
-              owner, repo, ref: `heads/${branch}`,
-            })).data.object.sha;
-            if (await read('develop') !== target) {
-              throw new Error('develop advanced during verification. Review and rerun.');
-            }
-            const base = await read('main');
-            const { data: comparison } = await github.rest.repos.compareCommits({
-              owner, repo, base, head: target,
-            });
-            if (comparison.status === 'identical') {
-              core.notice('main already contains this commit; develop is retained.');
-              return;
-            }
-            if (comparison.status !== 'ahead') {
-              throw new Error('main has changes outside develop. Reconcile and review first.');
-            }
-            if (await read('main') !== base || await read('develop') !== target) {
-              throw new Error('A branch changed before promotion. Review and rerun.');
-            }
-            await github.rest.git.updateRef({
-              owner, repo, ref: 'heads/main', sha: target, force: false,
-            });
-            if (await read('main') !== target) {
-              throw new Error('Could not verify the resulting main commit.');
-            }
-            await read('develop');
-            core.notice(`Released ${target} to main. develop is retained.`);
+            const release = require('./.github/scripts/release.cjs');
+            await release({ github, context, core });

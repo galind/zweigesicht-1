@@ -1,7 +1,44 @@
 # Current project status
 
-Updated 3 October 2026. Setup is in the [README](README.md); extended checks are
-in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains private.
+Updated 5 October 2026. Setup is in the [README](README.md); extended checks are
+in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
+
+## Public repository security — 5 October 2026
+
+- Active [branch ruleset](https://github.com/galind/zweigesicht-1/rules/24522996)
+  protects `main` and `develop`: PR required, resolved conversations, up-to-date
+  branch and required `Verify` / `Branch policy` checks from GitHub Actions;
+  deletion and force pushes blocked, no bypass actors.
+- Zero collaborators and no deploy keys. Required approvals remain zero for the
+  sole maintainer; automatic head-branch deletion is off. PR creation was already
+  limited to collaborators and remains so.
+- Actions require full commit SHAs, allow owner/GitHub-created actions, and require
+  approval for every external contributor. Default token permissions remain
+  read-only; workflow PR creation/approval remains disabled.
+- [PR #27](https://github.com/galind/zweigesicht-1/pull/27) pins actions and adds a
+  one-click **Release to production** workflow. It creates/reuses the release PR,
+  waits for protected CI and merges only the captured head; then syncs main back
+  through another checked PR. It aborts on branch changes and never bypasses rules.
+- The release job runs only from `main`, using a private app token restricted to
+  this repository and a `release-automation` environment restricted to main.
+  PR CI remains read-only. The environment is created with only the `main` branch
+  allowed (zero tags) and administrator protection bypass disabled. App creation,
+  installation and credential provisioning are pending; no release app credentials
+  have been created or added.
+- Current validation: all 92 tests and lint pass. Prior inventory, typecheck and
+  both production builds passed; app code and build configuration are unchanged.
+  GitHub CI also passed for implementation commit `14f34b0` (run 37358264288).
+  The one-click controller adds mocked GitHub tests for release/sync,
+  branch races, forbidden invocations, blocked CI and failed/partial merges.
+  Full integration validation requires the app setup and an authorized release.
+- Next: complete app setup, merge PR #27 into develop, then perform a separately
+  authorized bootstrap release PR to main and sync main back into develop.
+  Old unpinned workflows remain blocked by the Actions policy until replaced.
+  The preparation branch has Vercel Git deployment disabled; no production
+  deployment or release was performed.
+
+The publication preparation below is historical evidence from 3 October. Public
+visibility does not resolve its outstanding asset/production release gates.
 
 ## Current application
 
@@ -14,7 +51,7 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains pri
 - Original contributions use standard MIT; required upstream notices ship with
   builds. Maker CAD/design and derived assets remain outside that grant.
 
-## Publication preparation
+## Publication preparation — historical
 
 `codex/publication-blockers` starts from refreshed `develop` at `90b606e`.
 Remote `main` is `0037646`; `codex/running-movement` is `45fa9d3`; no remote tags.
@@ -54,7 +91,7 @@ JSON validity, preserved runtime/license/notice bytes and changed-file formattin
 Prior browser checks remain dated evidence; this documentation/configuration
 change does not certify physical devices, mechanical behavior or live deployment.
 
-## Decisions before public visibility
+## Outstanding publication decisions from the prior audit
 
 1. Obtain maker permission for current and historical derived assets, or approve
    code-only distribution with externally supplied assets and revised setup/CI.
@@ -65,7 +102,7 @@ change does not certify physical devices, mechanical behavior or live deployment
    before separately authorizing public visibility. Making this original public
    also requires completing the older/push/manual Actions and hosted-content review.
 
-Server-side develop protection and production qualification remain unverified.
+Server-side branch protection is now verified above; production qualification remains unverified.
 Applicable physical-device, accessibility/usability, mechanical and clean-machine
 CAD reproduction gates remain outstanding. Merging preparation or releasing
 `develop` to `main` does not authorize publication.
