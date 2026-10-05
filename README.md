@@ -52,8 +52,8 @@ mechanical certification.
 ## Deployment
 
 `develop` is integration/staging and `main` is production. Feature PRs target
-`develop`; the manual release workflow verifies a reviewed commit before
-fast-forwarding `main`. See [branching and releases](docs/BRANCHING_AND_RELEASES.md).
+`develop`; the manual workflow verifies a release candidate, then a reviewed
+`develop` → `main` PR performs production promotion. See [branching and releases](docs/BRANCHING_AND_RELEASES.md).
 
 The root `vercel.json` packages `npm --prefix explorer run build:vercel` output
 for Vercel's Git integration. Canonical/social URLs are set in

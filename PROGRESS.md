@@ -1,7 +1,35 @@
 # Current project status
 
-Updated 3 October 2026. Setup is in the [README](README.md); extended checks are
-in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains private.
+Updated 5 October 2026. Setup is in the [README](README.md); extended checks are
+in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
+
+## Public repository security — 5 October 2026
+
+- Active [branch ruleset](https://github.com/galind/zweigesicht-1/rules/24522996)
+  protects `main` and `develop`: PR required, resolved conversations, up-to-date
+  branch and required `Verify` / `Branch policy` checks from GitHub Actions;
+  deletion and force pushes blocked, no bypass actors.
+- Zero collaborators and no deploy keys. Required approvals remain zero for the
+  sole maintainer; automatic head-branch deletion is off. PR creation was already
+  limited to collaborators and remains so.
+- Actions require full commit SHAs, allow owner/GitHub-created actions, and require
+  approval for every external contributor. Default token permissions remain
+  read-only; workflow PR creation/approval remains disabled.
+- `codex/public-repo-hardening` pins workflow actions, removes direct production
+  branch writes, adds Vercel build verification to release PR CI and records code
+  ownership. The manual workflow only verifies candidates; promotion uses a
+  reviewed `develop` → `main` PR. This branch has Vercel Git deployment disabled.
+- Validation: 71 tests, inventory validation, typecheck, lint, production and
+  Vercel production builds passed. The old promotion tests were replaced by
+  read-only workflow and branch-policy tests. Builds temporarily excluded an
+  ignored local reference directory containing broken symlinks, then restored it.
+- Next: review and merge the hardening PR into `develop`; promote to `main` only
+  through an authorized release. Until then old unpinned workflows are blocked by
+  the new Actions policy. Server settings apply immediately across both branches.
+  No production deployment or GitHub release was performed.
+
+The publication preparation below is historical evidence from 3 October. Public
+visibility does not resolve its outstanding asset/production release gates.
 
 ## Current application
 
@@ -14,7 +42,7 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains pri
 - Original contributions use standard MIT; required upstream notices ship with
   builds. Maker CAD/design and derived assets remain outside that grant.
 
-## Publication preparation
+## Publication preparation — historical
 
 `codex/publication-blockers` starts from refreshed `develop` at `90b606e`.
 Remote `main` is `0037646`; `codex/running-movement` is `45fa9d3`; no remote tags.
@@ -54,7 +82,7 @@ JSON validity, preserved runtime/license/notice bytes and changed-file formattin
 Prior browser checks remain dated evidence; this documentation/configuration
 change does not certify physical devices, mechanical behavior or live deployment.
 
-## Decisions before public visibility
+## Outstanding publication decisions from the prior audit
 
 1. Obtain maker permission for current and historical derived assets, or approve
    code-only distribution with externally supplied assets and revised setup/CI.
@@ -65,7 +93,7 @@ change does not certify physical devices, mechanical behavior or live deployment
    before separately authorizing public visibility. Making this original public
    also requires completing the older/push/manual Actions and hosted-content review.
 
-Server-side develop protection and production qualification remain unverified.
+Server-side branch protection is now verified above; production qualification remains unverified.
 Applicable physical-device, accessibility/usability, mechanical and clean-machine
 CAD reproduction gates remain outstanding. Merging preparation or releasing
 `develop` to `main` does not authorize publication.
