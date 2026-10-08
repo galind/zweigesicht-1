@@ -34,7 +34,7 @@ The fitted case has 41 leaves. Focus, All parts, raw external inspection and iso
 
 `Play.tsx` owns selection, Ready now/All parts, grouping/search, explicit workbench navigation, confirmations and storage feedback. `state.ts` owns graph readiness, validated replay, physical accounting and Undo. `play-manifest.json` version `play-4` owns exact leaf sets, endpoints, exclusions, action IDs and prerequisite edges; display order never defines dependencies.
 
-Easy has 89 placements. Hard has 249 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 265 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
+Easy has 89 placements. Hard has 249 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 265 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat and the optional next-fit guide reveal fitting points; Fit part provides a named click/keyboard placement control. The removed Hints preference is retained only in the saved-session schema for compatibility.
 
 The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid saves; absent mode/save returns to the homepage chooser. Changing a progressed mode or replacing corrupt/incompatible data requires confirmation. Earlier linear saves are never silently reinterpreted. Unavailable storage allows a current-tab build with a warning and retained mode query.
 
@@ -43,6 +43,17 @@ The storage key remains `zweigesicht:play:session:v1`. Direct visits resume vali
 Free mouse/one-finger orbit matches the explorer. Flip, Reset and bounded centered zoom remain quick actions. The shock workbench has an angled face pair; radial dial screws have explicit edge presets in `fixedViews.ts`. Selection, placement and Undo preserve the camera; returning from a workbench restores the main view. Camera changes never hide fitted geometry. A drop requires the active workspace, prerequisites and an exposed source-surface sample. This is visual reachability, not physical collision certification.
 
 [Release gates](RELEASE_GATES.md) distinguish automated/browser checks from mechanical, physical-device and representative human review.
+
+`journey.ts` derives eight chapter summaries and legal recommendations from the
+existing graph. It keeps available bench work together, prioritizes explicit
+transfers, and follows missing prerequisites for a blocked chapter. No guide
+action commits a placement. Chapter notes are editorial observations of the puzzle.
+The desktop companion is excluded from the model's measured framing region.
+
+Finished-movement preview is transient presentation: `sync` supplies final leaves
+with no held part and disables placement while previewing. Camera/workspace/detail
+state is captured before entering and restored on return; session and storage are
+untouched. Completion uses the same viewing mode. See the [review and decision](WORKSHOP_REVIEW.md).
 
 ## Extended verification
 
@@ -78,12 +89,11 @@ node scripts/review/explorer-check.mjs http://127.0.0.1:4176
 node explorer/scripts/measure-build.mjs
 ```
 
-The `focused`, `home` and loading suites expect the entry to be visible. Build
-with `VERCEL_ENV=preview npm --prefix explorer run build`, restart the local server,
-then run `node scripts/play/browser-check.mjs http://127.0.0.1:4176 focused`,
+The `focused`, `home` and loading suites expect the entry to be visible. It is
+now enabled in all builds. After building and starting the local server, run `node scripts/play/browser-check.mjs http://127.0.0.1:4176 focused`,
 the same runner with `home`, and
 `node scripts/review/loading-check.mjs http://127.0.0.1:4176`. These are local
-checks; do not deploy or promote the compiled Preview artifact to production.
+checks; deployment remains subject to the release gates.
 
 Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
 

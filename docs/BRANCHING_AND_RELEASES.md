@@ -62,11 +62,11 @@ configuration is optional; the branch deployment itself is automatic.
 
 ## Workshop entry
 
-Workshop's homepage entry is code-controlled: visible in local development and
-Vercel Preview (`VERCEL_ENV=preview`), hidden in production. No feature setting
-is needed. Release via the normal `develop` → `main` build; do not promote a
-Preview artifact whose visible entry is already compiled in. Enabling the entry
-later requires a code release. Direct `/workshop` access remains available.
+Workshop's homepage entry and `?assemble=1` chooser are enabled in all builds.
+Direct `/workshop` access resumes a save or opens the chooser; `/play` redirects
+there. The route remains noindex and excluded from the sitemap. Release through
+the normal `develop` → `main` process after applicable release gates are cleared.
+Enabling the entry in source does not authorize deployment.
 
 ## Hotfixes
 

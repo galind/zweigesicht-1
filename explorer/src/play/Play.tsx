@@ -18,6 +18,10 @@ import {
   CircleHelp,
   Boxes,
   SlidersHorizontal,
+  ArrowRight,
+  Check,
+  BookOpen,
+  Maximize2,
 } from 'lucide-react';
 import {
   TextButton as Control,
@@ -41,10 +45,12 @@ import {
   fittedLeafIds,
   getSavedSession,
   isComplete,
+  missingPrerequisites,
   saveSession,
   undoPlacement,
   workspaceLeafIds,
 } from './state';
+import { chapterNotes, chapterProgress, recommendFit } from './journey';
 import type { PlayLevel, PlayManifest, PlaySession, PlayStep } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
 import { useTextScalePreview } from '../experience/useTextScalePreview';
@@ -128,6 +134,14 @@ export default function Play() {
   const app = useRef<HTMLElement>(null),
     host = useRef<HTMLDivElement>(null);
   const destination = useRef<HTMLButtonElement>(null);
+  const guideButton = useRef<HTMLButtonElement>(null);
+  const fitButton = useRef<HTMLButtonElement>(null);
+  const placementFocus = useRef(false);
+  const showcaseRef = useRef(false);
+  const showcaseCamera = useRef<ReturnType<PlayViewer['captureCamera']> | null>(
+    null,
+  );
+  const showcaseTrigger = useRef<HTMLElement | null>(null);
   const savedCamera = useRef<ReturnType<PlayViewer['captureCamera']> | null>(
     null,
   );
@@ -157,6 +171,7 @@ export default function Play() {
     [inventoryView, setInventoryView] = useState<'ready' | 'all'>('ready'),
     [placementPulse, setPlacementPulse] = useState(0),
     [attempt, setAttempt] = useState(0);
+  const [showcase, setShowcase] = useState(false);
   const [confirm, setConfirm] = useState<'restart' | null>(null);
   const dialog = useRef<HTMLDialogElement>(null),
     lastFocus = useRef<HTMLElement | null>(null);
@@ -168,10 +183,15 @@ export default function Play() {
   const scrollPositions = useRef(new Map<string, number>());
   const cardPointerHandled = useRef<string | null>(null);
 
-  const sync = useCallback(() => {
+  const sync = useCallback((guiding = false) => {
     const controller = viewer.current,
       current = sessionRef.current;
     if (!controller) return;
+    if (showcaseRef.current) {
+      controller.setAssistance(false, false, false);
+      controller.update(new Set(manifest.finalLeafIds), null, false);
+      return;
+    }
     const selected =
       current && activeRef.current
         ? actions(manifest, current.level).find(
@@ -184,6 +204,7 @@ export default function Play() {
       false,
       !!current && !!held && canPlace(manifest, current, held.id),
       assistanceRef.current,
+      guiding,
     );
     controller.update(
       new Set(
@@ -195,8 +216,28 @@ export default function Play() {
       ),
       held ?? null,
       activeRef.current,
+      guiding,
     );
   }, []);
+  const leaveShowcase = useCallback(() => {
+    if (!showcaseRef.current) return;
+    showcaseRef.current = false;
+    setShowcase(false);
+    if (showcaseCamera.current)
+      viewer.current?.restoreCamera(showcaseCamera.current);
+    sync();
+    requestAnimationFrame(() => {
+      viewer.current?.layout();
+      if (showcaseTrigger.current?.isConnected)
+        showcaseTrigger.current.focus({ preventScroll: true });
+      else
+        app.current
+          ?.querySelector<HTMLButtonElement>(
+            '[aria-label="Preview the finished movement"]',
+          )
+          ?.focus({ preventScroll: true });
+    });
+  }, [sync]);
   const getViewer = useCallback(() => viewer.current, []);
   const persist = useCallback((next: PlaySession) => {
     sessionRef.current = next;
@@ -221,6 +262,12 @@ export default function Play() {
   const pick = (id: string) => {
     selectionRef.current = id;
     setSelection(id);
+    const step =
+      sessionRef.current &&
+      actions(manifest, sessionRef.current.level).find(
+        (item) => item.id === id,
+      );
+    if (step) setGroup(step.groupId);
     assistanceRef.current = false;
     setAssistance(false);
     setNotice('');
@@ -247,6 +294,10 @@ export default function Play() {
       if (saved.status === 'saved') {
         sessionRef.current = saved.session;
         setSession(saved.session);
+        const lastStep = actions(manifest, saved.session.level).find(
+          (item) => item.id === saved.session.actionIds.at(-1),
+        );
+        if (lastStep) setGroup(lastStep.groupId);
         if (
           requested &&
           requested !== saved.session.level &&
@@ -349,7 +400,20 @@ export default function Play() {
           const finishedSystem = groupSteps.every((item) =>
             next.actionIds.includes(item.id),
           );
+          const placedWithButton =
+            placementFocus.current ||
+            document.activeElement === fitButton.current ||
+            document.activeElement === destination.current;
+          placementFocus.current = false;
           apply(next);
+          if (placedWithButton)
+            requestAnimationFrame(() => {
+              if (isComplete(manifest, next))
+                app.current
+                  ?.querySelector<HTMLButtonElement>('.play-complete button')
+                  ?.focus({ preventScroll: true });
+              else guideButton.current?.focus({ preventScroll: true });
+            });
           setPlacementPulse((value) => value + 1);
           setNotice(
             isComplete(manifest, next)
@@ -423,11 +487,11 @@ export default function Play() {
     };
     return observeElementResize(
       app.current?.querySelectorAll(
-        '.play-heading, .play-dock, .play-workspace',
+        '.play-heading, .play-dock, .play-workspace, .play-story',
       ) ?? [],
       layout,
     );
-  }, [active, status.ready]);
+  }, [active, status.ready, showcase]);
   useEffect(() => {
     if (confirm || startupConflict) {
       lastFocus.current = document.activeElement as HTMLElement;
@@ -439,6 +503,16 @@ export default function Play() {
     }
   }, [confirm, startupConflict]);
 
+  useEffect(() => {
+    if (!showcase) return;
+    const exit = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') leaveShowcase();
+    };
+    window.addEventListener('keydown', exit);
+    return () => {
+      window.removeEventListener('keydown', exit);
+    };
+  }, [showcase, leaveShowcase]);
   const disabled = !status.ready || status.busy;
   const all = session ? actions(manifest, session.level) : [];
   const levelSteps = session ? manifest.levels[session.level].steps : [];
@@ -505,6 +579,17 @@ export default function Play() {
           );
         })
       : [];
+  const chapters = session ? chapterProgress(manifest, session) : [];
+  const chapter = chapters.find((item) => item.id === group);
+  const story = chapterNotes[group];
+  const recommendation = session
+    ? recommendFit(manifest, session, group, workspace)
+    : null;
+  const blockers =
+    session && selected && !fitted
+      ? missingPrerequisites(manifest, session, selected.id)
+      : [];
+  const chapterDone = !!chapter && chapter.done === chapter.total;
   const completedFits = levelSteps.filter((step) => done.has(step.id)).length;
   const completedSystems = manifest.groups.filter((candidate) =>
     all
@@ -543,6 +628,8 @@ export default function Play() {
     };
   }, [scrollKey]);
   const start = (level: PlayLevel) => {
+    showcaseRef.current = false;
+    setShowcase(false);
     viewer.current?.setDetail(null);
     if (workspaceRef.current) enterWorkspace(null);
     selectionRef.current = null;
@@ -591,6 +678,10 @@ export default function Play() {
     setStorage('');
     start(requested);
   };
+  const placeFromControl = () => {
+    placementFocus.current = true;
+    viewer.current?.place();
+  };
   const reveal = () => {
     assistanceRef.current = true;
     setAssistance(true);
@@ -598,19 +689,87 @@ export default function Play() {
     viewer.current?.guide();
   };
 
+  const enterShowcase = () => {
+    if (disabled || showcaseRef.current) return;
+    setMenu(false);
+    setHelp(false);
+    setFilters(false);
+    setProgressOpen(false);
+    showcaseTrigger.current = document.activeElement as HTMLElement;
+    showcaseCamera.current = viewer.current?.captureCamera() ?? null;
+    viewer.current?.setWorkspace(null);
+    viewer.current?.setDetail(null);
+    showcaseRef.current = true;
+    setShowcase(true);
+    sync();
+    requestAnimationFrame(() => {
+      viewer.current?.layout();
+      viewer.current?.resetView();
+      app.current
+        ?.querySelector<HTMLButtonElement>('.play-showcase-controls button')
+        ?.focus();
+    });
+  };
+  const pickChapter = (id: string) => {
+    setGroup(id);
+    selectionRef.current = null;
+    setSelection(null);
+    assistanceRef.current = false;
+    setAssistance(false);
+    setNotice('');
+    setInventoryView('ready');
+    sync();
+  };
+  const guideFit = (step: PlayStep | null = recommendation) => {
+    if (!step || disabled) return;
+    if (workspaceRef.current !== step.workspaceId)
+      enterWorkspace(step.workspaceId);
+    setInventoryView('ready');
+    setQuery('');
+    selectionRef.current = step.id;
+    setSelection(step.id);
+    setGroup(step.groupId);
+    viewer.current?.setDetail(step.viewDirectionWorld ? step : null);
+    assistanceRef.current = true;
+    setAssistance(true);
+    sync(true);
+    viewer.current?.guide();
+    setNotice(
+      'The seat is highlighted. Drag the part, tap the seat, or choose Fit part.',
+    );
+    requestAnimationFrame(() => {
+      app.current
+        ?.querySelector<HTMLElement>(`[data-action-id="${step.id}"]`)
+        ?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+  };
+
   return (
     <main
       ref={app}
       className="play-app"
       data-active={active}
+      data-showcase={showcase}
+      data-complete={complete}
       data-workspace={!!workspace}
     >
       <div className="play-canvas" ref={host} />
       <SiteHeader className="play-heading">
         <SiteHeaderActions aria-label="Workshop navigation">
+          {!showcase && (
+            <Control
+              disabled={disabled}
+              onClick={enterShowcase}
+              aria-label="Preview the finished movement"
+            >
+              <Maximize2 aria-hidden="true" />
+              <span className="play-control-label">Preview</span>
+            </Control>
+          )}
           <Control
             ref={menuButton}
             aria-label="Menu"
+            disabled={showcase}
             onClick={() => setMenu(!menu)}
             aria-expanded={menu}
             aria-controls="play-menu"
@@ -667,10 +826,68 @@ export default function Play() {
         }
         disabled={disabled || !held || !inWorkspace || !available}
         hidden={!held || !inWorkspace || !assistance}
-        onClick={() => viewer.current?.place()}
+        onClick={placeFromControl}
       >
         <span aria-hidden="true">＋</span>
       </Control>
+      {active && !complete && (
+        <aside
+          className="play-story"
+          aria-label="Chapter notes"
+          style={{ top: headerBottom + 64 }}
+        >
+          <span className="play-eyebrow">
+            THE ATELIER · CHAPTER{' '}
+            {String(
+              manifest.groups.findIndex((item) => item.id === group) + 1,
+            ).padStart(2, '0')}
+          </span>
+          <h2>{story.title}</h2>
+          <p className="play-story-invitation">{story.invitation}</p>
+          <div className="play-story-rule" />
+          <p>{chapterDone ? story.reward : story.detail}</p>
+          <span className="play-story-count">
+            {chapter?.done} / {chapter?.total} chapter actions
+          </span>
+          <progress
+            aria-label={`${chapter?.label} progress`}
+            value={chapter?.done ?? 0}
+            max={chapter?.total ?? 1}
+          />
+          <button type="button" onClick={() => setProgressOpen(true)}>
+            <BookOpen aria-hidden="true" /> See the eight chapters
+          </button>
+          <small>
+            Build at your own pace. Every fit is saved on this device when
+            storage is available.
+          </small>
+        </aside>
+      )}
+      {active && showcase && (
+        <section
+          className="play-showcase-controls site-glass"
+          aria-label={
+            complete ? 'Your completed movement' : 'Finished movement preview'
+          }
+        >
+          <span>
+            {complete
+              ? 'Built by you · 265 pieces'
+              : 'Preview · the finished movement'}
+          </span>
+          <FlipButton
+            disabled={disabled}
+            onClick={() => viewer.current?.flip()}
+          />
+          <ResetViewButton
+            disabled={disabled}
+            onClick={() => viewer.current?.resetView()}
+          />
+          <Control onClick={leaveShowcase}>
+            {complete ? 'Return to workbench' : 'Back to my build'}
+          </Control>
+        </section>
+      )}
       {active && (
         <section
           className="play-dock site-glass"
@@ -678,6 +895,52 @@ export default function Play() {
           data-pulse={placementPulse}
           data-filters={inHardMode || inventoryView === 'all'}
         >
+          {!complete && (
+            <div className="play-journey-bar">
+              <button
+                type="button"
+                className="play-journey-summary"
+                onClick={() => setProgressOpen(true)}
+                aria-label="Open chapter map"
+              >
+                <span className="play-chapter-number">
+                  {chapterDone ? (
+                    <Check aria-hidden="true" />
+                  ) : (
+                    String(
+                      manifest.groups.findIndex((item) => item.id === group) +
+                        1,
+                    ).padStart(2, '0')
+                  )}
+                </span>
+                <span>
+                  <small>
+                    {chapterDone
+                      ? 'CHAPTER COMPLETE'
+                      : session?.actionIds.length
+                        ? 'YOUR BUILD'
+                        : 'YOUR FIRST CHAPTER'}
+                  </small>
+                  <strong>{chapter?.label}</strong>
+                </span>
+                <span className="play-chapter-fraction">
+                  {chapter?.done}/{chapter?.total}
+                </span>
+              </button>
+              <button
+                type="button"
+                className="play-guide-next"
+                ref={guideButton}
+                disabled={disabled || !recommendation}
+                onClick={() => guideFit()}
+              >
+                {session?.actionIds.length
+                  ? 'Guide next fit'
+                  : 'Guide my first fit'}{' '}
+                <ArrowRight aria-hidden="true" />
+              </button>
+            </div>
+          )}
           <div className="play-progress">
             <button
               type="button"
@@ -725,12 +988,18 @@ export default function Play() {
           {complete ? (
             <div className="play-complete" aria-live="polite">
               <div>
-                <strong>You completed the movement.</strong>
+                <span className="play-eyebrow">
+                  EIGHT CHAPTERS · ONE MOVEMENT
+                </span>
+                <strong>You built this.</strong>
                 <p>
                   All 265 physical pieces are in place. The assembled movement
                   remains yours to explore.
                 </p>
               </div>
+              <Control onClick={enterShowcase}>
+                <Maximize2 aria-hidden="true" /> Admire your build
+              </Control>
               <Control onClick={() => location.assign('/')}>
                 Explore the movement
               </Control>
@@ -808,7 +1077,7 @@ export default function Play() {
                       : step.kind === 'transfer'
                         ? 'Seat completed assembly'
                         : contextLabel
-                          ? `Workbench · ${contextLabel}`
+                          ? 'Bench piece'
                           : '';
                   return (
                     <div
@@ -927,7 +1196,7 @@ export default function Play() {
                     <p>
                       {notice ||
                         (fitted
-                          ? 'Fitted. Choose another piece or undo the last move.'
+                          ? 'Fitted. Choose another piece, or Guide next fit to keep building.'
                           : held?.viewDirectionWorld &&
                               inWorkspace &&
                               status.detail !== held.id
@@ -937,12 +1206,12 @@ export default function Play() {
                                 ? 'Build this part on its dedicated bench first.'
                                 : 'Return to the watch to fit this piece.'
                               : held && !available
-                                ? 'This part is waiting for earlier work. Choose Ready now for pieces you can fit.'
+                                ? `Needs: ${blockers.map((step) => step.label).join(', ')}. Guide next fit can help you continue.`
                                 : held
                                   ? assistance
                                     ? status.obstructed
-                                      ? 'The seat is hidden from this angle. Rotate the movement or show the seat again.'
-                                      : 'Drag the highlighted part onto its seat.'
+                                      ? 'The seat is hidden from this angle. Choose Show seat to reveal it again.'
+                                      : 'Drag the part, tap the highlighted seat, or choose Fit part.'
                                     : 'Study the part, then drag its image to the matching seat.'
                                   : inventoryView === 'ready'
                                     ? 'Every piece in this tray can be fitted now. Pick one and find its seat.'
@@ -986,9 +1255,26 @@ export default function Play() {
                     (!held.viewDirectionWorld || status.detail === held.id) && (
                       <Control
                         disabled={disabled || !available}
-                        onClick={reveal}
+                        ref={
+                          assistance && !status.obstructed
+                            ? fitButton
+                            : undefined
+                        }
+                        onClick={
+                          assistance && !status.obstructed
+                            ? placeFromControl
+                            : reveal
+                        }
                       >
-                        <LocateFixed aria-hidden="true" /> Show seat
+                        {assistance && !status.obstructed ? (
+                          <>
+                            <Check aria-hidden="true" /> Fit part
+                          </>
+                        ) : (
+                          <>
+                            <LocateFixed aria-hidden="true" /> Show seat
+                          </>
+                        )}
                       </Control>
                     )}
                 </div>
@@ -1154,12 +1440,60 @@ export default function Play() {
           finalFocus={progressButton}
         >
           <SheetHeader>
-            <SheetTitle>Assembly progress</SheetTitle>
+            <SheetTitle>Your eight chapters</SheetTitle>
             <SheetDescription>
               {session?.level === 'hard' ? 'Hard' : 'Easy'} build details
             </SheetDescription>
           </SheetHeader>
           <div className="panel-body play-progress-details">
+            <p className="play-map-intro">
+              Build a little, leave, come back. Choose a chapter to explore; the
+              guide follows the work it needs first.
+            </p>
+            <div className="play-chapter-map">
+              {chapters.map((item, index) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  disabled={disabled}
+                  aria-pressed={group === item.id}
+                  onClick={() => {
+                    setGroup(item.id);
+                    setQuery('');
+                    setProgressOpen(false);
+                    if (workspace) enterWorkspace(null);
+                    pickChapter(item.id);
+                  }}
+                >
+                  <span className="play-chapter-number">
+                    {item.done === item.total ? (
+                      <Check aria-hidden="true" />
+                    ) : (
+                      String(index + 1).padStart(2, '0')
+                    )}
+                  </span>
+                  <span>
+                    <strong>{item.label}</strong>
+                    <small>{chapterNotes[item.id].invitation}</small>
+                    <small>
+                      {item.done === item.total
+                        ? 'Complete'
+                        : item.ready
+                          ? `${item.ready} ${item.ready === 1 ? 'action' : 'actions'} ready`
+                          : 'Earlier work needed'}{' '}
+                      · {item.done}/{item.total}
+                    </small>
+                    <progress
+                      aria-label={`${item.label} chapter`}
+                      value={item.done}
+                      max={item.total}
+                    />
+                  </span>
+                  <ArrowRight aria-hidden="true" />
+                </button>
+              ))}
+            </div>
+            <p className="play-map-note">{story.detail}</p>
             <p>
               <strong>{completedFits}</strong> of {levelSteps.length}{' '}
               {session?.level === 'hard' ? 'individual parts' : 'prepared fits'}
@@ -1190,6 +1524,11 @@ export default function Play() {
             </SheetDescription>
           </SheetHeader>
           <div className="panel-body play-help-copy">
+            <p>
+              Guide next fit chooses an available part, opens its workbench when
+              needed, and reveals its seat. Choose Fit part to place it without
+              dragging. You can also choose any ready piece yourself.
+            </p>
             <p>
               With a mouse, drag a card straight into the assembly. On touch,
               swipe the tray to browse, tap a card, then drag its part image

@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 3 October 2026. Setup is in the [README](README.md); extended checks are
+Updated 9 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains private.
 
 ## Current application
@@ -9,12 +9,55 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains pri
   inspection/isolation, separation and fitted case/dial/hand configurations.
 - Workshop: 89 Easy placements, or 249 Hard placements and 35 transfers; 16
   foundation leaves remain and both finish with 265. Undo/local saves retained.
-- Production hides the homepage Workshop entry and `?assemble=1`; direct
-  `/workshop`, `/play` redirect, noindex and sitemap exclusion remain.
+- Workshop entry and `?assemble=1` are enabled in source for all builds. Direct
+  `/workshop`, `/play` redirect, noindex and sitemap exclusion remain. The Atelier
+  redesign below is local and has not been deployed.
 - Original contributions use standard MIT; required upstream notices ship with
   builds. Maker CAD/design and derived assets remain outside that grant.
 
-## Publication preparation
+## Workshop Atelier — 9 October 2026
+
+Branch `codex/workshop-atelier` starts from local `develop` at `6a092c0`
+(PR #26's merge). The [in-depth review](docs/WORKSHOP_REVIEW.md) records the
+baseline findings, five options, selected direction and human-validation plan.
+
+- Eight chapter summaries, context, readiness and persistent completion feedback;
+  desktop reading companion and compact phone chapter strip.
+- Optional next-fit guide follows real dependencies, keeps bench work together,
+  prioritizes transfers and opens the appropriate workspace/fitting view.
+- Named click/keyboard placement, missing-prerequisite names, keyboard focus
+  recovery, preserved free selection, Undo and existing compatible saves.
+- Reversible finished-movement preview and completed-build viewing mode. Return
+  restores camera, bench and selection without changing saved progress.
+- Redundant old-view seat checks are deferred for guidance; animated camera travel
+  hides the destination and checks source-surface access at the final viewpoint.
+- Source geometry, authored dependency/membership manifests and licensing unchanged.
+
+Verified: 86 automated tests; recommendations traverse both modes from each of
+8 preferred chapters; inventory validation; typecheck/lint; production build and
+production HTTP/SEO checks. In-app browser completed all 89 Easy fits and all 284
+Hard actions (249 placements + 35 transfers), using public controls. Also checked
+transfer Undo, preview return from an active bench, both final faces, mode-switch
+confirmation, saved progress after reload, independent selection with assistance,
+keyboard focus after placement, direct mouse dragging, 320 × 568 and 390 × 844 layouts, 200% text,
+landscape preview, and the explicit no-3D failure route followed by recovery.
+Browser evidence is local/ignored in `artifacts/browser/atelier/`. No session
+seeding or skipped placements were used in the full builds. Guidance changes
+were verified functionally; no timing benchmark or physical-device claim is made.
+
+A broken ignored `explorer/public/reference/polish-review` symlink prevented the
+first production build. Preserved it in `artifacts/local-reference-backup/`;
+tracked assets and original reference files were untouched.
+
+Next: review the local implementation with representative visitors and actual
+touch devices, then use the normal PR/release process if approved. No push,
+deployment, redistribution, permission-request sending or visibility change.
+Existing physical-device, human-accessibility and publication gates still apply.
+
+## Prior publication preparation — 3 October 2026
+
+The following records the earlier preparation snapshot; remote state was not
+refreshed during the Workshop redesign.
 
 `codex/publication-blockers` starts from refreshed `develop` at `90b606e`.
 Remote `main` is `0037646`; `codex/running-movement` is `45fa9d3`; no remote tags.

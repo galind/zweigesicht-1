@@ -467,7 +467,8 @@ export default function Home() {
               <SheetHeader>
                 <SheetTitle>Be a watchmaker</SheetTitle>
                 <SheetDescription>
-                  Choose how much of the movement you want to build.
+                  From a bare mainplate to two finished faces. Build the
+                  movement in eight chapters, at your own pace.
                 </SheetDescription>
               </SheetHeader>
               <div className="panel-body assembly-mode-list">
@@ -478,7 +479,9 @@ export default function Home() {
                 >
                   <span>
                     <strong>Easy</strong>
-                    <small>89 prepared fits · Best for a first build</small>
+                    <small>
+                      89 prepared fits · Start here, with an optional guide
+                    </small>
                   </span>
                   <ChevronRight aria-hidden="true" />
                 </button>
@@ -488,11 +491,16 @@ export default function Home() {
                 >
                   <span>
                     <strong>Hard</strong>
-                    <small>249 individual parts · 35 subassemblies</small>
+                    <small>
+                      249 individual parts · 35 workbench assemblies
+                    </small>
                   </span>
                   <ChevronRight aria-hidden="true" />
                 </button>
-                <p>Progress is saved on this device.</p>
+                <p>
+                  Choose freely or let the guide find your next fit. Progress is
+                  saved on this device.
+                </p>
               </div>
             </SheetContent>
           </Sheet>

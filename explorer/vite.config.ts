@@ -98,13 +98,11 @@ function localCad(): Plugin {
     },
   };
 }
-export default defineConfig(({ command }) => ({
-  // Keep Workshop unlisted in production until it is ready for a code release.
+export default defineConfig(() => ({
+  // Workshop is discoverable in every build; deployment remains release-gated.
   // Vite supplies the same literal to the server and client.
   define: {
-    __WORKSHOP_ENTRY_ENABLED__: JSON.stringify(
-      command === 'serve' || process.env.VERCEL_ENV === 'preview',
-    ),
+    __WORKSHOP_ENTRY_ENABLED__: JSON.stringify(true),
   },
   css: { postcss: { plugins: [tailwindcss()] } },
   server: {

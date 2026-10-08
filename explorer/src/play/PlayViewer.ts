@@ -364,7 +364,12 @@ export class PlayViewer {
   disposeObject(object: THREE.Object3D) {
     disposeObjectResources(object);
   }
-  update(fitted: Set<string>, step: PlayStep | null, active: boolean) {
+  update(
+    fitted: Set<string>,
+    step: PlayStep | null,
+    active: boolean,
+    guiding = false,
+  ) {
     this.cancel();
     this.animation = undefined;
     // A discrete selection never resumes an earlier guided transition.
@@ -413,12 +418,17 @@ export class PlayViewer {
       this.layout();
       this.reframe();
     }
-    this.updateSeat();
+    if (!guiding) this.updateSeat();
     this.positionStage();
     this.invalidate();
     this.emit();
   }
-  setAssistance(hints: boolean, available: boolean, assistance = false) {
+  setAssistance(
+    hints: boolean,
+    available: boolean,
+    assistance = false,
+    guiding = false,
+  ) {
     this.hints = hints;
     this.available = available;
     this.assistance = assistance;
@@ -428,7 +438,7 @@ export class PlayViewer {
       available &&
       (hints || assistance);
     this.destination.dataset.assisted = String(hints || assistance);
-    this.updateSeat();
+    if (!guiding) this.updateSeat();
     this.invalidate();
   }
   captureCamera() {
@@ -679,6 +689,12 @@ export class PlayViewer {
     );
   }
   updateSeat() {
+    // Placement is disabled during camera travel. Test source-surface access at
+    // the settled view, rather than raycasting every intermediate animation frame.
+    if (this.cameraMotion) {
+      this.destination.style.visibility = 'hidden';
+      return;
+    }
     if (
       !this.current ||
       !this.ready ||
@@ -1102,8 +1118,13 @@ export class PlayViewer {
     const heading = root
       ?.querySelector('.play-heading')
       ?.getBoundingClientRect();
-    const dock = root?.querySelector('.play-dock')?.getBoundingClientRect();
-    const landscape = rect.width / rect.height > 1.4 && rect.height < 600;
+    const showcase = root?.getAttribute('data-showcase') === 'true';
+    const dock = root
+      ?.querySelector(showcase ? '.play-showcase-controls' : '.play-dock')
+      ?.getBoundingClientRect();
+    const story = root?.querySelector('.play-story')?.getBoundingClientRect();
+    const landscape =
+      !showcase && rect.width / rect.height > 1.4 && rect.height < 600;
     const workspace = root
       ?.querySelector('.play-workspace')
       ?.getBoundingClientRect();
@@ -1120,7 +1141,11 @@ export class PlayViewer {
       parseFloat(style.getPropertyValue('--play-safe-left')) || 0;
     const safeRight =
       parseFloat(style.getPropertyValue('--play-safe-right')) || 0;
-    const left = Math.max(12, safeLeft + 8);
+    const left = Math.max(
+      12,
+      safeLeft + 8,
+      story && story.width > 0 ? story.right - rect.left + 20 : 0,
+    );
     this.frameRegion = {
       top,
       bottom: Math.max(top + 80, bottom),

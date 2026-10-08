@@ -177,18 +177,23 @@ test('idle rendering schedules one frame for coalesced invalidations and then sl
 
 test('chrome layout changes preserve camera ownership without a detached drag tray', () => {
   for (const [width,height] of [[1440,900],[390,844],[320,568],[568,320]]) {
-    const v=fixture(); let updates=0;
+    const v=fixture(); let updates=0, showcase=false;
     const rect={left:0,top:0,width,height,right:width,bottom:height};
     const dock={top:height-260,left:width>height&&height<600?width*.52:0};
     const heading={bottom:60};
     Object.assign(v,{active:true,hasFramed:true,stage:{offsetHeight:64,style:{},querySelector:()=>null},
-      host:{getBoundingClientRect:()=>rect,parentElement:{querySelector:selector=>({getBoundingClientRect:()=>selector==='.play-heading'?heading:selector==='.play-workspace'?{bottom:80}:dock})}},
+      host:{getBoundingClientRect:()=>rect,parentElement:{getAttribute:()=>String(showcase),querySelector:selector=>({getBoundingClientRect:()=>selector==='.play-heading'?heading:selector==='.play-workspace'?{bottom:80}:selector==='.play-story'?{width:!showcase&&width>=1100?240:0,right:264}:selector==='.play-showcase-controls'?{top:height-80,left:0}:dock})}},
       updateProjection(){updates++;},invalidate(){},reframe(){throw Error('Layout cannot claim camera ownership');},
     });
     const layout=actual('layout',v),before=v.camera.position.clone(),target=v.controls.target.clone();
     layout();dock.top-=10;layout();heading.bottom+=5;layout();
     assert.ok(v.camera.position.equals(before));assert.ok(v.controls.target.equals(target));
     assert.equal(updates,3);assert.ok(v.frameRegion.bottom>v.frameRegion.top);
+    if(width>=1100) assert.equal(v.frameRegion.left,284,'Editorial column stays outside the usable model frame');
+    showcase=true;layout();
+    assert.equal(v.frameRegion.left,12,'Preview reclaims the editorial column');
+    assert.equal(v.frameRegion.width,width-24,'Landscape preview reclaims the workbench column');
+    assert.ok(v.camera.position.equals(before));assert.ok(v.controls.target.equals(target));
     v.controls.dispose();
   }
 });
@@ -769,5 +774,20 @@ test('leaving an explicit edge view restores the normal camera and zoom bounds',
   assert.equal(v.detail, null); assert.equal(v.side, 'back');
   assert.ok(v.camera.position.equals(position)); assert.ok(v.controls.target.equals(target)); assert.ok(v.camera.up.equals(up));
   assert.equal(v.controls.minDistance, 3); assert.equal(v.controls.maxDistance, 1500);
+  v.controls.dispose();
+});
+
+test('guided camera travel defers expensive seat queries and checks the settled view', () => {
+  const v=fixture(); let queries=0;
+  Object.assign(v,{ready:true,current:{workspaceId:null},workspace:null,cameraMotion:{},
+    destination:{style:{}},scene:{updateMatrixWorld(){}},target:new THREE.Vector3(),
+    seatSamples:[new THREE.Vector3()],seatPoint:new THREE.Vector3(),
+    project:()=>({x:100,y:100}),inAssemblyView:()=>true,
+    visibleSeat:()=>{queries++;return true;},available:true,assistance:true,emit(){}});
+  const update=actual('updateSeat',v);
+  update();assert.equal(queries,0);assert.equal(v.destination.style.visibility,'hidden');
+  v.cameraMotion=undefined;update();
+  assert.equal(queries,1);assert.equal(v.destination.style.visibility,'visible');
+  assert.equal(v.seatVisible,true);assert.equal(v.seatInView,true);
   v.controls.dispose();
 });

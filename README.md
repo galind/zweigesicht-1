@@ -5,8 +5,9 @@ built with React, TypeScript and Three.js from the maker's CAD assembly.
 
 Inspect and isolate components, explore six mechanism groups, separate the
 assembly, and choose case, dial and hand appearances. A separate Workshop at
-`/workshop` offers Easy and Hard assembly puzzles with optional placement help,
-Undo and local saves. This is static construction exploration; movement timing,
+`/workshop` offers an eight-chapter Atelier journey with Easy and Hard assembly
+puzzles, an optional next-fit guide, finished-movement preview, Undo and local
+saves. This is static construction exploration; movement timing,
 assembly paths and finishes are interpretations, not a servicing guide.
 
 ## Run locally
@@ -28,8 +29,8 @@ npm --prefix explorer run build
 npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 ```
 
-Workshop's homepage entry appears in development and Vercel Preview builds;
-it is hidden in production. Direct `/workshop` access remains available and
+Workshop's homepage entry is enabled in all builds. Direct `/workshop` access
+resumes a saved build or opens the difficulty chooser, and
 `/play` redirects there. Workshop is excluded from indexing and the sitemap.
 
 ## Check changes
