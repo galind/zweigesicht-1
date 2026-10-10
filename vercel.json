@@ -6,7 +6,8 @@
   "git": {
     "deploymentEnabled": {
       "codex/public-documentation-review": false,
-      "codex/publication-blockers": false
+      "codex/publication-blockers": false,
+      "codex/workshop-atelier": false
     }
   }
 }

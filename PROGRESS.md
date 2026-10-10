@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 9 October 2026. Setup is in the [README](README.md); extended checks are
+Updated 10 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility remains private.
 
 ## Current application
@@ -49,9 +49,13 @@ A broken ignored `explorer/public/reference/polish-review` symlink prevented the
 first production build. Preserved it in `artifacts/local-reference-backup/`;
 tracked assets and original reference files were untouched.
 
-Next: review the local implementation with representative visitors and actual
-touch devices, then use the normal PR/release process if approved. No push,
-deployment, redistribution, permission-request sending or visibility change.
+The user authorized an SSH branch push on 10 October, with no PR. The branch
+is based on the refreshed `origin/develop` at `6a092c0`; automatic Vercel Git
+deployment is disabled for this exact branch before pushing.
+
+Next: review the implementation with representative visitors and actual touch
+devices. No PR, deployment, redistribution, permission-request sending or
+visibility change is authorized by the branch push.
 Existing physical-device, human-accessibility and publication gates still apply.
 
 ## Prior publication preparation — 3 October 2026
