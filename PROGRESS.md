@@ -1,9 +1,41 @@
 # Current project status
 
-Updated 5 October 2026. Setup is in the [README](README.md); extended checks are
+Updated 23 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
-## Public repository security — 5 October 2026
+## Repository cleanup — 23 October 2026
+
+[Draft PR #30](https://github.com/galind/zweigesicht-1/pull/30) targets `develop`
+from baseline `33de8d1`; the initial working tree was clean. Its exact Vercel Git
+deployment is disabled. The [review](docs/REPOSITORY_REVIEW.md) records the map,
+findings, retained workflows and remaining decisions.
+
+- Removed retired Workshop Hints/cutaway/callback code, ignored animation-scale
+  bookkeeping, an unused camera argument, and 73 overridden CSS declarations
+  plus four obsolete style rules. Save compatibility and CAD workflows remain.
+- Fixed production Workshop entry without exposing its homepage action. Patched
+  only Vite, source-map-js and tinypool; both npm audits report no known issues.
+- Initial validation: 93 CPU tests, inventory, types/lint, both production builds,
+  Preview build, 114 retained-input CAD checks, source hashes, Meshopt identity
+  and 1,119 access checks passed. All 36 tracked asset/provenance/notice files
+  match baseline. Browser checks covered complete Easy/Hard builds, 87 drag
+  checks, 92 focused checks, nine explorer suites, production/Preview entry and
+  enlarged-text loading/retry layouts. Original CI passed on `3109d06`.
+- Follow-up passed 93 CPU tests, inventory, types/lint, both production builds,
+  87 drag checks, 92 focused checks and 21 entry checks. Computed styles and
+  element positions match before/after removal across 45 UI-state/viewport
+  cases, including 200% text. Next action is draft review; no merge, release,
+  deployment or publication is authorized.
+- Removed the `/play` alias and its sole-purpose config at the owner's request.
+  Rechecked 93 tests, inventory, types/lint, both production builds, HTTP metadata
+  and removed-route checks, and 17 production Workshop entry checks; all pass.
+
+## Public repository security — historical snapshot, 5 October 2026
+
+The setup/next-action bullets below describe that date. At this review's fetched
+baseline, PR #27 and the release/synchronization PRs #28/#29 are merged; their
+merge commits are in `33de8d1`. This local review does not establish current app
+credentials, environment settings or deployment health.
 
 - Active [branch ruleset](https://github.com/galind/zweigesicht-1/rules/24522996)
   protects `main` and `develop`: PR required, resolved conversations, up-to-date
@@ -47,7 +79,8 @@ visibility does not resolve its outstanding asset/production release gates.
 - Workshop: 89 Easy placements, or 249 Hard placements and 35 transfers; 16
   foundation leaves remain and both finish with 265. Undo/local saves retained.
 - Production hides the homepage Workshop entry and `?assemble=1`; direct
-  `/workshop`, `/play` redirect, noindex and sitemap exclusion remain.
+  `/workshop`, noindex and sitemap exclusion remain. Removed the `/play` redirect
+  at the owner's request; Workshop is the only assembly URL.
 - Original contributions use standard MIT; required upstream notices ship with
   builds. Maker CAD/design and derived assets remain outside that grant.
 

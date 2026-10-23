@@ -40,7 +40,6 @@ export type PlayViewStatus = {
   ready: boolean;
   error: string;
   busy: boolean;
-  cutaway: boolean;
   obstructed?: boolean;
   side: 'front' | 'back';
   detail?: string;
@@ -75,7 +74,6 @@ export class PlayViewer {
     depthWrite: false,
   });
   available = true;
-  hints = false;
   assistance = false;
   workspace: string | null = null;
   mainView?: {
@@ -102,7 +100,6 @@ export class PlayViewer {
   contextUnavailable = false;
   busy = false;
   error = '';
-  cutaway = false;
   current: PlayStep | null = null;
   fitted = new Set<string>();
   active = false;
@@ -123,8 +120,6 @@ export class PlayViewer {
     start: number;
     from: Point;
     to: Point;
-    fromScale: number;
-    toScale: number;
     complete: () => void;
   };
   media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -137,7 +132,6 @@ export class PlayViewer {
     public manifest: PlayManifest,
     public notify: (status: PlayViewStatus) => void,
     public placed: (id: string) => void,
-    public selected: () => void,
     public feedback: (message: string) => void = () => {},
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -191,7 +185,6 @@ export class PlayViewer {
         ready: this.ready,
         error: this.error,
         busy: this.busy,
-        cutaway: this.cutaway,
         obstructed: !!this.current && (!this.seatVisible || !this.seatInView),
         side: this.side,
         detail: this.detail?.id,
@@ -418,16 +411,15 @@ export class PlayViewer {
     this.invalidate();
     this.emit();
   }
-  setAssistance(hints: boolean, available: boolean, assistance = false) {
-    this.hints = hints;
+  setAssistance(available: boolean, assistance = false) {
     this.available = available;
     this.assistance = assistance;
     this.ghost.visible =
       !!this.current &&
       this.current.workspaceId === this.workspace &&
       available &&
-      (hints || assistance);
-    this.destination.dataset.assisted = String(hints || assistance);
+      assistance;
+    this.destination.dataset.assisted = String(assistance);
     this.updateSeat();
     this.invalidate();
   }
@@ -487,7 +479,7 @@ export class PlayViewer {
         };
       this.detail = step;
       this.side = step.side;
-      this.reframe(false, true);
+      this.reframe();
     } else {
       this.detail = null;
       if (this.detailView) {
@@ -542,7 +534,7 @@ export class PlayViewer {
     } else {
       this.side =
         this.manifest.packets.find((p) => p.id === workspace)?.side ?? 'back';
-      this.reframe(false, true);
+      this.reframe();
     }
     this.invalidate();
     this.emit();
@@ -555,7 +547,7 @@ export class PlayViewer {
     }
     return b;
   }
-  reframe = (animate = false, _straightOn = false) => {
+  reframe = (animate = false) => {
     if (!this.ready || this.drag || (this.busy && !this.cameraMotion)) return;
     const transition = (animate || !!this.cameraMotion) && this.hasFramed;
     this.hasFramed = true;
@@ -627,12 +619,11 @@ export class PlayViewer {
   };
   presentContext() {
     for (const [id, p] of this.pieces) p.mesh.visible = this.fitted.has(id);
-    this.cutaway = false;
     this.ghost.visible =
       !!this.current &&
       this.current.workspaceId === this.workspace &&
       this.available &&
-      (this.hints || this.assistance);
+      this.assistance;
   }
   updateProjection() {
     const w = this.host.clientWidth,
@@ -713,10 +704,7 @@ export class PlayViewer {
     const inView = this.inAssemblyView(p);
     this.seatInView = inView;
     this.destination.style.visibility =
-      this.seatVisible &&
-      inView &&
-      this.available &&
-      (this.hints || this.assistance)
+      this.seatVisible && inView && this.available && this.assistance
         ? 'visible'
         : 'hidden';
     this.destination.style.left = `${p.x}px`;
@@ -768,7 +756,7 @@ export class PlayViewer {
       ray.ray.intersectPlane(plane, new THREE.Vector3()) ?? this.target.clone()
     );
   }
-  positionStage(point = this.stagePoint(), _scale?: number) {
+  positionStage(point = this.stagePoint()) {
     if (!this.current || !this.ready) return;
     this.staged.position.copy(this.planePoint(point));
     // Source geometry is already in world units. Pickup must not enlarge it.
@@ -817,7 +805,6 @@ export class PlayViewer {
     this.staged.visible = true;
     this.positionStage(center);
     this.invalidate();
-    this.selected();
     return true;
   }
   pointerMove = (event: PointerEvent) => {
@@ -828,9 +815,7 @@ export class PlayViewer {
     this.drag.position = dragCenter(p, this.drag.grab);
     // Keep the seat quiet until the player explicitly asks for assistance.
     const near =
-      (this.hints || this.assistance) &&
-      this.available &&
-      this.isNear(this.drag.position);
+      this.assistance && this.available && this.isNear(this.drag.position);
     this.destination.dataset.near = String(near);
     this.positionStage(this.drag.position);
     this.invalidate();
@@ -865,19 +850,18 @@ export class PlayViewer {
       this.positionStage();
       this.invalidate();
     } else {
-      if (drag.moved)
-        this.feedback(
-          this.current?.workspaceId !== this.workspace
-            ? this.current?.workspaceId
-              ? 'This part belongs on its workbench. Choose Open workbench.'
-              : 'Return to the watch to fit this piece.'
-            : !this.available
-              ? 'That piece cannot be fitted yet. Choose Ready now for available parts.'
-              : !this.seatVisible || !this.seatInView
-                ? 'The fitting point is hidden from this view. Rotate the movement or use Show seat.'
-                : 'Not close enough to its fitting point. Try nearer, or use Show seat.',
-        );
-      this.animateToStage(drag.position);
+      this.feedback(
+        this.current?.workspaceId !== this.workspace
+          ? this.current?.workspaceId
+            ? 'This part belongs on its workbench. Choose Open workbench.'
+            : 'Return to the watch to fit this piece.'
+          : !this.available
+            ? 'That piece cannot be fitted yet. Choose Ready now for available parts.'
+            : !this.seatVisible || !this.seatInView
+              ? 'The fitting point is hidden from this view. Rotate the movement or use Show seat.'
+              : 'Not close enough to its fitting point. Try nearer, or use Show seat.',
+      );
+      this.animate(drag.position, this.stagePoint(), () => {});
     }
   };
   releaseCapture() {
@@ -908,16 +892,7 @@ export class PlayViewer {
     this.positionStage();
     this.invalidate();
   };
-  animateToStage(from: Point) {
-    this.animate(from, this.stagePoint(), this.staged.scale.x, 1, () => {});
-  }
-  animate(
-    from: Point,
-    to: Point,
-    fromScale: number,
-    toScale: number,
-    complete: () => void,
-  ) {
+  animate(from: Point, to: Point, complete: () => void) {
     this.staged.visible = true;
     this.busy = true;
     this.controls.enabled = false;
@@ -925,8 +900,6 @@ export class PlayViewer {
       start: performance.now(),
       from,
       to,
-      fromScale,
-      toScale,
       complete,
     };
     this.emit();
@@ -958,14 +931,12 @@ export class PlayViewer {
     this.animate(
       this.project(this.staged.position),
       this.project(this.target),
-      this.staged.scale.x,
-      1,
       () => this.placed(id),
     );
   };
   resetView = () => {
     if (this.drag || this.busy) return;
-    this.reframe(true, true);
+    this.reframe(true);
   };
   guide = () => {
     if (this.drag || this.busy || !this.current) return;
@@ -986,12 +957,12 @@ export class PlayViewer {
       fromUp = this.camera.up.clone();
     this.assistance = true;
     this.side = this.current.side;
-    this.reframe(false);
+    this.reframe();
     // Guidance briefly returns to a clear face; the player can orbit again after it.
     this.updateSeat();
     if (!this.seatVisible || !this.seatInView) {
       this.side = this.side === 'front' ? 'back' : 'front';
-      this.reframe(false, true);
+      this.reframe();
       this.updateSeat();
     }
     if (!this.media.matches) {
@@ -1195,13 +1166,10 @@ export class PlayViewer {
       const a = this.animation,
         t = this.media.matches ? 1 : Math.min(1, (now - a.start) / 220),
         eased = motionEase(t);
-      this.positionStage(
-        {
-          x: THREE.MathUtils.lerp(a.from.x, a.to.x, eased),
-          y: THREE.MathUtils.lerp(a.from.y, a.to.y, eased),
-        },
-        THREE.MathUtils.lerp(a.fromScale, a.toScale, eased),
-      );
+      this.positionStage({
+        x: THREE.MathUtils.lerp(a.from.x, a.to.x, eased),
+        y: THREE.MathUtils.lerp(a.from.y, a.to.y, eased),
+      });
       if (t === 1) {
         this.animation = undefined;
         this.staged.visible = false;
@@ -1402,7 +1370,7 @@ export class PlayViewer {
       targetCenter: this.project(this.target),
       seatVisible: this.seatVisible,
       available: this.available,
-      hints: this.hints,
+      assistance: this.assistance,
       workspace: this.workspace,
       detail: this.detail?.id,
       rotationEnabled: this.controls.enableRotate,
@@ -1434,7 +1402,6 @@ export class PlayViewer {
       renderCount: this.renderCount,
       scheduledFrame: !!this.frame,
       geometryCount: this.pieces.size,
-      cutaway: this.cutaway,
     };
   }
   dispose() {

@@ -29,8 +29,9 @@ npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 ```
 
 Workshop's homepage entry appears in development and Vercel Preview builds;
-it is hidden in production. Direct `/workshop` access remains available and
-`/play` redirects there. Workshop is excluded from indexing and the sitemap.
+it is hidden in production. Direct `/workshop` access remains available.
+Fresh direct visits choose a difficulty on Workshop; valid saves resume.
+Workshop is excluded from indexing and the sitemap.
 
 ## Check changes
 
@@ -69,8 +70,9 @@ Guillem Galindo's original code and documentation use the standard
 Marco Lang / Atelier Marco Lang owns the watch design and supplied CAD.
 CAD, derived runtime geometry/metadata and reconstruction images are **excluded**
 from this MIT grant. Public redistribution permission is not established by the
-recorded evidence. Keep the repository private until the
-[publication gates](docs/RELEASE_GATES.md) are cleared. This independent project
+recorded evidence. Repository visibility is recorded in
+[PROGRESS.md](PROGRESS.md); public visibility does not clear the
+[publication gates](docs/RELEASE_GATES.md). This independent project
 is not affiliated with or endorsed by the maker.
 
 The [publication inventory](assets/source-manifest/publication-inventory.json)
@@ -83,4 +85,6 @@ live in `assets/authored/`. Original CAD, reference imagery, environments and
 build/evidence output remain ignored. [CAD notes](docs/CAD_NOTES.md) document
 source defects, recoveries and interpretation limits.
 
-See [current status](PROGRESS.md) for verified results and remaining work.
+See [current status](PROGRESS.md) for verified results and remaining work, and
+the [repository review](docs/REPOSITORY_REVIEW.md) for the maintenance map, cleanup
+evidence and deferred architectural decisions.

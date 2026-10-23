@@ -50,7 +50,7 @@ export function validateWatchPatch(
 const casePackets = new Map(WATCH.leaves.map((p) => [p.id, p.packet]));
 const caseVectors: Record<string, [number, number, number]> = {
   // Outside the complete display envelopes for every hand style, with >8 mm
-  // final axial gaps. Fixed across configurations; see DISASSEMBLY_REVIEW.md.
+  // final axial gaps. Fixed across configurations; see docs/CAD_NOTES.md.
   'front-back': [0, 0, 60],
   'front-seal': [0, 0, 50],
   'rear-back': [0, 0, -75],

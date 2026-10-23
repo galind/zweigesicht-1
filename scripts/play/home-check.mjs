@@ -28,8 +28,7 @@ async function home() {
   await page.goto(`${base}/`, { waitUntil:'networkidle' });
   await page.getByRole('button', {name:'Disassemble', exact:true}).waitFor();
   await page.waitForTimeout(1000);
-  check('Homepage has no /play link', await page.locator('a[href="/play"]').count() === 0);
-  check('Homepage does not request play modules/data', !requests.some(url => /\/src\/play\/|\/app\/play\/|play-manifest/.test(url)), requests);
+  check('Homepage does not request play modules/data', !requests.some(url => /\/src\/play\/|play-manifest/.test(url)), requests);
   check('Homepage JavaScript excludes game state, manifest and completion UI',!(await Promise.all(scriptBodies)).some(body=>body.includes('zweigesicht:play:session:v1')||body.includes('Every piece in place.')||body.includes('foundationRootId')));
   const trigger=page.getByRole('button',{name:'Be a watchmaker',exact:true});
   check('Homepage exposes the assembly action',await trigger.isVisible());
