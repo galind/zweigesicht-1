@@ -9,7 +9,7 @@ const initial: BenchStatus = {
   busy: false,
   side: 'bridge',
   error: '',
-  quality: 'High',
+  quality: 'Auto',
 };
 export default function Bench() {
   const host = useRef<HTMLDivElement>(null),
@@ -141,7 +141,16 @@ export default function Bench() {
                 Switch side
               </button>
               <button
-                onClick={() => viewer.current?.quality(state.quality !== 'Low')}
+                title="Auto adjusts resolution for responsiveness. Low and High stay fixed."
+                onClick={() =>
+                  viewer.current?.quality(
+                    state.quality === 'Auto'
+                      ? 'Low'
+                      : state.quality === 'Low'
+                        ? 'High'
+                        : 'Auto',
+                  )
+                }
               >
                 Detail: {state.quality}
               </button>

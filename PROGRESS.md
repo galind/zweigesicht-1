@@ -3,6 +3,46 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Local responsiveness follow-up — 24 October 2026
+
+Implemented and verified from clean `989bd6f` on `codex/walk-inside-movement`.
+See the [paired evidence and reproduction](docs/BENCH_EXPERIENCE.md#responsiveness-verification--24-october-2026).
+Local production preview: <http://127.0.0.1:4178/bench>.
+
+- Diagnosed GPU pixel/transmission cost at a larger visible viewport; collision
+  was not the driver. Mouse deltas now coalesce per frame, and stationary turns
+  participate in monitoring. A bounded scheduling-only tail handles sparse input
+  without redrawing unchanged views or counting sleeping intervals.
+- Auto starts at pixel ratio 1, reduces gradually through .85 and .7 using
+  sustained windows and cooldowns, and avoids oscillating recovery probes.
+  Explicit Low/High remain fixed within the viewer session, including side
+  switches. Half-resolution transmission retains jewel optics and opaque finishes.
+  Common material variants compile during loading. CAD geometry, source dimensions,
+  placements, visible openings and collision code remain unchanged.
+- Accepted visible Chrome/M4 comparisons at 2400 × 1300 CSS / device DPR 2:
+  baseline High p95 **32.5–36.6 ms**, final Auto **17.2–17.6 ms**. Frames over
+  25 ms fell from **622/871 to 0/1,437**; over 50 ms from five to zero. At the
+  same High resolution, the isolated transmission change lowered p95 to
+  22.7–28.8 ms. CPU, GPU timer and handler-to-render timings are reported separately.
+  These automated workloads do not establish physical mouse feel or other devices.
+- 107 CPU tests (six new activity/quality cases), inventory, types/lint, local
+  production and Vercel packaging builds, and HTTP metadata checks pass. Vercel
+  output still excludes local bench assets. All 23 visible walking-journey checks,
+  11 focused interaction checks and seven lifecycle checks pass, including actual
+  window hiding, stopped rendering, capture/Escape, side switching, retry and cleanup.
+  Seven explorer suites pass 350 checks; Workshop entry/focused checks pass 17/92.
+- The foreground helper uses isolated Chrome with Playwright 1.62.1's
+  `noDefaults` connection, preserving actual focus/visibility. Focus-lost samples
+  were rejected; earlier emulated-focus runs are exploratory only. Evidence and
+  the baseline archive remain ignored under `artifacts/bench/`. No push, PR,
+  deployment, publication or asset redistribution was performed.
+
+Next: owner physical-mouse walkthrough and representative device/browser review.
+Initial paint still measured about 101 ms CPU after precompilation; manual High
+can miss 60 fps at the large viewport. Cold-driver startup, prolonged thermal
+behavior and broader hardware support remain unverified. Publication still needs
+separate authorization and the existing release gates.
+
 ## Local walking experience — 24 October 2026
 
 Implemented from clean `develop` baseline `0233a5f` on local branch

@@ -16,6 +16,7 @@ import { createMaterial, setFinishEnabled } from '../viewer/materials';
 import { assetRequestUrl } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
 import { CollisionWorld, Walker, WALK } from './physics';
+import { BenchQuality, LookActivity, type QualityMode } from './performance';
 import holderManifest from '../../../assets/source-manifest/holder.json';
 export type BenchStatus = {
   ready: boolean;
@@ -23,7 +24,7 @@ export type BenchStatus = {
   busy: boolean;
   side: 'bridge' | 'dial';
   error: string;
-  quality: string;
+  quality: QualityMode;
 };
 
 function printedPlastic() {
@@ -73,10 +74,11 @@ export class BenchViewer {
     busy: false,
     side: 'bridge',
     error: '',
-    quality: 'High',
+    quality: 'Auto',
   };
   dead = false;
   frame = 0;
+  dirty = false;
   last = 0;
   observer!: ResizeObserver;
   assets: THREE.Object3D[] = [];
@@ -85,7 +87,9 @@ export class BenchViewer {
   renderCount = 0;
   frameTimes: number[] = [];
   cpuTimes: number[] = [];
-  slowFrames = 0;
+  activity = new LookActivity();
+  detail = new BenchQuality(devicePixelRatio);
+  inspect = new URLSearchParams(location.search).has('inspect');
   constructor(
     public host: HTMLElement,
     public notify: (s: BenchStatus) => void,
@@ -94,7 +98,9 @@ export class BenchViewer {
     try {
       configureRenderer(this.renderer);
       this.renderer.setClearColor(0x33352f);
-      this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+      this.renderer.setPixelRatio(this.detail.ratio);
+      // Keep jewel transmission while reducing its full-scene offscreen pixel cost.
+      this.renderer.transmissionResolutionScale = 0.5;
       host.appendChild(this.renderer.domElement);
       this.renderer.domElement.setAttribute(
         'aria-label',
@@ -315,6 +321,21 @@ export class BenchViewer {
           await new Promise((resolve) => setTimeout(resolve, 0));
       }
       if (this.dead) return;
+      // Compile every material (including currently hidden fixtures) before capture.
+      // Transmission renders opaque finishes a second time without tone mapping.
+      const toneMapping = this.renderer.toneMapping;
+      const outputColorSpace = this.renderer.outputColorSpace;
+      try {
+        this.renderer.toneMapping = THREE.NoToneMapping;
+        this.renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+        await this.renderer.compileAsync(this.scene, this.camera);
+      } finally {
+        this.renderer.toneMapping = toneMapping;
+        this.renderer.outputColorSpace = outputColorSpace;
+      }
+      if (this.dead || generation !== this.generation) return;
+      await this.renderer.compileAsync(this.scene, this.camera);
+      if (this.dead || generation !== this.generation) return;
       this.status.ready = true;
       this.walker.reset();
       this.emit();
@@ -343,7 +364,7 @@ export class BenchViewer {
   }
   switchSide = () => {
     if (!this.status.ready || this.status.busy) return;
-    this.walker.clear();
+    this.clearInput();
     this.status.busy = true;
     this.emit();
     this.delay(() => {
@@ -375,16 +396,21 @@ export class BenchViewer {
   lockChanged = () => {
     this.status.captured =
       document.pointerLockElement === this.renderer.domElement;
-    this.walker.clear();
-    this.last = 0;
+    this.clearInput();
     if (this.status.captured) {
       this.status.error = '';
       this.wake();
     }
     this.emit();
   };
-  pause = () => {
+  clearInput() {
     this.walker.clear();
+    this.activity.clear();
+    this.detail.resetSamples();
+    this.last = 0;
+  }
+  pause = () => {
+    this.clearInput();
     this.status.captured = false;
     if (document.pointerLockElement === this.renderer.domElement)
       document.exitPointerLock();
@@ -407,12 +433,8 @@ export class BenchViewer {
   };
   look = (e: MouseEvent) => {
     if (!this.status.captured || this.status.busy) return;
-    this.walker.yaw -= e.movementX * 0.002;
-    this.walker.pitch = THREE.MathUtils.clamp(
-      this.walker.pitch - e.movementY * 0.002,
-      -1.4,
-      1.4,
-    );
+    if (!e.movementX && !e.movementY) return;
+    this.activity.add(e.movementX, e.movementY, performance.now());
     this.wake();
   };
   keyDown = (e: KeyboardEvent) => {
@@ -436,21 +458,30 @@ export class BenchViewer {
     this.wake();
   };
   keyUp = (e: KeyboardEvent) => {
-    this.walker.keys.delete(e.code);
-    this.wake();
+    if (this.walker.keys.delete(e.code)) this.wake();
   };
   reset = () => {
     if (!this.status.busy) {
+      this.clearInput();
       this.walker.reset();
       this.wake();
     }
   };
-  quality = (low: boolean) => {
-    this.status.quality = low ? 'Low' : 'High';
-    this.renderer.setPixelRatio(low ? 0.85 : Math.min(devicePixelRatio, 1.5));
-    this.resize();
+  quality = (mode: QualityMode | boolean) => {
+    // Boolean remains accepted by existing local inspection scripts.
+    this.detail.select(
+      typeof mode === 'boolean' ? (mode ? 'Low' : 'High') : mode,
+      devicePixelRatio,
+    );
+    this.status.quality = this.detail.mode;
+    this.applyResolution();
     this.emit();
   };
+  applyResolution() {
+    if (this.renderer.getPixelRatio() !== this.detail.ratio)
+      this.renderer.setPixelRatio(this.detail.ratio);
+    this.wake();
+  }
   resize = () => {
     if (this.dead) return;
     const { width, height } = this.host.getBoundingClientRect();
@@ -460,13 +491,17 @@ export class BenchViewer {
     this.wake();
   };
   wake = () => {
-    if (!this.frame && !this.dead && !document.hidden)
+    this.dirty = true;
+    this.schedule();
+  };
+  schedule = () => {
+    if (!this.frame && !this.dead && !document.hidden && this.status.ready)
       this.frame = requestAnimationFrame(this.tick);
   };
   tick = (now: number) => {
     this.frame = 0;
-    if (this.dead || document.hidden) return;
-    const start = performance.now(),
+    if (this.dead || !this.status.ready || document.hidden) return;
+    const start = this.inspect ? performance.now() : 0,
       elapsed = this.last ? now - this.last : 16.67;
     const moving =
       this.status.captured &&
@@ -474,31 +509,50 @@ export class BenchViewer {
       (this.walker.keys.size > 0 ||
         !this.walker.grounded ||
         this.walker.jumpQueued);
+    const activity = this.activity.consume(now, moving);
+    const dirty = this.dirty;
+    this.dirty = false;
+    if (!activity.active && !dirty && this.walker.grounded) {
+      this.last = 0;
+      this.detail.resetSamples();
+      return;
+    }
+    this.walker.yaw -= activity.x * 0.002;
+    this.walker.pitch = THREE.MathUtils.clamp(
+      this.walker.pitch - activity.y * 0.002,
+      -1.4,
+      1.4,
+    );
+    if (activity.elapsed === null) this.detail.resetSamples();
+    const shouldRender =
+      dirty || moving || !this.walker.grounded || activity.looked;
     if (
       this.status.ready &&
       !this.status.busy &&
       (moving || !this.walker.grounded)
     )
       this.walker.update(elapsed / 1000);
-    this.camera.position.copy(this.walker.feet).y += WALK.eye;
-    this.camera.rotation.set(this.walker.pitch, this.walker.yaw, 0, 'YXZ');
-    this.renderer.render(this.scene, this.camera);
-    this.renderCount++;
-    if (moving && this.last) {
-      this.frameTimes.push(elapsed);
-      this.cpuTimes.push(performance.now() - start);
-      if (this.frameTimes.length > 3600) {
-        this.frameTimes.shift();
-        this.cpuTimes.shift();
+    if (shouldRender) {
+      this.camera.position.copy(this.walker.feet).y += WALK.eye;
+      this.camera.rotation.set(this.walker.pitch, this.walker.yaw, 0, 'YXZ');
+      this.renderer.render(this.scene, this.camera);
+      this.renderCount++;
+    }
+    if (activity.elapsed !== null) {
+      if (this.inspect) {
+        this.frameTimes.push(activity.elapsed);
+        this.cpuTimes.push(performance.now() - start);
+        if (this.frameTimes.length > 3600) {
+          this.frameTimes.shift();
+          this.cpuTimes.shift();
+        }
       }
-      if (elapsed > 24) this.slowFrames++;
-      else this.slowFrames = Math.max(0, this.slowFrames - 1);
-      if (this.slowFrames > 90 && this.status.quality !== 'Low')
-        this.quality(true);
+      if (this.detail.sample(activity.elapsed)) this.applyResolution();
     }
     this.last = now;
-    if (moving || (this.status.ready && !this.walker.grounded)) this.wake();
-    else this.last = 0;
+    // A bounded scheduling-only tail ends sampling when a look burst stops.
+    if (activity.active || !this.walker.grounded) this.schedule();
+    if (!moving && this.walker.grounded) this.last = 0;
   };
   dispose() {
     this.dead = true;

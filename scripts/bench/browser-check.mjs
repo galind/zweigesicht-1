@@ -1,4 +1,5 @@
 /** Browser journey uses real mouse capture and keyboard input. Geometry probes are explicitly separate. */
+import { launchForeground } from './foreground-browser.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -11,13 +12,20 @@ const { chromium } = await import(
 const base = process.argv[2] || 'http://127.0.0.1:4173';
 const out = path.resolve('artifacts/bench');
 await fs.mkdir(out, { recursive: true });
-const browser = await chromium.launch({
-  headless: !process.env.HEADED,
-  ...(process.env.CHROME_PATH
-    ? { executablePath: process.env.CHROME_PATH }
-    : {}),
-});
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const foreground = process.env.HEADED
+  ? await launchForeground(chromium, { dpr: 1 })
+  : null;
+const browser =
+  foreground?.browser ??
+  (await chromium.launch({
+    headless: true,
+    ...(process.env.CHROME_PATH
+      ? { executablePath: process.env.CHROME_PATH }
+      : {}),
+  }));
+const page =
+  foreground?.page ??
+  (await browser.newPage({ viewport: { width: 1440, height: 900 } }));
 const report = {
   base,
   started: new Date().toISOString(),
@@ -80,6 +88,7 @@ try {
     .click();
   // Enable the read-only QA observation handle with a direct route reload.
   await page.goto(base + '/bench?inspect=1');
+  await page.bringToFront();
   await ready();
   check(
     'direct route complete and no automatic capture',
@@ -95,6 +104,7 @@ try {
   await page.mouse.move(720, 450);
   await page.keyboard.press('KeyR');
   await page.mouse.move(720, 520);
+  await page.waitForFunction(() => window.bench.walker.pitch < 0);
   check(
     'mouse look keeps level horizon',
     await page.evaluate(
@@ -283,6 +293,7 @@ try {
   }
   await page.route('**/bench-local/movement.stl', (route) => route.abort());
   await page.goto(base + '/bench?inspect=1');
+  await page.bringToFront();
   await page
     .getByRole('button', { name: 'Retry loading', exact: true })
     .waitFor({ timeout: 90000 });
@@ -316,5 +327,6 @@ try {
     path.join(out, 'browser-report.json'),
     JSON.stringify(report, null, 2),
   );
-  await browser.close();
+  if (foreground) await foreground.close();
+  else await browser.close();
 }

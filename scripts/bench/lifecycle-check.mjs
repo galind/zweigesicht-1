@@ -1,3 +1,4 @@
+import { launchForeground } from './foreground-browser.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
@@ -7,16 +8,21 @@ const { chromium } = await import(
     : 'playwright'
 );
 const base = process.argv[2] || 'http://127.0.0.1:4176';
-const browser = await chromium.launch({
-  headless: true,
-  ...(process.env.CHROME_PATH
-    ? { executablePath: process.env.CHROME_PATH }
-    : {}),
-});
-const context = await browser.newContext({
-  viewport: { width: 1440, height: 900 },
-});
-const page = await context.newPage();
+const foreground = process.env.HEADED
+  ? await launchForeground(chromium, { dpr: 1 })
+  : null;
+const browser =
+  foreground?.browser ??
+  (await chromium.launch({
+    headless: true,
+    ...(process.env.CHROME_PATH
+      ? { executablePath: process.env.CHROME_PATH }
+      : {}),
+  }));
+const context =
+  foreground?.context ??
+  (await browser.newContext({ viewport: { width: 1440, height: 900 } }));
+const page = foreground?.page ?? (await context.newPage());
 const checks = [];
 const check = (name, pass, detail) => {
   checks.push({ name, pass, detail });
@@ -24,6 +30,7 @@ const check = (name, pass, detail) => {
 };
 try {
   await page.goto(base + '/bench?inspect=1');
+  await page.bringToFront();
   await page.waitForFunction(() => window.bench?.status.ready, null, {
     timeout: 90000,
   });
@@ -43,11 +50,48 @@ try {
     frames: window.bench.renderCount,
   }));
   check(
-    'actual tab focus loss releases and clears keys',
+    'actual window focus loss releases and clears keys',
     !hidden.captured && !hidden.keys.length,
     hidden,
   );
-  // Headless Chrome reports all tabs visible; exercise the visibility event separately.
+  let windowSession, windowId;
+  if (process.env.HEADED) {
+    // Playwright pages can occupy separate visible windows on macOS. Minimize
+    // this owned test window to test actual browser visibility, not just blur.
+    windowSession = await context.newCDPSession(page);
+    ({ windowId } = await windowSession.send('Browser.getWindowForTarget'));
+    await windowSession.send('Browser.setWindowBounds', {
+      windowId,
+      bounds: { windowState: 'minimized' },
+    });
+    await page
+      .waitForFunction(() => document.hidden, null, {
+        timeout: 10000,
+        polling: 100,
+      })
+      .catch(async (error) => {
+        console.error(
+          'Visibility probe',
+          await windowSession.send('Browser.getWindowBounds', { windowId }),
+          await page.evaluate(() => ({
+            hidden: document.hidden,
+            visibility: document.visibilityState,
+            focus: document.hasFocus(),
+          })),
+        );
+        throw error;
+      });
+    hidden.frames = await page.evaluate(() => window.bench.renderCount);
+    await page.waitForTimeout(700);
+    check(
+      'actual minimized window is hidden and stops rendering',
+      await page.evaluate(
+        (frames) => document.hidden && window.bench.renderCount === frames,
+        hidden.frames,
+      ),
+    );
+  }
+  // Also exercise the visibility handler explicitly in headless Chrome.
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', {
       configurable: true,
@@ -60,6 +104,11 @@ try {
     'hidden-document event stops rendering',
     (await page.evaluate(() => window.bench.renderCount)) === hidden.frames,
   );
+  if (windowSession)
+    await windowSession.send('Browser.setWindowBounds', {
+      windowId,
+      bounds: { windowState: 'normal' },
+    });
   await page.bringToFront();
   await page.evaluate(() => {
     delete document.hidden;
@@ -68,8 +117,9 @@ try {
   await page.keyboard.up('KeyW');
   await other.close();
   await page.waitForTimeout(500);
+  await page.waitForFunction(() => !document.hidden);
   check(
-    'returning tab does not capture without action',
+    'returning window does not capture without action',
     await page.evaluate(() => !window.bench.status.captured),
   );
   // Simulate a genuine WebGL context loss through the browser extension.
@@ -101,6 +151,7 @@ try {
     await route.continue().catch(() => {});
   });
   await page.goto(base + '/bench?inspect=1');
+  await page.bringToFront();
   await page.waitForFunction(() => !!window.bench);
   await page.evaluate(() => (window.departingBench = window.bench));
   await page
@@ -128,5 +179,6 @@ try {
     'artifacts/bench/lifecycle-report.json',
     JSON.stringify(checks, null, 2),
   );
-  await browser.close();
+  if (foreground) await foreground.close();
+  else await browser.close();
 }
