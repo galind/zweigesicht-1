@@ -1,5 +1,8 @@
-/** Foreground repeatable rendering workload. Synthetic input/placements, NOT human latency evidence. */
-import { launchForeground } from './foreground-browser.mjs';
+/** Repeatable rendering workload. Synthetic input/placements, NOT human latency evidence. */
+import {
+  launchProfileBrowser,
+  profileEnvironment,
+} from './profile-browser.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
@@ -9,16 +12,27 @@ const { chromium } = await import(
     : 'playwright'
 );
 const base = process.argv[2] || 'http://127.0.0.1:4176';
-const label = process.argv[3] || 'profile';
+const modes = (process.env.PROFILE_MODES || 'Auto,High,Low').split(',');
+assert.ok(
+  modes.every((mode) =>
+    ['Auto', 'High', 'Low', 'HalfTransmission', 'NoTransmission'].includes(
+      mode,
+    ),
+  ),
+  'Invalid PROFILE_MODES',
+);
 await fs.mkdir('artifacts/bench', { recursive: true });
-const { page, close } = await launchForeground(chromium, {
-  width: 2400,
-  height: 1300,
-});
+const { page, browser, close, executionMode } =
+  await launchProfileBrowser(chromium);
+const label = process.argv[3] || `profile-${executionMode}`;
 const report = {
   label,
+  executionMode,
+  status: 'incomplete',
   workload:
-    'Visible Chrome, synthetic 125 Hz mouse events and held keys; deterministic close-up placements. Not physical input-to-photon latency.',
+    'Synthetic 125 Hz mouse events and held keys; deterministic close-up placements. Not physical input-to-photon latency.',
+  warmupMs: 700,
+  sampleMs: 6000,
   scenarios: [],
 };
 
@@ -37,28 +51,18 @@ try {
   await page.addStyleTag({
     content: '.bench-menu { display: none !important; }',
   });
-  report.environment = await page.evaluate(() => {
-    const b = window.bench,
-      gl = b.renderer.getContext(),
-      ext = gl.getExtension('WEBGL_debug_renderer_info');
-    return {
-      userAgent: navigator.userAgent,
-      viewport: [innerWidth, innerHeight],
-      dpr: devicePixelRatio,
-      gpu: ext && gl.getParameter(ext.UNMASKED_RENDERER_WEBGL),
-      programsAfterReady: b.renderer.info.programs?.length,
-      focused: document.hasFocus(),
-      hidden: document.hidden,
-    };
-  });
+  report.environment = await profileEnvironment(
+    page,
+    browser,
+    executionMode,
+    base,
+  );
   await page.evaluate(() => {
     sessionStorage.profileTransmission = String(
       window.bench.renderer.transmissionResolutionScale,
     );
   });
-  for (const mode of (
-    process.env.PROFILE_MODES || 'High,Low,HalfTransmission,NoTransmission'
-  ).split(',')) {
+  for (const mode of modes) {
     for (const side of ['bridge', 'dial']) {
       for (const walk of [false, true]) {
         let result;
@@ -251,7 +255,7 @@ try {
           !result.unfocusedInputs &&
             !result.hiddenInputs &&
             result.sampledSpan > 5500,
-          'Invalid foreground sample: ' + JSON.stringify(result),
+          `Invalid ${executionMode} sample: ` + JSON.stringify(result),
         );
         console.log(
           JSON.stringify({
@@ -269,11 +273,18 @@ try {
     }
   }
   await page.screenshot({ path: `artifacts/bench/${label}.png` });
+  report.status = 'complete';
+} catch (error) {
+  report.error = String(error);
+  throw error;
 } finally {
-  await fs.mkdir('artifacts/bench', { recursive: true });
-  await fs.writeFile(
-    `artifacts/bench/${label}.json`,
-    JSON.stringify(report, null, 2),
-  );
-  await close();
+  try {
+    await fs.mkdir('artifacts/bench', { recursive: true });
+    await fs.writeFile(
+      `artifacts/bench/${label}.json`,
+      JSON.stringify(report, null, 2),
+    );
+  } finally {
+    await close();
+  }
 }

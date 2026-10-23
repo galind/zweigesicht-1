@@ -40,24 +40,51 @@ native capture, Escape/recapture, focus loss, minimization and actual interactio
 A physical-mouse walkthrough remains necessary to assess perceived responsiveness.
 Headless results alone do not establish display pacing or input-to-photon latency.
 
-This is the agreed direction for future testing, not a claim that every current
-runner already supports both modes:
+The performance profilers default to headless; native interaction checks remain
+available separately:
 
 | Current runner | Supported execution and scope |
 | --- | --- |
 | `performance-check.mjs` | Headless; historical 60-second bridge walking fixture. It does not replace the stationary-turn or two-face workload. |
 | `browser-check.mjs` | Headless by default; `HEADED=1` uses the native foreground helper for the complete journey. |
 | `lifecycle-check.mjs` | Headless by default with an explicit hidden-document fixture; `HEADED=1` additionally verifies actual native hiding/minimization. |
-| `interaction-profile.mjs` | Currently foreground only; paired stationary-turn and walking-plus-turn workloads on both faces, with CPU/GPU/input-handler measurements. |
-| `first-use-profile.mjs` | Currently foreground only; startup and first-turn/side-switch costs. |
+| `interaction-profile.mjs` | Headless by default; `BENCH_BROWSER=headed` opens a native window. Paired stationary-turn and walking-plus-turn workloads on both faces, with CPU/GPU/input-handler measurements. |
+| `first-use-profile.mjs` | Headless by default; `BENCH_BROWSER=headed` opens a native window. Startup and first-turn/side-switch costs. |
 | `interaction-check.mjs` | Currently foreground only; captured look, idle sleep, quality choices and injected adaptation stress. |
 
-The next test-tool improvement is a headless option for the paired interaction
-and first-use profilers, retaining the same fixtures and explicit execution-mode
-metadata. Setting `HEADED=0` is not a headless switch: the two runners that read
+Both profilers accept exactly `BENCH_BROWSER=headless` or `headed`; a typo fails
+before launch. Their default viewport is 2400 × 1300 CSS with device DPR 2 in
+both modes. The interaction profiler defaults to Auto, High and Low; diagnostic
+transmission experiments require explicit `PROFILE_MODES`. The first-use probe
+accepts Auto, High or Low as its final argument.
+
+Setting `HEADED=0` is not a headless switch: the journey/lifecycle runners that read
 `HEADED` currently test its presence/truthiness. Omit the variable for their
 headless default. Do not run foreground checks concurrently with other desktop
 interaction; reject samples that lose real focus or visibility.
+
+For routine profiling, after building and starting a production server, use the
+existing `PLAYWRIGHT_MODULE` and `CHROME_PATH` environment variables:
+
+```sh
+# Set these to the actual served build, which may differ from the runner checkout.
+export PROFILE_REVISION='replace-with-served-commit-sha'
+export PROFILE_BUILD=production
+node scripts/bench/interaction-profile.mjs http://127.0.0.1:4178 current-headless
+node scripts/bench/first-use-profile.mjs http://127.0.0.1:4178 current-headless Auto
+# Optional brief visible comparison of the same first-use workload:
+BENCH_BROWSER=headed node scripts/bench/first-use-profile.mjs http://127.0.0.1:4178 current-headed Auto
+```
+
+Replace the revision placeholder before running. Reports record caller-supplied server
+provenance separately from the harness Git revision/dirty state; missing server
+metadata stays unspecified. They also include execution mode, browser version,
+OS/CPU/memory, GPU renderer/vendor, timer availability, viewport/DPR, render ratios,
+cache assumptions and completion status. A failed run remains `incomplete` with
+its error, and its browser is closed even if report writing fails. Headless focus
+is labelled as document state, not native foreground evidence. No focus emulation
+is enabled in either mode. Software renderer detection is a heuristic; inspect
+the recorded GPU renderer before accepting hardware comparisons.
 
 For each comparable performance run, record the revision, production build,
 browser/version and execution mode, OS/hardware, GPU renderer/backend, CSS
@@ -79,6 +106,39 @@ Preserve raw reports/screenshots locally under ignored `artifacts/bench/`; commi
 the interpretation, exact conditions and reproduction instructions here. A clean
 checkout will not contain that local evidence. Performance work does not clear
 the asset or publication gates.
+
+### Headless tooling verification — 24 October 2026
+
+The unchanged production application from `b1d3841` was tested at
+`http://127.0.0.1:4178`, using the updated harness based on `1c15a93`. Chrome
+155.0.8059.86 reported **ANGLE Metal / Apple M4**, not a detected software
+renderer, at 2400 × 1300 CSS / device DPR 2. Both modes use the same isolated
+Chrome launcher and default context, with only the headless flag differing.
+
+All 12 headless interaction scenarios completed without discarded samples.
+Auto retained ratio 1 across both faces and both input workloads: p95
+17.5–17.6 ms, zero frames over 25 ms out of 1,436. Manual High retained 1.5 and
+Low retained .85. GPU timers were available with no disjoint events. These
+validate the new harness on this machine; they are not a new application
+optimization or a controlled proof that headless and headed timing are equivalent.
+
+The headless Auto first-use probe captured instrumentation before readiness,
+measured 101 ms CPU on initial paint, and completed both faces with no shader
+growth during turning. A separate headless Low probe retained .85 on both faces;
+the first-use runner now selects Low correctly instead of treating it as High.
+Browser-mode validation, the four changed scripts' syntax/lint/format checks and
+all 13 bench activity/quality/physics CPU tests passed. No application source or
+build configuration changed, so the existing production build was reused.
+
+Two visible first-use attempts lost native focus and
+were correctly saved as `incomplete`; their timing results are excluded. A fresh
+accepted visible comparison and the owner's physical-mouse walkthrough remain
+outstanding. Earlier accepted visible evidence below remains dated separately.
+
+Reports are local only: `artifacts/bench/headless-validation.json`,
+`headless-validation-first-use.json`, `headless-low-validation-first-use.json`,
+and `headed-validation-first-use.json` /
+`headed-validation-retry-first-use.json` for the rejected visible attempts.
 
 ## Local assets and reproduction
 
@@ -339,11 +399,11 @@ Reproduce with the existing Playwright/Chrome environment variables:
 ```sh
 # The server must be a production build of the revision under test.
 PROFILE_MODES=High,Low,HalfTransmission \
-  node scripts/bench/interaction-profile.mjs http://127.0.0.1:4180 before-native
+  BENCH_BROWSER=headed node scripts/bench/interaction-profile.mjs http://127.0.0.1:4180 before-native
 PROFILE_MODES=Auto,High,Low \
-  node scripts/bench/interaction-profile.mjs http://127.0.0.1:4178 after-native
-node scripts/bench/first-use-profile.mjs http://127.0.0.1:4180 before-native High
-node scripts/bench/first-use-profile.mjs http://127.0.0.1:4178 after-native Auto
+  BENCH_BROWSER=headed node scripts/bench/interaction-profile.mjs http://127.0.0.1:4178 after-native
+BENCH_BROWSER=headed node scripts/bench/first-use-profile.mjs http://127.0.0.1:4180 before-native High
+BENCH_BROWSER=headed node scripts/bench/first-use-profile.mjs http://127.0.0.1:4178 after-native Auto
 node scripts/bench/interaction-check.mjs http://127.0.0.1:4178
 HEADED=1 node scripts/bench/lifecycle-check.mjs http://127.0.0.1:4178
 HEADED=1 node scripts/bench/browser-check.mjs http://127.0.0.1:4178

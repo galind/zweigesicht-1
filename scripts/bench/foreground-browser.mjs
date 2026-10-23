@@ -1,4 +1,4 @@
-/** Real Chrome window, isolated profile, no Playwright focus/visibility emulation.
+/** Isolated Chrome process, no Playwright focus/visibility emulation.
  * A separate CDP session cannot disable overrides owned by Playwright's session.
  * Connect to a locally launched browser with noDefaults and use its default context.
  */
@@ -6,14 +6,15 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-export async function launchForeground(
+export async function launchBenchBrowser(
   chromium,
-  { width = 1440, height = 900, dpr = 2 } = {},
+  { width = 1440, height = 900, dpr = 2, headless = false } = {},
 ) {
   const profile = await fs.mkdtemp(path.join(os.tmpdir(), 'bench-chrome-'));
   const child = spawn(
     process.env.CHROME_PATH || chromium.executablePath(),
     [
+      ...(headless ? ['--headless=new'] : []),
       '--remote-debugging-port=0',
       '--remote-debugging-address=127.0.0.1',
       '--user-data-dir=' + profile,
@@ -70,7 +71,7 @@ export async function launchForeground(
       deviceScaleFactor: dpr,
       mobile: false,
     });
-    // Let native browser startup UI settle before foreground input begins.
+    // Keep startup settling identical in both modes; headed Chrome may show UI.
     await new Promise((resolve) => setTimeout(resolve, 1000));
     await page.bringToFront();
     return { browser, context, page, close };
@@ -78,4 +79,9 @@ export async function launchForeground(
     await close();
     throw error;
   }
+}
+
+// Existing native interaction/lifecycle runners continue to open a real window.
+export function launchForeground(chromium, options = {}) {
+  return launchBenchBrowser(chromium, { ...options, headless: false });
 }

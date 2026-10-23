@@ -40,8 +40,16 @@ Local production preview: <http://127.0.0.1:4178/bench>.
 Next: owner physical-mouse walkthrough and representative device/browser review.
 The [feature decision record and testing strategy](docs/BENCH_EXPERIENCE.md#maintenance-and-decision-record)
 now preserve the implementation rationale and headless-first testing direction.
-The paired interaction and first-use profilers still require foreground Chrome;
-adding their headless option is a future tooling step, not a completed change.
+The paired interaction and first-use profilers now default to headless Chrome;
+`BENCH_BROWSER=headed` retains the native visible path. Reports distinguish
+execution mode, GPU backend, host/browser settings and caller-supplied server
+revision from the harness revision. Workloads retain their placements and timing.
+All 12 headless interaction scenarios pass on M4/Metal; Auto p95 is 17.5–17.6 ms
+with zero frames over 25 ms out of 1,436. Headless Auto/Low first-use probes pass,
+as do 13 bench CPU tests and runner syntax/lint/format checks.
+Two fresh visible first-use attempts lost native focus and were rejected; an
+accepted fresh visible comparison remains outstanding. See the dated tooling
+verification in the feature reference; no application behavior changed here.
 Initial paint still measured about 101 ms CPU after precompilation; manual High
 can miss 60 fps at the large viewport. Cold-driver startup, prolonged thermal
 behavior and broader hardware support remain unverified. Publication still needs

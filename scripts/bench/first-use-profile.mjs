@@ -1,5 +1,8 @@
-/** Loading / first-turn / side-switch probe; visible browser with synthetic look fixtures. */
-import { launchForeground } from './foreground-browser.mjs';
+/** Loading / first-turn / side-switch probe with synthetic look fixtures. */
+import {
+  launchProfileBrowser,
+  profileEnvironment,
+} from './profile-browser.mjs';
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { pathToFileURL } from 'node:url';
@@ -8,19 +11,25 @@ const { chromium } = await import(
     ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href
     : 'playwright'
 );
-const base = process.argv[2],
-  label = process.argv[3],
+const base = process.argv[2] || 'http://127.0.0.1:4176',
   mode = process.argv[4] || 'Auto';
+assert.ok(
+  ['Auto', 'High', 'Low'].includes(mode),
+  'Mode must be Auto, High or Low',
+);
 await fs.mkdir('artifacts/bench', { recursive: true });
-const { page, close } = await launchForeground(chromium, {
-  width: 2400,
-  height: 1300,
-});
+const { page, browser, close, executionMode } =
+  await launchProfileBrowser(chromium);
+const label = process.argv[3] || `profile-${executionMode}`;
 const report = {
   label,
   mode,
+  executionMode,
+  status: 'incomplete',
   input:
-    'Synthetic fixed-placement turns in visible Chrome; fresh browser process, existing OS driver cache.',
+    'Synthetic fixed-placement turns at 125 Hz; fresh browser process, existing OS driver cache.',
+  sampleMs: 6000,
+  warmupMs: 0,
 };
 
 try {
@@ -43,6 +52,7 @@ try {
         after: b.renderer.info.programs?.length,
         side: b.status.side,
         busy: b.status.busy,
+        renderRatio: b.renderer.getPixelRatio(),
       });
     };
     return !b.status.ready;
@@ -52,6 +62,16 @@ try {
   });
   report.readyMs = Date.now() - start;
   report.initialFrames = await page.evaluate(() => window.firstFrames);
+  assert.ok(
+    report.instrumentedBeforeReady,
+    'Missed pre-ready instrumentation; rerun first-use probe',
+  );
+  report.environment = await profileEnvironment(
+    page,
+    browser,
+    executionMode,
+    base,
+  );
   await page.addStyleTag({
     content: '.bench-menu { display:none !important; }',
   });
@@ -74,7 +94,7 @@ try {
     const result = await page.evaluate(
       async ({ mode, side }) => {
         const b = window.bench;
-        b.quality(mode === 'Auto' ? 'Auto' : false);
+        b.quality(mode === 'Auto' ? 'Auto' : mode === 'Low');
         b.slowFrames = -1e9;
         b.walker.clear();
         b.walker.feet.set(-8, b.world.floor(-8, 0) + 0.002, 0);
@@ -106,9 +126,11 @@ try {
           const s = [...a].sort((a, b) => a - b);
           return {
             n: s.length,
+            p50: s[Math.floor((s.length - 1) * 0.5)],
             p95: s[Math.floor((s.length - 1) * 0.95)],
             p99: s[Math.floor((s.length - 1) * 0.99)],
             max: s.at(-1),
+            over25: s.filter((x) => x > 25).length,
             over50: s.filter((x) => x > 50).length,
           };
         };
@@ -116,6 +138,10 @@ try {
           side,
           hidden,
           unfocused,
+          sampledSpan: frames.length ? frames.at(-1).at - frames[0].at : 0,
+          quality: b.status.quality,
+          renderRatio: b.renderer.getPixelRatio(),
+          ratios: [...new Set(frames.map((f) => f.renderRatio))],
           intervals: stats(intervals),
           cpu: stats(frames.map((f) => f.cpu)),
           shaderGrowth: frames.filter((f) => f.after > f.before),
@@ -125,13 +151,23 @@ try {
       { mode, side },
     );
     report.turns.push({ ...result, switchMs });
-    assert.ok(!result.hidden && !result.unfocused);
+    assert.ok(
+      !result.hidden && !result.unfocused && result.sampledSpan > 5500,
+      `Invalid ${executionMode} first-use sample`,
+    );
   }
+  report.status = 'complete';
   console.log(JSON.stringify(report, null, 2));
+} catch (error) {
+  report.error = String(error);
+  throw error;
 } finally {
-  await fs.writeFile(
-    `artifacts/bench/${label}-first-use.json`,
-    JSON.stringify(report, null, 2),
-  );
-  await close();
+  try {
+    await fs.writeFile(
+      `artifacts/bench/${label}-first-use.json`,
+      JSON.stringify(report, null, 2),
+    );
+  } finally {
+    await close();
+  }
 }
