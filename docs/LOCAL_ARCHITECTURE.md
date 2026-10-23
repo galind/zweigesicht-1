@@ -43,3 +43,48 @@ The storage key remains `zweigesicht:play:session:v1`. Direct visits resume vali
 Free mouse/one-finger orbit matches the explorer. Flip, Reset and bounded centered zoom remain quick actions. The shock workbench has an angled face pair; radial dial screws have explicit edge presets in `fixedViews.ts`. Selection, placement and Undo preserve the camera; returning from a workbench restores the main view. Camera changes never hide fitted geometry. A drop requires the active workspace, prerequisites and an exposed source-surface sample. This is visual reachability, not physical collision certification.
 
 [Release gates](RELEASE_GATES.md) distinguish automated/browser checks from mechanical, physical-device and representative human review.
+
+## Extended verification
+
+Run these commands from the repository root after the basic checks in the
+[README](../README.md). Production HTTP examples use the local server at
+`http://127.0.0.1:4176`.
+
+The HTTP metadata check covers homepage and Workshop social cards in the initial
+HTML for X, Facebook and LinkedIn crawler user agents, clean canonical URLs for
+query-string links, the `/play` redirect, and delivery of the preview image.
+Actual platform preview rendering and cache refreshes still need a deployed check.
+
+The source/runtime regression suite additionally needs the ignored CAD inputs described in [CAD notes](CAD_NOTES.md):
+
+```sh
+node scripts/cad/review-runtime.mjs
+```
+
+The sampled access check uses tracked meshes and does not require original CAD:
+
+```sh
+node scripts/play/fixed-access-check.mjs
+```
+
+Browser runners use an existing Playwright installation and Chrome. Set `PLAYWRIGHT_MODULE` to its absolute `index.mjs` path and `CHROME_PATH` to the Chrome executable when they are not available through the defaults. No browser dependency is required by the application.
+
+```sh
+node scripts/play/browser-check.mjs http://127.0.0.1:4176 easy
+node scripts/play/browser-check.mjs http://127.0.0.1:4176 hard
+node scripts/play/drag-check.mjs http://127.0.0.1:4176
+node scripts/play/access-check.mjs http://127.0.0.1:4176
+node scripts/review/explorer-check.mjs http://127.0.0.1:4176
+node explorer/scripts/measure-build.mjs
+```
+
+The `focused`, `home` and loading suites expect the entry to be visible. Build
+with `VERCEL_ENV=preview npm --prefix explorer run build`, restart the local server,
+then run `node scripts/play/browser-check.mjs http://127.0.0.1:4176 focused`,
+the same runner with `home`, and
+`node scripts/review/loading-check.mjs http://127.0.0.1:4176`. These are local
+checks; do not deploy or promote the compiled Preview artifact to production.
+
+Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
+
+`/?inspect=1` exposes lazy browser regression/benchmark tools and local delivery-failure fixtures. `?no3d=1` exercises fallback and `?text=200` enlarges root text. Browser viewport and synthetic touch checks do not establish physical-device or accessibility certification.

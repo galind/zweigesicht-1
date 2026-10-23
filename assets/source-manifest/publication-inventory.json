@@ -1,0 +1,1295 @@
+{
+  "reviewed_at": "2026-10-03",
+  "scope": "Remote branch/tag runtime models, images, source-linked authored JSON and historical source/mechanical audit JSON. PR-only and local-only content is separately discussed in release gates. Git blob IDs identify versions; SHA-256 identifies bytes. Inclusion defines conservative rights-review scope, not a copyright determination.",
+  "remote_refs": {
+    "refs/remotes/origin/codex/running-movement": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+    "refs/remotes/origin/develop": "90b606efe5337491319251343b9caeb1f6c77042",
+    "refs/remotes/origin/main": "0037646e94e74cec184bdf8ddb2bec0c56971ec1"
+  },
+  "tags": [],
+  "current_assets": {
+    "refs/remotes/origin/codex/running-movement": [
+      "artifacts/dependency-audit.json",
+      "artifacts/preflight/access-checks.json",
+      "artifacts/preflight/assembly-inventory.json",
+      "artifacts/preflight/browser-smoke.json",
+      "artifacts/preflight/component-mesh-stats.json",
+      "assets/authored/component-labels.json",
+      "assets/authored/dial-configurations.json",
+      "assets/authored/explore-scope.json",
+      "assets/authored/explosion.json",
+      "assets/authored/hand-display-poses.json",
+      "assets/authored/mechanisms.json",
+      "assets/authored/motion-evidence.json",
+      "assets/derived/complete-separation.json",
+      "docs/appearance/cad-finishing-audit.json",
+      "docs/appearance/ledger.json",
+      "docs/running-movement/M2_EVIDENCE.json",
+      "docs/running-movement/coverage-summary.json",
+      "docs/running-movement/graph.json",
+      "docs/running-movement/probe-summary.json",
+      "explorer/public/images/marco-lang-ml01-movement.webp",
+      "explorer/public/models/assembly-manifest.json",
+      "explorer/public/models/asset-paths.json",
+      "explorer/public/models/catalog-0d8f8da54d0b.glb",
+      "explorer/public/models/catalog-0d8f8da54d0b.glb.gz",
+      "explorer/public/models/diamond-c74ee2731a1f.stl",
+      "explorer/public/models/finish-surfaces-5ad97cd16281.bin",
+      "explorer/public/models/finish-surfaces-5ad97cd16281.bin.gz",
+      "explorer/public/models/finish-surfaces-afd3394797bd.bin",
+      "explorer/public/models/finish-surfaces-afd3394797bd.bin.gz",
+      "explorer/public/models/finish-surfaces-bd9958b41c29.bin",
+      "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz",
+      "explorer/public/models/finish-surfaces-ce5d9d834cf7.bin",
+      "explorer/public/models/finish-surfaces-ce5d9d834cf7.bin.gz",
+      "explorer/public/models/finish-surfaces.json",
+      "explorer/public/models/overview-2337df2dca58.glb",
+      "explorer/public/models/overview-2337df2dca58.glb.gz"
+    ],
+    "refs/remotes/origin/develop": [
+      "assets/authored/component-labels.json",
+      "assets/authored/dial-configurations.json",
+      "assets/authored/explore-scope.json",
+      "assets/authored/explosion.json",
+      "assets/authored/hand-display-poses.json",
+      "assets/authored/material-review.json",
+      "assets/authored/mechanisms.json",
+      "assets/authored/motion-evidence.json",
+      "assets/authored/play-manifest.json",
+      "assets/authored/watch-configurations.json",
+      "assets/derived/complete-separation.json",
+      "explorer/public/images/marco-lang-ml01-movement.webp",
+      "explorer/public/images/zweigesicht-1-separated-71ba2d171225.jpg",
+      "explorer/public/models/assembly-manifest.json",
+      "explorer/public/models/asset-paths.json",
+      "explorer/public/models/case-lug-recovery.json",
+      "explorer/public/models/catalog-0d8f8da54d0b.glb",
+      "explorer/public/models/catalog-0d8f8da54d0b.glb.gz",
+      "explorer/public/models/diamond-c74ee2731a1f.stl",
+      "explorer/public/models/finish-surfaces-bd9958b41c29.bin",
+      "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz",
+      "explorer/public/models/finish-surfaces.json",
+      "explorer/public/models/overview-2337df2dca58.glb",
+      "explorer/public/models/overview-2337df2dca58.glb.gz"
+    ],
+    "refs/remotes/origin/main": [
+      "assets/authored/component-labels.json",
+      "assets/authored/dial-configurations.json",
+      "assets/authored/explore-scope.json",
+      "assets/authored/explosion.json",
+      "assets/authored/hand-display-poses.json",
+      "assets/authored/material-review.json",
+      "assets/authored/mechanisms.json",
+      "assets/authored/motion-evidence.json",
+      "assets/authored/play-manifest.json",
+      "assets/authored/watch-configurations.json",
+      "assets/derived/complete-separation.json",
+      "explorer/public/images/marco-lang-ml01-movement.webp",
+      "explorer/public/images/zweigesicht-1-separated-71ba2d171225.jpg",
+      "explorer/public/models/assembly-manifest.json",
+      "explorer/public/models/asset-paths.json",
+      "explorer/public/models/case-lug-recovery.json",
+      "explorer/public/models/catalog-0d8f8da54d0b.glb",
+      "explorer/public/models/catalog-0d8f8da54d0b.glb.gz",
+      "explorer/public/models/diamond-c74ee2731a1f.stl",
+      "explorer/public/models/finish-surfaces-bd9958b41c29.bin",
+      "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz",
+      "explorer/public/models/finish-surfaces.json",
+      "explorer/public/models/overview-2337df2dca58.glb",
+      "explorer/public/models/overview-2337df2dca58.glb.gz"
+    ]
+  },
+  "historical_assets": [
+    {
+      "path": "assets/authored/component-labels.json",
+      "versions": [
+        {
+          "git_blob": "1f2fc2e77a7cf6cc9367021d1a5a2b520586f38a",
+          "sha256": "492a82a3813ca93b0db7fef77f7c6c2c639584abbe16e7a1429e2db38ad3f72b",
+          "bytes": 2241,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "7ee2468b0a3ad3aade39d9e02b7c3a2974579284",
+          "sha256": "9fd83e7b77435c79c303312941af1526f560549e57ad36a0a0f0253fbd820274",
+          "bytes": 2239,
+          "example_commit": "3bb1d8ec34ba5ba7dd7a636a81f422f79ff2fc14",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "ee64df2f1b34ec1553238c57c27c9515d2024014",
+          "sha256": "80322374f90e92a936b1d39e662055b365b07c4da0ca9ff207b008590ed13a7e",
+          "bytes": 2198,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/dial-configurations.json",
+      "versions": [
+        {
+          "git_blob": "f07040d24ffc7c848a9f1edc67663babb6f3f2fc",
+          "sha256": "9f3b8bfdd84c4f4a388cccdce15434569d3e1b5c549069e6b5c4df8ef788ed4b",
+          "bytes": 8642,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "781313451aef602e6e104889ddb8774bff5c4568",
+          "sha256": "4ab3431db91990ba7e6d6af5575c4ed76efd1e3dbf238299237c4dc5915e46ae",
+          "bytes": 8015,
+          "example_commit": "7d87f0f889f3ba1f2f317fdc7486847c835bd76e",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "5b2cb9622e5ef6f2075edbf8a376226f1ca6fe18",
+          "sha256": "383b3a3180f668551a68e5da01329e087d577c1914c398088c2f093f7f51def1",
+          "bytes": 8763,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "a0493bc3d0be94e7fa5a4999c64924bc6651019a",
+          "sha256": "7e83d573f0d4dba35517e7a16f25c11a6cf5c3a4673719417fea62ff92afffc2",
+          "bytes": 8771,
+          "example_commit": "2eb90b0d62fb27deb52e818896a9180cd8cc62b6",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/explore-scope.json",
+      "versions": [
+        {
+          "git_blob": "51a50a4503b57ffec1c01a072aa06e428423ef2b",
+          "sha256": "de4f58c4320d12adf994dd736a6382e01736e5169343db7f9d9e9add3cea1534",
+          "bytes": 1258,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/explosion.json",
+      "versions": [
+        {
+          "git_blob": "817db8228ee5803323084686d7d18b4c43d54694",
+          "sha256": "465204f1bf9414402730f4fc174db679d6251cd0328fecc7837391d213e59c44",
+          "bytes": 138487,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/hand-display-poses.json",
+      "versions": [
+        {
+          "git_blob": "9e791b7076bbe55d6a7fd43a287e4f6eb19c704f",
+          "sha256": "ebf959c13d85191a4305898bc2863fe202a9247469bfad13bee7c92e8280454b",
+          "bytes": 7582,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "239f291c40a9ebf17079459a5db562c21de62db2",
+          "sha256": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+          "bytes": 7575,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/material-review.json",
+      "versions": [
+        {
+          "git_blob": "edcc0e312bbee2946f5d6bc1bc7c77e7351b20a8",
+          "sha256": "6c532f6671a710d64a6b55c937212c71c0dcc65f98b7f4bed7ca4ce5433b11ce",
+          "bytes": 17669,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "6bedb5997e6648d324826e23243eea9ff344ded7",
+          "sha256": "7dc33905b76114029fe96c801e15ffaebf5100052796f946c523f2194ecc6968",
+          "bytes": 16691,
+          "example_commit": "2eb90b0d62fb27deb52e818896a9180cd8cc62b6",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "4a3811e6c0b584544481bb046b741833b23ffc83",
+          "sha256": "6fb820bee2f5dceaba51bd813344d63dfab68bd7c861183f02ca482c82c794d9",
+          "bytes": 15921,
+          "example_commit": "4ce1cc655e7e5434e7f2bf5377e2cd230258ee3a",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "7cd63a57f6d7b71322c854101334b1f14f5280fb",
+          "sha256": "e5c667effbc2968bd254490b69a1c5514a88750bffe39520f92a923f433d4387",
+          "bytes": 13289,
+          "example_commit": "4300c6b739a3a8a4109e1d2298b6cd409e10e12e",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "92b1c08335aeb2ac7096f2f0db0162ec5e2a21d8",
+          "sha256": "b77b8485eddb2ec4316b9e72d4e6e57c3493b0f49c7c72678d8dcc4b52efbb42",
+          "bytes": 11832,
+          "example_commit": "a48e751e5047aac9bf13bc5e68670ae3eae82d73",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "aa4681e9e5f250f1805fa9e52f3962564fc4049a",
+          "sha256": "85ecaa5e1685cc7b9569a4429f6fb1376fa536dccf043087989d5e187922521d",
+          "bytes": 10597,
+          "example_commit": "aa2493afd6af038c54ed63a973c618051834dee3",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "5805b36149bbd02b6b2222772a02df78249bcf2e",
+          "sha256": "ab7b1282ba05ae667829889a8f8398668139229acdac4321e62d978b86b75979",
+          "bytes": 7490,
+          "example_commit": "a17d341c5ff365760ac7b4929a0c9c6f6e65ed74",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "d99c628e2b6b7d0b88acd33eddf8f0a205bf74aa",
+          "sha256": "db16fb71c362d0b050e96823c89efc52034d118606b02a295eaf7f5ad89f26ce",
+          "bytes": 5979,
+          "example_commit": "f4bb9d8753b83b666ec0c968690e58617023ee9f",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/mechanisms.json",
+      "versions": [
+        {
+          "git_blob": "5ee2e59bd3e27eb5f553ec6f8596fc20e844a331",
+          "sha256": "f9b2e9d9df412dab5df98b53d1beb1fe8fb7250458606f2675c7efb17038f6de",
+          "bytes": 4284,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "22d0232e4e029efd7de57a325bb3ecd4fd63c9b0",
+          "sha256": "2c83f5600e8bc6d77bc12acfeeee0a788823371cc7a3771027d5687ed6806782",
+          "bytes": 4285,
+          "example_commit": "a806295208b89aac9b7b5fcc9cc4dc0dcd492808",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "42f95b3250b1b8acbae523d0048e6117b6c47587",
+          "sha256": "069bc90a7b0c35cb3af11aab950552a9317ffe27e52951db73e0cf4603ed3396",
+          "bytes": 4472,
+          "example_commit": "215be75c3a6fcdb29acaa1af2952b716d25ee7c7",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "119bf32ccb080b8074944e88239bc4d95230b724",
+          "sha256": "c72b6054ecc6fbfe9946165116db35cabee483c7d2d7a3e30a2ffe59e762b39a",
+          "bytes": 4256,
+          "example_commit": "00fb905702a7ed2584b1b7fd6f9eb26182c5654e",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/motion-evidence.json",
+      "versions": [
+        {
+          "git_blob": "81ef1446b42fffeabf5bbe59e5b636414c220a8c",
+          "sha256": "ff7720f10dae54352b1e65fa989babb8e61c17d246c4e3e9e64f1c6f43f6c85f",
+          "bytes": 13193,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "e6a796a9da2b3da525e7fbcbdc3adafe62b4ff46",
+          "sha256": "18bd67112abe48e3c8b140133232b189052683593166fb941a4288cbd0892155",
+          "bytes": 12888,
+          "example_commit": "215be75c3a6fcdb29acaa1af2952b716d25ee7c7",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "005886971c487b2a42580ba417aa9307a98027e4",
+          "sha256": "a21544ee765e2b67cc005d6fb6be0ed981cc1f41b9f81adbfe148560e0346651",
+          "bytes": 3678,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "afdf1c3db1d0a3e850f3c29a8ab938b391400369",
+          "sha256": "b2364c5765a673d8976822d974d2fdf780ef747f64f9eac5bd477f727c1eb557",
+          "bytes": 16517,
+          "example_commit": "2eb90b0d62fb27deb52e818896a9180cd8cc62b6",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/play-manifest.json",
+      "versions": [
+        {
+          "git_blob": "6fc8b44f53f772bab3c9b4a921d95c34a975f71b",
+          "sha256": "d1524d3b9cf1bd85087652fda70cad37afc51b201166b7a02701733597a27d7e",
+          "bytes": 494745,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "4dc4a0d8eb06a6b242a9f33f37bfdce239ebe0cb",
+          "sha256": "e4308b37ddb6276f6b62e59a4cf843de925b1052d9c57a2b0323514f0629545d",
+          "bytes": 542973,
+          "example_commit": "2eb90b0d62fb27deb52e818896a9180cd8cc62b6",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "4cf8a31afa599cd53cd5775b1c2b64c52c1bef6b",
+          "sha256": "0bbfae2d00a5d9b4edd6b2873bdec34c2baa9061ca39592dfad26a13b4afb8fd",
+          "bytes": 2437763,
+          "example_commit": "affaa9d0b520038cb80e3af5db614277822949ec",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "c851aed79bdd584b955ec934fd1f4526d41bb829",
+          "sha256": "dd3006ea57094bcb7b0f55fbc53e0aa6b54cba47939df2aa8b430a8a47eb3f6c",
+          "bytes": 2414031,
+          "example_commit": "5f80d9d6e9fa110966fb2df59f870708209c2b00",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/shock-replacement.json",
+      "versions": [
+        {
+          "git_blob": "b54d0aca3bf463888c541593bcd94bfba8ba6b46",
+          "sha256": "0fa10127ce6ec4599156d6b69e8e1d0c3cd662bbf0daea9041ec78dfb18ab375",
+          "bytes": 3431,
+          "example_commit": "04b58613e2de1f3747f833261fea3f47986ee2cd",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "assets/authored/watch-configurations.json",
+      "versions": [
+        {
+          "git_blob": "fa3f9c988d8535ba887cc814be089bf946119314",
+          "sha256": "7c986558a2d82165bef846eb3c42183ea2d20b07491c302fd61ca040d804d8d4",
+          "bytes": 51253,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "abe3b505262eaf9b2c0782197e24a0b7afa9aacc",
+          "sha256": "07dfd5b1bc591532abd71b743667f7324c83a5c8c8a2e0f38aa223f19454c692",
+          "bytes": 50950,
+          "example_commit": "a17d341c5ff365760ac7b4929a0c9c6f6e65ed74",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "fab87a28143c5a6d460c42eecc30ec1ae030b1a4",
+          "sha256": "78e0e5dfe189479a9dcb54487ec5225f0193520136ceede02cc600040796bd70",
+          "bytes": 50464,
+          "example_commit": "ac2179f02b450aa9ab4d7824963d9a3c92416de9",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "ba7614d2ca2caa68d4ed1a4829cd2cd8d67f4cb9",
+          "sha256": "eaf349da63548a586e0fb7ade7070979228f3a3466efcc1686e149aea3845298",
+          "bytes": 38507,
+          "example_commit": "8a54e78ce8807edd4f173f9305761ff3b8283db0",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "assets/derived/complete-separation.json",
+      "versions": [
+        {
+          "git_blob": "1947bfa7715790e20bd3e05350c11ed0fc459599",
+          "sha256": "bc98fbfc0d93e670b70e155e4d34f75b285539f5b190902a2de963cff14da680",
+          "bytes": 128971,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/images/marco-lang-ml01-movement.webp",
+      "versions": [
+        {
+          "git_blob": "7bf3dad05c390273a11cc4ab59eb0be2c2305857",
+          "sha256": "bd10451480c5896958285a6087aa0258af775394f672eb2a010e617d6b92ef30",
+          "bytes": 52226,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/images/zweigesicht-1-separated-71ba2d171225.jpg",
+      "versions": [
+        {
+          "git_blob": "dc62eb58cb3833c0ca203aa60b32c48fce53acb2",
+          "sha256": "71ba2d17122578edad6cbecdac4685158cec38a40c837ecf1cdfa211dddff970",
+          "bytes": 238639,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/assembly-manifest.json",
+      "versions": [
+        {
+          "git_blob": "ef3c4615bf29e4797f7eea43b9ef12eacf6bd31f",
+          "sha256": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+          "bytes": 343973,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/asset-paths.json",
+      "versions": [
+        {
+          "git_blob": "e3aa517bcbcd66a2f735437774d15106963c4310",
+          "sha256": "d1d9240fb40c5a475f5cdafb3c679b918aa7f85e20e7be4bb172a6666957fd65",
+          "bytes": 93,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/case-lug-recovery.json",
+      "versions": [
+        {
+          "git_blob": "cda878333310252a93e1088b460b65d30c63a032",
+          "sha256": "c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2",
+          "bytes": 2105,
+          "example_commit": "90b606efe5337491319251343b9caeb1f6c77042",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",
+      "versions": [
+        {
+          "git_blob": "5de46c61e043dbc763ba6b8b789b69537b5faa81",
+          "sha256": "0d8f8da54d0bac5787e8f4c0f5202b8921c027e1cc0cb5ffd965d6f8ad265f6a",
+          "bytes": 17901308,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/catalog-0d8f8da54d0b.glb.gz",
+      "versions": [
+        {
+          "git_blob": "cb687bfe5366f03e9b7542a0475a4ea6debde350",
+          "sha256": "528004e61c970406df1d31cecc77881afd99ee3f9fa92c336a430f3ac34ba5f2",
+          "bytes": 9501474,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/diamond-c74ee2731a1f.stl",
+      "versions": [
+        {
+          "git_blob": "b5482f662972136b036874aa78f48b7ffd2bcb2a",
+          "sha256": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+          "bytes": 82084,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-4d11dd3bb5bd.bin",
+      "versions": [
+        {
+          "git_blob": "6ad9855c214f9e5e0899d246910d407c9619f830",
+          "sha256": "4d11dd3bb5bda2e5f1e5fa43b792c9e45ba1d609aae5f8669ab63cd0a37d299d",
+          "bytes": 6688272,
+          "example_commit": "61ea2646211e61aea33d70a2bb9a20619f40b1d0",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-4d11dd3bb5bd.bin.gz",
+      "versions": [
+        {
+          "git_blob": "cde1d98770cd85c0e41b80312b7712003efc1fad",
+          "sha256": "9d6b6e6d0c73f0e90347261b9a8cccedb35c5fa4084ee519c5b6e92b8084d49e",
+          "bytes": 1057460,
+          "example_commit": "61ea2646211e61aea33d70a2bb9a20619f40b1d0",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-5ad97cd16281.bin",
+      "versions": [
+        {
+          "git_blob": "990c107215d315424f8ef3a9263cd640940af57a",
+          "sha256": "5ad97cd1628170baba5040771d42963afd374bffa267bf51e82fa883c6461d88",
+          "bytes": 6688272,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-5ad97cd16281.bin.gz",
+      "versions": [
+        {
+          "git_blob": "1791952d5baff64836f619353556cc2f3e4f17a8",
+          "sha256": "3eeaf305f4c6b079364e81b690ef7e4240116102154115ab02c967a2edd3b281",
+          "bytes": 1057955,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-afd3394797bd.bin",
+      "versions": [
+        {
+          "git_blob": "b2ff44ab5bdf83b3d76e6b34f6c27a72da0e7fa3",
+          "sha256": "afd3394797bde7102750e86c5ceb2f06ec7a329c1a1549789e004cf25be064e0",
+          "bytes": 6688272,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-afd3394797bd.bin.gz",
+      "versions": [
+        {
+          "git_blob": "a9ff714c62badcc74d6dfed523b60553a47da1bb",
+          "sha256": "3a37ac0ddb2ac94eb835ff5279bdbba596f59783f969d0efe6ac9c4300048b32",
+          "bytes": 1058014,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-bd9958b41c29.bin",
+      "versions": [
+        {
+          "git_blob": "117c8140f6e9c754c2a4fe322074d3dbe850858d",
+          "sha256": "bd9958b41c2916f67c4689e5285cb94a7079e89b813e1b9afee05956faa0ab70",
+          "bytes": 6706960,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz",
+      "versions": [
+        {
+          "git_blob": "ce2066acc16830be9d5cb7e4c06dd7117669981b",
+          "sha256": "44e721acbbef9b055c3ee3746162595a16c29ae663737da557c3a62b1a5f5644",
+          "bytes": 1065047,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-ce5d9d834cf7.bin",
+      "versions": [
+        {
+          "git_blob": "4aeb04d344901030b96ba0372227d4cac65f76b9",
+          "sha256": "ce5d9d834cf79ddff84f8a73b37e1df6ef983ed1293c54b6a7cf5bb7de93d768",
+          "bytes": 6688272,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces-ce5d9d834cf7.bin.gz",
+      "versions": [
+        {
+          "git_blob": "3840cc315f79ec3fd60212a13b560451c0c6d8cb",
+          "sha256": "165121e8ff1983c77925381a6f443bd0d462168baba435c07f620683908fd786",
+          "bytes": 1058010,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/finish-surfaces.json",
+      "versions": [
+        {
+          "git_blob": "39247e805e71013dcf13ce1628005639fc681a82",
+          "sha256": "ea694b0a3dc5b9e11ccf61ea7c8fa4a39600d609e4f228c3529dffc1929518ac",
+          "bytes": 9344,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "9f5d180405aca87e2ed7197e6770ab3f6f0b0e42",
+          "sha256": "27cdbec766607a01ee7579a5f39fb506a892275bc6af85a175333323a2ed2ef4",
+          "bytes": 9344,
+          "example_commit": "a473fa82debcbfdac445c1afb0a94e350b882cec",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "e223effefb6cd2806cadfa60bcf11a855782ca0e",
+          "sha256": "daddb77bf7e31efc8e63707bfe961857fd720386678ae5003c631b27e12375b0",
+          "bytes": 9344,
+          "example_commit": "59fbb8969e00655b6dd37a58af54059ee8334166",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "4172abc329676c5f1c7a264013591f099f1dab3d",
+          "sha256": "ba0b7aee83a3809b232d57961acb5015856521856ccc968c033d9d65a1114753",
+          "bytes": 9200,
+          "example_commit": "4613c6615a3ac4ebfe134d6051363802d6e8bf57",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "621ca7821c06499a83989c6b03fb028ed53b0fb8",
+          "sha256": "60a85ceb735c658e2b7bc60777c58edddbc85388e07e79155bc2eefacb70a19c",
+          "bytes": 9200,
+          "example_commit": "1b6ad59cb41b312ec1498c9382c2f9bfbc8a6607",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "a1090a62f715c5a47d24a238d8131f969a622677",
+          "sha256": "b384b9139745090c378a9dbeda5ca2492186947ad4c343515e7a234d959edf23",
+          "bytes": 9144,
+          "example_commit": "f0931bd5d6d8e9d6314d62e025d5937a6ea4879d",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "2498aba850fec2087f7d5df47aa23e8b872059b8",
+          "sha256": "13fb908d3718dc5bbe6471f146828efb31b6b843a1a87d4d9aec7ec00cc456e8",
+          "bytes": 9107,
+          "example_commit": "23889a5f78527f16ec0fd3696fa91258cbd6fe10",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "ef6fe6b30197cd12717f7be9d5297ff475191a5d",
+          "sha256": "02cc2c8484c501d04e17b285065d56644124860888020fd232433aea1e857149",
+          "bytes": 8980,
+          "example_commit": "61ea2646211e61aea33d70a2bb9a20619f40b1d0",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/overview-2337df2dca58.glb",
+      "versions": [
+        {
+          "git_blob": "fdb7a35d5929589125c0c1b48be82bb0d1847636",
+          "sha256": "2337df2dca58a8d07d7f3ed5173cdfa67613951ba1b88d88480eb5c06db7aca5",
+          "bytes": 9834792,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "explorer/public/models/overview-2337df2dca58.glb.gz",
+      "versions": [
+        {
+          "git_blob": "3dbfd28d0b332631cb5f3f3211f34fa4c072b3eb",
+          "sha256": "7c64dd12b5b8655e3b7be874c1c2173f39c7c81e0664ba746ebb82b168287a72",
+          "bytes": 4751211,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "artifacts/dependency-audit.json",
+      "versions": [
+        {
+          "git_blob": "68600a2f07c68c0f0e544831cc0d6ba3acc136e1",
+          "sha256": "3a5fbca3cee8edd3fc6a96f1730cb8a69c1d9fa06178a30aff0fd50f33d898c0",
+          "bytes": 367,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "artifacts/preflight/access-checks.json",
+      "versions": [
+        {
+          "git_blob": "c548a3abc37b84a7fcd7795758361aacfbcbc48f",
+          "sha256": "45dad587ab5ff0a9e6196e5628836e149d18dc04a65c645eeb0f67668c164ea0",
+          "bytes": 1515,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "f5c761dbd65186b4acd5ed6ebec98d60b3d3c639",
+          "sha256": "0768e61380a768e8182170f8b650de4bb96dd7f1fbce6a7ed2ecfc1c0f3b53cd",
+          "bytes": 1205,
+          "example_commit": "f12ed02d4a266a7059fedc2f91bf198af4e81e9d",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "artifacts/preflight/assembly-inventory.json",
+      "versions": [
+        {
+          "git_blob": "9828aca1e5d54a7897207aa6291a880bc07406ec",
+          "sha256": "7d745ffea623f4369ae8d44c641a4aaa6b1ceafd0a549427d6e2aee69f87ec51",
+          "bytes": 490582,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "artifacts/preflight/browser-smoke.json",
+      "versions": [
+        {
+          "git_blob": "7486675d575b5a6a42e10b325448d037d09ec1c5",
+          "sha256": "08c4dc83d6b411630fdf1755933b93f0c36e91e9827dfcb3d9a80ade50488cd8",
+          "bytes": 544,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "artifacts/preflight/component-mesh-stats.json",
+      "versions": [
+        {
+          "git_blob": "d5dabf28e8b25c9dc2f774f87680244d5c0a6a4a",
+          "sha256": "fd3cf462405dfe046dc3075f68a90846ba2185faf9d117bc695f4e96e930b55a",
+          "bytes": 533,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/appearance/cad-finishing-audit.json",
+      "versions": [
+        {
+          "git_blob": "70e2b37566835b9d9a4f800dda9ebddb83c4e990",
+          "sha256": "b9c766fad844b552591fd1377283b47da63e3ae77f94451d578271148dd4dbfc",
+          "bytes": 39412993,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "docs/appearance/ledger.json",
+      "versions": [
+        {
+          "git_blob": "15b4032fb90388008810a9d29dcb64b73169164e",
+          "sha256": "7f3b687c194f65617af0e2ccdb046adf4cf88d172a2983b3b2e7c33672acfeca",
+          "bytes": 1655161,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "2f6b5d50e01187a8d12aef3d4d3a5b230a001415",
+          "sha256": "3d26b0ed6437ae9b119dc31183059a88b2337c920afcf2b647fe6e3272101c31",
+          "bytes": 1654773,
+          "example_commit": "7bd1587d083c490da3599eb66a3690a5259f302e",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "de438c561396c94597a15f175a9e58673b4ada7a",
+          "sha256": "f6f2050b6e4bce4de1954bd3aa917e24c79f3863296cb093df03569edb0dbb68",
+          "bytes": 1653371,
+          "example_commit": "f0931bd5d6d8e9d6314d62e025d5937a6ea4879d",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "c797a7ccae3f92693815529ff8c26fa83f212743",
+          "sha256": "a5922a75dad36de263606cddcdaa93627494fd3193d4038145d0555c955a770d",
+          "bytes": 1651743,
+          "example_commit": "29ba586f1b600aa4d18f2f15a79480109829b39e",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "2c0e888e404ee06b487d9408124f7b841700c930",
+          "sha256": "71148a2d566cf9fa7abe971e19e755c0538d768f7349787f88bda94ad4fa4c42",
+          "bytes": 1652182,
+          "example_commit": "64e02d2c93c4d5ceacbba255d7b33efc077a81af",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "b12531b4fadf2801cf3bd6f6a82f577495737d50",
+          "sha256": "5f6fc3847b311528809eea6a2003f28c5a727b5895c15deb873020ae1c558c16",
+          "bytes": 1651986,
+          "example_commit": "9540d8f5f405104f011a2ddb1181e2c8053eaa3c",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "ca52876829f1f1a4726973ab5f20f33bb6ad260a",
+          "sha256": "b23108e55aed4d92dbf0e97354936ebba160065f8d18d4fdad3c34f986031982",
+          "bytes": 1651462,
+          "example_commit": "23889a5f78527f16ec0fd3696fa91258cbd6fe10",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "71ab9280e4d62c1ac924f3ecc2539d8d0f5b02af",
+          "sha256": "8440d3d4ec61a32c4e54bc4b3bd138b6fa165ca57a3ff617e617925e1860a32d",
+          "bytes": 1650824,
+          "example_commit": "8d78910dd41b06be813e3ad2af844934c5f24b8e",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "20b05dcf6d127fb0651535057e0a4e9f11fa0e0a",
+          "sha256": "dd0ff41b2c1a1bd8371febd9f3560192f32f414eb73a3fa5a22edc5137f695f6",
+          "bytes": 1652957,
+          "example_commit": "d686680e99999ac9f2c3cec613e99b65ed17f308",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "cff00c905c4a071332b6a7109958232a33f35169",
+          "sha256": "118a6dcace33be61399dd44b25f86dd5aabe69c8d12dcdc32f8c9000c66f1516",
+          "bytes": 1657004,
+          "example_commit": "61ea2646211e61aea33d70a2bb9a20619f40b1d0",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "472bb406213d71f07b3e4896e22115d0adaf2557",
+          "sha256": "b7654509dae327fdc4a433dddf1c35579eb8a19680fd500d29a689462ee80b39",
+          "bytes": 1655874,
+          "example_commit": "0c56d81a1ec66ce8cd7a25ef75a4e2a65584ecc5",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "ab7b1117e3a5af68e49d224fc3c45f9f1e380411",
+          "sha256": "af11e933772d1b7ed27bbcceb555fb900ba32d17b394778dfbc7aaeba9f4fc47",
+          "bytes": 1653081,
+          "example_commit": "9bb2974d2409fe5e9dc470faeae041ea9f7e176f",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "478dbda73437f3bee3780aa6af6232384ca221ca",
+          "sha256": "71e79b386b13e722dd5c6505ab13a664cd025bb4bd9d3afda36e2fa39186ad75",
+          "bytes": 1653614,
+          "example_commit": "4f38c0b456e645790e69c3588edcbd3a5ae97fe0",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "016687bac2d9687683354bc0814595243647f13c",
+          "sha256": "5b8cad68ffa23d2e12a14d0e840d736e9e3fae34d72f54d96a296c96c8980094",
+          "bytes": 1657030,
+          "example_commit": "0b1531e3e98ac37f9cecfbaedb0406d2c70035e6",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "389465ed74929d9f28bffd219ddd0b51eed35f26",
+          "sha256": "ff9b37c98ba3997c4405ead1c83c86a01b12cdc3b3eb43d6ae5ddacfa551743f",
+          "bytes": 1661961,
+          "example_commit": "331d7b64143b2244bc382219db93c294a9292fc8",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "95a87715ce4fb24614d036c16eeaa8cbbef762e0",
+          "sha256": "511d0eb9b815739ff6598a9e818df1dd5ebc0007f1fbf22781e903083a00c93b",
+          "bytes": 1660248,
+          "example_commit": "594d20125fa71fad61d34380d00a25e7e4abaeb8",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "5210312164b53539cbc335d45cb5ffc0b7090007",
+          "sha256": "20982ba34a067dff9f83cfac6fac614b6e7b24ca7410855eb6eac7440e456815",
+          "bytes": 1633759,
+          "example_commit": "1ec2f53522856ec712c28e93ad33ac0582a50437",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "b42983ecdba52b9b47e110603ec11ff48c32de37",
+          "sha256": "cf5572360516f668efbb9534ee0c961a8cd547f3362bfe08e7c1e8cebba95399",
+          "bytes": 1620227,
+          "example_commit": "36a2ca526da825e32bfc90ea528649b8bfb0825c",
+          "reachable_from": [
+            "refs/remotes/origin/codex/running-movement",
+            "refs/remotes/origin/develop",
+            "refs/remotes/origin/main"
+          ]
+        },
+        {
+          "git_blob": "1f25249a9bfea1af18241847b70e24626e3fb6ba",
+          "sha256": "cceccaf015b7a3118095654175a903d60e2ab4c05e797661442dfa863cc96afc",
+          "bytes": 1685591,
+          "example_commit": "2eb90b0d62fb27deb52e818896a9180cd8cc62b6",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "365c15a3c1b88860818da66c0e58e9c402632046",
+          "sha256": "1e149fe362d004e0cec885d988eec8a62f0fde97213181c4a07b25d2a0d030ca",
+          "bytes": 1685591,
+          "example_commit": "59f34756d5cf403867ebca9fdc15116ad3c75ada",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "5078920b8ca8d224aee1e6702e7a4acacfc3528f",
+          "sha256": "7f143ec36548f787a0328c5422459a2b9f97b980857328f118eeb55f59248195",
+          "bytes": 1685427,
+          "example_commit": "4ce1cc655e7e5434e7f2bf5377e2cd230258ee3a",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "8a8ce11da520018fd4c04a2f978153ee1c25686f",
+          "sha256": "8b79a66294515ad255e105e56121f08441a1224dc944236246d68411dc8a7c93",
+          "bytes": 1683587,
+          "example_commit": "a48e751e5047aac9bf13bc5e68670ae3eae82d73",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "f47be4d80a4b3f58e07f0a39e854bf08c26ac0b7",
+          "sha256": "a2993e430de923368a1ea46b014ec149482710ee0c9f5d1581148c4ad681df54",
+          "bytes": 1682250,
+          "example_commit": "aa2493afd6af038c54ed63a973c618051834dee3",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "a445e099e7a4d75992447c3d14d9a771e8a5b282",
+          "sha256": "7e49c323ec732f732dc36ad3f4693ef390dd147b49ee96888f5435a5218c28af",
+          "bytes": 1682127,
+          "example_commit": "a17d341c5ff365760ac7b4929a0c9c6f6e65ed74",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        },
+        {
+          "git_blob": "3404d4863ed5d68b720895ae07c36881ef9fce97",
+          "sha256": "0fa04b069409b82bca87cfa43a7814a5584429f62ee0361f1adcd4995eaff95b",
+          "bytes": 1677767,
+          "example_commit": "f4bb9d8753b83b666ec0c968690e58617023ee9f",
+          "reachable_from": ["refs/remotes/origin/develop", "refs/remotes/origin/main"]
+        }
+      ]
+    },
+    {
+      "path": "docs/running-movement/M2_EVIDENCE.json",
+      "versions": [
+        {
+          "git_blob": "d915e1018dd5522127c460922d62713d49cbba11",
+          "sha256": "45549f8e41576e99de51f386ffd5f8314ca34c36ce3f44e6c2ceef1788ba1eaf",
+          "bytes": 130299,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": ["refs/remotes/origin/codex/running-movement"]
+        }
+      ]
+    },
+    {
+      "path": "docs/running-movement/coverage-summary.json",
+      "versions": [
+        {
+          "git_blob": "f82609312108a429477ab9084f1bf0c1dd69646f",
+          "sha256": "ff4447b3908ee6a4a973eafa5aea5f61f3c19c79f08b1e4f1bb0a30b66c47913",
+          "bytes": 1264,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": ["refs/remotes/origin/codex/running-movement"]
+        }
+      ]
+    },
+    {
+      "path": "docs/running-movement/graph.json",
+      "versions": [
+        {
+          "git_blob": "43f03022dbbccc472947e168f94eaee2bb9dee05",
+          "sha256": "b7e8f10d93b449e3e30139edc8342eeab3ae2cffce8d49bfb574b93fb36e3bbd",
+          "bytes": 42098,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": ["refs/remotes/origin/codex/running-movement"]
+        }
+      ]
+    },
+    {
+      "path": "docs/running-movement/probe-summary.json",
+      "versions": [
+        {
+          "git_blob": "4fe121acf956adc99f117bbfaf52558b35a57d88",
+          "sha256": "d209db9f5bcbc097acdc3235a895be155395882154e678f65dbf1f318c92f362",
+          "bytes": 25355,
+          "example_commit": "45fa9d30d9761cd71a9260cf6078f3026454cc43",
+          "reachable_from": ["refs/remotes/origin/codex/running-movement"]
+        }
+      ]
+    }
+  ]
+}

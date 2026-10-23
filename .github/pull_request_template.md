@@ -9,7 +9,8 @@
 ## Branch target
 
 - [ ] This feature/fix targets `develop`.
-- [ ] If this targets `main`, the head branch is `develop` and this is a release PR.
+
+- [ ] If this targets `main`, it comes from this repository’s `develop` and the exact head SHA has been reviewed in staging.
 
 ## Release considerations
 

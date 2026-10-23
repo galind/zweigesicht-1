@@ -1,139 +1,108 @@
 # Current project status
 
-Updated 3 October 2026. Static explorer at `/`, Workshop at `/workshop`, permanent
-`/play` redirect. See [README](README.md) for setup/checks,
-[architecture](docs/LOCAL_ARCHITECTURE.md) for implementation and
-[CAD notes](docs/CAD_NOTES.md) for mechanical/source constraints.
+Updated 5 October 2026. Setup is in the [README](README.md); extended checks are
+in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
-## Verified product
+## Public repository security — 5 October 2026
 
-- Explorer retains all 426 source instances, six functional groups, inspection,
-  isolation, All parts, separation, fitted case/dials and independent hand shapes.
-- Workshop retains 89 Easy fits, 249 Hard parts and 35 transfers; both start with
-  16 foundation leaves and finish with 265. Free orbit, searchable inventory,
-  Show seat, dragging, workbenches, Undo and local nonlinear saves remain.
-- Shared responsive controls/loading mark, reduced motion and failure recovery
-  remain. Explorer readiness requires two stable preparation frames.
-- Two compiled code guards hide the homepage Workshop entry/chooser and
-  `?assemble=1` in production, and show them in local development/Vercel Preview.
-  No feature configuration override exists. Direct routes remain available;
-  Workshop retains noindex/nofollow and sitemap exclusion.
-- PR #21 social metadata and exact replacement JPEG are preserved, along with
-  the legacy image URL. Source/runtime geometry, hashes and authored choices
-  are unchanged by public-repository preparation.
+- Active [branch ruleset](https://github.com/galind/zweigesicht-1/rules/24522996)
+  protects `main` and `develop`: PR required, resolved conversations, up-to-date
+  branch and required `Verify` / `Branch policy` checks from GitHub Actions;
+  deletion and force pushes blocked, no bypass actors.
+- Zero collaborators and no deploy keys. Required approvals remain zero for the
+  sole maintainer; automatic head-branch deletion is off. PR creation was already
+  limited to collaborators and remains so.
+- Actions require full commit SHAs, allow owner/GitHub-created actions, and require
+  approval for every external contributor. Default token permissions remain
+  read-only; workflow PR creation/approval remains disabled.
+- [PR #27](https://github.com/galind/zweigesicht-1/pull/27) pins actions and adds a
+  one-click **Release to production** workflow. It creates/reuses the release PR,
+  waits for protected CI and merges only the captured head; then syncs main back
+  through another checked PR. It aborts on branch changes and never bypasses rules.
+- The release job runs only from `main`, using a private app token restricted to
+  this repository and a `release-automation` environment restricted to main.
+  PR CI remains read-only. The environment is created with only the `main` branch
+  allowed (zero tags) and administrator protection bypass disabled. App creation,
+  installation and credential provisioning are pending; no release app credentials
+  have been created or added.
+- Current validation: all 92 tests and lint pass. Prior inventory, typecheck and
+  both production builds passed; app code and build configuration are unchanged.
+  GitHub CI also passed for implementation commit `14f34b0` (run 37358264288).
+  The one-click controller adds mocked GitHub tests for release/sync,
+  branch races, forbidden invocations, blocked CI and failed/partial merges.
+  Full integration validation requires the app setup and an authorized release.
+- Next: complete app setup, merge PR #27 into develop, then perform a separately
+  authorized bootstrap release PR to main and sync main back into develop.
+  Old unpinned workflows remain blocked by the Actions policy until replaced.
+  The preparation branch has Vercel Git deployment disabled; no production
+  deployment or release was performed.
 
-## Public-repository preparation
+The publication preparation below is historical evidence from 3 October. Public
+visibility does not resolve its outstanding asset/production release gates.
 
-- Standard MIT License: copyright 2026 Guillem Galindo, covering his original
-  contributions. CAD/source-derived assets are excluded. Upstream UI, icon and
-  library license notices ship in both builds at `/third-party-notices.txt`.
-  Fonts use the system stack; no maker reference photographs/webfonts are bundled.
-- Patched the one moderate npm advisory by changing only transitive `fast-uri`
-  3.1.7 → 3.1.8 in the app lockfile. App and asset-tool npm audits report zero
-  advisories. No framework migration or broad dependency upgrade.
-- Removed the favicon at the user's request; no favicon asset or HTML reference
-  remains. Historical icon rights remain a review item. Removed
-  unused Select scroll-button exports (the internally used controls
-  remain), consolidated obsolete verification/release history here, and corrected
-  README's production browser commands. Existing meaningful tools remain; the
-  CAD regression fixture now verifies the retained two-frame startup contract.
-- PR CI has read-only permissions and drops checkout credentials. The `main`
-  branch policy requires this repository's `develop`, rejecting a fork with that
-  name. Manual release dispatch runs only from `develop`; untrusted PR code is
-  never run with the release write token. Preparation-branch Git deployments
-  are disabled in `vercel.json` to honor the instruction not to deploy.
-- PR #23 is merged. At the user's request, remote `develop` was restored over
-  SSH from current `main` (`c7e8f23`) on 3 October 2026. Existing staging Git
-  integration may react to that restoration. `main` has not been changed.
-- Preparation changes are pushed on `codex/public-repository-preparation`.
-  [Draft PR #24](https://github.com/galind/zweigesicht-1/pull/24) targets the
-  restored `develop` base. Release workflow changes are committed at `3a065be`.
-- Future production promotion uses the manual **Release verified develop**
-  workflow instead of a release PR: enter the full reviewed SHA and `release`.
-  A read-only job verifies that exact commit; a separate write job checks current
-  branch heads and fast-forwards `main` without force. It never deletes `develop`.
-  The workflow has been tested locally, not dispatched. Existing main protection
-  may reject the direct update; no bypass has been configured.
-- Server-side deletion protection is still unconfirmed. The connected GitHub app
-  exposes no repository settings/ruleset mutation tool, and the browser settings
-  session exposes no usable controls. Configure an active rule matching exactly
-  `develop`, disallowing deletion and force pushes, to protect it against deletion
-  outside this workflow. The workflow alone cannot enforce that repository rule.
+## Current application
 
-## Exposure review
+- Static CAD explorer: 426 source instances, six mechanism groups, component
+  inspection/isolation, separation and fitted case/dial/hand configurations.
+- Workshop: 89 Easy placements, or 249 Hard placements and 35 transfers; 16
+  foundation leaves remain and both finish with 265. Undo/local saves retained.
+- Production hides the homepage Workshop entry and `?assemble=1`; direct
+  `/workshop`, `/play` redirect, noindex and sitemap exclusion remain.
+- Original contributions use standard MIT; required upstream notices ship with
+  builds. Maker CAD/design and derived assets remain outside that grant.
 
-- Scanned all 264 reachable local commits / 1,693 blobs (19 binary blobs), including
-  local branches, stale remote refs and Codex checkpoints; current live remote
-  heads reach 258 of those commits. No matches for the checked GitHub/AWS/service
-  token, private-key, credential-URL or quoted secret-assignment patterns.
-  This is a pattern scan, not proof that every possible secret is absent.
-- Current tracked files exclude originals, local reference imagery, environments,
-  caches and build/evidence output. Historical prompts and generated preflight
-  reports remain reachable from `main`; personal author email metadata remains
-  (redacted: `g***@gmail.com`). Historical runtime CAD and reconstruction images
-  also require rights coverage. Paths/commits and remediation are in the existing
-  [release gates](docs/RELEASE_GATES.md). The two untracked prompt files are untouched;
-  copies in local Codex checkpoint refs are not remote publication refs.
-- Read all 23 PR bodies and their accessible discussion/review timelines; no
-  standalone issues were returned. Checked 16 job logs from eight latest
-  PR-head CI runs; no checked credential patterns matched and no artifacts were
-  listed. Vercel bot comments expose project/team IDs and Preview URLs, not
-  identified credentials. Coverage excludes older run attempts, push/manual runs,
-  unavailable/deleted content, external attachments/deployment logs, repository
-  settings/secrets and provider caches. Recheck those surfaces before publication.
+## Publication preparation — historical
+
+`codex/publication-blockers` starts from refreshed `develop` at `90b606e`.
+Remote `main` is `0037646`; `codex/running-movement` is `45fa9d3`; no remote tags.
+PR #25 is merged. The preparation branch has Vercel Git deployment disabled.
+[Draft PR #26](https://github.com/galind/zweigesicht-1/pull/26) targets `develop`;
+the verified preparation milestone was committed and pushed over SSH.
+
+- Recorded version hashes and branch reachability for runtime assets, source-linked
+  decisions and audit metadata in the [publication inventory](assets/source-manifest/publication-inventory.json).
+- Rechecked maker pages; no adequate public redistribution grant is recorded.
+  Prepared an [unsent permission request](docs/ASSET_PERMISSION_REQUEST.md).
+- [Release gates](docs/RELEASE_GATES.md) contain exact historical findings,
+  proposed path removals, author-email treatment, hosted-surface coverage and a
+  comparison of coordinated rewriting versus a fresh public snapshot.
+- Essential assets, provenance and notices remain intact. No history rewrite,
+  remote deletion, visibility change, release, deployment or permission-request sending occurred.
+  Ignored local briefs and unrelated work remain untouched.
 
 ## Verification
 
-- 82 automated tests (including 14 release workflow tests), Workshop inventory/graph validation, 114 prepared CPU
-  source/runtime checks and 1,119 sampled access checks pass.
-- TypeScript, lint, app/docs/config formatting and diff whitespace checks pass.
-  The legacy compact CAD runner has pre-existing whole-file formatter drift;
-  its scoped fixture fix passes syntax and runtime checks without a broad rewrite.
-- Fresh `npm ci`, tests, inventory, typecheck, lint, production application and
-  Vercel builds pass in an exported staged tracked-only checkout, with no ignored
-  CAD/reference inputs. An independent compiled Preview application/Vercel build
-  also passes. npm audits for both locked JavaScript projects report zero advisories.
-- Chrome: all 89 Easy / 284 Hard actions (538 / 1,708 checks), 92 focused responsive
-  checks, 87 drag checks, 373 visible-seat access actions, 175 loading/recovery
-  checks and the 15-check homepage suite (including 71 embedded UX checks) pass.
-  Explorer suites pass 350 checks; real-frame capture and the 60-second desktop
-  benchmark complete. These are local Chrome results, not device certification.
-- Final tracked-only production and compiled Preview each pass 64 entry checks
-  across desktop, 390 px, 320 px and landscape: initial HTML, hydration, alternate
-  query behavior, direct Workshop routes and noindex metadata. Local development
-  also passes 64 visible-entry checks. The SEO HTTP suite passes for both compiled
-  builds, preserving `/play`, canonical/social tags, sitemap and the exact JPEG.
-- 24 packaging/delivery checks pass for complete MIT/upstream notices,
-  authored favicon before its requested removal, unchanged social image, exact
-  tracked model inventories and reference
-  exclusion across both application/Vercel build formats and local HTTP delivery.
-  All 13 tracked model/image payload hashes match the integration baseline.
-- Favicon removal: no favicon asset or application reference remains; the source
-  manifest parses and asset, notices and documentation diffs pass whitespace checks.
-- Workflow branch policy passes four trusted/fork/target scenarios. Release tests
-  exercise the actual promotion script and shell preflight with mocked GitHub refs:
-  exact SHA, non-force update, retained develop, stale reviews, branch races,
-  divergent history and protection rejection. No live production dispatch was run.
+Workspace cleanup: archived 1.47 GB of old local reviews, comparison downloads and
+legacy briefs outside the checkout with per-file hashes. Removed 54 MB of generated
+leftovers. Assets now occupy 145 MB; artifacts 175 MB. Tracked assets, provenance
+and licenses are unchanged. Export removes completed checkpoints and avoids a
+duplicate GLB write; optimization leaves gzip packaging to runtime preparation.
+Cached CAD pipeline, Meshopt byte-identity verification, 114 retained-input runtime
+checks, original-source hashes, 82 tests, inventory and production build passed.
 
-Prepared source/runtime and sampled access checks use ignored local source inputs;
-an application build from tracked assets is a separate reproducibility claim.
-Build notices still include large chunks, framework route classification and
-Vercel transform timing warnings. No physical-device, Safari/WebKit, sustained
-GPU/thermal, human accessibility or mechanical certification is claimed.
+Exposure review: 267 remote commits / 1,680 blobs; 273 local commits / 1,727 blobs;
+seven decoded gzip versions; commit messages and email metadata; PR #1–#25
+patches/discussions; 20 logs and empty artifact listings from 10 PR-head runs.
+No checked credential signatures matched. Coverage gaps are explicit in the gates.
 
-## Remaining blockers
+Preparation checks passed: 82 tests, inventory validation, typecheck/lint,
+production build, 101 inventory path-version hashes, 22 local Markdown links,
+JSON validity, preserved runtime/license/notice bytes and changed-file formatting.
+Prior browser checks remain dated evidence; this documentation/configuration
+change does not certify physical devices, mechanical behavior or live deployment.
 
-- Public CAD/derived-model/metadata and reconstruction-image redistribution is
-  unresolved after checking current maker download pages. Obtain written maker
-  permission covering present assets and retained public history; private-site
-  permission and download availability do not establish this right. If permission
-  cannot be obtained, separately authorize a code-only distribution with external
-  assets. Essential runtime assets have been preserved.
-- Decide whether historical internal prompts/reports and personal author email
-  metadata can become public. Any necessary history rewrite, old-ref removal or
-  credential rotation needs separate authorization; none was performed.
-- Enforce the `develop` deletion/force-push rule in repository settings; API/browser
-  access is insufficient to configure it here. Repository visibility remains
-  private. No production merge, release, deployment or publication was performed.
-- Applicable physical-device, representative accessibility/usability, deployment
-  and mechanical claim gates remain. Clean-machine CAD reproduction is unverified.
+## Outstanding publication decisions from the prior audit
+
+1. Obtain maker permission for current and historical derived assets, or approve
+   code-only distribution with externally supplied assets and revised setup/CI.
+2. Choose a fresh public repository with this original retained private
+   (recommended), or authorize a coordinated history rewrite and separate hosted
+   cleanup. Decide internal-report retention and author-email privacy.
+3. Review and authorize the concrete remediation, then verify the approved result
+   before separately authorizing public visibility. Making this original public
+   also requires completing the older/push/manual Actions and hosted-content review.
+
+Server-side branch protection is now verified above; production qualification remains unverified.
+Applicable physical-device, accessibility/usability, mechanical and clean-machine
+CAD reproduction gates remain outstanding. Merging preparation or releasing
+`develop` to `main` does not authorize publication.
