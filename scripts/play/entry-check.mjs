@@ -31,7 +31,7 @@ try {
   check('Homepage assemble query follows build policy', await chooser(home).isVisible() === (mode === 'preview'));
   await home.close();
 
-  for (const route of ['/workshop', '/workshop?mode=expert', '/play']) {
+  for (const route of ['/workshop', '/workshop?mode=expert']) {
     const page = await context.newPage();
     const models = [];
     page.on('request', request => { if (new URL(request.url()).pathname.startsWith('/models/')) models.push(request.url()); });

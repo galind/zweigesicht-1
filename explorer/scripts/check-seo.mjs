@@ -174,16 +174,6 @@ for (const userAgent of [
     );
   }
 }
-for (const path of ['/play', '/play?mode=hard&utm_source=share']) {
-  const response = await fetch(new URL(path, base), { redirect: 'manual' });
-  assert.ok(
-    [301, 308].includes(response.status),
-    `${path}: permanent redirect`,
-  );
-  const destination = new URL(response.headers.get('location'), base);
-  assert.equal(destination.pathname, '/workshop');
-  assert.equal(destination.search, new URL(path, base).search);
-}
 const robots = await get('/robots.txt');
 assert.match(robots, /User-agent: \*/i);
 assert.match(robots, /Allow: \//i);
@@ -206,6 +196,8 @@ assert.equal(
   'social image matches the user-supplied capture',
 );
 for (const path of [
+  '/play',
+  '/play?mode=hard&utm_source=share',
   '/movement/',
   '/movement/shock-indicator/',
   '/finishing/',

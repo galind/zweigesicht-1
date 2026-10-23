@@ -26,6 +26,9 @@ findings, retained workflows and remaining decisions.
   element positions match before/after removal across 45 UI-state/viewport
   cases, including 200% text. Next action is draft review; no merge, release,
   deployment or publication is authorized.
+- Removed the `/play` alias and its sole-purpose config at the owner's request.
+  Rechecked 93 tests, inventory, types/lint, both production builds, HTTP metadata
+  and removed-route checks, and 17 production Workshop entry checks; all pass.
 
 ## Public repository security — historical snapshot, 5 October 2026
 
@@ -76,7 +79,8 @@ visibility does not resolve its outstanding asset/production release gates.
 - Workshop: 89 Easy placements, or 249 Hard placements and 35 transfers; 16
   foundation leaves remain and both finish with 265. Undo/local saves retained.
 - Production hides the homepage Workshop entry and `?assemble=1`; direct
-  `/workshop`, `/play` redirect, noindex and sitemap exclusion remain.
+  `/workshop`, noindex and sitemap exclusion remain. Removed the `/play` redirect
+  at the owner's request; Workshop is the only assembly URL.
 - Original contributions use standard MIT; required upstream notices ship with
   builds. Maker CAD/design and derived assets remain outside that grant.
 

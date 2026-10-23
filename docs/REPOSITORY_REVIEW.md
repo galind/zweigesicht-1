@@ -7,7 +7,7 @@ branch has Vercel Git deployment disabled. No release or publication is included
 
 | Area | Connections and maintenance risk |
 | --- | --- |
-| Routes/UI | `explorer/app/page.tsx` → domain modules → `MovementViewer`; `app/workshop/page.tsx` → `Play.tsx` → `PlayViewer`. Shared controls/chooser use Base UI. Panel focus/layout and synchronous React refs couple UI to controllers. `/play`, robots and sitemap are framework entry points. |
+| Routes/UI | `explorer/app/page.tsx` → domain modules → `MovementViewer`; `app/workshop/page.tsx` → `Play.tsx` → `PlayViewer`. Shared controls/chooser use Base UI. Panel focus/layout and synchronous React refs couple UI to controllers. Robots and sitemap use framework conventions. |
 | State/rendering | `src/experience/` owns selection, configuration, fitting and separation; `src/play/state.ts` replays the prerequisite graph and saves. Controllers own immutable source matrices, presentation, camera, async generations and GPU lifetime. These boundaries need transition/lifecycle coverage when changed. |
 | Assets/reproduction | Authored JSON, generated separation offsets and hashed models/sidecars are distinct authorities. Python XCAF export → movement extraction → lossless Meshopt → runtime preparation; source/fit/appearance probes feed regression evidence. IDs, vertex order and hashes must stay aligned. |
 | Build/dependencies | Separate application and offline asset npm locks. vinext/Vite serves local builds; Nitro packages Vercel; pruning validates build copies. Runtime imports, CSS imports and vinext RSC peers account for dependencies; no package was proven removable. |
@@ -25,7 +25,7 @@ branch has Vercel Git deployment disabled. No release or publication is included
 
 Inspection modules are lazy `?inspect=1` entry points. Offline probes, source
 manifests, authored overrides, CAD evidence and source-derived assets remain even
-when frontend imports do not reach them. Legacy dial aliases, `/play` and saved
+when frontend imports do not reach them. Legacy dial aliases and saved
 session compatibility have explicit consumers/tests. Static search alone was not
 used as a deletion criterion.
 

@@ -29,9 +29,9 @@ npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 ```
 
 Workshop's homepage entry appears in development and Vercel Preview builds;
-it is hidden in production. Direct `/workshop` access remains available and
-`/play` redirects there. Fresh direct visits choose a difficulty on Workshop;
-valid saves resume. Workshop is excluded from indexing and the sitemap.
+it is hidden in production. Direct `/workshop` access remains available.
+Fresh direct visits choose a difficulty on Workshop; valid saves resume.
+Workshop is excluded from indexing and the sitemap.
 
 ## Check changes
 

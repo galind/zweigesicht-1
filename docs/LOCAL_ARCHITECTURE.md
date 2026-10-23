@@ -1,6 +1,6 @@
 # Application architecture
 
-`explorer/` uses React/TypeScript, vinext/Vite and Three.js. `app/page.tsx` owns the explorer UI; `app/workshop/page.tsx` supplies Workshop’s separate canonical/noindex metadata. The homepage opens a shared Easy/Hard chooser and loads no Workshop manifest or renderer. `next.config.ts` retains the `/play` compatibility redirect. The root `vercel.json` owns deployment packaging.
+`explorer/` uses React/TypeScript, vinext/Vite and Three.js. `app/page.tsx` owns the explorer UI; `app/workshop/page.tsx` supplies Workshop’s separate canonical/noindex metadata. The homepage opens a shared Easy/Hard chooser and loads no Workshop manifest or renderer. The root `vercel.json` owns deployment packaging.
 
 ## Authority and assets
 
@@ -58,7 +58,7 @@ Run these commands from the repository root after the basic checks in the
 
 The HTTP metadata check covers homepage and Workshop social cards in the initial
 HTML for X, Facebook and LinkedIn crawler user agents, clean canonical URLs for
-query-string links, the `/play` redirect, and delivery of the preview image.
+query-string links, removed routes, and delivery of the preview image.
 Actual platform preview rendering and cache refreshes still need a deployed check.
 
 The source/runtime regression suite additionally needs the ignored CAD inputs described in [CAD notes](CAD_NOTES.md):
