@@ -36,7 +36,9 @@ The fitted case has 41 leaves. Focus, All parts, raw external inspection and iso
 
 Easy has 89 placements. Hard has 249 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 265 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
 
-The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid saves; absent mode/save returns to the homepage chooser. Changing a progressed mode or replacing corrupt/incompatible data requires confirmation. Earlier linear saves are never silently reinterpreted. Unavailable storage allows a current-tab build with a warning and retained mode query.
+The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid saves; absent mode/save opens the shared chooser on Workshop without starting geometry
+loads. Changing difficulty also opens that local chooser, independent of the
+homepage entry flag. Changing a progressed mode or replacing corrupt/incompatible data requires confirmation. Earlier linear saves are never silently reinterpreted. Unavailable storage allows a current-tab build with a warning and retained mode query.
 
 `PlayViewer` loads required geometry transactionally; missing recovery or leaves block play/completion. Late metadata after unmount cannot start heavy loads. Thumbnail targets share authored materials and encode linear pixels for browser display, then center their transparent bounds. Dragging starts on gallery cards (selected thumbnails for touch), keeps source scale, and leaves no detached copy between interactions.
 
@@ -70,6 +72,7 @@ node scripts/play/fixed-access-check.mjs
 Browser runners use an existing Playwright installation and Chrome. Set `PLAYWRIGHT_MODULE` to its absolute `index.mjs` path and `CHROME_PATH` to the Chrome executable when they are not available through the defaults. No browser dependency is required by the application.
 
 ```sh
+node scripts/play/entry-check.mjs http://127.0.0.1:4176 production
 node scripts/play/browser-check.mjs http://127.0.0.1:4176 easy
 node scripts/play/browser-check.mjs http://127.0.0.1:4176 hard
 node scripts/play/drag-check.mjs http://127.0.0.1:4176
@@ -78,10 +81,13 @@ node scripts/review/explorer-check.mjs http://127.0.0.1:4176
 node explorer/scripts/measure-build.mjs
 ```
 
-The `focused`, `home` and loading suites expect the entry to be visible. Build
+The `home` and loading suites expect the homepage entry to be visible. The
+`entry-check` runner accepts `production` (default) or `preview` and checks the
+corresponding homepage policy plus direct Workshop entry and save safety.
+The `focused` suite works with either policy. Build
 with `VERCEL_ENV=preview npm --prefix explorer run build`, restart the local server,
-then run `node scripts/play/browser-check.mjs http://127.0.0.1:4176 focused`,
-the same runner with `home`, and
+then run `node scripts/play/entry-check.mjs http://127.0.0.1:4176 preview`,
+`node scripts/play/browser-check.mjs http://127.0.0.1:4176 home`, and
 `node scripts/review/loading-check.mjs http://127.0.0.1:4176`. These are local
 checks; do not deploy or promote the compiled Preview artifact to production.
 

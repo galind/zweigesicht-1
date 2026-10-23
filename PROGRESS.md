@@ -17,9 +17,18 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
   its explicit, prerequisite/workspace-scoped behavior.
 - Added a behavior test for explicit assistance and unavailable/foreign targets;
   all 41 Workshop controller/session tests, typecheck and lint pass.
-- Next: fix the reproduced production Workshop chooser dead end, apply narrowly
-  scoped tooling security patches, complete browser/build checks and record the
-  repository-wide findings before opening a draft PR to `develop`.
+- Fixed fresh/invalid-mode visits and Change difficulty by sharing the existing
+  chooser directly on Workshop. Production still hides its homepage entry and
+  ignores `?assemble=1`. Geometry waits for a session; saves, explicit replacement
+  and no-3D retry remain supported.
+- Verified 93 automated tests, inventory, typecheck/lint and local production
+  build; 21 new production entry checks and all 92 focused browser checks pass.
+  The focused suite's no-3D case now confirms replacement before expecting a
+  renderer, matching the deferred-load behavior. The initial production focused
+  run failed at the pre-existing hidden-homepage chooser dead end.
+- Next: apply narrowly scoped tooling security patches, complete both build
+  targets and Preview/browser regression checks, and record the repository-wide
+  findings before opening a draft PR to `develop`.
 
 ## Public repository security — 5 October 2026
 

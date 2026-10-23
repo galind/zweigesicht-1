@@ -49,6 +49,7 @@ import type { PlayLevel, PlayManifest, PlaySession, PlayStep } from './types';
 import { PlayViewer, type PlayViewStatus } from './PlayViewer';
 import { useTextScalePreview } from '../experience/useTextScalePreview';
 import { observeElementResize } from '../experience/observeElementResize';
+import { WorkshopChooser } from '../../components/WorkshopChooser';
 import { MovementLoadingState } from '../../components/MovementLoadingMark';
 import { SiteHeader, SiteHeaderActions } from '../../components/site-chrome';
 import './play.css';
@@ -139,6 +140,7 @@ export default function Play() {
   const [session, setSession] = useState<PlaySession | null>(null),
     [active, setActive] = useState(false);
   const [bootResolved, setBootResolved] = useState(false);
+  const [chooseMode, setChooseMode] = useState(false);
   const [startupConflict, setStartupConflict] =
     useState<StartupConflict | null>(null);
   const [selection, setSelection] = useState<string | null>(null),
@@ -271,7 +273,8 @@ export default function Play() {
       }
       if (saved.status === 'corrupt' || saved.status === 'incompatible') {
         if (!requested) {
-          location.replace('/?assemble=1');
+          setChooseMode(true);
+          setBootResolved(true);
           return;
         }
         setStorage(
@@ -288,7 +291,8 @@ export default function Play() {
         return;
       }
       if (!requested) {
-        location.replace('/?assemble=1');
+        setChooseMode(true);
+        setBootResolved(true);
         return;
       }
       const next = createSession(manifest, requested);
@@ -310,8 +314,9 @@ export default function Play() {
       mounted = false;
     };
   }, [persist, sync]);
+  const controllerEnabled = bootResolved && !!session;
   useEffect(() => {
-    if (!bootResolved || !host.current || !destination.current) return;
+    if (!controllerEnabled || !host.current || !destination.current) return;
     let controller: PlayViewer;
     try {
       if (new URLSearchParams(location.search).get('no3d') === '1')
@@ -408,7 +413,7 @@ export default function Play() {
       delete w.__playContext;
       delete w.__playAccessAudit;
     };
-  }, [apply, sync, attempt, bootResolved]);
+  }, [apply, sync, attempt, controllerEnabled]);
   useLayoutEffect(() => {
     const layout = () => {
       const bottom =
@@ -570,7 +575,8 @@ export default function Play() {
   };
   const keepSavedStartup = () => {
     if (startupConflict?.kind !== 'switch') {
-      location.assign('/?assemble=1');
+      setStartupConflict(null);
+      setChooseMode(true);
       return;
     }
     sessionRef.current = startupConflict.saved;
@@ -737,7 +743,7 @@ export default function Play() {
               >
                 Build again
               </Control>
-              <Control onClick={() => location.assign('/?assemble=1')}>
+              <Control onClick={() => setChooseMode(true)}>
                 Change difficulty
               </Control>
             </div>
@@ -1080,7 +1086,7 @@ export default function Play() {
                   disabled={disabled}
                   onClick={() => {
                     setMenu(false);
-                    location.assign('/?assemble=1');
+                    setChooseMode(true);
                   }}
                 >
                   Change difficulty
@@ -1221,6 +1227,15 @@ export default function Play() {
           </div>
         </SheetContent>
       </Sheet>
+      <WorkshopChooser
+        open={chooseMode}
+        onOpenChange={(open) => {
+          if (!open && !active) location.assign('/');
+          else setChooseMode(open);
+        }}
+        style={{ '--header-bottom': `${headerBottom}px` } as CSSProperties}
+        finalFocus={progressButton}
+      />
       <dialog
         ref={dialog}
         className="play-confirm"

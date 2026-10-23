@@ -1,5 +1,6 @@
 'use client';
 
+import { WorkshopChooser } from '@/components/WorkshopChooser';
 import { InformationPanel } from '@/components/InformationPanel';
 import { makerUrl } from '@/src/content/about';
 import {
@@ -101,7 +102,6 @@ export default function Home() {
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const assembleButton = useRef<HTMLButtonElement>(null);
-  const easyModeButton = useRef<HTMLButtonElement>(null);
   const moreButton = useRef<HTMLButtonElement>(null);
   const visibleTrigger = (
     selector: string,
@@ -446,9 +446,11 @@ export default function Home() {
         data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
       >
         {__WORKSHOP_ENTRY_ENABLED__ && (
-          <Sheet
+          <WorkshopChooser
             open={assemble}
             onOpenChange={(open) => openPanel(setAssemble, open)}
+            style={panelStyle}
+            finalFocus={assembleButton}
           >
             <SheetTrigger
               ref={assembleButton}
@@ -456,46 +458,7 @@ export default function Home() {
             >
               Be a watchmaker
             </SheetTrigger>
-            <SheetContent
-              side="top"
-              style={panelStyle}
-              className="explorer-panel settings-panel header-panel assembly-chooser"
-              scrollContent
-              initialFocus={easyModeButton}
-              finalFocus={assembleButton}
-            >
-              <SheetHeader>
-                <SheetTitle>Be a watchmaker</SheetTitle>
-                <SheetDescription>
-                  Choose how much of the movement you want to build.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="panel-body assembly-mode-list">
-                <button
-                  ref={easyModeButton}
-                  type="button"
-                  onClick={() => location.assign('/workshop?mode=easy')}
-                >
-                  <span>
-                    <strong>Easy</strong>
-                    <small>89 prepared fits · Best for a first build</small>
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => location.assign('/workshop?mode=hard')}
-                >
-                  <span>
-                    <strong>Hard</strong>
-                    <small>249 individual parts · 35 subassemblies</small>
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </button>
-                <p>Progress is saved on this device.</p>
-              </div>
-            </SheetContent>
-          </Sheet>
+          </WorkshopChooser>
         )}
         <SiteHeaderActions
           className="header-actions"
