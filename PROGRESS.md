@@ -26,9 +26,14 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
   The focused suite's no-3D case now confirms replacement before expecting a
   renderer, matching the deferred-load behavior. The initial production focused
   run failed at the pre-existing hidden-homepage chooser dead end.
-- Next: apply narrowly scoped tooling security patches, complete both build
-  targets and Preview/browser regression checks, and record the repository-wide
-  findings before opening a draft PR to `develop`.
+- Applied only three security patch updates: Vite 8.2.4, source-map-js 1.2.2
+  and tinypool 2.1.2 (scoped to oxfmt to retain the existing formatter version).
+  Clean `npm ci`, 93 tests, inventory, typecheck/lint, local and Vercel production
+  builds pass. Both npm dependency audits report zero known vulnerabilities.
+  Baseline explorer audit flagged four packages (two high, two critical);
+  no deployed exploit was demonstrated.
+- Next: finish extended browser/source verification, record the map and ranked
+  findings, then push over SSH and open a draft PR to `develop`.
 
 ## Public repository security — 5 October 2026
 

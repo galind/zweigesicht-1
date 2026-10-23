@@ -94,3 +94,18 @@ checks; do not deploy or promote the compiled Preview artifact to production.
 Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
 
 `/?inspect=1` exposes lazy browser regression/benchmark tools and local delivery-failure fixtures. `?no3d=1` exercises fallback and `?text=200` enlarges root text. Browser viewport and synthetic touch checks do not establish physical-device or accessibility certification.
+
+## Dependency maintenance
+
+Keep the two npm lockfiles separate: `explorer/` is the application and
+`scripts/assets/` is the offline Meshopt pipeline. The app's scoped
+`overrides.oxfmt.tinypool` pins 2.1.2 to patch the formatter's exact 2.1.0
+transitive dependency without a formatter upgrade. Revisit that override when
+updating oxfmt. Vite 8.2.4 and source-map-js 1.2.2 are security patch updates;
+no React, Three.js, vinext, Nitro or CAD package upgrades accompany this cleanup.
+
+The upstream [Vite advisory](https://github.com/vitejs/vite/security/advisories/GHSA-rq7h-c2jc-7f22),
+[tinypool advisory](https://github.com/tinylibs/tinypool/security/advisories/GHSA-85c8-ppgw-ccpr)
+and [source-map-js patch](https://github.com/7rulnik/source-map-js/releases/tag/v1.2.2)
+record the affected tooling paths. Audit severity alone does not establish a
+visitor-reachable vulnerability in this static CAD application.
