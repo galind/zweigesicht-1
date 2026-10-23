@@ -5,6 +5,81 @@ loads its route; neither the explorer nor Workshop owns its renderer or input.
 It uses the complete 223-leaf movement subtree (including recovered diamond),
 without the catalog, fitted case, dials or optional hands. Nothing runs mechanically.
 
+## Maintenance and decision record
+
+This document is the feature reference for behavior, rationale, reproduction and
+dated evidence. `PROGRESS.md` records the current verified state and next action;
+the README links here for setup. Update these records when behavior or evidence
+changes, preserving the conditions of earlier measurements.
+
+| Decision | Reason and constraint |
+| --- | --- |
+| Keep `/bench` separate from explorer and Workshop | Walking owns its camera, input, renderer and lifetime without changing the existing inspection and assembly experiences. |
+| Walk on source CAD triangles at source scale | Preserve openings, placements and dimensions. The visitor and authored access fixture accommodate exploration; invisible floors or CAD deformation would misrepresent the movement. |
+| Switch between two static holder presentations | Maker references support separate bridge-up and dial-up fixtures, not a mechanical turnover mechanism. |
+| Coalesce mouse deltas once per frame | Avoid redundant camera updates while retaining the accumulated turn. Stationary looking must participate in performance monitoring, just like walking. |
+| Sleep at rest; sample only active intervals | Idle gaps must not trigger quality reductions. The short scheduling tail covers sparse input without continuously redrawing. |
+| Start in Auto at ratio 1; reduce only after sustained slow windows | Large-viewport measurements exposed GPU cost that the earlier smaller benchmark did not. Gradual reductions and cooldowns avoid reacting to isolated stalls. No upward probes avoids quality oscillation; explicitly selecting Auto restarts assessment. |
+| Preserve manual High and Low | An explicit user quality choice remains authoritative across side changes. High can exceed the frame budget on the reference machine. |
+| Halve transmission target dimensions, retain jewel transmission | An isolated comparison established a costly pass. This reduces its pixel count by 75% while preserving the intended optics; disabling transmission was diagnostic only. |
+| Precompile common material variants during loading | Move known shader work before entry. First paint still has upload/program costs, so this is not a claim of stall-free startup. |
+| Leave collision physics unchanged in the responsiveness fix | Recorded CPU costs did not identify collision as the bottleneck. Further physics optimization requires new evidence. |
+| Keep profiling in external runners and the opt-in inspector | Ordinary use needs only bounded activity/quality state, not detailed tracing or GPU queries. |
+
+Implementation entry points are `explorer/src/bench/Bench.tsx` (route UI and
+quality selection), `BenchViewer.ts` (render/input/lifetime), `performance.ts`
+(activity and quality policy), and `physics.ts` (visitor collision). Browser
+runners live in `scripts/bench/`; CPU regression cases live in `tests/bench-*.test.mjs`.
+Authored environment generation and maker provenance are described below.
+
+## Testing strategy: headless first, visible confirmation
+
+Use headless Chrome for routine repeatable comparisons and automated regressions
+to avoid interrupting the desktop. Keep a short visible-browser confirmation for
+native capture, Escape/recapture, focus loss, minimization and actual interaction.
+A physical-mouse walkthrough remains necessary to assess perceived responsiveness.
+Headless results alone do not establish display pacing or input-to-photon latency.
+
+This is the agreed direction for future testing, not a claim that every current
+runner already supports both modes:
+
+| Current runner | Supported execution and scope |
+| --- | --- |
+| `performance-check.mjs` | Headless; historical 60-second bridge walking fixture. It does not replace the stationary-turn or two-face workload. |
+| `browser-check.mjs` | Headless by default; `HEADED=1` uses the native foreground helper for the complete journey. |
+| `lifecycle-check.mjs` | Headless by default with an explicit hidden-document fixture; `HEADED=1` additionally verifies actual native hiding/minimization. |
+| `interaction-profile.mjs` | Currently foreground only; paired stationary-turn and walking-plus-turn workloads on both faces, with CPU/GPU/input-handler measurements. |
+| `first-use-profile.mjs` | Currently foreground only; startup and first-turn/side-switch costs. |
+| `interaction-check.mjs` | Currently foreground only; captured look, idle sleep, quality choices and injected adaptation stress. |
+
+The next test-tool improvement is a headless option for the paired interaction
+and first-use profilers, retaining the same fixtures and explicit execution-mode
+metadata. Setting `HEADED=0` is not a headless switch: the two runners that read
+`HEADED` currently test its presence/truthiness. Omit the variable for their
+headless default. Do not run foreground checks concurrently with other desktop
+interaction; reject samples that lose real focus or visibility.
+
+For each comparable performance run, record the revision, production build,
+browser/version and execution mode, OS/hardware, GPU renderer/backend, CSS
+viewport, device DPR, actual render ratio and quality mode. Record the fixture,
+face, input method/rate, warmup, sample duration, throttling and cache conditions.
+Confirm hardware acceleration rather than assuming that headless uses the same
+GPU backend. Record GPU timer availability/disjoint events; unsupported timers
+mean unavailable GPU evidence, not zero GPU cost.
+
+Compare before and after within the same execution mode and conditions. Report
+p50/p95/p99, long-frame counts and sample counts, keeping CPU submission, GPU
+query duration and input-handler-to-render timing separate. Include stationary
+turning and walking plus turning on both faces; report startup separately from
+warmed sustained interaction. Label injected load and synthetic input explicitly.
+Do not attribute the historical 1440 × 900 headless versus 2400 × 1300 foreground
+discrepancy to execution mode: viewport and rendering conditions also differed.
+
+Preserve raw reports/screenshots locally under ignored `artifacts/bench/`; commit
+the interpretation, exact conditions and reproduction instructions here. A clean
+checkout will not contain that local evidence. Performance work does not clear
+the asset or publication gates.
+
 ## Local assets and reproduction
 
 Run the normal README setup, then prepare the local holder files and environment:

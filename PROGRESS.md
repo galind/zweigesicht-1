@@ -38,6 +38,10 @@ Local production preview: <http://127.0.0.1:4178/bench>.
   deployment, publication or asset redistribution was performed.
 
 Next: owner physical-mouse walkthrough and representative device/browser review.
+The [feature decision record and testing strategy](docs/BENCH_EXPERIENCE.md#maintenance-and-decision-record)
+now preserve the implementation rationale and headless-first testing direction.
+The paired interaction and first-use profilers still require foreground Chrome;
+adding their headless option is a future tooling step, not a completed change.
 Initial paint still measured about 101 ms CPU after precompilation; manual High
 can miss 60 fps at the large viewport. Cold-driver startup, prolonged thermal
 behavior and broader hardware support remain unverified. Publication still needs
