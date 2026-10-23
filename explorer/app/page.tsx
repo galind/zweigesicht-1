@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { WorkshopChooser } from '@/components/WorkshopChooser';
 import { InformationPanel } from '@/components/InformationPanel';
 import { makerUrl } from '@/src/content/about';
@@ -445,21 +446,30 @@ export default function Home() {
         identityClassName="identity"
         data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
       >
-        {__WORKSHOP_ENTRY_ENABLED__ && (
-          <WorkshopChooser
-            open={assemble}
-            onOpenChange={(open) => openPanel(setAssemble, open)}
-            style={panelStyle}
-            finalFocus={assembleButton}
+        <div className="experience-entries">
+          <Link
+            href="/bench"
+            prefetch={false}
+            className="text-button bench-trigger site-glass"
           >
-            <SheetTrigger
-              ref={assembleButton}
-              className="text-button assemble-trigger site-glass"
+            Walk inside the movement
+          </Link>
+          {__WORKSHOP_ENTRY_ENABLED__ && (
+            <WorkshopChooser
+              open={assemble}
+              onOpenChange={(open) => openPanel(setAssemble, open)}
+              style={panelStyle}
+              finalFocus={assembleButton}
             >
-              Be a watchmaker
-            </SheetTrigger>
-          </WorkshopChooser>
-        )}
+              <SheetTrigger
+                ref={assembleButton}
+                className="text-button assemble-trigger site-glass"
+              >
+                Be a watchmaker
+              </SheetTrigger>
+            </WorkshopChooser>
+          )}
+        </div>
         <SiteHeaderActions
           className="header-actions"
           aria-label="Information and settings"

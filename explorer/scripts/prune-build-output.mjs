@@ -3,7 +3,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /** Only build copies are pruned; local source/reproduction inputs stay intact. */
-export async function pruneBuildOutput(output) {
+export async function pruneBuildOutput(output, { localBench = true } = {}) {
   const models = path.join(output, 'models');
   const read = async (name) =>
     JSON.parse(await fs.readFile(path.join(models, name), 'utf8'));
@@ -51,6 +51,11 @@ export async function pruneBuildOutput(output) {
     }
   }
   await fs.rm(path.join(output, 'reference'), { recursive: true, force: true });
+  if (!localBench)
+    await fs.rm(path.join(output, 'bench-local'), {
+      recursive: true,
+      force: true,
+    });
   return { removed, runtimeAssets: (await fs.readdir(models)).length };
 }
 
@@ -63,5 +68,11 @@ if (
     '..',
     process.argv[2] ?? 'dist/client',
   );
-  console.log(JSON.stringify(await pruneBuildOutput(output)));
+  console.log(
+    JSON.stringify(
+      await pruneBuildOutput(output, {
+        localBench: !process.argv.includes('--exclude-local-bench'),
+      }),
+    ),
+  );
 }

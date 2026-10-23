@@ -1,7 +1,53 @@
 # Current project status
 
-Updated 23 October 2026. Setup is in the [README](README.md); extended checks are
+Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
+
+## Local walking experience — 24 October 2026
+
+Implemented from clean `develop` baseline `0233a5f` on local branch
+`codex/walk-inside-movement`. The homepage’s
+**Walk inside the movement** button opens `/bench`; explorer and Workshop remain
+separate. See [bench setup and evidence](docs/BENCH_EXPERIENCE.md).
+
+- A 1.65 mm first-person visitor walks and jumps on the actual 223-leaf movement.
+  Source placements and dimensions are unchanged. Per-definition BVHs query the
+  CAD triangles directly; the source-matrix comparison has zero error. Sixteen
+  sampled drop/landing checks pass, including exposed plates and bridges; sampled
+  holes retain lower visible support rather than invisible floors.
+- Inspected both maker holder STLs, STEP models and assembled reference images.
+  Recorded URLs/hashes and nominal seating in `assets/source-manifest/holder.json`.
+  T fades between the separate valid presentations and resets to the mat; no
+  mechanical turnover mechanism is claimed. The authored access fixture is a
+  separate Blender scene with reproducible export and a local editable `.blend`.
+- Explicit mouse capture, WASD, jump, reset, Escape/menu, repeated T, fall recovery,
+  loading failure/retry and repeated entry/exit pass the 23-check production
+  browser journey. Six additional lifecycle checks cover actual tab focus loss,
+  synthetic hidden-document events, WebGL context loss/retry and late load disposal.
+  Headless Chrome reports inactive tabs as visible, so hidden-document handling
+  is tested with an explicit visibility fixture, not claimed as an OS-level test.
+- On this Mac mini M4 / 24 GB, macOS 26.6.2, Chrome 155.0.8059.86 / ANGLE Metal,
+  a 60.196-second bridge benchmark at 1440 × 900, pixel ratio 1.5, High detail
+  recorded 3,600 active intervals: mean 16.666 ms (~60 fps), p95 16.7 ms,
+  p99 16.8 ms, p95 CPU submission/update 5.4 ms. The full journey at pixel ratio
+  1 also averaged ~60 fps. Rendering stops at rest and on hidden-document events.
+  These are local headless measurements, not a broad device or thermal claim.
+- Validation: 101 CPU tests, inventory, typecheck/lint, local production and
+  Vercel packaging builds, five homepage viewport/text-size entry checks,
+  HTTP metadata checks, seven explorer suites (350 checks), Workshop entry
+  (17 checks), focused checks (92), complete Easy (89 actions / 538 checks)
+  and complete Hard (284 actions / 1,708 checks) pass. Local browser evidence and
+  representative screenshots are in ignored `artifacts/bench/`.
+- Original holder downloads, prepared holder payloads, Blender outputs and browser
+  evidence remain ignored. Vercel packaging explicitly excludes `bench-local`;
+  the exclusion has an automated test and the built output was inspected.
+  No remote push, PR, deployment or
+  publication was performed. Source redistribution and other release gates remain.
+
+Next: owner walkthrough of the local prototype and representative usability/device
+review. Very narrow/deep CAD recesses can require R; mobile navigation is outside
+this milestone. Maker finish and seating are static interpretations, not physical
+mounting/printing certification. Publication needs separate permission and approval.
 
 ## Repository cleanup — 23 October 2026
 

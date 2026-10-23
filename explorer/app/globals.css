@@ -2178,7 +2178,7 @@ canvas:focus-visible {
   }
 }
 
-/* Equal side tracks keep the Workshop entry at the centre of the header. */
+/* Equal side tracks keep both experience entries centred and independently clickable. */
 .topbar,
 .text-enlarged .topbar {
   display: grid;
@@ -2192,11 +2192,18 @@ canvas:focus-visible {
   justify-self: start;
   margin-right: 0;
 }
-.topbar .assemble-trigger {
+.topbar .experience-entries {
   grid-column: 2;
   grid-row: 1;
-  justify-self: center;
-  margin: 0;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  pointer-events: auto;
+}
+.topbar .experience-entries a {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 .topbar .header-actions,
 .topbar .mobile-menu-trigger {
@@ -2213,6 +2220,9 @@ canvas:focus-visible {
     display: flex;
     pointer-events: auto;
   }
+  .topbar .experience-entries {
+    flex-direction: column;
+  }
 }
 .text-enlarged .topbar .header-actions {
   display: none;
@@ -2225,29 +2235,30 @@ canvas:focus-visible {
   .topbar .identity {
     grid-column: 1 / 3;
   }
-  .topbar .assemble-trigger {
+}
+@media (max-width: 600px) {
+  .topbar .experience-entries {
     grid-column: 1 / -1;
     grid-row: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }
 @media (max-width: 1000px) {
   .text-enlarged .topbar .identity {
     grid-column: 1 / 3;
   }
-  .text-enlarged .topbar .assemble-trigger {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
 }
-
-/* Without Workshop there is no centre track or reserved compact second row. */
-.topbar[data-workshop-entry='false'] {
-  grid-template-columns: minmax(0, 1fr) auto;
+.text-enlarged .topbar .experience-entries {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  flex-wrap: wrap;
 }
-.topbar[data-workshop-entry='false'] .identity {
-  grid-column: 1;
-}
-.topbar[data-workshop-entry='false'] .header-actions,
-.topbar[data-workshop-entry='false'] .mobile-menu-trigger {
-  grid-column: 2;
+.bench-trigger {
+  min-height: 44px;
+  padding-inline: 14px;
+  border-radius: 10px;
+  background: rgb(38 38 38 / 82%);
+  font-weight: 600;
+  pointer-events: auto;
 }

@@ -51,3 +51,6 @@ docs/*_PROMPT.md
 /*_GOAL.md
 /PREFLIGHT_REPORT.md
 /docs/*_GOAL.md
+
+# Local bench prototype: maker holder and generated Blender environment.
+explorer/public/bench-local/

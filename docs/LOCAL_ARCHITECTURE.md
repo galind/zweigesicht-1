@@ -50,6 +50,15 @@ Free mouse/one-finger orbit matches the explorer. Flip, Reset and bounded center
 
 [Release gates](RELEASE_GATES.md) distinguish automated/browser checks from mechanical, physical-device and representative human review.
 
+## Bench
+
+`/bench` dynamically imports `BenchViewer` after route entry. `physics.ts` owns
+the visitor capsule and per-definition BVH collision queries; `Bench.tsx` owns
+the capture/menu/loading UI. Source transforms remain immutable inside an outer
+presentation group. The two maker fixtures and authored Blender environment
+are local-only payloads, with hashes and nominal seating evidence recorded
+separately. See [bench reproduction and verification](BENCH_EXPERIENCE.md).
+
 ## Extended verification
 
 Run these commands from the repository root after the basic checks in the
