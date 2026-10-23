@@ -500,8 +500,6 @@ canvas:focus-visible {
 }
 .inspection {
   position: absolute;
-  top: 88px;
-  left: 20px;
   z-index: 9;
   font: 0.75rem monospace;
   background: #222e;
@@ -521,9 +519,6 @@ canvas:focus-visible {
 }
 .focus-strip {
   position: absolute;
-  top: calc(var(--top) + 88px);
-  left: var(--edge-left);
-  max-width: min(350px, calc(100% - var(--edge-left) - var(--edge-right)));
   z-index: 2;
   padding: 8px 12px;
   border: 1px solid #ffffff0e;
@@ -531,13 +526,10 @@ canvas:focus-visible {
   background: #1d1d1de8;
 }
 .focus-title {
-  display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 4px 12px;
 }
 .focus-title h2 {
-  flex: 1 1 180px;
   min-width: 0;
   margin: 0;
   font:
@@ -554,23 +546,17 @@ canvas:focus-visible {
 }
 /* One nonmodal edge panel at a time: the movement stays visible and operable. */
 .explorer-panel [data-slot='sheet-header'] {
-  padding: 18px 20px 12px !important;
   flex-shrink: 0;
 }
 .explorer-panel [data-slot='sheet-title'] {
   font:
     normal 1.3rem/1.25 Georgia,
     serif;
-  padding-right: 40px;
 }
 .explorer-panel [data-slot='sheet-description'] {
   font-size: 0.875rem;
   line-height: 1.5;
   margin-top: 6px;
-}
-.explorer-panel [data-slot='sheet-close'] {
-  top: 6px;
-  right: 6px;
 }
 .panel-body,
 .explorer-panel .about-copy {
@@ -579,9 +565,6 @@ canvas:focus-visible {
   min-height: 0;
   padding: 0 20px 20px;
 }
-.explorer-panel .about-copy {
-  font-size: 0.9375rem;
-}
 .explorer-panel .about-copy p {
   margin-bottom: 16px;
 }
@@ -589,9 +572,6 @@ canvas:focus-visible {
   padding: 0 20px 20px;
   min-height: 0;
   overscroll-behavior: contain;
-}
-.explorer-panel .about-copy .catalog-index {
-  padding: 0;
 }
 .explorer-panel .catalog-search {
   padding: 0 20px 12px;
@@ -623,12 +603,7 @@ canvas:focus-visible {
 .slider-heading {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
   font-size: 0.875rem;
-}
-.slider-heading output {
-  color: #cbb58e;
-  font-variant-numeric: tabular-nums;
 }
 [data-slot='slider'] {
   min-width: 0;
@@ -667,7 +642,6 @@ canvas:focus-visible {
   box-shadow: 0 4px 16px #00000018;
 }
 .part-selection .focus-title {
-  display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
 }
@@ -685,7 +659,6 @@ canvas:focus-visible {
   border: 1px solid #ffffff18;
   border-radius: 6px;
   background: #ffffff0c;
-  white-space: nowrap;
 }
 .part-selection .isolate-button:hover {
   background: #ffffff18;
@@ -705,8 +678,6 @@ canvas:focus-visible {
 
 /* Stable stage geometry; opening panels never resizes the movement. */
 .explorer {
-  --edge-left: max(20px, env(safe-area-inset-left));
-  --edge-right: max(20px, env(safe-area-inset-right));
   --top: max(16px, env(safe-area-inset-top));
   position: relative;
   width: 100%;
@@ -797,7 +768,6 @@ canvas:focus-visible {
   border-radius: 6px;
   background: rgb(203 181 142 / 9%);
   color: #e4d6bd;
-  font-size: 0.8125rem;
 }
 .text-button,
 .menu-link,
@@ -817,7 +787,6 @@ canvas:focus-visible {
   display: flex;
   align-items: center;
   gap: 4px;
-  position: absolute;
   top: var(--top);
   right: var(--edge-right);
   z-index: 3;
@@ -841,8 +810,6 @@ canvas:focus-visible {
   width: var(--popup-width) !important;
   max-width: none !important;
   max-height: min(520px, calc(100dvh - var(--panel-bottom, 90px) - 64px));
-  border: 0;
-  border-radius: 10px;
   background: var(--panel-surface) !important;
   backdrop-filter: blur(20px) saturate(115%);
   -webkit-backdrop-filter: blur(20px) saturate(115%);
@@ -861,27 +828,17 @@ canvas:focus-visible {
 }
 /* Reading has more room, with the same glass surface as the controls. */
 .explorer-panel.information-panel[data-slot='sheet-content'] {
-  top: max(80px, calc(env(safe-area-inset-top) + 64px));
-  right: 20px;
   left: auto;
   bottom: auto;
   transform: none;
   --popup-width: min(420px, calc(100vw - 24px));
-  max-height: calc(100dvh - 112px);
 }
 .explorer-panel.settings-panel[data-slot='sheet-content'] {
-  top: max(80px, calc(env(safe-area-inset-top) + 64px));
-  right: 20px;
   left: auto;
   bottom: auto;
   transform: none;
-  max-height: min(520px, calc(100dvh - 112px));
 }
 .information-panel [data-slot='sheet-header'] {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: transparent;
   padding: 28px 28px 16px !important;
 }
 .information-panel [data-slot='sheet-description'] {
@@ -889,14 +846,11 @@ canvas:focus-visible {
   color: var(--site-muted);
 }
 .explorer-panel.information-panel [data-slot='sheet-close'] {
-  top: 12px;
-  right: 12px;
   min-width: 44px;
   min-height: 44px;
   background: transparent;
 }
 .watch-reading {
-  padding: 24px 28px 20px;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--site-control);
@@ -1031,10 +985,6 @@ canvas:focus-visible {
   }
 }
 @media (max-width: 600px) {
-  .explorer {
-    --edge-left: max(16px, env(safe-area-inset-left));
-    --edge-right: max(16px, env(safe-area-inset-right));
-  }
   .topbar {
     max-width: calc(100% - 32px);
   }
@@ -1051,32 +1001,16 @@ canvas:focus-visible {
   .header-actions .settings-trigger {
     flex-shrink: 0;
   }
-  .explorer-panel.settings-panel[data-slot='sheet-content'] {
-    top: 164px;
-    right: 12px;
-    max-height: calc(100dvh - 164px - var(--panel-bottom, 120px));
-  }
   .action-dock {
     bottom: max(12px, env(safe-area-inset-bottom));
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    width: calc(100% - 24px);
-    gap: 0;
   }
   .action-dock .text-button {
-    padding: 8px 4px;
     gap: 4px;
-    font-size: 0.75rem;
-    white-space: normal;
   }
   .action-dock .dock-icon {
     display: none;
   }
   .action-dock .reset-button {
-    grid-column: 1 / -1;
-    justify-self: center;
-    margin: 0;
-    font-size: 0.6875rem;
     min-height: 44px;
   }
   .side-slot {
@@ -1101,7 +1035,6 @@ canvas:focus-visible {
   flex-wrap: wrap;
 }
 .text-enlarged .focus-strip {
-  max-height: 25dvh;
   overflow: auto;
 }
 @media (max-width: 1000px) {
@@ -1116,16 +1049,12 @@ canvas:focus-visible {
   }
   .text-enlarged .action-dock {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: calc(100% - 24px);
   }
   .text-enlarged .action-dock .text-button {
-    font-size: 0.75rem;
     white-space: normal;
   }
   .text-enlarged .action-dock .reset-button {
-    grid-column: 1 / -1;
-    justify-self: center;
     margin: 0;
   }
   .text-enlarged .action-dock .dock-icon {
@@ -1197,23 +1126,13 @@ canvas:focus-visible {
   .action-dock {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .action-dock .reset-button {
-    grid-column: auto;
-  }
   .explorer-panel.information-panel[data-slot='sheet-content'],
   .text-enlarged .explorer-panel.information-panel[data-slot='sheet-content'] {
-    top: max(12px, env(safe-area-inset-top));
-    bottom: max(12px, env(safe-area-inset-bottom));
-    right: 12px;
     height: auto !important;
-    max-height: none;
     --popup-width: calc(100vw - 24px);
   }
   .information-panel [data-slot='sheet-header'] {
     padding: 24px 20px 16px !important;
-  }
-  .watch-reading {
-    padding: 24px 20px 20px;
   }
 }
 @media (max-width: 1000px) {
@@ -1422,16 +1341,13 @@ canvas:focus-visible {
   .explorer-panel.settings-panel[data-slot='sheet-content'],
   .text-enlarged .explorer-panel.settings-panel[data-slot='sheet-content'] {
     right: max(16px, env(safe-area-inset-right));
-    max-height: calc(100dvh - var(--header-bottom, 120px) - 28px);
   }
   .explorer-panel.mechanism-panel[data-slot='sheet-content'] {
     left: max(16px, env(safe-area-inset-left));
   }
   .explorer-panel.information-panel[data-slot='sheet-content'],
   .text-enlarged .explorer-panel.information-panel[data-slot='sheet-content'] {
-    top: max(12px, env(safe-area-inset-top));
     right: 12px;
-    max-height: none;
   }
   .watch-reading {
     padding: 8px 20px 20px;
@@ -1449,9 +1365,6 @@ canvas:focus-visible {
 }
 .focus-strip {
   width: max-content;
-}
-.focus-title {
-  flex-wrap: nowrap;
 }
 .focus-title h2 {
   flex: 1 1 auto;
@@ -1500,8 +1413,6 @@ canvas:focus-visible {
   box-shadow: inset 0 -2px #cbb58e;
 }
 .explore-menu .menu-link[aria-pressed='true'] {
-  color: #e4d6bd;
-  background: #cbb58e0d;
   text-decoration: none;
 }
 .explorer-panel.separation-panel[data-slot='sheet-content'],
@@ -1564,9 +1475,6 @@ canvas:focus-visible {
   color: #eeece4;
   font: inherit;
 }
-.component-finder .catalog-scope {
-  margin: 8px 0 0;
-}
 .catalog-scope-note,
 .catalog-count,
 .catalog-empty {
@@ -1604,7 +1512,6 @@ canvas:focus-visible {
   }
   .action-dock .text-button {
     font-size: 0.8125rem;
-    width: 100%;
     height: 100%;
   }
   .action-dock .side-slot {

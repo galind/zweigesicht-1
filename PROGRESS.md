@@ -5,59 +5,27 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
 
 ## Repository cleanup — 23 October 2026
 
-- Review branch `codex/repository-cleanup-2026-10-23` starts at fetched
-  `develop` `33de8d1`; the initial working tree was clean. Its exact Vercel Git
-  deployment is disabled before pushing. No release or site publication is authorized.
-- Baseline: 92 tests, inventory, typecheck, lint, local production build, HTTP
-  SEO/redirect checks and retained-input CAD/runtime regression all passed.
-  The existing large-chunk warning and vinext route-classification notice remain.
-- Removed the retired Workshop renderer Hints input, always-false cutaway state
-  and no-op selection callback after tracing UI, browser inspection and test
-  callers. Saved-session `hints` remains supported verbatim; Show seat retains
-  its explicit, prerequisite/workspace-scoped behavior.
-- Added a behavior test for explicit assistance and unavailable/foreign targets;
-  all 41 Workshop controller/session tests, typecheck and lint pass.
-- Fixed fresh/invalid-mode visits and Change difficulty by sharing the existing
-  chooser directly on Workshop. Production still hides its homepage entry and
-  ignores `?assemble=1`. Geometry waits for a session; saves, explicit replacement
-  and no-3D retry remain supported.
-- Verified 93 automated tests, inventory, typecheck/lint and local production
-  build; 21 new production entry checks and all 92 focused browser checks pass.
-  The focused suite's no-3D case now confirms replacement before expecting a
-  renderer, matching the deferred-load behavior. The initial production focused
-  run failed at the pre-existing hidden-homepage chooser dead end.
-- Applied only three security patch updates: Vite 8.2.4, source-map-js 1.2.2
-  and tinypool 2.1.2 (scoped to oxfmt to retain the existing formatter version).
-  Clean `npm ci`, 93 tests, inventory, typecheck/lint, local and Vercel production
-  builds pass. Both npm dependency audits report zero known vulnerabilities.
-  Baseline explorer audit flagged four packages (two high, two critical);
-  no deployed exploit was demonstrated.
-- Removed four obsolete panel-style rules after checking rendered classes,
-  computed camera classes, shared UI primitives, scripts and route conventions.
-  Retained dynamically generated camera direction styles and every CAD workflow.
-  Corrected the case-offset comment to point to retained CAD notes.
-- Extended verification passes: 114 retained-input CAD/runtime checks, original
-  source hashes, Meshopt byte identity and 1,119 sampled access checks over 373
-  actions. All 36 tracked asset/provenance/image/license/notice files are byte
-  identical to the baseline.
-- Browser verification passes: 21 entry checks for each of production/Preview;
-  Easy 89 actions / 538 checks, Hard 284 actions / 1,708 checks, 87 drag checks;
-  nine explorer suites (350 assertions, 48 captured flip frames and a 60-second
-  frame benchmark), plus Preview homepage (15) and loading/retry/layout (175)
-  checks. All report zero uncaught browser errors. The 92 focused Workshop
-  checks passed during the Workshop milestone. Local dev gzip/integrity and
-  inspection failure/retry also passed after the Vite patch.
-- The [repository review](docs/REPOSITORY_REVIEW.md) records the ownership map,
-  ranked findings, removal evidence, limits and deferred decisions. Historical
-  visibility/release setup statements are now labeled with their audit dates.
-- [Draft PR #30](https://github.com/galind/zweigesicht-1/pull/30) targets
-  `develop`; the branch is pushed over SSH. GitHub `Verify` and `Branch policy`
-  passed for implementation head `20be358`
-  ([CI run](https://github.com/galind/zweigesicht-1/actions/runs/40002914541)).
-  This final status record changes documentation only; next action is maintainer
-  review. No release, merge or site publication was performed. Physical-device,
-  representative accessibility, mechanical/expert, uncached CAD reproduction
-  and deployed-delivery qualification remain outside this validation.
+[Draft PR #30](https://github.com/galind/zweigesicht-1/pull/30) targets `develop`
+from baseline `33de8d1`; the initial working tree was clean. Its exact Vercel Git
+deployment is disabled. The [review](docs/REPOSITORY_REVIEW.md) records the map,
+findings, retained workflows and remaining decisions.
+
+- Removed retired Workshop Hints/cutaway/callback code, ignored animation-scale
+  bookkeeping, an unused camera argument, and 73 overridden CSS declarations
+  plus four obsolete style rules. Save compatibility and CAD workflows remain.
+- Fixed production Workshop entry without exposing its homepage action. Patched
+  only Vite, source-map-js and tinypool; both npm audits report no known issues.
+- Initial validation: 93 CPU tests, inventory, types/lint, both production builds,
+  Preview build, 114 retained-input CAD checks, source hashes, Meshopt identity
+  and 1,119 access checks passed. All 36 tracked asset/provenance/notice files
+  match baseline. Browser checks covered complete Easy/Hard builds, 87 drag
+  checks, 92 focused checks, nine explorer suites, production/Preview entry and
+  enlarged-text loading/retry layouts. Original CI passed on `3109d06`.
+- Follow-up passed 93 CPU tests, inventory, types/lint, both production builds,
+  87 drag checks, 92 focused checks and 21 entry checks. Computed styles and
+  element positions match before/after removal across 45 UI-state/viewport
+  cases, including 200% text. Next action is draft review; no merge, release,
+  deployment or publication is authorized.
 
 ## Public repository security — historical snapshot, 5 October 2026
 

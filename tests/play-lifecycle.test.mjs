@@ -371,7 +371,7 @@ test('drag positioning preserves source scale independently of viewport or part 
   v.positionStage=actual('positionStage',v);
   for(const oldScale of [.01,1,8,120]) {
     v.staged.scale.setScalar(oldScale);
-    v.positionStage({x:30,y:50},oldScale);
+    v.positionStage({x:30,y:50});
     assert.deepEqual(v.staged.scale.toArray(),[1,1,1]);
     assert.deepEqual(v.staged.position.toArray(),[30,50,3]);
   }
@@ -459,27 +459,29 @@ test('beauty or contact-render failure stops pending damping frames and exposes 
 test('the production settle commits once, blocks duplicate activation and stops scheduling at completion', () => {
   for (const reduced of [false, true]) {
     let id = 0, commits = 0;
-    const callbacks = [], scales = [];
+    const callbacks = [];
     const v = fixture();
     const globals = {requestAnimationFrame: (callback) => {callbacks.push(callback); return ++id;}};
     Object.assign(v, {
       ready: true, active: true, current: {id: 'offered-part'}, target: new THREE.Vector3(20, 10, 0),
       media: {matches: reduced}, renderer: {render() {}}, destination: {style: {}},
       project(point) {return {x: point.x, y: point.y};},
-      positionStage(point, scale) {if (scale !== undefined) scales.push(scale);},
+      planePoint: point => new THREE.Vector3(point.x, point.y, 0),
+      stagePoint: () => ({x: 0, y: 0}),
       placed(stepId) {assert.equal(stepId, 'offered-part'); commits++; this.current = null;},
     });
     v.staged.scale.setScalar(1);
-    for (const name of ['invalidate', 'render', 'animate', 'place']) v[name] = actual(name, v, globals);
+    for (const name of ['invalidate', 'render', 'animate', 'place', 'positionStage']) v[name] = actual(name, v, globals);
     v.place(); v.place(); v.place();
     assert.equal(v.busy, true); assert.equal(v.controls.enabled, false); assert.equal(commits, 0);
     const start = v.animation.start;
     callbacks.shift()(start + 100);
     assert.equal(commits, reduced ? 1 : 0);
+    assert.deepEqual(v.staged.scale.toArray(), [1,1,1]);
     if (!reduced) callbacks.shift()(start + 240);
     assert.equal(commits, 1); assert.equal(v.busy, false); assert.equal(v.controls.enabled, true);
     assert.equal(v.animation, undefined); assert.equal(callbacks.length, 0); assert.equal(v.frame, 0);
-    assert.ok(scales.length && scales.every(s=>s===1), 'Pickup and settling both retain true physical scale');
+    assert.deepEqual(v.staged.scale.toArray(), [1,1,1], 'Settling retains true physical scale');
   }
 });
 
@@ -709,7 +711,7 @@ test('a visible in-frame seat is accepted even when the centre-nearest source sa
       target:new THREE.Vector3(x,70,0),seatPoint:new THREE.Vector3(),
       seatSamples:[new THREE.Vector3(x,70,0),new THREE.Vector3(x,100,0)],
       destination:{style:{}},project:p=>({x:p.x,y:p.y}),visibleSeat:()=>true,
-      animate(_from,_to,_a,_b,complete){complete();},placed(){commits++;},
+      animate(_from,_to,complete){complete();},placed(){commits++;},
       feedback(message){throw Error(`Valid drop was rejected: ${message}`);},
     });
     for(const name of ['inAssemblyView','updateSeat','isNear','place'])v[name]=actual(name,v,{snapDrop});

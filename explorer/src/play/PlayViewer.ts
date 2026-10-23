@@ -120,8 +120,6 @@ export class PlayViewer {
     start: number;
     from: Point;
     to: Point;
-    fromScale: number;
-    toScale: number;
     complete: () => void;
   };
   media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -481,7 +479,7 @@ export class PlayViewer {
         };
       this.detail = step;
       this.side = step.side;
-      this.reframe(false, true);
+      this.reframe();
     } else {
       this.detail = null;
       if (this.detailView) {
@@ -536,7 +534,7 @@ export class PlayViewer {
     } else {
       this.side =
         this.manifest.packets.find((p) => p.id === workspace)?.side ?? 'back';
-      this.reframe(false, true);
+      this.reframe();
     }
     this.invalidate();
     this.emit();
@@ -549,7 +547,7 @@ export class PlayViewer {
     }
     return b;
   }
-  reframe = (animate = false, _straightOn = false) => {
+  reframe = (animate = false) => {
     if (!this.ready || this.drag || (this.busy && !this.cameraMotion)) return;
     const transition = (animate || !!this.cameraMotion) && this.hasFramed;
     this.hasFramed = true;
@@ -758,7 +756,7 @@ export class PlayViewer {
       ray.ray.intersectPlane(plane, new THREE.Vector3()) ?? this.target.clone()
     );
   }
-  positionStage(point = this.stagePoint(), _scale?: number) {
+  positionStage(point = this.stagePoint()) {
     if (!this.current || !this.ready) return;
     this.staged.position.copy(this.planePoint(point));
     // Source geometry is already in world units. Pickup must not enlarge it.
@@ -852,19 +850,18 @@ export class PlayViewer {
       this.positionStage();
       this.invalidate();
     } else {
-      if (drag.moved)
-        this.feedback(
-          this.current?.workspaceId !== this.workspace
-            ? this.current?.workspaceId
-              ? 'This part belongs on its workbench. Choose Open workbench.'
-              : 'Return to the watch to fit this piece.'
-            : !this.available
-              ? 'That piece cannot be fitted yet. Choose Ready now for available parts.'
-              : !this.seatVisible || !this.seatInView
-                ? 'The fitting point is hidden from this view. Rotate the movement or use Show seat.'
-                : 'Not close enough to its fitting point. Try nearer, or use Show seat.',
-        );
-      this.animateToStage(drag.position);
+      this.feedback(
+        this.current?.workspaceId !== this.workspace
+          ? this.current?.workspaceId
+            ? 'This part belongs on its workbench. Choose Open workbench.'
+            : 'Return to the watch to fit this piece.'
+          : !this.available
+            ? 'That piece cannot be fitted yet. Choose Ready now for available parts.'
+            : !this.seatVisible || !this.seatInView
+              ? 'The fitting point is hidden from this view. Rotate the movement or use Show seat.'
+              : 'Not close enough to its fitting point. Try nearer, or use Show seat.',
+      );
+      this.animate(drag.position, this.stagePoint(), () => {});
     }
   };
   releaseCapture() {
@@ -895,16 +892,7 @@ export class PlayViewer {
     this.positionStage();
     this.invalidate();
   };
-  animateToStage(from: Point) {
-    this.animate(from, this.stagePoint(), this.staged.scale.x, 1, () => {});
-  }
-  animate(
-    from: Point,
-    to: Point,
-    fromScale: number,
-    toScale: number,
-    complete: () => void,
-  ) {
+  animate(from: Point, to: Point, complete: () => void) {
     this.staged.visible = true;
     this.busy = true;
     this.controls.enabled = false;
@@ -912,8 +900,6 @@ export class PlayViewer {
       start: performance.now(),
       from,
       to,
-      fromScale,
-      toScale,
       complete,
     };
     this.emit();
@@ -945,14 +931,12 @@ export class PlayViewer {
     this.animate(
       this.project(this.staged.position),
       this.project(this.target),
-      this.staged.scale.x,
-      1,
       () => this.placed(id),
     );
   };
   resetView = () => {
     if (this.drag || this.busy) return;
-    this.reframe(true, true);
+    this.reframe(true);
   };
   guide = () => {
     if (this.drag || this.busy || !this.current) return;
@@ -973,12 +957,12 @@ export class PlayViewer {
       fromUp = this.camera.up.clone();
     this.assistance = true;
     this.side = this.current.side;
-    this.reframe(false);
+    this.reframe();
     // Guidance briefly returns to a clear face; the player can orbit again after it.
     this.updateSeat();
     if (!this.seatVisible || !this.seatInView) {
       this.side = this.side === 'front' ? 'back' : 'front';
-      this.reframe(false, true);
+      this.reframe();
       this.updateSeat();
     }
     if (!this.media.matches) {
@@ -1182,13 +1166,10 @@ export class PlayViewer {
       const a = this.animation,
         t = this.media.matches ? 1 : Math.min(1, (now - a.start) / 220),
         eased = motionEase(t);
-      this.positionStage(
-        {
-          x: THREE.MathUtils.lerp(a.from.x, a.to.x, eased),
-          y: THREE.MathUtils.lerp(a.from.y, a.to.y, eased),
-        },
-        THREE.MathUtils.lerp(a.fromScale, a.toScale, eased),
-      );
+      this.positionStage({
+        x: THREE.MathUtils.lerp(a.from.x, a.to.x, eased),
+        y: THREE.MathUtils.lerp(a.from.y, a.to.y, eased),
+      });
       if (t === 1) {
         this.animation = undefined;
         this.staged.visible = false;
