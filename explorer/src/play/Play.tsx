@@ -58,7 +58,6 @@ const blank: PlayViewStatus = {
   ready: false,
   busy: false,
   error: '',
-  cutaway: false,
   side: 'back',
 };
 
@@ -181,7 +180,6 @@ export default function Play() {
     const held =
       selected && !current!.actionIds.includes(selected.id) ? selected : null;
     controller.setAssistance(
-      false,
       !!current && !!held && canPlace(manifest, current, held.id),
       assistanceRef.current,
     );
@@ -369,7 +367,6 @@ export default function Play() {
               ?.querySelector<HTMLButtonElement>(`[data-action-id="${id}"]`)
               ?.focus({ preventScroll: true });
         },
-        () => {},
         setNotice,
       );
       viewer.current = controller;
@@ -594,7 +591,7 @@ export default function Play() {
   const reveal = () => {
     assistanceRef.current = true;
     setAssistance(true);
-    viewer.current?.setAssistance(false, available, true);
+    viewer.current?.setAssistance(available, true);
     viewer.current?.guide();
   };
 

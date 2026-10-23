@@ -344,7 +344,7 @@ test('capturing a part clears orbit inertia and prevents flip or camera drift du
   Object.assign(v, {
     active: true, current: {id: 'offered-part'}, point: () => ({x: 40, y: 50}), stagePoint: () => ({x: 40, y: 50}),
     stage: {addEventListener() {}, removeEventListener() {}, setPointerCapture() {}, hasPointerCapture() {return true;}, releasePointerCapture() {}},
-    destination: {dataset: {}, style: {}}, selected() {}, project() {return {x: 100, y: 100};},
+    destination: {dataset: {}, style: {}}, project() {return {x: 100, y: 100};},
   });
   for (const name of ['beginDrag', 'cancel', 'releaseCapture', 'reframe']) v[name] = actual(name, v);
   v.controls._sphericalDelta.theta = .6;
@@ -389,7 +389,7 @@ test('inventory drag capture owns and removes its temporary listeners on cancel 
   };
   Object.assign(v, {
     active: true, current: {id: 'gallery-part'}, point: () => ({x: 160, y: 500}),
-    stage: {}, destination: {dataset: {}}, selected() {},
+    stage: {}, destination: {dataset: {}},
   });
   for (const name of ['beginDrag', 'cancel', 'releaseCapture']) v[name] = actual(name, v);
   const event = {button: 0, pointerId: 9, preventDefault() {}, stopPropagation() {}};
@@ -404,7 +404,7 @@ test('inventory drag capture owns and removes its temporary listeners on cancel 
     assert.equal(v.captureElement, undefined); assert.equal(v.drag, undefined);
     assert.equal(v.controls.enabled, true);
   }
-  v.hints = true; v.available = false;
+  v.assistance = true; v.available = false;
   assert.equal(v.beginDrag(event, origin), false);
   assert.equal(listeners.size, 0); assert.equal(captured.size, 0);
   v.controls.dispose();
@@ -592,7 +592,7 @@ test('failed controller construction frees the renderer, controls, canvas and te
   Object.assign(v, {stage: {removeEventListener() {}}, destination: {dataset: {}}, media: {removeEventListener() {}}});
   for (const name of ['makeEnvironment', 'dispose', 'releaseCapture']) v[name] = actual(name, v, globals);
   const constructor = declaration.members.find(ts.isConstructorDeclaration), module = {exports: {}};
-  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,selected) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, window: {addEventListener() {}, removeEventListener() {}}, ...graphics(globals), ...globals});
+  vm.runInNewContext(ts.transpileModule(`module.exports = function(host,stage,destination,manifest,notify,placed,feedback) ${constructor.body.getText(source)}`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {module, window: {addEventListener() {}, removeEventListener() {}}, ...graphics(globals), ...globals});
   assert.throws(() => module.exports.call(v, {appendChild() {}}, v.stage, v.destination, v.manifest, () => {}, () => {}, () => {}), /Injected environment failure/);
   assert.equal(v.dead, true);
   for (const key of ['renderer', 'controls', 'canvas', 'room', 'pmrem']) assert.equal(released.filter((value) => value === key).length, 1, key);
@@ -670,7 +670,7 @@ test('selection and undo updates preserve camera, fitted visibility and shared s
     mesh.matrixAutoUpdate=false;mesh.matrix.copy(matrix);v.scene.add(mesh);
     v.pieces.set(id,{mesh,pose:matrix,bounds:new THREE.Box3().setFromBufferAttribute(mesh.geometry.getAttribute('position')).applyMatrix4(matrix)});
   }
-  Object.assign(v,{ready:true,hasFramed:true,active:true,available:true,hints:true,seatSamples:[],cancel(){},invalidate(){},layout(){throw Error('Selection cannot reframe');},reframe(){throw Error('Selection cannot reframe');}});
+  Object.assign(v,{ready:true,hasFramed:true,active:true,available:true,assistance:true,seatSamples:[],cancel(){},invalidate(){},layout(){throw Error('Selection cannot reframe');},reframe(){throw Error('Selection cannot reframe');}});
   const step={id:'piece',leafIds:['piece'],side:'back'};
   v.camera.position.set(12,8,65);v.controls.target.set(2,4,1);v.camera.up.set(0,1,0);
   const before=[v.camera.position.clone(),v.controls.target.clone(),v.camera.up.clone()],material=plate.material;
@@ -680,7 +680,7 @@ test('selection and undo updates preserve camera, fitted visibility and shared s
   assert.ok(v.camera.position.equals(before[0]));assert.ok(v.controls.target.equals(before[1]));assert.ok(v.camera.up.equals(before[2]));
   assert.equal(plate.visible,true);assert.equal(incoming.visible,false);assert.equal(plate.material,material);assert.equal(material.opacity,1);
   assert.equal(v.staged.children[0].material,incoming.material,'Staging keeps the authored finish');
-  assert.notEqual(v.ghost.children[0].material,incoming.material,'Hint overlay owns a separate material');
+  assert.notEqual(v.ghost.children[0].material,incoming.material,'Seat overlay owns a separate material');
   v.camera.position.set(-20,10,-60);v.presentContext();assert.equal(plate.visible,true,'Orbit must never hide opaque fitted geometry');
   const orbited=v.camera.position.clone();actual('update',v)(new Set(['plate']),null,true);
   assert.ok(v.camera.position.equals(orbited),'Clearing selection/undo does not choose a face');
@@ -770,4 +770,29 @@ test('leaving an explicit edge view restores the normal camera and zoom bounds',
   assert.ok(v.camera.position.equals(position)); assert.ok(v.controls.target.equals(target)); assert.ok(v.camera.up.equals(up));
   assert.equal(v.controls.minDistance, 3); assert.equal(v.controls.maxDistance, 1500);
   v.controls.dispose();
+});
+
+test('seat assistance is explicit and never reveals an unavailable or foreign workspace target', () => {
+  const v = fixture();
+  Object.assign(v, {
+    current: {workspaceId: null}, workspace: null,
+    destination: {dataset: {}}, invalidate() {},
+  });
+  const assist = actual('setAssistance', v);
+  assist(true);
+  assert.equal(v.ghost.visible, false, 'Selecting a ready part does not reveal its seat');
+  assist(true, true);
+  assert.equal(v.ghost.visible, true);
+  assert.equal(v.destination.dataset.assisted, 'true');
+  v.workspace = 'other-bench';
+  v.presentContext();
+  assert.equal(v.ghost.visible, false, 'Assistance is scoped to the active workspace');
+  v.workspace = null;
+  assist(false, true);
+  assert.equal(v.ghost.visible, false, 'Assistance cannot bypass prerequisites');
+  v.current = null;
+  assist(true, true);
+  assert.equal(v.ghost.visible, false, 'A cleared selection has no seat overlay');
+  v.controls.dispose();
+  v.ghostMaterial.dispose();
 });

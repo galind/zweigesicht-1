@@ -1,7 +1,25 @@
 # Current project status
 
-Updated 5 October 2026. Setup is in the [README](README.md); extended checks are
+Updated 23 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
+
+## Repository cleanup — 23 October 2026
+
+- Review branch `codex/repository-cleanup-2026-10-23` starts at fetched
+  `develop` `33de8d1`; the initial working tree was clean. Its exact Vercel Git
+  deployment is disabled before pushing. No release or site publication is authorized.
+- Baseline: 92 tests, inventory, typecheck, lint, local production build, HTTP
+  SEO/redirect checks and retained-input CAD/runtime regression all passed.
+  The existing large-chunk warning and vinext route-classification notice remain.
+- Removed the retired Workshop renderer Hints input, always-false cutaway state
+  and no-op selection callback after tracing UI, browser inspection and test
+  callers. Saved-session `hints` remains supported verbatim; Show seat retains
+  its explicit, prerequisite/workspace-scoped behavior.
+- Added a behavior test for explicit assistance and unavailable/foreign targets;
+  all 41 Workshop controller/session tests, typecheck and lint pass.
+- Next: fix the reproduced production Workshop chooser dead end, apply narrowly
+  scoped tooling security patches, complete browser/build checks and record the
+  repository-wide findings before opening a draft PR to `develop`.
 
 ## Public repository security — 5 October 2026
 

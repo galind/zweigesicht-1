@@ -40,7 +40,6 @@ export type PlayViewStatus = {
   ready: boolean;
   error: string;
   busy: boolean;
-  cutaway: boolean;
   obstructed?: boolean;
   side: 'front' | 'back';
   detail?: string;
@@ -75,7 +74,6 @@ export class PlayViewer {
     depthWrite: false,
   });
   available = true;
-  hints = false;
   assistance = false;
   workspace: string | null = null;
   mainView?: {
@@ -102,7 +100,6 @@ export class PlayViewer {
   contextUnavailable = false;
   busy = false;
   error = '';
-  cutaway = false;
   current: PlayStep | null = null;
   fitted = new Set<string>();
   active = false;
@@ -137,7 +134,6 @@ export class PlayViewer {
     public manifest: PlayManifest,
     public notify: (status: PlayViewStatus) => void,
     public placed: (id: string) => void,
-    public selected: () => void,
     public feedback: (message: string) => void = () => {},
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -191,7 +187,6 @@ export class PlayViewer {
         ready: this.ready,
         error: this.error,
         busy: this.busy,
-        cutaway: this.cutaway,
         obstructed: !!this.current && (!this.seatVisible || !this.seatInView),
         side: this.side,
         detail: this.detail?.id,
@@ -418,16 +413,15 @@ export class PlayViewer {
     this.invalidate();
     this.emit();
   }
-  setAssistance(hints: boolean, available: boolean, assistance = false) {
-    this.hints = hints;
+  setAssistance(available: boolean, assistance = false) {
     this.available = available;
     this.assistance = assistance;
     this.ghost.visible =
       !!this.current &&
       this.current.workspaceId === this.workspace &&
       available &&
-      (hints || assistance);
-    this.destination.dataset.assisted = String(hints || assistance);
+      assistance;
+    this.destination.dataset.assisted = String(assistance);
     this.updateSeat();
     this.invalidate();
   }
@@ -627,12 +621,11 @@ export class PlayViewer {
   };
   presentContext() {
     for (const [id, p] of this.pieces) p.mesh.visible = this.fitted.has(id);
-    this.cutaway = false;
     this.ghost.visible =
       !!this.current &&
       this.current.workspaceId === this.workspace &&
       this.available &&
-      (this.hints || this.assistance);
+      this.assistance;
   }
   updateProjection() {
     const w = this.host.clientWidth,
@@ -716,7 +709,7 @@ export class PlayViewer {
       this.seatVisible &&
       inView &&
       this.available &&
-      (this.hints || this.assistance)
+      this.assistance
         ? 'visible'
         : 'hidden';
     this.destination.style.left = `${p.x}px`;
@@ -817,7 +810,6 @@ export class PlayViewer {
     this.staged.visible = true;
     this.positionStage(center);
     this.invalidate();
-    this.selected();
     return true;
   }
   pointerMove = (event: PointerEvent) => {
@@ -828,7 +820,7 @@ export class PlayViewer {
     this.drag.position = dragCenter(p, this.drag.grab);
     // Keep the seat quiet until the player explicitly asks for assistance.
     const near =
-      (this.hints || this.assistance) &&
+      this.assistance &&
       this.available &&
       this.isNear(this.drag.position);
     this.destination.dataset.near = String(near);
@@ -1402,7 +1394,7 @@ export class PlayViewer {
       targetCenter: this.project(this.target),
       seatVisible: this.seatVisible,
       available: this.available,
-      hints: this.hints,
+      assistance: this.assistance,
       workspace: this.workspace,
       detail: this.detail?.id,
       rotationEnabled: this.controls.enableRotate,
@@ -1434,7 +1426,6 @@ export class PlayViewer {
       renderCount: this.renderCount,
       scheduledFrame: !!this.frame,
       geometryCount: this.pieces.size,
-      cutaway: this.cutaway,
     };
   }
   dispose() {
