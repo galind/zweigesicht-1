@@ -16,11 +16,19 @@ does not establish public redistribution rights or mechanical certification.
 
 See [current status](../PROGRESS.md) for outstanding actions and [CAD notes](CAD_NOTES.md) for source constraints and existing evidence.
 
-## Public repository readiness — 3 October 2026
+## Public repository readiness — historical audit, 3 October 2026
 
-**Blocked. Keep this repository private.** Preparation, merging into `develop`
-and promoting `develop` to `main` do not authorize public visibility. Visibility
-exposes other branches, retained history and GitHub-hosted surfaces too.
+The owner subsequently made this repository public, as recorded in
+[PROGRESS.md](../PROGRESS.md) and confirmed by repository metadata on 23 October.
+That visibility change does not establish asset redistribution permission or
+clear the other gates. The private visibility, branch heads and proposed actions
+below describe the 3 October audit; they are retained as evidence, not current
+remote-state claims.
+
+**Publication gates were blocked at that audit and remain unresolved here.**
+Its recommendation was to keep the repository private. Preparation, merging into
+`develop` and promoting `develop` to `main` do not authorize public visibility.
+Visibility exposes other branches, retained history and GitHub-hosted surfaces too.
 
 ### Verified remote state
 
@@ -230,8 +238,9 @@ or keep the original private and publish only a verified new snapshot.
 
 Preparation verification is recorded in [PROGRESS.md](../PROGRESS.md). Applicable
 mechanical/device/accessibility/deployment gates above remain outstanding and are
-not substituted by repository privacy review. Server-side develop protection
-against deletion/force-push and production deployment qualification remain
-unverified. No visibility change, release, deployment, history rewrite, remote
-branch deletion, credential rotation or permission-request sending is authorized
-by this preparation PR.
+not substituted by repository privacy review. Server-side develop protection was
+subsequently recorded as verified on 5 October in PROGRESS.md; this cleanup does
+not re-certify server-side settings. Production deployment qualification remains
+unverified here. No visibility change, release, deployment, history rewrite,
+remote branch deletion, credential rotation or permission-request sending is
+authorized by this preparation PR.

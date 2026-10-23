@@ -28,7 +28,7 @@ try {
   const home = await context.newPage();
   await home.goto(`${base}/?assemble=1`, { waitUntil: 'networkidle' });
   check('Homepage entry follows build policy', await home.locator('.assemble-trigger').count() === (mode === 'preview' ? 1 : 0));
-  check('Production assemble query remains disabled', mode === 'preview' || !await chooser(home).isVisible());
+  check('Homepage assemble query follows build policy', await chooser(home).isVisible() === (mode === 'preview'));
   await home.close();
 
   for (const route of ['/workshop', '/workshop?mode=expert', '/play']) {
@@ -78,6 +78,7 @@ try {
   await page.getByRole('button', { name: 'Return to chooser', exact: true }).click();
   await chooser(page).waitFor();
   check('Corrupt-save cancellation keeps the original data on Workshop', await saved(page) === '{broken' && new URL(page.url()).pathname === '/workshop');
+  await page.locator('.assembly-chooser[data-open]:not([data-starting-style])').waitFor();
   await page.screenshot({ path: path.join(out, `chooser-${mode}.png`) });
   await page.keyboard.press('Escape');
   await page.waitForURL(url => url.pathname === '/');

@@ -36,10 +36,31 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
   computed camera classes, shared UI primitives, scripts and route conventions.
   Retained dynamically generated camera direction styles and every CAD workflow.
   Corrected the case-offset comment to point to retained CAD notes.
-- Next: finish extended browser/source verification, record the map and ranked
-  findings, then push over SSH and open a draft PR to `develop`.
+- Extended verification passes: 114 retained-input CAD/runtime checks, original
+  source hashes, Meshopt byte identity and 1,119 sampled access checks over 373
+  actions. All 36 tracked asset/provenance/image/license/notice files are byte
+  identical to the baseline.
+- Browser verification passes: 21 entry checks for each of production/Preview;
+  Easy 89 actions / 538 checks, Hard 284 actions / 1,708 checks, 87 drag checks;
+  nine explorer suites (350 assertions, 48 captured flip frames and a 60-second
+  frame benchmark), plus Preview homepage (15) and loading/retry/layout (175)
+  checks. All report zero uncaught browser errors. The 92 focused Workshop
+  checks passed during the Workshop milestone. Local dev gzip/integrity and
+  inspection failure/retry also passed after the Vite patch.
+- The [repository review](docs/REPOSITORY_REVIEW.md) records the ownership map,
+  ranked findings, removal evidence, limits and deferred decisions. Historical
+  visibility/release setup statements are now labeled with their audit dates.
+- Prepared for draft PR review against `develop`; next action is maintainer
+  review. No release, merge or site publication was performed. Physical-device,
+  representative accessibility, mechanical/expert, uncached CAD reproduction
+  and deployed-delivery qualification remain outside this validation.
 
-## Public repository security — 5 October 2026
+## Public repository security — historical snapshot, 5 October 2026
+
+The setup/next-action bullets below describe that date. At this review's fetched
+baseline, PR #27 and the release/synchronization PRs #28/#29 are merged; their
+merge commits are in `33de8d1`. This local review does not establish current app
+credentials, environment settings or deployment health.
 
 - Active [branch ruleset](https://github.com/galind/zweigesicht-1/rules/24522996)
   protects `main` and `develop`: PR required, resolved conversations, up-to-date

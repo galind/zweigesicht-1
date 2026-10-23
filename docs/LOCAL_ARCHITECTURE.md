@@ -36,9 +36,13 @@ The fitted case has 41 leaves. Focus, All parts, raw external inspection and iso
 
 Easy has 89 placements. Hard has 249 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 265 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
 
-The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid saves; absent mode/save opens the shared chooser on Workshop without starting geometry
-loads. Changing difficulty also opens that local chooser, independent of the
-homepage entry flag. Changing a progressed mode or replacing corrupt/incompatible data requires confirmation. Earlier linear saves are never silently reinterpreted. Unavailable storage allows a current-tab build with a warning and retained mode query.
+The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid
+saves; absent mode/save opens the shared chooser on Workshop without starting
+geometry loads. Changing difficulty also opens that local chooser, independent
+of the homepage entry flag. Changing a progressed mode or replacing
+corrupt/incompatible data requires confirmation. Earlier linear saves are never
+silently reinterpreted. Unavailable storage allows a current-tab build with a
+warning and retained mode query.
 
 `PlayViewer` loads required geometry transactionally; missing recovery or leaves block play/completion. Late metadata after unmount cannot start heavy loads. Thumbnail targets share authored materials and encode linear pixels for browser display, then center their transparent bounds. Dragging starts on gallery cards (selected thumbnails for touch), keeps source scale, and leaves no detached copy between interactions.
 
