@@ -209,10 +209,6 @@ canvas:focus-visible {
   color: #eee;
   margin: 25px 0 10px;
 }
-.about-copy .secondary {
-  font-size: 0.875rem;
-  color: var(--site-muted);
-}
 .alternative-controls {
   border: 0;
   padding: 0;
@@ -1197,10 +1193,6 @@ canvas:focus-visible {
   width: 16px;
   height: 16px;
 }
-.catalog-scope + .secondary {
-  margin: 0 16px 12px;
-  font-size: 0.75rem;
-}
 @media (max-width: 600px) {
   .action-dock {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1231,13 +1223,6 @@ canvas:focus-visible {
   .text-enlarged .action-dock .reset-button {
     grid-column: auto;
   }
-}
-
-.case-material {
-  margin-top: 12px;
-}
-.case-material + .dial-note {
-  margin-bottom: 12px;
 }
 
 /* Top review: content-sized header and contextual reading surfaces. */

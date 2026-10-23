@@ -32,6 +32,10 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
   builds pass. Both npm dependency audits report zero known vulnerabilities.
   Baseline explorer audit flagged four packages (two high, two critical);
   no deployed exploit was demonstrated.
+- Removed four obsolete panel-style rules after checking rendered classes,
+  computed camera classes, shared UI primitives, scripts and route conventions.
+  Retained dynamically generated camera direction styles and every CAD workflow.
+  Corrected the case-offset comment to point to retained CAD notes.
 - Next: finish extended browser/source verification, record the map and ranked
   findings, then push over SSH and open a draft PR to `develop`.
 

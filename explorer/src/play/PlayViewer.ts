@@ -706,10 +706,7 @@ export class PlayViewer {
     const inView = this.inAssemblyView(p);
     this.seatInView = inView;
     this.destination.style.visibility =
-      this.seatVisible &&
-      inView &&
-      this.available &&
-      this.assistance
+      this.seatVisible && inView && this.available && this.assistance
         ? 'visible'
         : 'hidden';
     this.destination.style.left = `${p.x}px`;
@@ -820,9 +817,7 @@ export class PlayViewer {
     this.drag.position = dragCenter(p, this.drag.grab);
     // Keep the seat quiet until the player explicitly asks for assistance.
     const near =
-      this.assistance &&
-      this.available &&
-      this.isNear(this.drag.position);
+      this.assistance && this.available && this.isNear(this.drag.position);
     this.destination.dataset.near = String(near);
     this.positionStage(this.drag.position);
     this.invalidate();
