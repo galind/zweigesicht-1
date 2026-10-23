@@ -10,7 +10,7 @@
 
 - [ ] This feature/fix targets `develop`.
 
-<!-- Production promotion uses the manual release workflow, not a release PR. -->
+- [ ] If this targets `main`, it comes from this repository’s `develop` and the exact head SHA has been reviewed in staging.
 
 ## Release considerations
 
