@@ -50,7 +50,11 @@ in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (
 - The [repository review](docs/REPOSITORY_REVIEW.md) records the ownership map,
   ranked findings, removal evidence, limits and deferred decisions. Historical
   visibility/release setup statements are now labeled with their audit dates.
-- Prepared for draft PR review against `develop`; next action is maintainer
+- [Draft PR #30](https://github.com/galind/zweigesicht-1/pull/30) targets
+  `develop`; the branch is pushed over SSH. GitHub `Verify` and `Branch policy`
+  passed for implementation head `20be358`
+  ([CI run](https://github.com/galind/zweigesicht-1/actions/runs/40002914541)).
+  This final status record changes documentation only; next action is maintainer
   review. No release, merge or site publication was performed. Physical-device,
   representative accessibility, mechanical/expert, uncached CAD reproduction
   and deployed-delivery qualification remain outside this validation.
