@@ -1,7 +1,8 @@
 # D — Main workbench
 
 Developed design and implementation brief, revision 3, 24 October 2026.
-**Selected direction: D. Final design approval: pending. Implementation: not started.**
+**Selected direction: D revision 3. Approved for local implementation on
+24 October 2026. Implementation: handed off, not yet started.**
 
 The owner selected D and requested a basic polished render, with less complexity
 and no city view. The latest revision keeps only the main workbench, removes the
@@ -10,8 +11,11 @@ map as the only wall decoration. The map is now centered on the wall directly
 ahead of the visitor, above the main bench, with the left wall plain.
 This supersedes the earlier developed D proposals.
 It prepares the work without changing application code, active authored data,
-environment models or maker CAD. The original requirement for explicit approval
-of the final design before implementation remains in force.
+environment models or maker CAD. The owner subsequently said “let's start with
+the implementation” and requested a prompt for another agent. That approves local
+implementation of revision 3; it does not authorize publication, push or deployment.
+The handoff prompt is `artifacts/workshop-design-d-v3/implementation-prompt.md`.
+Historical approval-pending labels in review artifacts are superseded by this record.
 
 ## Review package
 
@@ -60,7 +64,7 @@ or use the image-generated text pixels as a runtime texture.
 ## Dimensions and placement
 
 World units are millimetres, Y up. The arrival faces −Z. Mat top remains Y0.
-Coordinates below and the local JSON are design proposals awaiting approval.
+Coordinates below and the local JSON define the approved implementation target.
 
 | Element | Extents / position | Intent |
 | --- | --- | --- |
@@ -178,7 +182,7 @@ Initial environment budgets, excluding the unchanged maker CAD:
   on the same device/viewport/mode, with the 60 Hz Auto target retained where the
   baseline supports it. These are acceptance targets, not achieved results.
 
-## Implementation sequence after explicit approval
+## Approved implementation sequence
 
 1. Capture a fresh local baseline for both faces, arrival, flips, mouse-look/flight
    performance and scene resource counts. Preserve the approved render/plan.
@@ -233,4 +237,5 @@ Add focused checks for:
   qualifications remain open until performed.
 
 No application tests were run for this document/render-only step. Review files
-were checked locally. Implementation and final design approval remain pending.
+were checked locally. The design is approved; implementation and runtime
+verification remain for the receiving agent.

@@ -3,6 +3,21 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Workshop implementation approved and handed off — 24 October 2026
+
+Owner approved starting implementation of D revision 3 and requested a prompt
+for another agent. The [brief](docs/WORKSHOP_DESIGN_D.md) records that approval;
+the complete local handoff prompt is
+`artifacts/workshop-design-d-v3/implementation-prompt.md`. Use the v3 render and
+layout: one main desk, no side furniture/drawing/chair, Dresden map directly ahead.
+Earlier approval-pending records and review labels are historical.
+
+The handoff covers the local baseline, approved scope, source/interaction
+invariants, environment pipeline, collisions, performance, visual QA and delivery.
+No agent was dispatched and no application/CAD implementation has started in this
+chat. Next: receiving agent implements and verifies locally. No push, deployment,
+publication or redistribution is authorized.
+
 ## Workshop environment — map ahead, 24 October 2026
 
 Moved the Dresden map to the wall directly ahead of the visitor, centered above
