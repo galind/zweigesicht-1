@@ -92,6 +92,12 @@ export default function Bench() {
   return (
     <main className="bench-experience">
       <div className="bench-canvas" ref={host} />
+      {!state.captured && hasEntered && (
+        <div
+          className="bench-menu-backdrop bg-black/10 backdrop-blur-xs"
+          aria-hidden="true"
+        />
+      )}
       <header className="bench-header">
         <Link href="/" aria-label="Back to the explorer">
           ← Zweigesicht-1

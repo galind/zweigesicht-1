@@ -77,7 +77,10 @@ Other internal CAD uncertainties remain unchanged.
 The homepage's **Walk inside the movement** button opens a compact controls popup.
 **Enter the movement** then navigates client-side to `/bench` and requests mouse
 capture when the scene is ready. There is no second instruction screen. The popup
-and Escape menu share one controls component and the homepage's neutral styling.
+and Escape menu share one controls component and the homepage's typography,
+translucent panel surface, rounded corners and glass blur. Both blur the scene
+behind their controls; exploration keeps the scene sharp with small glass
+navigation/hint surfaces. Text retains contrast over bright scene areas.
 Escape or Close dismisses the popup and restores focus to its homepage button.
 
 Entry intent is consumed once and is not stored across reloads. Escape, blur or
@@ -96,7 +99,8 @@ visitor dimensions are unchanged; no badge, reticle or flight HUD is shown.
 cancellation, keyboard focus, browser Back, direct entry, capture/look, movement,
 loading/error recovery and desktop layouts including 200% text. The homepage
 entry runner also checks small viewports. Actual popup, arrival, direct-visit,
-menu and error captures are local under `artifacts/bench-popup/`. Run with the
+menu and error captures of the current glass styling are local under
+`artifacts/bench-glass/` (earlier popup captures: `artifacts/bench-popup/`). Run with the
 same Playwright/Chrome environment variables as the browser runners below.
 The older `artifacts/bench-ui/` captures record the superseded entry card.
 

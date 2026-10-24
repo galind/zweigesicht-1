@@ -12,7 +12,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 page.setDefaultTimeout(20000);
 const base = process.argv[2] || "http://127.0.0.1:4187";
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/bench-popup";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/bench-glass";
 await fs.mkdir(out, { recursive: true });
 const checks = [];
 const check = (name, pass, detail) => {
@@ -103,6 +103,25 @@ try {
       label + " popup contains keyboard focus",
       await popup.evaluate((e) => e.contains(document.activeElement)),
     );
+    await page.waitForFunction(() => {
+      const overlay = document.querySelector('[data-slot="sheet-overlay"]');
+      return (
+        overlay &&
+        getComputedStyle(overlay).opacity === "1" &&
+        overlay.getAnimations().every((animation) => animation.playState === "finished")
+      );
+    });
+    const popupGlass = await popup.evaluate((e) => {
+      const style = getComputedStyle(e);
+      const backdrop = getComputedStyle(document.querySelector('[data-slot="sheet-overlay"]'));
+      return {
+        background: style.backgroundColor,
+        blur: style.backdropFilter,
+        radius: style.borderRadius,
+        backdrop: backdrop.backdropFilter,
+      };
+    });
+    check(label + " popup blurs background", popupGlass.backdrop.includes("blur("), popupGlass);
     await shot("popup-" + label);
     await enter().click();
     await page.waitForURL(base + "/bench");
@@ -111,6 +130,10 @@ try {
     check(
       label + " popup enters captured scene without another instruction screen",
       (await page.locator(".bench-menu,.bench-start,.bench-entry-popup").count()) === 0,
+    );
+    check(
+      label + " scene is sharp while captured",
+      (await page.locator(".bench-menu-backdrop,[data-slot='sheet-overlay']").count()) === 0,
     );
     await shot("arrival-" + label);
     await page.keyboard.press("Escape");
@@ -155,10 +178,12 @@ try {
     );
     const contrast = await page.evaluate(() => {
       const luminance = (color) => {
-        const rgb = color
-          .match(/[\d.]+/g)
+        const channels = color.match(/[\d.]+/g).map(Number);
+        const alpha = channels[3] ?? 1;
+        // Conservative contrast: composite translucent surfaces over pure white.
+        const rgb = channels
           .slice(0, 3)
-          .map(Number)
+          .map((n) => n * alpha + 255 * (1 - alpha))
           .map((n) => {
             const c = n / 255;
             return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
@@ -272,6 +297,20 @@ try {
           return r.top >= menu.top && r.bottom <= menu.bottom;
         });
       }),
+    );
+    const menuGlass = await page.locator(".bench-menu").evaluate((e) => {
+      const style = getComputedStyle(e);
+      return {
+        background: style.backgroundColor,
+        blur: style.backdropFilter,
+        radius: style.borderRadius,
+        backdrop: getComputedStyle(document.querySelector(".bench-menu-backdrop")).backdropFilter,
+      };
+    });
+    check(
+      label + " Escape menu matches popup glass and backdrop",
+      JSON.stringify(menuGlass) === JSON.stringify(popupGlass),
+      { popupGlass, menuGlass },
     );
     await shot("menu-" + label);
     await page.getByRole("button", { name: "Reset position", exact: true }).click();

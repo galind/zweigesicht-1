@@ -37,7 +37,6 @@ export function BenchEntry({
       {children}
       <SheetContent
         side="top"
-        showOverlay={false}
         style={style}
         className="bench-entry-popup"
         initialFocus={enter}

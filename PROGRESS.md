@@ -3,6 +3,30 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Shared walking glass styling — 24 October 2026
+
+Updated locally on `codex/bench-ui` after owner feedback. The homepage controls
+popup now uses the existing blurred dialog backdrop. Popup and Escape menu share
+homepage panel colors, 16 px corners and 20 px glass blur; the Escape menu blurs
+the scene behind it. Navigation, direct-entry/loading and exploration hints use
+compact 12 px glass surfaces with the shared panel opacity for readable contrast
+over the bright desk. Typography, button/focus treatment and close targets match
+the homepage. The scene stays sharp while exploring.
+
+- 152 desktop UI checks and five homepage viewport/text-size entry checks pass:
+  actual capture/look, entry, Escape/resume, focus, hints, navigation, loading and
+  error recovery, four desktop sizes and 200% text. Translucent surface contrast
+  is checked against white behind the glass (≥4.5:1). Typecheck, lint and local
+  production build pass. Actual homepage, popup, exploration, menu and error
+  captures/reports stay in `artifacts/bench-glass/`; preview remains port 4187.
+- Only interface presentation changed. Desk, original holders, corrected seating,
+  materials, controls, gravity, collisions, boundaries, camera and 1.65 mm visitor /
+  1.48 mm eye height are unchanged. No new issues found; prior physical-device
+  qualification and browser pointer-lock limitations remain.
+
+Next: owner visual walkthrough. No push, deployment, publication or CAD redistribution.
+The earlier no-blur styling below is superseded by this requested glass treatment.
+
 ## Homepage walking popup — 24 October 2026
 
 Updated locally on `codex/bench-ui` after owner feedback. **Walk inside the
