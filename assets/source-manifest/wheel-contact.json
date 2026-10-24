@@ -117,7 +117,11 @@
       "sourceCommonVolumeMm3": 0.060692778812264515,
       "maxVerifiedInteriorWitnessDepthMm": 0.07933253842678478,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0.0,
+      "displayMinimumDistanceMm": 0.03173093914379695,
+      "followupReview": "docs/RATCHET_CONTACT_REVIEW.md",
+      "followupProvenance": "assets/source-manifest/ratchet-contact.json"
     },
     {
       "key": "137-210",
@@ -289,7 +293,7 @@
     },
     {
       "path": "artifacts/wheel-contact/mesh-pairs.json",
-      "sha256": "dce0bec9ff2cd356fb278ed266c8a597745384d88605ba5caf64d025c3ed61e2"
+      "sha256": "4b41bf2835aab9a4c038f860d0787b24fae3c30ff6d63bbb60e8e4fac8b9c741"
     },
     {
       "path": "artifacts/wheel-contact/browser-before/explorer-report.json",
@@ -334,10 +338,11 @@
     "Original source and runtime geometry assets are unchanged."
   ],
   "runtimeMeshReview": {
-    "correctedPairs": ["85-96", "93-96"],
+    "correctedPairs": ["85-96", "93-96", "131-131"],
     "sourceTriangleIntersections": true,
     "correctedTriangleIntersections": false,
-    "minimumTriangleDistancesMm": [0.027128355499877885, 0.0228209068327867],
+    "minimumTriangleDistancesMm": [0.027128355499877885, 0.0228209068327867, 0.03222530234281116],
     "unchangedOverviewMeshBuffers": 222
-  }
+  },
+  "followup": "assets/source-manifest/ratchet-contact.json"
 }

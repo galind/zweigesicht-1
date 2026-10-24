@@ -163,15 +163,15 @@ v.ingest(overviewScene);v.retarget();v.applyPose(0);
 assert.equal(v.renderParts.size,222);
 assert.equal(new Set([...v.renderParts.values()].map(p=>p.mesh.geometry)).size,138);
 assert.equal(v.assemblyError('presentation'),0);
-const phasedId=PREFIX+'4';
+const reviewedPhases=new Map([[PREFIX+'4',6.25],[PREFIX+'15',-1.8],[PREFIX+'1__0_1_1_84_3',1.8]]);
 for(const [id,p] of v.renderParts){
  assert.ok(p.assembled.equals(new THREE.Matrix4().set(...p.source.worldTransform.flat())), 'Immutable raw source pose');
  const expected=p.assembled.clone();
- if(id===phasedId)expected.multiply(new THREE.Matrix4().makeRotationZ(6.25*Math.PI/180));
- assert.ok(p.mesh.matrix.equals(expected), 'Only d96 receives the recorded static phase');
+ if(reviewedPhases.has(id))expected.multiply(new THREE.Matrix4().makeRotationZ(reviewedPhases.get(id)*Math.PI/180));
+ assert.ok(p.mesh.matrix.equals(expected), 'Only d96 and the reviewed ratchet/core packet receive static phases');
 }
 assert.ok(v.assemblyError('source')>0, 'Raw-source audit still exposes the intentional phase difference');
-results.push({check:'one reviewed d96 phase; every source matrix immutable and every other displayed movement pose unchanged',status:'pass'});
+results.push({check:'d96 and one rigid ratchet/core packet phased; every source matrix immutable and every other displayed movement pose unchanged',status:'pass'});
 let annotatedMeshes=0;
 for(const part of v.renderParts.values()){
  const data=v.sourceSurfaces.get(part.source.definitionId),g=part.mesh.geometry;

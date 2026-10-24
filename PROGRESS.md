@@ -3,6 +3,46 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Ratchet tooth contact follow-up — 24 October 2026
+
+Implemented from `f027338` on local `codex/wheel-contact-audit`. The production
+review server remains at <http://127.0.0.1:4179/>; reload existing browser tabs.
+See the [ratchet decision/evidence record](docs/RATCHET_CONTACT_REVIEW.md) and
+[provenance](assets/source-manifest/ratchet-contact.json).
+
+- Corrected d131 ratchet occurrence **15** together with its keyed barrel II
+  core d87 (`1__0_1_1_84_3`) by **+1.8° world Z**: local angles −1.8° / +1.8°
+  because their local axes point in opposite directions. Occurrence 14 stays
+  unchanged. Their relative mounting matrix is preserved within 8.9e−16.
+- Original ratchet common volume falls from 0.060692779 mm³ to zero, with
+  0.031730939 mm minimum solid distance. Decoded runtime triangles are disjoint
+  at 0.032225302 mm. Rejected isolated-wheel and quarter-turn alternatives are
+  recorded: they either retain tooth overlap or introduce keyed-core penetration.
+- All 364 other leaves are considered for each moved part: 32 exact before/after
+  checks, 694 broad-phase exclusions and two recovered-diamond checks. No increased
+  solid common; crown, click and click spring are explicitly checked. Barrel/cover
+  gaps remain 0.005 mm and the modeled mainspring gap remains 0.006985294 mm.
+  Existing core/screw common and nominal contacts remain; spring attachment,
+  loading, running engagement and manufacturing tolerances are not certified.
+- Added only two pose entries to the existing shared override. Original sources,
+  36 preexisting tracked assets, 222 overview geometry buffers, all source/base
+  target matrices and d96's earlier correction are preserved. Runtime controllers,
+  UI, materials, visibility and save/dependency formats are unchanged.
+- Verification passes: 111 CPU tests, 115 retained runtime checks, inventory,
+  1,119 sampled access checks, typecheck/lint, production build, source hashes,
+  Meshopt byte identity and HTTP metadata. Headless before/after live checks
+  independently verify 12 transforms across the three routes. Final explorer
+  suites pass 350 checks; Workshop focused 92, Easy 89 actions / 538 checks,
+  Hard 284 actions / 1,708 checks; walking passes 23 journey checks and 16
+  collision landings with matching render/collision poses on both holder sides.
+- Reproducible original-solid measurements, orthographic tooth/bore sections,
+  matched homepage close-ups, and browser reports are local under
+  `artifacts/ratchet-contact/`. Scripts and evidence hashes are committed; images,
+  original downloads and generated CAD remain local. No push, PR or publication.
+
+Next: review the nine remaining confirmed tooth pairs as coupled mechanisms;
+d144 remains an open-shell question. Static clearance is not mechanical certification.
+
 ## Wheel contact investigation and static phase — 24 October 2026
 
 Implemented from clean `4e33275` on local `codex/wheel-contact-audit`.

@@ -10,7 +10,7 @@ const { chromium } = await import(
     : 'playwright'
 );
 const base = process.argv[2] || 'http://127.0.0.1:4173';
-const out = path.resolve('artifacts/bench');
+const out = path.resolve(process.env.PLAY_QA_OUTPUT || 'artifacts/bench');
 await fs.mkdir(out, { recursive: true });
 const foreground = process.env.HEADED
   ? await launchForeground(chromium, { dpr: 1 })

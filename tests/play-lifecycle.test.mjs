@@ -97,23 +97,25 @@ test('offscreen thumbnail pixels are encoded for browser display without changin
 });
 
 test('Workshop load and reload apply the reviewed wheel phase once to seat and mesh', async () => {
-  const id = 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_4';
-  const record = JSON.parse(fs.readFileSync(new URL('../explorer/public/models/assembly-manifest.json', import.meta.url))).instances.find(p => p.id === id);
-  const globals = loadGlobals({overview: async () => scene(id).object, catalog: async () => scene('catalog').object, diamond: async () => scene('diamond').object});
-  globals.fetch = async path => ({ok: true, json: async () => path.includes('assembly-manifest') ? {instances: [record]} : {overview: 'overview', catalog: 'catalog'}});
-  const v = fixture(globals);
-  v.manifest = {initialLeafIds: [id], packets: [], finalLeafIds: [id], targetPoses: {[id]: record.worldTransform}};
-  const expected = new THREE.Matrix4().set(...record.worldTransform.flat()).multiply(new THREE.Matrix4().makeRotationZ(6.25 * Math.PI / 180));
-  for (let attempt = 0; attempt < 2; attempt++) {
-    await v.load();
-    assert.ok(v.ready);
-    const piece = v.pieces.get(id);
-    assert.ok(piece.pose.equals(expected));
-    assert.ok(piece.mesh.matrix.equals(expected));
-    assert.ok(piece.bounds.equals(new THREE.Box3().setFromBufferAttribute(piece.mesh.geometry.getAttribute('position')).applyMatrix4(expected)));
-    assert.deepEqual(v.manifest.targetPoses[id], record.worldTransform);
+  for (const [suffix, angle] of [['4', 6.25], ['15', -1.8], ['1__0_1_1_84_3', 1.8]]) {
+    const id = 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_' + suffix;
+    const record = JSON.parse(fs.readFileSync(new URL('../explorer/public/models/assembly-manifest.json', import.meta.url))).instances.find(p => p.id === id);
+    const globals = loadGlobals({overview: async () => scene(id).object, catalog: async () => scene('catalog').object, diamond: async () => scene('diamond').object});
+    globals.fetch = async path => ({ok: true, json: async () => path.includes('assembly-manifest') ? {instances: [record]} : {overview: 'overview', catalog: 'catalog'}});
+    const v = fixture(globals);
+    v.manifest = {initialLeafIds: [id], packets: [], finalLeafIds: [id], targetPoses: {[id]: record.worldTransform}};
+    const expected = new THREE.Matrix4().set(...record.worldTransform.flat()).multiply(new THREE.Matrix4().makeRotationZ(angle * Math.PI / 180));
+    for (let attempt = 0; attempt < 2; attempt++) {
+      await v.load();
+      assert.ok(v.ready);
+      const piece = v.pieces.get(id);
+      assert.ok(piece.pose.equals(expected));
+      assert.ok(piece.mesh.matrix.equals(expected));
+      assert.ok(piece.bounds.equals(new THREE.Box3().setFromBufferAttribute(piece.mesh.geometry.getAttribute('position')).applyMatrix4(expected)));
+      assert.deepEqual(v.manifest.targetPoses[id], record.worldTransform);
+    }
+    v.clearPieces();
   }
-  v.clearPieces();
 });
 
 test('all required load failures retain a disabled session, dispose successful siblings, and retry', async () => {

@@ -479,8 +479,7 @@ def validate_candidate():
     review = json.loads((OUT / 'candidate-neighbors.json').read_text())
     override = json.loads((ROOT / 'assets/authored/wheel-display-poses.json').read_text())
     assert override['sourceSha256'] == review['sourceSha256'] == SHA
-    assert len(override['wheels']) == 1
-    wheel = override['wheels'][0]
+    wheel = next(w for w in override['wheels'] if w['leafId'] == review['id'])
     assert (wheel['leafId'], wheel['localZDegrees'], wheel['pivotLocalMm']) == (
         review['id'], review['localZAngleDegrees'], review['localPivotMm'])
     checks = {

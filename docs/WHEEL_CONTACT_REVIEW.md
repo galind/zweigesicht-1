@@ -1,8 +1,9 @@
 # Wheel contact review — 24 October 2026
 
-One static phase correction is justified: rotate transfer wheel **d96** by
-**+6.25° about its original local Z bore axis**. This clears its contacts with
-barrel II d85 and center pinion d93 without changing either neighbor. Ten other
+Two static phase corrections are now recorded: transfer wheel **d96** receives
+**+6.25° about its original local Z bore axis**, clearing barrel II d85 and center
+pinion d93. The [ratchet follow-up](RATCHET_CONTACT_REVIEW.md) rotates d131
+occurrence 15 and its keyed core together by +1.8° world Z. Nine other
 non-coaxial solid contacts remain at their original poses. They are recorded
 findings, not a conclusion that the maker's manufactured movement is defective.
 
@@ -65,7 +66,7 @@ witness measurements in `details.json`.
 | d93 center pinion / d96 transfer wheel           | `3__0_1_1_92_1` / `4`                 |         0.010153667 | Cleared by d96 phase                     |
 | d94 center wheel / d237 third pinion             | `3__0_1_1_92_2` / `63__0_1_1_236_1`   |         0.010055919 | Source pose retained                     |
 | d97 coupling wheel / d249 crown wheel            | `5` / `74`                            |         0.009449354 | Source pose retained; perpendicular axes |
-| d131 ratchet wheels                              | `14` / `15`                           |         0.060692779 | Source poses retained                    |
+| d131 ratchet wheels                              | `14` / `15`                           |         0.060692779 | Cleared by ratchet/core packet phase     |
 | d137 cannon pinion 1 / d210 motion-works wheel 1 | `20` / `55__0_1_1_209_1`              |         0.008949716 | Source pose retained                     |
 | d141 hour wheel 1 / d211 motion-works pinion 1   | `26__0_1_1_140_1` / `55__0_1_1_209_2` |         0.015449548 | Source pose retained                     |
 | d187 hour wheel 2 / d217 motion-works pinion 3   | `40__0_1_1_186_1` / `57__0_1_1_215_2` |         0.000010340 | Source pose retained; small contact      |
@@ -118,7 +119,8 @@ section sampling, establish both final pair clearances:
 `review-wheel-contact.mjs` independently checks the actual Meshopt-decoded runtime
 triangles with BVHs. Both source pairs intersect before; neither intersects
 after. Their rendered mesh gaps are 0.027128 mm and 0.022821 mm respectively.
-All ten unresolved pairs keep identical before/after mesh results, and all 222
+The ratchet follow-up clears one further pair. The nine unresolved pairs keep
+identical before/after mesh results, and all 222
 overview mesh buffers retain their original position/normal/index bytes.
 
 See `artifacts/wheel-contact/transfer-wheel-before-after.png`. This is a valid
@@ -182,12 +184,13 @@ other confirmed parallel-axis pairs; it does not solve a coupled train or qualif
 perpendicular crown-wheel contact. Use only headless browser runners for this
 review; the bench collision runner accepts `PLAY_QA_OUTPUT` for local evidence.
 
-The remaining ten pairs retain identical before/after geometry and poses, so
+The remaining nine pairs retain identical before/after geometry and poses, so
 their measured commons are unchanged. Next options are to investigate coherent
 wheel/pinion packet phases and all their neighbors, or seek maker/mechanical
 review where clocking is constrained by ratchets, setting states or escapement
-contact. In particular, review both crown-wheel interfaces together and keep the
-ratchet/click relationship; do not apply isolated pair phases blindly. Closing
+contact. In particular, review both crown-wheel interfaces together and preserve coupled
+mounting/contact relationships as in the ratchet follow-up; do not apply isolated
+pair phases blindly. Closing
 d144's shell, modifying tooth profiles or moving any axes is not justified by
 this review. Static visual clearance is not mechanical certification, and the
 existing release gates remain in force.
