@@ -11,8 +11,8 @@ const browser = await chromium.launch({
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 page.setDefaultTimeout(20000);
-const base = process.argv[2] || "http://127.0.0.1:4186";
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/bench-ui";
+const base = process.argv[2] || "http://127.0.0.1:4187";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/bench-popup";
 await fs.mkdir(out, { recursive: true });
 const checks = [];
 const check = (name, pass, detail) => {
@@ -27,7 +27,7 @@ const layout = () =>
   page.evaluate(() =>
     [
       ...document.querySelectorAll(
-        ".bench-header a,.bench-menu,.bench-menu button,.bench-menu-controls,.bench-legend",
+        ".bench-header a,.bench-start,.bench-start button,.bench-menu,.bench-menu button,.bench-menu-controls,.bench-legend,.bench-entry-popup",
       ),
     ].map((e) => {
       const r = e.getBoundingClientRect();
@@ -48,9 +48,6 @@ try {
     radius: getComputedStyle(document.querySelector(".bench-trigger")).borderRadius,
   }));
   await shot("homepage");
-  await page.getByRole("link", { name: "Walk inside the movement", exact: true }).click();
-  await page.waitForURL(base + "/bench");
-  check("homepage enters bench", true);
   // Diagnostics are enabled only for the following local test visits.
   for (const [width, height, text] of [
     [1440, 900, 100],
@@ -61,13 +58,80 @@ try {
   ]) {
     const label = `${width}x${height}-${text}`;
     await page.setViewportSize({ width, height });
+    await page.goto(base + "/?text=" + text);
+    const trigger = page.getByRole("button", { name: "Walk inside the movement", exact: true });
+    await trigger.click();
+    const popup = page.getByRole("dialog");
+    await popup.waitFor();
+    check(
+      label + " homepage shows controls before navigation",
+      new URL(page.url()).pathname === "/" &&
+        (await popup
+          .innerText()
+          .then((t) => ["WASD", "Mouse", "Space", "R", "Esc"].every((k) => t.includes(k)))),
+    );
+    check(
+      label + " popup layout",
+      (await layout()).every((x) => x.within && !x.overflow),
+      await layout(),
+    );
+    await page.keyboard.press("Escape");
+    await popup.waitFor({ state: "hidden" });
+    await page.waitForFunction(
+      () => document.activeElement?.textContent?.trim() === "Walk inside the movement",
+    );
+    check(
+      label + " cancel restores homepage focus",
+      await trigger.evaluate((e) => e === document.activeElement),
+    );
+    await trigger.press("Enter");
+    await popup.waitFor();
+    await enter().waitFor();
+    await page.waitForFunction(
+      () => document.activeElement?.textContent?.trim() === "Enter the movement",
+    );
+    check(
+      label + " popup focuses Enter",
+      await enter().evaluate((e) => e === document.activeElement),
+    );
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+    await page.waitForFunction(() =>
+      document.querySelector('[role="dialog"]')?.contains(document.activeElement),
+    );
+    check(
+      label + " popup contains keyboard focus",
+      await popup.evaluate((e) => e.contains(document.activeElement)),
+    );
+    await shot("popup-" + label);
+    await enter().click();
+    await page.waitForURL(base + "/bench");
+    await page.waitForFunction(() => !!document.pointerLockElement);
+    await page.locator(".bench-legend").waitFor();
+    check(
+      label + " popup enters captured scene without another instruction screen",
+      (await page.locator(".bench-menu,.bench-start,.bench-entry-popup").count()) === 0,
+    );
+    await shot("arrival-" + label);
+    await page.keyboard.press("Escape");
+    await page.getByRole("button", { name: "Resume exploring", exact: true }).waitFor();
+    await page.getByRole("link", { name: "Back to the explorer", exact: true }).click();
+    await page.waitForURL(base + "/");
+    await page.goBack();
+    await page.waitForURL(base + "/bench");
+    await enter().waitFor();
+    check(
+      label + " browser Back never reuses capture intent",
+      (await page.evaluate(() => !document.pointerLockElement)) &&
+        (await page.locator(".bench-start").isVisible()),
+    );
     await page.goto(base + "/bench?inspect=1");
     await ready();
     if (text !== 100) await page.addStyleTag({ content: `html{font-size:${text}%}` });
     const styles = await page.evaluate(() => ({
-      font: getComputedStyle(document.querySelector(".bench-menu")).fontFamily,
-      color: getComputedStyle(document.querySelector(".bench-menu h1")).color,
-      radius: getComputedStyle(document.querySelector(".bench-menu")).borderRadius,
+      font: getComputedStyle(document.querySelector(".bench-start")).fontFamily,
+      color: getComputedStyle(document.querySelector(".bench-start")).color,
+      radius: getComputedStyle(document.querySelector(".bench-start")).borderRadius,
     }));
     check(
       label + " uses homepage font, foreground and surface radius",
@@ -85,7 +149,7 @@ try {
       label + " navigation and menu do not overlap",
       await page.evaluate(() => {
         const header = document.querySelector(".bench-header").getBoundingClientRect();
-        const menu = document.querySelector(".bench-menu").getBoundingClientRect();
+        const menu = document.querySelector(".bench-start").getBoundingClientRect();
         return header.bottom < menu.top;
       }),
     );
@@ -101,26 +165,28 @@ try {
           });
         return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
       };
-      return [".bench-intro", ".bench-menu-controls", ".bench-enter", ".bench-header a"].map(
-        (selector) => {
-          const element = document.querySelector(selector);
-          const style = getComputedStyle(element);
-          const background =
-            selector === ".bench-enter" || selector === ".bench-header a"
-              ? style.backgroundColor
-              : getComputedStyle(document.querySelector(".bench-menu")).backgroundColor;
-          const a = luminance(style.color),
-            b = luminance(background);
-          return { selector, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
-        },
-      );
+      return [".bench-enter", ".bench-header a"].map((selector) => {
+        const element = document.querySelector(selector);
+        const style = getComputedStyle(element);
+        const background =
+          selector === ".bench-enter" || selector === ".bench-header a"
+            ? style.backgroundColor
+            : getComputedStyle(document.querySelector(".bench-menu")).backgroundColor;
+        const a = luminance(style.color),
+          b = luminance(background);
+        return { selector, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
+      });
     });
     check(
       label + " text contrast exceeds 4.5:1",
       contrast.every((x) => x.ratio >= 4.5),
       contrast,
     );
-    await shot("entry-" + label);
+    check(
+      label + " direct visit has no repeated instructions",
+      (await page.locator(".bench-menu-controls,h1").count()) === 0,
+    );
+    await shot("direct-" + label);
     await page.keyboard.press("Shift+Tab");
     check(
       label + " keyboard navigation focus visible",
@@ -133,7 +199,7 @@ try {
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
     await page.waitForFunction(() => !!document.pointerLockElement);
-    await page.locator(".bench-menu").waitFor({ state: "hidden" });
+    await page.locator(".bench-menu,.bench-start").waitFor({ state: "hidden" });
     check(
       label + " explicit keyboard entry captures mouse",
       (await page.locator(".bench-menu").count()) === 0,
@@ -224,7 +290,7 @@ try {
     await page.waitForTimeout(1200);
     await enter().click();
     await page.waitForFunction(() => !!document.pointerLockElement);
-    await page.locator(".bench-menu").waitFor({ state: "hidden" });
+    await page.locator(".bench-menu,.bench-start").waitFor({ state: "hidden" });
     await page.keyboard.press("Escape");
     await page.waitForFunction(() => !document.pointerLockElement);
     await enter().waitFor();
@@ -233,6 +299,29 @@ try {
     check(label + " resume and return navigation", true);
   }
   await page.setViewportSize({ width: 1024, height: 640 });
+  // Escape during a pending homepage entry must cancel future automatic capture.
+  let finishLoad;
+  const heldLoad = new Promise((resolve) => {
+    finishLoad = resolve;
+  });
+  await page.route("**/bench-local/environment.glb", async (route) => {
+    await heldLoad;
+    await route.continue();
+  });
+  await page.goto(base + "/");
+  await page.getByRole("button", { name: "Walk inside the movement", exact: true }).click();
+  await enter().click();
+  await page.waitForURL(base + "/bench");
+  await page.getByText("Loading the movement…", { exact: true }).waitFor();
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(6000);
+  finishLoad();
+  await enter().waitFor();
+  check(
+    "Escape during slow loading cancels automatic capture",
+    await page.evaluate(() => !document.pointerLockElement),
+  );
+  await page.unroute("**/bench-local/environment.glb");
   // Hold the environment response to inspect an actual pending load, then fail it.
   let release;
   const pending = new Promise((resolve) => {
@@ -285,7 +374,7 @@ try {
   });
   await enter().click();
   await page.waitForFunction(() => !!document.pointerLockElement);
-  await page.locator(".bench-menu").waitFor({ state: "hidden" });
+  await page.locator(".bench-menu,.bench-start").waitFor({ state: "hidden" });
   check("capture retry recovers", (await page.getByRole("alert").count()) === 0);
   await page.keyboard.press("Escape");
   await page.evaluate(() =>

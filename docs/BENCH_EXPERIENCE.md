@@ -74,19 +74,31 @@ Other internal CAD uncertainties remain unchanged.
 
 ## Walking interface
 
-The entry and Escape menu share the homepage's sans-serif type, neutral colors
-and compact buttons. Enter captures the mouse; after the first entry, the action
-reads **Resume exploring**. Brief keyboard/mouse hints sit below it. Reset and
-existing Auto/Low/High detail controls appear only in the Escape menu. During
-exploration, only the homepage link and a compact WASD/Space/R/Escape hint row
-remain; no station/height badge, reticle or flight HUD is shown.
+The homepage's **Walk inside the movement** button opens a compact controls popup.
+**Enter the movement** then navigates client-side to `/bench` and requests mouse
+capture when the scene is ready. There is no second instruction screen. The popup
+and Escape menu share one controls component and the homepage's neutral styling.
+Escape or Close dismisses the popup and restores focus to its homepage button.
 
-Loading and errors retain announced status, retry and navigation. Entry, resume
-and retry receive visible keyboard focus. `scripts/bench/ui-check.mjs` verifies
-actual capture/look, keyboard input, return navigation, loading/error recovery,
-contrast and desktop layouts including 200% text. Actual homepage and before/after
-captures are local under `artifacts/bench-ui/`; run with the same Playwright/Chrome
-environment variables as the other browser runners below.
+Entry intent is consumed once and is not stored across reloads. Escape, blur or
+hiding the document while loading cancels automatic capture. Direct visits and
+browser Back show the scene with a compact Enter button; denied capture also
+retains that button and a clear error. Loading and retry use the same small status
+area. Browser restrictions can require an additional click; capture must never
+be forced after cancellation or focus loss.
+
+After capture, Escape opens the existing menu with **Resume exploring**, brief
+controls, Reset and Auto/Low/High detail. Exploration retains only the homepage
+link and WASD/Space/R/Escape hints. Scene geometry, movement/camera controls and
+visitor dimensions are unchanged; no badge, reticle or flight HUD is shown.
+
+`scripts/bench/ui-check.mjs` verifies the complete homepage-popup transition,
+cancellation, keyboard focus, browser Back, direct entry, capture/look, movement,
+loading/error recovery and desktop layouts including 200% text. The homepage
+entry runner also checks small viewports. Actual popup, arrival, direct-visit,
+menu and error captures are local under `artifacts/bench-popup/`. Run with the
+same Playwright/Chrome environment variables as the browser runners below.
+The older `artifacts/bench-ui/` captures record the superseded entry card.
 
 ## Controls, collision and lifetime
 

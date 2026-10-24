@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type { BenchViewer, BenchStatus } from './BenchViewer';
+import { BenchControls } from './BenchControls';
+import { consumeBenchEntry } from './entryIntent';
 import './bench.css';
 const initial: BenchStatus = {
   ready: false,
@@ -14,11 +16,26 @@ export default function Bench() {
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<BenchViewer | null>(null);
   const enter = useRef<HTMLButtonElement>(null);
+  const entryIntent = useRef<boolean | null>(null);
   const [hasEntered, setHasEntered] = useState(false);
   const [state, setState] = useState(initial),
     [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let disposed = false;
+    if (entryIntent.current === null) entryIntent.current = consumeBenchEntry();
+    let shouldEnter = attempt === 0 && entryIntent.current;
+    const cancelEntry = () => {
+      shouldEnter = false;
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') cancelEntry();
+    };
+    const onVisibility = () => {
+      if (document.hidden) cancelEntry();
+    };
+    window.addEventListener('blur', cancelEntry);
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('visibilitychange', onVisibility);
     void import('./BenchViewer')
       .then(({ BenchViewer }) => {
         if (disposed || !host.current) return;
@@ -31,7 +48,18 @@ export default function Bench() {
           viewer.current = v;
           if (new URLSearchParams(location.search).has('inspect'))
             (window as unknown as { bench: BenchViewer | undefined }).bench = v;
-          void v.load();
+          void v.load().then(() => {
+            if (
+              !disposed &&
+              shouldEnter &&
+              v.status.ready &&
+              document.hasFocus() &&
+              !document.hidden
+            ) {
+              shouldEnter = false;
+              void v.enter();
+            }
+          });
         } catch (error) {
           console.error(error);
           setState({
@@ -50,6 +78,9 @@ export default function Bench() {
       });
     return () => {
       disposed = true;
+      window.removeEventListener('blur', cancelEntry);
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('visibilitychange', onVisibility);
       viewer.current?.dispose();
       viewer.current = null;
       delete (window as unknown as { bench?: BenchViewer }).bench;
@@ -67,9 +98,11 @@ export default function Bench() {
         </Link>
       </header>
       {!state.captured && (
-        <section className="bench-menu" aria-labelledby="bench-title">
-          <h1 id="bench-title">Walk inside the movement</h1>
-          <p className="bench-intro">Use a keyboard and mouse to explore.</p>
+        <section
+          className={hasEntered ? 'bench-menu' : 'bench-start'}
+          aria-label="Walking menu"
+        >
+          {hasEntered && <h1>Walk inside the movement</h1>}
           {state.error && (
             <p role="alert" className="bench-error">
               {state.error}
@@ -94,23 +127,7 @@ export default function Bench() {
           ) : (
             <output className="bench-loading">Loading the movement…</output>
           )}
-          <div className="bench-menu-controls" aria-label="Controls">
-            <span>
-              <kbd>WASD</kbd> Move
-            </span>
-            <span>
-              <kbd>Mouse</kbd> Look
-            </span>
-            <span className="bench-thrust">
-              <kbd>Space</kbd> Hold to rise · Release to fall
-            </span>
-            <span>
-              <kbd>R</kbd> Reset position
-            </span>
-            <span>
-              <kbd>Esc</kbd> Menu
-            </span>
-          </div>
+          {hasEntered && <BenchControls />}
           {state.ready && hasEntered && (
             <div className="bench-options">
               <button onClick={() => viewer.current?.reset()}>

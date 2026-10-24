@@ -27,7 +27,7 @@ try {
     await page.goto(base + '/?no3d=1&text=' + text, {
       waitUntil: 'networkidle',
     });
-    const entry = page.getByRole('link', {
+    const entry = page.getByRole('button', {
       name: 'Walk inside the movement',
       exact: true,
     });
@@ -51,6 +51,11 @@ try {
       JSON.stringify({ width, height, text, accessible }),
     );
     await entry.click();
+    await page.getByRole('dialog').waitFor();
+    assert.equal(new URL(page.url()).pathname, '/');
+    await page
+      .getByRole('button', { name: 'Enter the movement', exact: true })
+      .click();
     await page.waitForURL(base + '/bench');
     report.push({ width, height, text, pass: true });
   }

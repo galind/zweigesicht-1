@@ -47,16 +47,11 @@
   background: var(--background);
 }
 .bench-menu h1 {
-  margin: 0;
+  margin: 0 0 24px;
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.25;
-}
-.bench-intro {
-  margin: 12px 0 24px;
-  color: var(--muted-foreground);
-  font-size: 0.875rem;
 }
 .bench-menu-controls {
   display: grid;
@@ -69,7 +64,8 @@
 .bench-thrust {
   grid-column: 1 / -1;
 }
-.bench-experience kbd {
+.bench-experience kbd,
+.bench-entry-popup kbd {
   font: inherit;
   font-weight: 600;
   color: var(--foreground);
@@ -166,4 +162,46 @@
   .bench-legend {
     max-width: calc(100% - 24px);
   }
+}
+/* The homepage owns first-use instructions; /bench opens directly on the scene. */
+.bench-start {
+  position: absolute;
+  left: 24px;
+  bottom: 20px;
+  width: min(24rem, calc(100% - 48px));
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--background);
+}
+.bench-entry-popup[data-slot='sheet-content'] {
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: min(24rem, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: 24px;
+  gap: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--background);
+  box-shadow: none;
+  transition: none;
+}
+.bench-entry-popup [data-slot='sheet-header'] {
+  padding: 0 !important;
+}
+.bench-entry-popup [data-slot='sheet-title'] {
+  font:
+    600 1.125rem/1.4 Arial,
+    Helvetica,
+    sans-serif;
+  letter-spacing: -0.02em;
+}
+.bench-entry-popup [data-slot='sheet-description'] {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.bench-entry-popup .bench-enter {
+  margin-top: 24px;
 }

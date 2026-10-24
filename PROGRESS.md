@@ -3,6 +3,34 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Homepage walking popup — 24 October 2026
+
+Updated locally on `codex/bench-ui` after owner feedback. **Walk inside the
+movement** now opens the brief controls on the homepage. **Enter the movement**
+then navigates to `/bench` and captures the mouse when ready, without repeating
+the instruction card. The popup reuses the existing dialog/focus infrastructure
+with neutral styling and no added blur or decoration. Escape/resume and all
+movement, camera, scene, material, corrected seating and scale settings remain.
+
+- Entry intent is one-use and memory-only. Direct visits/Back show a small Enter
+  button over the scene. Escape, blur and hidden-document events during loading
+  cancel automatic capture; declined capture and failed loading retain clear
+  error/retry controls. No persistent auto-entry preference was added.
+- **137 UI checks** verify popup → route → actual capture, cancellation/focus restoration,
+  focus containment, direct visits/Back, mouse look, movement/thrust,
+  Escape/resume, loading cancellation and error recovery across four desktop
+  sizes plus 200% text. Five homepage entry checks also cover small viewports.
+  Six lifecycle checks, all 63 jetpack checks, 118 CPU tests, typecheck, lint and
+  production build pass. Actual captures/reports stay in `artifacts/bench-popup/`.
+- Local preview starts at <http://127.0.0.1:4187/>. The full uninterrupted flow
+  passes in local Chrome. Browsers that decline pointer lock may require the
+  compact Enter action; physical-device/human-feel qualification remains open.
+
+Next: owner walkthrough of the revised entry flow. No push, deployment,
+publication or CAD redistribution. The previous entry-card milestone below is
+historical; its visual simplification remains, with first-use instructions now
+on the homepage.
+
 ## Quiet walking UI — 24 October 2026
 
 Implemented locally on `codex/bench-ui`. `/bench` now uses the homepage's

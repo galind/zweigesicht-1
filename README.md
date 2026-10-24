@@ -35,8 +35,8 @@ Workshop is excluded from indexing and the sitemap.
 
 ## Walk inside the movement
 
-The homepage’s **Walk inside the movement** button opens `/bench`, a separate
-first-person desktop experience on the actual static CAD. Local holder files
+The homepage’s **Walk inside the movement** button shows a controls popup before
+entering `/bench`, a separate first-person desktop experience on the actual static CAD. Local holder files
 and the Blender environment must be prepared first; see the
 [bench setup, controls, design decisions and testing strategy](docs/BENCH_EXPERIENCE.md).
 Holder downloads and generated bench assets remain local and release-gated.
