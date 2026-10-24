@@ -2,7 +2,7 @@
 
 `/bench` is a local desktop walk across two simultaneous static copies of the
 same movement: bridge-up in the foreground and dial-side-up farther back. One
-walnut desk, green linoleum forecourt and continuous external promenade connect
+walnut desk with an open green worktop and two straight ramps connects
 their west entrances. There is no presentation switch, fade or travel reset.
 The explorer and Workshop retain separate controllers and resources.
 
@@ -34,15 +34,19 @@ collision instances keep `partId`, plus distinct `stationId` and `instanceId`.
 Geometry, finishes and per-geometry BVHs are shared; transforms and bounds are
 per instance. Neither station becomes hidden or non-colliding when looking away.
 
-The desk remains 180 × 140 mm. The shared forecourt is at Y12.4, with spawn
-(−57, 12.402, 55). Two 15.6 mm runs rise by 2.6 mm each, separated by a level bay
-at Y15.0. Bridge access stays Y17.6, dial access Y15.9. The promenade runs from
-(−49,12) through (−49,−18) and (13,−18) to (13,−6) in X/Z; the 56 mm cross-run
-spreads the 1.7 mm height difference. Clear width is 6 mm inside the selected
-filled steel guards. The connector uses only external approaches, never a new
-east CAD landing. A broad continuous joinery base supports the routes and partly
-insets the intact red holders. Actual open wells have 22.8 mm radius with a
-separate east relief to X+27 / Z±5 for each crown.
+The owner requested a much simpler environment after reviewing the initial
+terraced version. The desk is now one 180 × 140 mm worktop at Y13.5, with a
+1 mm walnut border and no upper promenade, pause terraces, guards, tools or
+backdrop wall. The ivory scene background stays. Spawn is (−64, 13.502, 40),
+facing the movements. The open surface provides continuous circulation around
+both stations, rather than a prescribed narrow path.
+
+Two 6 mm wide straight ramps rise at 1:6 to the unchanged west interfaces:
+bridge X−73.6 → −49 at Y17.6, dial X−1.4 → 13 at Y15.9. Short level landings
+join the existing thresholds. Both ramps have solid support. The intact red
+holders remain partly inset in actual 22.8 mm radius wells, with east relief
+out to station X+27 / Z±5 for each crown. Wells and outer desk edges are visible
+open drops, without invisible guards. Recovery still uses the safe landings.
 
 The final interfaces retain the original west endpoints (local X−14 / −16.2),
 2.8 mm width, original approach heights and original undersides. Keyboard return
@@ -122,11 +126,12 @@ Original holder downloads must already exist and match `holder.json`. The
 Python file is reproducible authored source. It saves the editable
 `assets/generated/bench/environment.blend` and exports
 `explorer/public/bench-local/environment.glb`. Add `-- --blockout` for neutral
-materials without distant props. Both modes were inspected headlessly at actual
-eye height before finishing. No foreground browser or desktop takeover was used.
+materials. The simpler finished scene was inspected headlessly at actual
+eye height. No foreground browser or desktop takeover was used.
 
 `assets/authored/atelier-layout.json` records station transforms, arrival,
-checkpoints and centreline intent. Blender models numeric millimetres using
+checkpoints, worktop height and a sample external route. Blender models numeric
+millimetres using
 (world X, −world Z, world Y); glTF Y-up export restores the runtime convention.
 Maker CAD is not embedded in the authored scene or editable environment export.
 
@@ -139,11 +144,12 @@ albedo maps survive intact. No invisible proxy floors or walls are generated.
 
 Collections are `ENV_WALKABLE`, `ENV_BOUNDARY`, `ENV_DECOR`,
 `INTERFACE_BRIDGE` and `INTERFACE_DIAL`. Meshes merge by material and role inside
-each collection. Four opaque materials provide walnut, green linoleum, dark
-steel and ivory; two small procedural albedo maps are authored and packed by
-Blender. The finished environment has 12 meshes and 5,074 triangles.
-Bevels are baked into both visible and collision geometry where applicable.
-Only a distant tool-rest silhouette and drawer seam supplement the circulation.
+each collection. Three opaque materials provide walnut, green linoleum and dark
+steel; two small albedo maps are authored and packed by Blender. The simpler
+environment has 8 meshes and 2,164 triangles (220,208 bytes). Empty boundary
+and decoration collections remain available, but export no geometry. Boolean
+cutters retain a single material per mesh so glTF extras remain on each render
+mesh. Blender 5.2 uses `use_renderable` to exclude the hidden scale reference.
 A hidden `QA_SCALE_REFERENCE_1.65mm` collection in the editable blend provides a
 temporary size reference; renderable-only export excludes it from the runtime.
 
@@ -197,15 +203,39 @@ is available separately through profiler `BENCH_BROWSER=headed` and lifecycle
 `HEADED=1`, but was not used for this task. Physical mouse feel, representative
 GPUs/browsers and sustained thermal behavior remain unverified.
 
-Current production verification and measured performance are recorded in
+Current verification and measured performance are recorded in
 `PROGRESS.md`. Local evidence is under `artifacts/paired-atelier/` (including the
 retained grayscale `blockout/`), with profiler/lifecycle reports in
-`artifacts/bench/`. The overall, top-down, arrival, pause, promenade, bridge/dial
-entry and both crown captures are synthetic review cameras, distinct from the
-keyboard journey screenshots. Crown fit remains unresolved by the owner's
+`artifacts/bench/`. The simpler overall, top-down, arrival, approach, worktop,
+bridge/dial entry and crown captures in `artifacts/paired-atelier/simple/` are
+synthetic review cameras, distinct from the keyboard journey screenshots.
+Aerial review cameras use a 0.5 mm near plane for distant depth precision;
+eye-height captures and the runtime retain the original 0.035 mm near plane. Crown fit remains unresolved by the owner's
 explicit decision.
 
-## Paired-world production results — 24 October 2026
+## Simpler desk verification — 24 October 2026
+
+The simpler environment passes 39 keyboard journey checks, independent source
+and phase pose checks, render/collision agreement, 16 CAD landings, retained
+openings and three open-floor/outer-edge probes. All 113 CPU tests, typecheck,
+lint and production build pass. Both crown/holder conflicts remain explicitly
+unresolved. Actual authored-environment triangle clearance is at least 1.849 mm
+bridge / 1.720 mm dial. Generated assets and evidence remain local.
+
+Six Auto workloads repeat turning and walking-plus-turning at each station and
+with both visible: headless Chrome 155 / M4 Metal, 2400 × 1300 CSS, DPR2, 700 ms
+warmup and six seconds per sample. Ratio stays 1; frame p95 is 16.8–17.4 ms,
+with 2/2,153 intervals over 25 ms and none over 50 ms. No focus loss or GPU
+disjoint event occurred. This is a regression spot-check for the simpler scene;
+High, Low, physical devices and first-paint costs were not requalified here.
+Evidence: `artifacts/bench/simple-atelier.json` and source/asset hashes in
+`artifacts/paired-atelier/simple/build-manifest.json`. The walking camera,
+renderer, source poses, materials and physics implementation remain unchanged.
+
+## Original terraced layout results — 24 October 2026
+
+The following measurements and counts precede the owner-requested simplification.
+They describe `ef2a14d`, not the current environment.
 
 Application revision **`ef2a14d`**, production server on port 4183. Chrome
 155.0.8059.86, headless, ANGLE Metal / Apple M4, 10 logical cores and 24 GB RAM;

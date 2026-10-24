@@ -284,15 +284,17 @@ try {
       (e) => e.collides === (e.role !== 'decor'),
     ),
   );
+  // Former rail locations are now freely walkable. Outer edges remain real drops.
   report.boundaries = await page.evaluate(() => {
     const b = window.bench,
       rows = [];
-    for (const [id, x, y, z, key] of [
-      ['bridge', -50, 17.602, -5, 'KeyA'],
-      ['dial', 14, 15.902, -14, 'KeyD'],
+    for (const [id, x, z, key] of [
+      ['open worktop at former west rail', -50, -5, 'KeyA'],
+      ['open worktop north of dial', 14, -32, 'KeyD'],
+      ['visible outer edge has no invisible wall', 86, 40, 'KeyD'],
     ]) {
       b.walker.clear();
-      b.walker.feet.set(x, y, z);
+      b.walker.feet.set(x, 13.502, z);
       b.walker.grounded = true;
       b.walker.yaw = 0;
       b.walker.keys.add(key);
@@ -301,9 +303,8 @@ try {
         id,
         feet: b.walker.feet.toArray(),
         pass:
-          id === 'bridge'
-            ? b.walker.feet.x >= -51.781
-            : b.walker.feet.x <= 15.781,
+          Math.abs(b.walker.feet.x - x) > 5 &&
+          (x === 86 ? b.walker.feet.y < 13 : b.walker.grounded),
       });
     }
     b.walker.clear();
@@ -318,9 +319,9 @@ try {
     ['overall', [-85, 85, 110], [0, 8, 10]],
     ['pair-detail', [-52, 54, 68], [4, 12, 4]],
     ['circulation', [0, 150, 10], [0, 0, 10]],
-    ['arrival', [-57, 13.88, 50], [-38, 17, 12]],
-    ['pause', [-57, 16.48, 33], [-24, 17, 12]],
-    ['promenade', [-35, 18.746, -18], [38, 16, -6]],
+    ['arrival', [-64, 14.98, 40], [-24, 17, 12]],
+    ['approach', [-65, 16.48, 12], [-24, 17, 12]],
+    ['worktop', [-35, 14.98, -18], [38, 16, -6]],
     ['bridge-entry', [-39, 19.08, 12], [-22, 17, 12]],
     ['dial-entry', [20.8, 17.38, -6], [38, 15.7, -6]],
     ['bridge-crown', [5, 16.48, 18], [-1, 14, 12]],
@@ -340,10 +341,15 @@ try {
           name,
         );
         if (atEyeHeight) eye[1] = floor + 1.48;
+        // Aerial review cameras are ~150 mm away: the walking near plane loses
+        // depth precision between the thin mat and timber at that distance.
+        // Actual eye-height captures retain the unchanged runtime near plane.
+        b.camera.near = atEyeHeight ? 0.035 : 0.5;
+        b.camera.updateProjectionMatrix();
         b.camera.position.set(...eye);
         b.camera.lookAt(...target);
         b.renderer.render(b.scene, b.camera);
-        return { name, eye, target, floor, atEyeHeight };
+        return { name, eye, target, floor, atEyeHeight, near: b.camera.near };
       },
       { name, eye, target },
     );

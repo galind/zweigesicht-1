@@ -77,7 +77,7 @@ export default function Bench() {
           <p>
             Two faces of one movement, on one desk.
             <br />
-            Follow the green promenade, then find your own way.
+            Walk between them and explore at your own pace.
           </p>
           <div className="bench-menu-controls">
             <span>

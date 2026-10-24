@@ -133,7 +133,7 @@ export class BenchViewer {
         this.scene.add(station.root);
       }
       this.walker.spawn.fromArray(layout.arrival);
-      this.walker.spawnYaw = 0;
+      this.walker.spawnYaw = layout.arrivalYaw;
       this.observer = new ResizeObserver(this.resize);
       this.observer.observe(host);
       document.addEventListener('pointerlockchange', this.lockChanged);

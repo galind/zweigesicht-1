@@ -3,7 +3,37 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
-## Paired atelier — implemented and locally verified, 24 October 2026
+## Simpler paired desk — 24 October 2026
+
+The owner requested a much simpler experience after reviewing the paired atelier.
+Replaced the terraced landscape with one open green worktop at Y13.5, a narrow
+walnut border and two straight 1:6 access ramps. Removed the upper promenade,
+pause terraces, guards, backdrop wall and tool props. Both movements and original
+crowns remain simultaneous; every CAD pose, reviewed phase and holder is unchanged.
+The known crown/holder fit stays unresolved by the owner's explicit decision.
+
+- Blender source and editable scene retained. Environment reduced from 12 meshes /
+  5,074 triangles to 8 meshes / 2,164 triangles (220,208-byte GLB).
+- Independent pose, render/collision, 16 CAD landing and opening checks pass.
+  Authored geometry clears the crowns by at least 1.849 mm / 1.720 mm
+  (bridge/dial). Three probes verify open circulation and visible edge drops.
+- All 39 keyboard journey checks pass: both ramps and real CAD entries in both
+  directions, no required jump, swap or reset; capture, recovery, retry and
+  disposal remain working. All 113 CPU tests, typecheck, lint and production
+  build pass.
+- Six fresh Auto turning/walking samples (bridge, dial, pair), headless Chrome
+  155 / M4 Metal at 2400 × 1300 CSS / DPR2, retain render ratio 1. Frame p95
+  16.8–17.4 ms; 2/2,153 intervals over 25 ms, none over 50 ms. This is a local
+  regression spot-check, not a physical-device or fixed-High qualification.
+  Report: `artifacts/bench/simple-atelier.json`; source/asset hashes accompany
+  the review. The application camera and renderer are unchanged.
+- Local review: <http://127.0.0.1:4183/bench>.
+- New headless captures and reports: `artifacts/paired-atelier/simple/`.
+  The previous terraced captures and performance figures below are historical.
+
+No push, deployment, publication or source-asset redistribution.
+
+## Previous terraced atelier — locally verified, 24 October 2026
 
 Implemented from clean `01860fa` on local `codex/paired-atelier`. Production
 review: <http://127.0.0.1:4183/bench>. The selected paired atelier is now one

@@ -115,17 +115,18 @@ try {
   await shot('journey-arrival');
   await capture();
   const initialResets = (await snap()).resets;
-  await walkTo(-57, 33, 'gentle lower rise to level pause bay');
-  await shot('journey-pause');
-  await walkTo(-57, 12, 'gentle upper rise');
-  await walkTo(-49, 12, 'bridge approach');
+  await walkTo(-75, 40, 'open worktop from arrival');
+  await walkTo(-75, 12, 'direct bridge ramp foot');
+  await walkTo(-49, 12, 'straight bridge approach');
   await walkTo(-37, 12, 'enter real bridge CAD without jumping');
   await shot('journey-bridge');
   await walkTo(-49, 12, 'return from bridge to external approach');
-  await walkTo(-49, -18, 'external west promenade');
-  await walkTo(13, -18, 'continuous sloping connector');
+  await walkTo(-75, 12, 'descend bridge ramp');
+  await walkTo(-75, -18, 'open worktop west of bridge');
+  await walkTo(-3, -18, 'level worktop between stations');
   await shot('journey-connector');
-  await walkTo(13, -6, 'dial approach');
+  await walkTo(-3, -6, 'direct dial ramp foot');
+  await walkTo(13, -6, 'straight dial approach');
   await walkTo(23, -6, 'enter real dial CAD without jumping');
   await shot('journey-dial');
   check(
@@ -133,8 +134,10 @@ try {
     (await snap()).status.side === 'dial',
   );
   await walkTo(13, -6, 'return from dial CAD');
-  await walkTo(13, -18, 'dial external return');
-  await walkTo(-49, -18, 'reverse connector');
+  await walkTo(-3, -6, 'descend dial ramp');
+  await walkTo(-3, -18, 'dial external return');
+  await walkTo(-75, -18, 'reverse level connector');
+  await walkTo(-75, 12, 'bridge ramp return');
   await walkTo(-49, 12, 'bridge return');
   check(
     'complete round trip has no automatic resets',
@@ -186,8 +189,8 @@ try {
   await page.waitForTimeout(150);
   check(
     'explicit R returns to shared forecourt',
-    Math.abs((await snap()).position[0] + 57) < 0.01 &&
-      (await snap()).position[2] === 55,
+    Math.abs((await snap()).position[0] + 64) < 0.01 &&
+      (await snap()).position[2] === 40,
   );
   // Independent fixtures: force falls near each station, outside normal journey.
   for (const [side, x, z] of [
