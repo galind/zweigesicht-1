@@ -3,7 +3,22 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
-## Design-only desk review — 24 October 2026
+## Design C — exposed holders, stairs and hops — 24 October 2026
+
+The owner now prefers holder bases on the desk, with no recesses or ramps, and
+permits stairs and a hop into each movement. New [design-only sketches and evidence](docs/DESK_STAIRS_SKETCH.md)
+show candidate 5.9 / 6.7 mm derivative holders on a single worktop, with 30 / 34
+small risers and two short hops. The bridge uses a lower perimeter plate landing.
+Both selected landings and synthetic hops pass read-only checks against existing
+CAD collision geometry. New stair traversal and holder mechanics are unqualified.
+
+The 1.65 mm visitor, 1.48 mm eye height, movement geometry, reviewed internal
+placements and original crowns remain unchanged. The candidate base requires
+mechanical review; crown/holder interference remains unresolved. No application,
+runtime asset, original CAD, push or publication changes. Next: owner sketch
+review; no implementation is authorized by this design task.
+
+## Earlier design-only desk review — 24 October 2026
 
 Reviewed the actual first-person arrival, holder references and seating evidence.
 Two local concept boards compare recessed intact holders with a shortened-holder
