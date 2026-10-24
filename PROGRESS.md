@@ -3,6 +3,21 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Design-only desk review — 24 October 2026
+
+Reviewed the actual first-person arrival, holder references and seating evidence.
+Two local concept boards compare recessed intact holders with a shortened-holder
+derivative: [review and dimensions](docs/DESK_DESIGN_REVIEW.md).
+Recommend intact holders with level entrances on one compact desk. Candidate
+underside cuts separate each holder into four solids; a shorter version needs a
+new connecting base and mechanical review. Crown/holder interference remains
+unresolved. Original source hashes and reviewed occurrence matrices are unchanged.
+
+Sketches retain the 1.65 mm visitor and 1.48 mm eye height. They are sightline and
+section studies, not an implemented or walking-verified redesign. No application,
+runtime asset, source CAD, push or publication changes. Next: owner design review;
+implementation is explicitly outside this task.
+
 ## First-use review correction — 24 October 2026
 
 Reviewing the real entry view after owner feedback exposed a missed usability
