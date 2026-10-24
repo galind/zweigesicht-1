@@ -3,6 +3,15 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Workshop environment — map ahead, 24 October 2026
+
+Moved the Dresden map to the wall directly ahead of the visitor, centered above
+the main bench; the left wall is now plain. Revised render, layout and proposed
+coordinates are in `artifacts/workshop-design-d-v3/`, with local review on port
+4196. The [implementation brief](docs/WORKSHOP_DESIGN_D.md) reflects this placement.
+All other proposed geometry is unchanged. Final approval remains pending; no
+application/CAD changes, push, deployment, publication or redistribution.
+
 ## Workshop environment — main bench only, 24 October 2026
 
 Simplified the D design at the owner's request: one main workbench, no side

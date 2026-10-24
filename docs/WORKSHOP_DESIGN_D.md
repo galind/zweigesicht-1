@@ -1,24 +1,26 @@
 # D — Main workbench
 
-Developed design and implementation brief, revision 2, 24 October 2026.
+Developed design and implementation brief, revision 3, 24 October 2026.
 **Selected direction: D. Final design approval: pending. Implementation: not started.**
 
 The owner selected D and requested a basic polished render, with less complexity
 and no city view. The latest revision keeps only the main workbench, removes the
 side return, wall cupboard, technical drawing and chair, and retains the Dresden
-map as the only wall decoration. This supersedes the first developed D proposal.
+map as the only wall decoration. The map is now centered on the wall directly
+ahead of the visitor, above the main bench, with the left wall plain.
+This supersedes the earlier developed D proposals.
 It prepares the work without changing application code, active authored data,
 environment models or maker CAD. The original requirement for explicit approval
 of the final design before implementation remains in force.
 
 ## Review package
 
-Current local files are in `artifacts/workshop-design-d-v2/`; v1 remains historical:
+Current local files are in `artifacts/workshop-design-d-v3/`; v1/v2 remain historical:
 
 - `render.png`: one consistent room, desk and miniature-arrival visualization.
 - `layout.svg`: annotated, dimensioned plan and enlarged movement core.
 - `proposed-layout.json`: precise proposed coordinates; not imported by the app.
-- `review.html`: local visual review sheet, also served on port 4195.
+- `review.html`: local visual review sheet, also served on port 4196.
 - `prompts.json`: complete built-in ImageGen prompts and reference paths.
 
 The render communicates appearance; layout data controls dimensions. ImageGen
@@ -31,7 +33,9 @@ is claimed by this design review.
 ## Resolved visual direction
 
 A modest oak bench in a plaster-walled corner, muted olive-grey integrated drawers
-and a small oak-framed Dresden print. An opaque frosted pane supplies
+and a small oak-framed Dresden print centered above the workbench on the wall
+directly ahead. The map centre is X0/Y420 on the back wall Z−500; its dimensions
+remain 260 × 200 mm. The left wall is plain. An opaque frosted pane supplies
 soft light from the right. It needs a frame and a lit surface, with no exterior
 city, sky, vegetation, reflections of a city, or glass transmission pass.
 
