@@ -3,6 +3,32 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Performance and CAD fidelity — done for now, 24 October 2026
+
+Accepted for the current static website at local commit `d235cee`. Both workstreams
+are **done for now**; further optimization or geometry polishing is not scheduled.
+
+- **Performance:** the measured responsiveness problems are resolved and the
+  retained regression checks pass. Representative physical-device/browser testing,
+  physical mouse feel, cold-driver startup and sustained thermal behavior remain
+  unverified. Initial paint still measured about 101 ms CPU after precompilation,
+  and manual High quality can miss 60 fps at large viewports. These limitations
+  remain recorded in the [performance review](docs/BENCH_EXPERIENCE.md#responsiveness-verification--24-october-2026).
+- **CAD fidelity:** original geometry and provenance are preserved; all 12
+  identified tooth contacts have reviewed static phase corrections, with consistent
+  placement across explorer, Workshop and walking. The d144 open shell, invalid
+  d27 dial solid and retained crown/click contact remain documented uncertainties.
+  Static clearance does not certify running engagement, spring behavior, hand
+  setting or manufacturing tolerances. See the
+  [CAD decision record](docs/REMAINING_WHEEL_CONTACT_REVIEW.md).
+
+Reopen either workstream for a reproducible visual defect, a measured performance
+regression, or new evidence from device testing or the maker. Mechanical review
+is required before design or running-model changes. Existing
+[release gates](docs/RELEASE_GATES.md) remain unchanged; this status does not
+authorize publication or deployment. Earlier milestone results and limitations
+below are retained as the evidence history.
+
 ## Remaining wheel pairs — 24 October 2026
 
 Implemented from `b5bbfa9` on local `codex/wheel-contact-audit`. The production
