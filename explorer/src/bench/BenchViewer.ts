@@ -130,6 +130,11 @@ export class BenchViewer {
           station.rotationX,
         );
         station.movement.position.y = station.seat;
+        // The maker holders are Z-up, with their stem relief toward source −Y.
+        // Align that relief with the movement’s +X stem before building collision.
+        station.holder.rotation.y = THREE.MathUtils.degToRad(
+          station.holderRotationY,
+        );
         station.root.add(station.movement, station.holder);
         this.scene.add(station.root);
       }

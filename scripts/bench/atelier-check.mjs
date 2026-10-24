@@ -132,6 +132,37 @@ try {
           }
         }
       }
+      const holder = station.holder.children[0];
+      const holderSolid = b.world.solids.find((s) => s.mesh === holder);
+      // Independent +90 Y / −90 X composition, including station translation.
+      const expectedHolder = [
+        [0, -1, 0, station.x],
+        [0, 0, 1, 0],
+        [-1, 0, 0, station.z],
+        [0, 0, 0, 1],
+      ];
+      const holderMatrixError = Math.max(
+        ...holder.matrixWorld.elements.map((v, i) =>
+          Math.abs(v - expectedHolder[i % 4][Math.floor(i / 4)]),
+        ),
+      );
+      const holderIdentity = holderSolid.inverse
+        .clone()
+        .multiply(holder.matrixWorld);
+      const holderCollisionError = Math.max(
+        ...holderIdentity.elements.map((v, i) =>
+          Math.abs(v - (i % 5 === 0 ? 1 : 0)),
+        ),
+      );
+      const holderSurfaceContacts = station.movement.children
+        .filter((mesh) => {
+          const solid = b.world.solids.find((s) => s.mesh === mesh);
+          return solid.tree.intersectsGeometry(
+            holder.geometry,
+            solid.inverse.clone().multiply(holder.matrixWorld),
+          );
+        })
+        .map((mesh) => mesh.userData.partId);
       const stem = station.movement.children.find((m) =>
         m.userData.partId.endsWith('__0_1_1_83_27'),
       );
@@ -202,6 +233,9 @@ try {
         crowns,
         clearances,
         stemClearances,
+        holderMatrixError,
+        holderCollisionError,
+        holderSurfaceContacts,
         envelope,
         drops,
         heightRange: [Math.min(...heights), Math.max(...heights)],
@@ -254,30 +288,21 @@ try {
     assert.ok(s.collisionError < 1e-12);
     assert.ok(s.worldMatrixError < 1e-12);
     assert.ok(s.drops.every((d) => d.pass));
-    // Preserve genuine source-holder conflicts as blocking evidence; still capture the review.
-    const conflicts = s.clearances.filter((c) => c.intersects);
+    assert.ok(s.holderMatrixError < 1e-12);
+    assert.ok(s.holderCollisionError < 1e-12);
+    assert.ok(s.clearances.every((c) => !c.intersects));
+    assert.deepEqual(
+      s.holderSurfaceContacts,
+      s.id === 'bridge'
+        ? ['p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1']
+        : [],
+    );
     report.checks.push({
-      name:
-        s.id + ' source crown/holder fit remains unresolved by owner decision',
-      pass: false,
-      conflicts,
+      name: s.id + ' crown and underside surface clearance',
+      pass: true,
     });
-    assert.deepEqual(conflicts.map((c) => c.crown.split('_').at(-1)).sort(), [
-      '1',
-      '3',
-      '4',
-    ]);
-    assert.ok(
-      conflicts.every(
-        (c) =>
-          c.target === (s.id === 'bridge' ? 'movement' : 'dial') + '-holder',
-      ),
-    );
-    assert.ok(
-      s.clearances
-        .filter((c) => !c.target.endsWith('-holder'))
-        .every((c) => !c.intersects),
-    );
+    // Bridge mainplate surface contact is expected seating. Separate original-STEP
+    // common-volume + support-witness checks distinguish seating from penetration.
   }
   assert.ok(report.geometry.stations[1].lowerOpenings > 0);
   assert.ok(report.geometry.shared);

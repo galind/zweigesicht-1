@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
+  "status": "Historical evidence at the incorrect X-only holder orientation. Static crown conflict superseded by the owner-requested seating correction; see holder-seating.json. Original measurements and decision retained below.",
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "sourceProvenance": "assets/source-manifest/watch-configuration.json",
   "holderProvenance": "assets/source-manifest/holder.json",

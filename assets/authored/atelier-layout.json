@@ -6,14 +6,16 @@
       "x": -27,
       "z": -7,
       "seat": 12.2,
-      "rotationX": 90
+      "rotationX": 90,
+      "holderRotationY": 90
     },
     {
       "id": "dial",
       "x": 27,
       "z": -7,
       "seat": 16.3,
-      "rotationX": -90
+      "rotationX": -90,
+      "holderRotationY": 90
     }
   ],
   "arrival": [0, 0.002, 54],

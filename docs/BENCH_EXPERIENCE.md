@@ -11,16 +11,18 @@ are superseded. The explorer and Workshop retain separate controllers/resources.
 Each station contains **215 movement leaves plus four original external crown
 leaves**, and its intact original red maker holder. The uncased, undialed
 presentation omits three case clamps, their three fastening screws and two radial
-dial-retaining screws under the [shared assembly rule](CAD_NOTES.md#conditional-assembly-fittings--24-october-2026). The complete stations move
-only by parent translation. No source geometry, internal pose, material, crown,
+dial-retaining screws under the [shared assembly rule](CAD_NOTES.md#conditional-assembly-fittings--24-october-2026). The complete stations
+retain their parent translations; the original holders now turn +90° about world
+Y to align their stem reliefs and underside pockets. No source geometry,
+internal pose, material, crown,
 opening or holder design changes. All 18 reviewed phases remain separate from
 original matrices; see [wheel review](WHEEL_CONTACT_REVIEW.md),
 [ratchets](RATCHET_CONTACT_REVIEW.md) and [remaining contacts](REMAINING_WHEEL_CONTACT_REVIEW.md).
 
 | Station | Parent placement (X, Y, Z), mm | Unchanged movement presentation | Holder |
 | --- | --- | --- | --- |
-| Bridge | (−27, 0, −7) | X +90°, Y +12.2 | `movement.stl`, X −90° |
-| Dial | (27, 0, −7) | X −90°, Y +16.3 | `dial.stl`, X −90° |
+| Bridge | (−27, 0, −7) | X +90°, Y +12.2 | `movement.stl`, X −90° then world Y +90° |
+| Dial | (27, 0, −7) | X −90°, Y +16.3 | `dial.stl`, X −90° then world Y +90° |
 
 The stations are 54 mm apart, with a 12 mm gap between the 42 mm holder envelopes.
 The desk occupies X −62…62, Z −42…62 (124 × 104 mm). Its wood top is Y−0.12;
@@ -40,32 +42,35 @@ Render/collision instances keep `partId`, distinct `stationId`/`instanceId`, and
 shared geometry, materials and per-geometry BVHs. Both stations remain visible
 and colliding. Original external crowns retain catalog geometry and finishes.
 
-## Known unresolved crown/holder fit
+## Corrected original-holder seating — 24 October 2026
 
-The owner explicitly chose **keep original holders; record fit as unresolved**
-on 24 October 2026 after reviewing the measured conflict. Both crowns remain
-in their exact source poses, including this visible conflict. The stations are
-not certified as physically compatible crown/holder assemblies.
+The previous X-only holder orientation was a quarter-turn out of alignment.
+The maker's actual stem relief faces source −Y, not +X. Both original holders
+now use X −90° followed by world Y +90°. Mainplate heights remain correct:
+bridge seats on Y12.8, dial on Y13.7. Original geometry, crowns, source-relative
+poses and the 18 reviewed wheel phases are unchanged.
 
-Independent original-STEP Boolean and distance checks confirm the runtime
-triangle intersections. All tested crown and holder shapes are valid solids:
+Original-STEP Boolean/distance checks find **zero mainplate/holder overlap**
+and zero seating distance for both stations. Independent grid classification
+finds 189 bridge and 48 dial support witnesses with holder immediately below
+and plate immediately above the shoulder. These samples establish distributed
+nominal seating, not full contact area or a holding-force calculation.
 
-| Crown leaf | Bridge holder common, mm³ | Dial holder common, mm³ |
-| --- | ---: | ---: |
-| Body, d46 / occurrence 1 | 2.297096359 | 3.874614059 |
-| Outer seal, d47 / occurrence 2 | 0 | 0 |
-| Inner seal, d47 / occurrence 3 | 0.227774309 | 1.190860040 |
-| Cover ring, d48 / occurrence 4 | 0.145336305 | 0.553091454 |
+All eight original crown/holder pairs have zero common solid volume. Minimum
+crown clearance is **0.702108 mm bridge** and **0.100000 mm dial**. The previously
+recorded crown conflict was caused by holder orientation; its historical
+measurements remain in [atelier-crown-fit.json](../assets/source-manifest/atelier-crown-fit.json).
+They do not describe the corrected pose. No holder relief or crown displacement
+was necessary.
 
-[Provenance and decision](../assets/source-manifest/atelier-crown-fit.json)
-record full IDs, original hashes, common bounds and evidence hash. Reproduce
-with `.venv-cad/bin/python scripts/bench/crown-holder-probe.py`; complete reports
-and interior witnesses stay in `artifacts/paired-atelier/crown-holder-solids.json`.
-The broader source import emits its existing shape-processing warning, but each
-of these eight checked inputs is independently verified valid. No relief,
-rotation, displacement or source repair was made. Future resolution requires a
-separate maker/mechanical decision. This known fit failure is reported separately
-from the passing authored-environment clearances and walking tests.
+[Current evidence and hashes](../assets/source-manifest/holder-seating.json)
+record the placements and exact-solid results. Reproduce with
+`.venv-cad/bin/python scripts/bench/holder-seating-probe.py` and
+`.venv-cad/bin/python scripts/bench/crown-holder-probe.py`. Reports stay local
+under `artifacts/holder-fit/`. The source import retains its existing shape
+processing warning; the audited solids/commons pass validity checks. This is
+static nominal fit, not certification of manufacturing tolerances or clamping.
+Other internal CAD uncertainties remain unchanged.
 
 ## Controls, collision and lifetime
 
@@ -176,10 +181,12 @@ verification, not physical mouse feel or OS minimization qualification.
 `atelier-check` independently composes all original/reviewed matrices with the
 new station translations, checks render/collision agreement, 16 CAD landings,
 source openings, shared resources, holder/crown/environment clearances and the
-two-mesh environment contract. The six known original crown/holder intersections
-remain explicit unresolved evidence; new environment intersections fail the audit.
+two-mesh environment contract. The holder world/collision matrices and all
+movement/holder surface pairs are also checked. Bridge mainplate surface contact is expected; the independent
+solid/support probe distinguishes this from penetration. Crown/environment
+intersections fail the audit.
 
-Accepted current captures/reports are local under `artifacts/jetpack/`.
+Accepted current captures/reports are local under `artifacts/holder-fit/`.
 Earlier first-use, ramp/terrace and profiling evidence remains historical under
 `artifacts/paired-atelier/` and `artifacts/bench/`. Physical-device/browser coverage,
 human usability, narrow CAD cavities and the mechanical issues above remain

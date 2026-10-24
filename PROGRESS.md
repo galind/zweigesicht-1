@@ -3,6 +3,35 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Correct original-holder seating — 24 October 2026
+
+Implemented locally on `codex/holder-seating`. Both original holders were a
+quarter-turn out of alignment. A +90° world-Y rotation aligns their actual
+source −Y stem reliefs and shaped underside pockets with the movements. The
+mainplate seating heights were already correct. No movement geometry, internal
+placement, reviewed phase, finish, crown assembly or holder shape changed.
+
+- Original STEP solids confirm zero plate/holder penetration and zero seating
+  distance, with 189 bridge / 48 dial distributed support witnesses at the
+  Y12.8 / Y13.7 shoulders. All eight crown/holder solid pairs are clear; minimum
+  distances are 0.702108 mm bridge / 0.100000 mm dial. The previously unresolved
+  crown interference is resolved at this corrected static pose; its old
+  measurements remain explicitly historical. This is not tolerance or clamping
+  certification. [Evidence and hashes](assets/source-manifest/holder-seating.json).
+- Independent runtime audit verifies both 219-leaf presentations, all 18 phases,
+  holder and movement render/collision matrices, underside surface contacts,
+  environment clearance, openings and 16 CAD drops. All **63 jetpack checks**
+  pass: thrust/coast/fall/braking/landing/relaunch, both movements reached without
+  reset, tops/undersides/sides, and every desk edge/corner grounded and airborne.
+  Six lifecycle checks, 118 CPU tests, typecheck, lint and production build pass.
+- Fresh real arrival, flight approaches and landed views were captured and
+  inspected at the unchanged 1.48 mm eye offset. Reports and images are local in
+  `artifacts/holder-fit/`; preview remains <http://127.0.0.1:4185/bench>.
+
+Other internal CAD uncertainties, narrow-cavity recovery and physical-device/
+human-feel qualification remain as previously recorded. No push, deployment,
+publication or source/derived CAD redistribution. Next: owner walkthrough.
+
 ## Host-dependent case clamps and dial screws — 24 October 2026
 
 Implemented locally on `codex/assembly-fittings`. Identified exact source

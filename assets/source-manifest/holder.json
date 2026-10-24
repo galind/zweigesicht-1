@@ -57,8 +57,8 @@
     ],
     "bridge": "Werkplattenhalter: 12.8 mm seating shoulder, 17.1 mm pocket radius. Source movement rotated +90 degrees around X, translated +12.2 mm world Y; plate source Z=-0.6 seats at Y=12.8.",
     "dial": "ZBseite: 13.7 mm seating shoulders, 9.2 mm internal clearance floor. Source movement rotated -90 degrees around X, translated +16.3 mm world Y; plate source Z=-2.6 seats at Y=13.7.",
-    "holderOrientation": "Both holders rotate -90 degrees around X from source Z-up to world Y-up. Crown relief stays at +X.",
-    "limits": "Nominal static seating based on STEP planes, radial pockets and maker images; not a mechanical tolerance or holding certification.",
+    "holderOrientation": "Both original holders: source Z-up to world Y-up with X -90 degrees, then world Y +90 degrees. This maps the actual source -Y stem relief to world +X. The previous X-only orientation was incorrect.",
+    "limits": "Original-STEP mainplate seating and crown clearances verified in assets/source-manifest/holder-seating.json. Nominal static fit only; not a mechanical tolerance or holding certification.",
     "redistribution": "No public redistribution grant established. Originals and prepared holder payloads remain ignored/local."
   }
 }
