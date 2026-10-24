@@ -14,6 +14,7 @@ export default function Bench() {
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<BenchViewer | null>(null);
   const enter = useRef<HTMLButtonElement>(null);
+  const [hasEntered, setHasEntered] = useState(false);
   const [state, setState] = useState(initial),
     [attempt, setAttempt] = useState(0);
   useEffect(() => {
@@ -23,7 +24,10 @@ export default function Bench() {
         if (disposed || !host.current) return;
         setState(initial);
         try {
-          const v = new BenchViewer(host.current, setState);
+          const v = new BenchViewer(host.current, (status) => {
+            if (status.captured) setHasEntered(true);
+            setState(status);
+          });
           viewer.current = v;
           if (new URLSearchParams(location.search).has('inspect'))
             (window as unknown as { bench: BenchViewer | undefined }).bench = v;
@@ -52,50 +56,20 @@ export default function Bench() {
     };
   }, [attempt]);
   useEffect(() => {
-    if (state.ready && !state.captured) enter.current?.focus();
-  }, [state.ready, state.captured]);
+    if (!state.captured && (state.ready || state.error)) enter.current?.focus();
+  }, [state.ready, state.captured, state.error]);
   return (
     <main className="bench-experience">
       <div className="bench-canvas" ref={host} />
       <header className="bench-header">
-        <Link href="/" aria-label="Return to homepage">
+        <Link href="/" aria-label="Back to the explorer">
           ← Zweigesicht-1
         </Link>
-        <span>
-          {state.side === 'bridge' ? 'Bridge side' : 'Dial side'} <i> / </i>{' '}
-          1.65 mm tall
-        </span>
       </header>
       {!state.captured && (
-        <section className="bench-menu" aria-label="Walking menu">
-          <p className="bench-kicker">Two faces · One atelier</p>
-          <h1>
-            Walk inside
-            <br />
-            the movement.
-          </h1>
-          <p>
-            Two faces of one movement, on one desk.
-            <br />
-            Hold Space to rise; release to fall. Explore both at your own pace.
-          </p>
-          <div className="bench-menu-controls">
-            <span>
-              <kbd>W A S D</kbd> Move
-            </span>
-            <span>
-              <kbd>Mouse</kbd> Look
-            </span>
-            <span>
-              <kbd>Space</kbd> Hold to thrust
-            </span>
-            <span>
-              <kbd>R</kbd> Arrival
-            </span>
-            <span>
-              <kbd>Esc</kbd> Menu
-            </span>
-          </div>
+        <section className="bench-menu" aria-labelledby="bench-title">
+          <h1 id="bench-title">Walk inside the movement</h1>
+          <p className="bench-intro">Use a keyboard and mouse to explore.</p>
           {state.error && (
             <p role="alert" className="bench-error">
               {state.error}
@@ -107,21 +81,37 @@ export default function Bench() {
               className="bench-enter"
               onClick={() => void viewer.current?.enter()}
             >
-              Enter the movement
+              {hasEntered ? 'Resume exploring' : 'Enter the movement'}
             </button>
           ) : state.error ? (
             <button
+              ref={enter}
               className="bench-enter"
               onClick={() => setAttempt((n) => n + 1)}
             >
               Retry loading
             </button>
           ) : (
-            <output className="bench-loading">
-              Preparing the movement and walking surfaces…
-            </output>
+            <output className="bench-loading">Loading the movement…</output>
           )}
-          {state.ready && (
+          <div className="bench-menu-controls" aria-label="Controls">
+            <span>
+              <kbd>WASD</kbd> Move
+            </span>
+            <span>
+              <kbd>Mouse</kbd> Look
+            </span>
+            <span className="bench-thrust">
+              <kbd>Space</kbd> Hold to rise · Release to fall
+            </span>
+            <span>
+              <kbd>R</kbd> Reset position
+            </span>
+            <span>
+              <kbd>Esc</kbd> Menu
+            </span>
+          </div>
+          {state.ready && hasEntered && (
             <div className="bench-options">
               <button onClick={() => viewer.current?.reset()}>
                 Reset position
@@ -142,32 +132,23 @@ export default function Bench() {
               </button>
             </div>
           )}
-          <p className="bench-note">
-            Desktop keyboard & mouse · Static CAD exploration
-          </p>
-          <Link className="bench-back" href="/">
-            Back to the explorer
-          </Link>
         </section>
       )}
       {state.captured && (
-        <>
-          <div className="bench-reticle" aria-hidden="true" />
-          <div className="bench-legend">
-            <span>
-              <kbd>WASD</kbd> Move
-            </span>
-            <span>
-              <kbd>Space</kbd> Hold to thrust
-            </span>
-            <span>
-              <kbd>R</kbd> Reset
-            </span>
-            <span>
-              <kbd>Esc</kbd> Menu
-            </span>
-          </div>
-        </>
+        <div className="bench-legend">
+          <span>
+            <kbd>WASD</kbd> Move
+          </span>
+          <span>
+            <kbd>Space</kbd> Hold to rise
+          </span>
+          <span>
+            <kbd>R</kbd> Reset
+          </span>
+          <span>
+            <kbd>Esc</kbd> Menu
+          </span>
+        </div>
       )}
       <div className="bench-sr" aria-live="polite">
         {state.ready ? `Near the ${state.side} station` : ''}

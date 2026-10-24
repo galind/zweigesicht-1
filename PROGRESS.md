@@ -3,6 +3,37 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Quiet walking UI — 24 October 2026
+
+Implemented locally on `codex/bench-ui`. `/bench` now uses the homepage's
+sans-serif typography, neutral color tokens, compact spacing and button treatment.
+A small entry/menu replaces the large serif card; removed the scale/station badge,
+reticle, duplicate navigation, kicker and explanatory copy. Entry is explicit,
+Escape offers **Resume exploring**, and exploration retains one concise hint row
+and the homepage link. Existing reset/detail actions remain in the Escape menu.
+Loading, retry, capture errors and visible keyboard focus remain available.
+
+- **97 browser UI checks** pass at 800 × 600, 1024 × 640, 1440 × 900,
+  2400 × 1300 and 1024 × 768 with 200% text. Verified keyboard entry, actual
+  mouse capture/look, movement/thrust, Escape/resume, hints, navigation, focus,
+  contrast ≥4.5:1, pending loading, asset/capture/graphics failures and recovery.
+  Screenshot review caught and fixed enlarged-text menu clipping/header crowding.
+- **63 jetpack checks**, six lifecycle checks, the independent source/phase/
+  render/collision/holder audit and 16 CAD drops pass. Desk, original holders,
+  corrected seating, materials, movement controls, gravity, collisions and desk
+  boundaries are unchanged. Visitor height remains 1.65 mm; eyes stay 1.48 mm
+  above feet. All 118 CPU tests, typecheck, lint and production build pass.
+- Actual homepage, before/after entry, exploration and Escape-menu captures,
+  error states and reports remain local under `artifacts/bench-ui/`; the visual
+  comparison is `review.html`. Reproduce UI checks with `scripts/bench/ui-check.mjs`
+  and the existing Playwright/Chrome environment variables. Local production
+  preview: <http://127.0.0.1:4186/bench>.
+
+No new scene/physics issues found. Physical-device/human-feel qualification and
+previous CAD limitations remain. The in-app browser declined pointer lock;
+actual capture/resume passed in local headless Chrome. Next: owner walkthrough.
+No push, deployment, publication or CAD redistribution; release gates unchanged.
+
 ## Correct original-holder seating — 24 October 2026
 
 Implemented locally on `codex/holder-seating`. Both original holders were a

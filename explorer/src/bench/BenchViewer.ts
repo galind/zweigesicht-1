@@ -459,7 +459,7 @@ export class BenchViewer {
   lockError = () => {
     this.pause();
     this.status.error =
-      'Mouse capture was declined. Choose Enter again to continue.';
+      'Mouse capture was declined. Try again to continue.';
     this.emit();
   };
   lockChanged = () => {

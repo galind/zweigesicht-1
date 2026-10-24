@@ -72,6 +72,22 @@ processing warning; the audited solids/commons pass validity checks. This is
 static nominal fit, not certification of manufacturing tolerances or clamping.
 Other internal CAD uncertainties remain unchanged.
 
+## Walking interface
+
+The entry and Escape menu share the homepage's sans-serif type, neutral colors
+and compact buttons. Enter captures the mouse; after the first entry, the action
+reads **Resume exploring**. Brief keyboard/mouse hints sit below it. Reset and
+existing Auto/Low/High detail controls appear only in the Escape menu. During
+exploration, only the homepage link and a compact WASD/Space/R/Escape hint row
+remain; no station/height badge, reticle or flight HUD is shown.
+
+Loading and errors retain announced status, retry and navigation. Entry, resume
+and retry receive visible keyboard focus. `scripts/bench/ui-check.mjs` verifies
+actual capture/look, keyboard input, return navigation, loading/error recovery,
+contrast and desktop layouts including 200% text. Actual homepage and before/after
+captures are local under `artifacts/bench-ui/`; run with the same Playwright/Chrome
+environment variables as the other browser runners below.
+
 ## Controls, collision and lifetime
 
 Enter explicitly captures the mouse; Escape opens the menu and releases capture.
