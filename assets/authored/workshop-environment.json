@@ -1,0 +1,163 @@
+{
+  "status": "Approved revision 3 \u2014 implemented authored environment",
+  "units": "millimetres",
+  "axes": "Y up; visitor at +Z facing -Z",
+  "mainDesk": {
+    "minX": -550,
+    "maxX": 550,
+    "minZ": -465,
+    "maxZ": 185,
+    "topY": -1,
+    "bottomY": -33
+  },
+  "proposedTraversal": {
+    "minX": -550,
+    "maxX": 550,
+    "minZ": -465,
+    "maxZ": 185,
+    "rule": "Existing capsule-radius inset, outward-only constraints at every altitude; no floor access"
+  },
+  "mat": {
+    "minX": -175,
+    "maxX": 175,
+    "minZ": -125,
+    "maxZ": 125,
+    "topY": 0,
+    "bottomY": -1
+  },
+  "station": {
+    "x": 0,
+    "y": 0,
+    "z": -7,
+    "unchanged": true
+  },
+  "arrival": {
+    "feet": [0, 0.002, 54],
+    "eyesAboveFeet": 1.48,
+    "unchanged": true
+  },
+  "flipDesignReserve": {
+    "minX": -50,
+    "maxX": 50,
+    "minZ": -57,
+    "maxZ": 43,
+    "minY": 0,
+    "maxY": 100,
+    "verification": "Design reserve only. Verify actual source-derived swept envelope and both holders after authoring."
+  },
+  "openCore": {
+    "minX": -70,
+    "maxX": 70,
+    "minZ": -77,
+    "maxZ": 100,
+    "meaning": "No new props here; existing movement/holder remain. Keep both sides and forward arrival open."
+  },
+  "props": [
+    {
+      "id": "task-lamp",
+      "position": [-300, -1, -230],
+      "baseDiameter": 105,
+      "headTarget": [-190, 350, -135],
+      "collisionRole": "walkable",
+      "note": "Weighted base; complete arm/head collider follows visible solid; no cable across mat."
+    },
+    {
+      "id": "loupe",
+      "position": [210, -1, 0],
+      "diameter": 30,
+      "height": 28,
+      "collisionRole": "walkable"
+    },
+    {
+      "id": "tweezers",
+      "position": [225, -1, 70],
+      "length": 115,
+      "width": 8,
+      "height": 3,
+      "alignment": "Z axis; tips toward -Z",
+      "collisionRole": "walkable"
+    },
+    {
+      "id": "closed-notebook",
+      "position": [350, -1, -170],
+      "width": 140,
+      "depth": 95,
+      "height": 8,
+      "collisionRole": "walkable"
+    },
+    {
+      "id": "five-screwdriver-stand",
+      "position": [-380, -1, -90],
+      "width": 130,
+      "depth": 65,
+      "height": 100,
+      "collisionRole": "walkable"
+    },
+    {
+      "id": "empty-parts-tray",
+      "position": [-380, -1, 65],
+      "width": 150,
+      "depth": 90,
+      "height": 12,
+      "collisionRole": "walkable"
+    }
+  ],
+  "wordmark": {
+    "text": "Guillem Galindo",
+    "box": {
+      "minX": 142,
+      "maxX": 167,
+      "minZ": 113,
+      "maxZ": 115.2
+    },
+    "color": "#C6C7B1",
+    "style": "Original understated name-only monoline humanist lettering; no symbol, supplier mark or model number",
+    "collisionRole": "decor"
+  },
+  "room": {
+    "floorY": -921,
+    "backWallZ": -500,
+    "leftWallX": -600,
+    "rightWallX": 600,
+    "frontWallZ": 1700,
+    "note": "Walls and frames outside desk bounds; floor below solid desk. No ceiling geometry or flight cap. Neutral background above walls; no exterior city geometry.",
+    "wallTopY": 1600
+  },
+  "wallItems": [
+    {
+      "id": "Dresden-print",
+      "wall": "back",
+      "centerY": 420,
+      "widthAlongWall": 260,
+      "height": 200,
+      "graphic": "Original stylized river-and-street drawing; schematic, not navigational",
+      "centerX": 0,
+      "note": "On the wall directly ahead of the visitor above the main bench; back wall Z=-500. Left wall plain."
+    },
+    {
+      "id": "frosted-pane",
+      "wall": "right",
+      "centerZ": -140,
+      "bottomY": 100,
+      "widthAlongWall": 500,
+      "height": 800,
+      "note": "Opaque lit surface with roughness, no transmission pass, no exterior vista"
+    }
+  ],
+  "excludedAssets": [
+    "side workbench or return",
+    "wall cupboard",
+    "technical drawing",
+    "chair or stool"
+  ],
+  "schemaVersion": 1,
+  "palette": {
+    "oak": "A17D50",
+    "storage": "747467",
+    "plaster": "D8D4C5",
+    "mat": "3D6252",
+    "ink": "C6C7B1",
+    "steel": "888982",
+    "loupe": "303632"
+  }
+}

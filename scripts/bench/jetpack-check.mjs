@@ -207,7 +207,7 @@ try {
       w.grounded = false;
       w.yaw = 0;
     };
-    for (const y of [-0.12, 50, 500])
+    for (const y of [-1, 50, 500])
       for (const dx of [-1, 0, 1])
         for (const dz of [-1, 0, 1]) {
           if (!dx && !dz) continue;
@@ -231,7 +231,7 @@ try {
             feet: w.feet.toArray(),
           });
         }
-    for (const y of [-0.12, 50])
+    for (const y of [-1, 50])
       for (const side of ["minX", "maxX", "minZ", "maxZ"]) {
         const B = w.bounds,
           isX = side.endsWith("X"),

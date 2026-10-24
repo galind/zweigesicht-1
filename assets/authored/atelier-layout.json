@@ -22,10 +22,10 @@
   "arrivalYaw": 0,
   "worktopHeight": 0,
   "deskBounds": {
-    "minX": -62,
-    "maxX": 62,
-    "minZ": -42,
-    "maxZ": 62
+    "minX": -550,
+    "maxX": 550,
+    "minZ": -465,
+    "maxZ": 185
   },
   "station": {
     "x": 0,

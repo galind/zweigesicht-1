@@ -19,6 +19,9 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const report = { checks: [], errors: [] };
 page.on('pageerror', (e) => report.errors.push(e.message));
 const layout = JSON.parse(await fs.readFile('assets/authored/atelier-layout.json'));
+const workshop = JSON.parse(
+  await fs.readFile('assets/source-manifest/workshop-environment.json'),
+);
 const phases = JSON.parse(
   await fs.readFile('assets/authored/wheel-display-poses.json'),
 ).wheels;
@@ -304,8 +307,15 @@ try {
       (e) => e.collides === (e.role !== 'decor'),
     ),
   );
-  assert.equal(report.geometry.environment.length, 2);
-  assert.equal(report.geometry.environment.reduce((n, e) => n + e.triangles, 0), 24);
+  assert.equal(report.geometry.environment.length, workshop.budgets.drawsPerPass);
+  assert.equal(
+    report.geometry.environment.reduce((n, e) => n + e.triangles, 0),
+    workshop.budgets.visibleTriangles,
+  );
+  assert.ok(report.geometry.environment.filter(e => e.collides)
+    .reduce((n, e) => n + e.triangles, 0) <= 8000);
+  for (const material of ['Oak', 'Matte green'])
+    assert.ok(report.geometry.environment.some(e => e.material === material && e.hasAlbedoMap));
   // Boundary and actual first-person captures live in jetpack-check.mjs.
   assert.deepEqual(report.errors, []);
   console.log(

@@ -66,6 +66,7 @@ export class BenchViewer {
   camera = new THREE.PerspectiveCamera(68, 1, 0.035, 250);
   renderer: THREE.WebGLRenderer;
   environment?: THREE.WebGLRenderTarget;
+  roomBounds = new THREE.Sphere(new THREE.Vector3(), 250);
   station = {
     root: new THREE.Group(),
     movement: new THREE.Group(),
@@ -104,7 +105,21 @@ export class BenchViewer {
     public host: HTMLElement,
     public notify: (s: BenchStatus) => void,
   ) {
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('webgl2', {
+      antialias: true,
+      alpha: false,
+    });
+    const reversedDepth = !!context?.getExtension('EXT_clip_control');
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      context: context ?? undefined,
+      antialias: true,
+      // Preserve tiny CAD and room-scale depth while retaining early depth tests.
+      // Older GPUs use logarithmic depth; their performance needs qualification.
+      reversedDepthBuffer: reversedDepth,
+      logarithmicDepthBuffer: !reversedDepth,
+    });
     try {
       configureRenderer(this.renderer);
       this.renderer.setClearColor(0xdfd6c4);
@@ -117,15 +132,15 @@ export class BenchViewer {
         'First-person walk across the watch movement',
       );
       this.scene.background = new THREE.Color(0xdfd6c4);
-      this.scene.fog = new THREE.Fog(0xdfd6c4, 210, 350);
+      // Room-scale visibility: no short-range fog or ceiling/flight cap.
       this.environment = createStudioEnvironment(this.renderer);
       this.scene.environment = this.environment.texture;
       this.scene.environmentIntensity = 0.85;
       this.scene.add(new THREE.HemisphereLight(0xf2f4eb, 0x635340, 0.8));
-      const key = new THREE.DirectionalLight(0xffefd9, 1.4);
-      key.position.set(-20, 65, 30);
-      const fill = new THREE.DirectionalLight(0xd4e6ff, 0.7);
-      fill.position.set(30, 30, -30);
+      const key = new THREE.DirectionalLight(0xf2f4ef, 1.4);
+      key.position.set(600, 650, -140);
+      const fill = new THREE.DirectionalLight(0xffefd9, 0.7);
+      fill.position.set(-190, 350, -135);
       this.scene.add(key, fill);
       const station = this.station;
       station.root.name = 'movement-station';
@@ -354,6 +369,9 @@ export class BenchViewer {
           throw Error('Invalid atelier environment contract: ' + node.name);
       });
       this.scene.add(environment);
+      new THREE.Box3()
+        .setFromObject(environment)
+        .getBoundingSphere(this.roomBounds);
       const retained = new Set(
         this.station.movement.children.map(
           (node) => (node as THREE.Mesh).geometry,
@@ -604,9 +622,13 @@ export class BenchViewer {
     this.updateStation();
     if (shouldRender) {
       this.camera.position.copy(this.walker.feet).y += WALK.eye;
-      // Sustained flight has no altitude lock; keep the desk in the frustum
-      // even above the original walking-only far plane.
-      const far = Math.max(250, this.camera.position.y + 150);
+      // Enclose every room corner from any flight altitude. The near plane
+      // remains 0.035 mm for original CAD detail.
+      const far = Math.ceil(
+        this.camera.position.distanceTo(this.roomBounds.center) +
+          this.roomBounds.radius +
+          100,
+      );
       if (this.camera.far !== far) {
         this.camera.far = far;
         this.camera.updateProjectionMatrix();

@@ -1,12 +1,12 @@
 # Single-station walking experience
 
-`/bench` presents **one movement at one station** on the existing wooden desk
+`/bench` presents **one movement at one station** on the approved oak workbench
 and green mat. Press **F** to lift, turn and reseat the complete movement between
 bridge-up and dial-side-up. The original matching holder is exchanged while the
 movement is raised, as explicitly chosen by the owner. The former simultaneous
 pair and its aisle are superseded. Explorer and Workshop retain separate resources.
 
-## Current scene and resting poses — 24 October 2026
+## Current scene and resting poses — 25 October 2026
 
 One assembly contains **215 movement leaves and four original crown leaves**.
 Its source-relative matrices, all 18 reviewed phases, materials, crowns and
@@ -27,11 +27,71 @@ Both local holder assets load before entry; a missing asset keeps loading recove
 available. The spare holder has no second visible station. No CAD is cut, morphed,
 scaled, repaired or silently replaced with a universal holder.
 
-The desk remains X −62…62, Z −42…62 mm, wood top Y−0.12, with the inset 0.12 mm
-green mat at Y0. It still has two authored render/collision meshes, 24 triangles,
-and no ramps, wells, rails or decorative props. Arrival and explicit R reset remain
+The approved revision 3 oak desk spans X −550…550 and Z −465…185 mm, with wood
+top Y−1 and bottom Y−33. The 350 × 250 × 1 mm green mat remains at Y0. A 0.12 mm
+wood-edge bevel leaves flat support inside the existing 0.22 mm capsule inset.
+Arrival and explicit R reset remain
 at feet (0, 0.002, 54), facing −Z. The visitor stays **1.65 mm tall**, radius
 **0.22 mm**, with eyes **1.48 mm above their feet**, 68° vertical FOV and no bob/roll.
+
+## Approved workshop environment — revision 3
+
+One oak workbench with integrated olive-grey drawers fills the modest plaster
+room. The original schematic Dresden print is the only wall decoration, centered
+at X0/Y420 on the wall at Z−500. The right pane is opaque and softly emissive;
+there is no exterior scene, ceiling, side furniture or chair. A weighted task lamp,
+five screwdrivers in their stand, an empty tray, loupe, closed tweezers and notebook
+occupy the approved positions outside the movement's approach and flip envelopes.
+The mat has a small original offwhite “Guillem Galindo” monoline mark.
+
+`assets/authored/workshop-environment.json` and `workshop-graphics/*.svg` retain
+the authored design and original vector artwork. No external cartography, font,
+model pack or generated concept-image pixels are used. The Blender exporter
+builds beveled joinery, turned tools and their matching visible colliders, then
+bakes restrained contact shading into albedo atlases. The name decal casts no
+baked shadow and uses an alpha mask; all other surfaces are opaque. There are no
+new transmission or shadow-map passes. The source manifest records semantic
+bounds, budgets, source/output hashes and the Blender version.
+
+The desk, mat and every reachable tool surface retain `atelierVersion: 1` and
+`collisionRole: walkable`. Merging by material/role preserves semantic IDs for
+inspection. Walls, frames, map and pane remain outside the reachable X/Z column;
+the decorative floor is below the solid desk. The 1 mm mat edge exceeds the
+unchanged 0.22 mm step: walk down to the wood, then use Space to fly back up.
+All eight outer edges/corners remain supported and constrained at every altitude.
+No ramps, proxy movement floors, altered speed or automatic camera lift were added.
+
+Bench-only lighting now comes principally from the right, with a gentle warm left
+fill and the existing studio reflections. Short-range fog is removed. Camera far
+range encloses the loaded room bounding sphere from the current camera position,
+including sustained high flight; the 0.035 mm near plane is retained. Reversed
+depth on GPUs supporting `EXT_clip_control` prevents the 1 mm mat and 0.003 mm
+lettering offset from fighting with their
+underlying surfaces in distant room views. CAD materials, jewel transmission and
+its half-resolution target remain unchanged.
+
+Measured generated environment budgets (excluding unchanged maker CAD):
+
+| Metric | Measured | Target |
+| --- | ---: | ---: |
+| Visible triangles | 7,808 | ≤40,000 |
+| Collision triangles | 6,616 | ≤8,000 |
+| Environment draws per pass | 15 | ≤24 |
+| Decoded textures including mipmaps | 16.2 MiB | ≤24 MiB |
+| GLB download | 1.35 MiB | ≤8 MiB |
+
+The new `workshop-check.mjs` checks actual exported triangle budgets, texture
+memory, collision roles, all static triangles against continuous per-part lift
+columns/turnover bounds and both holder bounds, tool drops, desk support, four
+mat-edge routes, actual keyboard jetpack return, high-flight visibility, and exact
+once-only disposal. The continuous bounds are conservative clearance evidence,
+not exact swept-solid or mechanical certification. Room/desk inspection captures
+use explicitly labelled camera fixtures; arrival and landed captures retain the
+actual miniature visitor camera.
+
+Older GPUs without clip control use a logarithmic-depth fallback. Its performance
+requires separate qualification; forcing logarithmic depth on the reference M4
+caused a substantial close-up regression, so it is not the preferred path.
 
 ## Holder fit and the authorized exchange
 
@@ -140,33 +200,38 @@ ownership remain unchanged. Narrow/enclosed CAD cavities can require explicit R.
 
 ```sh
 node scripts/bench/prepare-holder.mjs
+node scripts/bench/prepare-workshop-artwork.mjs
 blender --background --python scripts/bench/export-environment.py
 npm --prefix explorer run build
-npm --prefix explorer start -- --hostname 127.0.0.1 --port 4189
+npm --prefix explorer start -- --hostname 127.0.0.1 --port 4198
 ```
 
-Original holder files must exist and match `holder.json`. The editable Blender
-source and generated GLB remain local and ignored. The environment is unchanged:
-`atelierVersion: 1`, `collisionRole: walkable`, walnut and green linoleum meshes,
-packed albedo maps and a hidden authoring-only scale reference. Its loader uses
-`no-store` to bypass stale environment caches. `build:vercel` still excludes
-`bench-local`. No release gate is cleared; no push, publication or redistribution.
+Original holder files must exist and match `holder.json`. Install the pinned
+explorer dependencies before rasterizing the artwork. Blender 5.2.1 LTS was used
+for this export; its CPU bake uses 64 samples. Editable Blender files and packed
+GLB output remain ignored under `assets/generated/bench/` and
+`explorer/public/bench-local/`. A hidden 1.65 mm authoring reference is excluded
+from export. The loader uses `no-store`; rebuild and restart a production preview
+after regenerating assets so its cached content-length metadata also updates.
+`build:vercel` still excludes `bench-local`. No release gate is cleared; no push,
+publication or redistribution is authorized.
 
 ## Verification
 
 Set `PLAYWRIGHT_MODULE` to the installed Playwright `index.mjs` and `CHROME_PATH`
-to Chrome, then use `PLAY_QA_OUTPUT=artifacts/bench-flip` for local reports/captures:
+to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-implementation/regression` for local reports/captures:
 
 ```sh
 node --test tests/*.test.mjs
 npm --prefix explorer run typecheck
 npm --prefix explorer run lint
 npm --prefix explorer run build
-node scripts/bench/flip-check.mjs http://127.0.0.1:4189
-node scripts/bench/atelier-check.mjs http://127.0.0.1:4189
-node scripts/bench/jetpack-check.mjs http://127.0.0.1:4189
-node scripts/bench/lifecycle-check.mjs http://127.0.0.1:4189
-node scripts/bench/ui-check.mjs http://127.0.0.1:4189
+node scripts/bench/workshop-check.mjs http://127.0.0.1:4198
+node scripts/bench/flip-check.mjs http://127.0.0.1:4198
+node scripts/bench/atelier-check.mjs http://127.0.0.1:4198
+node scripts/bench/jetpack-check.mjs http://127.0.0.1:4198
+node scripts/bench/lifecycle-check.mjs http://127.0.0.1:4198
+node scripts/bench/ui-check.mjs http://127.0.0.1:4198
 ```
 
 The flip runner uses actual keyboard capture for both directions, repeat
@@ -183,12 +248,84 @@ flip, retry and interrupted loading. UI checks cover four desktop sizes plus 200
 text, controls, navigation, entry, focus and loading/error recovery.
 
 Current counts and remaining actions are in [PROGRESS.md](../PROGRESS.md).
-Current follow-up screenshots and reports remain local in
-`artifacts/bench-flip-followup/`; the original implementation captures remain in
+Current workshop screenshots and reports remain local in
+`artifacts/workshop-implementation/`, with the final suites in `regression/`.
+Earlier flip captures remain in `artifacts/bench-flip-followup/` and
 `artifacts/bench-flip/`. Headless checks do not replace physical-device/mouse-feel
 or human accessibility review.
 Previous paired-station captures, timings and performance claims are historical;
 the remaining sections below describe older revisions.
+
+## Workshop verification and performance — 25 October 2026
+
+The local production build passes **130 CPU tests**, inventory validation,
+typecheck and lint. Browser suites pass **45 workshop checks**, **32 flip checks**,
+**67 jetpack/collision checks**, **8 lifecycle checks**, **157 UI checks** and
+**11 interaction/quality/idle checks**. The independent source audit retains all
+219 leaves and 18 phases in both rests, with maximum local-matrix error
+5.56 × 10⁻¹⁷, matching render/collision matrices and 16 source-surface drops.
+A separately forced no-clip-control fixture passes **46 fallback checks**.
+All 15 environment geometries, 13 materials and 13 textures dispose exactly once.
+
+Actual keyboard journeys cover both movement faces, clear-and-retry F, mat
+walking descent and jetpack return. Four desktop sizes plus 200% text retain the
+existing interface. Actual room/desk, arrival, landed-face and high-flight captures
+were reviewed against revision 3. Review caught and corrected regular-looking
+wood grain, missing contact shading, decal shadowing and distant depth artifacts.
+No original CAD, reviewed poses, shared materials, homepage or UI styling changed.
+
+Fresh matched production measurements use the Mac mini M4 / ANGLE Metal,
+Chrome 155.0.8059.86, **2400 × 1300 CSS**, device DPR 2, and the existing synthetic
+125 Hz turning / walking workload. Each six-second sample follows 700 ms warmup;
+there are six scenarios per mode, covering both faces and a wider approach view.
+The preserved baseline build and final build use identical settings. All accepted
+samples remain natively focused and visible, with zero GPU disjoint events.
+
+| Mode | Baseline frame p95 range | Final frame p95 range | Final render ratio |
+| --- | ---: | ---: | ---: |
+| Auto | 18.1–18.6 ms | 18.1–18.5 ms | 1.0 throughout |
+| High | 18.1–33.7 ms | 18.2–29.7 ms | 1.5 throughout |
+| Low | 17.9–18.6 ms | 17.1–18.5 ms | 0.85 throughout |
+
+The maximum paired p95 regression is **1.7%**, within the 10% target. Auto averages
+**16.67 ms** over 2,153 measured frame intervals, retaining the reference 60 Hz
+cadence without a resolution downgrade. One Auto interval exceeds 25 ms (maximum
+30.2 ms); none exceeds 50 ms. Fixed High still misses 60 Hz in close-ups, as did
+the baseline. High and Low each have one >50 ms outlier (82.1 / 149.3 ms), so these
+p95 results do not claim universally smooth frames or input-to-photon latency.
+
+Full multipass renderer counters are measured with `info.autoReset = false`.
+Auto's per-scenario median draw counts range **121–435**, versus **113–415** before;
+the wider view changes from 415 to 435. Auto render-submission CPU p95 ranges
+**3.4–5.4 ms** (before 3.6–5.2); asynchronous GPU-query p95 ranges **6.3–16.2 ms**
+(before 5.3–16.1). CPU submission, driver GPU elapsed and frame intervals are
+separate measurements, not additive quantities or physical input latency.
+The jewel transmission pass and resolution are retained.
+
+The isolated foreground Chrome sessions declined pointer capture in both builds
+(`WrongDocumentError` in the baseline probe). `PROFILE_CAPTURE=optional` records
+that failure and permits only this synthetic rendering benchmark to continue;
+the default profiler still requires capture. Real keyboard/mouse suites above
+require and obtain capture in headless Chrome. This is not a completed native
+mouse-feel or human accessibility qualification. Physical devices, sustained
+thermal runs and real older-GPU fallback performance remain open. An initial
+logarithmic-depth diagnostic regressed badly and was rejected; clip-control GPUs
+therefore use reversed depth, with a tested functional fallback for older GPUs.
+
+Evidence, paired JSON, the rejected diagnostic, source/build hashes and the local
+review sheet stay under `artifacts/workshop-implementation/`. Reproduce the
+foreground comparison against preserved baseline and final production servers:
+
+```sh
+PLAY_QA_OUTPUT=artifacts/workshop-implementation \
+  BENCH_BROWSER=headed PROFILE_CAPTURE=optional PROFILE_MODES=Auto,High,Low \
+  node scripts/bench/interaction-profile.mjs http://127.0.0.1:4198 after-review
+# Functional fallback only, not older-device performance qualification:
+WORKSHOP_DEPTH=fallback PLAY_QA_OUTPUT=artifacts/workshop-implementation/fallback \
+  node scripts/bench/workshop-check.mjs http://127.0.0.1:4198
+```
+
+No push, deployment, publication or source/derived CAD redistribution occurred.
 
 ## Historical single-station evidence
 

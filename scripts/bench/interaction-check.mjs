@@ -9,7 +9,8 @@ const { chromium } = await import(
     : 'playwright'
 );
 const base = process.argv[2] || 'http://127.0.0.1:4176';
-await fs.mkdir('artifacts/bench', { recursive: true });
+const out = process.env.PLAY_QA_OUTPUT || 'artifacts/bench';
+await fs.mkdir(out, { recursive: true });
 const { page, close } = await launchProfileBrowser(chromium);
 const checks = [];
 function check(name, pass, details) {
@@ -227,14 +228,14 @@ try {
       );
       await page.waitForTimeout(300);
       await page.screenshot({
-        path: `artifacts/bench/finish-${side}-${scale}.png`,
+        path: `${out}/finish-${side}-${scale}.png`,
       });
     }
   }
   console.log(JSON.stringify(checks, null, 2));
 } finally {
   await fs.writeFile(
-    'artifacts/bench/interaction-check.json',
+    `${out}/interaction-check.json`,
     JSON.stringify(checks, null, 2),
   );
   await close();

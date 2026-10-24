@@ -2,7 +2,9 @@
 
 Developed design and implementation brief, revision 3, 24 October 2026.
 **Selected direction: D revision 3. Approved for local implementation on
-24 October 2026. Implementation: handed off, not yet started.**
+24 October 2026. Implemented locally on 25 October 2026; see
+[BENCH_EXPERIENCE.md](BENCH_EXPERIENCE.md) and [PROGRESS.md](../PROGRESS.md) for
+verification and remaining qualifications.**
 
 The owner selected D and requested a basic polished render, with less complexity
 and no city view. The latest revision keeps only the main workbench, removes the
@@ -236,6 +238,7 @@ Add focused checks for:
   existing representative viewports and quality modes; physical-device/human
   qualifications remain open until performed.
 
-No application tests were run for this document/render-only step. Review files
-were checked locally. The design is approved; implementation and runtime
-verification remain for the receiving agent.
+The original design-only step did not run application tests. It has since been
+implemented and tested locally; current results are recorded in
+[BENCH_EXPERIENCE.md](BENCH_EXPERIENCE.md) and [PROGRESS.md](../PROGRESS.md).
+The frozen design artifacts remain historical approval references.

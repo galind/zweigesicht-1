@@ -1,7 +1,54 @@
 # Current project status
 
-Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
+Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
+
+## Approved workshop revision 3 implemented locally — 25 October 2026
+
+Implemented on `codex/workshop-environment` from the current local `codex/bench-ui`
+handoff. One 1100 × 650 mm oak bench with olive-grey drawers, a 350 × 250 × 1 mm
+mat, the Dresden schematic directly ahead and the approved small tool set replace
+the bare environment. No return, cupboard, technical drawing, chair or exterior.
+Original artwork, authored settings, Blender generation and output provenance are
+separate. Generated Blender/GLB assets remain ignored and local.
+
+- Preserved the station, arrival, 1.65 mm visitor / 1.48 mm eye offset, speed,
+  controls, move-clear/fresh-F workflow, original holders, 219 CAD leaves and
+  all reviewed poses/materials. Desk bounds expand using the existing physics.
+  Every reachable prop collides with its visible triangles; all four mat edges
+  require the existing jetpack to return from the wood.
+- Room-scale far range follows the loaded bounds without fog or an altitude cap.
+  Reversed depth preserves CAD/room precision on clip-control GPUs; a functional
+  logarithmic fallback covers older GPUs. Soft right daylight, warm left fill,
+  original textures and baked contact shading add no shadow/transmission passes.
+- Verified: **130 CPU tests**, inventory, typecheck, lint and production build;
+  **45 workshop**, **32 flip**, **67 jetpack/collision**, **8 lifecycle**,
+  **157 UI** and **11 interaction/quality/idle** browser checks, plus the independent
+  two-rest source/phase/holder audit and **16 CAD drops**. A forced fallback passes
+  **46 checks**. Continuous per-part sweep bounds and both holder bounds clear
+  every new solid. All eight desk edges/corners stay supported. Disposal/re-entry,
+  graphics-loss retry, four desktop sizes and 200% text pass.
+- Actual visual review against revision 3 includes room/desk inspection, unchanged
+  arrival, real keyboard flight to both faces, mat return, lettering and high
+  ascent. Fixed regular grain, contact shading, decal shadowing and depth artifacts.
+  Asset budgets: **7,808 visible / 6,616 collision triangles**, **15 draws/pass**,
+  **16.2 MiB decoded textures**, **1.35 MiB GLB** — all within targets.
+- Fresh matched foreground performance on M4 / Chrome 155 at 2400 × 1300 / DPR 2:
+  maximum paired p95 regression **1.7%** across 18 workloads. Auto remains ratio 1,
+  averages **16.67 ms**, and records p95 **18.1–18.5 ms** versus **18.1–18.6 ms**
+  before. Full multipass, CPU and GPU measurements are recorded separately in
+  [walking documentation](docs/BENCH_EXPERIENCE.md). Fixed High still has slower
+  close-ups; isolated long frames remain. The initial logarithmic path was
+  rejected for performance in favor of reversed depth on this GPU.
+
+Preview: <http://127.0.0.1:4198/bench>. Actual screenshots, review sheet, paired
+measurements and reports are local in `artifacts/workshop-implementation/`.
+The foreground benchmark's native capture probe was declined on both baseline
+and final builds, explicitly recorded; real headless keyboard/mouse capture passes.
+Next: owner walkthrough, native mouse-feel/human accessibility and physical-device
+qualification, including older-GPU fallback performance. Existing mechanical and
+publication gates remain open. **No push, deployment, publication or CAD
+redistribution.** Earlier handoff/design-only status entries below are historical.
 
 ## Workshop implementation approved and handed off — 24 October 2026
 

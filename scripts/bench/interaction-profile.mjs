@@ -21,7 +21,8 @@ assert.ok(
   ),
   'Invalid PROFILE_MODES',
 );
-await fs.mkdir('artifacts/bench', { recursive: true });
+const out = process.env.PLAY_QA_OUTPUT || 'artifacts/bench';
+await fs.mkdir(out, { recursive: true });
 const { page, browser, close, executionMode } =
   await launchProfileBrowser(chromium);
 const label = process.argv[3] || `profile-${executionMode}`;
@@ -45,7 +46,17 @@ try {
   await page
     .getByRole('button', { name: 'Enter the movement', exact: true })
     .click();
-  await page.waitForFunction(() => window.bench.status.captured);
+  await page.waitForFunction(
+    () => window.bench.status.captured || !!window.bench.status.error,
+  );
+  report.captureProbe = await page.evaluate(() => ({
+    captured: window.bench.status.captured,
+    error: window.bench.status.error,
+  }));
+  // Optional only for this already-synthetic rendering workload. Real keyboard,
+  // mouse and lifecycle suites still require actual browser pointer capture.
+  if (process.env.PROFILE_CAPTURE !== 'optional')
+    assert.ok(report.captureProbe.captured, JSON.stringify(report.captureProbe));
   await page.evaluate(() => document.exitPointerLock());
   await page.waitForFunction(() => !window.bench.status.captured);
   await page.addStyleTag({
@@ -297,16 +308,16 @@ try {
     }
   }
   // Keep captures after ALL measurements: Playwright can reset a custom CDP DPR.
-  await page.screenshot({ path: `artifacts/bench/${label}.png` });
+  await page.screenshot({ path: `${out}/${label}.png` });
   report.status = 'complete';
 } catch (error) {
   report.error = String(error);
   throw error;
 } finally {
   try {
-    await fs.mkdir('artifacts/bench', { recursive: true });
+    await fs.mkdir(out, { recursive: true });
     await fs.writeFile(
-      `artifacts/bench/${label}.json`,
+      `${out}/${label}.json`,
       JSON.stringify(report, null, 2),
     );
   } finally {

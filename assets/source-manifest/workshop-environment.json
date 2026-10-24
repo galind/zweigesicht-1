@@ -1,0 +1,1236 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/bench/export-environment.py",
+  "blender": "5.2.1 LTS",
+  "designRevision": 3,
+  "origin": "Original authored geometry, noise textures and vector artwork; no external models, map data, fonts or ImageGen pixels. No maker CAD embedded.",
+  "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
+  "budgets": {
+    "visibleTriangles": 7808,
+    "collisionTriangles": 6616,
+    "drawsPerPass": 15,
+    "textureBytesWithMipmaps": 16951975,
+    "downloadBytes": 1414592
+  },
+  "semantics": [
+    {
+      "id": "main-oak-top",
+      "role": "walkable",
+      "material": "Oak",
+      "min": [
+        -550,
+        -33,
+        -465
+      ],
+      "max": [
+        550,
+        -1,
+        185
+      ]
+    },
+    {
+      "id": "green-mat",
+      "role": "walkable",
+      "material": "Matte green",
+      "min": [
+        -175,
+        -1,
+        -125
+      ],
+      "max": [
+        175,
+        0,
+        125
+      ]
+    },
+    {
+      "id": "pedestal",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -534,
+        -910,
+        -430
+      ],
+      "max": [
+        -326,
+        -33,
+        155
+      ]
+    },
+    {
+      "id": "plinth",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -538,
+        -921,
+        -435
+      ],
+      "max": [
+        -322,
+        -883,
+        160
+      ]
+    },
+    {
+      "id": "drawer-front",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -525,
+        -265,
+        155
+      ],
+      "max": [
+        -335,
+        -63,
+        164
+      ]
+    },
+    {
+      "id": "drawer-cup-pull",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -454.0,
+        -164.0,
+        164
+      ],
+      "max": [
+        -406.0,
+        -152.0,
+        178
+      ]
+    },
+    {
+      "id": "drawer-front",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -525,
+        -515,
+        155
+      ],
+      "max": [
+        -335,
+        -275,
+        164
+      ]
+    },
+    {
+      "id": "drawer-cup-pull",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -454.0,
+        -395.0,
+        164
+      ],
+      "max": [
+        -406.0,
+        -383.0,
+        178
+      ]
+    },
+    {
+      "id": "drawer-front",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -525,
+        -877,
+        155
+      ],
+      "max": [
+        -335,
+        -525,
+        164
+      ]
+    },
+    {
+      "id": "drawer-cup-pull",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -454.0,
+        -701.0,
+        164
+      ],
+      "max": [
+        -406.0,
+        -689.0,
+        178
+      ]
+    },
+    {
+      "id": "pedestal",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        326,
+        -910,
+        -430
+      ],
+      "max": [
+        534,
+        -33,
+        155
+      ]
+    },
+    {
+      "id": "plinth",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        322,
+        -921,
+        -435
+      ],
+      "max": [
+        538,
+        -883,
+        160
+      ]
+    },
+    {
+      "id": "drawer-front",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        335,
+        -265,
+        155
+      ],
+      "max": [
+        525,
+        -63,
+        164
+      ]
+    },
+    {
+      "id": "drawer-cup-pull",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        406.0,
+        -164.0,
+        164
+      ],
+      "max": [
+        454.0,
+        -152.0,
+        178
+      ]
+    },
+    {
+      "id": "drawer-front",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        335,
+        -515,
+        155
+      ],
+      "max": [
+        525,
+        -275,
+        164
+      ]
+    },
+    {
+      "id": "drawer-cup-pull",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        406.0,
+        -395.0,
+        164
+      ],
+      "max": [
+        454.0,
+        -383.0,
+        178
+      ]
+    },
+    {
+      "id": "drawer-front",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        335,
+        -877,
+        155
+      ],
+      "max": [
+        525,
+        -525,
+        164
+      ]
+    },
+    {
+      "id": "drawer-cup-pull",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        406.0,
+        -701.0,
+        164
+      ],
+      "max": [
+        454.0,
+        -689.0,
+        178
+      ]
+    },
+    {
+      "id": "front-apron",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -325,
+        -125,
+        130
+      ],
+      "max": [
+        325,
+        -35,
+        150
+      ]
+    },
+    {
+      "id": "back-stretcher",
+      "role": "walkable",
+      "material": "Olive grey joinery",
+      "min": [
+        -330,
+        -815,
+        -430
+      ],
+      "max": [
+        330,
+        -740,
+        -410
+      ]
+    },
+    {
+      "id": "screwdriver-stand",
+      "role": "walkable",
+      "material": "Oak",
+      "min": [
+        -445,
+        -1,
+        -122.5
+      ],
+      "max": [
+        -315,
+        27,
+        -57.5
+      ]
+    },
+    {
+      "id": "screwdriver-1-shaft",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -431.70001220703125,
+        27.0,
+        -91.69999694824219
+      ],
+      "max": [
+        -428.29998779296875,
+        79.0,
+        -88.30000305175781
+      ]
+    },
+    {
+      "id": "screwdriver-1-grip",
+      "role": "walkable",
+      "material": "Blackened fittings",
+      "min": [
+        -434.0,
+        71,
+        -94.0
+      ],
+      "max": [
+        -426.0,
+        93,
+        -86.0
+      ]
+    },
+    {
+      "id": "screwdriver-1-cap",
+      "role": "walkable",
+      "material": "Instrument endcaps",
+      "min": [
+        -435.0,
+        93,
+        -95.0
+      ],
+      "max": [
+        -425.0,
+        99,
+        -85.0
+      ]
+    },
+    {
+      "id": "screwdriver-2-shaft",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -406.70001220703125,
+        27.0,
+        -91.69999694824219
+      ],
+      "max": [
+        -403.29998779296875,
+        79.0,
+        -88.30000305175781
+      ]
+    },
+    {
+      "id": "screwdriver-2-grip",
+      "role": "walkable",
+      "material": "Blackened fittings",
+      "min": [
+        -409.0,
+        71,
+        -94.0
+      ],
+      "max": [
+        -401.0,
+        93,
+        -86.0
+      ]
+    },
+    {
+      "id": "screwdriver-2-cap",
+      "role": "walkable",
+      "material": "Instrument endcaps",
+      "min": [
+        -410.0,
+        93,
+        -95.0
+      ],
+      "max": [
+        -400.0,
+        99,
+        -85.0
+      ]
+    },
+    {
+      "id": "screwdriver-3-shaft",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -381.70001220703125,
+        27.0,
+        -91.69999694824219
+      ],
+      "max": [
+        -378.29998779296875,
+        79.0,
+        -88.30000305175781
+      ]
+    },
+    {
+      "id": "screwdriver-3-grip",
+      "role": "walkable",
+      "material": "Blackened fittings",
+      "min": [
+        -384.0,
+        71,
+        -94.0
+      ],
+      "max": [
+        -376.0,
+        93,
+        -86.0
+      ]
+    },
+    {
+      "id": "screwdriver-3-cap",
+      "role": "walkable",
+      "material": "Instrument endcaps",
+      "min": [
+        -385.0,
+        93,
+        -95.0
+      ],
+      "max": [
+        -375.0,
+        99,
+        -85.0
+      ]
+    },
+    {
+      "id": "screwdriver-4-shaft",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -356.70001220703125,
+        27.0,
+        -91.69999694824219
+      ],
+      "max": [
+        -353.29998779296875,
+        79.0,
+        -88.30000305175781
+      ]
+    },
+    {
+      "id": "screwdriver-4-grip",
+      "role": "walkable",
+      "material": "Blackened fittings",
+      "min": [
+        -359.0,
+        71,
+        -94.0
+      ],
+      "max": [
+        -351.0,
+        93,
+        -86.0
+      ]
+    },
+    {
+      "id": "screwdriver-4-cap",
+      "role": "walkable",
+      "material": "Instrument endcaps",
+      "min": [
+        -360.0,
+        93,
+        -95.0
+      ],
+      "max": [
+        -350.0,
+        99,
+        -85.0
+      ]
+    },
+    {
+      "id": "screwdriver-5-shaft",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -331.70001220703125,
+        27.0,
+        -91.69999694824219
+      ],
+      "max": [
+        -328.29998779296875,
+        79.0,
+        -88.30000305175781
+      ]
+    },
+    {
+      "id": "screwdriver-5-grip",
+      "role": "walkable",
+      "material": "Blackened fittings",
+      "min": [
+        -334.0,
+        71,
+        -94.0
+      ],
+      "max": [
+        -326.0,
+        93,
+        -86.0
+      ]
+    },
+    {
+      "id": "screwdriver-5-cap",
+      "role": "walkable",
+      "material": "Instrument endcaps",
+      "min": [
+        -335.0,
+        93,
+        -95.0
+      ],
+      "max": [
+        -325.0,
+        99,
+        -85.0
+      ]
+    },
+    {
+      "id": "tray-floor",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -455,
+        -1,
+        20
+      ],
+      "max": [
+        -305,
+        1,
+        110
+      ]
+    },
+    {
+      "id": "tray-left",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -455,
+        0,
+        20
+      ],
+      "max": [
+        -453,
+        11,
+        110
+      ]
+    },
+    {
+      "id": "tray-right",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -307,
+        0,
+        20
+      ],
+      "max": [
+        -305,
+        11,
+        110
+      ]
+    },
+    {
+      "id": "tray-rear",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -453,
+        0,
+        20
+      ],
+      "max": [
+        -307,
+        11,
+        22
+      ]
+    },
+    {
+      "id": "tray-front",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -453,
+        0,
+        108
+      ],
+      "max": [
+        -307,
+        11,
+        110
+      ]
+    },
+    {
+      "id": "loupe-body",
+      "role": "walkable",
+      "material": "Blackened fittings",
+      "min": [
+        195.0,
+        -1,
+        -15.0
+      ],
+      "max": [
+        225.0,
+        27,
+        15.0
+      ]
+    },
+    {
+      "id": "loupe-opaque-lens",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        198.5,
+        25.5,
+        -11.5
+      ],
+      "max": [
+        221.5,
+        25.75,
+        11.5
+      ]
+    },
+    {
+      "id": "closed-tweezers",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        221,
+        -1,
+        12.5
+      ],
+      "max": [
+        229,
+        2,
+        127.5
+      ]
+    },
+    {
+      "id": "notebook-bottom",
+      "role": "walkable",
+      "material": "Notebook cloth",
+      "min": [
+        280,
+        -1,
+        -217.5
+      ],
+      "max": [
+        420,
+        0.2,
+        -122.5
+      ]
+    },
+    {
+      "id": "notebook-pages",
+      "role": "walkable",
+      "material": "Ivory paper",
+      "min": [
+        282,
+        0.2,
+        -215.5
+      ],
+      "max": [
+        418,
+        5.8,
+        -124.5
+      ]
+    },
+    {
+      "id": "notebook-cover",
+      "role": "walkable",
+      "material": "Notebook cloth",
+      "min": [
+        280,
+        5.8,
+        -217.5
+      ],
+      "max": [
+        420,
+        7,
+        -122.5
+      ]
+    },
+    {
+      "id": "notebook-spine",
+      "role": "walkable",
+      "material": "Notebook cloth",
+      "min": [
+        280,
+        -1,
+        -217.5
+      ],
+      "max": [
+        282,
+        7,
+        -122.5
+      ]
+    },
+    {
+      "id": "lamp-base",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -352.5,
+        -1,
+        -282.5
+      ],
+      "max": [
+        -247.5,
+        14,
+        -177.5
+      ]
+    },
+    {
+      "id": "lamp-lower-arm",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -303.5,
+        14.0,
+        -238.5
+      ],
+      "max": [
+        -296.5,
+        190.0,
+        -231.5
+      ]
+    },
+    {
+      "id": "lamp-upper-arm",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -303.00836181640625,
+        187.84349060058594,
+        -238.20196533203125
+      ],
+      "max": [
+        -186.9916229248047,
+        377.156494140625,
+        -136.79803466796875
+      ]
+    },
+    {
+      "id": "lamp-lower-arm",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -303.5,
+        14.0,
+        -228.5
+      ],
+      "max": [
+        -296.5,
+        190.0,
+        -221.5
+      ]
+    },
+    {
+      "id": "lamp-upper-arm",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -303.00836181640625,
+        187.84349060058594,
+        -228.20196533203125
+      ],
+      "max": [
+        -186.9916229248047,
+        377.156494140625,
+        -126.79803466796875
+      ]
+    },
+    {
+      "id": "lamp-hinge",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -310.0,
+        4.0,
+        -239.0
+      ],
+      "max": [
+        -290.0,
+        24.0,
+        -221.0
+      ]
+    },
+    {
+      "id": "lamp-hinge",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -310.0,
+        180.0,
+        -239.0
+      ],
+      "max": [
+        -290.0,
+        200.0,
+        -221.0
+      ]
+    },
+    {
+      "id": "lamp-hinge",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -200.0,
+        365.0,
+        -144.0
+      ],
+      "max": [
+        -180.0,
+        385.0,
+        -126.0
+      ]
+    },
+    {
+      "id": "lamp-shade",
+      "role": "walkable",
+      "material": "Brushed tool steel",
+      "min": [
+        -236.0,
+        305,
+        -181.0
+      ],
+      "max": [
+        -144.0,
+        371,
+        -89.0
+      ]
+    },
+    {
+      "id": "lamp-inner-enamel",
+      "role": "walkable",
+      "material": "Lamp enamel",
+      "min": [
+        -233.0,
+        304.8,
+        -178.0
+      ],
+      "max": [
+        -147.0,
+        305.0,
+        -92.0
+      ]
+    },
+    {
+      "id": "room-floor",
+      "role": "decor",
+      "material": "Oak",
+      "min": [
+        -620,
+        -941,
+        -520
+      ],
+      "max": [
+        620,
+        -921,
+        1720
+      ]
+    },
+    {
+      "id": "back-wall",
+      "role": "decor",
+      "material": "Warm plaster",
+      "min": [
+        -620,
+        -921,
+        -520
+      ],
+      "max": [
+        620,
+        1600,
+        -500
+      ]
+    },
+    {
+      "id": "left-wall",
+      "role": "decor",
+      "material": "Warm plaster",
+      "min": [
+        -620,
+        -921,
+        -500
+      ],
+      "max": [
+        -600,
+        1600,
+        1720
+      ]
+    },
+    {
+      "id": "right-wall",
+      "role": "decor",
+      "material": "Warm plaster",
+      "min": [
+        600,
+        -921,
+        -500
+      ],
+      "max": [
+        620,
+        1600,
+        1720
+      ]
+    },
+    {
+      "id": "front-wall",
+      "role": "decor",
+      "material": "Warm plaster",
+      "min": [
+        -600,
+        -921,
+        1700
+      ],
+      "max": [
+        600,
+        1600,
+        1720
+      ]
+    },
+    {
+      "id": "skirting",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        -600,
+        -921,
+        -500
+      ],
+      "max": [
+        600,
+        -856,
+        -493
+      ]
+    },
+    {
+      "id": "skirting",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        -600,
+        -921,
+        -500
+      ],
+      "max": [
+        -593,
+        -856,
+        1700
+      ]
+    },
+    {
+      "id": "skirting",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        593,
+        -921,
+        -500
+      ],
+      "max": [
+        600,
+        -856,
+        1700
+      ]
+    },
+    {
+      "id": "map-frame-top",
+      "role": "decor",
+      "material": "Oak",
+      "min": [
+        -130,
+        513,
+        -499
+      ],
+      "max": [
+        130,
+        520,
+        -488
+      ]
+    },
+    {
+      "id": "map-frame-bottom",
+      "role": "decor",
+      "material": "Oak",
+      "min": [
+        -130,
+        320,
+        -499
+      ],
+      "max": [
+        130,
+        327,
+        -488
+      ]
+    },
+    {
+      "id": "map-frame-left",
+      "role": "decor",
+      "material": "Oak",
+      "min": [
+        -130,
+        327,
+        -499
+      ],
+      "max": [
+        -123,
+        513,
+        -488
+      ]
+    },
+    {
+      "id": "map-frame-right",
+      "role": "decor",
+      "material": "Oak",
+      "min": [
+        123,
+        327,
+        -499
+      ],
+      "max": [
+        130,
+        513,
+        -488
+      ]
+    },
+    {
+      "id": "frosted-pane",
+      "role": "decor",
+      "material": "Opaque frosted daylight",
+      "min": [
+        594,
+        100,
+        -390
+      ],
+      "max": [
+        599,
+        900,
+        110
+      ]
+    },
+    {
+      "id": "window-frame",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        580,
+        90,
+        -400
+      ],
+      "max": [
+        599,
+        910,
+        -390
+      ]
+    },
+    {
+      "id": "window-frame",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        580,
+        90,
+        110
+      ],
+      "max": [
+        599,
+        910,
+        120
+      ]
+    },
+    {
+      "id": "window-frame",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        580,
+        90,
+        -390
+      ],
+      "max": [
+        599,
+        100,
+        110
+      ]
+    },
+    {
+      "id": "window-frame",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        580,
+        900,
+        -390
+      ],
+      "max": [
+        599,
+        910,
+        110
+      ]
+    },
+    {
+      "id": "window-frame",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        580,
+        790,
+        -390
+      ],
+      "max": [
+        599,
+        801,
+        110
+      ]
+    },
+    {
+      "id": "window-sill",
+      "role": "decor",
+      "material": "Olive grey joinery",
+      "min": [
+        570,
+        87,
+        -405
+      ],
+      "max": [
+        600,
+        100,
+        125
+      ]
+    },
+    {
+      "id": "Dresden schematic",
+      "role": "decor",
+      "material": "Dresden schematic",
+      "min": [
+        -123,
+        327,
+        -490
+      ],
+      "max": [
+        123,
+        513,
+        -490
+      ]
+    },
+    {
+      "id": "Guillem Galindo",
+      "role": "decor",
+      "material": "Guillem Galindo",
+      "min": [
+        142,
+        0.003,
+        113
+      ],
+      "max": [
+        167,
+        0.003,
+        115.2
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/authored/workshop-environment.json",
+      "sha256": "de2247c22fbe27aff28147dd84dc922716be66bf30b2116ae3b1b91ad6cdd922"
+    },
+    {
+      "path": "assets/authored/atelier-layout.json",
+      "sha256": "74023ae234a543c11f4c1e2580f821b6cb1db30c28fb55478b3d828e218c1420"
+    },
+    {
+      "path": "assets/authored/workshop-graphics/dresden.svg",
+      "sha256": "32ea53011f83f4cbd91c6c7f10e1cd627d851dddc48889dd27f648d0aa24d672"
+    },
+    {
+      "path": "assets/authored/workshop-graphics/wordmark.svg",
+      "sha256": "6bdcd4ce114a45ae617335165425201f21603bc10aa38bb32747e1066a0f42b3"
+    },
+    {
+      "path": "scripts/bench/export-environment.py",
+      "sha256": "d61dacdea03e16972c1ce35eab237ee1e27b0efc43e2a60341ac1fd8c3a03829"
+    },
+    {
+      "path": "scripts/bench/prepare-workshop-artwork.mjs",
+      "sha256": "8e0e69d3d6183d97af419a350068e239fea571b10af9e879a6bbb7d67feabd1d"
+    },
+    {
+      "path": "assets/generated/bench/environment.blend",
+      "sha256": "191183c4e0dc6cf58fb77f7c5b8ebe33eaa759463dd4f1b2eab17dcd2378e91d"
+    },
+    {
+      "path": "explorer/public/bench-local/environment.glb",
+      "sha256": "d4bb4560389c3ad41fb36e735e5ddc39043ed357cf4345a9a792c8676c5a3cba"
+    }
+  ]
+}
