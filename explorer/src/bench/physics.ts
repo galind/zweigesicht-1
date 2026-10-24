@@ -39,6 +39,9 @@ export class CollisionWorld {
   }
   sync() {
     for (const s of this.solids) {
+      // CAD leaves have matrixAutoUpdate=false. Parent updates alone do not dirty
+      // those leaves in Three r186; force them before copying collision matrices.
+      s.mesh.matrixWorldNeedsUpdate = true;
       s.mesh.updateWorldMatrix(true, false);
       s.inverse.copy(s.mesh.matrixWorld).invert();
       s.bounds
@@ -53,6 +56,71 @@ export class CollisionWorld {
       o = o.parent;
     }
     return true;
+  }
+  /** Read-only capsule query, also used to verify relocation and holder exchange. */
+  overlaps(feet: THREE.Vector3, meshes?: Set<THREE.Mesh>) {
+    const segment = new THREE.Line3(),
+      a = new THREE.Vector3(),
+      b = new THREE.Vector3();
+    const start = feet.clone().add(new THREE.Vector3(0, WALK.radius, 0));
+    const end = feet
+      .clone()
+      .add(new THREE.Vector3(0, WALK.height - WALK.radius, 0));
+    const box = new THREE.Box3()
+      .setFromPoints([start, end])
+      .expandByScalar(WALK.radius);
+    for (const s of this.solids) {
+      if (meshes ? !meshes.has(s.mesh) : !this.active(s)) continue;
+      if (!s.bounds.intersectsBox(box)) continue;
+      segment.start.copy(start).applyMatrix4(s.inverse);
+      segment.end.copy(end).applyMatrix4(s.inverse);
+      const ray = new THREE.Ray(
+        segment.start.clone(),
+        segment.delta(new THREE.Vector3()).normalize(),
+      );
+      const length = segment.distance();
+      const localBox = new THREE.Box3()
+        .setFromPoints([segment.start, segment.end])
+        .expandByScalar(WALK.radius);
+      if (
+        s.tree.shapecast({
+          intersectsBounds: (bounds) => bounds.intersectsBox(localBox),
+          intersectsTriangle: (triangle) => {
+            // BVH closestPointToSegment checks edges/endpoints but not a segment
+            // piercing a triangle's interior. Include that case for static swaps.
+            if (
+              ray.intersectTriangle(
+                triangle.a,
+                triangle.b,
+                triangle.c,
+                false,
+                a,
+              ) &&
+              a.distanceTo(ray.origin) <= length
+            )
+              return true;
+            return (
+              triangle.closestPointToSegment(segment, a, b) < WALK.radius - 1e-5
+            );
+          },
+        })
+      )
+        return true;
+      if (meshes) {
+        // The incoming original holder is closed. A capsule entirely inside its
+        // solid may not touch any triangle; parity detects that obstruction too.
+        ray.direction.set(0.83, 0.37, 0.43).normalize();
+        const distances = s.tree
+          .raycast(ray, THREE.DoubleSide)
+          .map((hit) => hit.distance)
+          .sort((x, y) => x - y);
+        const crossings = distances.filter(
+          (d, i) => i === 0 || d - distances[i - 1] > 1e-5,
+        );
+        if (crossings.length % 2) return true;
+      }
+    }
+    return false;
   }
   resolve(feet: THREE.Vector3) {
     let grounded = false;
@@ -105,7 +173,7 @@ export class CollisionWorld {
     feet.copy(start).add(new THREE.Vector3(0, -WALK.radius, 0));
     return { grounded, contacts };
   }
-  floor(x: number, z: number, top = 30) {
+  floor(x: number, z: number, top = 30, meshes?: Set<THREE.Mesh>) {
     const ray = new THREE.Ray(
       new THREE.Vector3(x, top, z),
       new THREE.Vector3(0, -1, 0),
@@ -113,7 +181,7 @@ export class CollisionWorld {
     let height = -Infinity;
     for (const s of this.solids) {
       if (
-        !this.active(s) ||
+        (meshes ? !meshes.has(s.mesh) : !this.active(s)) ||
         x < s.bounds.min.x ||
         x > s.bounds.max.x ||
         z < s.bounds.min.z ||
@@ -147,6 +215,8 @@ export class Walker {
   resets = 0;
   world: CollisionWorld;
   bounds?: DeskBounds;
+  // Temporary animation safety constraint, invoked on every physics substep.
+  guard?: (previous: THREE.Vector3) => void;
   constructor(world: CollisionWorld, bounds?: DeskBounds) {
     this.world = world;
     this.bounds = bounds;
@@ -208,6 +278,7 @@ export class Walker {
         wasGrounded = this.grounded;
       this.feet.addScaledVector(this.velocity, h);
       this.constrainToDesk();
+      this.guard?.(before);
       let result = this.world.resolve(this.feet);
       // Step only when grounded and blocked, and only onto an actual nearby surface.
       const wanted = Math.hypot(this.velocity.x, this.velocity.z) * h;
@@ -247,6 +318,7 @@ export class Walker {
       for (const normal of result.contacts)
         if (normal.y < -0.5 && this.velocity.y > 0) this.velocity.y = 0;
       this.constrainToDesk();
+      this.guard?.(before);
     }
   }
   /** Project only outward displacement; tangential travel and Y remain free. */

@@ -1,3 +1,4 @@
+import { FLIP_KEY } from './bindings';
 export function BenchControls() {
   return (
     <div className="bench-menu-controls" aria-label="Controls">
@@ -9,6 +10,9 @@ export function BenchControls() {
       </span>
       <span className="bench-thrust">
         <kbd>Space</kbd> Hold to rise · Release to fall
+      </span>
+      <span>
+        <kbd>{FLIP_KEY.label}</kbd> Flip movement
       </span>
       <span>
         <kbd>R</kbd> Reset position

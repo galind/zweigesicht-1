@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type { BenchViewer, BenchStatus } from './BenchViewer';
 import { BenchControls } from './BenchControls';
+import { FLIP_KEY } from './bindings';
 import { consumeBenchEntry } from './entryIntent';
 import './bench.css';
 const initial: BenchStatus = {
@@ -166,6 +167,9 @@ export default function Bench() {
             <kbd>Space</kbd> Hold to rise
           </span>
           <span>
+            <kbd>{FLIP_KEY.label}</kbd> Flip
+          </span>
+          <span>
             <kbd>R</kbd> Reset
           </span>
           <span>
@@ -174,7 +178,9 @@ export default function Bench() {
         </div>
       )}
       <div className="bench-sr" aria-live="polite">
-        {state.ready ? `Near the ${state.side} station` : ''}
+        {state.ready
+          ? `${state.side === 'bridge' ? 'Bridge' : 'Dial side'} facing up`
+          : ''}
       </div>
     </main>
   );

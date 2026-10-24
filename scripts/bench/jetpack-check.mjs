@@ -99,10 +99,10 @@ try {
   await wait(300);
   const initial = await snap();
   check(
-    "real arrival on mat, both full stations visible",
+    "real arrival on mat, one complete movement visible",
     Math.abs(initial.feet[1]) < 0.001 &&
       (await page.evaluate(() =>
-        window.bench.stations.every((s) => s.root.visible && s.movement.children.length === 219),
+        window.bench.station.root.visible && window.bench.station.movement.children.length === 219,
       )),
     initial,
   );
@@ -144,10 +144,12 @@ try {
   await page.keyboard.up("Space");
   await page.waitForFunction(() => window.bench.walker.grounded, null, { timeout: 8000 });
   check("lands naturally back on mat", Math.abs((await snap()).feet[1]) < 0.001, await snap());
-  await flyTo(-39, -7, "bridge");
-  await flyTo(15, -7, "dial");
+  await flyTo(-12, -7, "bridge");
+  await page.keyboard.press("f");
+  await page.waitForFunction(() => !window.bench.flip.active);
+  await flyTo(-12, -7, "dial");
   check(
-    "both movements explored without reset or swap",
+    "both sides explored with one flip and no reset",
     (await snap()).resets === initial.resets,
     await snap(),
   );
@@ -237,7 +239,9 @@ try {
           feet: w.feet.toArray(),
         });
       }
-    for (const st of b.stations) {
+    for (const id of ['bridge', 'dial']) {
+      b.flip.setRest(id);
+      const st = {id, x: b.station.root.position.x, z: b.station.root.position.z};
       // Original holder wall, then the movement top and its underside.
       setup(st.x, 2, st.z + 24);
       w.keys.add("KeyW");
@@ -277,8 +281,8 @@ try {
       [-55, -35],
       [55, -35],
       [55, 40],
-      [0, 40],
-      [0, -35],
+      [30, 40],
+      [30, -35],
     ]) {
       w.clear();
       w.velocity.set(0, 0, 0);

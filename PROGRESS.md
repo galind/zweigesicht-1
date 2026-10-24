@@ -3,6 +3,56 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## One movement, one station, controlled flip — 24 October 2026
+
+Implemented locally on `codex/bench-ui`. `/bench` now has one 219-leaf assembly
+at (0, 0, −7), with a four-second lift, rigid half-turn and reseating. **F** is the
+provisional unused shortcut, centralized in `bindings.ts` and shown in the
+homepage popup, Escape menu and compact exploration hints. Repeated/held presses
+do not queue flips. Both original holders load, but only the matching holder is
+visible/colliding; it exchanges while the movement is fully raised.
+
+- Original-solid cross-fit tests reject using either holder for both orientations:
+  even at shoulder-adjusted heights the wrong pairings intersect the mainplate
+  by 1.980906 / 0.330319 mm³. The owner explicitly chose exchanging the two intact
+  original holders at one station. [Cross-fit evidence](assets/source-manifest/holder-crossfit.json)
+  preserves source hashes and the reproducible probe. Matching corrected seats
+  retain zero plate overlap and the previously verified crown clearances. The
+  exchange is a visual exploration operation, not a maker-supplied mechanism.
+- Safe visitors retain position, view, input and momentum; physics continues.
+  Continuous per-part lift/turn safety envelopes exclude entrants each substep.
+  Only visitors in that envelope, obstructing the incoming holder or losing
+  holder support are moved to nearby checked clear space. Grounded visitors
+  land on the existing mat; airborne visitors keep altitude and momentum. No
+  reset-to-spawn or camera animation. Hidden tabs/graphics loss settle atomically;
+  visible Escape/focus loss lets the flip finish. Loading cannot queue a flip.
+- Collision transforms now explicitly update fixed CAD leaves after parent
+  motion, before player simulation. Destination queries cover triangle-interior
+  crossings and capsules wholly inside the closed incoming holder. Independent
+  checks retain all original/reviewed local matrices, 18 phases, materials and
+  four crowns. Desk, holder shapes, jetpack, bounds, 1.65 mm visitor and 1.48 mm
+  eye height remain unchanged. Homepage glass styling and entry/recovery remain.
+- Verified: **127 CPU tests**, **29 flip/browser checks**, **152 desktop UI checks**,
+  **63 jetpack/boundary checks**, **8 lifecycle checks**, **11 isolated interaction/
+  quality checks**, and the independent two-rest source/phase/render/collision/
+  holder audit with **16 CAD drops**.
+  Inventory validation, typecheck, lint and local production build pass. Real
+  keyboard flight reaches and lands on both faces with one flip and no reset.
+  Fixtures cover standing on/beneath CAD, safe and at-risk airborne visitors,
+  destination/late obstructions, repeat presses, Escape/resume, focus/visibility,
+  context loss during a flip, retry and late-load disposal. Four desktop sizes
+  and 200% text retain readable controls and layout.
+- Actual before/during/after captures in both directions, arrival, landed views,
+  static seating inspections and reports remain local in `artifacts/bench-flip/`.
+  The updated [walking documentation](docs/BENCH_EXPERIENCE.md) records behavior,
+  limits and reproduction. Local production preview: <http://127.0.0.1:4189/bench>.
+
+Remaining: owner visual/mouse-feel walkthrough and existing physical-device,
+human-accessibility and internal CAD qualifications. Safety envelopes are
+conservative, not exact swept-solid certification; narrow existing CAD cavities
+can still need explicit R recovery. No push, deployment, publication or CAD
+redistribution. Prior paired-station milestones below are historical.
+
 ## Shared walking glass styling — 24 October 2026
 
 Updated locally on `codex/bench-ui` after owner feedback. The homepage controls

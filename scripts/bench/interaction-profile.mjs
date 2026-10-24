@@ -82,8 +82,9 @@ try {
               const b = window.bench;
               b.walker.clear();
               // Focus/visibility are recorded; genuine pointer capture is checked above.
-              const station =
-                b.stations.find((s) => s.id === side) || b.stations[0];
+              b.flip?.setRest(side === 'pair' ? 'bridge' : side);
+              const station = b.station?.root.position ??
+                (b.stations.find((s) => s.id === side) || b.stations[0]);
               b.walker.clear();
               b.slowFrames = -1e9; // Hold the baseline manual setting; old code otherwise overrides High.
               if (mode === 'Auto') b.quality('Auto');
@@ -92,7 +93,7 @@ try {
                 mode === 'HalfTransmission'
                   ? 0.5
                   : Number(sessionStorage.profileTransmission);
-              b.stations.forEach((station) =>
+              (b.station ? [b.station] : b.stations).forEach((station) =>
                 station.movement.traverse((o) => {
                   if (o.material)
                     o.material.transmission =

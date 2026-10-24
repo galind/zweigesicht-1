@@ -86,7 +86,8 @@ try {
         b.quality(mode === 'Auto' ? 'Auto' : mode === 'Low');
         b.slowFrames = -1e9;
         b.walker.clear();
-        const station = b.stations.find((s) => s.id === side);
+        b.flip?.setRest(side);
+        const station = b.station?.root.position ?? b.stations.find((s) => s.id === side);
         const x = station.x - 8,
           z = station.z;
         b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);

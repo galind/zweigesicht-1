@@ -18,6 +18,8 @@ import { assetRequestUrl } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
 import { CollisionWorld, Walker, WALK } from './physics';
 import { BenchQuality, LookActivity, type QualityMode } from './performance';
+import { BenchFlip } from './flip';
+import { FLIP_KEY } from './bindings';
 import layout from '../../../assets/authored/atelier-layout.json';
 import watchConfiguration from '../../../assets/authored/watch-configurations.json';
 import holderManifest from '../../../assets/source-manifest/holder.json';
@@ -63,12 +65,12 @@ export class BenchViewer {
   camera = new THREE.PerspectiveCamera(68, 1, 0.035, 250);
   renderer: THREE.WebGLRenderer;
   environment?: THREE.WebGLRenderTarget;
-  stations = layout.stations.map((spec) => ({
-    ...spec,
+  station = {
     root: new THREE.Group(),
     movement: new THREE.Group(),
-    holder: new THREE.Group(),
-  }));
+    holders: { bridge: new THREE.Group(), dial: new THREE.Group() },
+  };
+  flip?: BenchFlip;
   bridgeHolder?: THREE.Mesh;
   dialHolder?: THREE.Mesh;
   world = new CollisionWorld();
@@ -123,21 +125,18 @@ export class BenchViewer {
       const fill = new THREE.DirectionalLight(0xd4e6ff, 0.7);
       fill.position.set(30, 30, -30);
       this.scene.add(key, fill);
-      for (const station of this.stations) {
-        station.root.name = station.id;
-        station.root.position.set(station.x, 0, station.z);
-        station.movement.rotation.x = THREE.MathUtils.degToRad(
-          station.rotationX,
-        );
-        station.movement.position.y = station.seat;
-        // The maker holders are Z-up, with their stem relief toward source −Y.
-        // Align that relief with the movement’s +X stem before building collision.
-        station.holder.rotation.y = THREE.MathUtils.degToRad(
-          station.holderRotationY,
-        );
-        station.root.add(station.movement, station.holder);
-        this.scene.add(station.root);
+      const station = this.station;
+      station.root.name = 'movement-station';
+      station.root.position.set(layout.station.x, 0, layout.station.z);
+      station.movement.rotation.x = Math.PI / 2;
+      station.movement.position.y = layout.stations[0].seat;
+      for (const spec of layout.stations) {
+        const holder = station.holders[spec.id as 'bridge' | 'dial'];
+        holder.rotation.y = THREE.MathUtils.degToRad(spec.holderRotationY);
+        station.root.add(holder);
       }
+      station.root.add(station.movement);
+      this.scene.add(station.root);
       this.walker.spawn.fromArray(layout.arrival);
       this.walker.spawnYaw = layout.arrivalYaw;
       this.observer = new ResizeObserver(this.resize);
@@ -324,12 +323,9 @@ export class BenchViewer {
           mesh.name = record.name;
           mesh.userData.partId = record.id;
           mesh.userData.packet = crownIds.has(record.id) ? 'crown' : 'movement';
-          this.stations.forEach((station, i) => {
-            const instance = i === 0 ? mesh : mesh.clone();
-            instance.userData.stationId = station.id;
-            instance.userData.instanceId = station.id + ':' + record.id;
-            station.movement.add(instance);
-          });
+          mesh.userData.stationId = 'movement';
+          mesh.userData.instanceId = 'movement:' + record.id;
+          this.station.movement.add(mesh);
         }
       }
       if (required.some((p) => !accepted.has(p.id)))
@@ -340,8 +336,8 @@ export class BenchViewer {
       this.dialHolder = (
         results[4] as PromiseFulfilledResult<THREE.Mesh>
       ).value;
-      this.stations[0].holder.add(this.bridgeHolder);
-      this.stations[1].holder.add(this.dialHolder);
+      this.station.holders.bridge.add(this.bridgeHolder);
+      this.station.holders.dial.add(this.dialHolder);
       const environment = (results[5] as PromiseFulfilledResult<THREE.Object3D>)
         .value;
       // glTF extras are the versioned Blender/renderer contract. Fail closed.
@@ -357,10 +353,8 @@ export class BenchViewer {
       });
       this.scene.add(environment);
       const retained = new Set(
-        this.stations.flatMap((station) =>
-          station.movement.children.map(
-            (node) => (node as THREE.Mesh).geometry,
-          ),
+        this.station.movement.children.map(
+          (node) => (node as THREE.Mesh).geometry,
         ),
       );
       for (const index of [0, 1, 6]) {
@@ -387,7 +381,7 @@ export class BenchViewer {
       this.scene.updateMatrixWorld(true);
       // Yield between definitions so loading UI can paint while the BVHs are built.
       const solids: THREE.Mesh[] = [];
-      for (const group of [...this.stations.map((s) => s.root), environment])
+      for (const group of [this.station.root, environment])
         group.traverse((node) => {
           if (
             node instanceof THREE.Mesh &&
@@ -402,7 +396,14 @@ export class BenchViewer {
           await new Promise((resolve) => setTimeout(resolve, 0));
       }
       if (this.dead) return;
-      // Compile both simultaneously present stations before capture.
+      this.flip = new BenchFlip(
+        this.station.movement,
+        this.station.holders,
+        this.world,
+        this.walker,
+        layout.stations,
+      );
+      // Compile the single assembly before capture.
       // Transmission renders opaque finishes a second time without tone mapping.
       const toneMapping = this.renderer.toneMapping;
       const outputColorSpace = this.renderer.outputColorSpace;
@@ -432,21 +433,18 @@ export class BenchViewer {
       }
     }
   }
-  nearbyStation() {
-    const { x, z } = this.walker.feet;
-    return this.stations.reduce((best, station) =>
-      Math.hypot(x - station.x, z - station.z) <
-      Math.hypot(x - best.x, z - best.z)
-        ? station
-        : best,
-    );
-  }
   updateStation() {
-    const station = this.nearbyStation();
-    if (this.status.side !== station.id) {
-      this.status.side = station.id as BenchStatus['side'];
+    const side = this.flip?.side ?? 'bridge';
+    if (this.status.side !== side) {
+      this.status.side = side;
       this.emit();
     }
+  }
+  startFlip() {
+    if (!this.status.ready || !this.status.captured) return false;
+    const started = this.flip?.start() ?? false;
+    if (started) this.wake();
+    return started;
   }
   enter = async () => {
     if (!this.status.ready) return;
@@ -458,8 +456,7 @@ export class BenchViewer {
   };
   lockError = () => {
     this.pause();
-    this.status.error =
-      'Mouse capture was declined. Try again to continue.';
+    this.status.error = 'Mouse capture was declined. Try again to continue.';
     this.emit();
   };
   lockChanged = () => {
@@ -487,6 +484,8 @@ export class BenchViewer {
   };
   visibility = () => {
     if (document.hidden) {
+      this.flip?.finish();
+      this.updateStation();
       this.pause();
       cancelAnimationFrame(this.frame);
       this.frame = 0;
@@ -494,6 +493,8 @@ export class BenchViewer {
   };
   contextLost = (e: Event) => {
     e.preventDefault();
+    this.flip?.finish();
+    this.updateStation();
     this.pause();
     this.status.ready = false;
     this.status.error =
@@ -512,6 +513,11 @@ export class BenchViewer {
       return;
     }
     if (!this.status.captured) return;
+    if (e.code === FLIP_KEY.code) {
+      e.preventDefault();
+      if (!e.repeat) this.startFlip();
+      return;
+    }
     if (!['KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'KeyR'].includes(e.code))
       return;
     e.preventDefault();
@@ -565,6 +571,7 @@ export class BenchViewer {
     const start = this.inspect ? performance.now() : 0,
       elapsed = this.last ? now - this.last : 16.67;
     const moving =
+      !!this.flip?.active ||
       this.walker.keys.size > 0 ||
       !this.walker.grounded ||
       this.walker.velocity.lengthSq() > 1e-8;
@@ -585,6 +592,7 @@ export class BenchViewer {
     if (activity.elapsed === null) this.detail.resetSamples();
     const shouldRender =
       dirty || moving || !this.walker.grounded || activity.looked;
+    this.flip?.update(elapsed / 1000);
     if (this.status.ready && (moving || !this.walker.grounded))
       this.walker.update(elapsed / 1000);
     this.updateStation();
@@ -619,6 +627,7 @@ export class BenchViewer {
   };
   dispose() {
     this.dead = true;
+    this.walker.guard = undefined;
     this.generation++;
     this.pause();
     cancelAnimationFrame(this.frame);

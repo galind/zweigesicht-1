@@ -41,7 +41,9 @@ try {
     for (const solid of b.world.solids)
       solid.mesh.geometry.boundsTree = solid.tree;
     const stations = [];
-    for (const station of b.stations) {
+    for (const spec of layout.stations) {
+      b.flip.setRest(spec.id);
+      const station = { ...spec, ...b.station, holder: b.station.holders[spec.id] };
       let matrixError = 0,
         collisionError = 0,
         worldMatrixError = 0;
@@ -180,7 +182,7 @@ try {
         (s) =>
           s.mesh === stem ||
           s.mesh === station.holder.children[0] ||
-          (s.mesh.userData.stationId === station.id &&
+          (s.mesh.userData.stationId === 'movement' &&
             s.mesh.userData.packet === 'crown'),
       );
       const envelope = {
@@ -256,21 +258,12 @@ try {
           collides: b.world.solids.some((s) => s.mesh === node),
         });
     });
-    const shared = b.stations[0].movement.children.every((a) => {
-      const c = b.stations[1].movement.children.find(
-        (c) => c.userData.partId === a.userData.partId,
-      );
-      return (
-        c &&
-        a !== c &&
-        a.geometry === c.geometry &&
-        a.material === c.material &&
-        a.userData.instanceId !== c.userData.instanceId
-      );
-    });
+    const single = b.station.movement.children.length === 219 &&
+      b.world.solids.filter((s) => s.mesh.userData.stationId === 'movement').length === 219;
+    b.flip.setRest('bridge');
     return {
       environment,
-      shared,
+      single,
       stations,
       solids: b.world.solids.length,
       trees: b.world.trees.size,
@@ -305,7 +298,7 @@ try {
     // common-volume + support-witness checks distinguish seating from penetration.
   }
   assert.ok(report.geometry.stations[1].lowerOpenings > 0);
-  assert.ok(report.geometry.shared);
+  assert.ok(report.geometry.single);
   assert.ok(
     report.geometry.environment.every(
       (e) => e.collides === (e.role !== 'decor'),

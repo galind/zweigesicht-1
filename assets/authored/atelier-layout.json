@@ -3,7 +3,7 @@
   "stations": [
     {
       "id": "bridge",
-      "x": -27,
+      "x": 0,
       "z": -7,
       "seat": 12.2,
       "rotationX": 90,
@@ -11,7 +11,7 @@
     },
     {
       "id": "dial",
-      "x": 27,
+      "x": 0,
       "z": -7,
       "seat": 16.3,
       "rotationX": -90,
@@ -26,5 +26,9 @@
     "maxX": 62,
     "minZ": -42,
     "maxZ": 62
+  },
+  "station": {
+    "x": 0,
+    "z": -7
   }
 }

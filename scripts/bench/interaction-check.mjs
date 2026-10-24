@@ -169,11 +169,12 @@ try {
         window.bench.detail.mode === 'High',
     ),
   );
-  // Independent nearby-station fixtures: quality stays fixed and neither station hides.
+  // Independent resting-pose fixtures: quality stays fixed across holder exchanges.
   for (const side of ['dial', 'bridge']) {
     const result = await page.evaluate((side) => {
-      const b = window.bench,
-        station = b.stations.find((s) => s.id === side);
+      const b = window.bench;
+      b.flip.setRest(side);
+      const station = b.station.root.position;
       b.clearInput();
       b.walker.velocity.set(0, 0, 0);
       b.walker.feet.set(
@@ -187,16 +188,16 @@ try {
         side: b.status.side,
         quality: b.status.quality,
         ratio: b.renderer.getPixelRatio(),
-        bothVisible: b.stations.every((s) => s.root.visible),
+        singleVisible: b.station.root.visible && Object.values(b.station.holders).filter(g => g.visible).length === 1,
         pending: b.activity.pending,
       };
     }, side);
     check(
-      side + ' nearby status preserves quality and both stations',
+      side + ' resting side preserves quality and one visible holder',
       result.side === side &&
         result.quality === 'High' &&
         result.ratio === 1.5 &&
-        result.bothVisible &&
+        result.singleVisible &&
         !result.pending,
       result,
     );
@@ -210,7 +211,8 @@ try {
       await page.evaluate(
         ({ side, scale }) => {
           const b = window.bench;
-          const station = b.stations.find((s) => s.id === side);
+          b.flip?.setRest(side);
+          const station = b.station?.root.position ?? b.stations.find((s) => s.id === side);
           b.emit();
           b.renderer.transmissionResolutionScale = scale;
           const x = station.x - 8,

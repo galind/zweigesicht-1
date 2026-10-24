@@ -122,6 +122,10 @@ try {
     'returning window does not capture without action',
     await page.evaluate(() => !window.bench.status.captured),
   );
+  await page.getByRole('button', {name: /^(Enter the movement|Resume exploring)$/}).click();
+  await page.waitForFunction(() => window.bench.status.captured);
+  await page.keyboard.press('f');
+  await page.waitForFunction(() => window.bench.flip.active);
   // Simulate a genuine WebGL context loss through the browser extension.
   await page.evaluate(() =>
     window.bench.renderer
@@ -133,6 +137,7 @@ try {
     .getByRole('button', { name: 'Retry loading', exact: true })
     .waitFor();
   check('graphics loss offers retry', true);
+  check('graphics loss finishes flip and removes guard', await page.evaluate(() => !window.bench.flip.active && !window.bench.walker.guard));
   await page
     .getByRole('button', { name: 'Retry loading', exact: true })
     .click();
@@ -153,6 +158,8 @@ try {
   await page.goto(base + '/bench?inspect=1');
   await page.bringToFront();
   await page.waitForFunction(() => !!window.bench);
+  await page.keyboard.press('f');
+  check('shortcut during loading cannot queue a flip', await page.evaluate(() => !window.bench.flip?.active));
   await page.evaluate(() => (window.departingBench = window.bench));
   await page
     .getByRole('link', { name: 'Back to the explorer', exact: true })
@@ -176,7 +183,7 @@ try {
   console.log(JSON.stringify(checks, null, 2));
 } finally {
   await fs.writeFile(
-    'artifacts/bench/lifecycle-report.json',
+    (process.env.PLAY_QA_OUTPUT || 'artifacts/bench') + '/lifecycle-report.json',
     JSON.stringify(checks, null, 2),
   );
   if (foreground) await foreground.close();

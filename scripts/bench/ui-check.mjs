@@ -68,7 +68,7 @@ try {
       new URL(page.url()).pathname === "/" &&
         (await popup
           .innerText()
-          .then((t) => ["WASD", "Mouse", "Space", "R", "Esc"].every((k) => t.includes(k)))),
+          .then((t) => ["WASD", "Mouse", "Space", "F", "R", "Esc"].every((k) => t.includes(k)))),
     );
     check(
       label + " popup layout",
