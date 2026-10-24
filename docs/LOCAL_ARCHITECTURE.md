@@ -26,6 +26,13 @@ The catalog promise coalesces optional requests, including the hash-checked orig
 
 The fitted case has 41 leaves. Focus, All parts, raw external inspection and isolation can hide it without clearing its preference. Selecting a fitted case part retains configured context. Crystals permit pointer selection through them while remaining catalog-selectable. Exterior alloy presets and Fine hand overrides are scoped to the reviewed occurrences; raw inspection retains its own finishes.
 
+`WheelDisplayPose.ts` applies the separately recorded d96 static phase to all
+three experiences. Explorer retains its raw assembled matrix and applies the
+phase as a display matrix, including spread layout. Workshop retains base target
+poses and derives corrected seat bounds at load. Bench builds collision from the
+same corrected mesh. See the [contact review](WHEEL_CONTACT_REVIEW.md); this is
+one static placement exception, not a running-gear model.
+
 `CasePose.ts` stages upper withdrawal, lower withdrawal, CAD-X case turnover, lower reseating and upper reseating. Camera and attachments share an inverse rotation frame, leaving source case/movement matrices intact. Exact endpoints reuse original counterpart occurrences. Reversal continues from the displayed phase; reduced motion snaps. Hidden-case turns skip invisible withdrawal/reseating time. Lug disassembly vectors follow the current attachment frame, and camera refits defer during turnover. The four unresolved locking pins stay seated. Detailed constraints are in [CAD notes](CAD_NOTES.md).
 
 `?inspect=1` dynamically loads the inspection panel and browser QA/benchmark modules. `?no3d=1` and `?text=200` are explicit verification modes. No database or visitor account is required.

@@ -30,6 +30,7 @@ import {
 } from '../experience/dials';
 import type { Benchmark } from './benchmark';
 import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
+import { wheelDisplayMatrix } from './WheelDisplayPose';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
@@ -1510,7 +1511,7 @@ export class MovementViewer {
         ...p,
         assembled: fitted.has(p.source.id)
           ? (handDisplayMatrix(p.source.id, p.assembled) ?? p.assembled)
-          : p.assembled,
+          : (wheelDisplayMatrix(p.source.id, p.assembled) ?? p.assembled),
       })),
       this.camera.aspect,
       fitted,
@@ -1829,7 +1830,7 @@ export class MovementViewer {
           ? handDisplayMatrix(id, p.assembled)
           : this.fittedCase.has(id)
             ? caseDisplayMatrix(id, p.assembled, caseTo)
-            : undefined;
+            : wheelDisplayMatrix(id, p.assembled);
       p.targetRotation.identity();
       p.target.fromArray(
         CASE_LEAVES.has(id) && !this.fittedCase.has(id)

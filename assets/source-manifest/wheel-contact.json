@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-10-24",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "review": "docs/WHEEL_CONTACT_REVIEW.md",
+  "override": "assets/authored/wheel-display-poses.json",
+  "sourceOccurrenceTransforms": "explorer/public/models/assembly-manifest.json",
+  "survey": {
+    "toothedOccurrences": 26,
+    "allPairs": 325,
+    "booleanCandidates": 45,
+    "aabbRejected": 280,
+    "freshMovementSourceMatrices": {
+      "count": 223,
+      "maxError": 0.0
+    },
+    "originalDeflectionMm": 0.015,
+    "comparisonDeflectionMm": 0.002
+  },
+  "correctedOccurrence": {
+    "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
+    "definitionId": "d_0_1_1_96",
+    "localZDegrees": 6.25,
+    "sourceMatrix": [
+      [1.0, 0.0, 0.0, -2.6790503757237],
+      [0.0, 1.0, 0.0, 0.972208354384323],
+      [0.0, 0.0, 1.0, -2.070000000000007],
+      [0.0, 0.0, 0.0, 1.0]
+    ],
+    "displayMatrix": [
+      [0.9940563382223196, -0.10886687485196457, 0.0, -2.6790503757237],
+      [0.10886687485196457, 0.9940563382223196, 0.0, 0.972208354384323],
+      [0.0, 0.0, 1.0, -2.070000000000007],
+      [0.0, 0.0, 0.0, 1.0]
+    ]
+  },
+  "solidToothContacts": [
+    {
+      "key": "85-96",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4"
+      ],
+      "definitionIds": ["d_0_1_1_85", "d_0_1_1_96"],
+      "names": ["ml01 Federhaustrommel II z80 m0,15", "ml01 ÜFHMinRad z26 m0,15"],
+      "sourceCommonVolumeMm3": 0.03608374065806415,
+      "maxVerifiedInteriorWitnessDepthMm": 0.0811650630119265,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0.0,
+      "displayMinimumDistanceMm": 0.0269709687247196
+    },
+    {
+      "key": "90-249",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_74"
+      ],
+      "definitionIds": ["d_0_1_1_90", "d_0_1_1_249"],
+      "names": ["ml01 Federhaustrommel I z80 m0,15", "ml01 Kronrad z45 m0,15"],
+      "sourceCommonVolumeMm3": 0.040314890553963686,
+      "maxVerifiedInteriorWitnessDepthMm": 0.06715373698008052,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "93-96",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4"
+      ],
+      "definitionIds": ["d_0_1_1_93", "d_0_1_1_96"],
+      "names": ["ml01 Minutentrieb z12 m0,15", "ml01 ÜFHMinRad z26 m0,15"],
+      "sourceCommonVolumeMm3": 0.010153666923809736,
+      "maxVerifiedInteriorWitnessDepthMm": 0.04354213996549064,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0.0,
+      "displayMinimumDistanceMm": 0.022584201618245967
+    },
+    {
+      "key": "94-237",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1"
+      ],
+      "definitionIds": ["d_0_1_1_94", "d_0_1_1_237"],
+      "names": ["ml01 Minutenrad z64 m0,13", "ml01 Kleinbodentrieb z10 m0,13"],
+      "sourceCommonVolumeMm3": 0.010055918762912912,
+      "maxVerifiedInteriorWitnessDepthMm": 0.06541736033669976,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "97-249",
+      "occurrenceIds": ["p_0_1_1_1__0_1_1_1_4__0_1_1_83_5", "p_0_1_1_1__0_1_1_1_4__0_1_1_83_74"],
+      "definitionIds": ["d_0_1_1_97", "d_0_1_1_249"],
+      "names": ["ml01 Kupplungsrad z17 m0,15", "ml01 Kronrad z45 m0,15"],
+      "sourceCommonVolumeMm3": 0.009449353596088153,
+      "maxVerifiedInteriorWitnessDepthMm": 0.06222451042992636,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "131-131",
+      "occurrenceIds": ["p_0_1_1_1__0_1_1_1_4__0_1_1_83_14", "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15"],
+      "definitionIds": ["d_0_1_1_131", "d_0_1_1_131"],
+      "names": ["ml01 Sperrrad z62 m0,20", "ml01 Sperrrad z62 m0,20"],
+      "sourceCommonVolumeMm3": 0.060692778812264515,
+      "maxVerifiedInteriorWitnessDepthMm": 0.07933253842678478,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "137-210",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1"
+      ],
+      "definitionIds": ["d_0_1_1_137", "d_0_1_1_210"],
+      "names": ["ml01 Viertelrohr1 z12 m0,177", "ml01 Wechselrad1 z36 m0,177"],
+      "sourceCommonVolumeMm3": 0.008949716036611845,
+      "maxVerifiedInteriorWitnessDepthMm": 0.04389686388275858,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "141-211",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2"
+      ],
+      "definitionIds": ["d_0_1_1_141", "d_0_1_1_211"],
+      "names": ["ml01 Stundenrad1 z40 m0,17", "ml01 Wechseltrieb1 z10 m0,17"],
+      "sourceCommonVolumeMm3": 0.015449548026262238,
+      "maxVerifiedInteriorWitnessDepthMm": 0.06855249461247606,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "187-217",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+      ],
+      "definitionIds": ["d_0_1_1_187", "d_0_1_1_217"],
+      "names": ["ml01 Stundenrad2 z32 m0,12", "ml01 Wechseltrieb3 z8 m0,12"],
+      "sourceCommonVolumeMm3": 1.0339956609523051e-5,
+      "maxVerifiedInteriorWitnessDepthMm": 0.0009230853016007027,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "210-213",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1"
+      ],
+      "definitionIds": ["d_0_1_1_210", "d_0_1_1_213"],
+      "names": ["ml01 Wechselrad1 z36 m0,177", "ml01 Wechselrad2 z36 m0,177"],
+      "sourceCommonVolumeMm3": 0.0023575960026917145,
+      "maxVerifiedInteriorWitnessDepthMm": 0.018245088605763723,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "234-243",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2"
+      ],
+      "definitionIds": ["d_0_1_1_234", "d_0_1_1_243"],
+      "names": ["ml01 Gangtrieb z9 m0,102", "ml01 Sekundenrad z81 m0,102"],
+      "sourceCommonVolumeMm3": 0.005208177789298621,
+      "maxVerifiedInteriorWitnessDepthMm": 0.0525198859730987,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    },
+    {
+      "key": "238-242",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1"
+      ],
+      "definitionIds": ["d_0_1_1_238", "d_0_1_1_242"],
+      "names": ["ml01 Kleinbodenrad z75 m0,1159", "ml01 Sekundentrieb z8 m0,1159"],
+      "sourceCommonVolumeMm3": 0.00589281232097677,
+      "maxVerifiedInteriorWitnessDepthMm": 0.06076746901683805,
+      "runtimeAndFineMeshWitnessesInsideBoth": true,
+      "decision": "preserve-source-pose-pending-coupled-review"
+    }
+  ],
+  "coaxialJoints": [
+    {
+      "key": "93-94",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2"
+      ],
+      "definitionIds": ["d_0_1_1_93", "d_0_1_1_94"],
+      "names": ["ml01 Minutentrieb z12 m0,15", "ml01 Minutenrad z64 m0,13"],
+      "sourceCommonVolumeMm3": 0.0017499433369393732
+    },
+    {
+      "key": "210-211",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2"
+      ],
+      "definitionIds": ["d_0_1_1_210", "d_0_1_1_211"],
+      "names": ["ml01 Wechselrad1 z36 m0,177", "ml01 Wechseltrieb1 z10 m0,17"],
+      "sourceCommonVolumeMm3": 0.0023608551441637467
+    },
+    {
+      "key": "216-217",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+      ],
+      "definitionIds": ["d_0_1_1_216", "d_0_1_1_217"],
+      "names": ["ml01 Wechselrad3 z 24 m0,15", "ml01 Wechseltrieb3 z8 m0,12"],
+      "sourceCommonVolumeMm3": 0.0010660218736778203
+    },
+    {
+      "key": "237-238",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2"
+      ],
+      "definitionIds": ["d_0_1_1_237", "d_0_1_1_238"],
+      "names": ["ml01 Kleinbodentrieb z10 m0,13", "ml01 Kleinbodenrad z75 m0,1159"],
+      "sourceCommonVolumeMm3": 0.0020865411213040197
+    },
+    {
+      "key": "242-243",
+      "occurrenceIds": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2"
+      ],
+      "definitionIds": ["d_0_1_1_242", "d_0_1_1_243"],
+      "names": ["ml01 Sekundentrieb z8 m0,1159", "ml01 Sekundenrad z81 m0,102"],
+      "sourceCommonVolumeMm3": 0.0007577405337794599
+    }
+  ],
+  "unresolvedShellContact": {
+    "definitions": ["d_0_1_1_144", "d_0_1_1_172"],
+    "finding": "d144 has no TopAbs_SOLID. Its nonzero raw volume integral cannot confirm solid penetration. No shell closing or geometry repair applied."
+  },
+  "neighborReview": {
+    "exactPairs": 14,
+    "broadPhaseExclusions": 349,
+    "emptyAssemblyDiamond": "Separate hash-verified maker STL is disjoint; see local candidate-validation.json.",
+    "changedContacts": ["85-96", "93-96"],
+    "preservedScrewFitCommonVolumeMm3": 0.1698715706345995,
+    "limitation": "Broad phase uses recorded mesh bounds padded by 0.05 mm; invalid or omitted source surfaces remain outside mechanical certification."
+  },
+  "localEvidence": [
+    {
+      "path": "artifacts/wheel-contact/survey.json",
+      "sha256": "bf35965be7e5b1b5f5242591255f04158aedf68c4b955c00fd1a25635932c2f8"
+    },
+    {
+      "path": "artifacts/wheel-contact/details.json",
+      "sha256": "d3596202353c120b4919e7de285d4b35942fa9aa019e910a509684b9a41d2f11"
+    },
+    {
+      "path": "artifacts/wheel-contact/phase-study.json",
+      "sha256": "9d0782d2a504f5fe466d3b33c605701496f22fb950d371c0aeb4605fc3b9c2ae"
+    },
+    {
+      "path": "artifacts/wheel-contact/candidate-neighbors.json",
+      "sha256": "26ab1b6e6ee5abcd80474cd806ba3208d0f38fc79639e51f33d31e8ed5e883d9"
+    },
+    {
+      "path": "artifacts/wheel-contact/candidate-validation.json",
+      "sha256": "867b5ebe2ec2ee4f3592931e8c6c0afbc238286d0c77c3d1d6f95f7aaef52d94"
+    },
+    {
+      "path": "artifacts/wheel-contact/transfer-wheel-before-after.png",
+      "sha256": "eb2bf2630f0bdefcda4fc52730b71ac2b1337fbc4108738d21a1023ebe295d50"
+    },
+    {
+      "path": "artifacts/wheel-contact/mesh-pairs.json",
+      "sha256": "dce0bec9ff2cd356fb278ed266c8a597745384d88605ba5caf64d025c3ed61e2"
+    },
+    {
+      "path": "artifacts/wheel-contact/browser-before/explorer-report.json",
+      "sha256": "dc1f7e997bd9e26fecc791b18d73d4c47a3275c7a5f08eedfb3ff3c94b8e4ac3"
+    },
+    {
+      "path": "artifacts/wheel-contact/browser-after/explorer-report.json",
+      "sha256": "29b1aed34ab04a99d47aa1149dc748eed84c38021a19049485846f7ef36a30b4"
+    },
+    {
+      "path": "artifacts/wheel-contact/workshop/focused-redesign-report.json",
+      "sha256": "3ecb7251ed5dbc63c48a0b33cb2ded2cc4def602a6b195166e55bc18c87c064f"
+    },
+    {
+      "path": "artifacts/wheel-contact/workshop-after/focused-redesign-report.json",
+      "sha256": "db4cd6a084d6832d27bec47480ebac4f6473c9a3e37acf9251f97f7928b1fa1c"
+    },
+    {
+      "path": "artifacts/wheel-contact/workshop-easy-after/easy-redesign-report.json",
+      "sha256": "0039bb4f3379300eaadc701579cf8cff27114e85a0267f72dc662f306cb9766d"
+    },
+    {
+      "path": "artifacts/wheel-contact/workshop-hard-after/hard-redesign-report.json",
+      "sha256": "063b10c8b9adbaf320883a112081cb6197cef77d827c40d3c3ab8448e7a65413"
+    },
+    {
+      "path": "artifacts/wheel-contact/bench/browser-report.json",
+      "sha256": "dbd35e7ef6fa14a2818f68f3e143719d73ec06f853ff5241c6250c24ff9a8e1b"
+    },
+    {
+      "path": "artifacts/wheel-contact/bench-after/browser-report.json",
+      "sha256": "083087820f5ec27f297b20bb268d726f820d774dbe250a7bc70a95538c42055a"
+    },
+    {
+      "path": "artifacts/wheel-contact/bench-after/collision-report.json",
+      "sha256": "933c92cf60da3b15ef5c7900eac6cb24949edb2aa6b082dd99711d97c209c362"
+    }
+  ],
+  "limitations": [
+    "Static unloaded endpoint pose only; no continuous-cycle, escapement, spring, backlash or manufacturing-tolerance certification.",
+    "Phase alternatives for the remaining pairs need coupled-packet and neighboring-contact review before applying.",
+    "Original source and runtime geometry assets are unchanged."
+  ],
+  "runtimeMeshReview": {
+    "correctedPairs": ["85-96", "93-96"],
+    "sourceTriangleIntersections": true,
+    "correctedTriangleIntersections": false,
+    "minimumTriangleDistancesMm": [0.027128355499877885, 0.0228209068327867],
+    "unchangedOverviewMeshBuffers": 222
+  }
+}

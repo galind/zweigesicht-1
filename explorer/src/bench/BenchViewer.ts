@@ -12,6 +12,7 @@ import {
   loadSourceSurfaces,
 } from '../viewer/SourceSurfaces';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
+import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
 import { assetRequestUrl } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
@@ -247,6 +248,9 @@ export class BenchViewer {
             ...(record.worldTransform.flat() as Parameters<
               THREE.Matrix4['set']
             >),
+          );
+          mesh.matrix.copy(
+            wheelDisplayMatrix(record.id, mesh.matrix) ?? mesh.matrix,
           );
           mesh.name = record.name;
           mesh.userData.partId = record.id;

@@ -6,6 +6,7 @@ export async function reviewInventory({v: source, Viewer, THREE, initialState, l
   const {makeSpreadSlots, forwardRotation}=load('explorer/src/experience/spread.ts');
   const {DIALS}=load('explorer/src/experience/dials.ts');
   const handRecords=JSON.parse(fs.readFileSync(new URL('../../assets/authored/hand-display-poses.json',import.meta.url))).hands;
+  const {wheelDisplayMatrix}=load('explorer/src/viewer/WheelDisplayPose.ts');
   const {handDisplayMatrix}=load('explorer/src/viewer/HandDisplayPose.ts');
   const v=Object.assign(Object.create(Viewer.prototype),{
     state:{...initialState,phase:'whole'}, ready:true, parts, renderParts:source.renderParts,
@@ -37,7 +38,7 @@ export async function reviewInventory({v: source, Viewer, THREE, initialState, l
   for(const aspect of [1440/788,390/680]) for(const central of DIALS.faces.central.styles) for(const small of DIALS.faces.small.styles){
     v.reset();await v.configureDials({centralVisible:true,smallVisible:true,centralStyle:central.id,smallStyle:small.id});pose();
     v.camera.aspect=aspect;v.camera.updateProjectionMatrix();v.allParts();pose();
-    const inputs=[...v.renderParts.values()].map(p=>({...p,assembled:v.fitted.has(p.source.id)?handDisplayMatrix(p.source.id,p.assembled)??p.assembled:p.assembled}));
+    const inputs=[...v.renderParts.values()].map(p=>({...p,assembled:v.fitted.has(p.source.id)?handDisplayMatrix(p.source.id,p.assembled)??p.assembled:wheelDisplayMatrix(p.source.id,p.assembled)??p.assembled}));
     const slots=makeSpreadSlots(inputs,aspect,v.fitted), forward=matrices();
     const centers=new Map([...v.spread].map(([id])=>[id,center(v.renderParts.get(id))]));
     for(const p of inputs)if(slots.has(p.source.id)){

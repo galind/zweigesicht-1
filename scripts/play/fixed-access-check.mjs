@@ -41,9 +41,11 @@ const b = fs.readFileSync(root + "/explorer/public/models/diamond-c74ee2731a1f.s
 pieces.set(diamond, {
   geometry: new STLLoader().parse(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)),
 });
+const {wheelDisplayMatrix} = await import('../../explorer/src/viewer/WheelDisplayPose.ts');
 for (const [id, p] of pieces) {
   p.geometry.computeBoundingBox();
   p.pose = new THREE.Matrix4().set(...manifest.targetPoses[id].flat());
+  p.pose = wheelDisplayMatrix(id, p.pose) ?? p.pose;
   p.mesh = new THREE.Mesh(p.geometry, new THREE.MeshBasicMaterial());
   p.mesh.matrixAutoUpdate = false;
   p.mesh.matrix.copy(p.pose);

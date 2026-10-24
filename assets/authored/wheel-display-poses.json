@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "scope": "Static presentation phase; original geometry and source matrices remain immutable. No running or mechanical certification.",
+  "review": "docs/WHEEL_CONTACT_REVIEW.md",
+  "wheels": [
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
+      "definitionId": "d_0_1_1_96",
+      "name": "ml01 ÜFHMinRad z26 m0,15",
+      "pivotLocalMm": [0, 0, 0],
+      "localZDegrees": 6.25,
+      "axisEvidence": "Original cylindrical bore face 140, radius 0.2625 mm, centered at local X=Y=0; source local +Z equals world +Z.",
+      "reason": "Correct the static tooth phase against barrel II d85 and center pinion d93 without changing either neighboring wheel, tooth profile, axis or axial seating."
+    }
+  ]
+}

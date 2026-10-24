@@ -3,6 +3,44 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Wheel contact investigation and static phase — 24 October 2026
+
+Implemented from clean `4e33275` on local `codex/wheel-contact-audit`.
+See the [pair identities, measurements and decision record](docs/WHEEL_CONTACT_REVIEW.md)
+and [provenance](assets/source-manifest/wheel-contact.json). Evidence remains local
+under `artifacts/wheel-contact/`; production review server is on port 4179.
+
+- Surveyed 26 toothed occurrences / 325 pairs, with 45 original-BRep candidates.
+  All 223 movement source matrices match fresh XCAF composition exactly. Confirmed
+  12 non-coaxial source-solid contacts, separated five coaxial joints and the d144
+  open-shell volume signal. Orthographic close-ups, interior witnesses and finer
+  tessellation distinguish these from perspective and mesh-only artifacts.
+- Corrected only transfer wheel d96's static phase, +6.25° about its original
+  local Z bore. Source common volumes with d85/d93 were 0.036083741/0.010153667
+  mm³; both become zero with 0.026971/0.022584 mm minimum solid gaps. Actual decoded
+  runtime meshes also stop intersecting (0.027128/0.022821 mm gaps). Fourteen
+  nearby original-solid checks show no increased penetration; existing screw-fit
+  and jewel contacts remain. The empty assembly diamond's recovered STL is disjoint.
+- One reproducible authored override is shared by explorer, Workshop and walking.
+  Source STEP/GLBs, geometry buffers, immutable matrices and Workshop base targets
+  retain their hashes/values. No tooth, axis, scale, material, UI, visibility or
+  performance changes. Explorer tracks the phase separately as a display pose;
+  Workshop seat bounds and walking collision use the same corrected pose.
+- Validation passes: 110 CPU tests, 115 retained-input runtime checks, inventory,
+  1,119 sampled access checks, typecheck/lint, production build, source hashes and
+  Meshopt byte identity. Headless browser checks pass before/after: seven explorer
+  suites (350), Workshop focused (92), walking journey (23). Final complete Easy
+  (89 actions / 538 checks), Hard (284 actions / 1,708 checks), 17 entry checks,
+  HTTP metadata checks and 16 landings pass. Walking independently verifies the
+  one phase exception, all other source poses and both collision presentation
+  transforms. Original and corrected local screenshots/reports are retained.
+
+Next: coupled phase/contact review for the other ten confirmed pairs; review d144
+as an open shell before making any solid-interference claim. Their original poses
+and measured overlaps remain unchanged. The accepted correction is an unloaded
+static presentation, not maker clocking, dynamic contact or mechanical
+certification. No push, PR, deployment or asset publication was performed.
+
 ## Local responsiveness follow-up — 24 October 2026
 
 Implemented and verified from clean `989bd6f` on `codex/walk-inside-movement`.

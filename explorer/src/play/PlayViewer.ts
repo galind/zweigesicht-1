@@ -21,6 +21,7 @@ import {
   loadSourceSurfaces,
 } from '../viewer/SourceSurfaces';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
+import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
 import {
   createMaterial,
   FITTED_BLUE_ENAMEL,
@@ -300,11 +301,12 @@ export class PlayViewer {
             polygonOffsetUnits: -1,
           });
         }
-        const pose = new THREE.Matrix4().set(
+        const sourcePose = new THREE.Matrix4().set(
           ...(this.manifest.targetPoses[id].flat() as Parameters<
             THREE.Matrix4['set']
           >),
         );
+        const pose = wheelDisplayMatrix(id, sourcePose) ?? sourcePose;
         mesh.matrixAutoUpdate = false;
         mesh.matrix.copy(pose);
         mesh.userData.partId = id;
