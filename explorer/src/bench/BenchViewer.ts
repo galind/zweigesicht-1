@@ -225,6 +225,19 @@ export class BenchViewer {
         track(mesh);
         return mesh;
       };
+      const loadEnvironment = async () => {
+        // This locally authored GLB keeps a stable filename between Blender
+        // exports. Revalidate it on entry instead of retaining an old desk.
+        const response = await fetch('/bench-local/environment.glb', {
+          cache: 'no-store',
+        });
+        if (!response.ok) throw Error('Local environment unavailable');
+        const gltf = await loader.parseAsync(
+          await response.arrayBuffer(),
+          '/bench-local/',
+        );
+        return track(gltf.scene);
+      };
       const results = await Promise.allSettled([
         loader
           .loadAsync(assetRequestUrl(paths.overview))
@@ -233,9 +246,7 @@ export class BenchViewer {
         loadSourceSurfaces(paths.overview),
         holder('movement'),
         holder('dial'),
-        loader
-          .loadAsync('/bench-local/environment.glb')
-          .then((g) => track(g.scene)),
+        loadEnvironment(),
         loader
           .loadAsync(assetRequestUrl(paths.catalog))
           .then((g) => track(g.scene)),

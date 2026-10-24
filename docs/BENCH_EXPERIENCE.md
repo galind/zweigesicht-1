@@ -37,8 +37,8 @@ per instance. Neither station becomes hidden or non-colliding when looking away.
 The owner requested a much simpler environment after reviewing the initial
 terraced version. The desk is now one 180 × 140 mm worktop at Y13.5, with a
 1 mm walnut border and no upper promenade, pause terraces, guards, tools or
-backdrop wall. The ivory scene background stays. Spawn is (−64, 13.502, 40),
-facing the movements. The open surface provides continuous circulation around
+backdrop wall. The ivory scene background stays. Spawn/reset is (−49, 17.602, 12) on the existing level bridge landing,
+facing +X directly into the movement. The open surface provides continuous circulation around
 both stations, rather than a prescribed narrow path.
 
 Two 6 mm wide straight ramps rise at 1:6 to the unchanged west interfaces:
@@ -87,7 +87,7 @@ from the passing authored-environment clearances and walking tests.
 ## Controls, collision and lifetime
 
 Enter explicitly captures the mouse; Escape opens the menu and releases capture.
-WASD walks, mouse looks, Space jumps and R returns to the shared forecourt.
+WASD walks, mouse looks, Space jumps and R returns to the entry landing.
 T has no action. Nearby station status is derived from position. Accidental falls
 below Y−8 or outside the desk bounds recover to the nearer safe west approach;
 normal station-to-station travel never changes position except through physics.
@@ -146,7 +146,7 @@ Collections are `ENV_WALKABLE`, `ENV_BOUNDARY`, `ENV_DECOR`,
 `INTERFACE_BRIDGE` and `INTERFACE_DIAL`. Meshes merge by material and role inside
 each collection. Three opaque materials provide walnut, green linoleum and dark
 steel; two small albedo maps are authored and packed by Blender. The simpler
-environment has 8 meshes and 2,164 triangles (220,208 bytes). Empty boundary
+environment has 8 meshes and 2,164 triangles. Empty boundary
 and decoration collections remain available, but export no geometry. Boolean
 cutters retain a single material per mesh so glTF extras remain on each render
 mesh. Blender 5.2 uses `use_renderable` to exclude the hidden scale reference.
@@ -186,8 +186,9 @@ failures as explicit evidence. Other intersections fail the runner. Legacy
 `collision-check` and `presentation-check` entry points run this same consolidated
 audit rather than keeping obsolete active-side assumptions.
 
-`browser-check` uses actual pointer capture and keyboard translation with fixed
-automated look headings. Every step of the round trip is physics-driven; forced
+`browser-check` begins with actual pointer capture and straight W input from the
+default spawn, without injecting a heading. It then uses fixed automated look
+headings for the remaining round trip. Every step is physics-driven; forced
 fall fixtures are separate. It checks optional jumping after the no-jump round
 trip, Escape, ignored T, rest, blur, explicit reset, both nearby recoveries,
 disposal, repeated entry and asset failure/retry. `lifecycle-check` additionally
@@ -213,9 +214,25 @@ Aerial review cameras use a 0.5 mm near plane for distant depth precision;
 eye-height captures and the runtime retain the original 0.035 mm near plane. Crown fit remains unresolved by the owner's
 explicit decision.
 
+## First-use and local refresh correction
+
+Review of the default entry view found that the previous spawn faced beside the
+ramp and let straight-ahead travel fall into the holder well. It now starts on
+the existing bridge landing, aligned with the CAD entrance. The regression
+journey checks this actual first interaction before applying any scripted look
+heading. Headless before/after captures are in `artifacts/paired-atelier/live-review/`.
+
+The environment GLB is fetched with `cache: 'no-store'` because Blender replaces
+its stable local filename while the server advertises a one-hour cache lifetime.
+A real browser-cache fixture primed a stale response, verified a second ordinary
+fetch used that cached response, and then verified bench entry fetched the new
+asset successfully. Parsing still uses the existing loader and tracked disposal
+ownership; retry and late-load disposal checks pass. An already open scene needs
+one page reload to use the updated application and arrival.
+
 ## Simpler desk verification — 24 October 2026
 
-The simpler environment passes 39 keyboard journey checks, independent source
+The current environment passes 36 keyboard journey checks, independent source
 and phase pose checks, render/collision agreement, 16 CAD landings, retained
 openings and three open-floor/outer-edge probes. All 113 CPU tests, typecheck,
 lint and production build pass. Both crown/holder conflicts remain explicitly

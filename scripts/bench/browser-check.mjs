@@ -115,10 +115,27 @@ try {
   await shot('journey-arrival');
   await capture();
   const initialResets = (await snap()).resets;
-  await walkTo(-75, 40, 'open worktop from arrival');
-  await walkTo(-75, 12, 'direct bridge ramp foot');
-  await walkTo(-49, 12, 'straight bridge approach');
-  await walkTo(-37, 12, 'enter real bridge CAD without jumping');
+  // First-use regression: use the actual arrival heading, with no automated turn.
+  await page.keyboard.down('KeyW');
+  try {
+    await page.waitForFunction(
+      () => window.bench.walker.feet.x >= -37.15,
+      null,
+      { timeout: 5000, polling: 16 },
+    );
+  } finally {
+    await page.keyboard.up('KeyW');
+  }
+  await page.waitForTimeout(100);
+  const firstEntry = await snap();
+  check(
+    'straight W from arrival enters real CAD without steering or falling',
+    firstEntry.grounded &&
+      firstEntry.resets === initialResets &&
+      Math.abs(firstEntry.position[2] - 12) < 0.25 &&
+      firstEntry.position[1] > 17,
+    firstEntry,
+  );
   await shot('journey-bridge');
   await walkTo(-49, 12, 'return from bridge to external approach');
   await walkTo(-75, 12, 'descend bridge ramp');
@@ -188,9 +205,9 @@ try {
   await page.keyboard.press('KeyR');
   await page.waitForTimeout(150);
   check(
-    'explicit R returns to shared forecourt',
-    Math.abs((await snap()).position[0] + 64) < 0.01 &&
-      (await snap()).position[2] === 40,
+    'explicit R returns to the entry landing',
+    Math.abs((await snap()).position[0] + 49) < 0.01 &&
+      (await snap()).position[2] === 12,
   );
   // Independent fixtures: force falls near each station, outside normal journey.
   for (const [side, x, z] of [

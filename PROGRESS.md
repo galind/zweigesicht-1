@@ -3,6 +3,29 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## First-use review correction — 24 October 2026
+
+Reviewing the real entry view after owner feedback exposed a missed usability
+fault: the simplified desk's old spawn faced beside the bridge ramp, and holding
+W could enter the holder well. The previous scripted journey supplied its own
+headings, so its passing result did not qualify the default first-use route.
+
+- Arrival/reset now uses the existing level west landing (−49, 17.602, 12),
+  facing +X into the bridge movement. Geometry, holders, crowns, camera
+  proportions and movement physics remain unchanged.
+- The local environment's stable URL was served with a one-hour browser cache.
+  Its loader now uses a fresh `no-store` fetch before GLB parsing. A proxy-backed
+  browser fixture first proved that a stale response was cached, then confirmed
+  bench entry bypassed it and loaded the current scene. The owner's existing
+  browser cache was not inspected; this fixes a demonstrated possible stale view.
+- The revised journey passes 36 checks, starting with actual W input and no
+  heading injection; it reaches real CAD without falling or resetting. Six
+  lifecycle checks, source/phase/clearance audits, typecheck, lint and build pass.
+  New first-person before/after captures and cache evidence are under
+  `artifacts/paired-atelier/live-review/`. Local server: <http://127.0.0.1:4183/bench>.
+
+The original crown/holder fit remains unresolved. No push or publication.
+
 ## Simpler paired desk — 24 October 2026
 
 The owner requested a much simpler experience after reviewing the paired atelier.
