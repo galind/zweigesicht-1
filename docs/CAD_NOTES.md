@@ -85,9 +85,32 @@ The historical [PR #19 audit](https://github.com/galind/zweigesicht-1/pull/19), 
 
 Two consequential exclusions remain: independent main plate d195 narrows the setting slot from Y=±1.30 to ±1.15 mm (0.30 mm total), and the d61 buckle-screw candidate has a 2.2 mm head instead of 1.9 mm, with different shoulders/axial extent. Minimal candidate URLs/hashes are in [source provenance](../assets/source-manifest/sources.json). Retain the assembly variants pending maker/mechanical review. Closed independent d111 and d27 STLs do not establish valid equivalent interfaces: the eccentric comparison failed on invalid source geometry and the inner dial remains unresolved. Existing recoveries and face mappings stay authoritative.
 
+## Conditional assembly fittings — 24 October 2026
+
+The owner requested that exposed movements omit fittings whose host is absent.
+[Assembly-fitting membership](../assets/authored/assembly-fittings.json) identifies
+exact source occurrences, independently of shared definition names:
+
+- Three `ml01 Werkhaltelasche` case-mounting clamps (d185, movement occurrences
+  38/39/41), with their fastening screws (d189, 45/44/43 respectively), require
+  a displayed case. Existing original-source head/hole checks in `explosion.json`
+  associate these screw axes with their clamp seats.
+- The two radial dial-retaining screws (d201, mainplate occurrences 11/12) require
+  the central dial. Other occurrences of d189 or d201 are unaffected.
+
+The explorer follows actual loaded case/dial availability, including toggles,
+partial load failure and whole-movement selection. Inventory retains dial screws
+only with the fitted dials; the original catalog still supports explicit
+individual-part inspection. Walking has neither case nor dials, so both stations
+omit all eight leaves from rendering and collision. Workshop has no case and
+therefore omits the six clamps/fasteners; its two dial screws remain explicit
+placements after the central dial. This is a presentation/configuration decision,
+not deletion or modification of the original CAD or certification of service order.
+All source poses, geometry, reviewed phases and finishes remain unchanged.
+
 ## Workshop membership and dependencies
 
-[play-manifest.json](../assets/authored/play-manifest.json), version `play-4`, is the sole membership/dependency representation. The 265-leaf finish contains 222 selected movement and 43 dial/hand leaves; 100 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Its stored base targets contain five corrected blade endpoints and 260 exact source endpoints. The separate 18 reviewed occurrence phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades and 18 wheel-packet components. Save format and dependency membership are unchanged.
+[play-manifest.json](../assets/authored/play-manifest.json), version `play-5`, is the sole membership/dependency representation. The 259-leaf finish contains 216 selected movement and 43 dial/hand leaves; 106 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Its stored base targets contain five corrected blade endpoints and 254 exact source endpoints. The separate 18 reviewed occurrence phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades and 18 wheel-packet components. The save shape is unchanged. Existing `play-4` histories migrate by removing the six retired case-fitting actions and replay-validating the remaining progress; invalid histories still fail validation.
 
 The shared mainplate subtree has 18 leaves: 16 remain fitted (plate, eight direct jewels, two pins and five Incabloc leaves), while radial d201 screws `194_11`/`194_12` are player placements. They wait for the complete central dial and precede its hands. Their source-local +Z withdrawal axes transform into radial XY directions; the original head/shank and mainplate seat faces are recorded in `explosion.json`. Guided edge cameras are presentation choices, not screw-turn simulation.
 

@@ -7,6 +7,7 @@ import {actions, createSession, canPlace, commitPlacement, fittedLeafIds, isComp
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (name) => JSON.parse(readFileSync(path.join(root, name), 'utf8'));
+const fittings = read('assets/authored/assembly-fittings.json');
 const play = read('assets/authored/play-manifest.json');
 const source = read('explorer/public/models/assembly-manifest.json');
 const dials = read('assets/authored/dial-configurations.json');
@@ -45,8 +46,8 @@ for (const id of deferred) assert.equal(parts.get(id)?.definitionId, 'd_0_1_1_20
 const expectedInitial = allLeaves.filter((id) => under(id, play.foundationRootId) && !deferred.includes(id));
 sameSet(play.initialLeafIds, expectedInitial, 'Foundation is the fitted mainplate subtree minus the two explicitly deferred dial screws');
 assert.equal(play.initialLeafIds.length, 16);
-assert.equal(play.version, 'play-4', 'Nonlinear workbench state rejects earlier prefix saves explicitly');
-const expectedFinal = allLeaves.filter((id) => under(id, 'p_0_1_1_1__0_1_1_1_4') && id !== 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_66');
+assert.equal(play.version, 'play-5', 'Uncased inventory removes case-mounting hardware');
+const expectedFinal = allLeaves.filter((id) => under(id, 'p_0_1_1_1__0_1_1_1_4') && !fittings.caseMounts.includes(id) && id !== 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_66');
 for (const key of ['central', 'small']) {
   const face = dials.faces[key];
   expectedFinal.push(...face.structureLeafIds, ...face.styles.find((style) => style.id === dials.defaults[key]).leafIds);
@@ -138,6 +139,7 @@ for (const level of ['easy', 'hard']) {
   }
   sameSet([...placed], play.finalLeafIds, `${level} completes exactly full intended assembly`);
   assert.equal(play.levels[level].placementCount, steps.length);
+  assert.equal(play.levels[level].physicalLeafCount, play.finalLeafIds.length);
   completed[level] = [...placed];
 }
 sameSet(completed.easy, completed.hard, 'Both levels finish identical configurations');

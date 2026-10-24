@@ -102,7 +102,7 @@ try {
     "real arrival on mat, both full stations visible",
     Math.abs(initial.feet[1]) < 0.001 &&
       (await page.evaluate(() =>
-        window.bench.stations.every((s) => s.root.visible && s.movement.children.length === 227),
+        window.bench.stations.every((s) => s.root.visible && s.movement.children.length === 219),
       )),
     initial,
   );

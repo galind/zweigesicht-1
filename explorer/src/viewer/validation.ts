@@ -1,3 +1,4 @@
+import { assemblyFittingPresent } from '../experience/assemblyFittings';
 import { focusRole, focusCover } from '../experience/emphasis';
 import {
   GROUPS,
@@ -27,7 +28,10 @@ export async function runBrowserChecks(v: MovementViewer) {
   if (!v.ready) throw new Error('Movement not ready');
   const canvas = v.renderer.domElement;
   const preferenceKeys = [
-    'centralVisible', 'smallVisible', 'centralStyle', 'smallStyle',
+    'centralVisible',
+    'smallVisible',
+    'centralStyle',
+    'smallStyle',
   ] as const satisfies readonly (keyof DialPreferences)[];
   const preferences = { ...v.state };
   const dialCount = fittedLeaves(preferences).size;
@@ -116,7 +120,11 @@ export async function runBrowserChecks(v: MovementViewer) {
         p.material.opacity !== 1 ||
         !p.material.depthWrite ||
         p.mesh.visible !==
-          (role !== 'surrounding' &&
+          (assemblyFittingPresent(id, {
+            casePresent: false,
+            centralDialPresent: dialCount > 0,
+          }) &&
+            role !== 'surrounding' &&
             !focusCover(id, group) &&
             !(
               uncoverHost(id, group.id) &&
@@ -201,8 +209,8 @@ export async function runBrowserChecks(v: MovementViewer) {
   checks.push({
     name: 'Spread membership, source scale and projected bounds are correct in the real renderer',
     pass:
-      spreadAudit.members === 216 + dialCount &&
-      spreadAudit.visible === 216 + dialCount &&
+      spreadAudit.members === (dialCount ? 216 : 214) + dialCount &&
+      spreadAudit.visible === (dialCount ? 216 : 214) + dialCount &&
       spreadAudit.overlaps.length === 0 &&
       spreadAudit.clipped.length === 0 &&
       spreadAudit.maxScaleError < 1e-9,
@@ -229,7 +237,7 @@ export async function runBrowserChecks(v: MovementViewer) {
     pass:
       !v.travel &&
       v.assemblyError('presentation') === 0 &&
-      reducedSpread.visible === 216 + dialCount &&
+      reducedSpread.visible === (dialCount ? 216 : 214) + dialCount &&
       reducedSpread.overlaps.length === 0,
   });
   v.reduced = preferredMotion;
@@ -247,8 +255,12 @@ export async function runBrowserChecks(v: MovementViewer) {
       .every(
         (p) =>
           p.mesh.visible ===
-          (focusRole(p.source.id, p.source.definitionId, regulation) !==
-            'surrounding'),
+          (assemblyFittingPresent(p.source.id, {
+            casePresent: false,
+            centralDialPresent: dialCount > 0,
+          }) &&
+            focusRole(p.source.id, p.source.definitionId, regulation) !==
+              'surrounding'),
       ),
   });
   v.patch({ separation: 0.65, partSpread: 0.3 });
@@ -266,7 +278,8 @@ export async function runBrowserChecks(v: MovementViewer) {
     name: 'Reset restores all default movement parts and releases section fade state',
     pass:
       [...v.renderParts.values()].filter((p) => p.mesh.visible).length ===
-        222 + dialCount && [...v.renderParts.values()].every((p) => !p.cutaway),
+        (dialCount ? 216 : 214) + dialCount &&
+      [...v.renderParts.values()].every((p) => !p.cutaway),
   });
   checks.push({
     name: 'Navigation and Reset preserve both dial visibility and hand style preferences',

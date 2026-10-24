@@ -3,6 +3,43 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Host-dependent case clamps and dial screws — 24 October 2026
+
+Implemented locally on `codex/assembly-fittings`. Identified exact source
+occurrences in [assembly-fittings.json](assets/authored/assembly-fittings.json):
+three d185 `Werkhaltelasche` clamps (38/39/41), their three d189 screws
+(45/44/43 respectively), and the two radial d201 dial-retaining screws
+(mainplate 11/12). Shared definitions are not blanket-hidden.
+
+- Explorer assemblies show clamps/fasteners only with the actual loaded case,
+  and dial retainers only with fitted dials. Whole-movement selection, missing
+  optional assets, configuration toggles and inventory respect membership.
+  Explicit individual source-part inspection remains available. Source geometry,
+  matrices, materials and all reviewed phases are unchanged.
+- Both walking presentations omit all eight leaves from rendering and collision:
+  **215 movement leaves + 4 original crown leaves = 219 per station**. This
+  supersedes the preceding milestone's 227-leaf station count. Original red
+  holders, layout, jetpack, eye height and desk boundaries remain unchanged.
+- Workshop's uncased assembly omits the six case-fitting actions. Existing
+  central-dial prerequisites already correctly defer its two retaining screws.
+  Final inventory is 259 leaves; Easy has 83 placements, Hard 243 placements
+  plus 35 transfers. Version `play-5` preserves useful `play-4` save progress by
+  removing only the six retired actions and validating the remaining history.
+  Counts, completion text and inventory labels now match that assembly.
+- Verified: 118 CPU tests, source/runtime regression, exact inventory/40 legal
+  graph orders per level, typecheck, lint and production build. Fourteen targeted
+  browser checks cover all host combinations, selected-part toggles, inventory,
+  both walking render/collision sets and old-save restoration in both Workshop
+  levels. All 92 focused Workshop checks and 311 explorer watch/dial/inventory/
+  interaction checks pass. Independent bench source/phase,
+  clearance, openings and 16 CAD-landing checks pass with the reduced membership.
+  Evidence is local under `artifacts/assembly-fittings/`.
+
+Local preview remains <http://127.0.0.1:4185/bench> (reload the existing tab).
+No mechanical redesign or new mechanical certification is claimed. Known
+crown/holder interference and prior CAD uncertainties remain unresolved.
+No push, deployment, publication or source/derived CAD redistribution.
+
 ## Plain desk and gravity jetpack — 24 October 2026
 
 Implemented locally on `codex/desk-jetpack`. All prior ramps, recessed desks,

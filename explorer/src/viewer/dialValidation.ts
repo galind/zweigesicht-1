@@ -150,7 +150,8 @@ export async function runDialChecks(v: MovementViewer) {
     const packed = v.auditSpread();
     check(
       `${label}: All parts includes every enabled leaf without overlap or clipping`,
-      v.spread.size === 216 + fittedLeaves(v.state).size &&
+      v.spread.size ===
+        (fittedLeaves(v.state).size ? 216 : 214) + fittedLeaves(v.state).size &&
         packed.overlaps.length === 0 &&
         packed.clipped.length === 0 &&
         exact(),

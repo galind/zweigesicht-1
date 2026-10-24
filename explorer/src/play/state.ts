@@ -118,24 +118,29 @@ export function commitPlacement(
   session: PlaySession,
   id: string,
 ): PlaySession {
+  const validated = validateSession(manifest, session);
   if (
-    validateSession(manifest, session).status !== 'saved' ||
-    !canPlace(manifest, session, id)
+    validated.status !== 'saved' ||
+    !canPlace(manifest, validated.session, id)
   )
     return session;
-  return { ...session, actionIds: [...session.actionIds, id] };
+  return {
+    ...validated.session,
+    actionIds: [...validated.session.actionIds, id],
+  };
 }
 
 export function undoPlacement(
   manifest: PlayManifest,
   session: PlaySession,
 ): PlaySession {
-  if (
-    validateSession(manifest, session).status !== 'saved' ||
-    !session.actionIds.length
-  )
+  const validated = validateSession(manifest, session);
+  if (validated.status !== 'saved' || !validated.session.actionIds.length)
     return session;
-  return { ...session, actionIds: session.actionIds.slice(0, -1) };
+  return {
+    ...validated.session,
+    actionIds: validated.session.actionIds.slice(0, -1),
+  };
 }
 
 export type SessionValidation =
@@ -151,7 +156,8 @@ export function validateSession(
     return { status: 'corrupt' };
   const data = value as Record<string, unknown>;
   if (typeof data.manifestVersion !== 'string') return { status: 'corrupt' };
-  if (data.manifestVersion !== manifest.version)
+  const migrating = data.manifestVersion === manifest.previousVersion?.version;
+  if (data.manifestVersion !== manifest.version && !migrating)
     return { status: 'incompatible' };
   if (
     (data.level !== 'easy' && data.level !== 'hard') ||
@@ -165,7 +171,20 @@ export function validateSession(
     return { status: 'corrupt' };
   const byId = new Map(actions(manifest, data.level).map((s) => [s.id, s]));
   const done = new Set<string>();
+  const retained: string[] = [];
   for (const id of data.actionIds) {
+    const retired =
+      migrating &&
+      typeof id === 'string' &&
+      Object.hasOwn(manifest.previousVersion!.retiredActions, id)
+        ? manifest.previousVersion?.retiredActions[id]
+        : undefined;
+    if (retired) {
+      if (done.has(id) || retired.some((p) => !done.has(p)))
+        return { status: 'corrupt' };
+      done.add(id);
+      continue;
+    }
     const step = typeof id === 'string' ? byId.get(id) : undefined;
     if (
       !step ||
@@ -174,13 +193,14 @@ export function validateSession(
     )
       return { status: 'corrupt' };
     done.add(id);
+    retained.push(id);
   }
   return {
     status: 'saved',
     session: {
       manifestVersion: manifest.version,
       level: data.level,
-      actionIds: [...data.actionIds],
+      actionIds: retained,
       hints: data.hints,
     },
   };

@@ -91,8 +91,8 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    }
   }
   assert.equal(controller.assemblyError('presentation'),0);
-  controller.allParts();pose();assert.equal(controller.spread.size,216+expected.length);
-  assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,216+expected.length);
+  controller.allParts();pose();assert.equal(controller.spread.size,(dialsVisible?216:214)+expected.length);
+  assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,(dialsVisible?216:214)+expected.length);
   // Actual transformed boxes must equal packing boxes, including off-axis Lance seconds.
   for(const id of expected) {
    const p=controller.renderParts.get(id),box=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);

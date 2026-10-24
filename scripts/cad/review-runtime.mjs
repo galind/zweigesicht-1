@@ -1120,8 +1120,9 @@ const {makeSpread,spreadMember,SPREAD_EXCLUSIONS}=load('explorer/src/experience/
 const {wheelDisplayMatrix}=load('explorer/src/viewer/WheelDisplayPose.ts');
 const spreadParts=()=>[...v.renderParts.values()].map(p=>({...p,assembled:wheelDisplayMatrix(p.source.id,p.assembled)??p.assembled}));
 v.spread=makeSpread(spreadParts());
-const expectedSpread=parts.filter(p=>!p.isAssembly&&belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT)&&![38,39,41,43,44,45,66].map(n=>PREFIX+n).includes(p.id));
-assert.equal(expectedSpread.length,216);assert.equal(v.spread.size,216);
+const fittingRules=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/authored/assembly-fittings.json')));
+const expectedSpread=parts.filter(p=>!fittingRules.dialRetainers.includes(p.id)&&!p.isAssembly&&belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT)&&![38,39,41,43,44,45,66].map(n=>PREFIX+n).includes(p.id));
+assert.equal(expectedSpread.length,214);assert.equal(v.spread.size,214);
 assert.deepEqual([...v.spread.keys()].sort(),expectedSpread.map(p=>p.id).sort());
 assert.ok(v.spread.has(recovery.DIAMOND_ID));
 for(const id of SPREAD_EXCLUSIONS)assert.ok(parts.some(p=>p.id===id)&&!v.spread.has(id));
@@ -1130,7 +1131,7 @@ for(const [id,placement]of v.spread){
  assert.ok(reverse.get(id).offset.equals(placement.offset));assert.ok(reverse.get(id).rotation.equals(placement.rotation));
  assert.ok(Math.abs(placement.rotation.length()-1)<1e-12);
 }
-results.push({check:'216 unique active physical leaves, explicit seven exclusions, recovered diamond, deterministic layout independent of traversal/catalog order',status:'pass'});
+results.push({check:'214 unique active physical leaves, explicit nine exclusions, recovered diamond, deterministic layout independent of traversal/catalog order',status:'pass'});
 v.state={...initialState,layout:'spread'};v.retarget();v.reduced=true;v.applyPose(0);v.root.updateMatrixWorld(true);
 const spreadBoxes=[...v.renderParts.values()].filter(p=>spreadMember(p.source)).map(p=>({id:p.source.id,box:new THREE.Box3().setFromObject(p.mesh)}));
 for(let i=0;i<spreadBoxes.length;i++)for(let j=i+1;j<spreadBoxes.length;j++){
@@ -1169,11 +1170,11 @@ for(let i=0;i<24;i++) {
  v.patch({partSpread:.6,reveal:.6});v.applyPose(.03);v.allParts();v.applyPose(.02);
  await v.select(recovery.DIAMOND_ID);v.patch({isolated:true});v.applyPose(.01);v.back();
  const retainedSide=v.state.side;v.reset();for(let n=0;n<260;n++)v.applyPose(1/60);v.retargetVisibility();
- assert.equal(v.assemblyError('presentation'),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,222);
+ assert.equal(v.assemblyError('presentation'),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,214);
  assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,retainedSide);assert.equal('treatment' in v.state,false);assert.equal(v.history.length,0);assert.equal(v.state.part,null);
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
-results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
+results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 214 uncased undialed leaves, preserve geometry bytes',status:'pass'});
 v.reset();v.applyPose(10);v.cameraUserOwned=true;v.travel=null;v.reduced=false;
 v.patch({separation:1});assert.equal(v.explosionTravel.duration,1.25);
 v.patch({separation:0});v.applyPose(1.5);
@@ -1390,4 +1391,32 @@ for(const face of ['central','small']) {
  }
 }
 results.push({check:'both case seal/back packets preserve monotone outward interval ordering for all source dial/hand alternatives and >8 mm final gaps',status:'pass',minCaseGap});
+// Host-dependent fittings must follow actual available assemblies, not merely
+// remembered UI intent. Original meshes remain available for explicit inspection.
+const fittingIds = [...fittingRules.caseMounts, ...fittingRules.dialRetainers];
+const fittingSources = new Map(fittingIds.map(id => [id, v.renderParts.get(id).assembled.clone()]));
+for (const caseVisible of [false, true]) for (const dialsVisible of [false, true]) {
+  v.state={...initialState,caseVisible,dialsVisible,centralVisible:dialsVisible,smallVisible:dialsVisible};
+  v.reduced=true;v.retarget();v.applyPose(0);
+  for(const id of fittingRules.caseMounts) assert.equal(v.renderParts.get(id).mesh.visible,caseVisible,id);
+  for(const id of fittingRules.dialRetainers) assert.equal(v.renderParts.get(id).mesh.visible,dialsVisible,id);
+  v.state.part=load('explorer/src/experience/catalog.ts').ROOT;v.retarget();v.applyPose(0);
+  for(const id of fittingRules.caseMounts) assert.equal(v.renderParts.get(id).mesh.visible,caseVisible,'Whole-movement selection cannot restore absent case fittings');
+  for(const id of fittingRules.dialRetainers) assert.equal(v.renderParts.get(id).mesh.visible,dialsVisible,'Whole-movement selection cannot restore absent dial fittings');
+}
+v.state={...initialState,caseVisible:true,centralVisible:true,smallVisible:true};v.retarget();
+const missingCaseId=[...watchReview.CASE_LEAVES][0],missingCase=v.renderParts.get(missingCaseId);
+v.renderParts.delete(missingCaseId);v.retarget();
+assert.ok(fittingRules.caseMounts.every(id=>!v.renderParts.get(id).mesh.visible));
+v.renderParts.set(missingCaseId,missingCase);
+const missingDialId=displayReview.DIALS.faces.central.structureLeafIds[0],missingDial=v.renderParts.get(missingDialId);
+v.renderParts.delete(missingDialId);v.retarget();
+assert.ok(fittingRules.dialRetainers.every(id=>!v.renderParts.get(id).mesh.visible));
+v.renderParts.set(missingDialId,missingDial);
+for(const id of fittingIds) {
+  v.state={...initialState,part:id,isolated:true};v.retarget();
+  assert.equal(v.renderParts.get(id).mesh.visible,true);
+  assert.ok(v.renderParts.get(id).assembled.equals(fittingSources.get(id)));
+}
+results.push({check:'six case mounts and two radial dial retainers follow all four assembly configurations, whole-root selection and missing host assets; direct source-part inspection and original matrices remain intact',status:'pass'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

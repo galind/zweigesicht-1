@@ -30,13 +30,13 @@ test('independent barrels and train branches can start freely; a premature bridg
 test('the default bench offers meaningful legal choices without revealing their seats',()=>{
   const easy=createSession(manifest,'easy');
   const easyReady=actions(manifest,'easy').filter(step=>canPlace(manifest,easy,step.id));
-  assert.equal(easyReady.length,19);
+  assert.equal(easyReady.length,16);
   assert.ok(easyReady.every(step=>!step.prerequisiteStepIds.length));
   assert.ok(!easyReady.some(step=>step.id==='movement-60'),'A premature cover is not put on the ready bench');
 
   const hard=createSession(manifest,'hard');
   const hardReady=actions(manifest,'hard').filter(step=>canPlace(manifest,hard,step.id));
-  assert.equal(hardReady.length,40);
+  assert.equal(hardReady.length,37);
   const powerProjects=new Set(hardReady.filter(step=>step.groupId==='power'&&step.workspaceId).map(step=>step.workspaceId));
   assert.deepEqual(powerProjects,new Set(['movement-1','movement-2','movement-60']));
   assert.equal(hardReady.filter(step=>step.groupId==='power'&&!step.workspaceId).length,0);
@@ -114,4 +114,35 @@ test('balance-bridge diamond fitting cannot close over unfinished shock-protecti
  for(const label of ['Shock-protection housing','Shock-protection jewel setting','Shock-protection jewel 1','Shock-protection jewel 2','Shock-protection retaining spring']) s=commitPlacement(manifest,s,byLabel(label).id);
  assert.equal(canPlace(manifest,s,setting),true);
  assert.equal(canPlace(manifest,undoPlacement(manifest,s),setting),false);
+});
+
+
+test('previous Workshop saves retain all useful progress while removing obsolete case fittings', () => {
+  for (const level of ['easy', 'hard']) {
+    const current = complete(level).at(-1);
+    const retired = ['movement-38', 'movement-39', 'movement-41', 'movement-43', 'movement-44', 'movement-45'];
+    const old = { ...current, manifestVersion: 'play-4', actionIds: [...retired, ...current.actionIds] };
+    assert.deepEqual(validateSession(manifest, old), { status: 'saved', session: current });
+    const storage = memoryStorage();
+    storage.setItem(PLAY_STORAGE_KEY, JSON.stringify(old));
+    assert.deepEqual(getSavedSession(manifest, storage), { status: 'saved', session: current });
+    assert.equal(isComplete(manifest, current), true);
+    for (const actionIds of [['movement-43'], ['movement-38', 'movement-38'], ['__proto__'], ['toString']])
+      assert.equal(validateSession(manifest, { ...old, actionIds }).status, 'corrupt');
+  }
+});
+
+test('uncased Workshop omits case fittings; dial retainers require the fitted central dial in both levels', () => {
+  const caseSteps = ['movement-38','movement-39','movement-41','movement-43','movement-44','movement-45'];
+  for (const level of ['easy', 'hard']) {
+    const all = actions(manifest, level);
+    assert.ok(all.every(s => !caseSteps.includes(s.id)));
+    const history = complete(level);
+    const dialAction = level === 'hard' ? 'seat:central-dial' : 'central-dial';
+    const beforeDial = history.find(s => !s.actionIds.includes(dialAction) && canPlace(manifest, s, dialAction));
+    for (const id of ['central-dial-screw-1', 'central-dial-screw-2']) {
+      assert.equal(canPlace(manifest, beforeDial, id), false);
+      assert.equal(canPlace(manifest, commitPlacement(manifest, beforeDial, dialAction), id), true);
+    }
+  }
 });

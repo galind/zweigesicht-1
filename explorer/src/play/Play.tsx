@@ -730,8 +730,8 @@ export default function Play() {
               <div>
                 <strong>You completed the movement.</strong>
                 <p>
-                  All 265 physical pieces are in place. The assembled movement
-                  remains yours to explore.
+                  All {authored.finalLeafIds.length} physical pieces are in
+                  place. The assembled movement remains yours to explore.
                 </p>
               </div>
               <Control onClick={() => location.assign('/')}>

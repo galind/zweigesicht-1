@@ -8,8 +8,10 @@ are superseded. The explorer and Workshop retain separate controllers/resources.
 
 ## Current behavior — 24 October 2026
 
-Each station contains all **223 movement leaves plus four original external crown
-leaves**, and its intact original red maker holder. The complete stations move
+Each station contains **215 movement leaves plus four original external crown
+leaves**, and its intact original red maker holder. The uncased, undialed
+presentation omits three case clamps, their three fastening screws and two radial
+dial-retaining screws under the [shared assembly rule](CAD_NOTES.md#conditional-assembly-fittings--24-october-2026). The complete stations move
 only by parent translation. No source geometry, internal pose, material, crown,
 opening or holder design changes. All 18 reviewed phases remain separate from
 original matrices; see [wheel review](WHEEL_CONTACT_REVIEW.md),

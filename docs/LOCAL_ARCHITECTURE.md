@@ -39,9 +39,9 @@ a set of static placement exceptions, not a running-gear model.
 
 ## Workshop
 
-`Play.tsx` owns selection, Ready now/All parts, grouping/search, explicit workbench navigation, confirmations and storage feedback. `state.ts` owns graph readiness, validated replay, physical accounting and Undo. `play-manifest.json` version `play-4` owns exact leaf sets, endpoints, exclusions, action IDs and prerequisite edges; display order never defines dependencies.
+`Play.tsx` owns selection, Ready now/All parts, grouping/search, explicit workbench navigation, confirmations and storage feedback. `state.ts` owns graph readiness, validated replay, physical accounting and Undo. `play-manifest.json` version `play-5` owns exact leaf sets, endpoints, exclusions, action IDs and prerequisite edges; display order never defines dependencies. Previous `play-4` saves migrate by removing only the six retired case-fitting actions; all other validated progress is preserved.
 
-Easy has 89 placements. Hard has 249 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 265 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
+Easy has 83 placements. Hard has 243 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 259 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
 
 The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid
 saves; absent mode/save opens the shared chooser on Workshop without starting

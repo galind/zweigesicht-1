@@ -1,3 +1,4 @@
+import { assemblyFittingPresent } from '../experience/assemblyFittings';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
@@ -270,6 +271,10 @@ export class BenchViewer {
       const required = manifest.instances.filter(
         (p) =>
           !p.isAssembly &&
+          assemblyFittingPresent(p.id, {
+            casePresent: false,
+            centralDialPresent: false,
+          }) &&
           (p.id.startsWith('p_0_1_1_1__0_1_1_1_4__') || crownIds.has(p.id)),
       );
       const requiredIds = new Set(required.map((p) => p.id));

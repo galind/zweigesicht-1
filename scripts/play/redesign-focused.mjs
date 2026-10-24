@@ -23,9 +23,9 @@ const touch=async(from,to,cancel=false)=>{const cdp=await context.newCDPSession(
 const start=async level=>{await page.goto(`${base}/workshop?mode=${level}&inspect=1`,{waitUntil:'networkidle'});if(await page.locator('dialog[open]').count())await page.getByRole('button',{name:`Start ${level==='easy'?'Easy':'Hard'}`,exact:true}).click();await settle();};
 try {
  await start('easy');const initial=await inspect();
- check('Ready now starts with 19 legal Easy choices',await page.locator('.play-card').count()===19&&await page.locator('.play-card:disabled').count()===0&&await page.locator('.play-card[data-unavailable=true]').count()===0);
+ check('Ready now starts with 16 legal Easy choices',await page.locator('.play-card').count()===16&&await page.locator('.play-card:disabled').count()===0&&await page.locator('.play-card[data-unavailable=true]').count()===0);
  await page.getByText('All parts',{exact:true}).click();await settle();
- check('All parts keeps all 89 Easy actions inspectable',await page.locator('.play-card').count()===89);
+ check('All parts keeps all 83 Easy actions inspectable',await page.locator('.play-card').count()===83);
  await pick('movement-60');preserved('Selecting unavailable bridge preserves camera',initial,await inspect());
  check('Unavailable work has no destination and cannot be dragged',await page.locator('.play-target').isHidden()&&await page.locator('.play-card-drag').isDisabled());
  let s=await inspect();check('Unavailable copy points back to Ready now',/waiting for earlier work/.test(await page.locator('.play-selection').innerText()));preserved('Unavailable selection preserves camera',s,await inspect());
@@ -99,7 +99,7 @@ try {
  await retryPage.goto(`${base}/workshop?mode=easy&inspect=1`);if(await retryPage.locator('dialog[open]').count())await retryPage.getByRole('button',{name:'Start Easy',exact:true}).click();await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).waitFor({timeout:60000});
  check('Incomplete catalog disables assembly controls',await retryPage.locator('.play-actions button').evaluateAll(buttons=>buttons.length>0&&buttons.every(button=>button.disabled)));
  failAssets=false;await retryPage.getByRole('button',{name:'Retry 3D',exact:true}).click();await retryPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
- check('Asset retry prepares the full inventory',(await retryPage.evaluate(()=>window.__playInspect())).geometryCount===265);await retryContext.close();
+ check('Asset retry prepares the full inventory',(await retryPage.evaluate(()=>window.__playInspect())).geometryCount===259);await retryContext.close();
  const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('blocked for QA')}}));
  const blockedPage=await blocked.newPage();await blockedPage.goto(`${base}/workshop?mode=easy&inspect=1`);await blockedPage.waitForFunction(()=>window.__playInspect?.().ready,null,{timeout:60000});
  check('Storage failure permits play with honest feedback',/unavailable/.test(await blockedPage.locator('.play-storage').innerText())&&blockedPage.url().includes('mode=easy'));await blocked.close();

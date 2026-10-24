@@ -246,7 +246,7 @@ try {
     };
   }, { phases, layout });
   for (const s of report.geometry.stations) {
-    assert.equal(s.count, 227);
+    assert.equal(s.count, 219);
     assert.equal(s.crowns.length, 4);
     assert.ok(s.stemClearances.every((c) => !c.intersects));
     assert.equal(s.changed.length, 18);
