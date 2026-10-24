@@ -169,19 +169,6 @@
   box-shadow: 0 0 3px #0008;
   pointer-events: none;
 }
-.bench-fade {
-  position: absolute;
-  inset: 0;
-  background: #151a16;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 180ms linear;
-  z-index: 5;
-}
-.bench-fade.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
 .bench-sr {
   position: absolute;
   width: 1px;
@@ -201,10 +188,5 @@
     gap: 8px;
     font-size: 9px;
     padding: 12px 8px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bench-fade {
-    transition-duration: 0ms;
   }
 }

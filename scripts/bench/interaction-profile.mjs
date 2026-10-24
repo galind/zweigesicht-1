@@ -63,7 +63,7 @@ try {
     );
   });
   for (const mode of modes) {
-    for (const side of ['bridge', 'dial']) {
+    for (const side of ['bridge', 'dial', 'pair']) {
       for (const walk of [false, true]) {
         let result;
         for (let attempt = 0; attempt < 3; attempt++) {
@@ -77,7 +77,8 @@ try {
               const b = window.bench;
               b.walker.clear();
               // Focus/visibility are recorded; genuine pointer capture is checked above.
-              b.present(side);
+              const station =
+                b.stations.find((s) => s.id === side) || b.stations[0];
               b.walker.clear();
               b.slowFrames = -1e9; // Hold the baseline manual setting; old code otherwise overrides High.
               if (mode === 'Auto') b.quality('Auto');
@@ -86,16 +87,20 @@ try {
                 mode === 'HalfTransmission'
                   ? 0.5
                   : Number(sessionStorage.profileTransmission);
-              b.movement.traverse((o) => {
-                if (o.material)
-                  o.material.transmission =
-                    mode === 'NoTransmission'
-                      ? 0
-                      : o.material.userData.finishTransmission || 0;
-              });
-              b.walker.feet.set(-8, b.world.floor(-8, 0) + 0.002, 0);
-              b.walker.yaw = -Math.PI / 2;
-              b.walker.pitch = -0.55;
+              b.stations.forEach((station) =>
+                station.movement.traverse((o) => {
+                  if (o.material)
+                    o.material.transmission =
+                      mode === 'NoTransmission'
+                        ? 0
+                        : o.material.userData.finishTransmission || 0;
+                }),
+              );
+              const x = side === 'pair' ? -48 : station.x - 8;
+              const z = side === 'pair' ? 55 : station.z;
+              b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);
+              b.walker.yaw = side === 'pair' ? -0.75 : -Math.PI / 2;
+              b.walker.pitch = side === 'pair' ? 0.04 : -0.55;
               b.status.captured = true;
               b.wake();
               await new Promise((r) => setTimeout(r, 700));

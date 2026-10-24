@@ -31,7 +31,10 @@ try {
   // Independent benchmark fixture, not part of the user journey.
   await page.evaluate(() => {
     const b = window.bench;
-    b.walker.feet.set(-12, b.world.floor(-12, 0) + 0.002, 0);
+    const station = b.stations[0],
+      x = station.x - 12,
+      z = station.z;
+    b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);
     b.walker.pitch = -0.35;
     b.wake();
   });
@@ -87,14 +90,14 @@ try {
   for (const side of ['bridge', 'dial']) {
     await page.evaluate((side) => {
       const b = window.bench;
-      b.present(side);
+      const station = b.stations.find((s) => s.id === side);
       b.emit();
       b.walker.clear();
       b.walker.grounded = true;
       cancelAnimationFrame(b.frame);
       b.frame = 0;
-      b.camera.position.set(-45, 45, 45);
-      b.camera.lookAt(0, 12, 0);
+      b.camera.position.set(station.x - 45, 45, station.z + 45);
+      b.camera.lookAt(station.x, 12, station.z);
       b.renderer.render(b.scene, b.camera);
       document.querySelector('.bench-menu').style.display = 'none';
     }, side);

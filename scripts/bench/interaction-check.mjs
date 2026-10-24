@@ -1,5 +1,5 @@
-/** Visible-browser regression: browser-dispatched input, plus explicitly labelled stress fixtures. */
-import { launchForeground } from './foreground-browser.mjs';
+/** Headless-by-default regression: browser-dispatched input, plus explicitly labelled stress fixtures. */
+import { launchProfileBrowser } from './profile-browser.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
@@ -10,7 +10,7 @@ const { chromium } = await import(
 );
 const base = process.argv[2] || 'http://127.0.0.1:4176';
 await fs.mkdir('artifacts/bench', { recursive: true });
-const { page, close } = await launchForeground(chromium, {});
+const { page, close } = await launchProfileBrowser(chromium);
 const checks = [];
 function check(name, pass, details) {
   checks.push({ name, pass, details });
@@ -161,24 +161,31 @@ try {
         window.bench.detail.mode === 'High',
     ),
   );
-  // Discrete side changes preserve quality and do not retain pending look.
+  // Independent nearby-station fixtures: quality stays fixed and neither station hides.
   for (const side of ['dial', 'bridge']) {
-    await page
-      .getByRole('button', { name: 'Switch side', exact: true })
-      .click();
-    await page.waitForFunction(
-      (side) => window.bench.status.side === side && !window.bench.status.busy,
-      side,
-    );
+    const result = await page.evaluate((side) => {
+      const b = window.bench,
+        station = b.stations.find((s) => s.id === side);
+      b.clearInput();
+      b.walker.feet.fromArray(station.checkpoint);
+      b.updateStation();
+      b.wake();
+      return {
+        side: b.status.side,
+        quality: b.status.quality,
+        ratio: b.renderer.getPixelRatio(),
+        bothVisible: b.stations.every((s) => s.root.visible),
+        pending: b.activity.pending,
+      };
+    }, side);
     check(
-      side + ' switch preserves manual choice and clears input',
-      await page.evaluate(
-        () =>
-          window.bench.status.quality === 'High' &&
-          window.bench.renderer.getPixelRatio() === 1.5 &&
-          !window.bench.activity.pending &&
-          window.bench.walker.feet.x === -59,
-      ),
+      side + ' nearby status preserves quality and both stations',
+      result.side === side &&
+        result.quality === 'High' &&
+        result.ratio === 1.5 &&
+        result.bothVisible &&
+        !result.pending,
+      result,
     );
   }
   // Static close-up inspection fixtures. They do not claim a walked route.
@@ -190,10 +197,12 @@ try {
       await page.evaluate(
         ({ side, scale }) => {
           const b = window.bench;
-          b.present(side);
+          const station = b.stations.find((s) => s.id === side);
           b.emit();
           b.renderer.transmissionResolutionScale = scale;
-          b.walker.feet.set(-8, b.world.floor(-8, 0) + 0.002, 0);
+          const x = station.x - 8,
+            z = station.z;
+          b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);
           b.walker.yaw = -Math.PI / 2;
           b.walker.pitch = -0.55;
           b.walker.grounded = true;

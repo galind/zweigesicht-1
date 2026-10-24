@@ -3,6 +3,47 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Paired atelier — local implementation, 24 October 2026
+
+Implemented from clean `01860fa` on local `codex/paired-atelier`. Production
+review: <http://127.0.0.1:4183/bench>. The selected paired atelier is now one
+continuous walnut/green desk with two simultaneous stations, 64.56 mm apart.
+See [current behavior, source contract and reproduction](docs/BENCH_EXPERIENCE.md).
+
+- Each station has all 223 reviewed movement leaves, its original maker holder
+  and four original external crown leaves. Shared geometry/materials/BVHs retain
+  separate instance poses. All 18 reviewed phases, source matrices, dimensions,
+  finishes and openings are preserved. Independent world-pose error is at most
+  1.43e−14; render/collision agreement and 16 CAD landings pass.
+- A Y12.4 forecourt, two gentle rises, pause bay and supported 6 mm clear promenade
+  reach both established west interfaces. T/swap/fade are removed. Both stations
+  stay physical; nearby status and fall checkpoints follow location. Authored
+  threshold noses ease return stepping while preserving original underside heights.
+- **Crown/holder fit remains unresolved by explicit owner decision.** Original
+  STEP confirms body, inner-seal and cover-ring intersections on both holders.
+  Body common volumes are 2.297096359 / 3.874614059 mm³ (bridge/dial). The owner
+  chose to keep the originals; no source repair, relief or pose change was made.
+  [Measured evidence and decision](assets/source-manifest/atelier-crown-fit.json)
+  distinguish this retained conflict from clear authored-environment geometry.
+- Background Blender builds a reproducible editable scene with walnut, linoleum,
+  steel and ivory. Explicit glTF extras preserve materials and distinguish actual
+  walkable/boundary triangles from decoration. Twelve render meshes, roughly 5.2k
+  triangles; generated assets and captures remain local/ignored. Headless
+  grayscale and finished captures cover the whole pair, circulation, arrival,
+  promenade, actual eye-height CAD entrances and both crowns.
+- Verified: 113 CPU tests, 115 runtime checks, inventory, typecheck/lint, local
+  production and release-gated packaging builds, HTTP metadata; 35 production
+  keyboard-journey checks, six lifecycle checks, two visible-guard probes,
+  explorer watch/inventory/interaction (254 checks), Workshop focused (92 checks).
+  The round trip uses keyboard physics, no forced jump or automatic reset.
+  Retry, capture/Escape, idle sleep, both nearby recoveries and disposal pass.
+  Vercel output excludes `bench-local`. No foreground browser was opened.
+
+Next in this local task: profile turning/walking with both stations present,
+inspect final captures and record remaining performance limitations. Crown/holder
+compatibility needs a separate maker/mechanical decision. No push, PR,
+deployment, publication or source-asset redistribution.
+
 ## Performance and CAD fidelity — done for now, 24 October 2026
 
 Accepted for the current static website at local commit `d235cee`. Both workstreams

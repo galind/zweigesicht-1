@@ -5,7 +5,6 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
   configureRenderer,
   createStudioEnvironment,
-  disposeObjectResources,
 } from '../viewer/GraphicsResources';
 import {
   attachSourceSurface,
@@ -18,11 +17,12 @@ import { assetRequestUrl } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
 import { CollisionWorld, Walker, WALK } from './physics';
 import { BenchQuality, LookActivity, type QualityMode } from './performance';
+import layout from '../../../assets/authored/atelier-layout.json';
+import watchConfiguration from '../../../assets/authored/watch-configurations.json';
 import holderManifest from '../../../assets/source-manifest/holder.json';
 export type BenchStatus = {
   ready: boolean;
   captured: boolean;
-  busy: boolean;
   side: 'bridge' | 'dial';
   error: string;
   quality: QualityMode;
@@ -62,17 +62,19 @@ export class BenchViewer {
   camera = new THREE.PerspectiveCamera(68, 1, 0.035, 250);
   renderer: THREE.WebGLRenderer;
   environment?: THREE.WebGLRenderTarget;
-  movement = new THREE.Group();
-  holder = new THREE.Group();
+  stations = layout.stations.map((spec) => ({
+    ...spec,
+    root: new THREE.Group(),
+    movement: new THREE.Group(),
+    holder: new THREE.Group(),
+  }));
   bridgeHolder?: THREE.Mesh;
   dialHolder?: THREE.Mesh;
-  ramps: THREE.Object3D[] = [];
   world = new CollisionWorld();
   walker = new Walker(this.world);
   status: BenchStatus = {
     ready: false,
     captured: false,
-    busy: false,
     side: 'bridge',
     error: '',
     quality: 'Auto',
@@ -84,7 +86,9 @@ export class BenchViewer {
   observer!: ResizeObserver;
   assets: THREE.Object3D[] = [];
   generation = 0;
-  timers = new Set<ReturnType<typeof setTimeout>>();
+  releasedGeometry = new WeakSet<THREE.BufferGeometry>();
+  releasedMaterial = new WeakSet<THREE.Material>();
+  releasedTexture = new WeakSet<THREE.Texture>();
   renderCount = 0;
   frameTimes: number[] = [];
   cpuTimes: number[] = [];
@@ -98,7 +102,7 @@ export class BenchViewer {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     try {
       configureRenderer(this.renderer);
-      this.renderer.setClearColor(0x33352f);
+      this.renderer.setClearColor(0xdfd6c4);
       this.renderer.setPixelRatio(this.detail.ratio);
       // Keep jewel transmission while reducing its full-scene offscreen pixel cost.
       this.renderer.transmissionResolutionScale = 0.5;
@@ -107,8 +111,8 @@ export class BenchViewer {
         'aria-label',
         'First-person walk across the watch movement',
       );
-      this.scene.background = new THREE.Color(0x33352f);
-      this.scene.fog = new THREE.Fog(0x33352f, 110, 230);
+      this.scene.background = new THREE.Color(0xdfd6c4);
+      this.scene.fog = new THREE.Fog(0xdfd6c4, 210, 350);
       this.environment = createStudioEnvironment(this.renderer);
       this.scene.environment = this.environment.texture;
       this.scene.environmentIntensity = 0.85;
@@ -117,7 +121,19 @@ export class BenchViewer {
       key.position.set(-20, 65, 30);
       const fill = new THREE.DirectionalLight(0xd4e6ff, 0.7);
       fill.position.set(30, 30, -30);
-      this.scene.add(key, fill, this.movement, this.holder);
+      this.scene.add(key, fill);
+      for (const station of this.stations) {
+        station.root.name = station.id;
+        station.root.position.set(station.x, 0, station.z);
+        station.movement.rotation.x = THREE.MathUtils.degToRad(
+          station.rotationX,
+        );
+        station.movement.position.y = station.seat;
+        station.root.add(station.movement, station.holder);
+        this.scene.add(station.root);
+      }
+      this.walker.spawn.fromArray(layout.arrival);
+      this.walker.spawnYaw = 0;
       this.observer = new ResizeObserver(this.resize);
       this.observer.observe(host);
       document.addEventListener('pointerlockchange', this.lockChanged);
@@ -140,12 +156,30 @@ export class BenchViewer {
   emit() {
     if (!this.dead) this.notify({ ...this.status });
   }
-  delay(fn: () => void, ms: number) {
-    const id = setTimeout(() => {
-      this.timers.delete(id);
-      if (!this.dead) fn();
-    }, ms);
-    this.timers.add(id);
+  releaseMaterial(material: THREE.Material) {
+    if (this.releasedMaterial.has(material)) return;
+    this.releasedMaterial.add(material);
+    for (const value of Object.values(material)) {
+      if (value instanceof THREE.Texture && !this.releasedTexture.has(value)) {
+        this.releasedTexture.add(value);
+        value.dispose();
+      }
+    }
+    material.dispose();
+  }
+  release(objects: THREE.Object3D[]) {
+    for (const object of objects)
+      object.traverse((node) => {
+        if (!(node instanceof THREE.Mesh)) return;
+        if (!this.releasedGeometry.has(node.geometry)) {
+          this.releasedGeometry.add(node.geometry);
+          node.geometry.dispose();
+        }
+        for (const material of Array.isArray(node.material)
+          ? node.material
+          : [node.material])
+          this.releaseMaterial(material);
+      });
   }
   async load() {
     const generation = ++this.generation;
@@ -202,9 +236,12 @@ export class BenchViewer {
         loader
           .loadAsync('/bench-local/environment.glb')
           .then((g) => track(g.scene)),
+        loader
+          .loadAsync(assetRequestUrl(paths.catalog))
+          .then((g) => track(g.scene)),
       ]);
       if (this.dead || generation !== this.generation) {
-        loaded.forEach(disposeObjectResources);
+        this.release(loaded);
         return;
       }
       for (const r of results) if (r.status === 'rejected') throw r.reason;
@@ -214,8 +251,19 @@ export class BenchViewer {
         >
       ).value;
       const records = new Map(manifest.instances.map((p) => [p.id, p]));
+      const crownIds = new Set(
+        watchConfiguration.leaves
+          .filter((p) => p.packet === 'crown')
+          .map((p) => p.id),
+      );
+      const required = manifest.instances.filter(
+        (p) =>
+          !p.isAssembly &&
+          (p.id.startsWith('p_0_1_1_1__0_1_1_1_4__') || crownIds.has(p.id)),
+      );
+      const requiredIds = new Set(required.map((p) => p.id));
       const accepted = new Set<string>();
-      for (const result of [results[0], results[1]]) {
+      for (const result of [results[0], results[1], results[6]]) {
         const object = (result as PromiseFulfilledResult<THREE.Object3D>).value;
         const meshes: { mesh: THREE.Mesh; record: Part }[] = [];
         object.traverse((node) => {
@@ -229,13 +277,13 @@ export class BenchViewer {
           if (record) meshes.push({ mesh: node, record });
         });
         for (const { mesh, record } of meshes) {
-          if (accepted.has(record.id)) continue;
+          if (!requiredIds.has(record.id) || accepted.has(record.id)) continue;
           accepted.add(record.id);
           attachSourceSurface(mesh.geometry, surfaces.get(record.definitionId));
           const old = Array.isArray(mesh.material)
             ? mesh.material
             : [mesh.material];
-          old.forEach((m) => m.dispose());
+          old.forEach((m) => this.releaseMaterial(m));
           mesh.material = createMaterial(
             record.name,
             record.definitionId,
@@ -254,12 +302,15 @@ export class BenchViewer {
           );
           mesh.name = record.name;
           mesh.userData.partId = record.id;
-          this.movement.add(mesh);
+          mesh.userData.packet = crownIds.has(record.id) ? 'crown' : 'movement';
+          this.stations.forEach((station, i) => {
+            const instance = i === 0 ? mesh : mesh.clone();
+            instance.userData.stationId = station.id;
+            instance.userData.instanceId = station.id + ':' + record.id;
+            station.movement.add(instance);
+          });
         }
       }
-      const required = manifest.instances.filter(
-        (p) => !p.isAssembly && p.id.startsWith('p_0_1_1_1__0_1_1_1_4__'),
-      );
       if (required.some((p) => !accepted.has(p.id)))
         throw Error('Incomplete movement');
       this.bridgeHolder = (
@@ -268,55 +319,60 @@ export class BenchViewer {
       this.dialHolder = (
         results[4] as PromiseFulfilledResult<THREE.Mesh>
       ).value;
-      this.holder.add(this.bridgeHolder, this.dialHolder);
+      this.stations[0].holder.add(this.bridgeHolder);
+      this.stations[1].holder.add(this.dialHolder);
       const environment = (results[5] as PromiseFulfilledResult<THREE.Object3D>)
         .value;
+      // glTF extras are the versioned Blender/renderer contract. Fail closed.
       environment.traverse((node) => {
         if (!(node instanceof THREE.Mesh)) return;
-        (node.material as THREE.Material).dispose();
-        if (node.name.includes('ramp')) {
-          node.material = printedPlastic();
-          this.ramps.push(node);
-        } else {
-          const material = new THREE.MeshStandardMaterial({
-            color: node.name === 'mat' ? 0x375b48 : 0x8a7356,
-            roughness: 0.95,
-          });
-          if (node.name === 'mat') {
-            material.onBeforeCompile = (shader) => {
-              shader.vertexShader =
-                'varying vec3 matPoint;\n' + shader.vertexShader;
-              shader.vertexShader = shader.vertexShader.replace(
-                '#include <worldpos_vertex>',
-                '#include <worldpos_vertex>\nmatPoint = (modelMatrix * vec4(transformed, 1.0)).xyz;',
-              );
-              shader.fragmentShader =
-                'varying vec3 matPoint;\n' + shader.fragmentShader;
-              shader.fragmentShader = shader.fragmentShader.replace(
-                '#include <color_fragment>',
-                `#include <color_fragment>
-                vec2 grid = abs(fract(matPoint.xz / 5.0 + 0.5) - 0.5) * 5.0;
-                vec2 edge = smoothstep(vec2(0.018), vec2(0.018) + fwidth(matPoint.xz), grid);
-                float line = 1.0 - min(edge.x, edge.y);
-                diffuseColor.rgb *= 1.0 + line * 0.12;
-                diffuseColor.rgb *= mix(0.55, 1.0, smoothstep(19.0, 24.0, length(matPoint.xz)));
-              `,
-              );
-            };
-            material.customProgramCacheKey = () => 'bench-mat-5mm-v1';
-          }
-          node.material = material;
-        }
+        if (
+          node.userData.atelierVersion !== 1 ||
+          !['walkable', 'boundary', 'decor'].includes(
+            node.userData.collisionRole,
+          )
+        )
+          throw Error('Invalid atelier environment contract: ' + node.name);
       });
       this.scene.add(environment);
+      const retained = new Set(
+        this.stations.flatMap((station) =>
+          station.movement.children.map(
+            (node) => (node as THREE.Mesh).geometry,
+          ),
+        ),
+      );
+      for (const index of [0, 1, 6]) {
+        const unused = (
+          results[index] as PromiseFulfilledResult<THREE.Object3D>
+        ).value;
+        unused.traverse((node) => {
+          if (!(node instanceof THREE.Mesh)) return;
+          if (
+            !retained.has(node.geometry) &&
+            !this.releasedGeometry.has(node.geometry)
+          ) {
+            this.releasedGeometry.add(node.geometry);
+            node.geometry.dispose();
+          }
+          for (const material of Array.isArray(node.material)
+            ? node.material
+            : [node.material])
+            this.releaseMaterial(material);
+        });
+        unused.clear();
+      }
       this.assets = loaded;
-      this.present('bridge');
       this.scene.updateMatrixWorld(true);
       // Yield between definitions so loading UI can paint while the BVHs are built.
       const solids: THREE.Mesh[] = [];
-      for (const group of [this.movement, this.holder, environment])
+      for (const group of [...this.stations.map((s) => s.root), environment])
         group.traverse((node) => {
-          if (node instanceof THREE.Mesh) solids.push(node);
+          if (
+            node instanceof THREE.Mesh &&
+            node.userData.collisionRole !== 'decor'
+          )
+            solids.push(node);
         });
       for (let i = 0; i < solids.length; i++) {
         if (this.dead) return;
@@ -325,7 +381,7 @@ export class BenchViewer {
           await new Promise((resolve) => setTimeout(resolve, 0));
       }
       if (this.dead) return;
-      // Compile every material (including currently hidden fixtures) before capture.
+      // Compile both simultaneously present stations before capture.
       // Transmission renders opaque finishes a second time without tone mapping.
       const toneMapping = this.renderer.toneMapping;
       const outputColorSpace = this.renderer.outputColorSpace;
@@ -346,7 +402,7 @@ export class BenchViewer {
       this.wake();
     } catch (error) {
       console.error('Bench load', error);
-      loaded.forEach(disposeObjectResources);
+      this.release(loaded);
       if (!this.dead) {
         this.status.error =
           'The bench could not load completely. Check the local bench assets, then retry.';
@@ -355,36 +411,25 @@ export class BenchViewer {
       }
     }
   }
-  present(side: BenchStatus['side']) {
-    this.status.side = side;
-    this.movement.rotation.x = side === 'bridge' ? Math.PI / 2 : -Math.PI / 2;
-    this.movement.position.y = side === 'bridge' ? 12.2 : 16.3;
-    if (this.bridgeHolder) this.bridgeHolder.visible = side === 'bridge';
-    if (this.dialHolder) this.dialHolder.visible = side === 'dial';
-    for (const ramp of this.ramps)
-      ramp.visible = ramp.name.startsWith(side + '-ramp');
-    this.scene.updateMatrixWorld(true);
-    this.world.sync();
+  nearbyStation() {
+    const { x, z } = this.walker.feet;
+    return this.stations.reduce((best, station) =>
+      Math.hypot(x - station.x, z - station.z) <
+      Math.hypot(x - best.x, z - best.z)
+        ? station
+        : best,
+    );
   }
-  switchSide = () => {
-    if (!this.status.ready || this.status.busy) return;
-    this.clearInput();
-    this.status.busy = true;
-    this.emit();
-    this.delay(() => {
-      this.present(this.status.side === 'bridge' ? 'dial' : 'bridge');
-      this.walker.reset();
-      this.wake();
+  updateStation() {
+    const station = this.nearbyStation();
+    this.walker.recovery.fromArray(station.checkpoint);
+    if (this.status.side !== station.id) {
+      this.status.side = station.id as BenchStatus['side'];
       this.emit();
-      this.delay(() => {
-        this.status.busy = false;
-        this.emit();
-        this.wake();
-      }, 180);
-    }, 220);
-  };
+    }
+  }
   enter = async () => {
-    if (!this.status.ready || this.status.busy) return;
+    if (!this.status.ready) return;
     try {
       await this.renderer.domElement.requestPointerLock();
     } catch {
@@ -436,7 +481,7 @@ export class BenchViewer {
     this.emit();
   };
   look = (e: MouseEvent) => {
-    if (!this.status.captured || this.status.busy) return;
+    if (!this.status.captured) return;
     if (!e.movementX && !e.movementY) return;
     this.activity.add(e.movementX, e.movementY, performance.now());
     this.wake();
@@ -446,18 +491,13 @@ export class BenchViewer {
       if (this.status.captured) this.pause();
       return;
     }
-    if (!this.status.captured || this.status.busy) return;
-    if (
-      !['KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'KeyR', 'KeyT'].includes(
-        e.code,
-      )
-    )
+    if (!this.status.captured) return;
+    if (!['KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'KeyR'].includes(e.code))
       return;
     e.preventDefault();
     if (e.code === 'KeyR' && !e.repeat) this.reset();
-    else if (e.code === 'KeyT' && !e.repeat) this.switchSide();
     else if (e.code === 'Space' && !e.repeat) this.walker.jumpQueued = true;
-    else if (e.code.startsWith('Key') && !['KeyR', 'KeyT'].includes(e.code))
+    else if (e.code.startsWith('Key') && e.code !== 'KeyR')
       this.walker.keys.add(e.code);
     this.wake();
   };
@@ -465,11 +505,10 @@ export class BenchViewer {
     if (this.walker.keys.delete(e.code)) this.wake();
   };
   reset = () => {
-    if (!this.status.busy) {
-      this.clearInput();
-      this.walker.reset();
-      this.wake();
-    }
+    this.clearInput();
+    this.walker.reset();
+    this.updateStation();
+    this.wake();
   };
   quality = (mode: QualityMode | boolean) => {
     // Boolean remains accepted by existing local inspection scripts.
@@ -509,7 +548,6 @@ export class BenchViewer {
       elapsed = this.last ? now - this.last : 16.67;
     const moving =
       this.status.captured &&
-      !this.status.busy &&
       (this.walker.keys.size > 0 ||
         !this.walker.grounded ||
         this.walker.jumpQueued);
@@ -530,12 +568,9 @@ export class BenchViewer {
     if (activity.elapsed === null) this.detail.resetSamples();
     const shouldRender =
       dirty || moving || !this.walker.grounded || activity.looked;
-    if (
-      this.status.ready &&
-      !this.status.busy &&
-      (moving || !this.walker.grounded)
-    )
+    if (this.status.ready && (moving || !this.walker.grounded))
       this.walker.update(elapsed / 1000);
+    this.updateStation();
     if (shouldRender) {
       this.camera.position.copy(this.walker.feet).y += WALK.eye;
       this.camera.rotation.set(this.walker.pitch, this.walker.yaw, 0, 'YXZ');
@@ -563,8 +598,6 @@ export class BenchViewer {
     this.generation++;
     this.pause();
     cancelAnimationFrame(this.frame);
-    this.timers.forEach(clearTimeout);
-    this.timers.clear();
     this.observer?.disconnect();
     document.removeEventListener('pointerlockchange', this.lockChanged);
     document.removeEventListener('pointerlockerror', this.lockError);
@@ -577,8 +610,7 @@ export class BenchViewer {
       'webglcontextlost',
       this.contextLost,
     );
-    disposeObjectResources(this.scene);
-    this.assets.forEach(disposeObjectResources);
+    this.release([this.scene, ...this.assets]);
     this.world.solids = [];
     this.world.trees.clear();
     this.environment?.dispose();

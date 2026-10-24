@@ -1,4 +1,4 @@
-/** Loading / first-turn / side-switch probe with synthetic look fixtures. */
+/** Loading / first-turn / first visit to each station probe with synthetic look fixtures. */
 import {
   launchProfileBrowser,
   profileEnvironment,
@@ -51,7 +51,6 @@ try {
         before,
         after: b.renderer.info.programs?.length,
         side: b.status.side,
-        busy: b.status.busy,
         renderRatio: b.renderer.getPixelRatio(),
       });
     };
@@ -81,23 +80,17 @@ try {
     await page.waitForFunction(() => document.hasFocus(), null, {
       polling: 100,
     });
-    let switchMs = null;
-    if (side === 'dial') {
-      const t = Date.now();
-      await page.evaluate(() => {
-        window.bench.status.captured = false;
-        window.bench.switchSide();
-      });
-      await page.waitForFunction(() => !window.bench.status.busy);
-      switchMs = Date.now() - t;
-    }
     const result = await page.evaluate(
       async ({ mode, side }) => {
         const b = window.bench;
         b.quality(mode === 'Auto' ? 'Auto' : mode === 'Low');
         b.slowFrames = -1e9;
         b.walker.clear();
-        b.walker.feet.set(-8, b.world.floor(-8, 0) + 0.002, 0);
+        const station = b.stations.find((s) => s.id === side);
+        const x = station.x - 8,
+          z = station.z;
+        b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);
+        b.updateStation();
         b.walker.yaw = -Math.PI / 2;
         b.walker.pitch = -0.55;
         b.status.captured = true;
@@ -150,7 +143,7 @@ try {
       },
       { mode, side },
     );
-    report.turns.push({ ...result, switchMs });
+    report.turns.push(result);
     assert.ok(
       !result.hidden && !result.unfocused && result.sampledSpan > 5500,
       `Invalid ${executionMode} first-use sample`,

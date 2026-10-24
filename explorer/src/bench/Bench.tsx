@@ -6,7 +6,6 @@ import './bench.css';
 const initial: BenchStatus = {
   ready: false,
   captured: false,
-  busy: false,
   side: 'bridge',
   error: '',
   quality: 'Auto',
@@ -69,16 +68,16 @@ export default function Bench() {
       </header>
       {!state.captured && (
         <section className="bench-menu" aria-label="Walking menu">
-          <p className="bench-kicker">A different perspective</p>
+          <p className="bench-kicker">Two faces · One atelier</p>
           <h1>
             Walk inside
             <br />
             the movement.
           </h1>
           <p>
-            From the green mat to the plates and bridges.
+            Two faces of one movement, on one desk.
             <br />
-            Follow the red ramp, then find your own way.
+            Follow the green promenade, then find your own way.
           </p>
           <div className="bench-menu-controls">
             <span>
@@ -91,10 +90,7 @@ export default function Bench() {
               <kbd>Space</kbd> Jump
             </span>
             <span>
-              <kbd>T</kbd> Other side
-            </span>
-            <span>
-              <kbd>R</kbd> Start again
+              <kbd>R</kbd> Arrival
             </span>
             <span>
               <kbd>Esc</kbd> Menu
@@ -109,7 +105,6 @@ export default function Bench() {
             <button
               ref={enter}
               className="bench-enter"
-              disabled={state.busy}
               onClick={() => void viewer.current?.enter()}
             >
               Enter the movement
@@ -128,17 +123,8 @@ export default function Bench() {
           )}
           {state.ready && (
             <div className="bench-options">
-              <button
-                onClick={() => viewer.current?.reset()}
-                disabled={state.busy}
-              >
+              <button onClick={() => viewer.current?.reset()}>
                 Reset position
-              </button>
-              <button
-                onClick={() => viewer.current?.switchSide()}
-                disabled={state.busy}
-              >
-                Switch side
               </button>
               <button
                 title="Auto adjusts resolution for responsiveness. Low and High stay fixed."
@@ -175,9 +161,6 @@ export default function Bench() {
               <kbd>Space</kbd> Jump
             </span>
             <span>
-              <kbd>T</kbd> Side
-            </span>
-            <span>
               <kbd>R</kbd> Reset
             </span>
             <span>
@@ -186,16 +169,8 @@ export default function Bench() {
           </div>
         </>
       )}
-      <div
-        className={'bench-fade' + (state.busy ? ' is-active' : '')}
-        aria-hidden="true"
-      />
       <div className="bench-sr" aria-live="polite">
-        {state.busy
-          ? 'Changing presentation. Returning to the mat.'
-          : state.ready
-            ? `${state.side} side ready`
-            : ''}
+        {state.ready ? `Near the ${state.side} station` : ''}
       </div>
     </main>
   );

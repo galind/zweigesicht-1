@@ -128,6 +128,9 @@ export class CollisionWorld {
 }
 export class Walker {
   feet = new THREE.Vector3(-59, 0.002, 0);
+  spawn = new THREE.Vector3(-59, 0.002, 0);
+  recovery = this.spawn.clone();
+  spawnYaw = -Math.PI / 2;
   velocity = new THREE.Vector3();
   grounded = false;
   yaw = -Math.PI / 2;
@@ -148,10 +151,10 @@ export class Walker {
     this.jumpBuffer = 0;
     this.velocity.set(0, 0, 0);
   }
-  reset() {
+  reset(recover = false) {
     this.clear();
-    this.feet.set(-59, 0.002, 0);
-    this.yaw = -Math.PI / 2;
+    this.feet.copy(recover ? this.recovery : this.spawn);
+    this.yaw = recover ? -Math.PI / 2 : this.spawnYaw;
     this.pitch = 0.08;
     this.grounded = false;
     this.resets++;
@@ -235,7 +238,7 @@ export class Walker {
         Math.abs(this.feet.x) > 92 ||
         Math.abs(this.feet.z) > 72
       )
-        this.reset();
+        this.reset(true);
     }
   }
 }

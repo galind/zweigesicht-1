@@ -97,13 +97,48 @@ test("hidden opposite presentation cannot collide; source geometry indices remai
   assert.deepEqual(Array.from(mesh.geometry.index.array), indices);
 });
 
-test('a jump just after leaving an edge is accepted once, with no midair repeat', () => {
+test("a jump just after leaving an edge is accepted once, with no midair repeat", () => {
   const { w } = rig();
-  w.feet.set(15.4, 1, 0); w.grounded = false; w.groundGrace = .06;
-  w.jumpQueued = true; w.update(1 / 60);
+  w.feet.set(15.4, 1, 0);
+  w.grounded = false;
+  w.groundGrace = 0.06;
+  w.jumpQueued = true;
+  w.update(1 / 60);
   assert.ok(w.velocity.y > 6);
-  advance(w, .15);
+  advance(w, 0.15);
   const speed = w.velocity.y;
-  w.jumpQueued = true; w.update(1 / 60);
+  w.jumpQueued = true;
+  w.update(1 / 60);
   assert.ok(w.velocity.y < speed);
+});
+
+test("two visible instances share a BVH while keeping independent world poses", () => {
+  const world = new CollisionWorld();
+  const first = box(world, [5, 1, 5], [-12, 3, 0]);
+  const second = first.clone();
+  second.position.set(12, 7, 0);
+  world.add(second);
+  assert.equal(world.trees.size, 1);
+  assert.equal(world.floor(-12, 0), 3.5);
+  assert.equal(world.floor(12, 0), 7.5);
+  first.position.y = 4;
+  world.sync();
+  assert.equal(world.floor(-12, 0), 4.5);
+  assert.equal(world.floor(12, 0), 7.5);
+});
+
+test("explicit reset and nearby fall recovery use separate safe checkpoints", () => {
+  const { w } = rig();
+  w.spawn.set(-8, 1, 3);
+  w.spawnYaw = 0;
+  w.recovery.set(10, 2, -4);
+  w.feet.set(10, -9, -4);
+  w.update(1 / 60);
+  assert.equal(w.feet.x, 10);
+  assert.equal(w.feet.z, -4);
+  assert.ok(w.feet.y > 1.99);
+  w.reset();
+  assert.deepEqual(w.feet.toArray(), [-8, 1, 3]);
+  assert.equal(w.yaw, 0);
+  assert.equal(w.resets, 2);
 });

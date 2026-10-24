@@ -1,72 +1,48 @@
-/** Browser journey uses real mouse capture and keyboard input. Geometry probes are explicitly separate. */
-import { launchForeground } from './foreground-browser.mjs';
+/** Paired-world journey: real capture/keyboard translation, automated look headings.
+ * No position injection until the separately labelled recovery probes.
+ */
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE
     ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href
     : 'playwright'
 );
-const base = process.argv[2] || 'http://127.0.0.1:4173';
-const out = path.resolve(process.env.PLAY_QA_OUTPUT || 'artifacts/bench');
+const base = process.argv[2] || 'http://127.0.0.1:4182';
+const out = process.env.PLAY_QA_OUTPUT || 'artifacts/paired-atelier';
 await fs.mkdir(out, { recursive: true });
-const foreground = process.env.HEADED
-  ? await launchForeground(chromium, { dpr: 1 })
-  : null;
-const browser =
-  foreground?.browser ??
-  (await chromium.launch({
-    headless: true,
-    ...(process.env.CHROME_PATH
-      ? { executablePath: process.env.CHROME_PATH }
-      : {}),
-  }));
-const page =
-  foreground?.page ??
-  (await browser.newPage({ viewport: { width: 1440, height: 900 } }));
-const report = {
-  base,
-  started: new Date().toISOString(),
-  checks: [],
-  journey: [],
-  errors: [],
-  requests: [],
-};
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.CHROME_PATH
+    ? { executablePath: process.env.CHROME_PATH }
+    : {}),
+});
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const report = { checks: [], journey: [], errors: [], requests: [] };
 page.on('pageerror', (e) => report.errors.push(e.message));
 page.on('request', (r) => report.requests.push(r.url()));
-const check = (name, pass, details) => {
-  report.checks.push({ name, pass, details });
-  assert.ok(pass, name + ': ' + JSON.stringify(details));
+const check = (name, pass, detail) => {
+  report.checks.push({ name, pass, detail });
+  assert.ok(pass, name + ': ' + JSON.stringify(detail));
 };
-const snapshot = () =>
+const snap = () =>
   page.evaluate(() => {
     const b = window.bench;
     return {
-      status: b.status,
       position: b.walker.feet.toArray(),
       grounded: b.walker.grounded,
-      keys: [...b.walker.keys],
       resets: b.walker.resets,
-      renderCount: b.renderCount,
-      parts: b.movement.children.length,
+      status: b.status,
+      keys: [...b.walker.keys],
+      renders: b.renderCount,
+      parts: b.stations.map((s) => s.movement.children.length),
     };
   });
-const shot = async (name) => {
-  await page.screenshot({ path: path.join(out, name + '.png') });
-  report.journey.push({ name, ...(await snapshot()) });
-};
-const hold = async (key, ms) => {
-  await page.keyboard.down(key);
-  await page.waitForTimeout(ms);
-  await page.keyboard.up(key);
-};
-const ready = async () => {
-  await page.waitForFunction(() => window.bench?.status.ready, null, {
+const ready = () =>
+  page.waitForFunction(() => window.bench?.status.ready, null, {
     timeout: 90000,
   });
-};
 const capture = async () => {
   await page
     .getByRole('button', { name: 'Enter the movement', exact: true })
@@ -75,191 +51,167 @@ const capture = async () => {
     () => !!document.pointerLockElement && window.bench.status.captured,
   );
 };
+const shot = async (name) => {
+  await page.screenshot({ path: out + '/' + name + '.png' });
+  report.journey.push({ name, ...(await snap()) });
+};
+async function walkTo(x, z, name) {
+  const before = await snap();
+  const distance = Math.hypot(x - before.position[0], z - before.position[2]);
+  // Deterministic mouse heading only; actual W events drive every movement step.
+  await page.evaluate(
+    ({ x, z }) => {
+      const b = window.bench;
+      b.walker.yaw = Math.atan2(-(x - b.walker.feet.x), -(z - b.walker.feet.z));
+      b.walker.pitch = 0;
+      b.wake();
+    },
+    { x, z },
+  );
+  await page.keyboard.down('KeyW');
+  try {
+    await page.waitForFunction(
+      ({ x, z }) =>
+        Math.hypot(
+          window.bench.walker.feet.x - x,
+          window.bench.walker.feet.z - z,
+        ) < 0.15,
+      { x, z },
+      { timeout: Math.max(5000, (distance / 5.5) * 2000), polling: 16 },
+    );
+  } catch (error) {
+    report.journey.push({ name: 'BLOCKED ' + name, ...(await snap()) });
+    throw error;
+  } finally {
+    await page.keyboard.up('KeyW');
+  }
+  await page.waitForTimeout(100);
+  const s = await snap();
+  check(name, s.resets === before.resets && s.grounded, s);
+  report.journey.push({ name, ...s });
+}
 try {
   await page.goto(base + '/?inspect=1', { waitUntil: 'networkidle' });
   check(
-    'homepage does not load bench assets',
-    !report.requests.some(
-      (u) => u.includes('/bench-local/') || u.includes('BenchViewer'),
-    ),
+    'home does not load local bench assets',
+    !report.requests.some((u) => u.includes('/bench-local/')),
   );
   await page
     .getByRole('link', { name: 'Walk inside the movement', exact: true })
     .click();
-  // Enable the read-only QA observation handle with a direct route reload.
   await page.goto(base + '/bench?inspect=1');
-  await page.bringToFront();
   await ready();
   check(
-    'direct route complete and no automatic capture',
-    !(await snapshot()).status.captured,
+    'both complete movements and four crowns present before capture',
+    (await snap()).parts.every((n) => n === 227),
   );
+  check('explicit capture only', !(await snap()).status.captured);
   check(
-    'all 223 movement leaves loaded without catalog',
-    (await snapshot()).parts === 223 &&
-      !report.requests.some((u) => u.includes('/models/catalog-')),
+    'no obsolete swap control',
+    (await page
+      .getByRole('button', { name: 'Switch side', exact: true })
+      .count()) === 0,
   );
-  await shot('01-entry');
+  await shot('journey-arrival');
   await capture();
-  await page.mouse.move(720, 450);
-  await page.keyboard.press('KeyR');
-  await page.mouse.move(720, 520);
-  await page.waitForFunction(() => window.bench.walker.pitch < 0);
+  const initialResets = (await snap()).resets;
+  await walkTo(-57, 33, 'gentle lower rise to level pause bay');
+  await shot('journey-pause');
+  await walkTo(-57, 12, 'gentle upper rise');
+  await walkTo(-49, 12, 'bridge approach');
+  await walkTo(-37, 12, 'enter real bridge CAD without jumping');
+  await shot('journey-bridge');
+  await walkTo(-49, 12, 'return from bridge to external approach');
+  await walkTo(-49, -18, 'external west promenade');
+  await walkTo(13, -18, 'continuous sloping connector');
+  await shot('journey-connector');
+  await walkTo(13, -6, 'dial approach');
+  await walkTo(23, -6, 'enter real dial CAD without jumping');
+  await shot('journey-dial');
   check(
-    'mouse look keeps level horizon',
-    await page.evaluate(
-      () =>
-        window.bench.walker.pitch < 0 && window.bench.camera.rotation.z === 0,
-    ),
+    'nearby status follows dial station',
+    (await snap()).status.side === 'dial',
   );
-  await page.waitForTimeout(400);
-  await hold('KeyW', 500);
-  check('walk on mat', (await snapshot()).position[0] > -58);
-  await shot('02-mat');
-  await hold('KeyW', 5500);
-  let s = await snapshot();
-  check('climb actual fixture', s.position[1] > 10 && s.position[0] < -25, s);
-  await shot('03-ramp');
-  await hold('KeyW', 4300);
-  await page.waitForTimeout(500);
-  s = await snapshot();
-  check('reach actual bridge', s.position[0] > -14 && s.position[1] > 16, s);
-  await shot('04-bridge-entry');
-  // Cross a screw and bridge onto the adjacent moving-train surfaces.
-  const before = (await snapshot()).position;
-  await page.keyboard.down('KeyW');
+  await walkTo(13, -6, 'return from dial CAD');
+  await walkTo(13, -18, 'dial external return');
+  await walkTo(-49, -18, 'reverse connector');
+  await walkTo(-49, 12, 'bridge return');
+  check(
+    'complete round trip has no automatic resets',
+    (await snap()).resets === initialResets,
+  );
+  await walkTo(-37, 12, 'revisit bridge for optional jump');
+  const beforeJump = (await snap()).position[1];
   await page.keyboard.press('Space');
-  await page.waitForTimeout(220);
-  s = await snapshot();
-  check('jump rises above surface', s.position[1] > before[1] + 0.35, {
-    before,
-    after: s.position,
-  });
+  await page.waitForTimeout(230);
+  check(
+    'jump remains available on CAD',
+    (await snap()).position[1] > beforeJump + 0.3,
+  );
   await page.waitForTimeout(900);
-  await page.keyboard.up('KeyW');
-  await page.waitForTimeout(600);
-  s = await snapshot();
-  check('cross several movement parts', s.position[0] > -9, s);
-  await shot('05-across-bridges');
-  await hold('KeyD', 700);
-  await page.keyboard.press('Space');
-  await hold('KeyW', 650);
-  await page.waitForTimeout(600);
-  await shot('06-train-detail');
-  // Escape and focus loss must clear keys and release capture.
+  await walkTo(-49, 12, 'return after optional CAD jump');
+  const beforeT = await snap();
+  await page.keyboard.press('KeyT');
+  await page.waitForTimeout(300);
+  const afterT = await snap();
+  check(
+    'T cannot swap or reset',
+    afterT.resets === beforeT.resets &&
+      JSON.stringify(afterT.position) === JSON.stringify(beforeT.position),
+  );
   await page.keyboard.down('KeyW');
   await page.keyboard.press('Escape');
   await page.keyboard.up('KeyW');
   await page.waitForFunction(() => !document.pointerLockElement);
-  s = await snapshot();
   check(
-    'Escape releases and clears held keys',
-    !s.status.captured && s.keys.length === 0,
+    'Escape releases capture and keys',
+    !(await snap()).status.captured && (await snap()).keys.length === 0,
   );
-  await page.waitForTimeout(700);
-  const idleA = (await snapshot()).renderCount;
-  await page.waitForTimeout(700);
-  check(
-    'stationary menu stops rendering',
-    (await snapshot()).renderCount === idleA,
-  );
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(500);
+  const renders = (await snap()).renders;
+  await page.waitForTimeout(500);
+  check('resting scene sleeps', (await snap()).renders === renders);
   await capture();
   await page.keyboard.down('KeyW');
   await page.evaluate(() => window.dispatchEvent(new Event('blur')));
   await page.keyboard.up('KeyW');
-  await page.waitForTimeout(200);
-  s = await snapshot();
+  await page.waitForTimeout(150);
   check(
-    'focus loss releases and clears keys',
-    !s.status.captured && s.keys.length === 0,
+    'blur clears capture and keys',
+    !(await snap()).status.captured && (await snap()).keys.length === 0,
   );
   await page.waitForTimeout(1200);
   await capture();
-  await page.keyboard.press('KeyT');
-  await page.keyboard.press('KeyT');
-  await page.keyboard.press('KeyT');
-  await page.waitForTimeout(700);
-  s = await snapshot();
-  check(
-    'repeated T changes once and returns safely',
-    s.status.side === 'dial' && s.position[0] === -59 && !s.status.busy,
-    s,
-  );
-  await hold('KeyW', 10000);
-  await page.waitForTimeout(400);
-  s = await snapshot();
-  check(
-    'dial presentation accessible from mat',
-    s.position[0] > -14 && Math.abs(s.position[1] - 15.7) < 0.05,
-    s,
-  );
-  await shot('07-dial-plate');
-  await hold('KeyD', 700);
-  const dialBefore = (await snapshot()).position;
-  await page.keyboard.down('KeyW');
-  await page.keyboard.press('Space');
-  await page.waitForTimeout(250);
-  s = await snapshot();
-  check('jump on opposite face', s.position[1] > dialBefore[1] + 0.3, {
-    before: dialBefore,
-    after: s.position,
-  });
-  await page.waitForTimeout(700);
-  await page.keyboard.up('KeyW');
-  await page.waitForTimeout(500);
-  await shot('08-dial-exploration');
   await page.keyboard.press('KeyR');
-  await page.waitForTimeout(100);
-  s = await snapshot();
-  check('R resets to safe mat', s.position[0] === -59 && s.keys.length === 0);
-  await shot('09-reset');
-  // Independent test fixture: drop beyond the playable bounds, never part of journey.
-  await page.evaluate(() => {
-    window.bench.walker.feet.set(0, -9, 0);
-    window.bench.walker.grounded = false;
-    window.bench.wake();
-  });
-  await page.waitForTimeout(100);
-  s = await snapshot();
+  await page.waitForTimeout(150);
   check(
-    'automatic fall recovery',
-    s.position[0] === -59 && s.position[1] > -0.01,
-    s,
+    'explicit R returns to shared forecourt',
+    Math.abs((await snap()).position[0] + 57) < 0.01 &&
+      (await snap()).position[2] === 55,
   );
-  // Sample collision floors against the source geometry, including genuine holes.
-  const samples = await page.evaluate(() => {
-    const b = window.bench;
-    return {
-      plate: b.world.floor(-10, 4),
-      opening: b.world.floor(0, 0),
-      holder: b.world.floor(-19, 8),
-      offMat: b.world.floor(100, 100),
-    };
-  });
-  report.geometrySamples = samples;
-  // Read performance accumulated during the real route; no fps claim from sleeping frames.
-  report.performance = await page.evaluate(() => {
-    const b = window.bench;
-    const pct = (a, p) =>
-      [...a].sort((a, b) => a - b)[Math.floor((a.length - 1) * p)];
-    const gl = b.renderer.getContext(),
-      ext = gl.getExtension('WEBGL_debug_renderer_info');
-    return {
-      samples: b.frameTimes.length,
-      meanMs: b.frameTimes.reduce((a, v) => a + v, 0) / b.frameTimes.length,
-      p50Ms: pct(b.frameTimes, 0.5),
-      p95Ms: pct(b.frameTimes, 0.95),
-      p99Ms: pct(b.frameTimes, 0.99),
-      cpuP95Ms: pct(b.cpuTimes, 0.95),
-      quality: b.status.quality,
-      pixelRatio: b.renderer.getPixelRatio(),
-      drawCalls: b.renderer.info.render.calls,
-      triangles: b.renderer.info.render.triangles,
-      gpu: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : 'unavailable',
-      userAgent: navigator.userAgent,
-    };
-  });
+  // Independent fixtures: force falls near each station, outside normal journey.
+  for (const [side, x, z] of [
+    ['bridge', -24, 12],
+    ['dial', 38, -6],
+  ]) {
+    await page.evaluate(
+      ({ x, z }) => {
+        const b = window.bench;
+        b.walker.feet.set(x, -9, z);
+        b.updateStation();
+        b.walker.grounded = false;
+        b.wake();
+      },
+      { x, z },
+    );
+    await page.waitForTimeout(150);
+    const s = await snap();
+    check(
+      side + ' fall recovers to nearby approach',
+      s.status.side === side && s.position[1] > 15,
+      s,
+    );
+  }
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.pointerLockElement);
   await page.evaluate(() => (window.previousBench = window.bench));
@@ -268,11 +220,12 @@ try {
     .click();
   await page.waitForURL(base + '/');
   check(
-    'return home disposes controller',
+    'disposal clears scene collision ownership',
     await page.evaluate(
       () =>
         window.previousBench.dead &&
-        window.previousBench.world.solids.length === 0,
+        window.previousBench.world.solids.length === 0 &&
+        window.previousBench.world.trees.size === 0,
     ),
   );
   for (let i = 0; i < 2; i++) {
@@ -283,7 +236,7 @@ try {
       .getByRole('button', { name: 'Enter the movement', exact: true })
       .waitFor({ timeout: 90000 });
     check(
-      're-entry has one canvas ' + i,
+      'reentry owns exactly one canvas ' + i,
       (await page.locator('.bench-canvas canvas').count()) === 1,
     );
     await page
@@ -291,42 +244,32 @@ try {
       .click();
     await page.waitForURL(base + '/');
   }
-  await page.route('**/bench-local/movement.stl', (route) => route.abort());
+  await page.route('**/bench-local/movement.stl', (r) => r.abort());
   await page.goto(base + '/bench?inspect=1');
-  await page.bringToFront();
   await page
     .getByRole('button', { name: 'Retry loading', exact: true })
     .waitFor({ timeout: 90000 });
   check(
-    'asset failure blocks entry',
+    'incomplete asset load blocks capture',
     (await page
       .getByRole('button', { name: 'Enter the movement', exact: true })
       .count()) === 0,
   );
-  await page.screenshot({ path: path.join(out, '10-load-failure.png') });
   await page.unroute('**/bench-local/movement.stl');
   await page
     .getByRole('button', { name: 'Retry loading', exact: true })
     .click();
   await ready();
-  check('retry reconstructs complete scene', (await snapshot()).parts === 223);
   check(
-    'no uncaught browser errors',
-    report.errors.length === 0,
-    report.errors,
+    'retry restores both complete stations',
+    (await snap()).parts.every((n) => n === 227),
   );
-  console.log(
-    JSON.stringify(
-      { checks: report.checks.length, performance: report.performance },
-      null,
-      2,
-    ),
-  );
+  check('no uncaught errors', report.errors.length === 0, report.errors);
+  console.log(report.checks.length + ' paired walking checks pass');
 } finally {
   await fs.writeFile(
-    path.join(out, 'browser-report.json'),
+    out + '/browser-report.json',
     JSON.stringify(report, null, 2),
   );
-  if (foreground) await foreground.close();
-  else await browser.close();
+  await browser.close();
 }
