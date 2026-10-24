@@ -41,7 +41,7 @@ const shot = async (name) => {
   report.views.push({ name, ...(await snap()) });
   await page.screenshot({ path: out + "/" + name + ".png" });
 };
-async function flyTo(x, z, name) {
+async function flyTo(x, z, name, onMovement = true) {
   await page.keyboard.down("Space");
   await page.waitForFunction(() => window.bench.walker.feet.y > 25, null, {
     timeout: 12000,
@@ -85,8 +85,10 @@ async function flyTo(x, z, name) {
   await wait(300);
   const s = await snap();
   check(
-    name + " lands on real movement",
-    s.grounded && s.feet[1] > 9 && Math.hypot(x - s.feet[0], z - s.feet[2]) < 1,
+    name + (onMovement ? " lands on real movement" : " lands on mat"),
+    s.grounded &&
+      (onMovement ? s.feet[1] > 9 : Math.abs(s.feet[1]) < 0.001) &&
+      Math.hypot(x - s.feet[0], z - s.feet[2]) < 1,
     s,
   );
   check(name + " eye remains 1.48 mm above feet", Math.abs(s.eye[1] - s.feet[1] - 1.48) < 1e-8, s);
@@ -101,8 +103,10 @@ try {
   check(
     "real arrival on mat, one complete movement visible",
     Math.abs(initial.feet[1]) < 0.001 &&
-      (await page.evaluate(() =>
-        window.bench.station.root.visible && window.bench.station.movement.children.length === 219,
+      (await page.evaluate(
+        () =>
+          window.bench.station.root.visible &&
+          window.bench.station.movement.children.length === 219,
       )),
     initial,
   );
@@ -146,6 +150,13 @@ try {
   check("lands naturally back on mat", Math.abs((await snap()).feet[1]) < 0.001, await snap());
   await flyTo(-12, -7, "bridge");
   await page.keyboard.press("f");
+  check(
+    "flip while standing asks visitor to move away",
+    await page.evaluate(() => window.bench.status.flipBlocked && !window.bench.flip.active),
+  );
+  await flyTo(-30, -7, "clear mat", false);
+  await page.keyboard.press("f");
+  await page.waitForFunction(() => window.bench.flip.active);
   await page.waitForFunction(() => !window.bench.flip.active);
   await flyTo(-12, -7, "dial");
   check(
@@ -239,9 +250,9 @@ try {
           feet: w.feet.toArray(),
         });
       }
-    for (const id of ['bridge', 'dial']) {
+    for (const id of ["bridge", "dial"]) {
       b.flip.setRest(id);
-      const st = {id, x: b.station.root.position.x, z: b.station.root.position.z};
+      const st = { id, x: b.station.root.position.x, z: b.station.root.position.z };
       // Original holder wall, then the movement top and its underside.
       setup(st.x, 2, st.z + 24);
       w.keys.add("KeyW");

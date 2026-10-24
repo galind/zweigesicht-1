@@ -6,11 +6,13 @@ import { BenchControls } from './BenchControls';
 import { FLIP_KEY } from './bindings';
 import { consumeBenchEntry } from './entryIntent';
 import './bench.css';
+const flipNotice = 'Move away from the movement to flip it.';
 const initial: BenchStatus = {
   ready: false,
   captured: false,
   side: 'bridge',
   error: '',
+  flipBlocked: false,
   quality: 'Auto',
 };
 export default function Bench() {
@@ -134,6 +136,9 @@ export default function Bench() {
           ) : (
             <output className="bench-loading">Loading the movement…</output>
           )}
+          {state.flipBlocked && (
+            <output className="bench-flip-notice">{flipNotice}</output>
+          )}
           {hasEntered && <BenchControls />}
           {state.ready && hasEntered && (
             <div className="bench-options">
@@ -160,21 +165,27 @@ export default function Bench() {
       )}
       {state.captured && (
         <div className="bench-legend">
-          <span>
-            <kbd>WASD</kbd> Move
-          </span>
-          <span>
-            <kbd>Space</kbd> Hold to rise
-          </span>
-          <span>
-            <kbd>{FLIP_KEY.label}</kbd> Flip
-          </span>
-          <span>
-            <kbd>R</kbd> Reset
-          </span>
-          <span>
-            <kbd>Esc</kbd> Menu
-          </span>
+          {state.flipBlocked ? (
+            <output className="bench-flip-notice">{flipNotice}</output>
+          ) : (
+            <>
+              <span>
+                <kbd>WASD</kbd> Move
+              </span>
+              <span>
+                <kbd>Space</kbd> Hold to rise
+              </span>
+              <span>
+                <kbd>{FLIP_KEY.label}</kbd> Flip
+              </span>
+              <span>
+                <kbd>R</kbd> Reset
+              </span>
+              <span>
+                <kbd>Esc</kbd> Menu
+              </span>
+            </>
+          )}
         </div>
       )}
       <div className="bench-sr" aria-live="polite">

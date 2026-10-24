@@ -289,6 +289,16 @@ try {
       await layout(),
     );
     check(
+      label + " Escape menu is centered in the viewport",
+      await page.locator(".bench-menu").evaluate((e) => {
+        const r = e.getBoundingClientRect();
+        return (
+          Math.abs(r.x + r.width / 2 - innerWidth / 2) < 1 &&
+          Math.abs(r.y + r.height / 2 - innerHeight / 2) < 1
+        );
+      }),
+    );
+    check(
       label + " menu actions are not clipped",
       await page.evaluate(() => {
         const menu = document.querySelector(".bench-menu").getBoundingClientRect();

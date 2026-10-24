@@ -30,7 +30,7 @@ const state = () =>
       active: f.active,
       elapsed: f.elapsed,
       completed: f.completed,
-      relocations: f.relocations,
+      blocked: f.blocked,
       feet: w.feet.toArray(),
       velocity: w.velocity.toArray(),
       yaw: w.yaw,
@@ -108,7 +108,7 @@ try {
       after.yaw === before.yaw &&
       after.pitch === before.pitch &&
       after.resets === before.resets &&
-      after.relocations === 0,
+      !after.blocked,
     { before, after },
   );
   check("visitor eye remains 1.48 mm", Math.abs(after.eye - 1.48) < 1e-8);
@@ -172,6 +172,53 @@ try {
     document.dispatchEvent(new Event("visibilitychange"));
   });
   await enter();
+  await page.evaluate(() => {
+    const b = window.bench,
+      w = b.walker;
+    b.flip.setRest("bridge");
+    w.clear();
+    w.feet.set(0, b.world.floor(0, -7) + 0.00001, -7);
+    w.grounded = true;
+    w.velocity.set(0, 0, 0);
+    b.wake();
+  });
+  await page.waitForTimeout(100);
+  const blockedBefore = await state();
+  await page.keyboard.press("f");
+  await page.getByText("Move away from the movement to flip it.", { exact: true }).waitFor();
+  await page.keyboard.press("f");
+  const blockedAfter = await state();
+  check(
+    "F on movement shows message without relocation or flip",
+    blockedAfter.blocked &&
+      !blockedAfter.active &&
+      blockedAfter.side === "bridge" &&
+      blockedAfter.feet.every((v, i) => Math.abs(v - blockedBefore.feet[i]) < 0.001) &&
+      blockedAfter.yaw === blockedBefore.yaw &&
+      blockedAfter.pitch === blockedBefore.pitch,
+  );
+  await page.screenshot({ path: out + "/blocked-flip.png" });
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Resume exploring", exact: true }).waitFor();
+  await page.screenshot({ path: out + "/centered-menu.png" });
+  await enter();
+  check(
+    "blocked notice survives Escape and resume",
+    await page.locator(".bench-legend .bench-flip-notice").isVisible(),
+  );
+  await page.evaluate(() => {
+    const b = window.bench;
+    b.walker.feet.set(35, 0.00001, 28);
+    b.walker.velocity.set(0, 0, 0);
+    b.walker.grounded = true;
+    b.wake();
+  });
+  await page.waitForFunction(() => !window.bench.status.flipBlocked);
+  check("moving away clears message without starting automatically", !(await state()).active);
+  await page.keyboard.press("f");
+  await page.waitForFunction(() => window.bench.flip.active);
+  await done();
+  check("fresh F after moving away flips normally", (await state()).side === "dial");
   report.fixtures = await page.evaluate(() => {
     const b = window.bench,
       w = b.walker,
@@ -202,36 +249,35 @@ try {
     w.feet.set(0, b.world.floor(0, -7) + 0.00001, -7);
     w.grounded = true;
     const resets = w.resets,
-      rel = f.relocations;
-    f.start();
+      standing = w.feet.clone();
     row(
-      "standing on movement relocated locally",
-      f.relocations === rel + 1 &&
+      "standing on movement blocks flip without relocating",
+      !f.start() &&
+        f.blocked &&
+        w.feet.equals(standing) &&
         w.resets === resets &&
         w.yaw === 0.6 &&
-        w.pitch === -0.2 &&
-        !b.world.overlaps(w.feet) &&
-        w.feet.distanceTo(w.spawn) > 5,
-      { feet: w.feet.toArray() },
+        w.pitch === -0.2,
     );
     run();
-    row("standing visitor remains safe after flip", !b.world.overlaps(w.feet) && w.grounded);
+    row(
+      "standing visitor retains resting support",
+      !f.active && f.side === "bridge" && w.feet.distanceTo(standing) < 0.001 && w.grounded,
+    );
     reset();
     w.feet.set(0, 28, -7);
     w.velocity.set(1, 3, 2);
     w.keys.add("Space");
-    const airRel = f.relocations;
-    f.start();
+    const airborne = w.feet.clone();
     row(
-      "airborne visitor preserves altitude, momentum, view and thrust",
-      f.relocations === airRel + 1 &&
-        w.feet.y === 28 &&
+      "blocked airborne visitor preserves position, momentum, view and thrust",
+      !f.start() &&
+        f.blocked &&
+        w.feet.equals(airborne) &&
         w.velocity.y === 3 &&
         w.yaw === 0.6 &&
         w.keys.has("Space"),
     );
-    run();
-    row("airborne visitor outside finished solids", !b.world.overlaps(w.feet));
     // Clear visitors over or beside the sweep keep their full state at activation.
     for (const point of [
       [35, 25, -7],
@@ -240,11 +286,11 @@ try {
       reset();
       w.feet.fromArray(point);
       w.velocity.set(2, -3, 1);
-      const prior = f.relocations;
-      f.start();
+      const started = f.start();
       row(
         "safe airborne state " + point.join(","),
-        f.relocations === prior &&
+        started &&
+          !f.blocked &&
           w.feet.toArray().every((v, i) => v === point[i]) &&
           w.velocity.y === -3,
       );
@@ -252,8 +298,7 @@ try {
     }
     reset();
     w.feet.set(22, f.liftHeight + 14, 8);
-    const clearCorner = w.feet.clone(),
-      cornerRel = f.relocations;
+    const clearCorner = w.feet.clone();
     row(
       "corner fixture inside coarse bounds is clear",
       f.forbiddenFeet.containsPoint(w.feet) && !f.isUnsafe(w.feet),
@@ -261,7 +306,7 @@ try {
     f.start();
     row(
       "safe corner visitor remains undisturbed",
-      f.relocations === cornerRel && w.feet.equals(clearCorner),
+      f.active && !f.blocked && w.feet.equals(clearCorner),
     );
     f.finish();
     // Find real free capsules below CAD, including a holder-destination obstruction.
@@ -281,11 +326,10 @@ try {
     if (clearUnder) {
       reset();
       w.feet.fromArray(clearUnder);
-      const prior = f.relocations;
-      f.start();
+      const started = f.start();
       row(
         "safe visitor beneath movement remains in place",
-        f.relocations === prior && w.feet.toArray().every((v, i) => v === clearUnder[i]),
+        started && !f.blocked && w.feet.toArray().every((v, i) => v === clearUnder[i]),
         clearUnder,
       );
       f.finish();
@@ -294,11 +338,10 @@ try {
     if (blockedUnder) {
       reset();
       w.feet.fromArray(blockedUnder);
-      const prior = f.relocations;
-      f.start();
+      const started = f.start();
       row(
-        "actual incoming-holder obstruction relocated",
-        f.relocations === prior + 1,
+        "actual incoming-holder obstruction blocks flip without relocating",
+        !started && f.blocked && w.feet.toArray().every((v, i) => v === blockedUnder[i]),
         blockedUnder,
       );
       f.finish();
@@ -310,11 +353,14 @@ try {
       w.feet.set(35, 0, -7);
       f.start();
       w.feet.fromArray(blockedUnder);
-      const prior = f.relocations;
       f.finish();
       row(
         "late destination obstruction rechecked",
-        f.relocations === prior + 1 && !b.world.overlaps(w.feet),
+        f.blocked &&
+          f.side === "bridge" &&
+          !f.active &&
+          !b.world.overlaps(w.feet) &&
+          w.feet.toArray().every((v, i) => v === blockedUnder[i]),
       );
     }
     reset();

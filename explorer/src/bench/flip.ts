@@ -19,9 +19,8 @@ export class BenchFlip {
   target: BenchSide = 'dial';
   active = false;
   elapsed = 0;
-  relocations = 0;
+  blocked = false;
   completed = 0;
-  lastRelocation = '';
   readonly swept = new THREE.Box3();
   readonly forbiddenFeet = new THREE.Box3();
   readonly columns: THREE.Box3[] = [];
@@ -183,99 +182,52 @@ export class BenchFlip {
   holderMeshes(side: BenchSide) {
     return new Set(this.holders[side].children as THREE.Mesh[]);
   }
-  holderSupportChanges() {
+  holderSupportChanges(feet = this.walker.feet) {
     const w = this.walker;
     if (!w.grounded) return false;
     const oldFloor = this.world.floor(
-      w.feet.x,
-      w.feet.z,
-      w.feet.y + 0.02,
+      feet.x,
+      feet.z,
+      feet.y + 0.02,
       this.holderMeshes(this.side),
     );
     const newFloor = this.world.floor(
-      w.feet.x,
-      w.feet.z,
-      w.feet.y + 0.02,
+      feet.x,
+      feet.z,
+      feet.y + 0.02,
       this.holderMeshes(this.target),
     );
     return (
-      Math.abs(oldFloor - w.feet.y) < 0.03 &&
-      Math.abs(newFloor - oldFloor) > 0.03
+      Math.abs(oldFloor - feet.y) < 0.03 && Math.abs(newFloor - oldFloor) > 0.03
     );
+  }
+  obstructed(feet = this.walker.feet) {
+    return (
+      this.isUnsafe(feet) ||
+      this.world.overlaps(feet, this.holderMeshes(this.target)) ||
+      this.holderSupportChanges(feet)
+    );
+  }
+  refreshBlocked() {
+    if (this.blocked && !this.obstructed()) this.blocked = false;
   }
   start() {
     if (this.active) return false; // No queue; repeated presses never overlap.
     this.target = this.side === 'bridge' ? 'dial' : 'bridge';
-    if (
-      this.isUnsafe(this.walker.feet) ||
-      this.world.overlaps(this.walker.feet, this.holderMeshes(this.target)) ||
-      this.holderSupportChanges()
-    ) {
-      if (!this.relocate('swept path or destination')) return false;
-    }
+    this.blocked = this.obstructed();
+    if (this.blocked) return false; // Ask the visitor to move; never relocate them.
     this.elapsed = 0;
     this.active = true;
     this.walker.guard = this.guard;
     return true;
   }
-  /** Nearest clear candidate beside the work, never spawn; leave yaw/input intact. */
-  relocate(reason: string) {
-    const w = this.walker,
-      box = this.forbiddenFeet.clone(),
-      candidates: THREE.Vector3[] = [];
-    for (const holder of Object.values(this.holders))
-      box.union(
-        new THREE.Box3()
-          .setFromObject(holder)
-          .expandByScalar(WALK.radius + 0.03),
-      );
-    const bounds = w.bounds;
-    if (!bounds) return false;
-    const ground = w.grounded;
-    // Enumerate nearby faces and their corners; more samples cover local obstacles.
-    const xs = [box.min.x - 0.1, box.max.x + 0.1];
-    const zs = [box.min.z - 0.1, box.max.z + 0.1];
-    const add = (x: number, z: number) => {
-      if (
-        x < bounds.minX + WALK.radius ||
-        x > bounds.maxX - WALK.radius ||
-        z < bounds.minZ + WALK.radius ||
-        z > bounds.maxZ - WALK.radius
-      )
-        return;
-      // The mat is the retained static surface at Y0. A floor query verifies it.
-      const y = ground ? this.world.floor(x, z, 0.1) + 0.00001 : w.feet.y;
-      if (!Number.isFinite(y)) return;
-      const point = new THREE.Vector3(x, y, z);
-      if (
-        box.containsPoint(point) ||
-        this.world.overlaps(point) ||
-        this.world.overlaps(point, this.holderMeshes(this.target))
-      )
-        return;
-      candidates.push(point);
-    };
-    xs.forEach((x) => add(x, THREE.MathUtils.clamp(w.feet.z, zs[0], zs[1])));
-    zs.forEach((z) => add(THREE.MathUtils.clamp(w.feet.x, xs[0], xs[1]), z));
-    for (let t = 0; t <= 1; t += 0.125) {
-      xs.forEach((x) => add(x, THREE.MathUtils.lerp(zs[0], zs[1], t)));
-      zs.forEach((z) => add(THREE.MathUtils.lerp(xs[0], xs[1], t), z));
-    }
-    candidates.sort(
-      (a, b) => a.distanceToSquared(w.feet) - b.distanceToSquared(w.feet),
-    );
-    if (!candidates.length) return false; // Fail closed: leave the current resting state.
-    w.feet.copy(candidates[0]);
-    if (ground) w.velocity.y = 0;
-    this.relocations++;
-    this.lastRelocation = reason;
-    return true;
-  }
   guard = (previous: THREE.Vector3) => {
     const w = this.walker;
-    if (!this.isUnsafe(w.feet)) return;
-    if (this.isUnsafe(previous)) {
-      this.relocate('entered swept path');
+    if (!this.obstructed()) return;
+    if (this.obstructed(previous)) {
+      // Fail closed if an external interruption bypassed the substep guard.
+      this.blocked = true;
+      this.finish(false);
       return;
     }
     const end = w.feet.clone(),
@@ -285,7 +237,7 @@ export class BenchFlip {
     for (let i = 0; i < 16; i++) {
       const t = (lo + hi) / 2;
       trial.copy(previous).lerp(end, t);
-      if (this.isUnsafe(trial)) hi = t;
+      if (this.obstructed(trial)) hi = t;
       else lo = t;
     }
     w.feet.copy(previous).lerp(end, lo);
@@ -299,6 +251,9 @@ export class BenchFlip {
       trial[axis] -= 0.0002;
       normal[axis] = above - this.distance(trial);
     }
+    // Holder-only obstruction has no movement-envelope gradient. Stop inward
+    // travel along the attempted crossing without moving to another location.
+    if (!this.isUnsafe(end)) normal.copy(previous).sub(end);
     normal.normalize();
     const inward = w.velocity.dot(normal);
     if (inward < 0) w.velocity.addScaledVector(normal, -inward);
@@ -308,11 +263,12 @@ export class BenchFlip {
     // A visitor below the movement can remain there if the incoming holder clears
     // them. Recheck at the instant of exchange, including late arrivals.
     if (
-      (this.world.overlaps(this.walker.feet, this.holderMeshes(this.target)) ||
-        this.holderSupportChanges()) &&
-      !this.relocate('incoming holder or departing support')
-    )
+      this.world.overlaps(this.walker.feet, this.holderMeshes(this.target)) ||
+      this.holderSupportChanges()
+    ) {
+      this.blocked = true;
       return false;
+    }
     this.holders.bridge.visible = this.target === 'bridge';
     this.holders.dial.visible = this.target === 'dial';
     return true;

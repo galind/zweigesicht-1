@@ -34,13 +34,11 @@
 }
 .bench-menu {
   position: absolute;
-  top: max(80px, 5.75rem);
-  bottom: 20px;
-  left: 24px;
-  margin-block: auto;
-  height: max-content;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: min(24rem, calc(100% - 48px));
-  max-height: calc(100dvh - max(80px, 5.75rem) - 40px);
+  max-height: calc(100dvh - 32px);
   overflow: auto;
   padding: 24px;
   border-radius: 10px;
@@ -166,6 +164,18 @@
 .bench-legend span {
   white-space: nowrap;
 }
+.bench-flip-notice {
+  display: block;
+  margin: 16px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.bench-legend .bench-flip-notice {
+  display: block;
+  margin: 0;
+  white-space: normal;
+  text-align: center;
+}
 .bench-sr {
   position: absolute;
   width: 1px;
@@ -179,7 +189,6 @@
     left: 12px;
   }
   .bench-menu {
-    left: 12px;
     width: calc(100% - 24px);
     padding: 20px;
   }

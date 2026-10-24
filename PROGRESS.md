@@ -3,6 +3,32 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Centered menu and visitor-controlled flip clearance — 24 October 2026
+
+Updated locally on `codex/bench-ui` after owner feedback. The Escape menu is
+centered in the viewport, retaining its glass styling and scroll limits. Pressing
+**F** inside the sweep, in the incoming holder, or on support that will disappear
+now leaves the visitor and movement untouched and shows **“Move away from the
+movement to flip it.”** The message clears after moving clear; a fresh F press is
+required. No automatic relocation or queued flip remains. The animation still
+reserves its sweep and incoming holder every physics substep; an externally
+injected late obstruction cancels without moving the visitor.
+
+- Verified: **130 CPU tests** (including rejected standing/airborne flips,
+  both directions, outgoing support and late obstruction), **32 flip/browser
+  checks**, **157 desktop UI checks**, **67 flight/collision checks**, **8 lifecycle
+  checks**, typecheck, lint and production build. Actual message, Escape/resume,
+  clear-and-retry, both flip directions and centered menus at four desktop sizes
+  plus 200% text pass. Real keyboard flight lands on both faces and flies clear
+  before flipping, without a reset. Focus loss, graphics interruption and loading
+  recovery pass.
+- Captures and reports stay local in `artifacts/bench-flip-followup/`. The preview
+  remains <http://127.0.0.1:4189/bench>. Updated walking documentation records the
+  behavior; the prior milestone's automatic relocation is superseded.
+
+No push, deployment, publication or CAD redistribution. Existing physical-device,
+human-accessibility and internal CAD qualifications remain open.
+
 ## One movement, one station, controlled flip — 24 October 2026
 
 Implemented locally on `codex/bench-ui`. `/bench` now has one 219-leaf assembly

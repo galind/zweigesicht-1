@@ -85,18 +85,22 @@ the assembly's overall box; clear space near the crown and below the lift remain
 available. These are safety envelopes, not claims of exact swept-solid clearance.
 
 A visitor intersecting that envelope, obstructing the incoming holder, or standing
-on outgoing holder support that disappears is moved to a nearby verified clear
-position beside the work. Grounded visitors are placed on the existing mat;
-airborne visitors retain altitude and velocity. Both retain yaw/pitch and input.
-Candidate points must satisfy desk bounds and current/incoming collision checks.
-If no safe candidate exists, the flip does not start. The incoming holder is
-checked again at exchange, so late arrivals cannot be trapped. Closed-holder
-containment and capsule segments piercing triangle interiors are included.
+on outgoing holder support that disappears **blocks the flip**. The existing hint
+surface says **“Move away from the movement to flip it.”** Position, view, velocity,
+grounded state and held input are left untouched. The message clears once the
+visitor moves clear; a fresh F press is required, with no automatic or queued flip.
+This supersedes the earlier automatic nearby relocation behavior.
+
+The incoming holder space is reserved by the per-substep guard throughout the
+animation and checked again at exchange. An externally injected late obstruction
+cancels to the original rest without relocating the visitor. Closed-holder
+containment and capsule segments piercing triangle interiors remain included.
 
 During the animation, every physics substep prevents entry into the reserved
-sweep and removes inward velocity while retaining tangential travel. Render and
-collision matrices update together before player simulation; fixed CAD leaf
-matrices are explicitly dirtied after parent movement. The temporary constraint
+sweep and incoming holder. The sweep boundary removes inward velocity while
+retaining tangential travel; holder-only crossings stop along the attempted path.
+Render and collision matrices update together before player simulation; fixed CAD
+leaf matrices are explicitly dirtied after parent movement. The temporary constraint
 is removed when the movement rests. There are no permanent proxy floors over
 movement openings, and normal triangle collisions remain active throughout.
 
@@ -115,8 +119,10 @@ The homepage **Walk inside the movement** button opens the glass controls popup.
 direct visits/Back show the compact Enter button. Escape, blur or document hiding
 while loading cancels automatic capture. Capture refusal, missing assets and
 graphics errors retain the existing recovery actions. Popup and Escape menu keep
-the homepage's typography, colors, rounded corners and glass blur; exploration
-keeps the scene sharp with compact navigation and one hint row.
+the homepage's typography, colors, rounded corners and glass blur. The Escape menu
+is centered horizontally and vertically in the viewport, with bounded scrolling
+on short screens. Exploration keeps the scene sharp with compact navigation and
+one hint row; a rejected flip temporarily replaces that row with the message.
 
 WASD moves on ground/in air; mouse look is unchanged. Space supplies continuous
 26 mm/s² upward acceleration against 18 mm/s² gravity, with quadratic drag
@@ -169,15 +175,17 @@ beneath it, airborne visitors, late destination obstruction, per-substep entry
 protection, rigid component matrices and sampled holder clearances during motion.
 The independent atelier audit checks both rests sequentially: source matrices,
 18 phases, render/collision agreement, holders/crowns, openings and 16 CAD drops.
-The jetpack journey reaches and lands on both faces with one flip and no reset;
-its fixtures retain all desk edges/corners, high-altitude stress, sides/undersides,
-landings and ground circulation. Lifecycle checks include graphics loss during a
+The jetpack journey reaches and lands on both faces, flies clear before flipping,
+and uses no reset; its fixtures retain all desk edges/corners, high-altitude stress,
+sides/undersides, landings and ground circulation. Lifecycle checks include graphics loss during a
 flip, retry and interrupted loading. UI checks cover four desktop sizes plus 200%
 text, controls, navigation, entry, focus and loading/error recovery.
 
 Current counts and remaining actions are in [PROGRESS.md](../PROGRESS.md).
-Actual screenshots and reports remain local in `artifacts/bench-flip/`. Headless
-checks do not replace physical-device/mouse-feel or human accessibility review.
+Current follow-up screenshots and reports remain local in
+`artifacts/bench-flip-followup/`; the original implementation captures remain in
+`artifacts/bench-flip/`. Headless checks do not replace physical-device/mouse-feel
+or human accessibility review.
 Previous paired-station captures, timings and performance claims are historical;
 the remaining sections below describe older revisions.
 

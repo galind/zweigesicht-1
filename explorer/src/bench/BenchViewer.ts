@@ -28,6 +28,7 @@ export type BenchStatus = {
   captured: boolean;
   side: 'bridge' | 'dial';
   error: string;
+  flipBlocked: boolean;
   quality: QualityMode;
 };
 
@@ -80,6 +81,7 @@ export class BenchViewer {
     captured: false,
     side: 'bridge',
     error: '',
+    flipBlocked: false,
     quality: 'Auto',
   };
   dead = false;
@@ -435,14 +437,18 @@ export class BenchViewer {
   }
   updateStation() {
     const side = this.flip?.side ?? 'bridge';
-    if (this.status.side !== side) {
+    this.flip?.refreshBlocked();
+    const flipBlocked = this.flip?.blocked ?? false;
+    if (this.status.side !== side || this.status.flipBlocked !== flipBlocked) {
       this.status.side = side;
+      this.status.flipBlocked = flipBlocked;
       this.emit();
     }
   }
   startFlip() {
     if (!this.status.ready || !this.status.captured) return false;
     const started = this.flip?.start() ?? false;
+    this.updateStation();
     if (started) this.wake();
     return started;
   }

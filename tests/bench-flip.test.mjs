@@ -91,29 +91,38 @@ test("safe visitor position, look, held inputs and velocity survive start and at
     before,
   );
   assert.equal(w.keys.size, 2);
-  assert.equal(flip.relocations, 0);
+  assert.equal(flip.blocked, false);
   assert.equal(w.guard, undefined);
 });
-test("standing and airborne visitors in the sweep move locally without losing view or input", () => {
+test("standing and airborne visitors block flipping without changing any player state", () => {
   for (const grounded of [true, false]) {
-    const { flip, w, world } = rig();
+    const { flip, w, movement } = rig();
     w.feet.set(0, grounded ? 3 : 7, 0);
     w.grounded = grounded;
     w.keys.add("Space");
     w.velocity.set(1, 2, 3);
-    assert.ok(flip.start());
-    assert.equal(flip.relocations, 1);
-    assert.ok(!flip.forbiddenFeet.containsPoint(w.feet));
-    assert.ok(!world.overlaps(w.feet));
-    assert.equal(w.yaw, 0.72);
-    assert.equal(w.pitch, -0.25);
-    assert.ok(w.keys.has("Space"));
-    assert.equal(w.resets, 0);
-    if (!grounded) {
-      assert.equal(w.feet.y, 7);
-      assert.equal(w.velocity.y, 2);
-    } else assert.ok(w.feet.y < 0.001);
-    assert.ok(w.feet.length() < 15);
+    const snapshot = () => [
+      ...w.feet.toArray(),
+      ...w.velocity.toArray(),
+      w.yaw,
+      w.pitch,
+      w.grounded,
+      w.resets,
+      ...w.keys,
+    ];
+    const before = snapshot();
+    for (let press = 0; press < 3; press++) assert.equal(flip.start(), false);
+    finish(flip);
+    assert.equal(flip.blocked, true);
+    assert.equal(flip.active, false);
+    assert.equal(movement.position.y, 2.5);
+    assert.deepEqual(snapshot(), before);
+    assert.equal(w.guard, undefined);
+    w.feet.set(15, 7, 0);
+    flip.refreshBlocked();
+    assert.equal(flip.blocked, false);
+    assert.equal(flip.active, false, "leaving the area must not queue a flip");
+    assert.ok(flip.start(), "a fresh press works after moving away");
   }
 });
 test("swept boundary blocks entrants on every substep, retaining tangential movement", () => {
@@ -135,12 +144,14 @@ test("incoming holder obstruction is checked even below the movement sweep", () 
   w.grounded = true;
   assert.equal(world.overlaps(w.feet), false);
   assert.equal(world.overlaps(w.feet, flip.holderMeshes("dial")), true);
-  assert.ok(flip.start());
-  assert.equal(flip.relocations, 1);
+  const before = w.feet.clone();
+  assert.equal(flip.start(), false);
+  assert.equal(flip.blocked, true);
+  assert.ok(w.feet.equals(before));
   flip.finish();
   assert.equal(world.overlaps(w.feet), false);
 });
-test("no safe relocation aborts before movement or holder changes", () => {
+test("blocked flip leaves movement and holder unchanged", () => {
   const { flip, w, movement, holders } = rig();
   w.feet.set(0, 3, 0);
   w.bounds = { minX: -1, maxX: 1, minZ: -1, maxZ: 1 };
@@ -150,7 +161,7 @@ test("no safe relocation aborts before movement or holder changes", () => {
   assert.equal(holders.bridge.visible, true);
   assert.equal(w.guard, undefined);
 });
-test("clear space inside overall bounds does not trigger relocation", () => {
+test("clear space inside overall bounds still allows a flip", () => {
   const { flip, w } = rig();
   w.feet.set(0, flip.liftHeight + 3, 4);
   w.grounded = false;
@@ -158,7 +169,7 @@ test("clear space inside overall bounds does not trigger relocation", () => {
   assert.equal(flip.isUnsafe(w.feet), false);
   const before = w.feet.clone();
   assert.ok(flip.start());
-  assert.equal(flip.relocations, 0);
+  assert.equal(flip.blocked, false);
   assert.ok(w.feet.equals(before));
 });
 test("closed incoming holder detects capsule wholly inside solid material", () => {
@@ -167,8 +178,10 @@ test("closed incoming holder detects capsule wholly inside solid material", () =
   w.grounded = false;
   assert.equal(world.overlaps(w.feet), false);
   assert.equal(world.overlaps(w.feet, flip.holderMeshes("dial")), true);
-  assert.ok(flip.start());
-  assert.equal(flip.relocations, 1);
+  const before = w.feet.clone();
+  assert.equal(flip.start(), false);
+  assert.equal(flip.blocked, true);
+  assert.ok(w.feet.equals(before));
 });
 test("safe moving visitor follows the same physics trajectory during a flip", () => {
   const active = rig(),
@@ -188,5 +201,47 @@ test("safe moving visitor follows the same physics trajectory during a flip", ()
     assert.ok(active.w.feet.distanceTo(control.w.feet) < 1e-9);
     assert.ok(active.w.velocity.distanceTo(control.w.velocity) < 1e-9);
   }
-  assert.equal(active.flip.relocations, 0);
+  assert.equal(active.flip.blocked, false);
+});
+
+test("incoming holder space stays reserved throughout a flip without relocation", () => {
+  const { flip, w } = rig();
+  assert.ok(flip.start());
+  w.feet.set(5.4, 0.5, 0);
+  const previous = w.feet.clone();
+  w.feet.x = 4.8;
+  w.velocity.set(-3, 0, 0);
+  flip.guard(previous);
+  assert.ok(w.feet.x > 5.2 && w.feet.x < 5.4);
+  assert.equal(w.feet.y, 0.5);
+  assert.ok(!flip.obstructed());
+  assert.ok(flip.active);
+  flip.finish();
+  assert.equal(flip.side, "dial");
+});
+test("late external destination obstruction cancels without moving the visitor", () => {
+  const { flip, w } = rig();
+  assert.ok(flip.start());
+  w.feet.set(4.5, 0.5, 0);
+  const before = w.feet.clone();
+  flip.finish();
+  assert.equal(flip.active, false);
+  assert.equal(flip.side, "bridge");
+  assert.equal(flip.blocked, true);
+  assert.ok(w.feet.equals(before));
+  assert.equal(w.guard, undefined);
+});
+
+test("departing holder support blocks the reverse flip outside the movement sweep", () => {
+  const { flip, w } = rig();
+  flip.setRest("dial");
+  w.feet.set(4.5, 3.00001, 0);
+  w.grounded = true;
+  const before = w.feet.clone();
+  assert.equal(flip.isUnsafe(w.feet), false);
+  assert.equal(flip.world.overlaps(w.feet, flip.holderMeshes("bridge")), false);
+  assert.equal(flip.start(), false);
+  assert.equal(flip.blocked, true);
+  assert.ok(w.feet.equals(before));
+  assert.equal(flip.side, "dial");
 });
