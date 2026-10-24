@@ -3,6 +3,26 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Workshop environment — D developed, 24 October 2026
+
+Owner selected D and requested a simpler polished render without a city view.
+Prepared a consistent room/desk/miniature-view visualization, dimensioned layout,
+proposed coordinate data and [implementation brief](docs/WORKSHOP_DESIGN_D.md).
+The room uses oak, olive-grey storage, an opaque frosted pane, a lower separated
+storage return and a small deliberate tool set. Review package and complete
+ImageGen prompts remain local in `artifacts/workshop-design-d-v1/`; local visual
+review is served at <http://127.0.0.1:4194/review.html> while that server is running.
+
+The brief identifies larger rectangular desk bounds, the 1 mm mat edge, reachable
+prop collisions, flip clearance, room-scale camera/fog changes, material/asset
+budgets and targeted verification. Existing movement, holders, materials, reviewed
+poses and controls remain implementation invariants. Render perspective is
+illustrative, not calibrated camera or mechanical evidence.
+
+Next: explicit owner approval of this developed final proposal before implementation.
+Application code, active authored data, runtime assets and CAD are untouched.
+No push, deployment, publication or redistribution; release gates remain unchanged.
+
 ## Workshop environment design — Stage 1, 24 October 2026
 
 Prepared four local exploratory sketch boards: A north-light maple, B walnut
