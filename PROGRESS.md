@@ -3,6 +3,25 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Workshop environment design — Stage 1, 24 October 2026
+
+Prepared four local exploratory sketch boards: A north-light maple, B walnut
+repair studio, C pale precision workshop and D oak corner atelier. Each includes
+a room overview, mat-eye view and annotated plan. Inspected the current homepage,
+entry controls and loaded `/bench` arrival. Used existing arrival/holder captures
+as visual references; these sketches are not measured renders or clearance proof.
+
+Boards and complete built-in ImageGen prompts are local in
+`artifacts/workshop-design-stage1/`. The [design review](docs/WORKSHOP_DESIGN_STAGE1.md)
+records concept tradeoffs, preserved assembly/interaction requirements and the
+proposed larger desk, mat and 1 mm edge requiring later geometry review.
+Application code, runtime assets and CAD are untouched. No tests were needed for
+this design-only milestone; no new runtime qualification is claimed.
+
+Next: owner selects/combines A–D before Stage 2. Stage 3 final-design approval is
+required before implementation. No direction selected, push, deployment,
+publication or redistribution; release gates remain unchanged.
+
 ## Centered move-away message — 24 October 2026
 
 The blocked-flip message now appears at the center of the viewport while exploring,
