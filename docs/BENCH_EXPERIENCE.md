@@ -122,7 +122,8 @@ graphics errors retain the existing recovery actions. Popup and Escape menu keep
 the homepage's typography, colors, rounded corners and glass blur. The Escape menu
 is centered horizontally and vertically in the viewport, with bounded scrolling
 on short screens. Exploration keeps the scene sharp with compact navigation and
-one hint row; a rejected flip temporarily replaces that row with the message.
+one hint row; a rejected flip temporarily replaces that row with a message
+centered horizontally and vertically in the viewport.
 
 WASD moves on ground/in air; mouse look is unchanged. Space supplies continuous
 26 mm/s² upward acceleration against 18 mm/s² gravity, with quadratic drag

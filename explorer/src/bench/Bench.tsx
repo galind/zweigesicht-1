@@ -164,7 +164,13 @@ export default function Bench() {
         </section>
       )}
       {state.captured && (
-        <div className="bench-legend">
+        <div
+          className={
+            state.flipBlocked
+              ? 'bench-legend bench-legend-notice'
+              : 'bench-legend'
+          }
+        >
           {state.flipBlocked ? (
             <output className="bench-flip-notice">{flipNotice}</output>
           ) : (

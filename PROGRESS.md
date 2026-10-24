@@ -3,6 +3,15 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Centered move-away message — 24 October 2026
+
+The blocked-flip message now appears at the center of the viewport while exploring,
+using the existing glass surface. Normal hints return to the bottom once clear.
+Verified actual F activation and centered placement at 1440 × 900, 800 × 600 and
+1024 × 768 with 200% text, plus hint restoration. Typecheck, lint and production
+build pass. Captures remain local in `artifacts/bench-centered-notice/`; preview
+remains <http://127.0.0.1:4189/bench>. No push or deployment.
+
 ## Centered menu and visitor-controlled flip clearance — 24 October 2026
 
 Updated locally on `codex/bench-ui` after owner feedback. The Escape menu is
