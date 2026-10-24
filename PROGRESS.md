@@ -3,6 +3,21 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Workshop environment — main bench only, 24 October 2026
+
+Simplified the D design at the owner's request: one main workbench, no side
+return, wall cupboard, technical drawing or chair. The Dresden map is the only
+wall decoration. The stand and empty parts tray move to the left wood area of
+the main bench and therefore need visible colliding geometry during implementation.
+The movement, mat, clear approach and existing controls remain unchanged.
+
+Updated the [implementation brief](docs/WORKSHOP_DESIGN_D.md). Revised render,
+annotated layout, coordinate data and complete prompts are local in
+`artifacts/workshop-design-d-v2/`; v1 remains historical. Local review is at
+<http://127.0.0.1:4195/review.html> while its server runs. Final design approval
+is still pending. No application code, active data, runtime assets or CAD changes;
+no push, deployment, publication or redistribution.
+
 ## Workshop environment — D developed, 24 October 2026
 
 Owner selected D and requested a simpler polished render without a city view.

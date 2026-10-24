@@ -1,22 +1,24 @@
-# D — Oak corner workshop
+# D — Main workbench
 
-Developed design and implementation brief, 24 October 2026.
+Developed design and implementation brief, revision 2, 24 October 2026.
 **Selected direction: D. Final design approval: pending. Implementation: not started.**
 
 The owner selected D and requested a basic polished render, with less complexity
-and no city view. This document replaces the open A–D decision in Stage 1.
+and no city view. The latest revision keeps only the main workbench, removes the
+side return, wall cupboard, technical drawing and chair, and retains the Dresden
+map as the only wall decoration. This supersedes the first developed D proposal.
 It prepares the work without changing application code, active authored data,
 environment models or maker CAD. The original requirement for explicit approval
 of the final design before implementation remains in force.
 
 ## Review package
 
-Local files in `artifacts/workshop-design-d-v1/`:
+Current local files are in `artifacts/workshop-design-d-v2/`; v1 remains historical:
 
 - `render.png`: one consistent room, desk and miniature-arrival visualization.
 - `layout.svg`: annotated, dimensioned plan and enlarged movement core.
 - `proposed-layout.json`: precise proposed coordinates; not imported by the app.
-- `review.html`: local visual review sheet, also served on port 4194.
+- `review.html`: local visual review sheet, also served on port 4195.
 - `prompts.json`: complete built-in ImageGen prompts and reference paths.
 
 The render communicates appearance; layout data controls dimensions. ImageGen
@@ -28,15 +30,16 @@ is claimed by this design review.
 
 ## Resolved visual direction
 
-A modest oak bench in a plaster-walled corner, muted olive-grey drawers, a small
-oak-framed Dresden print and one working drawing. An opaque frosted pane supplies
+A modest oak bench in a plaster-walled corner, muted olive-grey integrated drawers
+and a small oak-framed Dresden print. An opaque frosted pane supplies
 soft light from the right. It needs a frame and a lit surface, with no exterior
 city, sky, vegetation, reflections of a city, or glass transmission pass.
 
-The left return becomes a separate storage console, 70 mm lower than the main
-desk with a 20 mm gap. It holds five screwdrivers and one empty parts tray. This
-preserves the corner-workshop character while distinguishing the main traversable
-desk from background furniture. The wall cabinet has two closed painted doors.
+The main workbench is the only furniture. There is no side return, wall cupboard,
+technical drawing or chair/stool. Five screwdrivers in a compact stand and one
+empty parts tray sit on the main bench's left wood area, outside the mat. The
+left wall moves closer to the main desk, leaving 50 mm at its side rather than
+retaining an empty space for the removed return.
 
 The main desk has a weighted task lamp at rear-left, a black loupe and closed
 tweezers to the right of the mat, and one closed notebook farther back-right.
@@ -63,15 +66,14 @@ Coordinates below and the local JSON are design proposals awaiting approval.
 | Arrival | Feet (0,0.002,54), eye offset 1.48 mm | Unchanged approach, F workflow and visitor scale |
 | Flip design reserve | X −50…50; Z −57…43; Y0…100 | No new props or overhead objects; actual sweep to be checked |
 | Open core | X −70…70; Z −77…100 | Existing assembly plus clear front/side approaches; no new props |
-| Left return | X −830…−570; Z −465…400; top Y−71 | Background storage, outside main desk bounds |
 | Lamp base / head | Base (−300,−1,−230), Ø105; head near (−190,350,−135) | Visible solid is collidable, including arm/head |
 | Loupe | (210,−1,0), Ø30 × 28 high | On wood, clear of mat and right crown |
 | Tweezers | Centre (225,−1,70), 115 long × 8 wide × 3 high | Aligned along Z, tips toward −Z; closed, no trapping cavity |
 | Notebook | (350,−1,−170), 140 × 95 × 8 | Closed and collidable |
-| Screwdriver stand | (−700,−71,100), 130 × 65 footprint | Five simple instruments, on background return |
-| Parts tray | (−700,−71,−70), 150 × 90 × 12 | Empty, on background return |
+| Screwdriver stand | (−380,−1,−90), 130 × 65 footprint | Five simple instruments, main desk, collidable |
+| Parts tray | (−380,−1,65), 150 × 90 × 12 | Empty, main desk, collidable |
 
-The walls, cabinet, wall graphics and frosted pane are outside the main desk's
+The walls, map and frosted pane are outside the main desk's
 X/Z domain. Keep frames and any sill outside it too. The local JSON provides
 their proposed extents. The floor is 920 mm below the wood top, beneath the solid
 desk. Use tall simple walls and a neutral background above them; omit ceiling
@@ -86,7 +88,7 @@ They are authored environment choices, not claims about maker materials.
 | Surface | Target | Authoring approach |
 | --- | --- | --- |
 | Oak | `#A17D50`, roughness 0.68, nonmetal | Restrained directional grain; slight edge wear, no distressed marks |
-| Painted storage | `#747467`, roughness 0.78, nonmetal | Flat olive-grey, subtle variation; closed drawers/doors |
+| Painted storage | `#747467`, roughness 0.78, nonmetal | Flat olive-grey, subtle variation; closed integrated drawers |
 | Plaster | `#D8D4C5`, roughness 0.95 | Very low contrast; avoid noisy macro bumps |
 | Green mat | `#3D6252`, roughness 0.92, nonmetal | Fine matte surface; almost smooth at miniature height; texture is not collision relief |
 | Printed name | `#C6C7B1` | Dedicated small alpha texture/decal; no raised geometry or collider |
@@ -98,8 +100,7 @@ Create the furniture, props, wall frames and simple graphics originally from
 primitive meshes/vector artwork. No asset-pack purchase or external model
 download is required. The Dresden print is an original stylized river-and-street
 graphic, labelled as a schematic in its small footer; it is not navigational
-cartography. The technical drawing is an original decorative line study, not
-service documentation. Neither should be presented as new maker evidence.
+cartography. No technical drawing or additional wall art is required.
 
 Keep authored settings and artwork separate from generated Blender/GLB output.
 Record authored provenance, inputs, generator version and output hashes in a new
@@ -117,7 +118,7 @@ before use. Render images remain local review material, not runtime assets.
   mouse look, gravity jetpack, speed, visitor capsule and reset behaviour intact.
 - Expand the existing rectangular bounds to the main desk extents only. Preserve
   capsule-radius inset, outward-only clipping and tangential sliding at every
-  altitude. The return and floor remain outside the exploration domain. Do not
+  altitude. The floor remains outside the exploration domain. Do not
   add an invisible floor or rectangular collision slab above source openings.
 - A 1 mm mat edge exceeds the current 0.22 mm step. Walking off the mat descends
   to wood; returning requires the existing jetpack. Keep the full edge visible
@@ -126,10 +127,12 @@ before use. Render images remain local review material, not runtime assets.
   straight walking at 5.5 mm/s; arrival-to-station remains 61 mm. Wider travel is
   optional exploration. Do not change speed or spawn to disguise the larger size.
 - On the main desk, use the visible low-poly surfaces for collision: mat, desk,
-  loupe, tweezers, notebook and the entire lamp. Do not flag reachable tools as
+  loupe, tweezers, notebook, stand/screwdrivers, tray and the entire lamp. The
+  moved tools are now reachable, so their collision role changes from background
+  decoration to colliding geometry. Do not flag reachable tools as
   `decor`. Merge by material/role, while preserving semantic identifiers for QA.
-- Outside the bounded domain, mark walls, return, cabinet, stand/tray and wall
-  graphics `decor`. Keep them outside the reachable X/Z column; any intrusion
+- Outside the bounded domain, mark walls and map `decor` (and the frosted pane).
+  Keep them outside the reachable X/Z column; any intrusion
   by an overhang requires a visible colliding surface. The decorative floor is
   below the solid main desk and cannot be reached within the current boundaries.
 - The 100 × 100 × 100 mm box is a design reservation, not certified sweep data.
@@ -159,7 +162,7 @@ Initial environment budgets, excluding the unchanged maker CAD:
   count the full multipass renderer workload as well.
 - At most 24 MiB additional decoded texture memory including mipmaps, and an
   8 MiB environment download target. Prefer shared 1K textures and a small
-  dedicated name/map/drawing atlas, no collection of 4K maps.
+  dedicated name/map atlas, no collection of 4K maps.
 - Opaque environment materials only. Preserve jewel transmission and its existing
   half-resolution target. No environment refraction, postprocessing, depth blur,
   particles, animated daylight, real-time planar reflections or continuous loops.
@@ -212,10 +215,11 @@ Add focused checks for:
   a new press. No visitor teleportation or automatic queued flip.
 - Arrival genuinely at the unchanged eye offset; ground view does not cheat by
   lifting the camera to expose gears. Real keyboard flight reaches both faces.
-- Mat-edge descent, jetpack return, collision on each reachable prop, no snagging
-  in closed tweezers, and no missing surface below the visitor.
-- Every new desk edge/corner, grounded/airborne/high-flight/long-frame cases,
-  including the visible gap toward the nontraversable return.
+- Mat-edge descent, jetpack return, collision on each reachable prop, including
+  the moved stand/screwdrivers and empty tray, no snagging in closed tweezers,
+  and no missing surface below the visitor.
+- Every new desk edge/corner, grounded/airborne/high-flight/long-frame cases.
+  No side-return boundary or chair collision is part of this revision.
 - Room visibility in all directions/altitudes, no near-detail clipping, no
   short-range fog, stable wordmark edges and no texture shimmer at mat level.
 - Loading failure, retry, Escape/focus/visibility, graphics loss during a flip,
