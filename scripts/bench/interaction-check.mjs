@@ -132,7 +132,14 @@ try {
         document.dispatchEvent(new MouseEvent('mousemove', { movementX: 1 })),
       8,
     );
-    await new Promise((r) => setTimeout(r, 20000));
+    const started = performance.now();
+    // A state-machine stress probe, not a timing benchmark. Allow headless
+    // scheduler variation while retaining both bounded reductions and cooldown.
+    while (
+      b.renderer.getPixelRatio() > 0.7 &&
+      performance.now() - started < 35000
+    )
+      await new Promise((r) => setTimeout(r, 100));
     clearInterval(timer);
     b.status.captured = false;
     b.renderer.render = original;
@@ -141,6 +148,7 @@ try {
       ratio: b.renderer.getPixelRatio(),
       mode: b.status.quality,
       changes,
+      elapsedMs: performance.now() - started,
     };
   });
   check(

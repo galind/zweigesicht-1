@@ -65,6 +65,11 @@ try {
   for (const mode of modes) {
     for (const side of ['bridge', 'dial', 'pair']) {
       for (const walk of [false, true]) {
+        assert.equal(
+          await page.evaluate(() => devicePixelRatio),
+          report.environment.dpr,
+          'Device ratio changed between fixtures',
+        );
         let result;
         for (let attempt = 0; attempt < 3; attempt++) {
           await page.bringToFront();
@@ -182,8 +187,10 @@ try {
                 inputs++;
                 document.dispatchEvent(
                   new MouseEvent('mousemove', {
-                    movementX: phase * 14,
-                    movementY: Math.floor(elapsed / 350) % 2 ? 2 : -2,
+                    movementX: phase * (side === 'pair' ? 2 : 14),
+                    movementY:
+                      (Math.floor(elapsed / 350) % 2 ? 1 : -1) *
+                      (side === 'pair' ? 0.4 : 2),
                   }),
                 );
                 if (walk) {
@@ -256,6 +263,17 @@ try {
           (report.discarded ??= []).push(result);
         }
         report.scenarios.push(result);
+        if (mode !== 'Auto') {
+          const expectedRatio = Math.min(
+            report.environment.dpr,
+            mode === 'Low' ? 0.85 : 1.5,
+          );
+          assert.deepEqual(
+            result.ratios,
+            [expectedRatio],
+            'Manual render ratio changed',
+          );
+        }
         assert.ok(
           !result.unfocusedInputs &&
             !result.hiddenInputs &&
@@ -277,6 +295,7 @@ try {
       }
     }
   }
+  // Keep captures after ALL measurements: Playwright can reset a custom CDP DPR.
   await page.screenshot({ path: `artifacts/bench/${label}.png` });
   report.status = 'complete';
 } catch (error) {

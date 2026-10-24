@@ -141,7 +141,7 @@ Collections are `ENV_WALKABLE`, `ENV_BOUNDARY`, `ENV_DECOR`,
 `INTERFACE_BRIDGE` and `INTERFACE_DIAL`. Meshes merge by material and role inside
 each collection. Four opaque materials provide walnut, green linoleum, dark
 steel and ivory; two small procedural albedo maps are authored and packed by
-Blender. The finished environment has 12 meshes and roughly 5.2k triangles.
+Blender. The finished environment has 12 meshes and 5,074 triangles.
 Bevels are baked into both visible and collision geometry where applicable.
 Only a distant tool-rest silhouette and drawer seam supplement the circulation.
 A hidden `QA_SCALE_REFERENCE_1.65mm` collection in the editable blend provides a
@@ -204,6 +204,75 @@ retained grayscale `blockout/`), with profiler/lifecycle reports in
 entry and both crown captures are synthetic review cameras, distinct from the
 keyboard journey screenshots. Crown fit remains unresolved by the owner's
 explicit decision.
+
+## Paired-world production results — 24 October 2026
+
+Application revision **`ef2a14d`**, production server on port 4183. Chrome
+155.0.8059.86, headless, ANGLE Metal / Apple M4, 10 logical cores and 24 GB RAM;
+Darwin 25.6.0. Viewport **2400 × 1300 CSS**, device DPR **2**, no requested
+CPU/GPU throttling, existing OS/driver cache. The 18 accepted samples combine
+three quality choices, bridge/dial close-ups and a forecourt view of the pair,
+each stationary-turning and walking-plus-turning. Each has 700 ms warmup and
+six seconds of synthetic 125 Hz mouse input; walking alternates W/S every 500 ms.
+The pair fixture uses a smaller yaw/pitch sweep to retain both stations in view.
+No focus/visibility loss or GPU-disjoint events occurred. GPU timers were available.
+
+Frame intervals below are between render submissions, not display presentation
+or physical input-to-photon latency. Table entries are **p95 milliseconds**.
+
+| Workload | Auto, ratio 1 | High, ratio 1.5 | Low, ratio .85 |
+| --- | ---: | ---: | ---: |
+| Bridge turning | 18.5 | 23.3 | 17.1 |
+| Bridge walking + turning | 18.4 | 23.8 | 17.3 |
+| Dial turning | 18.5 | 22.3 | 16.9 |
+| Dial walking + turning | 18.3 | 27.6 | 17.0 |
+| Pair turning | 18.1 | 17.4 | 16.9 |
+| Pair walking + turning | 17.9 | 17.4 | 16.8 |
+
+Auto retained ratio 1 in every sample: 2 intervals over 25 ms out of 2,154,
+none over 50 ms; p99 18.6–18.7 ms. High retained 1.5: 56/2,006 over 25 ms,
+none over 50 ms. Low retained .85: 2/2,152 over 25 ms, none over 50 ms.
+The pair workload recorded about 878 median multipass draw calls. This larger
+scene stays responsive in these headless samples, but fixed High still misses
+60 fps in close-ups; these are not physical-device or long thermal guarantees.
+
+For Auto, render-submission CPU p95 is 5.2–5.5 ms; physics CPU p95 is
+0.3–0.6 ms in sampled movement. GPU elapsed p95 is 8.4–14.9 ms and synthetic
+handler-to-render p95 is 13.3–15.9 ms. GPU durations are separate driver query
+measurements and are not added to CPU time or interpreted as display latency.
+The report retains every p50/p95/p99, count, quality and ratio.
+
+A separate fresh-process first-use probe reached readiness in 583 ms. First
+render CPU was **111.8 ms**, with 11 additional programs appearing then despite
+precompilation. Subsequent first turns on bridge/dial had p95 17.5/17.6 ms,
+zero intervals over 25 ms and no shader growth. Cold-driver startup, physical
+mouse feel and broader hardware remain unverified.
+
+The quality/interaction runner passes 11 checks, including captured stationary
+look, sleep, idle sampling, manual choices and both station contexts. Its injected
+27 ms render delay produced Auto reductions 1 → .85 → .7, 8.05 seconds apart.
+The old fixed 20-second deadline observed only the first reduction; the headless
+state-machine check now waits for the expected bounded state, with a 35-second
+limit, and passed after 23.3 seconds. This is synthetic adaptation evidence, not
+normal performance. An earlier profiler capture between scenarios reset the
+custom CDP DPR and invalidated its High samples. Captures now run only after all
+measurements, and new assertions reject changed DPR or manual render ratios.
+
+Accepted evidence: `artifacts/bench/paired-atelier.json`,
+`paired-atelier-first-use.json` and `interaction-check.json`. Excluded runs remain
+under `artifacts/paired-atelier/exploratory-wide-sweep.json`,
+`rejected-dpr-reset.json` and `initial-stress-timeout.json`. The local
+`artifacts/paired-atelier/review.html` links representative captures and reports;
+`build-manifest.json` records the application revision and generated/source hashes.
+
+Final verification also passes 113 CPU tests, 115 retained runtime checks,
+inventory, typecheck/lint, production build, packaging exclusion, HTTP metadata,
+35 keyboard-journey checks, six lifecycle checks, two visible-guard probes,
+16 CAD landings, 254 explorer smoke assertions and 92 focused Workshop checks.
+The authored crown clearance is at least 3.1133 mm (bridge) / 2.5809 mm (dial)
+in measured runtime triangles. Winding-stem/environment checks are disjoint.
+The six source crown/holder intersections remain explicitly unresolved by owner
+choice; no physical compatibility claim is made. No push or publication occurred.
 
 ## Historical single-station evidence
 

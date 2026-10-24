@@ -3,7 +3,7 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
-## Paired atelier — local implementation, 24 October 2026
+## Paired atelier — implemented and locally verified, 24 October 2026
 
 Implemented from clean `01860fa` on local `codex/paired-atelier`. Production
 review: <http://127.0.0.1:4183/bench>. The selected paired atelier is now one
@@ -27,7 +27,7 @@ See [current behavior, source contract and reproduction](docs/BENCH_EXPERIENCE.m
   distinguish this retained conflict from clear authored-environment geometry.
 - Background Blender builds a reproducible editable scene with walnut, linoleum,
   steel and ivory. Explicit glTF extras preserve materials and distinguish actual
-  walkable/boundary triangles from decoration. Twelve render meshes, roughly 5.2k
+  walkable/boundary triangles from decoration. Twelve render meshes, 5,074
   triangles; generated assets and captures remain local/ignored. Headless
   grayscale and finished captures cover the whole pair, circulation, arrival,
   promenade, actual eye-height CAD entrances and both crowns.
@@ -39,10 +39,24 @@ See [current behavior, source contract and reproduction](docs/BENCH_EXPERIENCE.m
   Retry, capture/Escape, idle sleep, both nearby recoveries and disposal pass.
   Vercel output excludes `bench-local`. No foreground browser was opened.
 
-Next in this local task: profile turning/walking with both stations present,
-inspect final captures and record remaining performance limitations. Crown/holder
-compatibility needs a separate maker/mechanical decision. No push, PR,
-deployment, publication or source-asset redistribution.
+- Production profiling of `ef2a14d`: all 18 headless samples pass at 2400 × 1300
+  CSS / DPR2, Chrome 155 / M4 Metal. Auto retained ratio 1, p95 17.9–18.5 ms,
+  2/2,154 intervals over 25 ms and none over 50 ms. High retained 1.5 and reached
+  p95 27.6 ms; Low retained .85, p95 16.8–17.3 ms. First-render CPU remains
+  111.8 ms. These qualify the recorded headless workloads, not physical mouse
+  feel, cold-driver startup, representative devices or sustained thermal behavior.
+  Eleven interaction/quality checks pass. The updated profiler verifies DPR and
+  manual ratios; screenshot-induced DPR-reset samples were explicitly excluded.
+- Final local captures and source hashes are indexed in
+  `artifacts/paired-atelier/review.html` and `build-manifest.json`. The production
+  review server remains on port 4183. The editable Blender scene and all generated
+  assets stay ignored. Application implementation is committed as `ef2a14d`;
+  final evidence/tooling is recorded in the following local milestone.
+
+Next: owner walkthrough and representative device review; crown/holder
+compatibility requires a separate maker/mechanical decision. No further local
+implementation is pending under this task. No push, PR, deployment, publication
+or source-asset redistribution was performed.
 
 ## Performance and CAD fidelity — done for now, 24 October 2026
 
