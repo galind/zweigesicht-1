@@ -3,6 +3,49 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Remaining wheel pairs — 24 October 2026
+
+Implemented from `b5bbfa9` on local `codex/wheel-contact-audit`. The production
+review server is <http://127.0.0.1:4179/>; reload the homepage or walking tab.
+See the [complete decision record](docs/REMAINING_WHEEL_CONTACT_REVIEW.md),
+[provenance](assets/source-manifest/remaining-wheel-contact.json), and local
+`artifacts/remaining-wheel-contact/report.html` with nine matched before/after sections.
+
+- All nine remaining initial tooth pairs are clear: d90/d249, d97/d249,
+  d94/d237, d238/d242, d234/d243, d137/d210, d141/d211, d210/d213 and d187/d217.
+  Together with d96 and the ratchets, all 12 initially confirmed non-coaxial
+  tooth contacts have zero original-solid common and disjoint runtime meshes.
+- The evidence supports incompatible static source phases, not import errors,
+  perspective or tessellation-only overlap. Added 15 rigid occurrence phases:
+  barrel I drum/cover/spring +1.45° world Z; winding pinion +7.7° local Z;
+  cannon pinion +3.3° world Z; hour 1 wheel/hub −2.95°; hour 2 wheel/hub +0.25°;
+  motion 1 wheel/pinion +0.8°; third wheel/pinion +16.6°; seconds wheel/pinion +2.3°.
+  Exact local signs, IDs and matrices are in the record. Crown/click and
+  escapement stay fixed. Rejected a crown-only phase that increased click penetration.
+- Qualified all 15 moved valid solids against all 364 other leaves: 251 directed
+  before/after records, 5,194 AABB exclusions, 15 recovered-diamond exclusions;
+  plus 30 exact fitted-hand checks / 195 exclusions. No common increase beyond
+  1e−8 mm³. Eight packet-relative matrix checks pass. Three zero-common checks
+  involve the already-invalid d27 dial solid and remain provisional.
+- Original CAD downloads, 36 preexisting tracked assets, 222 overview buffers,
+  axes, dimensions and base targets are unchanged. Only the shared authored
+  override changes runtime placement, consistently across all three experiences;
+  no controllers, UI, materials, visibility or dependency formats changed.
+- Verified: 111 CPU tests, 115 runtime checks, inventory, 1,119 access checks,
+  typecheck/lint/build, source hashes, Meshopt identity and HTTP metadata.
+  Headless before/after checks verify 75 live transforms per stage. Explorer
+  passes 350 checks; Workshop focused 92, Easy 89 actions / 538 checks, Hard
+  284 actions / 1,708 checks; walking 23 checks and 16 collision landings.
+  All 18 final phases agree with walking collision on both holder sides.
+- New nominal solid gaps span 0.004479–0.027174 mm. Static clearance does not
+  certify tolerances, loaded tooth engagement, spring attachment/loading,
+  hand setting or a running escapement. d144 remains an open shell; d27 source
+  validity and the retained crown/click common require separate mechanical review.
+  Evidence stays local. No push, PR, deployment or asset publication.
+
+Next: maker/mechanical review of those retained uncertainties before any design
+or running-model changes. The initial static tooth-contact correction scope is complete.
+
 ## Ratchet tooth contact follow-up — 24 October 2026
 
 Implemented from `f027338` on local `codex/wheel-contact-audit`. The production
@@ -40,7 +83,7 @@ See the [ratchet decision/evidence record](docs/RATCHET_CONTACT_REVIEW.md) and
   `artifacts/ratchet-contact/`. Scripts and evidence hashes are committed; images,
   original downloads and generated CAD remain local. No push, PR or publication.
 
-Next: review the nine remaining confirmed tooth pairs as coupled mechanisms;
+The nine-pair follow-up above completes the next action from this milestone;
 d144 remains an open-shell question. Static clearance is not mechanical certification.
 
 ## Wheel contact investigation and static phase — 24 October 2026

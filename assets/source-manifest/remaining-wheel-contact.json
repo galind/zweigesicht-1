@@ -1,0 +1,1838 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-10-24",
+  "baselineCommit": "b5bbfa9",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "review": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md",
+  "candidateInput": {
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "status": "diagnostic-only-unapproved",
+    "wheels": [
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+        "definitionId": "d_0_1_1_90",
+        "name": "ml01 Federhaustrommel I z80 m0,15",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 1.45,
+        "rigidPacket": "barrel-I-drum-cover-spring"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2",
+        "definitionId": "d_0_1_1_91",
+        "name": "ml01 Federhausdeckel",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 1.45,
+        "rigidPacket": "barrel-I-drum-cover-spring"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4",
+        "definitionId": "d_0_1_1_88",
+        "name": "ml01 Zugfeder_h1,6_s0,145_l290",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -1.45,
+        "rigidPacket": "barrel-I-drum-cover-spring"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5",
+        "definitionId": "d_0_1_1_97",
+        "name": "ml01 Kupplungsrad z17 m0,15",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 7.7,
+        "rigidPacket": "winding-pinion"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+        "definitionId": "d_0_1_1_137",
+        "name": "ml01 Viertelrohr1 z12 m0,177",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 3.3,
+        "rigidPacket": "cannon-pinion-1"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "definitionId": "d_0_1_1_141",
+        "name": "ml01 Stundenrad1 z40 m0,17",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.95,
+        "rigidPacket": "hour-wheel-1"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+        "definitionId": "d_0_1_1_142",
+        "name": "ml01 Butzen Stundenrad1",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.95,
+        "rigidPacket": "hour-wheel-1"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "definitionId": "d_0_1_1_187",
+        "name": "ml01 Stundenrad2 z32 m0,12",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -0.25,
+        "rigidPacket": "hour-wheel-2"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+        "definitionId": "d_0_1_1_188",
+        "name": "ml01 Butzen Stundenrad2",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -0.25,
+        "rigidPacket": "hour-wheel-2"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "definitionId": "d_0_1_1_210",
+        "name": "ml01 Wechselrad1 z36 m0,177",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 0.8,
+        "rigidPacket": "motion-works-1"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+        "definitionId": "d_0_1_1_211",
+        "name": "ml01 Wechseltrieb1 z10 m0,17",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -0.8,
+        "rigidPacket": "motion-works-1"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1",
+        "definitionId": "d_0_1_1_237",
+        "name": "ml01 Kleinbodentrieb z10 m0,13",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -16.6,
+        "rigidPacket": "third-wheel"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2",
+        "definitionId": "d_0_1_1_238",
+        "name": "ml01 Kleinbodenrad z75 m0,1159",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 16.6,
+        "rigidPacket": "third-wheel"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1",
+        "definitionId": "d_0_1_1_242",
+        "name": "ml01 Sekundentrieb z8 m0,1159",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.3,
+        "rigidPacket": "seconds-wheel"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2",
+        "definitionId": "d_0_1_1_243",
+        "name": "ml01 Sekundenrad z81 m0,102",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.3,
+        "rigidPacket": "seconds-wheel"
+      }
+    ]
+  },
+  "baselinePoses": {
+    "schemaVersion": 1,
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "scope": "Static presentation phase; original geometry and source matrices remain immutable. No running or mechanical certification.",
+    "review": "docs/WHEEL_CONTACT_REVIEW.md",
+    "wheels": [
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
+        "definitionId": "d_0_1_1_96",
+        "name": "ml01 \u00dcFHMinRad z26 m0,15",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 6.25,
+        "axisEvidence": "Original cylindrical bore face 140, radius 0.2625 mm, centered at local X=Y=0; source local +Z equals world +Z.",
+        "reason": "Correct the static tooth phase against barrel II d85 and center pinion d93 without changing either neighboring wheel, tooth profile, axis or axial seating."
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15",
+        "definitionId": "d_0_1_1_131",
+        "name": "ml01 Sperrrad z62 m0,20",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -1.8,
+        "rigidPacket": "barrel-II-ratchet-and-core",
+        "axisEvidence": "Original coaxial mounting at world X=-6.2, Y=8.1 mm. d131 local Z points toward world -Z; d87 local Z points toward world +Z. Opposite local signs preserve the complete wheel/core relative transform.",
+        "reason": "One +1.8 degree world-Z static packet phase clears ratchet instance 14 without twisting the four-lobed key fit. All source vertices, axes, axial seating and the other barrel components remain unchanged.",
+        "review": "docs/RATCHET_CONTACT_REVIEW.md"
+      },
+      {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3",
+        "definitionId": "d_0_1_1_87",
+        "name": "ml01 Federkern1",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 1.8,
+        "rigidPacket": "barrel-II-ratchet-and-core",
+        "axisEvidence": "Original coaxial mounting at world X=-6.2, Y=8.1 mm. d131 local Z points toward world -Z; d87 local Z points toward world +Z. Opposite local signs preserve the complete wheel/core relative transform.",
+        "reason": "One +1.8 degree world-Z static packet phase clears ratchet instance 14 without twisting the four-lobed key fit. All source vertices, axes, axial seating and the other barrel components remain unchanged.",
+        "review": "docs/RATCHET_CONTACT_REVIEW.md"
+      }
+    ]
+  },
+  "expectedLocalPhases": {
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4": 6.25,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15": -1.8,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3": 1.8,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1": 1.45,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2": 1.45,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4": -1.45,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5": 7.7,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20": 3.3,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1": -2.95,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2": -2.95,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1": -0.25,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2": -0.25,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1": 0.8,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2": -0.8,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1": -16.6,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2": 16.6,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1": -2.3,
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2": -2.3
+  },
+  "components": {
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1": {
+      "definitionId": "d_0_1_1_90",
+      "name": "ml01 Federhaustrommel I z80 m0,15",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:2/0:1:1:89:1",
+      "sourceMatrix": [
+        [0.46364006515665923, -0.8860236396290615, 6.47960342714905e-18, 6.2],
+        [0.8860236396290615, 0.46364006515665923, -1.14155539878141e-18, 8.1],
+        [-1.9927586858861885e-18, 6.270352631346491e-18, 1.0, -2.100000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.4410711523076114, -0.897472138064484, 6.47960342714905e-18, 6.2],
+        [0.897472138064484, 0.4410711523076114, -1.14155539878141e-18, 8.1],
+        [-1.8334519856455725e-18, 6.318770696736907e-18, 1.0, -2.100000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1",
+        "definitionId": "d_0_1_1_90",
+        "name": "ml01 Federhaustrommel I z80 m0,15",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 1.45,
+        "rigidPacket": "barrel-I-drum-cover-spring"
+      },
+      "axisSurfaces": [
+        {
+          "face": 486,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -2.2],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.6,
+          "endRadiiMm": [0.6, 0.6],
+          "axialRangeLocalMm": [0.08000000000000007, 0.42000000000000015],
+          "originWorldMm": [6.199999999999998, 8.100000000000001, -4.300000000000747],
+          "axisWorld": [6.47960342714905e-18, -1.14155539878141e-18, 1.0],
+          "axisEndpointsWorldMm": [
+            [6.199999999999998, 8.100000000000001, -4.220000000000747],
+            [6.199999999999998, 8.100000000000001, -3.880000000000747]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2": {
+      "definitionId": "d_0_1_1_91",
+      "name": "ml01 Federhausdeckel",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:2/0:1:1:89:2",
+      "sourceMatrix": [
+        [0.46364006515665923, -0.8860236396290615, 6.47960342714905e-18, 6.1999999999999975],
+        [0.8860236396290615, 0.46364006515665923, -1.14155539878141e-18, 8.100000000000001],
+        [-1.9927586858861885e-18, 6.270352631346491e-18, 1.0, -2.100000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.4410711523076114, -0.897472138064484, 6.47960342714905e-18, 6.1999999999999975],
+        [0.897472138064484, 0.4410711523076114, -1.14155539878141e-18, 8.100000000000001],
+        [-1.8334519856455725e-18, 6.318770696736907e-18, 1.0, -2.100000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_2",
+        "definitionId": "d_0_1_1_91",
+        "name": "ml01 Federhausdeckel",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 1.45,
+        "rigidPacket": "barrel-I-drum-cover-spring"
+      },
+      "axisSurfaces": [
+        {
+          "face": 3,
+          "type": "cylinder",
+          "originLocalMm": [0.0, 0.0, 4.5],
+          "axisLocal": [0.0, 0.0, -1.0],
+          "radiusMm": 0.95,
+          "endRadiiMm": [0.95, 0.95],
+          "axialRangeLocalMm": [4.58, 4.910000000000001],
+          "originWorldMm": [6.1999999999999975, 8.100000000000001, 2.399999999999253],
+          "axisWorld": [-6.47960342714905e-18, 1.14155539878141e-18, -1.0],
+          "axisEndpointsWorldMm": [
+            [6.1999999999999975, 8.100000000000001, -2.180000000000747],
+            [6.1999999999999975, 8.100000000000001, -2.510000000000748]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4": {
+      "definitionId": "d_0_1_1_88",
+      "name": "ml01 Zugfeder_h1,6_s0,145_l290",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:2/0:1:1:89:4",
+      "sourceMatrix": [
+        [-0.3269224956913738, 0.9450511530128536, -6.4895686903001445e-18, 6.1999999999999975],
+        [0.9450511530128536, 0.3269224956913738, 1.1410532088764914e-18, 8.100000000000001],
+        [3.199939642891268e-18, -5.759938410561713e-18, -1.0, -4.050000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-0.350731926957467, 0.9364759022060859, -6.4895686903001445e-18, 6.1999999999999975],
+        [0.9364759022060859, 0.350731926957467, 1.1410532088764914e-18, 8.100000000000001],
+        [3.344667765119577e-18, -5.677120903466942e-18, -1.0, -4.050000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_4",
+        "definitionId": "d_0_1_1_88",
+        "name": "ml01 Zugfeder_h1,6_s0,145_l290",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -1.45,
+        "rigidPacket": "barrel-I-drum-cover-spring"
+      },
+      "axisSurfaces": [
+        {
+          "face": 6,
+          "type": "cylinder",
+          "originLocalMm": [-9.39062193829892e-16, -8.76928227745629e-16, -1.6],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 1.55698529411765,
+          "endRadiiMm": [1.5569852941176499, 1.5569852941176499],
+          "axialRangeLocalMm": [0.0, 1.6],
+          "originWorldMm": [6.199999999999997, 8.1, -2.4500000000007467],
+          "axisWorld": [-6.4895686903001445e-18, 1.1410532088764914e-18, -1.0],
+          "axisEndpointsWorldMm": [
+            [6.199999999999997, 8.1, -2.4500000000007467],
+            [6.199999999999997, 8.1, -4.050000000000747]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5": {
+      "definitionId": "d_0_1_1_97",
+      "name": "ml01 Kupplungsrad z17 m0,15",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:5",
+      "sourceMatrix": [
+        [-2.0187217466174565e-21, -1.2284719451703705e-20, -1.0, 14.2002356932679],
+        [-0.8347894108466752, 0.5505693775885661, -5.0783828048525e-21, -1.39463862767957e-15],
+        [0.5505693775885661, 0.8347894108466752, -1.13666000890641e-20, -2.500000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-3.6465020340645614e-21, -1.1903469763598202e-20, -1.0, 14.2002356932679],
+        [-0.753493590737686, 0.6574552522546525, -5.0783828048525e-21, -1.39463862767957e-15],
+        [0.6574552522546525, 0.753493590737686, -1.13666000890641e-20, -2.500000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5",
+        "definitionId": "d_0_1_1_97",
+        "name": "ml01 Kupplungsrad z17 m0,15",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 7.7,
+        "rigidPacket": "winding-pinion"
+      },
+      "axisSurfaces": [
+        {
+          "face": 2,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -4.15706881980943],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.505,
+          "endRadiiMm": [0.505, 0.505],
+          "axialRangeLocalMm": [3.67706881980943, 4.286101378984065],
+          "originWorldMm": [18.35730451307733, -1.0372575919274747e-16, -2.5000000000000053],
+          "axisWorld": [-1.0, -5.0783828048525e-21, -1.13666000890641e-20],
+          "axisEndpointsWorldMm": [
+            [14.680235693267901, -1.0374443275581424e-16, -2.5000000000000053],
+            [14.071203134093267, -1.0374752565629035e-16, -2.5000000000000053]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1": {
+      "definitionId": "d_0_1_1_237",
+      "name": "ml01 Kleinbodentrieb z10 m0,13",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:63/0:1:1:236:1",
+      "sourceMatrix": [
+        [-0.9237280213470681, -0.38304900806323805, 0.0, 3.17046045103862],
+        [-0.38304900806323805, 0.9237280213470681, 0.0, -3.617219999999998],
+        [0.0, 0.0, -1.0, -3.2100000000000066],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-0.7757967697732249, -0.6309828618983484, 0.0, 3.17046045103862],
+        [-0.6309828618983484, 0.7757967697732249, 0.0, -3.617219999999998],
+        [0.0, 0.0, -1.0, -3.2100000000000066],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1",
+        "definitionId": "d_0_1_1_237",
+        "name": "ml01 Kleinbodentrieb z10 m0,13",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -16.6,
+        "rigidPacket": "third-wheel"
+      },
+      "axisSurfaces": [
+        {
+          "face": 61,
+          "type": "cylinder",
+          "originLocalMm": [0.0, 0.0, 2.25],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.145,
+          "endRadiiMm": [0.145, 0.145],
+          "axialRangeLocalMm": [-1.12, -0.7414866773014599],
+          "originWorldMm": [3.17046045103862, -3.617219999999998, -5.460000000000006],
+          "axisWorld": [0.0, 0.0, -1.0],
+          "axisEndpointsWorldMm": [
+            [3.17046045103862, -3.617219999999998, -4.340000000000006],
+            [3.17046045103862, -3.617219999999998, -4.718513322698547]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2": {
+      "definitionId": "d_0_1_1_238",
+      "name": "ml01 Kleinbodenrad z75 m0,1159",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:63/0:1:1:236:2",
+      "sourceMatrix": [
+        [1.0, 0.0, 0.0, 3.17046045103862],
+        [0.0, 1.0, 0.0, -3.61722],
+        [0.0, 0.0, 1.0, -4.020000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.9583225744651332, -0.28568836740497355, 0.0, 3.17046045103862],
+        [0.28568836740497355, 0.9583225744651332, 0.0, -3.61722],
+        [0.0, 0.0, 1.0, -4.020000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2",
+        "definitionId": "d_0_1_1_238",
+        "name": "ml01 Kleinbodenrad z75 m0,1159",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 16.6,
+        "rigidPacket": "third-wheel"
+      },
+      "axisSurfaces": [
+        {
+          "face": 398,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -12.8004415953284],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.4,
+          "endRadiiMm": [0.4, 0.4],
+          "axialRangeLocalMm": [12.6204415953284, 12.7804415953284],
+          "originWorldMm": [3.17046045103862, -3.617219999999998, -16.820441595328404],
+          "axisWorld": [0.0, 0.0, 1.0],
+          "axisEndpointsWorldMm": [
+            [3.17046045103862, -3.617219999999998, -4.200000000000005],
+            [3.17046045103862, -3.617219999999998, -4.0400000000000045]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1": {
+      "definitionId": "d_0_1_1_242",
+      "name": "ml01 Sekundentrieb z8 m0,1159",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:65/0:1:1:241:1",
+      "sourceMatrix": [
+        [0.9237280213470682, 0.38304900806323783, 0.0, 5.204170427930427e-15],
+        [0.3830490080632379, -0.923728021347068, 0.0, -6.0715321659188185e-15],
+        [0.0, 0.0, -1.0, -4.310000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.9076114182187512, 0.4198112832201479, 0.0, 5.204170427930427e-15],
+        [0.41981128322014793, -0.907611418218751, 0.0, -6.0715321659188185e-15],
+        [0.0, 0.0, -1.0, -4.310000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1",
+        "definitionId": "d_0_1_1_242",
+        "name": "ml01 Sekundentrieb z8 m0,1159",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.3,
+        "rigidPacket": "seconds-wheel"
+      },
+      "axisSurfaces": [
+        {
+          "face": 53,
+          "type": "cylinder",
+          "originLocalMm": [0.0, 0.0, 2.25],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.12,
+          "endRadiiMm": [0.12, 0.12],
+          "axialRangeLocalMm": [-6.82, -6.62],
+          "originWorldMm": [5.204170427930427e-15, -6.0715321659188185e-15, -6.560000000000008],
+          "axisWorld": [0.0, 0.0, -1.0],
+          "axisEndpointsWorldMm": [
+            [5.204170427930427e-15, -6.0715321659188185e-15, 0.2599999999999927],
+            [5.204170427930427e-15, -6.0715321659188185e-15, 0.059999999999992504]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2": {
+      "definitionId": "d_0_1_1_243",
+      "name": "ml01 Sekundenrad z81 m0,102",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:65/0:1:1:241:2",
+      "sourceMatrix": [
+        [0.9641243939894371, 0.2654508483966496, 0.0, 4.3817014361465e-15],
+        [0.2654508483966497, -0.9641243939894368, 0.0, -3.84383551464001e-15],
+        [0.0, 0.0, -1.0, -3.830000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.9526946722919111, 0.3039290400514708, 0.0, 4.3817014361465e-15],
+        [0.30392904005147087, -0.9526946722919108, 0.0, -3.84383551464001e-15],
+        [0.0, 0.0, -1.0, -3.830000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2",
+        "definitionId": "d_0_1_1_243",
+        "name": "ml01 Sekundenrad z81 m0,102",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.3,
+        "rigidPacket": "seconds-wheel"
+      },
+      "axisSurfaces": [
+        {
+          "face": 428,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -12.1326220097667],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.4,
+          "endRadiiMm": [0.4, 0.4],
+          "axialRangeLocalMm": [11.952622009766701, 12.112622009766701],
+          "originWorldMm": [4.9673894933704616e-15, -6.072239067376332e-15, 8.302622009766694],
+          "axisWorld": [0.0, 0.0, -1.0],
+          "axisEndpointsWorldMm": [
+            [4.9673894933704616e-15, -6.072239067376332e-15, -3.6500000000000075],
+            [4.9673894933704616e-15, -6.072239067376332e-15, -3.8100000000000076]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20": {
+      "definitionId": "d_0_1_1_137",
+      "name": "ml01 Viertelrohr1 z12 m0,177",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:20",
+      "sourceMatrix": [
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0, -2.27682456221956e-15],
+        [0.0, 0.0, 1.0, -1.070000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.9983418166140283, -0.05756402695956728, 0.0, 0.0],
+        [0.05756402695956728, 0.9983418166140283, 0.0, -2.27682456221956e-15],
+        [0.0, 0.0, 1.0, -1.070000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+        "definitionId": "d_0_1_1_137",
+        "name": "ml01 Viertelrohr1 z12 m0,177",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 3.3,
+        "rigidPacket": "cannon-pinion-1"
+      },
+      "axisSurfaces": [
+        {
+          "face": 75,
+          "type": "cylinder",
+          "originLocalMm": [0.0, 0.0, 2.25],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.275,
+          "endRadiiMm": [0.275, 0.275],
+          "axialRangeLocalMm": [-0.75, 0.030399840127900202],
+          "originWorldMm": [0.0, -2.27682456221956e-15, 1.179999999999993],
+          "axisWorld": [0.0, 0.0, 1.0],
+          "axisEndpointsWorldMm": [
+            [0.0, -2.27682456221956e-15, 0.42999999999999305],
+            [0.0, -2.27682456221956e-15, 1.2103998401278933]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1": {
+      "definitionId": "d_0_1_1_141",
+      "name": "ml01 Stundenrad1 z40 m0,17",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:1",
+      "sourceMatrix": [
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0, 0.0],
+        [0.0, 0.0, 1.0, -0.700000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.9986748262365419, 0.051464467756044054, 0.0, 0.0],
+        [-0.051464467756044054, 0.9986748262365419, 0.0, 0.0],
+        [0.0, 0.0, 1.0, -0.700000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "definitionId": "d_0_1_1_141",
+        "name": "ml01 Stundenrad1 z40 m0,17",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.95,
+        "rigidPacket": "hour-wheel-1"
+      },
+      "axisSurfaces": [
+        {
+          "face": 218,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -10.2084309195786],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.75,
+          "endRadiiMm": [0.75, 0.75],
+          "axialRangeLocalMm": [9.978430919578601, 10.1884309195786],
+          "originWorldMm": [-2.68554704060629e-17, 2.3039296165317e-15, -10.908430919578606],
+          "axisWorld": [0.0, 0.0, 1.0],
+          "axisEndpointsWorldMm": [
+            [-2.68554704060629e-17, 2.3039296165317e-15, -0.930000000000005],
+            [-2.68554704060629e-17, 2.3039296165317e-15, -0.720000000000006]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2": {
+      "definitionId": "d_0_1_1_142",
+      "name": "ml01 Butzen Stundenrad1",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:2",
+      "sourceMatrix": [
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0, 2.27682456221956e-15],
+        [0.0, 0.0, 1.0, -0.700000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [0.9986748262365419, 0.051464467756044054, 0.0, 0.0],
+        [-0.051464467756044054, 0.9986748262365419, 0.0, 2.27682456221956e-15],
+        [0.0, 0.0, 1.0, -0.700000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+        "definitionId": "d_0_1_1_142",
+        "name": "ml01 Butzen Stundenrad1",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -2.95,
+        "rigidPacket": "hour-wheel-1"
+      },
+      "axisSurfaces": [
+        {
+          "face": 2,
+          "type": "cylinder",
+          "originLocalMm": [0.0, 0.0, 4.5],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.55,
+          "endRadiiMm": [0.55, 0.55],
+          "axialRangeLocalMm": [-4.76, -3.17],
+          "originWorldMm": [0.0, 2.27682456221956e-15, 3.799999999999993],
+          "axisWorld": [0.0, 0.0, 1.0],
+          "axisEndpointsWorldMm": [
+            [0.0, 2.27682456221956e-15, -0.9600000000000066],
+            [0.0, 2.27682456221956e-15, 0.6299999999999932]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1": {
+      "definitionId": "d_0_1_1_187",
+      "name": "ml01 Stundenrad2 z32 m0,12",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:1",
+      "sourceMatrix": [
+        [-0.9237280213470681, -0.38304900806323805, 0.0, -4.67706903509508e-15],
+        [-0.38304900806323805, 0.9237280213470681, 0.0, 7.39999999999999],
+        [0.0, 0.0, -1.0, -5.590000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-0.9220478668286722, -0.3870758727648822, 0.0, -4.67706903509508e-15],
+        [-0.3870758727648822, 0.9220478668286722, 0.0, 7.39999999999999],
+        [0.0, 0.0, -1.0, -5.590000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "definitionId": "d_0_1_1_187",
+        "name": "ml01 Stundenrad2 z32 m0,12",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -0.25,
+        "rigidPacket": "hour-wheel-2"
+      },
+      "axisSurfaces": [
+        {
+          "face": 195,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -5.84252780463015],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.45,
+          "endRadiiMm": [0.45, 0.45],
+          "axialRangeLocalMm": [5.66252780463015, 5.822527804630149],
+          "originWorldMm": [-5.534779838814527e-15, 7.3999999999999915, 0.2525278046301427],
+          "axisWorld": [0.0, 0.0, -1.0],
+          "axisEndpointsWorldMm": [
+            [-5.534779838814527e-15, 7.3999999999999915, -5.410000000000007],
+            [-5.534779838814527e-15, 7.3999999999999915, -5.5700000000000065]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2": {
+      "definitionId": "d_0_1_1_188",
+      "name": "ml01 Butzen Stundenrad2",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:2",
+      "sourceMatrix": [
+        [-0.9237280213470681, -0.38304900806323805, 0.0, -5.507674168516241e-15],
+        [-0.38304900806323805, 0.9237280213470681, 0.0, 7.3999999999999915],
+        [0.0, 0.0, -1.0, -5.590000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-0.9220478668286722, -0.3870758727648822, 0.0, -5.507674168516241e-15],
+        [-0.3870758727648822, 0.9220478668286722, 0.0, 7.3999999999999915],
+        [0.0, 0.0, -1.0, -5.590000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+        "definitionId": "d_0_1_1_188",
+        "name": "ml01 Butzen Stundenrad2",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -0.25,
+        "rigidPacket": "hour-wheel-2"
+      },
+      "axisSurfaces": [
+        {
+          "face": 7,
+          "type": "cylinder",
+          "originLocalMm": [0.0, 0.0, 4.5],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.21,
+          "endRadiiMm": [0.21, 0.21],
+          "axialRangeLocalMm": [-4.68, -3.92],
+          "originWorldMm": [-5.507674168516241e-15, 7.3999999999999915, -10.090000000000007],
+          "axisWorld": [0.0, 0.0, -1.0],
+          "axisEndpointsWorldMm": [
+            [-5.507674168516241e-15, 7.3999999999999915, -5.410000000000007],
+            [-5.507674168516241e-15, 7.3999999999999915, -6.170000000000007]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1": {
+      "definitionId": "d_0_1_1_210",
+      "name": "ml01 Wechselrad1 z36 m0,177",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:1",
+      "sourceMatrix": [
+        [-0.21957769440021088, 0.9755950164499035, 0.0, 4.24287382474019],
+        [-0.9755950164499035, -0.21957769440021088, 0.0, 0.246011600000001],
+        [0.0, 0.0, 1.0, -1.2000000000000068],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-0.20593485728926958, 0.9785657027268267, 0.0, 4.24287382474019],
+        [-0.9785657027268267, -0.20593485728926958, 0.0, 0.246011600000001],
+        [0.0, 0.0, 1.0, -1.2000000000000068],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "definitionId": "d_0_1_1_210",
+        "name": "ml01 Wechselrad1 z36 m0,177",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": 0.8,
+        "rigidPacket": "motion-works-1"
+      },
+      "axisSurfaces": [
+        {
+          "face": 234,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -9.62932246561589],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.695,
+          "endRadiiMm": [0.695, 0.695],
+          "axialRangeLocalMm": [9.39932246561589, 9.60932246561589],
+          "originWorldMm": [4.242873824740193, 0.24601160000000052, -10.829322465615896],
+          "axisWorld": [0.0, 0.0, 1.0],
+          "axisEndpointsWorldMm": [
+            [4.242873824740193, 0.24601160000000052, -1.430000000000005],
+            [4.242873824740193, 0.24601160000000052, -1.220000000000006]
+          ]
+        }
+      ]
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2": {
+      "definitionId": "d_0_1_1_211",
+      "name": "ml01 Wechseltrieb1 z10 m0,17",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:2",
+      "sourceMatrix": [
+        [-0.17087063414231593, 0.9852934722141433, 0.0, 4.24287382474019],
+        [0.9852934722141433, 0.17087063414231593, 0.0, 0.2460116000000001],
+        [0.0, 0.0, -1.0, -1.4500000000000068],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "displayMatrix": [
+        [-0.18461082350400856, 0.982811703148254, 0.0, 4.24287382474019],
+        [0.982811703148254, 0.18461082350400856, 0.0, 0.2460116000000001],
+        [0.0, 0.0, -1.0, -1.4500000000000068],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "override": {
+        "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+        "definitionId": "d_0_1_1_211",
+        "name": "ml01 Wechseltrieb1 z10 m0,17",
+        "pivotLocalMm": [0, 0, 0],
+        "localZDegrees": -0.8,
+        "rigidPacket": "motion-works-1"
+      },
+      "axisSurfaces": [
+        {
+          "face": 62,
+          "type": "cylinder",
+          "originLocalMm": [-2.68554704060629e-17, 2.3039296165317e-15, -3.00995313521029],
+          "axisLocal": [0.0, 0.0, 1.0],
+          "radiusMm": 0.35,
+          "endRadiiMm": [0.35, 0.35],
+          "axialRangeLocalMm": [2.46995313521029, 2.839953135210289],
+          "originWorldMm": [4.242873824740193, 0.24601160000000047, 1.5599531352102831],
+          "axisWorld": [0.0, 0.0, -1.0],
+          "axisEndpointsWorldMm": [
+            [4.242873824740193, 0.24601160000000047, -0.9100000000000068],
+            [4.242873824740193, 0.24601160000000047, -1.280000000000006]
+          ]
+        }
+      ]
+    }
+  },
+  "toothContacts": {
+    "90-249": {
+      "key": "90-249",
+      "before": {
+        "commonVolumeMm3": 0.040314890553963686,
+        "rawVolumeIntegralMm3": 0.04031043821363767,
+        "commonSolidCount": 5,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          1.1803180100365761e-15, 9.533410412861946e-16, 4.8550454787897405e-15,
+          1.3528273337528433e-15, 7.176863700236657e-15
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [8.266359697082118, 2.250832923350561, -4.3000001000007595],
+          [9.966760022532338, 3.3338677015287703, -3.919999900000748]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.010380949248411384,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "94-237": {
+      "key": "94-237",
+      "before": {
+        "commonVolumeMm3": 0.010055918762912914,
+        "rawVolumeIntegralMm3": 0.01005591876291288,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          8.15357107200935e-16, 1.7539364269967887e-16, 3.406094519035273e-16
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [2.4422807367377524, -3.505439349051432, -2.9400000000000075],
+          [3.1831681024764253, -2.870751608081157, -2.710000000000007]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.021691735770226456,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "97-249": {
+      "key": "97-249",
+      "before": {
+        "commonVolumeMm3": 0.009449353596088153,
+        "rawVolumeIntegralMm3": 0.009447283396859902,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          3.664431359472222e-15, 1.2866561637079101e-15, 1.0179724466764633e-15
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [14.200235593267884, -0.31244739262869453, -3.943224127352415],
+          [14.427788052549621, 0.7457573492133945, -3.719999900000006]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.016567463743841087,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "137-210": {
+      "key": "137-210",
+      "before": {
+        "commonVolumeMm3": 0.008949716036611845,
+        "rawVolumeIntegralMm3": 0.0089497160366118,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          4.329043850046142e-15, 4.3752943143373624e-16, 6.458135870786975e-16
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [0.8325419876834113, -0.3962030170422258, -1.4500000000000068],
+          [1.23097587302279, 0.7085035588269235, -1.2000000000000064]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.013120182234825889,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "141-211": {
+      "key": "141-211",
+      "before": {
+        "commonVolumeMm3": 0.015449548026262238,
+        "rawVolumeIntegralMm3": 0.015449548026262236,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          4.774439401104853e-16, 1.9985029047937276e-16, 5.203706484810656e-15
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [3.2161122307788426, -0.27287304469470114, -0.9500000000000072],
+          [3.60814290598031, 0.8589455184225451, -0.7000000000000064]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.020681566970047617,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "187-217": {
+      "key": "187-217",
+      "before": {
+        "commonVolumeMm3": 1.0339956609523051e-5,
+        "rawVolumeIntegralMm3": 1.0339956609523649e-5,
+        "commonSolidCount": 1,
+        "adaptiveIntegrationRelativeErrorEstimates": [3.679714456956999e-14],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [-0.2498737939197511, 5.33972635779117, -5.590000000000007],
+          [-0.22386218800773083, 5.372020474020392, -5.390000000000007]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.004478894179656371,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "210-213": {
+      "key": "210-213",
+      "before": {
+        "commonVolumeMm3": 0.0023575960026917145,
+        "rawVolumeIntegralMm3": 0.002357596002691699,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          1.8306629826293617e-15, 9.134244598156577e-16, 1.337851490312469e-15
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [1.7191456126956226, 2.2137364934190473, -1.4000000000000075],
+          [2.6073302499976663, 3.122468213050236, -1.2000000000000055]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.0060230943584458655,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "234-243": {
+      "key": "234-243",
+      "before": {
+        "commonVolumeMm3": 0.005208177789298623,
+        "rawVolumeIntegralMm3": 0.00520817778929848,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          3.6707767880904177e-16, 3.9188215653023497e-16, 3.347673811070063e-15
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [-2.2137248343233247, -3.944704931679442, -3.830000000000007],
+          [-1.546659858453704, -3.6196529768858197, -3.630000000000006]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.023201605160258317,
+        "commonBoundsWorldMm": null
+      }
+    },
+    "238-242": {
+      "key": "238-242",
+      "before": {
+        "commonVolumeMm3": 0.00589281232097677,
+        "rawVolumeIntegralMm3": 0.0058928123209765594,
+        "commonSolidCount": 3,
+        "adaptiveIntegrationRelativeErrorEstimates": [
+          2.0795585807447467e-15, 2.5998637549715496e-16, 1.3301361335257874e-15
+        ],
+        "commonValid": true,
+        "distanceMm": 0.0,
+        "commonBoundsWorldMm": [
+          [-0.044465040346019835, -0.5516839568028125, -4.220000000000008],
+          [0.5516839568028117, 0.020864702344590036, -4.020000000000007]
+        ]
+      },
+      "after": {
+        "commonVolumeMm3": 0.0,
+        "rawVolumeIntegralMm3": 0.0,
+        "commonSolidCount": 0,
+        "adaptiveIntegrationRelativeErrorEstimates": [],
+        "commonValid": true,
+        "distanceMm": 0.02717380670190248,
+        "commonBoundsWorldMm": null
+      }
+    }
+  },
+  "evidence": [
+    {
+      "path": "artifacts/remaining-wheel-contact/137-210-before-after.png",
+      "sha256": "7aaa759cb216ce8550ef0d5ee058cad1ccd58156c0062530485ef1ca5ca0187a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/141-211-before-after.png",
+      "sha256": "8a4a5b88114eb63a34ebe95714911cf5066a7df06cfefe66cda32552cc0c5843"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/187-217-before-after.png",
+      "sha256": "6f1da81bd402b76806532262d85f497e5d1eb542f0993907b56d70ef68b763ca"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/210-213-before-after.png",
+      "sha256": "8cea62a5688dfb50c86207e0b4543bd7e07411d691de40af01ad9c908a730d53"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/234-243-before-after.png",
+      "sha256": "0a5489b813aa6f27213a24bca26bc6dcd2c935ec6af7f9e49198c9d178dfd53d"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/238-242-before-after.png",
+      "sha256": "b5dc73fc95d97c19ed814f915042ce7c6f3b81a3dfa74568f0024ebfb8ca807f"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/90-249-before-after.png",
+      "sha256": "e84b57435429e454f91820614a63464f7dd0fa3a421e4b81cea7f7f4fac199bc"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/94-237-before-after.png",
+      "sha256": "6271ad9092c5a6c359827b947296d47dc74315ad790b624773962d340f9f8dc0"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/97-249-before-after.png",
+      "sha256": "e39c5450b63d4e2b05d91e137af746668fd6a54d51492a0835bd947b193fc9ef"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/all-nine-contact-sections.png",
+      "sha256": "d0510b3758f4a3229f53a41bb482cd7cd4baaf29f1d044d1eb41cf0e0e5cd977"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/asset-preservation.json",
+      "sha256": "deedad5ba0965a40841aaee4eb288875cc641ed1511a05f6838d479f669646ae"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/baseline-poses.json",
+      "sha256": "190394459be9c8cfa20da44d5ff8c6815f433a35d81fff61fb64854be6a0be3e"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/01-entry.png",
+      "sha256": "2145ee7269dcf9a02e3b29b4bcaaa8bf27b4fced4e84ec77a699dbb12e3e88fd"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/02-mat.png",
+      "sha256": "89b01868bca589d43fd2741945a491ef961be63b3711c8dd6dd47a926f47be7c"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/03-ramp.png",
+      "sha256": "0c93128b9fa1d8467d57396fd8065f7c1141ca0ed00b5e168888d754b0832902"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/04-bridge-entry.png",
+      "sha256": "0e3c191160ece03e3c76ba8d8409f082b5864657bef0768c8f7d67ff657e43e8"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/05-across-bridges.png",
+      "sha256": "224e307a1bb4ce5c539ff491f6f87d786add0a836307e94ed0703478e01d1816"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/06-train-detail.png",
+      "sha256": "c21f98268711a7d245843a2e53d20c6a67d2a3a9ced7a31c54b85aa6f0aeec14"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/07-dial-plate.png",
+      "sha256": "b625569480d5fd9e6878d8748cbd5b947ffa2cc550c155a6012f81d68db80794"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/08-dial-exploration.png",
+      "sha256": "706ee637ebe017b0e06532afc4b8f947056678f77843dcd776f0a34c954a23c3"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/09-reset.png",
+      "sha256": "67b4c931dffce6edf36e83f6b09415964a810472996dc35dd8455b53c9a7a5c6"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/10-load-failure.png",
+      "sha256": "2225a931fd9690109d3000625d35d840e25cdd97228793d9757cf36655ba4009"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench/browser-report.json",
+      "sha256": "fe1655670855f6ff3b82dd16fe099c4896d50a79d0005ce5cd8baac77879e6b9"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/bench-collision/collision-report.json",
+      "sha256": "7d8ab6d268317b43d1a9b57eb84c95b4cd940e7f6398452784864e5839d73ff2"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/137-210-closeup.png",
+      "sha256": "53332bc136aa2bcccc0b9aaf6bc510392bd21fcf982b65bd3a827d47fd691edd"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/141-211-closeup.png",
+      "sha256": "fac7f85265320684d4ff54bf5429b8fb958189ec870493c938b0c8202cce9053"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/187-217-closeup.png",
+      "sha256": "aed99106cf682239b668834cefb22b5cdbc1e0dfb08e4045d4698b9d301deea2"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/210-213-closeup.png",
+      "sha256": "a4734d908ff7c95f8de16533594267db98192263c3785fa8458fe7c7574216bc"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/234-243-closeup.png",
+      "sha256": "9ae5ec93944981c8437c9567a0888096607abd079a2b83a9f8584184922c2dc3"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/238-242-closeup.png",
+      "sha256": "24a3e7ef58550c5f6e2a95051530d927cb7ad4c60505d2f0758daea121268bdf"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/90-249-closeup.png",
+      "sha256": "cb71ae4b84a9c1c270f68bef690c06dbb661e9d7d6e3e984b2870c4ef91766e2"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/94-237-closeup.png",
+      "sha256": "b05b075c11f236ea5490dace3a9861e9417d9be6e37e29f8afdca2088836133c"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/97-249-closeup.png",
+      "sha256": "75e249a5c47dd1fb6421e8f9bd98367379fd9888912da316c07ba8e96ef5a629"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/homepage.png",
+      "sha256": "f822e895cb70a7e15132996265e07dec6e3d28a0b7182eb9b909a16e5ad304ab"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-after/report.json",
+      "sha256": "6345ebbb97e8d3815ed492c7a576acc2e946942e33497bd274e097c38c4f7d8b"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/137-210-closeup.png",
+      "sha256": "db50cc1516c52d265755de648577e2616fee6a0abb332a1328cfcbc7933412a8"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/141-211-closeup.png",
+      "sha256": "0ec2c0fa5bf86a619e632b0220087aa12748433e912baae2f76f85d2f23bda71"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/187-217-closeup.png",
+      "sha256": "b7b4f49de941463cfd4676cad962bff6827ffabeda3318d15902fc8603e12ed1"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/210-213-closeup.png",
+      "sha256": "55929bc2636254888d84a3ccb33b344c2e404cea5e61a8e755ce7c70c62387a7"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/234-243-closeup.png",
+      "sha256": "483bb7d6261356fd8530050769c35aeea6d0c254cca22797d4c79f71fcfc2a73"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/238-242-closeup.png",
+      "sha256": "ccdc02f6076ba7b6377c3d6b8eb3725bc1788fe15a60d2c6bc2c10b814e7af29"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/90-249-closeup.png",
+      "sha256": "b6a4d1b6129d29a81cf7cf678c2dedfc88c950819634a2dd26745f3d8a468fa9"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/94-237-closeup.png",
+      "sha256": "0839c79491f55b6a0caec5d00abc6b765d3c7bef35d73bacf82414c77e6866d4"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/97-249-closeup.png",
+      "sha256": "df3ef6e68ec696b64e09b3d3bfefc21274c83a0a21ca9c3593ad324f3a026b3b"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/homepage.png",
+      "sha256": "bf218b2e7699d059e479f3663adce1c0f01f8c57f0cf2c27d572d67d729599b4"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/browser-before/report.json",
+      "sha256": "dc8f58e637cb80ddf22c8a5a1e1a5707c2f956c38d2848ce5082531af0e7494a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/crown-click.json",
+      "sha256": "41b9fb03a2b79678550bcbd92da5f891b5656dac6aca993d562f570d265b87ef"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/explorer/explorer-report.json",
+      "sha256": "9b4b74b588420118bc3ed07c1eb28ca5c76db1ff69ede7ffb40a7849e6a0d846"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/fixed-access-audit.json",
+      "sha256": "eef208f15dc7ebbbb8728cd46b3b08d1232bf023059d4e2d8702dac9b70152d6"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/access.log",
+      "sha256": "a1fcb654a4ee774d01e13e3a852b364a2373e2f2e9eccf2a1e057f5a40692f0a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/bench-collision.log",
+      "sha256": "4efa3f4dc45c5d7726559371082f6681aeaf325fff6fbafd47ff74e123c2f9ca"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/bench.log",
+      "sha256": "f65e960938f37bbe009a73140f4092f205e3a203a756d759de03f838f925d042"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/browser-after.log",
+      "sha256": "21bf15d4d58e933aa6a892df94c15f4f00718a6e1ad6c6f8fcbba5f31c572dba"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/browser-before.log",
+      "sha256": "292b081e77f8f61cd60c4588f22915cedeccc2e571a935389dfe38eac76e4f23"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/build.log",
+      "sha256": "590b612c837df2d497b38c7f2a96f745698615d5c61d07c72950c3804ec8244e"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/crown-click.log",
+      "sha256": "8d71166bbec74a4da178d354e17571de9e147fb763bb50ed1c04978ec5796567"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/explorer.log",
+      "sha256": "b326ddc254b193bc0290ab3c237620eb4e7e280b480e55a89cc670a3dcb87130"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/geometry.log",
+      "sha256": "3e4f1e7b95a220c1062987c303d0280301c1a29fcd200b7786bd97f9ce9fc855"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/inventory.log",
+      "sha256": "23606a068b4d97b227cef8a4afd59fdac65264709b5caec3ca58f0b839f9ad30"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/lint.log",
+      "sha256": "040dc829b5a9ba7d2ba7a2878408419c672332899b3026a63563226a316b99e9"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/mesh.log",
+      "sha256": "2604409be15ac6f2d6fe28a9acacc6c524e83e19fb7b3cb9df52f10ad9b10799"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/motion-margin-search.log",
+      "sha256": "255bba9a3818737d00a6693f49d4949e975f2b39299b372fe479456ece7d1841"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/motion-search.log",
+      "sha256": "8604a2f0a83200de2ec9bcb42b8dda1320d60e0c7104d31d4d615c595e0a45de"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/motion-small-search.log",
+      "sha256": "541ede83b9039643aaf71b5e0702e5a6622202bd3f810759ddd8ca61fd487e48"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/motion.log",
+      "sha256": "2f365f433c86b31ba5eeec627daf1c75df11a786ee6767df4b12268b77560f8a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/previous-ratchet-validation.log",
+      "sha256": "e4103719804a6447620f207630b5bc6d22386f1a44c0ee16c8c98ee1fae9287f"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/previous-wheel-validation.log",
+      "sha256": "eebff3a7e078b7e189e31982e09c72df5d3aae4f1ea1262feed850f07e103534"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/rejected.log",
+      "sha256": "85c9d61faf2b00ffce54949d76c7cd7406cc689dd4fc81b700e42e67b0a401f6"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/runtime.log",
+      "sha256": "56c2171573dfcc24d4e043b01afb2b679ec76c1e2f7b62c2716b25c622058b30"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/search-winding.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/search.log",
+      "sha256": "9753e5c11e5d4d51293ab4619d96b0f095fd8d2da0174100ab0603a0b52ad3bb"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/seo.log",
+      "sha256": "bc8889f062f9a494c151c50a23ff3a8b281f80035ca477fb9f7a8c79690bbdb6"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/source-candidates-2.log",
+      "sha256": "9f8852495d766f45eda5097feda3df59840a58c93ea258ab2f45e04e8fadc16e"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/source-candidates.log",
+      "sha256": "bc3c4e31f22be19678e993c9dbd7feb10e625e2a7580b6582505ee04050564ae"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/sources.log",
+      "sha256": "ddf02044ad7410b3c5802269a112b2b50ac7414cdd5c502080bf29d025714fb1"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/tests.log",
+      "sha256": "890f0f6d9536ef0eecd3b70da2408150bb73dc7264af4f3d44f40d19fcdfadb4"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/train.log",
+      "sha256": "5ba8328c5450d2b39daabd39b93aeedfdac6e037f14f09e0854748802e1cb473"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/typecheck.log",
+      "sha256": "4e6bb3b91678b8c724495939039efa7de3416735163e4c73aad9a3d1d31042aa"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/views.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/winding-alternative.log",
+      "sha256": "9af5b1f195c28c8aa01bc1f069a9aa0d8ab51192df3ed4830d19e23dde771704"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/winding.log",
+      "sha256": "dc21ccee884fb503d498dce8d4f76a5682fa12edcacdbd96003ba198e9b6e129"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/workshop-easy.log",
+      "sha256": "c243a120ba5f91ac06bf3c35ff2b19fe56409270d7a6cfa4e22664a2ebfef9bd"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/workshop-focused.log",
+      "sha256": "8c69fac34107f700e42ea2943a05ebd3e9f7f7b32c416b407af5d2f069d5ebb8"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/logs/workshop-hard.log",
+      "sha256": "2288cdcd97ea0f1c772bc9eb8823ca09045ace081ecc8f4398d623871d60d4c0"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/mesh-pairs.json",
+      "sha256": "2604409be15ac6f2d6fe28a9acacc6c524e83e19fb7b3cb9df52f10ad9b10799"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/motion-margin-search.json",
+      "sha256": "6b6d6a0f0fecf51070469f88f0309ac8a2a1862f595d257dea3ba995b96eedd3"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/motion-search.json",
+      "sha256": "f34bca44eaada07175b65420970dac6458c2deedc45fd62736197b1dd198c8be"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/motion-small-search.json",
+      "sha256": "920d49a3e9ab5a415eab771bc1931d0c876d868467651897928730f287e26bf0"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/motion.json",
+      "sha256": "f6bcca4fc0016bbd5d990267d090fea0c33d105e0826f4dc1c96fafe4b47998b"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/proposed.json",
+      "sha256": "a3ad0f8108af8d7b1d3b5e3e1a60855953684be39f904b0ef2cf533e0392c94f"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/rejected-crown.json",
+      "sha256": "05ab69021d0b6a9a9fbeaf950dfaa833ee6eb414cbcd890ce4a850473308c441"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/repeated-search-winding.json",
+      "sha256": "4921aa5c5160a7bc67320fea9da643b819322ba578274a291e573ec187d867fa"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/report.html",
+      "sha256": "653e454dc60601391f5fce4bfb535efd8746f4281f2779999cc1c88dff24686a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/search.json",
+      "sha256": "8878625613ca26f7b122b37e9abaee4be6df4ba993dc9baa22b81a0340cfef81"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/source-candidates-2.json",
+      "sha256": "34bc85ebe823626083020b3d15f4a3bfac01d0cb1bf97e9c5b2f20ecb254de45"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/source-candidates.json",
+      "sha256": "ae174d652697cbdeba22a64351f541dcb9b3565f5e962425ac97765c5bb90bef"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/train.json",
+      "sha256": "42d4ff15ae24d89f665930d0409d5007f5330fbc986d87b8ed141b5ad4e53574"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/validation.json",
+      "sha256": "d989da64c78b52be5f599ac834213e90eada001a0a7ff792200d27a3385e3b33"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/winding-alternative.json",
+      "sha256": "f5bf5dd92ce4ea0bcd225ddb76b408b65ad3d7612b5754478ea24bd706b32a7a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/winding.json",
+      "sha256": "376db107c5d98ea7a77de17bdaf228f358667b87cbfb98cbef9518bbabba7257"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-easy/easy-001.png",
+      "sha256": "17d40df93128017f259d051a32ce87cd3e2be0d78fdc0ac3c12d4a380edcf587"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-easy/easy-010.png",
+      "sha256": "edb34ca9c16511f9624b3c645d0f61eaec411cf6e63a55d73a6499c59d0990f1"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-easy/easy-complete.png",
+      "sha256": "146567da25ddeeeb4f7bbe08a2221ae7861f3315e5f78bfda029bfbcd6919064"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-easy/easy-inventory-off.png",
+      "sha256": "5f88b46cca49e5986db29c1e2588013ff1c2c2f50f8586a57967bc102844ecd8"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-easy/easy-redesign-report.json",
+      "sha256": "0039bb4f3379300eaadc701579cf8cff27114e85a0267f72dc662f306cb9766d"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/focused-redesign-report.json",
+      "sha256": "db4cd6a084d6832d27bec47480ebac4f6473c9a3e37acf9251f97f7928b1fa1c"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/hard-1440-900-text100.png",
+      "sha256": "9f50b7f10cfa55f8a1b8e187ce9c50413808e44be523ab542a40151d16a1a95e"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/hard-320-568-text100.png",
+      "sha256": "e2757e91aa0a3eae29db1003b423216925953e880cedfbdc6563a3dd9f807dcd"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/hard-320-568-text200.png",
+      "sha256": "c819e8c185dd75dbcf1a51d65916a90e5766dec732962ab94661190cd51c3e05"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/hard-390-844-text100.png",
+      "sha256": "041090ae0373225bda6313432cff6dee9a3c4c45c959b72d94bf2e6a1452ea53"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/hard-568-320-text100.png",
+      "sha256": "feff5b6cd410b7e26a3641695c5517be8608f5375b99deeaabf6e6a0e1144304"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/phone-easy-all-parts.png",
+      "sha256": "e3fed470ea3f5feef246f200924af295819a61ca682e13b992fd14dcfb663597"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/phone-hard-inventory-on.png",
+      "sha256": "74d2c3138d32b3d6c23e274d3b4ec6b33836ed95a8e9f7f01dbb4361378484d4"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-focused/phone-hard-workbench.png",
+      "sha256": "cb8cd260895adcc74d68bf4486ff58f8f50140912ff10c46279fa5cf35a6fd02"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-001.png",
+      "sha256": "1895d77dffc0e9a0d5c988c707a0eff04c3e58b1281041bc058c929a5f0446e7"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-010.png",
+      "sha256": "6a41cba8342d0571276f48f058f88ad2bb1bca22f540fc786096b47f0da11e03"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-091.png",
+      "sha256": "247bad455531699fbcf1db96cff0b2c657eda7ce3f48fad3ebc5f51dc9673467"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-098.png",
+      "sha256": "c2ae19519b08368191ee203854d2044f4140bcf6b7c5f48a7186f9b896b1d33b"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-105.png",
+      "sha256": "ea64c3a2accab52331fdfa5febf0738d5e8609ef2164213a6b1f92249511afad"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-112.png",
+      "sha256": "9986b4496f8dfce94de15ba0f8322fe3983418533b4512d1ad5376298bb7fb74"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-119.png",
+      "sha256": "81770618e1ab33848dc14b76974ff22c22f457dcb073cb5579d1191f97d83b0a"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-complete.png",
+      "sha256": "75248e13dd61705935388d3528e353411f13ce29d96a2efb7601af629c721003"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-inventory-off.png",
+      "sha256": "ab32273328071c67421bfe4b606a8dcd4d1b1d5469e6f30dac1c9da89450267b"
+    },
+    {
+      "path": "artifacts/remaining-wheel-contact/workshop-hard/hard-redesign-report.json",
+      "sha256": "f80623f599dd4c79567bcd7f2b633135867b129af8588502dba27af9778c4527"
+    }
+  ],
+  "neighborAudit": {
+    "winding": {
+      "moved": 4,
+      "pairs": 55,
+      "aabbRejected": 1397,
+      "unbounded": 4,
+      "fittedHandPairs": 0,
+      "fittedHandExclusions": 60,
+      "packetRelativeMatrixChecks": 3
+    },
+    "train": {
+      "moved": 4,
+      "pairs": 69,
+      "aabbRejected": 1383,
+      "unbounded": 4,
+      "fittedHandPairs": 9,
+      "fittedHandExclusions": 51,
+      "packetRelativeMatrixChecks": 2
+    },
+    "motion": {
+      "moved": 7,
+      "pairs": 127,
+      "aabbRejected": 2414,
+      "unbounded": 7,
+      "fittedHandPairs": 21,
+      "fittedHandExclusions": 84,
+      "packetRelativeMatrixChecks": 3
+    }
+  },
+  "limitations": [
+    "Static endpoint phases only; neither running engagement, backlash, spring loading nor tolerances are certified.",
+    "Existing crown/click common and fitted joints are preserved. d144 is an open shell. d27 dial inner part is invalid in the original source; three zero-common checks involving it are provisional."
+  ],
+  "status": "reviewed-static-presentation-endpoints",
+  "candidateInputSha256": "a3ad0f8108af8d7b1d3b5e3e1a60855953684be39f904b0ef2cf533e0392c94f",
+  "pairComponents": {
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_2__0_1_1_89_1": {
+      "definitionId": "d_0_1_1_90",
+      "name": "ml01 Federhaustrommel I z80 m0,15",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:2/0:1:1:89:1",
+      "worldTransform": [
+        [0.46364006515665923, -0.8860236396290615, 6.47960342714905e-18, 6.2],
+        [0.8860236396290615, 0.46364006515665923, -1.14155539878141e-18, 8.1],
+        [-1.9927586858861885e-18, 6.270352631346491e-18, 1.0, -2.100000000000747],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_74": {
+      "definitionId": "d_0_1_1_249",
+      "name": "ml01 Kronrad z45 m0,15",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:74",
+      "worldTransform": [
+        [0.986240376957944, 0.16531763020879797, 0.0, 10.9202356932598],
+        [-0.165317630208798, 0.9862403769579438, 0.0, -2.16840434497101e-16],
+        [0.0, 0.0, 1.0, -3.720000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2": {
+      "definitionId": "d_0_1_1_94",
+      "name": "ml01 Minutenrad z64 m0,13",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:3/0:1:1:92:2",
+      "worldTransform": [
+        [0.9595174798911958, 0.281649082695557, 0.0, -6.231313698059617e-16],
+        [0.281649082695557, -0.9595174798911958, 0.0, 2.2182245581064115e-15],
+        [0.0, 0.0, -1.0, -2.940000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1": {
+      "definitionId": "d_0_1_1_237",
+      "name": "ml01 Kleinbodentrieb z10 m0,13",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:63/0:1:1:236:1",
+      "worldTransform": [
+        [-0.9237280213470681, -0.38304900806323805, 0.0, 3.17046045103862],
+        [-0.38304900806323805, 0.9237280213470681, 0.0, -3.617219999999998],
+        [0.0, 0.0, -1.0, -3.2100000000000066],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_5": {
+      "definitionId": "d_0_1_1_97",
+      "name": "ml01 Kupplungsrad z17 m0,15",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:5",
+      "worldTransform": [
+        [-2.0187217466174565e-21, -1.2284719451703705e-20, -1.0, 14.2002356932679],
+        [-0.8347894108466752, 0.5505693775885661, -5.0783828048525e-21, -1.39463862767957e-15],
+        [0.5505693775885661, 0.8347894108466752, -1.13666000890641e-20, -2.500000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20": {
+      "definitionId": "d_0_1_1_137",
+      "name": "ml01 Viertelrohr1 z12 m0,177",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:20",
+      "worldTransform": [
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0, -2.27682456221956e-15],
+        [0.0, 0.0, 1.0, -1.070000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1": {
+      "definitionId": "d_0_1_1_210",
+      "name": "ml01 Wechselrad1 z36 m0,177",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:1",
+      "worldTransform": [
+        [-0.21957769440021088, 0.9755950164499035, 0.0, 4.24287382474019],
+        [-0.9755950164499035, -0.21957769440021088, 0.0, 0.246011600000001],
+        [0.0, 0.0, 1.0, -1.2000000000000068],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1": {
+      "definitionId": "d_0_1_1_141",
+      "name": "ml01 Stundenrad1 z40 m0,17",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:1",
+      "worldTransform": [
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0, 0.0],
+        [0.0, 0.0, 1.0, -0.700000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2": {
+      "definitionId": "d_0_1_1_211",
+      "name": "ml01 Wechseltrieb1 z10 m0,17",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:2",
+      "worldTransform": [
+        [-0.17087063414231593, 0.9852934722141433, 0.0, 4.24287382474019],
+        [0.9852934722141433, 0.17087063414231593, 0.0, 0.2460116000000001],
+        [0.0, 0.0, -1.0, -1.4500000000000068],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1": {
+      "definitionId": "d_0_1_1_187",
+      "name": "ml01 Stundenrad2 z32 m0,12",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:1",
+      "worldTransform": [
+        [-0.9237280213470681, -0.38304900806323805, 0.0, -4.67706903509508e-15],
+        [-0.38304900806323805, 0.9237280213470681, 0.0, 7.39999999999999],
+        [0.0, 0.0, -1.0, -5.590000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2": {
+      "definitionId": "d_0_1_1_217",
+      "name": "ml01 Wechseltrieb3 z8 m0,12",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:2",
+      "worldTransform": [
+        [-0.9237280213470681, -0.38304900806323805, 0.0, 1.2705710541153772e-15],
+        [-0.38304900806323805, 0.9237280213470681, 0.0, 5.000000000000003],
+        [0.0, 0.0, -1.0, -5.680000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1": {
+      "definitionId": "d_0_1_1_213",
+      "name": "ml01 Wechselrad2 z36 m0,177",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:56/0:1:1:212:1",
+      "worldTransform": [
+        [1.0, 0.0, 0.0, 1.24009950124815e-15],
+        [0.0, 1.0, 0.0, 5.0],
+        [0.0, 0.0, 1.0, -1.150000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_2": {
+      "definitionId": "d_0_1_1_234",
+      "name": "ml01 Gangtrieb z9 m0,102",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:62/0:1:1:232:2",
+      "worldTransform": [
+        [0.9237280213470684, 0.3830490080632376, 0.0, -1.9998981789018702],
+        [0.3830490080632376, -0.9237280213470684, 0.0, -4.131405],
+        [0.0, 0.0, -1.0, -4.140000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2": {
+      "definitionId": "d_0_1_1_243",
+      "name": "ml01 Sekundenrad z81 m0,102",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:65/0:1:1:241:2",
+      "worldTransform": [
+        [0.9641243939894371, 0.2654508483966496, 0.0, 4.3817014361465e-15],
+        [0.2654508483966497, -0.9641243939894368, 0.0, -3.84383551464001e-15],
+        [0.0, 0.0, -1.0, -3.830000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2": {
+      "definitionId": "d_0_1_1_238",
+      "name": "ml01 Kleinbodenrad z75 m0,1159",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:63/0:1:1:236:2",
+      "worldTransform": [
+        [1.0, 0.0, 0.0, 3.17046045103862],
+        [0.0, 1.0, 0.0, -3.61722],
+        [0.0, 0.0, 1.0, -4.020000000000007],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1": {
+      "definitionId": "d_0_1_1_242",
+      "name": "ml01 Sekundentrieb z8 m0,1159",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:65/0:1:1:241:1",
+      "worldTransform": [
+        [0.9237280213470682, 0.38304900806323783, 0.0, 5.204170427930427e-15],
+        [0.3830490080632379, -0.923728021347068, 0.0, -6.0715321659188185e-15],
+        [0.0, 0.0, -1.0, -4.310000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    }
+  },
+  "validation": {
+    "all-nine-tooth-contacts-clear": true,
+    "no-new-penetration": true,
+    "all-moved-valid-solids": true,
+    "all-fitted-hands-accounted": true,
+    "all-leaves-accounted": true,
+    "all-packet-relative-poses-preserved": true,
+    "all-diamond-checks-disjoint": true
+  },
+  "numericalReportingThresholdMm3": 1e-8,
+  "packetRelativeMatrixMaxError": 8.789246760600402e-16,
+  "rejectedCrownPhase": {
+    "worldZDegrees": 2.7,
+    "clickCommonBeforeMm3": 0.007094859627829178,
+    "clickCommonAfterMm3": 0.02516834235074245,
+    "reason": "increases click penetration; keep crown, click and spring fixed"
+  },
+  "verification": {
+    "cpuTests": 111,
+    "runtimeChecks": 115,
+    "overviewBuffersUnchanged": 222,
+    "trackedOriginalAssetsUnchanged": 36,
+    "sampledAccessChecks": 1119,
+    "livePoseChecksPerStage": 75,
+    "explorerChecks": 350,
+    "workshopFocusedChecks": 92,
+    "workshopEasy": {
+      "actions": 89,
+      "checks": 538
+    },
+    "workshopHard": {
+      "actions": 284,
+      "checks": 1708
+    },
+    "walkingJourneyChecks": 23,
+    "collisionLandings": 16,
+    "typecheck": "pass",
+    "lint": "pass",
+    "productionBuild": "pass",
+    "sourceHashes": "pass",
+    "meshoptByteIdentity": "pass",
+    "httpMetadata": "pass",
+    "browserMode": "headless-only"
+  }
+}

@@ -4,7 +4,9 @@ Ratchet wheel **d131, occurrence 15**, and its **barrel II core d87** receive on
 rigid **+1.8° rotation about their existing world-Z axis**. Ratchet occurrence 14
 stays at its source pose. This clears the visible tooth penetration while keeping
 the keyed wheel/core mounting exactly as supplied. The earlier d96 correction
-remains unchanged; nine other confirmed tooth pairs remain unresolved.
+remains unchanged. The nine other confirmed pairs were subsequently cleared in
+the [remaining-pairs review](REMAINING_WHEEL_CONTACT_REVIEW.md); this document
+retains the ratchet milestone measurements.
 
 ## Identities and source
 

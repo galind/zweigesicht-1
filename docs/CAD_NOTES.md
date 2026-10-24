@@ -49,13 +49,15 @@ changing geometry or increasing any of 14 tested neighbor commons. The
 [ratchet follow-up](RATCHET_CONTACT_REVIEW.md) adds a +1.8° world-Z rigid
 phase to d131 occurrence 15 and its keyed barrel II core d87, clearing their
 ratchet contact by 0.031731 mm while preserving the four-lobed mounting fit.
-Nine other tooth pairs retain their source poses pending coupled-contact review.
+The [remaining-pairs follow-up](REMAINING_WHEEL_CONTACT_REVIEW.md) clears the
+other nine with 15 further occurrence phases, preserving joined packets and
+leaving crown/click and escapement phases fixed. All 12 initial tooth pairs are
+clear; d144 remains an open shell and d27 is an invalid source dial solid.
 
 Explorer retains raw `assembled` matrices and uses a display override; Workshop
 derives its rendered seats from unchanged base targets; walking uses the same
 posed mesh for rendering and collision. Source GLBs and mesh buffers are
-unchanged. Raw-source pose error intentionally includes d96 and the ratchet/core
-phases; compare presentation pose separately. See the review for reproduction, per-pair local
+unchanged. Raw-source pose error intentionally includes all 18 phased occurrences; compare presentation pose separately. See the review for reproduction, per-pair local
 close-ups, provenance, source-shell limitations and the lack of dynamic or
 mechanical certification.
 
@@ -85,7 +87,7 @@ Two consequential exclusions remain: independent main plate d195 narrows the set
 
 ## Workshop membership and dependencies
 
-[play-manifest.json](../assets/authored/play-manifest.json), version `play-4`, is the sole membership/dependency representation. The 265-leaf finish contains 222 selected movement and 43 dial/hand leaves; 100 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Its stored base targets contain five corrected blade endpoints and 260 exact source endpoints. The separate reviewed d96 and ratchet/core phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades, two wheels and one barrel core. Save format and dependency membership are unchanged.
+[play-manifest.json](../assets/authored/play-manifest.json), version `play-4`, is the sole membership/dependency representation. The 265-leaf finish contains 222 selected movement and 43 dial/hand leaves; 100 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Its stored base targets contain five corrected blade endpoints and 260 exact source endpoints. The separate 18 reviewed occurrence phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades and 18 wheel-packet components. Save format and dependency membership are unchanged.
 
 The shared mainplate subtree has 18 leaves: 16 remain fitted (plate, eight direct jewels, two pins and five Incabloc leaves), while radial d201 screws `194_11`/`194_12` are player placements. They wait for the complete central dial and precede its hands. Their source-local +Z withdrawal axes transform into radial XY directions; the original head/shank and mainplate seat faces are recorded in `explosion.json`. Guided edge cameras are presentation choices, not screw-turn simulation.
 

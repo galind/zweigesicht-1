@@ -163,15 +163,15 @@ v.ingest(overviewScene);v.retarget();v.applyPose(0);
 assert.equal(v.renderParts.size,222);
 assert.equal(new Set([...v.renderParts.values()].map(p=>p.mesh.geometry)).size,138);
 assert.equal(v.assemblyError('presentation'),0);
-const reviewedPhases=new Map([[PREFIX+'4',6.25],[PREFIX+'15',-1.8],[PREFIX+'1__0_1_1_84_3',1.8]]);
+const reviewedPhases=new Map(Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT,'assets/source-manifest/remaining-wheel-contact.json'),'utf8')).expectedLocalPhases));
 for(const [id,p] of v.renderParts){
  assert.ok(p.assembled.equals(new THREE.Matrix4().set(...p.source.worldTransform.flat())), 'Immutable raw source pose');
  const expected=p.assembled.clone();
  if(reviewedPhases.has(id))expected.multiply(new THREE.Matrix4().makeRotationZ(reviewedPhases.get(id)*Math.PI/180));
- assert.ok(p.mesh.matrix.equals(expected), 'Only d96 and the reviewed ratchet/core packet receive static phases');
+ assert.ok(Math.max(...p.mesh.matrix.elements.map((v,i)=>Math.abs(v-expected.elements[i])))<1e-12, 'Only reviewed wheel packets receive static phases');
 }
 assert.ok(v.assemblyError('source')>0, 'Raw-source audit still exposes the intentional phase difference');
-results.push({check:'d96 and one rigid ratchet/core packet phased; every source matrix immutable and every other displayed movement pose unchanged',status:'pass'});
+results.push({check:'18 reviewed occurrences phased; every source matrix immutable and every other displayed movement pose unchanged',status:'pass'});
 let annotatedMeshes=0;
 for(const part of v.renderParts.values()){
  const data=v.sourceSurfaces.get(part.source.definitionId),g=part.mesh.geometry;

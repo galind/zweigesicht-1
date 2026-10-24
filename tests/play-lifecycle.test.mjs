@@ -97,8 +97,8 @@ test('offscreen thumbnail pixels are encoded for browser display without changin
 });
 
 test('Workshop load and reload apply the reviewed wheel phase once to seat and mesh', async () => {
-  for (const [suffix, angle] of [['4', 6.25], ['15', -1.8], ['1__0_1_1_84_3', 1.8]]) {
-    const id = 'p_0_1_1_1__0_1_1_1_4__0_1_1_83_' + suffix;
+  const reviewed = JSON.parse(fs.readFileSync(new URL('../assets/source-manifest/remaining-wheel-contact.json', import.meta.url)));
+  for (const [id, angle] of Object.entries(reviewed.expectedLocalPhases)) {
     const record = JSON.parse(fs.readFileSync(new URL('../explorer/public/models/assembly-manifest.json', import.meta.url))).instances.find(p => p.id === id);
     const globals = loadGlobals({overview: async () => scene(id).object, catalog: async () => scene('catalog').object, diamond: async () => scene('diamond').object});
     globals.fetch = async path => ({ok: true, json: async () => path.includes('assembly-manifest') ? {instances: [record]} : {overview: 'overview', catalog: 'catalog'}});
@@ -109,9 +109,10 @@ test('Workshop load and reload apply the reviewed wheel phase once to seat and m
       await v.load();
       assert.ok(v.ready);
       const piece = v.pieces.get(id);
-      assert.ok(piece.pose.equals(expected));
-      assert.ok(piece.mesh.matrix.equals(expected));
-      assert.ok(piece.bounds.equals(new THREE.Box3().setFromBufferAttribute(piece.mesh.geometry.getAttribute('position')).applyMatrix4(expected)));
+      assert.ok(Math.max(...piece.pose.elements.map((v,i)=>Math.abs(v-expected.elements[i]))) < 1e-12);
+      assert.ok(Math.max(...piece.mesh.matrix.elements.map((v,i)=>Math.abs(v-expected.elements[i]))) < 1e-12);
+      const expectedBounds = new THREE.Box3().setFromBufferAttribute(piece.mesh.geometry.getAttribute('position')).applyMatrix4(expected);
+      assert.ok(piece.bounds.min.distanceTo(expectedBounds.min)<1e-12 && piece.bounds.max.distanceTo(expectedBounds.max)<1e-12);
       assert.deepEqual(v.manifest.targetPoses[id], record.worldTransform);
     }
     v.clearPieces();

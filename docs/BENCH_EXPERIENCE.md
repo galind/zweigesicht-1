@@ -8,10 +8,11 @@ without the catalog, fitted case, dials or optional hands. Nothing runs mechanic
 The [24 October wheel contact review](WHEEL_CONTACT_REVIEW.md) records shared
 static presentation exceptions: d96 rotates +6.25° about its unchanged bore axis;
 ratchet instance 15 and its keyed barrel II core rotate together +1.8° world Z.
-See the [ratchet contact review](RATCHET_CONTACT_REVIEW.md).
+The [remaining-pairs review](REMAINING_WHEEL_CONTACT_REVIEW.md) adds 15 occurrence
+phases for the other nine tooth pairs, preserving joined wheel packets.
 Source matrices, mesh buffers and dimensions remain intact. Rendering and
 collision both use that reviewed pose on either holder side. The current
-`collision-check.mjs` audits all three phased occurrences and all other source
+`collision-check.mjs` audits all 18 phased occurrences and all other source
 matrices, both collision transforms and 16 sampled landings. Earlier zero-source-
 error measurements below describe their original, pre-correction revisions.
 
@@ -201,7 +202,7 @@ records STEP planes and cylinders in `artifacts/bench/holder-surfaces.json`.
 Both holders rotate −90° about X from Z-up into scene Y-up. The crown relief
 remains at +X. The dial holder's internal floor is at 9.2 mm, below the lowest
 presented movement extent (9.64 mm). Original movement occurrence matrices,
-meshes and scale remain unchanged; the d96 and ratchet/core display phases are applied separately.
+meshes and scale remain unchanged; the 18 reviewed occurrence phases are applied separately.
 Nominal seating is an authored static
 presentation informed by these measurements and images, not tolerance or
 holding-force certification.

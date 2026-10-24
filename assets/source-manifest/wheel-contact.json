@@ -69,7 +69,10 @@
       "sourceCommonVolumeMm3": 0.040314890553963686,
       "maxVerifiedInteriorWitnessDepthMm": 0.06715373698008052,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.010380949248411384,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "93-96",
@@ -97,7 +100,10 @@
       "sourceCommonVolumeMm3": 0.010055918762912912,
       "maxVerifiedInteriorWitnessDepthMm": 0.06541736033669976,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.021691735770226456,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "97-249",
@@ -107,7 +113,10 @@
       "sourceCommonVolumeMm3": 0.009449353596088153,
       "maxVerifiedInteriorWitnessDepthMm": 0.06222451042992636,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.016567463743841087,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "131-131",
@@ -134,7 +143,10 @@
       "sourceCommonVolumeMm3": 0.008949716036611845,
       "maxVerifiedInteriorWitnessDepthMm": 0.04389686388275858,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.013120182234825889,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "141-211",
@@ -147,7 +159,10 @@
       "sourceCommonVolumeMm3": 0.015449548026262238,
       "maxVerifiedInteriorWitnessDepthMm": 0.06855249461247606,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.020681566970047617,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "187-217",
@@ -160,7 +175,10 @@
       "sourceCommonVolumeMm3": 1.0339956609523051e-5,
       "maxVerifiedInteriorWitnessDepthMm": 0.0009230853016007027,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.004478894179656371,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "210-213",
@@ -173,7 +191,10 @@
       "sourceCommonVolumeMm3": 0.0023575960026917145,
       "maxVerifiedInteriorWitnessDepthMm": 0.018245088605763723,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.0060230943584458655,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "234-243",
@@ -186,7 +207,10 @@
       "sourceCommonVolumeMm3": 0.005208177789298621,
       "maxVerifiedInteriorWitnessDepthMm": 0.0525198859730987,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.023201605160258317,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     },
     {
       "key": "238-242",
@@ -199,7 +223,10 @@
       "sourceCommonVolumeMm3": 0.00589281232097677,
       "maxVerifiedInteriorWitnessDepthMm": 0.06076746901683805,
       "runtimeAndFineMeshWitnessesInsideBoth": true,
-      "decision": "preserve-source-pose-pending-coupled-review"
+      "decision": "static-phase-corrected",
+      "displayCommonVolumeMm3": 0,
+      "displayMinimumDistanceMm": 0.02717380670190248,
+      "followUpReview": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
     }
   ],
   "coaxialJoints": [
@@ -334,15 +361,34 @@
   ],
   "limitations": [
     "Static unloaded endpoint pose only; no continuous-cycle, escapement, spring, backlash or manufacturing-tolerance certification.",
-    "Phase alternatives for the remaining pairs need coupled-packet and neighboring-contact review before applying.",
+    "All 12 initial non-coaxial tooth contacts have static phase overrides; original d144 open shell, invalid d27 dial solid, crown/click common and loaded behavior remain separate questions.",
     "Original source and runtime geometry assets are unchanged."
   ],
   "runtimeMeshReview": {
-    "correctedPairs": ["85-96", "93-96", "131-131"],
+    "correctedPairs": [
+      "85-96",
+      "90-249",
+      "93-96",
+      "94-237",
+      "97-249",
+      "131-131",
+      "137-210",
+      "141-211",
+      "187-217",
+      "210-213",
+      "234-243",
+      "238-242"
+    ],
     "sourceTriangleIntersections": true,
     "correctedTriangleIntersections": false,
-    "minimumTriangleDistancesMm": [0.027128355499877885, 0.0228209068327867, 0.03222530234281116],
-    "unchangedOverviewMeshBuffers": 222
+    "minimumTriangleDistancesMm": [
+      0.027128355499877885, 0.010658531745217744, 0.0228209068327867, 0.02216771116694411,
+      0.01675019191399866, 0.03222530234281116, 0.013323357560388839, 0.02106415094022055,
+      0.004802278395523961, 0.006566479235616423, 0.023203904705144295, 0.027175921820452406
+    ],
+    "unchangedOverviewMeshBuffers": 222,
+    "latestReport": "artifacts/remaining-wheel-contact/mesh-pairs.json"
   },
-  "followup": "assets/source-manifest/ratchet-contact.json"
+  "followup": "assets/source-manifest/ratchet-contact.json",
+  "remainingPairsFollowup": "assets/source-manifest/remaining-wheel-contact.json"
 }

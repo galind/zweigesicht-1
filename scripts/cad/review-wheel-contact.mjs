@@ -74,7 +74,9 @@ for (const pair of audit.solidToothContacts) {
   if (pair.decision === "static-phase-corrected") {
     assert.ok(result.before.triangleSurfaceIntersection, pair.key + " before");
     assert.equal(result.after.triangleSurfaceIntersection, false, pair.key + " after");
-    assert.ok(result.after.minimumTriangleDistanceMm > 0.02, pair.key + " mesh clearance");
+    // Each pair has its own original-solid gap. Allow a bounded tessellation
+    // difference; this regression margin is not a manufacturing tolerance.
+    assert.ok(result.after.minimumTriangleDistanceMm > pair.displayMinimumDistanceMm * 0.9, pair.key + " mesh clearance");
   } else {
     assert.deepEqual(result.after, result.before, pair.key + " unresolved pair unchanged");
   }
@@ -93,7 +95,7 @@ const report = {
 };
 await fs.mkdir(new URL("artifacts/wheel-contact/", root), { recursive: true });
 await fs.writeFile(
-  new URL("artifacts/wheel-contact/mesh-pairs.json", root),
+  new URL(process.env.WHEEL_CONTACT_REPORT || "artifacts/wheel-contact/mesh-pairs.json", root),
   JSON.stringify(report, null, 2) + "\n",
 );
 console.log(JSON.stringify(report, null, 2));

@@ -1,11 +1,12 @@
 # Wheel contact review — 24 October 2026
 
-Two static phase corrections are now recorded: transfer wheel **d96** receives
-**+6.25° about its original local Z bore axis**, clearing barrel II d85 and center
-pinion d93. The [ratchet follow-up](RATCHET_CONTACT_REVIEW.md) rotates d131
-occurrence 15 and its keyed core together by +1.8° world Z. Nine other
-non-coaxial solid contacts remain at their original poses. They are recorded
-findings, not a conclusion that the maker's manufactured movement is defective.
+All 12 non-coaxial tooth contacts from this survey now have reviewed static
+phase corrections. Transfer wheel **d96** receives **+6.25° local Z**; the
+[ratchet follow-up](RATCHET_CONTACT_REVIEW.md) rotates occurrence 15 and its
+keyed core +1.8° world Z. The [remaining-pairs review](REMAINING_WHEEL_CONTACT_REVIEW.md)
+clears the other nine with 15 additional rigid occurrence phases. These are
+presentation endpoints, not a conclusion that the maker's manufactured movement
+is defective or a certification of running engagement.
 
 The decision and source/evidence hashes are in
 [wheel-contact.json](../assets/source-manifest/wheel-contact.json). The separate
@@ -62,17 +63,17 @@ witness measurements in `details.json`.
 | Definitions / components                         | Occurrence suffixes                   | Source common (mm³) | Final decision                           |
 | ------------------------------------------------ | ------------------------------------- | ------------------: | ---------------------------------------- |
 | d85 barrel II / d96 transfer wheel               | `1__0_1_1_84_1` / `4`                 |         0.036083741 | Cleared by d96 phase                     |
-| d90 barrel I / d249 crown wheel                  | `2__0_1_1_89_1` / `74`                |         0.040314891 | Source pose retained                     |
+| d90 barrel I / d249 crown wheel                  | `2__0_1_1_89_1` / `74`                |         0.040314891 | Cleared; see remaining-pairs review                     |
 | d93 center pinion / d96 transfer wheel           | `3__0_1_1_92_1` / `4`                 |         0.010153667 | Cleared by d96 phase                     |
-| d94 center wheel / d237 third pinion             | `3__0_1_1_92_2` / `63__0_1_1_236_1`   |         0.010055919 | Source pose retained                     |
-| d97 coupling wheel / d249 crown wheel            | `5` / `74`                            |         0.009449354 | Source pose retained; perpendicular axes |
+| d94 center wheel / d237 third pinion             | `3__0_1_1_92_2` / `63__0_1_1_236_1`   |         0.010055919 | Cleared; see remaining-pairs review                     |
+| d97 coupling wheel / d249 crown wheel            | `5` / `74`                            |         0.009449354 | Cleared; perpendicular axes |
 | d131 ratchet wheels                              | `14` / `15`                           |         0.060692779 | Cleared by ratchet/core packet phase     |
-| d137 cannon pinion 1 / d210 motion-works wheel 1 | `20` / `55__0_1_1_209_1`              |         0.008949716 | Source pose retained                     |
-| d141 hour wheel 1 / d211 motion-works pinion 1   | `26__0_1_1_140_1` / `55__0_1_1_209_2` |         0.015449548 | Source pose retained                     |
-| d187 hour wheel 2 / d217 motion-works pinion 3   | `40__0_1_1_186_1` / `57__0_1_1_215_2` |         0.000010340 | Source pose retained; small contact      |
-| d210 / d213 motion-works wheels 1 and 2          | `55__0_1_1_209_1` / `56__0_1_1_212_1` |         0.002357596 | Source pose retained                     |
-| d234 escape pinion / d243 seconds wheel          | `62__0_1_1_232_2` / `65__0_1_1_241_2` |         0.005208178 | Source pose retained                     |
-| d238 third wheel / d242 seconds pinion           | `63__0_1_1_236_2` / `65__0_1_1_241_1` |         0.005892812 | Source pose retained                     |
+| d137 cannon pinion 1 / d210 motion-works wheel 1 | `20` / `55__0_1_1_209_1`              |         0.008949716 | Cleared; see remaining-pairs review                     |
+| d141 hour wheel 1 / d211 motion-works pinion 1   | `26__0_1_1_140_1` / `55__0_1_1_209_2` |         0.015449548 | Cleared; see remaining-pairs review                     |
+| d187 hour wheel 2 / d217 motion-works pinion 3   | `40__0_1_1_186_1` / `57__0_1_1_215_2` |         0.000010340 | Cleared; nominal gap 0.004479 mm      |
+| d210 / d213 motion-works wheels 1 and 2          | `55__0_1_1_209_1` / `56__0_1_1_212_1` |         0.002357596 | Cleared; see remaining-pairs review                     |
+| d234 escape pinion / d243 seconds wheel          | `62__0_1_1_232_2` / `65__0_1_1_241_2` |         0.005208178 | Cleared; see remaining-pairs review                     |
+| d238 third wheel / d242 seconds pinion           | `63__0_1_1_236_2` / `65__0_1_1_241_1` |         0.005892812 | Cleared; see remaining-pairs review                     |
 
 These are tooth-region solid penetrations at the supplied static poses, beyond
 ordinary overlapping pitch/addendum envelopes. Their existence is established;
@@ -119,9 +120,10 @@ section sampling, establish both final pair clearances:
 `review-wheel-contact.mjs` independently checks the actual Meshopt-decoded runtime
 triangles with BVHs. Both source pairs intersect before; neither intersects
 after. Their rendered mesh gaps are 0.027128 mm and 0.022821 mm respectively.
-The ratchet follow-up clears one further pair. The nine unresolved pairs keep
-identical before/after mesh results, and all 222
-overview mesh buffers retain their original position/normal/index bytes.
+The ratchet and remaining-pairs follow-ups clear all other initial tooth pairs.
+All 222 overview mesh buffers retain their original position/normal/index bytes.
+The latest all-pair mesh report is under `artifacts/remaining-wheel-contact/`;
+older hashed reports describe their original review milestones.
 
 See `artifacts/wheel-contact/transfer-wheel-before-after.png`. This is a valid
 unloaded static phase choice, not a reconstruction of the maker's precise
@@ -184,13 +186,9 @@ other confirmed parallel-axis pairs; it does not solve a coupled train or qualif
 perpendicular crown-wheel contact. Use only headless browser runners for this
 review; the bench collision runner accepts `PLAY_QA_OUTPUT` for local evidence.
 
-The remaining nine pairs retain identical before/after geometry and poses, so
-their measured commons are unchanged. Next options are to investigate coherent
-wheel/pinion packet phases and all their neighbors, or seek maker/mechanical
-review where clocking is constrained by ratchets, setting states or escapement
-contact. In particular, review both crown-wheel interfaces together and preserve coupled
-mounting/contact relationships as in the ratchet follow-up; do not apply isolated
-pair phases blindly. Closing
-d144's shell, modifying tooth profiles or moving any axes is not justified by
-this review. Static visual clearance is not mechanical certification, and the
-existing release gates remain in force.
+The [remaining-pairs review](REMAINING_WHEEL_CONTACT_REVIEW.md) records the
+coupled packet phases and neighbor checks that clear all nine later-reviewed
+pairs. The crown/click and escapement phases remain unchanged. Closing d144's
+shell, repairing the invalid d27 dial solid, changing tooth profiles or moving
+axes remains outside this correction. Static visual clearance is not mechanical
+certification, and the existing release gates remain in force.

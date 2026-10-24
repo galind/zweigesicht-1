@@ -11,13 +11,10 @@ const id = "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4";
 const part = manifest.instances.find((p) => p.id === id);
 const base = () => new THREE.Matrix4().set(...part.worldTransform.flat());
 
-const phases = new Map([
-  [id, 6.25],
-  ["p_0_1_1_1__0_1_1_1_4__0_1_1_83_15", -1.8],
-  ["p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3", 1.8],
-]);
+const reviewed = read("../assets/source-manifest/remaining-wheel-contact.json");
+const phases = new Map(Object.entries(reviewed.expectedLocalPhases));
 
-test("only the transfer wheel and reviewed ratchet/core packet receive rigid static phases", () => {
+test("only the reviewed occurrences receive rigid static phases", () => {
   assert.equal(override.sourceSha256, manifest.source.sha256);
   assert.equal(override.wheels.length, phases.size);
   assert.deepEqual(new Map(override.wheels.map((w) => [w.leafId, w.localZDegrees])), phases);
@@ -60,22 +57,31 @@ test("Workshop base endpoint and source remain unchanged; repeated presentation 
   assert.ok(Math.max(...unphase.elements.map((v, i) => Math.abs(v - source.elements[i]))) < 1e-14);
 });
 
-test("ratchet and keyed core retain their relative mounting pose and Workshop base endpoints", () => {
+test("all joined packets retain relative mounting poses and immutable Workshop endpoints", () => {
   const play = read("../assets/authored/play-manifest.json");
-  const ids = [...phases.keys()].slice(1);
-  const sources = ids.map((id) =>
-    new THREE.Matrix4().set(...manifest.instances.find((p) => p.id === id).worldTransform.flat()),
-  );
-  const posed = ids.map((id, i) => wheelDisplayMatrix(id, sources[i]));
-  const before = sources[0].clone().invert().multiply(sources[1]);
-  const after = posed[0].clone().invert().multiply(posed[1]);
-  assert.ok(Math.max(...before.elements.map((n, i) => Math.abs(n - after.elements[i]))) < 1e-12);
-  for (let i = 0; i < ids.length; i++) {
-    assert.deepEqual(
-      play.targetPoses[ids[i]],
-      manifest.instances.find((p) => p.id === ids[i]).worldTransform,
+  const packets = new Map();
+  for (const entry of override.wheels) {
+    const packet = entry.rigidPacket ?? entry.leafId;
+    if (!packets.has(packet)) packets.set(packet, []);
+    packets.get(packet).push(entry.leafId);
+  }
+  for (const ids of packets.values()) {
+    const sources = ids.map((id) =>
+      new THREE.Matrix4().set(...manifest.instances.find((p) => p.id === id).worldTransform.flat()),
     );
-    for (let repeat = 0; repeat < 100; repeat++)
-      assert.ok(wheelDisplayMatrix(ids[i], sources[i]).equals(posed[i]));
+    const posed = ids.map((id, i) => wheelDisplayMatrix(id, sources[i]));
+    for (let i = 0; i < ids.length; i++) {
+      const before = sources[0].clone().invert().multiply(sources[i]);
+      const after = posed[0].clone().invert().multiply(posed[i]);
+      assert.ok(
+        Math.max(...before.elements.map((v, k) => Math.abs(v - after.elements[k]))) < 1e-12,
+      );
+      assert.deepEqual(
+        play.targetPoses[ids[i]],
+        manifest.instances.find((p) => p.id === ids[i]).worldTransform,
+      );
+      for (let repeat = 0; repeat < 100; repeat++)
+        assert.ok(wheelDisplayMatrix(ids[i], sources[i]).equals(posed[i]));
+    }
   }
 });
