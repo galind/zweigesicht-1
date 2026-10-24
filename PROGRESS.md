@@ -3,6 +3,59 @@
 Updated 24 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Plain desk and gravity jetpack — 24 October 2026
+
+Implemented locally on `codex/desk-jetpack`. All prior ramps, recessed desks,
+terraces and stair concepts below are superseded. Current behavior and
+reproduction are in [BENCH_EXPERIENCE.md](docs/BENCH_EXPERIENCE.md).
+
+- One 124 × 104 mm wooden desk and one thin green mat, with two intact original
+  red holders resting directly on it. Bridge-up and dial-side-up stations sit
+  side by side, 54 mm apart. Only complete-station translations changed;
+  movement geometry, reviewed phases, finishes and original crowns are preserved.
+  Environment is two visible/colliding meshes, 24 triangles; no access structures,
+  wells, rails, props or hidden floors over movement openings.
+- Actual arrival is on the mat, feet (0, 0.000001, 54), eyes Y1.480001, facing both
+  holders and their aisle. Visitor remains 1.65 mm tall with 1.48 mm eye offset.
+  Full-height holder walls obscure most top details at ground level; flight
+  reveals them. Before/after actual entry views were visually inspected.
+- Hold Space applies continuous upward acceleration against unchanged 18 mm/s²
+  gravity. Release coasts then falls; thrust during a fall brakes before climbing.
+  Quadratic air resistance and gradual horizontal acceleration allow precision.
+  WASD works in air/on ground; landing and relaunch need no mode switch. No hover,
+  altitude lock, flight toggle, descend control, fuel or flight HUD. High-flight
+  clipping is extended while retaining eye height and the existing mouse look.
+- Capsule-radius desk bounds constrain only outward travel on every substep,
+  at every altitude, including corners and fast/long frames. Edge sliding stays
+  available. No automatic repositioning/recovery, wall meshes or rails; R remains
+  an explicit return to arrival. Escape, blur and hidden-tab transitions clear
+  held controls/thrust; momentum persists and visible gravity continues.
+- Verified: **116 CPU tests**, typecheck, lint, production build, runtime source
+  regression, inventory and original-holder preparation/hash checks. Independent
+  source-pose audit retains both sets of 227 leaves and all 18 reviewed phases;
+  world/collision matrix error ≤1.43e−14. Sixteen real-CAD drop samples, source
+  openings and environment clearances pass. **63 live journey/fixture checks**
+  cover takeoff, held thrust, release, coast/fall, descent braking, landing and
+  relaunch; both movements reached/landed without reset or swap; every edge and
+  corner grounded/airborne (including 50/500 mm altitude and a 100 mm/s,
+  10-second-frame stress fixture), edge sliding, tops/undersides/sides, ground
+  circulation and real-mat falls. Six lifecycle checks cover focus loss,
+  visibility, graphics retry and late-load disposal. Eleven interaction/quality
+  checks also pass, including captured mouse look, idle sleep and Auto adaptation.
+- Local production review: <http://127.0.0.1:4185/bench>. Actual first-person
+  arrival, flight approaches and landed views plus camera/feet records are in
+  `artifacts/jetpack/review.html` and `jetpack-report.json`. Geometry and high-flight
+  reports accompany them. Captures/generated assets/editable Blender stay ignored.
+
+**Crown/holder interference remains explicitly unresolved.** Original source
+contacts and other previously recorded CAD/mechanical uncertainties are unchanged.
+Very narrow or enclosed CAD cavities can require explicit R recovery. Headless
+local tests do not qualify physical mouse feel, other devices, accessibility or
+sustained performance; earlier performance measurements are historical. Next:
+owner walkthrough and representative-device review; mechanical fit needs a
+separate maker/reviewer decision. No push, PR, deployment, publication or CAD
+redistribution was performed; release gates remain closed.
+
 ## Design C — exposed holders, stairs and hops — 24 October 2026
 
 The owner now prefers holder bases on the desk, with no recesses or ramps, and

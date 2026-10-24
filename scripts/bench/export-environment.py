@@ -18,7 +18,7 @@ bpy.ops.object.delete(use_global=False)
 bpy.context.scene.unit_settings.system = 'METRIC'
 bpy.context.scene.unit_settings.scale_length = .001
 collections = {}
-for name in ['ENV_WALKABLE', 'ENV_BOUNDARY', 'ENV_DECOR', 'INTERFACE_BRIDGE', 'INTERFACE_DIAL']:
+for name in ['ENV_WALKABLE']:
     c = bpy.data.collections.new(name)
     bpy.context.scene.collection.children.link(c)
     collections[name] = c
@@ -97,59 +97,13 @@ def prism(name, footprint, top, bottom, mat, role='walkable', group=None):
 def rect(name,x0,x1,z0,z1,top,bottom,mat,role='walkable',group=None):
     return prism(name,[(x0,z0),(x1,z0),(x1,z1),(x0,z1)],top,bottom,mat,role,group)
 
-def terrace(name,x0,x1,z0,z1,top,group=None):
-    under = (lambda x,z: top(x,z)-.12) if callable(top) else top-.12
-    rect(name+' joinery',x0,x1,z0,z1,under,0,walnut,group=group)
-    # Thin visible top, welded to matching support profile without hidden planes.
-    footprint=[(x0,z0),(x1,z0),(x1,z1),(x0,z1)]
-    heights=[top(x,z) if callable(top) else top for x,z in footprint]
-    verts=[(x,h-.12,z) for (x,z),h in zip(footprint,heights)]+[(x,h,z) for (x,z),h in zip(footprint,heights)]
-    mesh(name+' linoleum',verts,[(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)],green,group=group)
-
-# One open worktop replaces the stepped terraces and raised promenade.
-# Original holders remain based at Y0 inside actual through-wells.
+# One solid wooden desk and one thin mat. Original holder bases remain at Y0.
+# No cuts, interfaces or geometry above the mat; source openings stay open.
 floor = LAYOUT['worktopHeight']
-rect('Desk base',-90,90,-70,70,0,-4,walnut)
-worktop = rect('Walnut worktop',-90,90,-70,70,floor-.12,0,walnut)
-mat = rect('Green work surface',-89,89,-69,69,floor,floor-.12,green)
-for st in LAYOUT['stations']:
-    x,z,h=st['x'],st['z'],st['height']
-    landing=x-25
-    start=landing-(h-floor)*6
-    group='INTERFACE_'+st['id'].upper()
-    terrace(st['id']+' direct ramp',start,landing,z-3,z+3,
-            lambda px,pz,start=start:floor+(px-start)/6,group)
-    terrace(st['id']+' landing',landing,x-21.2,z-3,z+3,h,group)
-for st in LAYOUT['stations']:
-    x,z,h=st['x'],st['z'],st['height']
-    end=x+st['end']
-    group='INTERFACE_'+st['id'].upper()
-    rect(st['id']+' CAD threshold',x-21.2,end-1.2,z-1.4,z+1.4,h,h-.2,steel,group=group)
-    # The bridge surface is Y17.3399: a .12mm eased tip permits a return step
-    # without lowering the original underside or penetrating reviewed CAD.
-    tip=.12 if st['id']=='bridge' else .08
-    rect(st['id']+' threshold nose',end-1.2,end,z-1.4,z+1.4,
-         lambda px,pz:h-tip*(px-(end-1.2))/1.2,h-.2,steel,group=group)
-# Cut the same real holder wells and crown clearances through both layers.
-for surface in [worktop, mat]:
-    for st in LAYOUT['stations']:
-        bpy.ops.mesh.primitive_cylinder_add(vertices=128,radius=22.8,depth=40,location=(st['x'],-st['z'],10))
-        cutter=bpy.context.object
-        bpy.context.view_layer.objects.active=surface
-        mod=surface.modifiers.new('Open holder well','BOOLEAN');mod.operation='DIFFERENCE';mod.object=cutter
-        bpy.ops.object.modifier_apply(modifier=mod.name)
-        bpy.data.objects.remove(cutter,do_unlink=True)
-        cutter=rect('Temporary crown clearance',st['x']+19,st['x']+27,st['z']-5,st['z']+5,30,-1,walnut)
-        bpy.context.view_layer.objects.active=surface
-        mod=surface.modifiers.new('Crown sector relief','BOOLEAN');mod.operation='DIFFERENCE';mod.object=cutter
-        bpy.ops.object.modifier_apply(modifier=mod.name)
-        bpy.data.objects.remove(cutter,do_unlink=True)
-    # Boolean cutters must not introduce a second glTF primitive/material.
-    original_material = surface.data.materials[0]
-    surface.data.materials.clear()
-    surface.data.materials.append(original_material)
-    for polygon in surface.data.polygons: polygon.material_index = 0
-# The ivory background comes from the renderer. No backdrop wall, guards or props.
+bounds = LAYOUT['deskBounds']
+x0,x1,z0,z1 = [bounds[k] for k in ['minX','maxX','minZ','maxZ']]
+rect('Wooden desk',x0,x1,z0,z1,floor-.12,floor-4,walnut)
+rect('Green mat',x0+1,x1-1,z0+1,z1-1,floor,floor-.12,green)
 # Merge within each explicit group/material/role to keep modest draw-call cost.
 for collection in collections.values():
     groups={}

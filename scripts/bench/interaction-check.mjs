@@ -175,7 +175,12 @@ try {
       const b = window.bench,
         station = b.stations.find((s) => s.id === side);
       b.clearInput();
-      b.walker.feet.fromArray(station.checkpoint);
+      b.walker.velocity.set(0, 0, 0);
+      b.walker.feet.set(
+        station.x - 12,
+        b.world.floor(station.x - 12, station.z) + 0.001,
+        station.z,
+      );
       b.updateStation();
       b.wake();
       return {

@@ -71,7 +71,7 @@ export class BenchViewer {
   bridgeHolder?: THREE.Mesh;
   dialHolder?: THREE.Mesh;
   world = new CollisionWorld();
-  walker = new Walker(this.world);
+  walker = new Walker(this.world, layout.deskBounds);
   status: BenchStatus = {
     ready: false,
     captured: false,
@@ -433,7 +433,6 @@ export class BenchViewer {
   }
   updateStation() {
     const station = this.nearbyStation();
-    this.walker.recovery.fromArray(station.checkpoint);
     if (this.status.side !== station.id) {
       this.status.side = station.id as BenchStatus['side'];
       this.emit();
@@ -507,9 +506,7 @@ export class BenchViewer {
       return;
     e.preventDefault();
     if (e.code === 'KeyR' && !e.repeat) this.reset();
-    else if (e.code === 'Space' && !e.repeat) this.walker.jumpQueued = true;
-    else if (e.code.startsWith('Key') && e.code !== 'KeyR')
-      this.walker.keys.add(e.code);
+    else if (e.code !== 'KeyR') this.walker.keys.add(e.code);
     this.wake();
   };
   keyUp = (e: KeyboardEvent) => {
@@ -558,10 +555,9 @@ export class BenchViewer {
     const start = this.inspect ? performance.now() : 0,
       elapsed = this.last ? now - this.last : 16.67;
     const moving =
-      this.status.captured &&
-      (this.walker.keys.size > 0 ||
-        !this.walker.grounded ||
-        this.walker.jumpQueued);
+      this.walker.keys.size > 0 ||
+      !this.walker.grounded ||
+      this.walker.velocity.lengthSq() > 1e-8;
     const activity = this.activity.consume(now, moving);
     const dirty = this.dirty;
     this.dirty = false;
@@ -584,6 +580,13 @@ export class BenchViewer {
     this.updateStation();
     if (shouldRender) {
       this.camera.position.copy(this.walker.feet).y += WALK.eye;
+      // Sustained flight has no altitude lock; keep the desk in the frustum
+      // even above the original walking-only far plane.
+      const far = Math.max(250, this.camera.position.y + 150);
+      if (this.camera.far !== far) {
+        this.camera.far = far;
+        this.camera.updateProjectionMatrix();
+      }
       this.camera.rotation.set(this.walker.pitch, this.walker.yaw, 0, 'YXZ');
       this.renderer.render(this.scene, this.camera);
       this.renderCount++;

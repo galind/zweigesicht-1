@@ -18,6 +18,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const report = { checks: [], errors: [] };
 page.on('pageerror', (e) => report.errors.push(e.message));
+const layout = JSON.parse(await fs.readFile('assets/authored/atelier-layout.json'));
 const phases = JSON.parse(
   await fs.readFile('assets/authored/wheel-display-poses.json'),
 ).wheels;
@@ -33,7 +34,7 @@ try {
     },
   );
   assert.equal(await page.evaluate(() => window.bench.status.error), '');
-  report.geometry = await page.evaluate(async (phases) => {
+  report.geometry = await page.evaluate(async ({ phases, layout }) => {
     const b = window.bench,
       manifest = await (await fetch('/models/assembly-manifest.json')).json();
     const byId = new Map(manifest.instances.map((p) => [p.id, p]));
@@ -76,9 +77,10 @@ try {
           expected[1].map((v) => v * (bridge ? 1 : -1)),
           [0, 0, 0, 1],
         ];
-        expectedWorld[0][3] += bridge ? -24 : 38;
-        expectedWorld[1][3] += bridge ? 12.2 : 16.3;
-        expectedWorld[2][3] += bridge ? 12 : -6;
+        const spec = layout.stations.find((s) => s.id === station.id);
+        expectedWorld[0][3] += spec.x;
+        expectedWorld[1][3] += spec.seat;
+        expectedWorld[2][3] += spec.z;
         worldMatrixError = Math.max(
           worldMatrixError,
           ...mesh.matrixWorld.elements.map((v, i) =>
@@ -242,7 +244,7 @@ try {
         (s) => s.mesh.userData.collisionRole,
       ).length,
     };
-  }, phases);
+  }, { phases, layout });
   for (const s of report.geometry.stations) {
     assert.equal(s.count, 227);
     assert.equal(s.crowns.length, 4);
@@ -284,78 +286,9 @@ try {
       (e) => e.collides === (e.role !== 'decor'),
     ),
   );
-  // Former rail locations are now freely walkable. Outer edges remain real drops.
-  report.boundaries = await page.evaluate(() => {
-    const b = window.bench,
-      rows = [];
-    for (const [id, x, z, key] of [
-      ['open worktop at former west rail', -50, -5, 'KeyA'],
-      ['open worktop north of dial', 14, -32, 'KeyD'],
-      ['visible outer edge has no invisible wall', 86, 40, 'KeyD'],
-    ]) {
-      b.walker.clear();
-      b.walker.feet.set(x, 13.502, z);
-      b.walker.grounded = true;
-      b.walker.yaw = 0;
-      b.walker.keys.add(key);
-      for (let i = 0; i < 180; i++) b.walker.update(1 / 180);
-      rows.push({
-        id,
-        feet: b.walker.feet.toArray(),
-        pass:
-          Math.abs(b.walker.feet.x - x) > 5 &&
-          (x === 86 ? b.walker.feet.y < 13 : b.walker.grounded),
-      });
-    }
-    b.walker.clear();
-    return rows;
-  });
-  assert.ok(report.boundaries.every((b) => b.pass));
-  await page.addStyleTag({
-    content:
-      '.bench-menu,.bench-header,.bench-legend,.bench-reticle{display:none!important}',
-  });
-  const views = [
-    ['overall', [-85, 85, 110], [0, 8, 10]],
-    ['pair-detail', [-52, 54, 68], [4, 12, 4]],
-    ['circulation', [0, 150, 10], [0, 0, 10]],
-    ['arrival', [-49, 19.08, 12], [-24, 17, 12]],
-    ['approach', [-65, 16.48, 12], [-24, 17, 12]],
-    ['worktop', [-35, 14.98, -18], [38, 16, -6]],
-    ['bridge-entry', [-39, 19.08, 12], [-22, 17, 12]],
-    ['dial-entry', [20.8, 17.38, -6], [38, 15.7, -6]],
-    ['bridge-crown', [5, 16.48, 18], [-1, 14, 12]],
-    ['dial-crown', [68, 17.38, 0], [60, 15, -6]],
-  ];
-  report.views = views;
-  for (const [name, eye, target] of views) {
-    const cameraRecord = await page.evaluate(
-      ({ name, eye, target }) => {
-        const b = window.bench;
-        b.walker.clear();
-        b.walker.grounded = true;
-        cancelAnimationFrame(b.frame);
-        b.frame = 0;
-        const floor = b.world.floor(eye[0], eye[2], 100);
-        const atEyeHeight = !['overall', 'pair-detail', 'circulation'].includes(
-          name,
-        );
-        if (atEyeHeight) eye[1] = floor + 1.48;
-        // Aerial review cameras are ~150 mm away: the walking near plane loses
-        // depth precision between the thin mat and timber at that distance.
-        // Actual eye-height captures retain the unchanged runtime near plane.
-        b.camera.near = atEyeHeight ? 0.035 : 0.5;
-        b.camera.updateProjectionMatrix();
-        b.camera.position.set(...eye);
-        b.camera.lookAt(...target);
-        b.renderer.render(b.scene, b.camera);
-        return { name, eye, target, floor, atEyeHeight, near: b.camera.near };
-      },
-      { name, eye, target },
-    );
-    (report.cameras ||= []).push(cameraRecord);
-    await page.screenshot({ path: out + '/' + name + '.png' });
-  }
+  assert.equal(report.geometry.environment.length, 2);
+  assert.equal(report.geometry.environment.reduce((n, e) => n + e.triangles, 0), 24);
+  // Boundary and actual first-person captures live in jetpack-check.mjs.
   assert.deepEqual(report.errors, []);
   console.log(
     JSON.stringify(

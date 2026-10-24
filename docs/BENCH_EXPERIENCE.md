@@ -1,61 +1,42 @@
 # Paired atelier walking experience
 
-`/bench` is a local desktop walk across two simultaneous static copies of the
-same movement: bridge-up in the foreground and dial-side-up farther back. One
-walnut desk with an open green worktop and two straight ramps connects
-their west entrances. There is no presentation switch, fade or travel reset.
-The explorer and Workshop retain separate controllers and resources.
+`/bench` is a local desktop experience with two simultaneous exposed movement
+presentations on one plain wooden desk and one green mat. Bridge-up is on the
+left and dial-side-up on the right. Hold Space to fly between them; land to walk
+on their actual surfaces. Previous ramps, recesses, terraces and stair concepts
+are superseded. The explorer and Workshop retain separate controllers/resources.
 
 ## Current behavior — 24 October 2026
 
-Each station contains all **223 movement leaves plus the four original external
-crown leaves**, and its matching original maker holder. No case, glass, numeral
-dial or optional hands are added. Source geometry, dimensions and openings stay
-intact. The 18 reviewed phases remain separate from the original matrices; see
-[wheel review](WHEEL_CONTACT_REVIEW.md), [ratchets](RATCHET_CONTACT_REVIEW.md) and
-[remaining contacts](REMAINING_WHEEL_CONTACT_REVIEW.md).
-
-The crown uses the existing catalog GLB, filtered by the `crown` packet in
-`assets/authored/watch-configurations.json`. This is the smallest existing asset
-path; there is no new CAD payload or case recovery/visibility dependency. Other
-catalog meshes are discarded after ingestion. Source material creation and
-available source-surface annotations use the explorer's existing functions.
-The existing annotation file has no entries for the three crown definitions;
-their normal catalog finish handling remains intact.
+Each station contains all **223 movement leaves plus four original external crown
+leaves**, and its intact original red maker holder. The complete stations move
+only by parent translation. No source geometry, internal pose, material, crown,
+opening or holder design changes. All 18 reviewed phases remain separate from
+original matrices; see [wheel review](WHEEL_CONTACT_REVIEW.md),
+[ratchets](RATCHET_CONTACT_REVIEW.md) and [remaining contacts](REMAINING_WHEEL_CONTACT_REVIEW.md).
 
 | Station | Parent placement (X, Y, Z), mm | Unchanged movement presentation | Holder |
 | --- | --- | --- | --- |
-| Bridge | (−24, 0, 12) | X +90°, Y +12.2 | `movement.stl`, X −90° |
-| Dial | (38, 0, −6) | X −90°, Y +16.3 | `dial.stl`, X −90° |
+| Bridge | (−27, 0, −7) | X +90°, Y +12.2 | `movement.stl`, X −90° |
+| Dial | (27, 0, −7) | X −90°, Y +16.3 | `dial.stl`, X −90° |
 
-The centres are 64.56 mm apart. Parent translations are the only station changes;
-source and reviewed occurrence matrices are identical in each copy. Render and
-collision instances keep `partId`, plus distinct `stationId` and `instanceId`.
-Geometry, finishes and per-geometry BVHs are shared; transforms and bounds are
-per instance. Neither station becomes hidden or non-colliding when looking away.
+The stations are 54 mm apart, with a 12 mm gap between the 42 mm holder envelopes.
+The desk occupies X −62…62, Z −42…62 (124 × 104 mm). Its wood top is Y−0.12;
+one 0.12 mm green mat, inset 1 mm from each edge, has its top at Y0. Both intact
+holders rest directly on that mat. There are exactly two authored render/collision
+meshes (24 triangles): desk and mat. No wells, ramps, stairs, thresholds, rails,
+props or decorative architecture. The real surface below the holders catches
+falls; no extra surfaces cover openings in either movement.
 
-The owner requested a much simpler environment after reviewing the initial
-terraced version. The desk is now one 180 × 140 mm worktop at Y13.5, with a
-1 mm walnut border and no upper promenade, pause terraces, guards, tools or
-backdrop wall. The ivory scene background stays. Spawn/reset is (−49, 17.602, 12) on the existing level bridge landing,
-facing +X directly into the movement. The open surface provides continuous circulation around
-both stations, rather than a prescribed narrow path.
+Spawn and explicit R reset place feet at (0, 0.002, 54), facing −Z toward both
+stations and the central aisle. After settling, eyes are Y1.480001. Both holders
+and open mat are evident in the actual entry view; their full-height walls
+naturally obscure much of the movement tops from this tiny visitor's ground
+perspective. Flight reveals the exposed tops without changing visitor scale.
 
-Two 6 mm wide straight ramps rise at 1:6 to the unchanged west interfaces:
-bridge X−73.6 → −49 at Y17.6, dial X−1.4 → 13 at Y15.9. Short level landings
-join the existing thresholds. Both ramps have solid support. The intact red
-holders remain partly inset in actual 22.8 mm radius wells, with east relief
-out to station X+27 / Z±5 for each crown. Wells and outer desk edges are visible
-open drops, without invisible guards. Recovery still uses the safe landings.
-
-The final interfaces retain the original west endpoints (local X−14 / −16.2),
-2.8 mm width, original approach heights and original undersides. Keyboard return
-testing found the former bridge edge 0.2601 mm above its CAD support, beyond the
-0.22 mm step allowance; the dial's abrupt 0.2 mm edge also blocked return.
-Only the last 1.2 mm of each authored top is eased down: 0.12 mm bridge, 0.08 mm
-dial. The bottom stays Y17.4 / Y15.7, so this does not lower architecture into
-source geometry or add a floor over an opening. Both directions are verified
-with keyboard walking and no jump.
+Render/collision instances keep `partId`, distinct `stationId`/`instanceId`, and
+shared geometry, materials and per-geometry BVHs. Both stations remain visible
+and colliding. Original external crowns retain catalog geometry and finishes.
 
 ## Known unresolved crown/holder fit
 
@@ -87,31 +68,47 @@ from the passing authored-environment clearances and walking tests.
 ## Controls, collision and lifetime
 
 Enter explicitly captures the mouse; Escape opens the menu and releases capture.
-WASD walks, mouse looks, Space jumps and R returns to the entry landing.
-T has no action. Nearby station status is derived from position. Accidental falls
-below Y−8 or outside the desk bounds recover to the nearer safe west approach;
-normal station-to-station travel never changes position except through physics.
+WASD moves horizontally both on the ground and in the air. Hold Space for upward
+thrust; release it to stop thrust. Mouse look is unchanged. R explicitly returns
+to arrival; T has no action. There is no automatic reset, hover, altitude lock,
+flight toggle, descend key, fuel or flight HUD.
 
-The visitor stays 1.65 mm tall with 1.48 mm eyes, 0.22 mm radius and 68° vertical
-FOV. Speed 5.5 mm/s, gravity 18 mm/s², jump impulse 7 mm/s and 0.22 mm stepping
-are unchanged. No bob or roll. Source triangles, indirect BVHs, bounded 1/180 s
-physics substeps, jump buffering and edge grace remain. Narrow/deep CAD recesses
-can still require explicit recovery. Floor samples retain lower visible support
-through actual holes; the architecture does not bridge them.
+The visitor stays **1.65 mm tall**, eyes **1.48 mm above feet**, radius **0.22 mm**,
+with 68° vertical FOV. Gravity remains **18 mm/s²**. Held thrust supplies
+26 mm/s² upward acceleration; quadratic vertical drag is `−0.18 × vy × |vy|`.
+This smoothly approaches about 6.67 mm/s ascent and 10 mm/s descent. Releasing
+Space preserves upward momentum for a brief coast; pressing it during a fall
+first brakes the descent, then reverses it. Landing cancels downward velocity
+through collision and permits immediate lift-off with Space. Horizontal speed
+is 5.5 mm/s with 22 mm/s² acceleration/deceleration for precise control. Ground
+stepping remains 0.22 mm and is disabled during upward flight. No bob or roll.
 
-Blur, capture loss and hidden-document events clear held input. Resting scenes
-sleep; hidden documents stop rendering. Retry replaces the whole route-owned
-controller. Shared resources are disposed once per owner, including packed
-Blender albedo textures; late loads cannot revive a departed scene. `?inspect=1`
-exposes station-aware diagnostics only for local verification.
+Every substep constrains the capsule centre to desk bounds inset by its radius,
+before and after collision resolution. Only outward displacement/velocity is
+blocked; tangential movement and altitude remain free, including at corners.
+This is a movement constraint, with no visible or collision-mesh walls/rails.
+Substeps are at most 1/180 s, adapt to unusually high speed to keep travel below
+one third of the radius, and clamp long-frame catch-up to 50 ms. The camera far
+plane grows for high flight so the desk remains rendered; eye height never changes.
+
+Source-triangle BVH collisions remain active above, below and beside geometry.
+Narrow passages smaller than the 0.44 mm visitor width cannot be entered; enclosed
+CAD cavities can still require explicit R recovery. These are static visual
+exploration constraints, not mechanical clearance certification.
+
+Escape, blur, pointer-capture loss and hidden-tab events clear all held keys,
+including thrust. Physical momentum is preserved; visible scenes keep simulating
+gravity/deceleration until rest. Hidden documents stop scheduling frames and
+resume with cleared input. Resting scenes sleep. Retry and route disposal retain
+shared-resource ownership. `?inspect=1` exposes diagnostics for local verification.
 
 Auto still starts at ratio min(DPR,1) and reduces only after sustained slow
 windows, through .85 and .7, with cooldowns. Manual Low (.85) and High (up to 1.5)
 remain fixed. Coalesced look input and the 80 ms scheduling-only tail preserve
 idle behavior. Jewel transmission stays at half target dimensions, and material
 variants compile during loading. There are no new realtime shadows, reflections,
-depth-of-field or transmission effects. Two stations require fresh profiling;
-historical one-station measurements below do not qualify this scene.
+depth-of-field or transmission effects. Prior profiling below predates the jetpack; it is historical evidence, not a new
+performance qualification of this revision.
 
 ## Blender source and renderer contract
 
@@ -119,207 +116,72 @@ historical one-station measurements below do not qualify this scene.
 node scripts/bench/prepare-holder.mjs
 blender --background --python scripts/bench/export-environment.py
 npm --prefix explorer run build
-npm --prefix explorer start -- --hostname 127.0.0.1 --port 4183
+npm --prefix explorer start -- --hostname 127.0.0.1 --port 4185
 ```
 
-Original holder downloads must already exist and match `holder.json`. The
-Python file is reproducible authored source. It saves the editable
-`assets/generated/bench/environment.blend` and exports
+Original holder downloads must already exist and match `holder.json`.
+The Python script is reproducible authored source, saving the editable
+`assets/generated/bench/environment.blend` and exporting
 `explorer/public/bench-local/environment.glb`. Add `-- --blockout` for neutral
-materials. The simpler finished scene was inspected headlessly at actual
-eye height. No foreground browser or desktop takeover was used.
+materials. `assets/authored/atelier-layout.json` is shared by environment export
+and the controller for desk dimensions, arrival and whole-station placements.
+Blender uses numeric millimetres and (world X, −world Z, world Y); glTF Y-up
+restores runtime coordinates. Maker CAD is not embedded in the environment.
 
-`assets/authored/atelier-layout.json` records station transforms, arrival,
-checkpoints, worktop height and a sample external route. Blender models numeric
-millimetres using
-(world X, −world Z, world Y); glTF Y-up export restores the runtime convention.
-Maker CAD is not embedded in the authored scene or editable environment export.
-
-Every exported mesh carries glTF extras `atelierVersion: 1` and
-`collisionRole: walkable | boundary | decor`. The loader validates these fields
-and rejects unknown/missing roles. Names and collections alone do not control
-collision. Walkable and boundary objects use exactly their visible triangles;
-decor objects never enter the collision world. Imported materials and packed
-albedo maps survive intact. No invisible proxy floors or walls are generated.
-
-Collections are `ENV_WALKABLE`, `ENV_BOUNDARY`, `ENV_DECOR`,
-`INTERFACE_BRIDGE` and `INTERFACE_DIAL`. Meshes merge by material and role inside
-each collection. Three opaque materials provide walnut, green linoleum and dark
-steel; two small albedo maps are authored and packed by Blender. The simpler
-environment has 8 meshes and 2,164 triangles. Empty boundary
-and decoration collections remain available, but export no geometry. Boolean
-cutters retain a single material per mesh so glTF extras remain on each render
-mesh. Blender 5.2 uses `use_renderable` to exclude the hidden scale reference.
-A hidden `QA_SCALE_REFERENCE_1.65mm` collection in the editable blend provides a
-temporary size reference; renderable-only export excludes it from the runtime.
+The two meshes carry `atelierVersion: 1` and `collisionRole: walkable` extras;
+the loader continues validating roles, preserving materials and packed albedo
+maps. The `ENV_WALKABLE` collection contains walnut and green linoleum meshes.
+A hidden editable 1.65 mm scale reference is excluded from runtime export.
+Environment fetching bypasses stale browser cache with `no-store`.
 
 Generated GLB, editable blend, original downloads and screenshots remain ignored.
-`build:vercel` continues to remove `bench-local`; no release gate has been cleared.
+`build:vercel` continues excluding `bench-local`; no release gate is cleared.
 No push, PR, deployment, publication or source redistribution is authorized.
 
 ## Verification and reproduction
 
-Headless Chrome is the default. Set `PLAYWRIGHT_MODULE` to an installed Playwright
-`index.mjs` and `CHROME_PATH` to Chrome; no browser package was added to the app.
-Use a production server for performance measurement.
+Headless Chrome is the default. Set `PLAYWRIGHT_MODULE` to an existing Playwright
+`index.mjs` and `CHROME_PATH` to Chrome; no browser dependency was added.
 
 ```sh
 node --test tests/*.test.mjs
-node scripts/cad/review-runtime.mjs
-node scripts/play/validate-inventory.mjs
 npm --prefix explorer run typecheck
 npm --prefix explorer run lint
-node scripts/bench/atelier-check.mjs http://127.0.0.1:4183
-node scripts/bench/browser-check.mjs http://127.0.0.1:4183
-node scripts/bench/lifecycle-check.mjs http://127.0.0.1:4183
-node scripts/bench/interaction-check.mjs http://127.0.0.1:4183
-PROFILE_REVISION='<served revision>' PROFILE_BUILD=production \
-  node scripts/bench/interaction-profile.mjs http://127.0.0.1:4183 paired-atelier
-node scripts/bench/first-use-profile.mjs http://127.0.0.1:4183 paired-atelier Auto
+npm --prefix explorer run build
+PLAY_QA_OUTPUT=artifacts/jetpack node scripts/bench/atelier-check.mjs http://127.0.0.1:4185
+node scripts/bench/browser-check.mjs http://127.0.0.1:4185
+node scripts/bench/lifecycle-check.mjs http://127.0.0.1:4185
 ```
 
-`atelier-check` independently composes all source and phase matrices, station
-presentations, render/collision agreement, 16 CAD landings, source openings,
-shared-resource identities and the environment role contract. It measures actual
-crown/holder/environment triangle distances and retains the six known source-fit
-failures as explicit evidence. Other intersections fail the runner. Legacy
-`collision-check` and `presentation-check` entry points run this same consolidated
-audit rather than keeping obsolete active-side assumptions.
+`browser-check` delegates to `jetpack-check`, superseding the old ramp journey.
+Its real keyboard route starts from default arrival, checks takeoff/sustained
+thrust/coast/fall/braking/landing/relaunch, reaches both movements, and lands on
+real CAD without swapping, resetting or injecting positions. Automated headings
+and timed Space presses drive the test; there is no runtime altitude controller.
+It captures the unmodified arrival, both flight approaches and both landed views
+with camera/feet records. Eye offset remains 1.48 mm throughout.
 
-`browser-check` begins with actual pointer capture and straight W input from the
-default spawn, without injecting a heading. It then uses fixed automated look
-headings for the remaining round trip. Every step is physics-driven; forced
-fall fixtures are separate. It checks optional jumping after the no-jump round
-trip, Escape, ignored T, rest, blur, explicit reset, both nearby recoveries,
-disposal, repeated entry and asset failure/retry. `lifecycle-check` additionally
-checks hidden-document handling, WebGL context failure and late-load disposal.
-Headless hiding is an explicit document-state fixture, not an OS visibility claim.
+Separate labelled fixtures exercise every edge and corner at ground level and
+50/500 mm altitude, 100 mm/s horizontal velocity with a 10-second input frame,
+tangential edge travel, holder sides, movement tops/undersides, mat landings and
+a continuous ground circuit around both holders and through the aisle. CPU tests
+also cover thin walls/ceilings, actual openings and 30/60/144 Hz jetpack behavior.
+Escape, blur and hidden-document fixtures verify thrust clears alongside WASD.
+The lifecycle runner checks actual headless focus loss, explicit hidden-document
+handling, graphics retry and late-load disposal. This is automated headless
+verification, not physical mouse feel or OS minimization qualification.
 
-The interaction profiler covers both CAD close-ups and a forecourt view of the
-pair, each with turning and walking-plus-turning. Reports retain browser/GPU,
-viewport/DPR, quality/actual ratio, server revision and harness state, timing and
-synthetic input conditions. `first-use-profile` visits both existing stations by
-labelled placement fixtures; it no longer measures a swap. Native confirmation
-is available separately through profiler `BENCH_BROWSER=headed` and lifecycle
-`HEADED=1`, but was not used for this task. Physical mouse feel, representative
-GPUs/browsers and sustained thermal behavior remain unverified.
+`atelier-check` independently composes all original/reviewed matrices with the
+new station translations, checks render/collision agreement, 16 CAD landings,
+source openings, shared resources, holder/crown/environment clearances and the
+two-mesh environment contract. The six known original crown/holder intersections
+remain explicit unresolved evidence; new environment intersections fail the audit.
 
-Current verification and measured performance are recorded in
-`PROGRESS.md`. Local evidence is under `artifacts/paired-atelier/` (including the
-retained grayscale `blockout/`), with profiler/lifecycle reports in
-`artifacts/bench/`. The simpler overall, top-down, arrival, approach, worktop,
-bridge/dial entry and crown captures in `artifacts/paired-atelier/simple/` are
-synthetic review cameras, distinct from the keyboard journey screenshots.
-Aerial review cameras use a 0.5 mm near plane for distant depth precision;
-eye-height captures and the runtime retain the original 0.035 mm near plane. Crown fit remains unresolved by the owner's
-explicit decision.
-
-## First-use and local refresh correction
-
-Review of the default entry view found that the previous spawn faced beside the
-ramp and let straight-ahead travel fall into the holder well. It now starts on
-the existing bridge landing, aligned with the CAD entrance. The regression
-journey checks this actual first interaction before applying any scripted look
-heading. Headless before/after captures are in `artifacts/paired-atelier/live-review/`.
-
-The environment GLB is fetched with `cache: 'no-store'` because Blender replaces
-its stable local filename while the server advertises a one-hour cache lifetime.
-A real browser-cache fixture primed a stale response, verified a second ordinary
-fetch used that cached response, and then verified bench entry fetched the new
-asset successfully. Parsing still uses the existing loader and tracked disposal
-ownership; retry and late-load disposal checks pass. An already open scene needs
-one page reload to use the updated application and arrival.
-
-## Simpler desk verification — 24 October 2026
-
-The current environment passes 36 keyboard journey checks, independent source
-and phase pose checks, render/collision agreement, 16 CAD landings, retained
-openings and three open-floor/outer-edge probes. All 113 CPU tests, typecheck,
-lint and production build pass. Both crown/holder conflicts remain explicitly
-unresolved. Actual authored-environment triangle clearance is at least 1.849 mm
-bridge / 1.720 mm dial. Generated assets and evidence remain local.
-
-Six Auto workloads repeat turning and walking-plus-turning at each station and
-with both visible: headless Chrome 155 / M4 Metal, 2400 × 1300 CSS, DPR2, 700 ms
-warmup and six seconds per sample. Ratio stays 1; frame p95 is 16.8–17.4 ms,
-with 2/2,153 intervals over 25 ms and none over 50 ms. No focus loss or GPU
-disjoint event occurred. This is a regression spot-check for the simpler scene;
-High, Low, physical devices and first-paint costs were not requalified here.
-Evidence: `artifacts/bench/simple-atelier.json` and source/asset hashes in
-`artifacts/paired-atelier/simple/build-manifest.json`. The walking camera,
-renderer, source poses, materials and physics implementation remain unchanged.
-
-## Original terraced layout results — 24 October 2026
-
-The following measurements and counts precede the owner-requested simplification.
-They describe `ef2a14d`, not the current environment.
-
-Application revision **`ef2a14d`**, production server on port 4183. Chrome
-155.0.8059.86, headless, ANGLE Metal / Apple M4, 10 logical cores and 24 GB RAM;
-Darwin 25.6.0. Viewport **2400 × 1300 CSS**, device DPR **2**, no requested
-CPU/GPU throttling, existing OS/driver cache. The 18 accepted samples combine
-three quality choices, bridge/dial close-ups and a forecourt view of the pair,
-each stationary-turning and walking-plus-turning. Each has 700 ms warmup and
-six seconds of synthetic 125 Hz mouse input; walking alternates W/S every 500 ms.
-The pair fixture uses a smaller yaw/pitch sweep to retain both stations in view.
-No focus/visibility loss or GPU-disjoint events occurred. GPU timers were available.
-
-Frame intervals below are between render submissions, not display presentation
-or physical input-to-photon latency. Table entries are **p95 milliseconds**.
-
-| Workload | Auto, ratio 1 | High, ratio 1.5 | Low, ratio .85 |
-| --- | ---: | ---: | ---: |
-| Bridge turning | 18.5 | 23.3 | 17.1 |
-| Bridge walking + turning | 18.4 | 23.8 | 17.3 |
-| Dial turning | 18.5 | 22.3 | 16.9 |
-| Dial walking + turning | 18.3 | 27.6 | 17.0 |
-| Pair turning | 18.1 | 17.4 | 16.9 |
-| Pair walking + turning | 17.9 | 17.4 | 16.8 |
-
-Auto retained ratio 1 in every sample: 2 intervals over 25 ms out of 2,154,
-none over 50 ms; p99 18.6–18.7 ms. High retained 1.5: 56/2,006 over 25 ms,
-none over 50 ms. Low retained .85: 2/2,152 over 25 ms, none over 50 ms.
-The pair workload recorded about 878 median multipass draw calls. This larger
-scene stays responsive in these headless samples, but fixed High still misses
-60 fps in close-ups; these are not physical-device or long thermal guarantees.
-
-For Auto, render-submission CPU p95 is 5.2–5.5 ms; physics CPU p95 is
-0.3–0.6 ms in sampled movement. GPU elapsed p95 is 8.4–14.9 ms and synthetic
-handler-to-render p95 is 13.3–15.9 ms. GPU durations are separate driver query
-measurements and are not added to CPU time or interpreted as display latency.
-The report retains every p50/p95/p99, count, quality and ratio.
-
-A separate fresh-process first-use probe reached readiness in 583 ms. First
-render CPU was **111.8 ms**, with 11 additional programs appearing then despite
-precompilation. Subsequent first turns on bridge/dial had p95 17.5/17.6 ms,
-zero intervals over 25 ms and no shader growth. Cold-driver startup, physical
-mouse feel and broader hardware remain unverified.
-
-The quality/interaction runner passes 11 checks, including captured stationary
-look, sleep, idle sampling, manual choices and both station contexts. Its injected
-27 ms render delay produced Auto reductions 1 → .85 → .7, 8.05 seconds apart.
-The old fixed 20-second deadline observed only the first reduction; the headless
-state-machine check now waits for the expected bounded state, with a 35-second
-limit, and passed after 23.3 seconds. This is synthetic adaptation evidence, not
-normal performance. An earlier profiler capture between scenarios reset the
-custom CDP DPR and invalidated its High samples. Captures now run only after all
-measurements, and new assertions reject changed DPR or manual render ratios.
-
-Accepted evidence: `artifacts/bench/paired-atelier.json`,
-`paired-atelier-first-use.json` and `interaction-check.json`. Excluded runs remain
-under `artifacts/paired-atelier/exploratory-wide-sweep.json`,
-`rejected-dpr-reset.json` and `initial-stress-timeout.json`. The local
-`artifacts/paired-atelier/review.html` links representative captures and reports;
-`build-manifest.json` records the application revision and generated/source hashes.
-
-Final verification also passes 113 CPU tests, 115 retained runtime checks,
-inventory, typecheck/lint, production build, packaging exclusion, HTTP metadata,
-35 keyboard-journey checks, six lifecycle checks, two visible-guard probes,
-16 CAD landings, 254 explorer smoke assertions and 92 focused Workshop checks.
-The authored crown clearance is at least 3.1133 mm (bridge) / 2.5809 mm (dial)
-in measured runtime triangles. Winding-stem/environment checks are disjoint.
-The six source crown/holder intersections remain explicitly unresolved by owner
-choice; no physical compatibility claim is made. No push or publication occurred.
+Accepted current captures/reports are local under `artifacts/jetpack/`.
+Earlier first-use, ramp/terrace and profiling evidence remains historical under
+`artifacts/paired-atelier/` and `artifacts/bench/`. Physical-device/browser coverage,
+human usability, narrow CAD cavities and the mechanical issues above remain
+limitations. The following older results do not qualify this jetpack revision.
 
 ## Historical single-station evidence
 

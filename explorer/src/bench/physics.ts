@@ -7,7 +7,9 @@ export const WALK = Object.freeze({
   eye: 1.48,
   speed: 5.5,
   gravity: 18,
-  jump: 7,
+  thrust: 26,
+  verticalDrag: 0.18,
+  acceleration: 22,
   step: 0.22,
   tick: 1 / 180,
 });
@@ -126,75 +128,86 @@ export class CollisionWorld {
     return height;
   }
 }
+export type DeskBounds = {
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
+};
+
 export class Walker {
   feet = new THREE.Vector3(-59, 0.002, 0);
   spawn = new THREE.Vector3(-59, 0.002, 0);
-  recovery = this.spawn.clone();
   spawnYaw = -Math.PI / 2;
   velocity = new THREE.Vector3();
   grounded = false;
   yaw = -Math.PI / 2;
   pitch = 0;
   keys = new Set<string>();
-  jumpQueued = false;
-  groundGrace = 0;
-  jumpBuffer = 0;
   resets = 0;
   world: CollisionWorld;
-  constructor(world: CollisionWorld) {
+  bounds?: DeskBounds;
+  constructor(world: CollisionWorld, bounds?: DeskBounds) {
     this.world = world;
+    this.bounds = bounds;
   }
   clear() {
     this.keys.clear();
-    this.jumpQueued = false;
-    this.groundGrace = 0;
-    this.jumpBuffer = 0;
-    this.velocity.set(0, 0, 0);
+    // Input loss cuts thrust, not physical momentum. Gravity still acts.
   }
-  reset(recover = false) {
+  reset() {
     this.clear();
-    this.feet.copy(recover ? this.recovery : this.spawn);
-    this.yaw = recover ? -Math.PI / 2 : this.spawnYaw;
+    this.velocity.set(0, 0, 0);
+    this.feet.copy(this.spawn);
+    this.yaw = this.spawnYaw;
     this.pitch = 0.08;
     this.grounded = false;
     this.resets++;
   }
   update(dt: number) {
-    // Substeps limit travel to < 1/3 capsule radius even at terminal fall speed.
-    const steps = Math.ceil(Math.min(dt, 0.05) / WALK.tick);
+    // Clamp elapsed catch-up, and bound each sweep by capsule radius even for
+    // unusually fast motion. The desk constraint is applied on every substep.
+    const duration = Math.max(0, Math.min(dt, 0.05));
+    const maxSpeed =
+      Math.max(WALK.speed, this.velocity.length()) + WALK.thrust * duration;
+    const steps = Math.ceil(
+      duration / Math.min(WALK.tick, WALK.radius / (3 * maxSpeed)),
+    );
     if (!steps) return;
-    const h = Math.min(dt, 0.05) / steps;
-    if (this.jumpQueued) this.jumpBuffer = 0.12;
-    this.jumpQueued = false;
+    const h = duration / steps;
     for (let i = 0; i < steps; i++) {
-      this.groundGrace = this.grounded
-        ? 0.09
-        : Math.max(0, this.groundGrace - h);
-      this.jumpBuffer = Math.max(0, this.jumpBuffer - h);
       const forward =
         Number(this.keys.has('KeyW')) - Number(this.keys.has('KeyS'));
       const right =
         Number(this.keys.has('KeyD')) - Number(this.keys.has('KeyA'));
       const n = Math.max(1, Math.hypot(forward, right));
-      this.velocity.x =
+      const targetX =
         ((-Math.sin(this.yaw) * forward + Math.cos(this.yaw) * right) *
           WALK.speed) /
         n;
-      this.velocity.z =
+      const targetZ =
         ((-Math.cos(this.yaw) * forward - Math.sin(this.yaw) * right) *
           WALK.speed) /
         n;
-      if (this.jumpBuffer > 0 && this.groundGrace > 0) {
-        this.velocity.y = WALK.jump;
-        this.jumpBuffer = 0;
-        this.groundGrace = 0;
-        this.grounded = false;
-      }
-      this.jumpQueued = false;
-      this.velocity.y = Math.max(-8, this.velocity.y - WALK.gravity * h);
+      const delta = new THREE.Vector2(
+        targetX - this.velocity.x,
+        targetZ - this.velocity.z,
+      );
+      delta.clampLength(0, WALK.acceleration * h);
+      this.velocity.x += delta.x;
+      this.velocity.z += delta.y;
+      // Continuous thrust, unchanged gravity, and quadratic air resistance.
+      // No impulse, hover state, altitude target or instantaneous speed change.
+      const thrust = this.keys.has('Space') ? WALK.thrust : 0;
+      this.velocity.y +=
+        (thrust -
+          WALK.gravity -
+          WALK.verticalDrag * this.velocity.y * Math.abs(this.velocity.y)) *
+        h;
       const before = this.feet.clone(),
         wasGrounded = this.grounded;
       this.feet.addScaledVector(this.velocity, h);
+      this.constrainToDesk();
       let result = this.world.resolve(this.feet);
       // Step only when grounded and blocked, and only onto an actual nearby surface.
       const wanted = Math.hypot(this.velocity.x, this.velocity.z) * h;
@@ -233,12 +246,22 @@ export class Walker {
       if (this.grounded && this.velocity.y < 0) this.velocity.y = 0;
       for (const normal of result.contacts)
         if (normal.y < -0.5 && this.velocity.y > 0) this.velocity.y = 0;
+      this.constrainToDesk();
+    }
+  }
+  /** Project only outward displacement; tangential travel and Y remain free. */
+  constrainToDesk() {
+    if (!this.bounds) return;
+    for (const [axis, min, max] of [
+      ['x', this.bounds.minX + WALK.radius, this.bounds.maxX - WALK.radius],
+      ['z', this.bounds.minZ + WALK.radius, this.bounds.maxZ - WALK.radius],
+    ] as const) {
+      this.feet[axis] = THREE.MathUtils.clamp(this.feet[axis], min, max);
       if (
-        this.feet.y < -8 ||
-        Math.abs(this.feet.x) > 92 ||
-        Math.abs(this.feet.z) > 72
+        (this.feet[axis] <= min && this.velocity[axis] < 0) ||
+        (this.feet[axis] >= max && this.velocity[axis] > 0)
       )
-        this.reset(true);
+        this.velocity[axis] = 0;
     }
   }
 }

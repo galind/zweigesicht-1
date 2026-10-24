@@ -77,17 +77,17 @@ export default function Bench() {
           <p>
             Two faces of one movement, on one desk.
             <br />
-            Walk between them and explore at your own pace.
+            Hold Space to rise; release to fall. Explore both at your own pace.
           </p>
           <div className="bench-menu-controls">
             <span>
-              <kbd>W A S D</kbd> Walk
+              <kbd>W A S D</kbd> Move
             </span>
             <span>
               <kbd>Mouse</kbd> Look
             </span>
             <span>
-              <kbd>Space</kbd> Jump
+              <kbd>Space</kbd> Hold to thrust
             </span>
             <span>
               <kbd>R</kbd> Arrival
@@ -155,10 +155,10 @@ export default function Bench() {
           <div className="bench-reticle" aria-hidden="true" />
           <div className="bench-legend">
             <span>
-              <kbd>WASD</kbd> Walk
+              <kbd>WASD</kbd> Move
             </span>
             <span>
-              <kbd>Space</kbd> Jump
+              <kbd>Space</kbd> Hold to thrust
             </span>
             <span>
               <kbd>R</kbd> Reset

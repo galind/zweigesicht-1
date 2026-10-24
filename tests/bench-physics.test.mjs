@@ -19,29 +19,30 @@ function rig() {
 function advance(w, seconds, fps = 60) {
   for (let i = 0; i < seconds * fps; i++) w.update(1 / fps);
 }
-test("capsule walks, jumps and lands on visible floors at 30, 60 and 144 Hz", () => {
+test("capsule walks, thrusts and lands on visible floors at 30, 60 and 144 Hz", () => {
   for (const fps of [30, 60, 144]) {
     const { w } = rig();
     assert.ok(w.grounded);
     w.keys.add("KeyW");
     advance(w, 1, fps);
-    assert.ok(Math.abs(w.feet.x - WALK.speed) < 0.02);
+    assert.ok(Math.abs(w.feet.x - (WALK.speed - 0.67)) < 0.08);
     w.keys.clear();
-    w.jumpQueued = true;
-    advance(w, 0.35, fps);
+    w.keys.add("Space");
+    advance(w, 0.65, fps);
     assert.ok(w.feet.y > 1);
-    advance(w, 1, fps);
+    w.keys.delete("Space");
+    advance(w, 2, fps);
     assert.ok(w.grounded);
     assert.ok(Math.abs(w.feet.y) < 0.001);
   }
 });
-test("thin wall blocks ordinary travel, including jump and long-frame clamp", () => {
+test("thin wall blocks ordinary travel, including thrust and long-frame clamp", () => {
   const { world, w } = rig();
   box(world, [0.025, 6, 10], [2, 3, 0]);
   w.keys.add("KeyW");
   advance(w, 1);
   assert.ok(w.feet.x < 1.77);
-  w.jumpQueued = true;
+  w.keys.add("Space");
   advance(w, 1);
   w.update(10);
   assert.ok(w.feet.x < 1.77);
@@ -64,27 +65,25 @@ test("step clearance and head clearance are enforced", () => {
   const { world, w } = rig();
   box(world, [2, 0.15, 4], [2, 0.075, 0]);
   w.keys.add("KeyW");
-  advance(w, 0.4);
+  advance(w, 0.55);
   assert.ok(w.feet.x > 1.9);
   assert.ok(w.feet.y > 0.14);
   w.keys.clear();
   box(world, [4, 0.1, 4], [2, 2, 0]);
-  w.jumpQueued = true;
+  w.keys.add("Space");
   advance(w, 0.1);
   assert.ok(w.feet.y + WALK.height < 1.951);
 });
-test("reset and focus clearing remove all held input; falls recover without reloading", () => {
+test("input clearing cuts thrust without discarding physical momentum", () => {
   const { w } = rig();
-  w.keys.add("KeyW");
-  w.jumpQueued = true;
+  w.keys.add("Space");
+  advance(w, 0.7);
+  const vy = w.velocity.y;
   w.clear();
   assert.equal(w.keys.size, 0);
-  assert.equal(w.jumpQueued, false);
-  w.feet.set(0, -9, 0);
+  assert.equal(w.velocity.y, vy);
   w.update(1 / 60);
-  assert.equal(w.resets, 1);
-  assert.equal(w.feet.x, -59);
-  assert.equal(w.yaw, -Math.PI / 2);
+  assert.ok(w.velocity.y > 0 && w.velocity.y < vy);
 });
 test("hidden opposite presentation cannot collide; source geometry indices remain unchanged", () => {
   const world = new CollisionWorld();
@@ -97,19 +96,31 @@ test("hidden opposite presentation cannot collide; source geometry indices remai
   assert.deepEqual(Array.from(mesh.geometry.index.array), indices);
 });
 
-test("a jump just after leaving an edge is accepted once, with no midair repeat", () => {
-  const { w } = rig();
-  w.feet.set(15.4, 1, 0);
-  w.grounded = false;
-  w.groundGrace = 0.06;
-  w.jumpQueued = true;
-  w.update(1 / 60);
-  assert.ok(w.velocity.y > 6);
-  advance(w, 0.15);
-  const speed = w.velocity.y;
-  w.jumpQueued = true;
-  w.update(1 / 60);
-  assert.ok(w.velocity.y < speed);
+test("release coasts, gravity falls, thrust brakes before climbing, landing permits relaunch", () => {
+  for (const fps of [30, 60, 144]) {
+    const { w } = rig();
+    w.keys.add("Space");
+    advance(w, 2, fps);
+    assert.ok(w.feet.y > 8 && w.velocity.y > 5);
+    w.keys.delete("Space");
+    const releaseY = w.feet.y;
+    advance(w, 0.1, fps);
+    assert.ok(w.feet.y > releaseY && w.velocity.y > 0);
+    advance(w, 0.7, fps);
+    assert.ok(w.velocity.y < -3);
+    const falling = w.velocity.y;
+    w.keys.add("Space");
+    w.update(1 / fps);
+    assert.ok(w.velocity.y < 0 && w.velocity.y > falling);
+    advance(w, 1, fps);
+    assert.ok(w.velocity.y > 0);
+    w.keys.delete("Space");
+    advance(w, 4, fps);
+    assert.ok(w.grounded);
+    w.keys.add("Space");
+    advance(w, 0.5, fps);
+    assert.ok(!w.grounded && w.feet.y > 0.5);
+  }
 });
 
 test("two visible instances share a BVH while keeping independent world poses", () => {
@@ -127,18 +138,60 @@ test("two visible instances share a BVH while keeping independent world poses", 
   assert.equal(world.floor(12, 0), 7.5);
 });
 
-test("explicit reset and nearby fall recovery use separate safe checkpoints", () => {
+test("explicit reset is the only position reset", () => {
   const { w } = rig();
   w.spawn.set(-8, 1, 3);
   w.spawnYaw = 0;
-  w.recovery.set(10, 2, -4);
   w.feet.set(10, -9, -4);
   w.update(1 / 60);
-  assert.equal(w.feet.x, 10);
-  assert.equal(w.feet.z, -4);
-  assert.ok(w.feet.y > 1.99);
+  assert.equal(w.resets, 0);
   w.reset();
   assert.deepEqual(w.feet.toArray(), [-8, 1, 3]);
   assert.equal(w.yaw, 0);
-  assert.equal(w.resets, 2);
+  assert.equal(w.resets, 1);
+});
+
+test("all edges and corners contain the capsule grounded and airborne, even in long fast frames", () => {
+  for (const y of [0, 50, 500])
+    for (const x of [-1, 0, 1])
+      for (const z of [-1, 0, 1]) {
+        if (!x && !z) continue;
+        const { w } = rig();
+        w.bounds = { minX: -10, maxX: 10, minZ: -10, maxZ: 10 };
+        w.feet.set(x * 9.77, y, z * 9.77);
+        w.yaw = 0;
+        if (x) w.keys.add(x < 0 ? "KeyA" : "KeyD");
+        if (z) w.keys.add(z < 0 ? "KeyW" : "KeyS");
+        w.velocity.set(x * 100, 80, z * 100);
+        w.update(10);
+        advance(w, 1);
+        assert.ok(Math.abs(w.feet.x) <= 9.78 && Math.abs(w.feet.z) <= 9.78);
+        assert.equal(w.resets, 0);
+      }
+});
+
+test("boundary allows tangential travel at ground and flight heights", () => {
+  for (const y of [0, 50]) {
+    const { w } = rig();
+    w.bounds = { minX: -10, maxX: 10, minZ: -10, maxZ: 10 };
+    w.feet.set(9.78, y, 0);
+    w.yaw = 0;
+    w.keys.add("KeyD");
+    w.keys.add("KeyW");
+    advance(w, 1);
+    assert.equal(w.feet.x, 9.78);
+    assert.ok(w.feet.z < -3);
+  }
+});
+
+test("sustained thrust stops below a thin ceiling and resumes after moving clear", () => {
+  const { world, w } = rig();
+  box(world, [3, 0.025, 3], [0, 3, 0]);
+  w.keys.add("Space");
+  advance(w, 2);
+  assert.ok(w.feet.y + WALK.height <= 2.988);
+  assert.equal(w.velocity.y, 0);
+  w.keys.add("KeyW");
+  advance(w, 1);
+  assert.ok(w.feet.x > 3 && w.feet.y > 2);
 });
