@@ -21,6 +21,7 @@ import { BenchQuality, LookActivity, type QualityMode } from './performance';
 import { BenchFlip } from './flip';
 import { FLIP_KEY } from './bindings';
 import layout from '../../../assets/authored/atelier-layout.json';
+import workshop from '../../../assets/authored/workshop-environment.json';
 import watchConfiguration from '../../../assets/authored/watch-configurations.json';
 import holderManifest from '../../../assets/source-manifest/holder.json';
 export type BenchStatus = {
@@ -76,7 +77,7 @@ export class BenchViewer {
   bridgeHolder?: THREE.Mesh;
   dialHolder?: THREE.Mesh;
   world = new CollisionWorld();
-  walker = new Walker(this.world, layout.deskBounds);
+  walker = new Walker(this.world, workshop.mainDesk);
   status: BenchStatus = {
     ready: false,
     captured: false,

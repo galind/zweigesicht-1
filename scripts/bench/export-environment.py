@@ -1,8 +1,9 @@
-"""Standalone desk/mat in an open background, simplified after revision 3.
+"""Reference-inspired closed tabletop and plain mat in an open background.
 Numeric mm, glTF Y up. Run blender --background --python this-file.
 Visible walkable triangles are collision triangles; no proxy slabs or hidden ramps.
 """
 import bpy
+import bmesh
 import json
 import math
 import hashlib
@@ -32,9 +33,7 @@ def material(name, color, rough=.7, metal=0, emission=0):
     return m
 pal=SPEC['palette']
 oak=material('Oak',pal['oak'],.68)
-paint=material('Olive grey joinery',pal['storage'],.78)
 green=material('Matte green',pal['mat'],.92)
-steel=material('Brushed tool steel',pal['steel'],.5,.65)
 # Packed restrained albedo maps. World-scale UVs; never modify CAD materials.
 for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
     img=bpy.data.images.new(kind+' original albedo',width=size,height=size)
@@ -45,9 +44,7 @@ for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
             if kind=='oak':
                 wobble=noise.noise_vector(Vector((u*2,v*3,1)))[0]
                 grain=noise.noise(Vector((u*2.5,v*160+wobble*3,7))) + .45*noise.noise(Vector((u*6,v*550,9)))
-                plank=int(v*6)
-                val=1+.14*grain+.035*noise.noise(Vector((u*10,v*210,3)))+.025*math.sin(plank*6)
-                if (v*6)%1 < .007:val*=.88
+                val=1+.065*grain+.018*noise.noise(Vector((u*10,v*210,3)))
             else:val=1+.018*noise.noise(Vector((u*80,v*80,3)))
             rgb=[min(1,max(0,c*val)) for c in base]
             pixels.extend((*[12.92*c if c<=.0031308 else 1.055*c**(1/2.4)-.055 for c in rgb],1))
@@ -65,6 +62,8 @@ def mesh(name, verts, faces, mat, role='walkable', bevel=0, smooth=False, uv=Non
     if bevel:
         mod=o.modifiers.new('Small crafted edge','BEVEL');mod.width=bevel;mod.segments=2
         bpy.ops.object.modifier_apply(modifier=mod.name)
+    if mat == oak:
+        bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
     if smooth:
         for poly in data.polygons:poly.use_smooth=len(poly.vertices)==4
     uvl=data.uv_layers.new(name='Authored projection')
@@ -83,29 +82,28 @@ def box(name,x0,x1,z0,z1,top,bottom,mat,role='walkable',bevel=0):
     pts=[(x0,z0),(x1,z0),(x1,z1),(x0,z1)]
     return mesh(name,[(x,bottom,z) for x,z in pts]+[(x,top,z) for x,z in pts],[(3,2,1,0),(4,5,6,7)]+[(i,(i+1)%4,(i+1)%4+4,i+4) for i in range(4)],mat,role,bevel)
 
-D=SPEC['mainDesk'];M=SPEC['mat']
-box('main-oak-top',D['minX'],D['maxX'],D['minZ'],D['maxZ'],D['topY'],D['bottomY'],oak,bevel=.12)
+def slab(name, outline, top, bottom, mat, bevel=0):
+    n=len(outline)
+    return mesh(name,[(x,bottom,z) for x,z in outline]+[(x,top,z) for x,z in outline],
+                [tuple(reversed(range(n))),tuple(range(n,2*n))]+
+                [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],mat,bevel=bevel)
+
+D=SPEC['mainDesk'];M=SPEC['mat'];detail=SPEC['tabletopDetail']
+slab('main-oak-top',D['footprint'],D['topY'],D['bottomY'],oak,detail['edgeBevel'])
 box('green-mat',M['minX'],M['maxX'],M['minZ'],M['maxZ'],M['topY'],M['bottomY'],green)
-# Integrated drawer pedestals below a continuous desktop. No second furniture.
-for x in [-430,430]:
-    box('pedestal',x-104,x+104,-430,155,-33,-910,paint,bevel=3)
-    box('plinth',x-108,x+108,-435,160,-883,-921,paint,bevel=2)
-    for i,(bottom,top) in enumerate([(-265,-63),(-515,-275),(-877,-525)]):
-        box('drawer-front',x-95,x+95,155,164,top,bottom,paint,bevel=2)
-        # Original curved cup pulls, closed at the back and lower lip.
-        cy=(top+bottom)/2
-        verts=[]
-        for r,depth in [(1,164),(.82,172),(.4,177)]:
-            verts += [(x+24*r*math.cos(a*math.pi/12),cy+12*r*math.sin(a*math.pi/12),depth) for a in range(13)]
-        faces=[]
-        for j in range(2):
-            faces += [(j*13+i,j*13+i+1,(j+1)*13+i+1,(j+1)*13+i) for i in range(12)]
-        verts.append((x,cy,178))
-        faces += [(26+i,26+i+1,39) for i in range(12)]
-        faces += [tuple(range(12,-1,-1)),(0,13,26,39,38,25,12)]
-        mesh('drawer-cup-pull',verts,faces,steel,smooth=True)
-box('front-apron',-325,325,130,150,-35,-125,paint,bevel=2)
-box('back-stretcher',-330,330,-430,-410,-740,-815,paint,bevel=2)
+# One continuous U-shaped rim: no front fence, overlapping boxes or open ends.
+# The rear outer arcs share the slab's 8 mm corner radius; inner radius is 2 mm.
+rim_width=detail['rimWidth'];inner_radius=8-rim_width
+rim=[(-550,detail['rimFrontZ'])]
+for cx,start in [(-542,180),(542,270)]:
+    rim += [(cx+8*math.cos(math.radians(start+i*90/8)),
+             -457+8*math.sin(math.radians(start+i*90/8))) for i in range(9)]
+rim += [(550,detail['rimFrontZ']),(550-rim_width,detail['rimFrontZ'])]
+for cx,start in [(542,0),(-542,-90)]:
+    rim += [(cx+inner_radius*math.cos(math.radians(start-i*90/8)),
+             -457+inner_radius*math.sin(math.radians(start-i*90/8))) for i in range(9)]
+rim += [(-550+rim_width,detail['rimFrontZ'])]
+slab('low-back-side-rim',rim,D['topY']+detail['rimHeight'],D['topY'],oak,detail['edgeBevel'])
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}
 for o in objects:groups.setdefault((o.data.materials[0].name,o['collisionRole']),[]).append(o)
@@ -116,6 +114,9 @@ for (mat,role),parts in groups.items():
     o=bpy.context.object;o.name='ENV '+role+' '+mat;o['atelierVersion']=1;o['collisionRole']=role
     o['semanticIds']=[s['id'] for s in semantics if s['material']==mat and s['role']==role]
     mod=o.modifiers.new('Explicit collision triangles','TRIANGULATE');bpy.ops.object.modifier_apply(modifier=mod.name)
+    bm=bmesh.new();bm.from_mesh(o.data)
+    assert all(e.is_manifold for e in bm.edges), 'Open or nonmanifold surface: '+o.name
+    bm.free()
     o.select_set(False)
 # Bake restrained contact occlusion into opaque albedo atlases. Original UVs
 # remain the procedural wood/noise inputs; a second UV set stores the bake.
@@ -124,9 +125,9 @@ bpy.context.scene.render.engine='CYCLES'
 bpy.context.scene.cycles.samples=64
 bpy.context.scene.render.bake.margin=3
 bpy.context.scene.render.bake.use_clear=True
-for mat in [oak,paint,green,steel]:
+for mat in [oak,green]:
     parts=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.data.materials[0]==mat]
-    size=1024 if mat==oak else 512 if mat in [green,paint] else 256
+    size=1024 if mat==oak else 512
     img=bpy.data.images.new(mat.name+' baked albedo',width=size,height=size)
     nodes=mat.node_tree.nodes;links=mat.node_tree.links
     originalUV=nodes.new('ShaderNodeUVMap');originalUV.uv_map='Authored projection'
@@ -174,7 +175,7 @@ bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'environment.blend'))
 runtime=ROOT/'explorer/public/bench-local/environment.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
-report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':'desk-in-open-space','origin':'Original authored desk and mat geometry with noise textures; no external models, artwork or maker CAD embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','budgets':counts,'semantics':semantics,'files':[]}
+report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original authored tabletop, rim and mat geometry with noise textures; no external models, artwork or maker CAD embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','closedSurfaceAudit':'All slab, rim and mat mesh edges have exactly two incident faces after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
 for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 (ROOT/'assets/source-manifest/workshop-environment.json').write_text(json.dumps(report,indent=2)+'\n')
 print('WORKSHOP',json.dumps(counts))

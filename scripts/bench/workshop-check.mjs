@@ -1,11 +1,11 @@
-/** Standalone desk geometry/collision/visibility fixtures. Inspection views are labelled. */
+/** Sculpted tabletop geometry/collision/visibility fixtures. Inspection views are labelled. */
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-open-space";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-tabletop";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -159,27 +159,81 @@ try {
         pass: Math.abs(floor - height) < 0.03 && w.grounded && Math.abs(w.feet.y - floor) < 0.03,
       });
     }
-    // Mat descent, walking rejection, then thrust return on all four edges.
+    // Every sampled visible outline segment and corner, including both recesses.
+    // Starting on the rim uses its real top; the boundary never supplies a floor.
     const outerEdges = [];
-    for (const dx of [-1, 0, 1])
-      for (const dz of [-1, 0, 1]) {
-        if (!dx && !dz) continue;
-        setup(
-          dx < 0 ? -549.779 : dx > 0 ? 549.779 : 0,
-          -0.998,
-          dz < 0 ? -464.779 : dz > 0 ? 184.779 : 40,
-        );
-        if (dx) w.keys.add(dx < 0 ? "KeyA" : "KeyD");
-        if (dz) w.keys.add(dz < 0 ? "KeyW" : "KeyS");
-        advance(1800);
+    const outline = w.bounds.footprint;
+    for (let i = 0; i < outline.length; i++) {
+      const [ax, az] = outline[i],
+        [bx, bz] = outline[(i + 1) % outline.length];
+      for (const t of [0, 0.5]) {
+        setup(ax + (bx - ax) * t, 50, az + (bz - az) * t);
+        w.constrainToDesk();
+        const floor = b.world.floor(w.feet.x, w.feet.z, 50);
+        w.feet.y = floor + 0.002;
+        const dx = bx - ax,
+          dz = bz - az;
+        w.yaw = Math.atan2(-dz, dx); // W points outward (dz, -dx).
+        w.keys.add("KeyW");
+        advance(60);
+        const supported = b.world.floor(w.feet.x, w.feet.z, 50);
         outerEdges.push({
-          dx,
-          dz,
+          edge: i,
+          t,
           feet: w.feet.toArray(),
           grounded: w.grounded,
-          pass: w.grounded && w.feet.y > -1.05,
+          pass: Number.isFinite(supported) && w.grounded && Math.abs(w.feet.y - supported) < 0.03,
         });
       }
+    }
+    const recesses = [];
+    for (const sign of [-1, 1]) {
+      const x = sign * 295;
+      recesses.push({
+        name: "no invisible support " + sign,
+        pass: !Number.isFinite(b.world.floor(x, 150, 50)),
+      });
+      for (const y of [-0.998, 50, 6000]) {
+        setup(x, y, 109.77);
+        w.velocity.set(sign * 100, 0, 100);
+        w.keys.add("KeyS");
+        w.update(10);
+        advance(180);
+        const contained = Number.isFinite(b.world.floor(w.feet.x, w.feet.z, 50));
+        w.clear();
+        w.velocity.set(0, 0, 0);
+        const start = w.feet.z;
+        w.keys.add("KeyW");
+        advance(180);
+        recesses.push({
+          name: "fast curved edge and free inward travel " + sign + " at " + y,
+          pass: contained && w.feet.z < start - 4,
+          feet: w.feet.toArray(),
+        });
+      }
+    }
+    const rimContacts = [];
+    for (const [name, x, z, key, axis, limit, sign] of [
+      ["left", -542, 0, "KeyA", "x", -544, -1],
+      ["right", 542, 0, "KeyD", "x", 544, 1],
+      ["back", 0, -457, "KeyW", "z", -459, -1],
+      ["left end", -547, 162, "KeyW", "z", 160, -1],
+      ["right end", 547, 162, "KeyW", "z", 160, -1],
+    ]) {
+      setup(x, -0.998, z);
+      w.keys.add(key);
+      advance(180);
+      const blocked = sign * (w.feet[axis] - limit) < -0.2 && w.feet.y < -0.9;
+      w.keys.add("Space");
+      advance(240);
+      w.clear();
+      advance(400);
+      rimContacts.push({
+        name,
+        pass: blocked && w.grounded && Math.abs(w.feet.y - 4) < 0.02,
+        feet: w.feet.toArray(),
+      });
+    }
     const matEdges = [];
     for (const [x, z, outKey, inKey, axis, sign] of [
       [174, 40, "KeyD", "KeyA", "x", 1],
@@ -214,13 +268,14 @@ try {
           w.grounded,
       });
     }
-    // Every semantic reachable prop has corresponding render triangles in a
-    // collision mesh, including all arm/head components and five instruments.
+    // All reachable tabletop/rim surfaces use their actual render triangles.
     return {
       stats,
       collisions,
       matEdges,
       outerEdges,
+      recesses,
+      rimContacts,
       bounds: w.bounds,
       near: b.camera.near,
       depth: {
@@ -252,20 +307,12 @@ try {
       s.draws === provenance.budgets.drawsPerPass,
   );
   check("all semantics retained; reachable geometry collides", !s.missingIds.length, s.missingIds);
-  const allowedIds = new Set([
-    "main-oak-top",
-    "green-mat",
-    "pedestal",
-    "plinth",
-    "drawer-front",
-    "drawer-cup-pull",
-    "front-apron",
-    "back-stretcher",
-  ]);
+  const allowedIds = new Set(["main-oak-top", "green-mat", "low-back-side-rim"]);
   check(
-    "only desk and plain mat in environment",
-    provenance.semantics.every((part) => allowedIds.has(part.id)),
-    provenance.semantics.map((part) => part.id),
+    "only solid tabletop, low rim and plain mat",
+    provenance.semantics.length === 3 &&
+      provenance.semantics.every((part) => allowedIds.has(part.id) && part.min[1] >= -33),
+    provenance.semantics,
   );
   check("no new transparent or transmission passes", !s.nonOpaque.length, s.nonOpaque);
   check(
@@ -281,7 +328,11 @@ try {
   check("decor stays outside reachable column", !s.decorIntrusions.length, s.decorIntrusions);
   check(
     "approved desk boundaries",
-    JSON.stringify(g.bounds) === JSON.stringify({ minX: -550, maxX: 550, minZ: -465, maxZ: 185 }),
+    g.bounds.minX === -550 &&
+      g.bounds.maxX === 550 &&
+      g.bounds.minZ === -465 &&
+      g.bounds.maxZ === 185 &&
+      g.bounds.footprint.length > 100,
     g.bounds,
   );
   check(
@@ -294,7 +345,8 @@ try {
   );
   for (const row of g.collisions) check("drop on " + row.name, row.pass, row);
   for (const row of g.outerEdges)
-    check("solid outer desk edge " + row.dx + "," + row.dz, row.pass, row);
+    check("solid outline segment/corner " + row.edge + "/" + row.t, row.pass, row);
+  for (const row of [...g.recesses, ...g.rimContacts]) check(row.name, row.pass, row);
   for (const [i, row] of g.matEdges.entries())
     check("mat edge descent/block/jetpack " + i, row.pass, row);
   // Real keyboard input across a mat edge, in addition to labelled fixtures.
@@ -350,7 +402,10 @@ try {
   });
   // Explicit camera fixtures, never exposed as visitor camera controls.
   for (const [name, position, target] of [
-    ["open-space-inspection", [900, 500, 2000], [0, -380, -100]],
+    ["open-space-inspection", [900, 500, 2000], [0, -150, -100]],
+    ["reference-front-overview", [0, 720, 1200], [0, -1, -130]],
+    ["rim-profile-overview", [850, 170, 600], [180, -1, -130]],
+    ["underside-overview", [700, -360, 800], [0, -17, -130]],
     ["desk-inspection", [280, 480, 420], [0, 0, -120]],
   ]) {
     await page.evaluate(
@@ -369,6 +424,27 @@ try {
       },
       { position, target },
     );
+    await page.screenshot({ path: out + "/" + name + ".png" });
+  }
+  for (const [name, x, z, yaw, pitch] of [
+    ["mat-edge-visitor", 177, 40, Math.PI / 2, -0.3],
+    ["rim-visitor", 534, -100, -Math.PI / 2, 0.1],
+    ["recess-visitor", 295, 108, Math.PI, -0.35],
+  ]) {
+    await page.evaluate(
+      ({ x, z, yaw, pitch }) => {
+        const b = window.bench;
+        b.camera.fov = 68;
+        b.camera.updateProjectionMatrix();
+        b.walker.feet.set(x, b.world.floor(x, z, 50) + 0.002, z);
+        b.walker.velocity.set(0, 0, 0);
+        b.walker.yaw = yaw;
+        b.walker.pitch = pitch;
+        b.wake();
+      },
+      { x, z, yaw, pitch },
+    );
+    await page.waitForTimeout(200);
     await page.screenshot({ path: out + "/" + name + ".png" });
   }
   for (const side of ["bridge", "dial"]) {

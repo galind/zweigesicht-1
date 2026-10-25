@@ -195,3 +195,87 @@ test("sustained thrust stops below a thin ceiling and resumes after moving clear
   advance(w, 1);
   assert.ok(w.feet.x > 3 && w.feet.y > 2);
 });
+
+// Independent support oracle: triangulate the authored outline and raycast its
+// visible top, including a ring around the capsule; no boundary formula reuse.
+const tabletop = (
+  await import("../assets/authored/workshop-environment.json", { with: { type: "json" } })
+).default.mainDesk;
+function tabletopRig() {
+  const shape = new THREE.Shape(tabletop.footprint.map(([x, z]) => new THREE.Vector2(x, z)));
+  const geometry = new THREE.ShapeGeometry(shape).rotateX(Math.PI / 2).translate(0, -1, 0);
+  const world = new CollisionWorld();
+  world.add(new THREE.Mesh(geometry));
+  return new Walker(world, tabletop);
+}
+function supported(w) {
+  for (let i = 0; i < 32; i++) {
+    const a = (i * Math.PI) / 16;
+    assert.ok(
+      Number.isFinite(
+        w.world.floor(w.feet.x + 0.2199 * Math.cos(a), w.feet.z + 0.2199 * Math.sin(a), 10),
+      ),
+      `unsupported capsule at ${w.feet.toArray()}`,
+    );
+  }
+}
+test("sculpted footprint contains every edge and rounded corner at all flight heights", () => {
+  const w = tabletopRig(),
+    points = tabletop.footprint;
+  for (const y of [-0.998, 50, 6000]) {
+    for (let i = 0; i < points.length; i++) {
+      const [ax, az] = points[i],
+        [bx, bz] = points[(i + 1) % points.length];
+      for (const t of [0, 0.5]) {
+        w.feet.set(ax + (bx - ax) * t, y, az + (bz - az) * t);
+        w.velocity.set(0, 7, 0);
+        w.constrainToDesk();
+        supported(w);
+        assert.equal(w.feet.y, y);
+        assert.equal(w.velocity.y, 7);
+      }
+    }
+  }
+});
+test("recess edges reject outward motion, preserving inward and tangent momentum", () => {
+  const w = tabletopRig(),
+    points = tabletop.footprint;
+  for (let i = 0; i < points.length; i++) {
+    const [ax, az] = points[i],
+      [bx, bz] = points[(i + 1) % points.length];
+    const length = Math.hypot(bx - ax, bz - az),
+      tx = (bx - ax) / length,
+      tz = (bz - az) / length;
+    const nx = -tz,
+      nz = tx;
+    for (const inward of [-3, 0, 3]) {
+      w.feet.set((ax + bx) / 2 + nx * 0.22, 500, (az + bz) / 2 + nz * 0.22);
+      w.velocity.set(2 * tx + inward * nx, 4, 2 * tz + inward * nz);
+      w.constrainToDesk();
+      assert.ok(Math.abs(w.velocity.x * tx + w.velocity.z * tz - 2) < 1e-6);
+      assert.ok(Math.abs(w.velocity.x * nx + w.velocity.z * nz - Math.max(0, inward)) < 1e-6);
+      assert.equal(w.velocity.y, 4);
+    }
+  }
+});
+test("fast substeps slide along both recesses without crossing unsupported gaps or trapping inward travel", () => {
+  const w = tabletopRig();
+  for (const sign of [-1, 1])
+    for (const y of [-0.998, 50, 6000]) {
+      w.feet.set(sign * 295, y, 109.77);
+      w.velocity.set(sign * 80, 0, 100);
+      w.yaw = 0;
+      w.keys.add("KeyS");
+      w.update(10);
+      supported(w);
+      w.clear();
+      w.velocity.set(0, 0, 0);
+      const start = w.feet.z;
+      w.keys.add("KeyW");
+      advance(w, 1);
+      assert.ok(w.feet.z < start - 4);
+      supported(w);
+      w.clear();
+      assert.equal(w.resets, 0);
+    }
+});

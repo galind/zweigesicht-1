@@ -3,15 +3,16 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "desk-in-open-space",
-  "origin": "Original authored desk and mat geometry with noise textures; no external models, artwork or maker CAD embedded.",
+  "stage": "sculpted-tabletop",
+  "origin": "Original authored tabletop, rim and mat geometry with noise textures; no external models, artwork or maker CAD embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
+  "closedSurfaceAudit": "All slab, rim and mat mesh edges have exactly two incident faces after triangulation.",
   "budgets": {
-    "visibleTriangles": 1872,
-    "collisionTriangles": 1872,
-    "drawsPerPass": 4,
-    "textureBytesWithMipmaps": 8738132,
-    "downloadBytes": 552956
+    "visibleTriangles": 2156,
+    "collisionTriangles": 2156,
+    "drawsPerPass": 2,
+    "textureBytesWithMipmaps": 6990506,
+    "downloadBytes": 239420
   },
   "semantics": [
     {
@@ -19,14 +20,14 @@
       "role": "walkable",
       "material": "Oak",
       "min": [
-        -550,
+        -550.0,
         -33,
-        -465
+        -465.0
       ],
       "max": [
-        550,
+        550.0,
         -1,
-        185
+        185.0
       ]
     },
     {
@@ -45,280 +46,25 @@
       ]
     },
     {
-      "id": "pedestal",
+      "id": "low-back-side-rim",
       "role": "walkable",
-      "material": "Olive grey joinery",
+      "material": "Oak",
       "min": [
-        -534,
-        -910,
-        -430
+        -550,
+        -1,
+        -465.0
       ],
       "max": [
-        -326,
-        -33,
-        155
-      ]
-    },
-    {
-      "id": "plinth",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        -538,
-        -921,
-        -435
-      ],
-      "max": [
-        -322,
-        -883,
+        550.0,
+        4,
         160
-      ]
-    },
-    {
-      "id": "drawer-front",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        -525,
-        -265,
-        155
-      ],
-      "max": [
-        -335,
-        -63,
-        164
-      ]
-    },
-    {
-      "id": "drawer-cup-pull",
-      "role": "walkable",
-      "material": "Brushed tool steel",
-      "min": [
-        -454.0,
-        -164.0,
-        164
-      ],
-      "max": [
-        -406.0,
-        -152.0,
-        178
-      ]
-    },
-    {
-      "id": "drawer-front",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        -525,
-        -515,
-        155
-      ],
-      "max": [
-        -335,
-        -275,
-        164
-      ]
-    },
-    {
-      "id": "drawer-cup-pull",
-      "role": "walkable",
-      "material": "Brushed tool steel",
-      "min": [
-        -454.0,
-        -395.0,
-        164
-      ],
-      "max": [
-        -406.0,
-        -383.0,
-        178
-      ]
-    },
-    {
-      "id": "drawer-front",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        -525,
-        -877,
-        155
-      ],
-      "max": [
-        -335,
-        -525,
-        164
-      ]
-    },
-    {
-      "id": "drawer-cup-pull",
-      "role": "walkable",
-      "material": "Brushed tool steel",
-      "min": [
-        -454.0,
-        -701.0,
-        164
-      ],
-      "max": [
-        -406.0,
-        -689.0,
-        178
-      ]
-    },
-    {
-      "id": "pedestal",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        326,
-        -910,
-        -430
-      ],
-      "max": [
-        534,
-        -33,
-        155
-      ]
-    },
-    {
-      "id": "plinth",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        322,
-        -921,
-        -435
-      ],
-      "max": [
-        538,
-        -883,
-        160
-      ]
-    },
-    {
-      "id": "drawer-front",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        335,
-        -265,
-        155
-      ],
-      "max": [
-        525,
-        -63,
-        164
-      ]
-    },
-    {
-      "id": "drawer-cup-pull",
-      "role": "walkable",
-      "material": "Brushed tool steel",
-      "min": [
-        406.0,
-        -164.0,
-        164
-      ],
-      "max": [
-        454.0,
-        -152.0,
-        178
-      ]
-    },
-    {
-      "id": "drawer-front",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        335,
-        -515,
-        155
-      ],
-      "max": [
-        525,
-        -275,
-        164
-      ]
-    },
-    {
-      "id": "drawer-cup-pull",
-      "role": "walkable",
-      "material": "Brushed tool steel",
-      "min": [
-        406.0,
-        -395.0,
-        164
-      ],
-      "max": [
-        454.0,
-        -383.0,
-        178
-      ]
-    },
-    {
-      "id": "drawer-front",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        335,
-        -877,
-        155
-      ],
-      "max": [
-        525,
-        -525,
-        164
-      ]
-    },
-    {
-      "id": "drawer-cup-pull",
-      "role": "walkable",
-      "material": "Brushed tool steel",
-      "min": [
-        406.0,
-        -701.0,
-        164
-      ],
-      "max": [
-        454.0,
-        -689.0,
-        178
-      ]
-    },
-    {
-      "id": "front-apron",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        -325,
-        -125,
-        130
-      ],
-      "max": [
-        325,
-        -35,
-        150
-      ]
-    },
-    {
-      "id": "back-stretcher",
-      "role": "walkable",
-      "material": "Olive grey joinery",
-      "min": [
-        -330,
-        -815,
-        -430
-      ],
-      "max": [
-        330,
-        -740,
-        -410
       ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "120338cea699a24244f33682834c5a7aebad79aeedda8071121a9ba51450233e"
+      "sha256": "46221dec4860f4b3c96ceaa3a4d5eb7b31dab0b1e783998b946e73178831eeee"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -326,15 +72,15 @@
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "5b3cc8c792cb8e32d9efab90fee7c141cda856c7635c46a7cb320183fc5b5cc7"
+      "sha256": "e071901c106938f89ab2f7c1117fd8fcb5de911d133b236365949474a580facf"
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "e4aee124bc07f70685038a50fcd71bcc5a26b0646a94d258d2203f1659146998"
+      "sha256": "ca2d867997307794e70d152ae36c1f63372ff02c186278c5d974e2e9e332680b"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "e39f18c8d5b0abfe91c83df54d0d9baae2a5e721244d86edb24742ebd80f2804"
+      "sha256": "225360ca27575ffb21084b8e75467b5a11f69090edefcd82fcf4a36d1cd16ea2"
     }
   ]
 }

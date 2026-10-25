@@ -3,6 +3,44 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Reference-inspired tabletop — 25 October 2026
+
+Implemented the owner's upper-photo reference as a light natural wooden tabletop
+in the existing open warm-neutral background. Removed drawer pedestals, pulls,
+apron, stretcher and all lower furniture from the generated scene. The solid
+32 mm slab has two broad 370 mm wide / 75 mm deep +Z recesses, a 220 mm central
+projection, softened corners and a continuous 6 mm wide / 5 mm high back/side rim.
+The original green mat, watch, both holders, station, arrival, visitor dimensions,
+lighting and controls remain unchanged.
+
+The authored 134-point outline drives both export and the capsule boundary.
+Outward-only containment now follows the nonconvex silhouette at every flight
+height; the visible rim triangles collide, and the 1 mm mat descent/jetpack return
+is retained. Regenerated the Blender scene, GLB and contact shading, verified
+closed manifold surfaces, and recorded source/output hashes. Environment budgets:
+**2,156 visible/collision triangles**, **2 draws/pass**, **6.67 MiB decoded textures**,
+**0.23 MiB GLB**. Generated files and reference imagery remain ignored/local.
+
+Verified: **133 CPU tests** (including every outline edge/corner, free tangency and
+inward motion, and fast recess crossings), inventory, typecheck, lint and production
+build; **319 environment**, **67 jetpack/collision**, **32 flip**, **8 lifecycle** and
+**11 interaction/quality/idle** browser checks. Independent CAD/holder audit passes
+both rests and **16 source-surface drops**, retaining 219 leaves with maximum
+source-matrix error 5.56 × 10⁻¹⁷. Continuous flip/holder envelopes clear the new
+geometry; resource disposal/re-entry and high flight pass.
+
+Reviewed actual front/profile/underside overview fixtures against the upper
+reference, plus arrival, rim/recess/mat edges and both landed movement sides at
+normal visitor scale. Refined curved-side shading after the first visual pass.
+Evidence and the before/reference/after review sheet are in
+`artifacts/workshop-tabletop/`; implementation details are in
+[walking documentation](docs/BENCH_EXPERIENCE.md). Restarted production preview:
+<http://127.0.0.1:4198/bench>.
+
+Next: owner walkthrough. Existing physical-device, human mouse-feel/accessibility
+and mechanical qualification limits remain; no new certification is claimed.
+No push, deployment, publication or CAD redistribution.
+
 ## Standalone desk in open space — 25 October 2026
 
 Owner requested removing the surrounding room. Removed all walls, the window,

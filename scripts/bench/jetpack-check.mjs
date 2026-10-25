@@ -215,6 +215,8 @@ try {
             x = dx < 0 ? B.minX + 0.221 : dx > 0 ? B.maxX - 0.221 : 0,
             z = dz < 0 ? B.minZ + 0.221 : dz > 0 ? B.maxZ - 0.221 : 40;
           setup(x, y, z);
+          w.constrainToDesk();
+          if (y === -1) w.feet.y = b.world.floor(w.feet.x, w.feet.z, 50) + 0.002;
           advance(10);
           if (dx) w.keys.add(dx < 0 ? "KeyA" : "KeyD");
           if (dz) w.keys.add(dz < 0 ? "KeyW" : "KeyS");
@@ -224,10 +226,11 @@ try {
           rows.push({
             name: `edge/corner ${dx},${dz} at ${y}`,
             pass:
-              w.feet.x >= B.minX + 0.22 &&
-              w.feet.x <= B.maxX - 0.22 &&
-              w.feet.z >= B.minZ + 0.22 &&
-              w.feet.z <= B.maxZ - 0.22,
+              Number.isFinite(b.world.floor(w.feet.x, w.feet.z, 50)) &&
+              w.feet.x >= B.minX + 0.22 - 1e-6 &&
+              w.feet.x <= B.maxX - 0.22 + 1e-6 &&
+              w.feet.z >= B.minZ + 0.22 - 1e-6 &&
+              w.feet.z <= B.maxZ - 0.22 + 1e-6,
             feet: w.feet.toArray(),
           });
         }
@@ -241,6 +244,7 @@ try {
           y,
           isX ? 40 : B[side] + (negative ? 0.22 : -0.22),
         );
+        if (y === -1) w.feet.y = b.world.floor(w.feet.x, w.feet.z, 50) + 0.002;
         w.keys.add(isX ? (negative ? "KeyA" : "KeyD") : negative ? "KeyW" : "KeyS");
         w.keys.add(isX ? "KeyW" : "KeyD");
         advance(180);
