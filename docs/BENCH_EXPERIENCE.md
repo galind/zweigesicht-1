@@ -82,7 +82,7 @@ Hold either **Shift** while using WASD to run at **11 mm/s**, twice the ordinary
 5.5 mm/s horizontal speed. Existing 22 mm/s² acceleration smoothly transitions
 between speeds; diagonals are normalized. Shift also speeds horizontal travel in
 air but never alters vertical thrust or gravity. Releasing Shift returns to walk;
-menu, focus loss and reset clear the held input. The entry popup, pause menu and
+menu, focus loss and reset clear the held input. The Bench introduction, pause menu and
 walking hint show **Shift · Hold to run**. Physics substeps account for run speed.
 
 Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
@@ -358,8 +358,8 @@ Other internal CAD limitations remain unchanged.
 ## Flip and player continuity
 
 **F is provisional**, unused by the prior walking controls. Change `FLIP_KEY` in
-`explorer/src/bench/bindings.ts` to update the input handler, homepage controls
-popup, Escape menu and concise exploration hints together. No flight HUD,
+`explorer/src/bench/bindings.ts` to update the input handler, Bench controls
+introduction, Escape menu and concise exploration hints together. No flight HUD,
 settings panel, particles, camera shake or camera animation was added.
 
 The four-second operation uses quintic easing: 1.05 seconds of vertical lift,
@@ -432,34 +432,43 @@ remains outside header measurement and yields to open panels and focused
 part/group views. The preview-only Workshop action retains its existing location
 and build policy.
 
-The controls introduction is now **Before you begin**, with a short Escape/pointer
-release explanation and the unchanged shared bindings. **Enter workbench** leads
-to **Preparing the workbench…**, then the existing captured arrival; no second
-introduction or new step is added. If the popup overflows, initial focus goes to
-its heading so the introduction is visible, with Tab reaching the entry action.
-Otherwise the entry action retains initial focus. Cancellation restores the
-invitation's focus. Direct entry, capture refusal, loading cancellation, retry and
-pause/resume behavior are preserved. Route metadata, canvas description and the
-pause heading use workbench terminology. Scene, physics and CAD are unchanged.
+The homepage invitation is now a direct link to `/bench`, with no popup and no
+prefetch. The route owns an introduction titled **The workbench**: scene context,
+shared controls, keyboard/mouse requirement and **Preparing the workbench…**.
+The scene loads visibly behind it. Once ready, **Start exploring** requests mouse
+capture from that user action. Loading completion, browser Back, reloads and
+bookmarks never capture automatically. The old cross-route capture intent and
+homepage popup were removed.
 
-Visible checks cover desktop and narrow layouts, keyboard/focus, 200% text and
-native Chrome reduced-motion emulation. Native Chrome also verifies actual
-capture/arrival and Escape; the in-app preview refuses pointer capture, and its
-existing recovery action remains available. Automated entry checks cover seven
-viewport/text combinations in both motion modes, including a short landscape
-viewport, and remove the arrow to verify the text remains sufficient. Local
-screenshots and reports are in `artifacts/bench-entry-redesign/`; current test
-results are recorded in `PROGRESS.md`. These checks do not replace the existing
-physical-device, human usability or release gates.
+Initial focus goes to the introduction heading; loading completion does not move
+focus. Tab reaches Start once available; the return link stays accessible.
+The introduction scrolls below the header at short/narrow sizes and enlarged text.
+After entry, Esc opens the existing pause menu with full controls and Resume.
+Capture refusal, missing assets and graphics errors keep their recovery actions.
+
+`useBenchAccess` checks any fine pointer, any hover capability and the standard
+pointer-lock API. It listens for pointer/hover capability changes, supports hybrid
+devices and does not classify by screen width or user-agent. Browsers cannot
+reliably detect physical keyboards, so the requirement stays explicit. API
+presence cannot guarantee capture permission; runtime refusal still has recovery.
+Touch-only devices see a non-interactive **Explore on desktop** invitation with
+**Keyboard and mouse required.** Direct `/bench` visits show the explanation and
+a return link, without importing the viewer or requesting scene assets. Browsers
+without the mouse-capture API get an additional browser-support explanation.
+
+Visible review covers desktop, narrow windows, 200% text, native Chrome capture,
+movement and Esc, and native touch emulation toggled in both directions. Automated
+checks include phone/tablet touch emulation, API absence, keyboard navigation,
+normal/reduced motion, explicit entry, loading/errors and lifecycle cleanup.
+Evidence is local in `artifacts/bench-route-introduction/`; current results are in
+`PROGRESS.md`. Emulation does not replace physical-device or release gates.
 
 ## Existing interface and physics
 
-The homepage **Explore the workbench** invitation opens the glass controls popup.
-**Enter workbench** navigates to `/bench` and requests capture when ready;
-direct visits/Back show the compact Enter button. Escape, blur or document hiding
-while loading cancels automatic capture. Capture refusal, missing assets and
-graphics errors retain the existing recovery actions. Popup and Escape menu keep
-the homepage's typography, colors, rounded corners and glass blur. The Escape menu
+The homepage **Explore it in first person** link opens the Bench introduction.
+**Start exploring** captures the mouse after loading; direct visits and Back use
+the same introduction. Loading never captures automatically. The introduction
+and Escape menu use the homepage's typography, colors and glass surfaces. The Escape menu
 is centered horizontally and vertically in the viewport, with bounded scrolling
 on short screens. Exploration keeps the scene sharp with compact navigation and
 one hint row; a rejected flip temporarily replaces that row with a message

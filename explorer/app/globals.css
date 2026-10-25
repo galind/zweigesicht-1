@@ -2264,6 +2264,7 @@ canvas:focus-visible {
   z-index: 2;
 }
 .bench-trigger {
+  text-decoration: none;
   display: flex;
   width: 100%;
   min-height: 44px;
@@ -2311,4 +2312,20 @@ canvas:focus-visible {
   .bench-invitation {
     bottom: var(--panel-bottom, 90px);
   }
+}
+
+.bench-unavailable {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  max-width: 20rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--site-panel);
+}
+.bench-invitation-note {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--site-muted);
 }

@@ -22,12 +22,12 @@ const check = (name, pass, detail) => {
 const shot = (name) => page.screenshot({ path: `${out}/${name}.png` });
 const ready = () =>
   page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
-const enter = () => page.getByRole("button", { name: /^(Enter workbench|Resume exploring)$/ });
+const enter = () => page.getByRole("button", { name: /^(Start exploring|Resume exploring)$/ });
 const layout = () =>
   page.evaluate(() =>
     [
       ...document.querySelectorAll(
-        ".bench-header a,.bench-start,.bench-start button,.bench-menu,.bench-menu button,.bench-menu-controls,.bench-legend,.bench-entry-popup",
+        ".bench-header a,.bench-start,.bench-menu,.bench-menu button,.bench-legend",
       ),
     ].map((e) => {
       const r = e.getBoundingClientRect();
@@ -59,81 +59,28 @@ try {
     const label = `${width}x${height}-${text}`;
     await page.setViewportSize({ width, height });
     await page.goto(base + "/?text=" + text);
-    const trigger = page.getByRole("button", { name: "Explore it in first person", exact: true });
-    await trigger.click();
-    const popup = page.getByRole("dialog");
-    await popup.waitFor();
-    check(
-      label + " homepage shows controls before navigation",
-      new URL(page.url()).pathname === "/" &&
-        (await popup
-          .innerText()
-          .then((t) => ["WASD", "Mouse", "Space", "F", "R", "Esc"].every((k) => t.includes(k)))),
-    );
-    check(
-      label + " popup layout",
-      (await layout()).every((x) => x.within && !x.overflow),
-      await layout(),
-    );
-    await page.keyboard.press("Escape");
-    await popup.waitFor({ state: "hidden" });
-    await page.waitForFunction(
-      () => document.activeElement?.getAttribute("aria-labelledby") === "bench-invitation-title",
-    );
-    check(
-      label + " cancel restores homepage focus",
-      await trigger.evaluate((e) => e === document.activeElement),
-    );
+    const trigger = page.getByRole("link", { name: "Explore it in first person", exact: true });
     await trigger.press("Enter");
-    await popup.waitFor();
-    await enter().waitFor();
-    await page.waitForFunction(
-      () => document.activeElement?.textContent?.trim() === "Enter workbench",
-    );
-    check(
-      label + " popup focuses Enter",
-      await enter().evaluate((e) => e === document.activeElement),
-    );
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Tab");
-    await page.waitForFunction(() =>
-      document.querySelector('[role="dialog"]')?.contains(document.activeElement),
-    );
-    check(
-      label + " popup contains keyboard focus",
-      await popup.evaluate((e) => e.contains(document.activeElement)),
-    );
-    await page.waitForFunction(() => {
-      const overlay = document.querySelector('[data-slot="sheet-overlay"]');
-      return (
-        overlay &&
-        getComputedStyle(overlay).opacity === "1" &&
-        overlay.getAnimations().every((animation) => animation.playState === "finished")
-      );
-    });
-    const popupGlass = await popup.evaluate((e) => {
-      const style = getComputedStyle(e);
-      const backdrop = getComputedStyle(document.querySelector('[data-slot="sheet-overlay"]'));
-      return {
-        background: style.backgroundColor,
-        blur: style.backdropFilter,
-        radius: style.borderRadius,
-        backdrop: backdrop.backdropFilter,
-      };
-    });
-    check(label + " popup blurs background", popupGlass.backdrop.includes("blur("), popupGlass);
-    await shot("popup-" + label);
-    await enter().click();
     await page.waitForURL(base + "/bench");
-    await page.waitForFunction(() => !!document.pointerLockElement);
-    await page.locator(".bench-legend").waitFor();
+    await enter().waitFor();
     check(
-      label + " popup enters captured scene without another instruction screen",
-      (await page.locator(".bench-menu,.bench-start,.bench-entry-popup").count()) === 0,
+      label + " homepage goes directly to Bench introduction",
+      await page
+        .locator(".bench-start")
+        .innerText()
+        .then((t) => ["WASD", "Mouse", "Space", "Esc"].every((k) => t.includes(k))),
     );
     check(
-      label + " scene is sharp while captured",
-      (await page.locator(".bench-menu-backdrop,[data-slot='sheet-overlay']").count()) === 0,
+      label + " loading never captures automatically",
+      await page.evaluate(() => !document.pointerLockElement),
+    );
+    await shot("introduction-" + label);
+    await enter().click();
+    await page.waitForFunction(() => !!document.pointerLockElement);
+    await page.locator(".bench-start").waitFor({ state: "hidden" });
+    check(
+      label + " explicit start removes introduction",
+      (await page.locator(".bench-start").count()) === 0,
     );
     await shot("arrival-" + label);
     await page.keyboard.press("Escape");
@@ -144,7 +91,7 @@ try {
     await page.waitForURL(base + "/bench");
     await enter().waitFor();
     check(
-      label + " browser Back never reuses capture intent",
+      label + " browser Back shows introduction without capture",
       (await page.evaluate(() => !document.pointerLockElement)) &&
         (await page.locator(".bench-start").isVisible()),
     );
@@ -166,7 +113,12 @@ try {
       (await layout()).every((x) => x.within && !x.overflow),
       await layout(),
     );
-    check(label + " entry focused", await enter().evaluate((e) => e === document.activeElement));
+    check(
+      label + " introduction focused",
+      await page
+        .getByRole("heading", { name: "The workbench" })
+        .evaluate((e) => e === document.activeElement),
+    );
     check(label + " no entry settings", (await page.locator(".bench-options").count()) === 0);
     check(
       label + " navigation and menu do not overlap",
@@ -208,10 +160,11 @@ try {
       contrast,
     );
     check(
-      label + " direct visit has no repeated instructions",
-      (await page.locator(".bench-menu-controls,h1").count()) === 0,
+      label + " direct visit includes one controls introduction",
+      (await page.locator(".bench-menu-controls").count()) === 1,
     );
     await shot("direct-" + label);
+    await page.keyboard.press("Tab");
     await page.keyboard.press("Shift+Tab");
     check(
       label + " keyboard navigation focus visible",
@@ -318,9 +271,9 @@ try {
       };
     });
     check(
-      label + " Escape menu matches popup glass and backdrop",
-      JSON.stringify(menuGlass) === JSON.stringify(popupGlass),
-      { popupGlass, menuGlass },
+      label + " Escape menu retains glass and backdrop",
+      menuGlass.blur.includes("blur(") && menuGlass.backdrop.includes("blur("),
+      menuGlass,
     );
     await shot("menu-" + label);
     await page.getByRole("button", { name: "Reset position", exact: true }).click();
@@ -348,7 +301,7 @@ try {
     check(label + " resume and return navigation", true);
   }
   await page.setViewportSize({ width: 1024, height: 640 });
-  // Escape during a pending homepage entry must cancel future automatic capture.
+  // Loading never opts into capture, even after a homepage entry.
   let finishLoad;
   const heldLoad = new Promise((resolve) => {
     finishLoad = resolve;
@@ -358,8 +311,7 @@ try {
     await route.continue();
   });
   await page.goto(base + "/");
-  await page.getByRole("button", { name: "Explore it in first person", exact: true }).click();
-  await enter().click();
+  await page.getByRole("link", { name: "Explore it in first person", exact: true }).click();
   await page.waitForURL(base + "/bench");
   await page.getByText("Preparing the workbench…", { exact: true }).waitFor();
   await page.keyboard.press("Escape");
@@ -367,7 +319,7 @@ try {
   finishLoad();
   await enter().waitFor();
   check(
-    "Escape during slow loading cancels automatic capture",
+    "Slow loading preserves explicit start",
     await page.evaluate(() => !document.pointerLockElement),
   );
   await page.unroute("**/bench-local/environment.glb");

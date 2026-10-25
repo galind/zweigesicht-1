@@ -34,7 +34,7 @@ const snap = () =>
   });
 const wait = (ms) => page.waitForTimeout(ms);
 const capture = async () => {
-  await page.getByRole("button", { name: /^(Enter workbench|Resume exploring)$/ }).click();
+  await page.getByRole("button", { name: /^(Start exploring|Resume exploring)$/ }).click();
   await page.waitForFunction(() => window.bench.status.captured);
 };
 const shot = async (name) => {
