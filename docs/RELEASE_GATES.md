@@ -16,6 +16,16 @@ does not establish public redistribution rights or mechanical certification.
 
 See [current status](../PROGRESS.md) for outstanding actions and [CAD notes](CAD_NOTES.md) for source constraints and existing evidence.
 
+## Scoped UAT delivery authorization — 25 October 2026
+
+After reviewing the missing-asset failure and confirming that UAT is publicly
+accessible, the owner explicitly approved public delivery of `movement.stl`,
+`dial.stl` and `environment.glb`. This authorizes the three prepared payloads for
+`zweigesicht-uat.vercel.app`; it does not change their source hashes, original CAD
+storage policy or the separate production project's release scope. The approval
+is an owner publication decision, not a newly obtained maker license. Broader
+source/history redistribution and mechanical qualification remain separate.
+
 ## Public repository readiness — historical audit, 3 October 2026
 
 The owner subsequently made this repository public, as recorded in

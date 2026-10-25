@@ -8,8 +8,10 @@ Updated 25 October 2026. Setup: [README](README.md). Technical reference:
 
 `develop` includes the Bench feature in [PR #31](https://github.com/galind/zweigesicht-1/pull/31)
 and the homepage/Bench onboarding in [PR #33](https://github.com/galind/zweigesicht-1/pull/33).
-The owner reports staging release; this review starts at `48ef8b3`. Production
-promotion and live staging delivery have not been verified by this cleanup.
+This review starts at `48ef8b3`. UAT now manually serves PR #34's application
+commit `cdde799`; Vercel reports deployment `dpl_6uRrfS9xnkM7ZsKWr1511YShTD5p`
+ready and promoted to `zweigesicht-uat.vercel.app`. The PR remains open toward
+`develop`; the separate production project and `main` were not changed.
 Repository visibility is public, confirmed through the connected GitHub app.
 
 ## Current application
@@ -26,8 +28,8 @@ Repository visibility is public, confirmed through the connected GitHub app.
   Touch-only devices get a desktop explanation without loading the scene.
   [Bench reference](docs/BENCH_EXPERIENCE.md) owns dimensions, reproduction and controls;
   [performance review](docs/BENCH_PERFORMANCE.md) owns measurements and their limits.
-- Holder/environment payloads remain local. Hosted Bench now requires an explicit,
-  hash-verified build asset source; integrating code does not provision that source.
+- Original holder files remain outside Git. The three prepared Bench payloads
+  now have owner-approved public delivery through UAT's verified build asset source.
 
 ## Cleanup under review
 
@@ -73,16 +75,19 @@ The owner's staging screenshot confirms HTTP 404 for all three required Bench
 payloads: `/bench-local/movement.stl`, `dial.stl` and `environment.glb`, followed
 by `Local holder unavailable`. The deployment fix adds an opt-in build source
 with hash validation and disables the hosted entry when no source is configured.
-CI now builds the Vercel package on every integration PR. The owner confirms UAT
-is publicly accessible. Public asset delivery clearance, storage and deployment
-configuration remain outstanding; no payloads have been uploaded. See
-[hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
+CI now builds the Vercel package on every integration PR. The owner explicitly
+approved public delivery of these three files. The matching bytes are uploaded
+to the UAT-only Blob store, and its serving environment has the asset source
+configured. The remote build is ready/promoted; the **Staging delivery** workflow
+checks the live paths and hashes. See [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
 [GitHub CI on `6ca7539`](https://github.com/galind/zweigesicht-1/actions/runs/40233643129)
 passed all 161 tests, inventory, typecheck, lint and both builds. The hosted-asset
 fixtures exercise successful delivery and missing/corrupt/private-source failures;
 they do not verify a configured live UAT deployment. No local testing was run.
 
-Review and merge this cleanup into `develop`, then review staging separately.
+Review and merge this cleanup into `develop`; UAT currently serves its reviewed
+application snapshot without a PR merge. Actual browser scene-entry review is
+separate from the cloud HTTP/asset checks.
 Keep current status concise: replace superseded next actions rather than adding
 another chronological entry.
 

@@ -355,9 +355,15 @@ development and standard local builds retain their prepared-file workflow.
 
 Storage authentication protects the build source; the deployed files inherit
 the site's access controls. Confirm staging protection and the applicable
-[release gates](RELEASE_GATES.md) before supplying the assets. No assets have
-been uploaded or deployment settings changed by this fix. After provisioning,
-redeploy and verify all three `/bench-local/` responses and actual scene entry.
+[release gates](RELEASE_GATES.md) before supplying the assets. The owner has now
+approved these three files for public UAT delivery. Their recorded bytes are in
+the `zweigesicht-uat-bench` Blob store under `bench-20261025/`, and only the UAT
+project's serving environment has `BENCH_ASSET_BASE_URL` configured. No build
+read token is needed for these approved public objects. Originals stay out of Git.
+
+The **Staging delivery** GitHub Actions workflow checks the deployed homepage,
+`/bench`, and all three payload hashes without using the owner's computer.
+It does not execute browser/WebGL interaction or replace actual scene-entry review.
 
 ## Verification
 
