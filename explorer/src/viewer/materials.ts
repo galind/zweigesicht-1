@@ -45,7 +45,7 @@ const profiles = {
 };
 // Fitted dial II: translucent vitreous enamel over the separate silver carrier.
 // Optical values are an appearance approximation, not measured enamel data.
-export const FITTED_BLUE_ENAMEL = {
+const FITTED_BLUE_ENAMEL = {
   color: 0x0e47ba,
   metalness: 0,
   roughness: 0.065,
@@ -57,6 +57,34 @@ export const FITTED_BLUE_ENAMEL = {
   clearcoat: 1,
   clearcoatRoughness: 0.035,
 };
+
+/** A source finish restores the raw catalog dial; other routes keep it fitted. */
+export function applyDialEnamel(
+  material: THREE.MeshPhysicalMaterial,
+  appearance:
+    | 'fitted'
+    | { color: number; metalness: number; roughness: number } = 'fitted',
+) {
+  const optical = FITTED_BLUE_ENAMEL;
+  const fitted = appearance === 'fitted';
+  const surface = appearance === 'fitted' ? optical : appearance;
+  material.color.setHex(surface.color);
+  material.metalness = surface.metalness;
+  material.roughness = surface.roughness;
+  material.transmission = fitted ? optical.transmission : 0;
+  material.userData.finishTransmission = material.transmission;
+  material.ior = optical.ior;
+  material.thickness = optical.thickness;
+  material.attenuationColor.setHex(optical.attenuationColor);
+  material.attenuationDistance = optical.attenuationDistance;
+  material.clearcoat = fitted ? optical.clearcoat : 0;
+  material.clearcoatRoughness = optical.clearcoatRoughness;
+  // Carrier and enamel share coplanar source faces. Bias depth, not geometry.
+  material.polygonOffset = fitted;
+  material.polygonOffsetFactor = -1;
+  material.polygonOffsetUnits = -1;
+}
+
 type Finish = keyof typeof profiles;
 // Shared straight-brush controls: updating a family affects all its parts.
 // Spatial grain controls below remain independent of these optical amplitudes.

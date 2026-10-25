@@ -19,6 +19,13 @@ function check(name, pass, details) {
 }
 
 try {
+  if (process.env.WORKSHOP_DEPTH === 'fallback')
+    await page.addInitScript(() => {
+      const get = WebGL2RenderingContext.prototype.getExtension;
+      WebGL2RenderingContext.prototype.getExtension = function (name) {
+        return name === 'EXT_clip_control' ? null : get.call(this, name);
+      };
+    });
   await page.goto(base + '/bench?inspect=1');
   await page.bringToFront();
   await page.waitForFunction(() => window.bench?.status.ready, null, {
@@ -29,7 +36,11 @@ try {
     await page.evaluate(
       () =>
         window.bench.status.quality === 'Auto' &&
-        window.bench.renderer.getPixelRatio() === 1,
+        window.bench.renderer.getPixelRatio() ===
+          Math.min(
+            devicePixelRatio,
+            window.bench.renderer.capabilities.reversedDepthBuffer ? 1 : 0.85,
+          ),
     ),
   );
   // Real browser input/capture; no direct call of the look handler.
@@ -103,7 +114,7 @@ try {
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.pointerLockElement);
   for (const mode of ['Low', 'High', 'Auto']) {
-    await page.getByRole('button', { name: /^Detail:/ }).click();
+    await page.getByRole('combobox', { name: 'Detail' }).selectOption(mode);
     check(
       'menu selects ' + mode,
       await page.evaluate((mode) => window.bench.status.quality === mode, mode),
@@ -113,6 +124,7 @@ try {
   // regression, not evidence about normal GPU or physical mouse performance.
   const adaptation = await page.evaluate(async () => {
     const b = window.bench;
+    const initialRatio = b.renderer.getPixelRatio();
     const original = b.renderer.render.bind(b.renderer);
     const originalSetRatio = b.renderer.setPixelRatio.bind(b.renderer);
     const changes = [];
@@ -150,15 +162,20 @@ try {
       mode: b.status.quality,
       changes,
       elapsedMs: performance.now() - started,
+      initialRatio,
     };
   });
   check(
     'stationary look drives gradual bounded Auto reduction',
     adaptation.ratio === 0.7 &&
       adaptation.mode === 'Auto' &&
-      adaptation.changes.length === 2 &&
-      adaptation.changes[0].ratio === 0.85 &&
-      adaptation.changes[1].at - adaptation.changes[0].at > 5000,
+      adaptation.changes.length === (adaptation.initialRatio > 0.85 ? 2 : 1) &&
+      adaptation.changes.every(
+        (change, i) =>
+          change.ratio ===
+            (adaptation.initialRatio > 0.85 && i === 0 ? 0.85 : 0.7) &&
+          (i === 0 || change.at - adaptation.changes[i - 1].at > 5000),
+      ),
     adaptation,
   );
   await page.evaluate(() => window.bench.quality('High'));
@@ -189,7 +206,10 @@ try {
         side: b.status.side,
         quality: b.status.quality,
         ratio: b.renderer.getPixelRatio(),
-        singleVisible: b.station.root.visible && Object.values(b.station.holders).filter(g => g.visible).length === 1,
+        singleVisible:
+          b.station.root.visible &&
+          Object.values(b.station.holders).filter((g) => g.visible).length ===
+            1,
         pending: b.activity.pending,
       };
     }, side);
@@ -213,7 +233,7 @@ try {
         ({ side, scale }) => {
           const b = window.bench;
           b.flip?.setRest(side);
-          const station = b.station?.root.position ?? b.stations.find((s) => s.id === side);
+          const station = b.station.root.position;
           b.emit();
           b.renderer.transmissionResolutionScale = scale;
           const x = station.x - 8,

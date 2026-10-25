@@ -59,6 +59,6 @@
     "dial": "ZBseite: 13.7 mm seating shoulders, 9.2 mm internal clearance floor. Source movement rotated -90 degrees around X, translated +16.3 mm world Y; plate source Z=-2.6 seats at Y=13.7.",
     "holderOrientation": "Both original holders: source Z-up to world Y-up with X -90 degrees, then world Y +90 degrees. This maps the actual source -Y stem relief to world +X. The previous X-only orientation was incorrect.",
     "limits": "Original-STEP mainplate seating and crown clearances verified in assets/source-manifest/holder-seating.json. Nominal static fit only; not a mechanical tolerance or holding certification.",
-    "redistribution": "No public redistribution grant established. Originals and prepared holder payloads remain ignored/local."
+    "redistribution": "No public redistribution grant established. Originals remain private and ignored; owner-approved UAT GLB delivery and measurements are recorded in holder-runtime.json and docs/RELEASE_GATES.md."
   }
 }

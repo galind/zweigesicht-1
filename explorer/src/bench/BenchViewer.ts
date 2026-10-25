@@ -1,7 +1,6 @@
 import { assemblyFittingPresent } from '../experience/assemblyFittings';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
   configureRenderer,
@@ -16,7 +15,7 @@ import { loadCaseRecovery, recoverCaseSurfaces } from '../viewer/CaseRecovery';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
 import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
-import { assetRequestUrl } from '../experience/loading';
+import { assetRequestUrl, sha256 } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
 import { CollisionWorld, Walker, WALK } from './physics';
 import { BenchQuality, LookActivity, type QualityMode } from './performance';
@@ -26,7 +25,7 @@ import { finishBenchSurface } from './SurfaceFinish';
 import layout from '../../../assets/authored/atelier-layout.json';
 import workshop from '../../../assets/authored/workshop-environment.json';
 import watchConfiguration from '../../../assets/authored/watch-configurations.json';
-import holderManifest from '../../../assets/source-manifest/holder.json';
+import holderManifest from '../../../assets/source-manifest/holder-runtime.json';
 export type BenchStatus = {
   ready: boolean;
   captured: boolean;
@@ -35,6 +34,11 @@ export type BenchStatus = {
   flipBlocked: boolean;
   quality: QualityMode;
 };
+
+function loadedValue<T>(result: PromiseSettledResult<T>): T {
+  if (result.status === 'rejected') throw result.reason;
+  return result.value;
+}
 
 function printedPlastic() {
   const material = new THREE.MeshStandardMaterial({
@@ -276,26 +280,26 @@ export class BenchViewer {
         return o;
       };
       const holder = async (name: string) => {
-        const response = await fetch('/bench-local/' + name + '.stl');
-        if (!response.ok) throw Error('Local holder unavailable');
+        const response = await fetch('/bench-local/' + name + '.glb');
+        if (!response.ok) throw Error('Holder unavailable');
         const data = await response.arrayBuffer();
-        const hash = Array.from(
-          new Uint8Array(await crypto.subtle.digest('SHA-256', data)),
-          (v) => v.toString(16).padStart(2, '0'),
-        ).join('');
         if (
-          hash !==
-          holderManifest.files.find((f) => f.path.endsWith('/' + name + '.stl'))
+          (await sha256(data)) !==
+          holderManifest.files.find((f) => f.name === name + '.glb')
             ?.sha256
         )
           throw Error('Holder integrity mismatch');
-        const mesh = new THREE.Mesh(
-          new STLLoader().parse(data),
-          printedPlastic(),
-        );
+        const gltf = await loader.parseAsync(data, '/bench-local/');
+        track(gltf.scene);
+        const mesh = gltf.scene.children[0];
+        if (gltf.scene.children.length !== 1 || !(mesh instanceof THREE.Mesh))
+          throw Error('Invalid holder model');
+        for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material])
+          this.releaseMaterial(material);
+        mesh.material = printedPlastic();
         mesh.rotation.x = -Math.PI / 2;
         mesh.name = name + '-holder';
-        track(mesh);
+        track(mesh); // Retain ownership when the mesh moves out of the glTF scene.
         return mesh;
       };
       const loadEnvironment = async () => {
@@ -329,22 +333,16 @@ export class BenchViewer {
         this.release(loaded);
         return;
       }
-      for (const r of results) if (r.status === 'rejected') throw r.reason;
-      const surfaces = (
-        results[2] as PromiseFulfilledResult<
-          Awaited<ReturnType<typeof loadSourceSurfaces>>
-        >
-      ).value;
-      const catalog = (results[6] as PromiseFulfilledResult<THREE.Object3D>)
-        .value;
-      recoverCaseSurfaces(
-        catalog,
-        (
-          results[7] as PromiseFulfilledResult<
-            Awaited<ReturnType<typeof loadCaseRecovery>>
-          >
-        ).value,
-      );
+      // All siblings have settled before unwrapping, so failure cleanup owns
+      // every successful load. Keep each asset's inferred type and name.
+      const overview = loadedValue(results[0]);
+      const diamond = loadedValue(results[1]);
+      const surfaces = loadedValue(results[2]);
+      const bridgeHolder = loadedValue(results[3]);
+      const dialHolder = loadedValue(results[4]);
+      const environment = loadedValue(results[5]);
+      const catalog = loadedValue(results[6]);
+      recoverCaseSurfaces(catalog, loadedValue(results[7]));
       const records = new Map(manifest.instances.map((p) => [p.id, p]));
       const crownIds = new Set(
         watchConfiguration.leaves
@@ -362,8 +360,7 @@ export class BenchViewer {
       );
       const requiredIds = new Set(required.map((p) => p.id));
       const accepted = new Set<string>();
-      for (const result of [results[0], results[1], results[6]]) {
-        const object = (result as PromiseFulfilledResult<THREE.Object3D>).value;
+      for (const object of [overview, diamond, catalog]) {
         const meshes: { mesh: THREE.Mesh; record: Part }[] = [];
         object.traverse((node) => {
           if (!(node instanceof THREE.Mesh)) return;
@@ -412,16 +409,10 @@ export class BenchViewer {
       this.detached = createDetachedParts(catalog, records, surfaces);
       track(this.detached);
       this.scene.add(this.detached);
-      this.bridgeHolder = (
-        results[3] as PromiseFulfilledResult<THREE.Mesh>
-      ).value;
-      this.dialHolder = (
-        results[4] as PromiseFulfilledResult<THREE.Mesh>
-      ).value;
-      this.station.holders.bridge.add(this.bridgeHolder);
-      this.station.holders.dial.add(this.dialHolder);
-      const environment = (results[5] as PromiseFulfilledResult<THREE.Object3D>)
-        .value;
+      this.bridgeHolder = bridgeHolder;
+      this.dialHolder = dialHolder;
+      this.station.holders.bridge.add(bridgeHolder);
+      this.station.holders.dial.add(dialHolder);
       // glTF extras are the versioned Blender/renderer contract. Fail closed.
       environment.traverse((node) => {
         if (!(node instanceof THREE.Mesh)) return;
@@ -458,10 +449,7 @@ export class BenchViewer {
       this.detached.traverse((node) => {
         if (node instanceof THREE.Mesh) retained.add(node.geometry);
       });
-      for (const index of [0, 1, 6]) {
-        const unused = (
-          results[index] as PromiseFulfilledResult<THREE.Object3D>
-        ).value;
+      for (const unused of [overview, diamond, catalog]) {
         unused.traverse((node) => {
           if (!(node instanceof THREE.Mesh)) return;
           if (
@@ -514,7 +502,9 @@ export class BenchViewer {
         this.renderer.setRenderTarget(target);
         await this.renderer.compileAsync(this.scene, this.camera);
       } finally {
-        this.renderer.setRenderTarget(previousTarget);
+        // Route disposal can finish while compilation is awaiting the driver.
+        // Never recreate framebuffer state on an already disposed renderer.
+        if (!this.dead) this.renderer.setRenderTarget(previousTarget);
         target.dispose();
       }
       if (this.dead || generation !== this.generation) return;
@@ -682,12 +672,8 @@ export class BenchViewer {
     this.updateStation();
     this.wake();
   };
-  quality = (mode: QualityMode | boolean) => {
-    // Boolean remains accepted by existing local inspection scripts.
-    this.detail.select(
-      typeof mode === 'boolean' ? (mode ? 'Low' : 'High') : mode,
-      devicePixelRatio,
-    );
+  quality = (mode: QualityMode) => {
+    this.detail.select(mode, devicePixelRatio);
     this.status.quality = this.detail.mode;
     this.applyResolution();
     this.emit();
@@ -780,11 +766,14 @@ export class BenchViewer {
     if (!moving && this.walker.grounded) this.last = 0;
   };
   dispose() {
+    if (this.dead) return;
     this.dead = true;
+    this.status.ready = false;
     this.walker.guard = undefined;
     this.generation++;
     this.pause();
     cancelAnimationFrame(this.frame);
+    this.frame = 0;
     this.observer?.disconnect();
     document.removeEventListener('pointerlockchange', this.lockChanged);
     document.removeEventListener('pointerlockerror', this.lockError);

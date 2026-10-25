@@ -1,15 +1,13 @@
 import * as THREE from 'three';
+import { sha256 } from '../experience/loading';
+
 /** Local, source-derived patch for d54 face 1. No new surface or wire is authored. */
 export async function loadCaseRecovery() {
   const response = await fetch('/models/case-lug-recovery.json');
   if (!response.ok) throw new Error('Case surface recovery unavailable');
   const bytes = await response.arrayBuffer();
-  const digest = Array.from(
-    new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)),
-    (n) => n.toString(16).padStart(2, '0'),
-  ).join('');
   if (
-    digest !==
+    (await sha256(bytes)) !==
     'c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2'
   )
     throw new Error('Case recovery hash mismatch');

@@ -29,6 +29,21 @@ function BenchHeader() {
 export default function Bench() {
   useTextScalePreview();
   const access = useBenchAccess();
+  if (!__BENCH_ASSETS_ENABLED__)
+    return (
+      <main className="bench-experience">
+        <BenchHeader />
+        <section className="bench-start" aria-labelledby="bench-unavailable-title">
+          <h1 id="bench-unavailable-title">The workbench</h1>
+          <p className="bench-introduction">
+            The workbench is not available in this version.
+          </p>
+          <Link href="/" className="bench-enter">
+            Return to the explorer
+          </Link>
+        </section>
+      </main>
+    );
   if (access === 'ready') return <BenchScene />;
   return (
     <main className="bench-experience">

@@ -44,7 +44,8 @@ This experience requires a keyboard and mouse. Touch-only devices show
 loading the scene. Local holder files
 and the Blender environment must be prepared first; see the
 [bench setup, controls, design decisions and testing strategy](docs/BENCH_EXPERIENCE.md).
-Holder downloads and generated bench assets remain local and release-gated.
+Holder downloads and generated bench assets stay out of Git; hosted delivery
+requires an approved asset source and the applicable release gates.
 
 ## Check changes
 
@@ -73,6 +74,15 @@ The root `vercel.json` packages `npm --prefix explorer run build:vercel` output
 for Vercel's Git integration. Canonical/social URLs are set in
 `explorer/src/content/seo.ts` and `explorer/app/sitemap.ts`; review them before
 hosting a fork. Building locally does not authorize publication.
+
+Hosted Bench is opt-in: set `BENCH_ASSET_BASE_URL` to an approved HTTPS storage
+directory containing `movement.glb`, `dial.glb` and `environment.glb`. If required,
+set `BENCH_ASSET_TOKEN` as a sensitive Vercel build environment variable; requests
+use Bearer authentication. The build checks all three files against recorded
+runtime hashes and fails on missing or corrupt files. Holder STLs stay private; CI
+converts the recorded originals and checks geometry and transfer-size savings. Redirects are not followed.
+Without the URL, the hosted homepage omits the Bench invitation and `/bench`
+shows an unavailable message. See [Bench deployment](docs/BENCH_EXPERIENCE.md#hosted-delivery).
 
 ## Licensing and source assets
 

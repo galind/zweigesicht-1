@@ -50,6 +50,7 @@ test("PR CI stays read-only and release credentials are isolated to protected ma
   assert.doesNotMatch(workflow, /npm ci|npm .*build|skip-token-revoke/);
   assert.match(
     ci,
-    /if: github.event_name == 'pull_request' && github.base_ref == 'main'\n        run: npm --prefix explorer run build:vercel/,
+    /- name: Build Vercel output\n        run: npm --prefix explorer run build:vercel/,
+    'Hosted packaging must also run for integration PRs, without release credentials',
   );
 });

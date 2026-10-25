@@ -51,6 +51,9 @@ export async function pruneBuildOutput(output, { localBench = true } = {}) {
     }
   }
   await fs.rm(path.join(output, 'reference'), { recursive: true, force: true });
+  // Original holder inputs must never survive into a distributable build.
+  for (const name of ['movement.stl', 'dial.stl'])
+    await fs.rm(path.join(output, 'bench-local', name), { force: true });
   if (!localBench)
     await fs.rm(path.join(output, 'bench-local'), {
       recursive: true,

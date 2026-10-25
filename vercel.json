@@ -10,7 +10,8 @@
       "codex/public-documentation-review": false,
       "codex/publication-blockers": false,
       "codex/public-repo-hardening": false,
-      "codex/repository-cleanup-2026-10-23": false
+      "codex/repository-cleanup-2026-10-23": false,
+      "codex/staging-code-cleanup": false
     }
   }
 }

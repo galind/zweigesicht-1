@@ -11,6 +11,7 @@ Use [PROGRESS.md](PROGRESS.md) for current status and the [README](README.md) fo
 
 ## Project safeguards
 
+- Prefer GitHub CI for validation. Do not run local tests, builds or browser automation on the owner's computer unless extremely necessary; explain why before doing so.
 - Keep secrets, dependencies, environments, caches and original CAD downloads out of Git.
 - Preserve source URLs and hashes in `assets/source-manifest/`, and keep generated assets separate from hand-authored overrides.
 - Support mechanical claims with recorded evidence and review.

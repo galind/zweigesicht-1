@@ -24,7 +24,7 @@ import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
 import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
 import {
   createMaterial,
-  FITTED_BLUE_ENAMEL,
+  applyDialEnamel,
   setFinishEnabled,
 } from '../viewer/materials';
 import { DIALS } from '../experience/dials';
@@ -287,20 +287,9 @@ export class PlayViewer {
           bounds: new THREE.Box3(),
         };
         prepared.set(id, piece);
+        if (DIALS.presentationOverrides.some((o) => o.leafId === id))
+          applyDialEnamel(material);
         setFinishEnabled(material, true);
-        if (DIALS.presentationOverrides.some((o) => o.leafId === id)) {
-          const enamel = material as THREE.MeshPhysicalMaterial;
-          Object.assign(enamel, {
-            ...FITTED_BLUE_ENAMEL,
-            color: new THREE.Color(FITTED_BLUE_ENAMEL.color),
-            attenuationColor: new THREE.Color(
-              FITTED_BLUE_ENAMEL.attenuationColor,
-            ),
-            polygonOffset: true,
-            polygonOffsetFactor: -1,
-            polygonOffsetUnits: -1,
-          });
-        }
         const sourcePose = new THREE.Matrix4().set(
           ...(this.manifest.targetPoses[id].flat() as Parameters<
             THREE.Matrix4['set']

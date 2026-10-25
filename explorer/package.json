@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build && node scripts/prune-build-output.mjs",
-    "build:vercel": "NITRO_PRESET=vercel vite build && node scripts/prune-build-output.mjs .vercel/output/static --exclude-local-bench",
+    "build:vercel": "NITRO_PRESET=vercel vite build && node scripts/package-vercel.mjs",
     "start": "vinext start",
     "lint": "oxlint",
     "format": "oxfmt",
@@ -32,7 +32,6 @@
     "vinext": "^1.0.0-beta.9"
   },
   "devDependencies": {
-    "@resvg/resvg-wasm": "2.4.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
