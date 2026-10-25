@@ -101,9 +101,10 @@ exact source occurrences, independently of shared definition names:
 The explorer follows actual loaded case/dial availability, including toggles,
 partial load failure and whole-movement selection. Inventory retains dial screws
 only with the fitted dials; the original catalog still supports explicit
-individual-part inspection. Walking has neither case nor dials, so both stations
-omit all eight leaves from rendering and collision. Workshop has no case and
-therefore omits the six clamps/fasteners; its two dial screws remain explicit
+individual-part inspection. The walking movement remains uncased and undialed,
+so its two resting poses omit all eight leaves from rendering and collision.
+The separately stored case and dials on the mat do not enable fittings on the
+working movement. Workshop has no case and therefore omits the six clamps/fasteners; its two dial screws remain explicit
 placements after the central dial. This is a presentation/configuration decision,
 not deletion or modification of the original CAD or certification of service order.
 All source poses, geometry, reviewed phases and finishes remain unchanged.

@@ -1,25 +1,37 @@
 {
-  "status": "Rectangular tabletop with mat near the front edge",
+  "status": "Compact tabletop with protected detached watch parts",
   "units": "millimetres",
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
-    "minX": -550,
-    "maxX": 550,
-    "minZ": -465,
+    "minX": -225,
+    "maxX": 225,
+    "minZ": -195,
     "maxZ": 135,
     "topY": -1,
     "bottomY": -33,
     "footprint": [
-      [-550, -465],
-      [550, -465],
-      [550, 135],
-      [-550, 135]
+      [
+        -225,
+        -195
+      ],
+      [
+        225,
+        -195
+      ],
+      [
+        225,
+        135
+      ],
+      [
+        -225,
+        135
+      ]
     ]
   },
   "proposedTraversal": {
-    "minX": -550,
-    "maxX": 550,
-    "minZ": -465,
+    "minX": -225,
+    "maxX": 225,
+    "minZ": -195,
     "maxZ": 135,
     "rule": "Rectangular capsule-radius inset; outward-only constraints at every altitude. Visible rim triangles collide."
   },
@@ -38,7 +50,11 @@
     "unchanged": true
   },
   "arrival": {
-    "feet": [0, 0.002, 54],
+    "feet": [
+      0,
+      0.002,
+      54
+    ],
     "eyesAboveFeet": 1.48,
     "unchanged": true
   },
@@ -54,11 +70,40 @@
   "openCore": {
     "minX": -70,
     "maxX": 70,
-    "minZ": -77,
+    "minZ": -65,
     "maxZ": 100,
-    "meaning": "No new props here; existing movement/holder remain. Keep both sides and forward arrival open."
+    "meaning": "Approach and circulation around the unchanged working movement; rear case sits beyond Z-70.64. Continuous CAD envelopes are independently audited."
   },
-  "props": [],
+  "props": [
+    {
+      "id": "central-dial-protector",
+      "center": [
+        -105,
+        -35
+      ]
+    },
+    {
+      "id": "central-hand-box",
+      "center": [
+        -105,
+        35
+      ]
+    },
+    {
+      "id": "small-dial-protector",
+      "center": [
+        105,
+        -35
+      ]
+    },
+    {
+      "id": "small-hand-box",
+      "center": [
+        105,
+        35
+      ]
+    }
+  ],
   "wallItems": [],
   "excludedAssets": [
     "side workbench or return",
@@ -82,9 +127,9 @@
     "oak": "C5A77B",
     "mat": "3D6252"
   },
-  "stage": "rectangular-tabletop",
+  "stage": "compact-protected-parts",
   "tabletopDetail": {
-    "outline": "Straight rectangular 1100 x 600 mm slab with small edge bevels. Front Z135 leaves a 10 mm wood border beyond the mat at Z125.",
+    "outline": "Straight rectangular 450 x 330 mm slab; front Z135 preserves 10 mm wood margin.",
     "edgeBevel": 0.12,
     "rimWidth": 6,
     "rimHeight": 5,

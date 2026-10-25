@@ -11,6 +11,8 @@ import {
   attachSourceSurface,
   loadSourceSurfaces,
 } from '../viewer/SourceSurfaces';
+import { createDetachedParts } from './DetachedParts';
+import { loadCaseRecovery, recoverCaseSurfaces } from '../viewer/CaseRecovery';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
 import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
@@ -73,6 +75,7 @@ export class BenchViewer {
     movement: new THREE.Group(),
     holders: { bridge: new THREE.Group(), dial: new THREE.Group() },
   };
+  detached = new THREE.Group();
   flip?: BenchFlip;
   bridgeHolder?: THREE.Mesh;
   dialHolder?: THREE.Mesh;
@@ -273,6 +276,7 @@ export class BenchViewer {
         loader
           .loadAsync(assetRequestUrl(paths.catalog))
           .then((g) => track(g.scene)),
+        loadCaseRecovery(),
       ]);
       if (this.dead || generation !== this.generation) {
         this.release(loaded);
@@ -284,6 +288,16 @@ export class BenchViewer {
           Awaited<ReturnType<typeof loadSourceSurfaces>>
         >
       ).value;
+      const catalog = (results[6] as PromiseFulfilledResult<THREE.Object3D>)
+        .value;
+      recoverCaseSurfaces(
+        catalog,
+        (
+          results[7] as PromiseFulfilledResult<
+            Awaited<ReturnType<typeof loadCaseRecovery>>
+          >
+        ).value,
+      );
       const records = new Map(manifest.instances.map((p) => [p.id, p]));
       const crownIds = new Set(
         watchConfiguration.leaves
@@ -348,6 +362,9 @@ export class BenchViewer {
       }
       if (required.some((p) => !accepted.has(p.id)))
         throw Error('Incomplete movement');
+      this.detached = createDetachedParts(catalog, records, surfaces);
+      track(this.detached);
+      this.scene.add(this.detached);
       this.bridgeHolder = (
         results[3] as PromiseFulfilledResult<THREE.Mesh>
       ).value;
@@ -368,6 +385,29 @@ export class BenchViewer {
           )
         )
           throw Error('Invalid atelier environment contract: ' + node.name);
+        const material = node.material as THREE.MeshStandardMaterial;
+        if (material.transparent) {
+          material.depthWrite = false;
+          material.side =
+            material.name === 'Elastic membrane'
+              ? THREE.DoubleSide
+              : THREE.FrontSide;
+          material.forceSinglePass = true;
+          if (
+            material.name === 'Elastic membrane' ||
+            material.name === 'Clear rigid shell'
+          ) {
+            const film = material.name === 'Elastic membrane';
+            material.onBeforeCompile = (shader) => {
+              shader.fragmentShader = shader.fragmentShader.replace(
+                '#include <opaque_fragment>',
+                `diffuseColor.a = ${film ? '0.018 + 0.36' : '0.025 + 0.24'} * pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 3.0);\n#include <opaque_fragment>`,
+              );
+            };
+            material.customProgramCacheKey = () =>
+              film ? 'bench-film-fresnel-v1' : 'bench-shell-fresnel-v1';
+          }
+        }
       });
       this.scene.add(environment);
       new THREE.Box3()
@@ -378,6 +418,9 @@ export class BenchViewer {
           (node) => (node as THREE.Mesh).geometry,
         ),
       );
+      this.detached.traverse((node) => {
+        if (node instanceof THREE.Mesh) retained.add(node.geometry);
+      });
       for (const index of [0, 1, 6]) {
         const unused = (
           results[index] as PromiseFulfilledResult<THREE.Object3D>
@@ -402,7 +445,7 @@ export class BenchViewer {
       this.scene.updateMatrixWorld(true);
       // Yield between definitions so loading UI can paint while the BVHs are built.
       const solids: THREE.Mesh[] = [];
-      for (const group of [this.station.root, environment])
+      for (const group of [this.station.root, this.detached, environment])
         group.traverse((node) => {
           if (
             node instanceof THREE.Mesh &&

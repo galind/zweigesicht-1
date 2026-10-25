@@ -18,13 +18,17 @@
       "holderRotationY": 90
     }
   ],
-  "arrival": [0, 0.002, 54],
+  "arrival": [
+    0,
+    0.002,
+    54
+  ],
   "arrivalYaw": 0,
   "worktopHeight": 0,
   "deskBounds": {
-    "minX": -550,
-    "maxX": 550,
-    "minZ": -465,
+    "minX": -225,
+    "maxX": 225,
+    "minZ": -195,
     "maxZ": 135
   },
   "station": {

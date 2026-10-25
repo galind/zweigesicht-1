@@ -1,0 +1,47 @@
+{
+  "accessed": "2026-10-25",
+  "references": [
+    {
+      "id": "horotec",
+      "url": "https://www.hswalsh.com/product/plastic-case-for-dial-packing-45mm-hd17583-45",
+      "imageUrl": "https://img.hswalsh.com/original/31431.jpg",
+      "sha256": "e750cdf64d676b6a09f8cf63f0fc893d95e328da4bee1d3ada3f55595e61f103"
+    },
+    {
+      "id": "bergeon",
+      "url": "https://www.hswalsh.com/product/perspex-elastic-membrane-boxes-39mm-x-39mm-x-178mm-bergeon-6799-01-hb6799-01",
+      "imageUrl": "https://img.hswalsh.com/original/12280.jpg",
+      "sha256": "587662568a70d4e98c568fe1154b3e7c46d73caf0b4cda392833cc0872d0a93e"
+    }
+  ],
+  "assumptions": {
+    "dialProtector": "Published nominal diameter 45 mm. Authored outer diameter 45, height 8, internal radius 21.6, floor 1.2, lid underside 7.5. Black base and three curved clear rear support arms follow photographs. Three contact pads land on actual rear ring surfaces; all heights and support details inferred.",
+    "handBox": "Published 39 x 39 x 17.8 mm. Authored wall 0.8, corner radius 4, seam 8.9, skin 0.02 mm. Paired films meet at 8.9 away from packets and deform conservatively around actual packet thickness. No measured elasticity or engineering certification."
+  },
+  "sourceFiles": [
+    {
+      "path": "assets/authored/dial-configurations.json",
+      "sha256": "383b3a3180f668551a68e5da01329e087d577c1914c398088c2f093f7f51def1"
+    },
+    {
+      "path": "assets/authored/watch-configurations.json",
+      "sha256": "7c986558a2d82165bef846eb3c42183ea2d20b07491c302fd61ca040d804d8d4"
+    },
+    {
+      "path": "assets/authored/hand-display-poses.json",
+      "sha256": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c"
+    },
+    {
+      "path": "assets/authored/bench-parts-layout.json",
+      "sha256": "5a83a1d0a6dafb51fc4a782b822c19cfd97a1e5bb5278dd91fbe5297760de768"
+    },
+    {
+      "path": "scripts/bench/prepare-parts.mjs",
+      "sha256": "d5726185a63db72e23c43318b8262db6bd6dc18029e08a1256bddbb21f6e3a58"
+    },
+    {
+      "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",
+      "sha256": "0d8f8da54d0bac5787e8f4c0f5202b8921c027e1cc0cb5ffd965d6f8ad265f6a"
+    }
+  ]
+}

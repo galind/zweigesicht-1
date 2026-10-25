@@ -27,8 +27,8 @@ Both local holder assets load before entry; a missing asset keeps loading recove
 available. The spare holder has no second visible station. No CAD is cut, morphed,
 scaled, repaired or silently replaced with a universal holder.
 
-The light wooden tabletop is a straight **1100 × 600 mm rectangle**: X −550…550,
-Z −465…135 mm, with surface Y−1 and underside Y−33. Small 0.12 mm edge bevels
+The light wooden tabletop is a straight **450 × 330 mm rectangle**: X −225…225,
+Z −195…135 mm, with surface Y−1 and underside Y−33. Small 0.12 mm edge bevels
 soften the solid slab. A continuous 6 mm wide rim rises 5 mm along the back and
 sides, ending at Z125; there is no front fence. The unchanged 350 × 250 × 1 mm
 green mat ends at Z125, leaving just **10 mm of wood before the front edge**
@@ -37,59 +37,140 @@ Arrival and explicit R reset remain at feet (0, 0.002, 54), facing −Z. The vis
 stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet**,
 68° vertical FOV and no bob/roll.
 
-## Rectangular tabletop — current local stage
+## Compact tabletop and protected parts — current local stage
 
-The owner requested a simpler rectangular shape and a mat much closer to the
-border. The front edge moves from Z185 to Z135; the mat, watch station and arrival
-stay in place. This supersedes the two curved recesses and central projection.
-Light natural wood, the low back/side rim and the plain mat remain against the
-warm neutral background. There is no lower furniture or added scenery.
+The 450 × 330 mm tabletop surrounds the unchanged 350 × 250 mm mat with 50 mm
+wood borders at the sides, 70 mm behind it and 10 mm in front. The closed slab,
+6 mm wide / 5 mm high back-and-side rim, light wood, warm background and lighting
+are preserved. Rim coordinates derive from the desk bounds. Rectangular capsule
+containment remains outward-only at every altitude; the vertical seam/ceiling
+fix and 1 mm mat descent/jetpack return remain covered by regression tests.
 
-`assets/authored/workshop-environment.json` defines the four-corner outline and
-export dimensions; `atelier-layout.json` records the same desk bounds. The exporter
-creates closed front, side and underside faces, checks manifold edges after
-triangulation, and bakes fresh contact shading. Wood finish, mat appearance,
-watch materials and lighting remain unchanged. Generated assets stay local.
+Five stationary CAD groups now accompany the working movement. Coordinates are
+plan-view bounding-box centers, in mm; no part is rescaled:
 
-The tabletop, rim and mat retain `atelierVersion: 1` and `collisionRole: walkable`.
-Visible triangles are collision geometry. The simpler rectangular capsule-radius
-constraint replaces the previous nonconvex projection, preserving outward-only
-containment at every altitude and free inward/tangential movement. Triangle
-collision blocks the rim, including both ends. The 1 mm mat edge retains the
-existing walk-down/jetpack-return behavior. No ramps or automatic camera motion
-are added. A focused collision correction distinguishes a vertical triangle seam
-from a ceiling, so pressing against the rim while thrusting no longer cancels ascent.
-Actual ceiling contacts still stop upward velocity; both cases have CPU coverage.
+| Group | Center X / Z | Actual contents |
+| --- | --- | --- |
+| Detached steel case | 0 / −92 | 37 reviewed leaves, both complete attached lug packets, backs/crystals/seals, tube/corrector; recovered d54 face retained |
+| Central protector | −105 / −35 | 16 central structure leaves, no hands |
+| Central hand box | −105 / 35 | Fine hour, minute and seconds; each with its original bushing |
+| Reverse protector | 105 / −35 | 17 small-dial structure leaves, fitted blue enamel, no hands |
+| Reverse hand box | 105 / 35 | Lance hour and minute; each with its original bushing |
 
-The unchanged bench lighting comes principally from the right, with warm left fill
-and studio reflections. Camera far range encloses the loaded environment sphere
-from the current position, including sustained high flight; the 0.035 mm near plane
-is retained. Reversed depth prevents distant mat/wood depth fighting on supported
-GPUs. Older GPUs use the existing logarithmic-depth fallback; their performance
-still needs separate qualification.
+The four crown leaves remain on the working movement, giving 299 unique source
+leaves across it and the detached groups. Alternate lug occurrences, straps and
+buckle are explicitly excluded. `bench-parts-layout.json` records every included
+ID, case exclusion and rigid storage transform. `prepare-parts.mjs` derives these
+from decoded original vertices, the authoritative membership manifests and
+reviewed fitted hand/bushing relationships. Blade fitting precedes a common rigid
+packet transform; storage does not flatten or separate the bushings. Source poses,
+geometry buffers, finishes, wheel phases and the known d27 defect remain intact.
+The case footprint is 48.553 × 42.711 mm and its seated height is 12.456 mm.
+All groups fit on the mat and independently clear the actual continuous per-part
+flip envelopes and both holders by at least 2 mm. F changes only the working
+movement and its original holder; the new groups remain visible and stationary
+through both complete animations. No new controls or interactions were added.
 
-Measured generated environment budgets (excluding unchanged maker CAD):
+### Protective container approximations
 
-| Metric | Measured | Target |
+Both retailer pages and actual photographs were inspected on 25 October 2026.
+URLs and local image hashes are in `assets/source-manifest/bench-parts.json`.
+Original procedural geometry follows the Horotec black circular base, clear cover
+and three curved internal supports, and the Bergeon rounded clear base/cover with
+paired elastic films. Reference photographs are never embedded in runtime assets.
+
+The Horotec listing establishes nominal Ø45 mm, not its internal engineering
+clearances. This visual model uses a 45 mm outer diameter, 43.2 mm clear interior,
+8 mm overall height, 1.2 mm floor and lid underside at Y7.5. These heights,
+wall thicknesses and supports are inferred. The actual central dial is 33.4 mm
+across and spans Y2…4.75, including its rear protrusions; the small dial spans
+about 17.8 mm and Y2…3.468. Three small pins per protector contact measured rear
+ring triangle centroids; curved arms remain below Y1.6, clear of the dials and
+feet. Neither decorated face contacts a support or cover.
+
+The Bergeon boxes retain the published **39 × 39 × 17.8 mm** dimensions. The
+0.8 mm walls, 4 mm rounded corners and Y8.9 meeting seam are authored assumptions.
+Each hand packet's thickness is centered at Y8.9. Two separately rendered thin
+sheets deform in opposite directions around the complete packet bounds, returning
+to Y8.89/Y8.91 away from the contents. This conservative envelope includes a
+nominal 0.035 mm visual clearance; it is not an elasticity/contact simulation or
+packaging certification. The actual triangle-interpolated films enclose all
+10,543 hand/bushing vertices with minimum clearance 0.0349997 mm. They are
+continuous sheets, not shelves or pads, and no contents touch the box floor.
+
+All reachable case, container wall, base and lid triangles collide at their
+visible locations. Actual case openings receive no proxy floors; retained source
+crystals retain their own collision surfaces. Closed protectors make the internal
+dials, hands, supports and membranes inaccessible, so those interiors are
+explicitly noncolliding. Walking paths around the groups and between each pair
+remain open; wall approaches, lid drops and original movement drops pass.
+
+### Rendering, ownership and budgets
+
+The existing Blender exporter now calls `scripts/bench/containers.py`. It keeps
+all procedural containers separate from runtime maker CAD, saves the editable
+Blender scene and regenerates the GLB and contact shading. Transparent pieces are
+excluded from the opaque occlusion bake, preventing dark container-shaped blocks.
+Alpha surfaces sort by container/half; both films are separate meshes. Bench-only
+angle-dependent opacity reveals edges and film deformation while keeping contents
+readable. Films use double-sided single-pass rendering; depth testing stays on.
+No container uses transmission. The small dial reuses the authoritative fitted
+enamel optics through the existing shared transmission infrastructure.
+
+| Procedural environment metric | Measured | Target |
 | --- | ---: | ---: |
-| Visible triangles | 340 | ≤40,000 |
-| Collision triangles | 340 | ≤8,000 |
-| Environment draws per pass | 2 | ≤24 |
+| Visible triangles | 26,900 | ≤40,000 |
+| Collision triangles | 6,708 | ≤8,000 |
+| Draws per pass | 19 | ≤24 |
 | Decoded textures including mipmaps | 6.67 MiB | ≤24 MiB |
-| GLB download | 0.16 MiB | ≤8 MiB |
+| GLB download | 0.874 MiB | ≤8 MiB |
 
-`workshop-check.mjs` verifies actual exported budgets, semantic objects, the
-10 mm front margin, continuous per-part flip envelopes and both holder bounds.
-It checks all four edges/corners, fast grounded/high-flight travel, rim walls/ends
-and jetpack landings, all four mat-edge routes, actual keyboard descent/return,
-high-flight visibility and exactly-once disposal/re-entry. CPU tests independently
-triangulate the authored rectangle to verify capsule support around its boundary.
-Continuous bounds are conservative clearance evidence, not mechanical certification.
+Reused CAD additions are **80 leaves / 344,845 triangles**, reported separately.
+The bridge-rest whole scene has 319 active meshes / 1,172,198 geometry triangles;
+the renderer reports 196 geometries and five textures. The overview submits
+2,212,108 triangles and 590 draws across the main render and **one shared
+720 × 450 offscreen target**. No per-container refraction captures are allocated.
+Bench owns new groups and material instances, retains shared catalog geometry
+until final cleanup, and includes the detached case in the collision world.
+Exactly-once disposal, late loading cancellation, route re-entry and graphics
+recovery were checked. Explorer/Workshop configuration and materials are unchanged.
 
-Current actual captures and reports are in `artifacts/workshop-rectangle/`.
-Overview/inspection captures use labelled external camera fixtures; arrival,
-mat-edge, rim/front-edge and both landed movement views use the normal miniature
-visitor camera. Prior curved-tabletop evidence remains in `artifacts/workshop-tabletop/`.
+Matched local headless Chrome measurements used Apple M4 / ANGLE Metal,
+1440 × 900, fixed pixel ratio 1, half-resolution transmission, 30 warmup and
+150 measured frames per fixture. The before run is commit `66c2952`:
+
+| Fixture | Before / after p95 frame ms | Before / after p95 render CPU ms | Before / after draws |
+| --- | --- | --- | --- |
+| External overview | 16.7 / 16.8 | 5.1 / 5.8 | 415 / 590 |
+| Bridge close-up | 16.7 / 16.8 | 5.2 / 5.8 | 415 / 489 |
+| Dial close-up | 16.7 / 16.7 | 5.1 / 5.4 | 415 / 489 |
+
+Added geometry increases submission cost. These short static fixtures do not
+establish physical-device, sustained thermal or human mouse-feel qualification.
+The local Vercel analytics script returns 404; all scene assets load successfully.
+
+### Evidence and verification
+
+Current evidence is local/ignored under `artifacts/workshop-parts-layout/`:
+`before/after-profile.json`, matched comparison captures, `parts-report.json`,
+`workshop-report.json`, `geometry-report.json`, `jetpack-report.json`,
+`flip-report.json` and lifecycle/build/CPU logs. `external-*` captures are labelled
+external inspection fixtures: complete table, top mat, case/lugs, both dials,
+both hand sets from above/oblique/side, and an inaccessible inside-shell sorting
+probe. `visitor-*`, arrival and landed captures retain the 1.48 mm eye offset;
+they are not overview controls available to visitors. Visual review checked
+transparent sorting, readable bores/finishes, support clearance and membrane
+suspension against the product photographs. Prior rectangle captures remain
+historical in `artifacts/workshop-rectangle/`.
+
+Verified: **141 CPU tests**, inventory validation, typecheck, lint and production
+build; **64 environment**, **67 jetpack/collision**, **32 flip**, **8 lifecycle**
+and **10 detached-part audit checks**. The independent CAD/holder audit retains
+both rests and **16 source-surface drops**, with maximum movement matrix error
+5.56 × 10⁻¹⁷. Source-buffer hashing checks every added position/index array and
+original normal buffer, including the exact permitted lug recovery. No mechanical or packaging
+certification is claimed. Preview rebuilt and restarted at
+<http://127.0.0.1:4198/bench>; no push, deployment or redistribution.
 
 ## Holder fit and the authorized exchange
 
@@ -198,6 +279,8 @@ ownership remain unchanged. Narrow/enclosed CAD cavities can require explicit R.
 
 ```sh
 node scripts/bench/prepare-holder.mjs
+# Only when re-deriving CAD storage poses (requires the local reference images):
+node scripts/bench/prepare-parts.mjs
 blender --background --python scripts/bench/export-environment.py
 npm --prefix explorer run build
 npm --prefix explorer start -- --hostname 127.0.0.1 --port 4198
@@ -216,7 +299,7 @@ publication or redistribution is authorized.
 ## Verification
 
 Set `PLAYWRIGHT_MODULE` to the installed Playwright `index.mjs` and `CHROME_PATH`
-to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-rectangle` for local reports/captures:
+to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-parts-layout` for local reports/captures:
 
 ```sh
 node --test tests/*.test.mjs

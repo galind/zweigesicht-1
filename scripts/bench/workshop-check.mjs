@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-rectangle";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-parts-layout";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -98,11 +98,12 @@ try {
           if (holderBoxes.some((box) => positiveOverlap(box, triangleBox)))
             stats.holderHits.push([mesh.name, i]);
         } else if (
+          !mesh.userData.protectedInterior &&
           triangleBox.max.y > -33 &&
-          triangleBox.min.x < 550 &&
-          triangleBox.max.x > -550 &&
+          triangleBox.min.x < 225 &&
+          triangleBox.max.x > -225 &&
           triangleBox.min.z < 135 &&
-          triangleBox.max.z > -465
+          triangleBox.max.z > -195
         )
           stats.decorIntrusions.push([mesh.name, i]);
       }
@@ -136,16 +137,13 @@ try {
     for (const [name, x, z, height] of [
       ["wood", 0, 130, -1],
       ["mat", 100, 0, 0],
-      ["cleared stand area", -380, -70, -1],
-      ["cleared screwdriver area", -380, -90, -1],
-      ["cleared tray area", -380, 65, -1],
-      ["cleared tray rim", -454, 65, -1],
-      ["cleared loupe area", 210, 0, -1],
-      ["cleared tweezers area", 225, 100, -1],
-      ["cleared notebook area", 350, -170, -1],
-      ["cleared lamp base", -325, -230, -1],
-      ["cleared lamp hinge", -300, -230, -1],
-      ["cleared lamp head", -190, -135, -1],
+      ["left wood border", -200, 0, -1],
+      ["right wood border", 200, 0, -1],
+      ["back wood border", 0, -150, -1],
+      ["central protector lid", -105, -35, 8],
+      ["small protector lid", 105, -35, 8],
+      ["central hand-box lid", -105, 35, 17.8],
+      ["small hand-box lid", 105, 35, 17.8],
     ]) {
       const floor = b.world.floor(x, z, 500);
       setup(x, floor + 3, z);
@@ -188,7 +186,7 @@ try {
     }
     const frontEdges = [];
     for (const sign of [-1, 1]) {
-      const x = sign * 295;
+      const x = sign * 195;
       frontEdges.push({
         name: "no invisible support " + sign,
         pass: !Number.isFinite(b.world.floor(x, 150, 50)),
@@ -214,11 +212,11 @@ try {
     }
     const rimContacts = [];
     for (const [name, x, z, key, axis, limit, sign] of [
-      ["left", -542, 0, "KeyA", "x", -544, -1],
-      ["right", 542, 0, "KeyD", "x", 544, 1],
-      ["back", 0, -457, "KeyW", "z", -459, -1],
-      ["left end", -547, 127, "KeyW", "z", 125, -1],
-      ["right end", 547, 127, "KeyW", "z", 125, -1],
+      ["left", -217, 0, "KeyA", "x", -219, -1],
+      ["right", 217, 0, "KeyD", "x", 219, 1],
+      ["back", 0, -187, "KeyW", "z", -189, -1],
+      ["left end", -222, 127, "KeyW", "z", 125, -1],
+      ["right end", 222, 127, "KeyW", "z", 125, -1],
     ]) {
       setup(x, -0.998, z);
       w.keys.add(key);
@@ -232,6 +230,34 @@ try {
         name,
         pass: blocked && w.grounded && Math.abs(w.feet.y - 4) < 0.02,
         feet: w.feet.toArray(),
+      });
+    }
+    const circulation = [];
+    for (const [name, x, z, key] of [
+      ["left approach aisle", -65, 55, "KeyW"],
+      ["right approach aisle", 65, 55, "KeyW"],
+      ["between central pair", -130, 0, "KeyD"],
+      ["between small pair", 80, 0, "KeyD"],
+      ["behind case", -30, -120, "KeyD"],
+    ]) {
+      setup(x, 0.002, z);
+      w.keys.add(key);
+      advance(900);
+      circulation.push({
+        name,
+        feet: w.feet.toArray(),
+        pass:
+          w.grounded && Math.abs(w.feet.y) < 0.02 && Math.hypot(w.feet.x - x, w.feet.z - z) > 25,
+      });
+    }
+    for (const x of [-105, 105]) {
+      setup(x, 0.002, 57);
+      w.keys.add("KeyW");
+      advance(240);
+      circulation.push({
+        name: "closed hand box wall " + x,
+        feet: w.feet.toArray(),
+        pass: w.feet.z > 54.5 && w.feet.y < 0.02,
       });
     }
     const matEdges = [];
@@ -272,6 +298,7 @@ try {
     return {
       stats,
       collisions,
+      circulation,
       matEdges,
       outerEdges,
       frontEdges,
@@ -309,9 +336,11 @@ try {
   check("all semantics retained; reachable geometry collides", !s.missingIds.length, s.missingIds);
   const allowedIds = new Set(["main-oak-top", "green-mat", "low-back-side-rim"]);
   check(
-    "only solid tabletop, low rim and plain mat",
-    provenance.semantics.length === 3 &&
-      provenance.semantics.every((part) => allowedIds.has(part.id) && part.min[1] >= -33),
+    "tabletop, low rim, plain mat and four protective containers",
+    provenance.semantics.every(
+      (part) =>
+        (allowedIds.has(part.id) || /^(central|small)-/.test(part.id)) && part.min[1] >= -33,
+    ),
     provenance.semantics,
   );
   check(
@@ -320,7 +349,11 @@ try {
       provenance.semantics.find((p) => p.id === "green-mat").max[2] ===
       10,
   );
-  check("no new transparent or transmission passes", !s.nonOpaque.length, s.nonOpaque);
+  check(
+    "four clear protectors and paired transparent films present",
+    s.nonOpaque.length >= 8,
+    s.nonOpaque,
+  );
   check(
     "continuous per-part flip envelopes clear every static triangle",
     !s.sweepHits.length,
@@ -334,9 +367,9 @@ try {
   check("decor stays outside reachable column", !s.decorIntrusions.length, s.decorIntrusions);
   check(
     "approved desk boundaries",
-    g.bounds.minX === -550 &&
-      g.bounds.maxX === 550 &&
-      g.bounds.minZ === -465 &&
+    g.bounds.minX === -225 &&
+      g.bounds.maxX === 225 &&
+      g.bounds.minZ === -195 &&
       g.bounds.maxZ === 135 &&
       g.bounds.footprint.length === 4,
     g.bounds,
@@ -349,6 +382,7 @@ try {
       g.fog === null,
     g,
   );
+  for (const row of g.circulation) check(row.name, row.pass, row);
   for (const row of g.collisions) check("drop on " + row.name, row.pass, row);
   for (const row of g.outerEdges)
     check("solid outline segment/corner " + row.edge + "/" + row.t, row.pass, row);
@@ -408,11 +442,11 @@ try {
   });
   // Explicit camera fixtures, never exposed as visitor camera controls.
   for (const [name, position, target] of [
-    ["open-space-inspection", [900, 500, 2000], [0, -150, -100]],
-    ["reference-front-overview", [0, 720, 1200], [0, -1, -130]],
-    ["rim-profile-overview", [850, 170, 600], [180, -1, -130]],
-    ["underside-overview", [700, -360, 800], [0, -17, -130]],
-    ["desk-inspection", [280, 480, 420], [0, 0, -120]],
+    ["open-space-inspection", [440, 300, 550], [0, -10, -30]],
+    ["reference-front-overview", [0, 340, 430], [0, -1, -30]],
+    ["rim-profile-overview", [400, 100, 310], [0, -1, -30]],
+    ["underside-overview", [320, -210, 400], [0, -17, -30]],
+    ["desk-inspection", [220, 350, 320], [0, 0, -30]],
   ]) {
     await page.evaluate(
       ({ position, target }) => {
@@ -501,7 +535,7 @@ try {
       materials = new Set(),
       textures = new Set();
     b.scene.traverse((o) => {
-      if (!o.userData.atelierVersion) return;
+      if (!o.isMesh) return;
       geometry.add(o.geometry);
       materials.add(o.material);
       for (const v of Object.values(o.material)) if (v?.isTexture) textures.add(v);
@@ -519,7 +553,7 @@ try {
     };
   });
   check(
-    "all environment GPU resources disposed exactly once",
+    "all bench GPU resources, including shared CAD, disposed exactly once",
     JSON.stringify(report.disposal.expected) === JSON.stringify(report.disposal.released) &&
       report.disposal.solids === 0 &&
       report.disposal.trees === 0,

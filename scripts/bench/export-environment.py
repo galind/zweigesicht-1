@@ -7,6 +7,7 @@ import bmesh
 import json
 import math
 import hashlib
+import sys
 from pathlib import Path
 from mathutils import Vector, noise
 ROOT = Path(__file__).resolve().parents[2]
@@ -82,11 +83,11 @@ def box(name,x0,x1,z0,z1,top,bottom,mat,role='walkable',bevel=0):
     pts=[(x0,z0),(x1,z0),(x1,z1),(x0,z1)]
     return mesh(name,[(x,bottom,z) for x,z in pts]+[(x,top,z) for x,z in pts],[(3,2,1,0),(4,5,6,7)]+[(i,(i+1)%4,(i+1)%4+4,i+4) for i in range(4)],mat,role,bevel)
 
-def slab(name, outline, top, bottom, mat, bevel=0):
+def slab(name, outline, top, bottom, mat, bevel=0, role='walkable'):
     n=len(outline)
     return mesh(name,[(x,bottom,z) for x,z in outline]+[(x,top,z) for x,z in outline],
                 [tuple(reversed(range(n))),tuple(range(n,2*n))]+
-                [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],mat,bevel=bevel)
+                [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],mat,role=role,bevel=bevel)
 
 D=SPEC['mainDesk'];M=SPEC['mat'];detail=SPEC['tabletopDetail']
 slab('main-oak-top',D['footprint'],D['topY'],D['bottomY'],oak,detail['edgeBevel'])
@@ -97,18 +98,31 @@ x0,x1,z0=D['minX'],D['maxX'],D['minZ']
 rim=[(x0,front),(x0,z0),(x1,z0),(x1,front),
      (x1-width,front),(x1-width,z0+width),(x0+width,z0+width),(x0+width,front)]
 slab('low-back-side-rim',rim,D['topY']+detail['rimHeight'],D['topY'],oak,detail['edgeBevel'])
+sys.path.insert(0,str(ROOT/'scripts/bench'))
+from containers import add_containers
+add_containers(mesh,slab,material,SPEC,ROOT)
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}
-for o in objects:groups.setdefault((o.data.materials[0].name,o['collisionRole']),[]).append(o)
+for o in objects:
+    mat=o.data.materials[0]
+    # Transparent shells sort per container/half; films remain separate objects.
+    key=mat.name
+    if mat.diffuse_color[3]<1:
+        name=o.name
+        key += ':' + (name if 'film' in name else ('-'.join(name.split('-')[:3]) if '-box-' in name else '-'.join(name.split('-')[:2])))
+    groups.setdefault((key,o['collisionRole']),[]).append(o)
 for (mat,role),parts in groups.items():
     bpy.ops.object.select_all(action='DESELECT')
     for o in parts:o.select_set(True)
     bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join()
     o=bpy.context.object;o.name='ENV '+role+' '+mat;o['atelierVersion']=1;o['collisionRole']=role
-    o['semanticIds']=[s['id'] for s in semantics if s['material']==mat and s['role']==role]
+    o['semanticIds']=[p.name for p in parts] if len(parts)==1 else []
+    # Names may change during join; recover from group key and source semantic bounds.
+    o['semanticIds']=[s['id'] for s in semantics if s['material']==mat.split(':')[0] and s['role']==role and (':' not in mat or s['id'].startswith(mat.split(':')[1]))]
+    if role=='decor':o['protectedInterior']=True
     mod=o.modifiers.new('Explicit collision triangles','TRIANGULATE');bpy.ops.object.modifier_apply(modifier=mod.name)
     bm=bmesh.new();bm.from_mesh(o.data)
-    assert all(e.is_manifold for e in bm.edges), 'Open or nonmanifold surface: '+o.name
+    assert role=='decor' or all(e.is_manifold for e in bm.edges), 'Open or nonmanifold surface: '+o.name
     bm.free()
     o.select_set(False)
 # Bake restrained contact occlusion into opaque albedo atlases. Original UVs
@@ -118,6 +132,8 @@ bpy.context.scene.render.engine='CYCLES'
 bpy.context.scene.cycles.samples=64
 bpy.context.scene.render.bake.margin=3
 bpy.context.scene.render.bake.use_clear=True
+transparent=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.data.materials[0].diffuse_color[3]<1]
+for o in transparent:o.hide_render=True
 for mat in [oak,green]:
     parts=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.data.materials[0]==mat]
     size=1024 if mat==oak else 512
@@ -154,6 +170,7 @@ for mat in [oak,green]:
     for o in parts:o.data.uv_layers.active_index=0
     print('BAKED',mat.name,size,flush=True)
 
+for o in transparent:o.hide_render=False
 counts={'visibleTriangles':0,'collisionTriangles':0,'drawsPerPass':0}
 for o in bpy.context.scene.objects:
     n=len(o.data.polygons);counts['visibleTriangles']+=n;counts['drawsPerPass']+=1
@@ -161,14 +178,14 @@ for o in bpy.context.scene.objects:
 counts['textureBytesWithMipmaps']=sum(int(i.size[0]*i.size[1]*4*4/3) for i in {n.image for m in bpy.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=='TEX_IMAGE' and n.image and any(link.from_node==n for link in m.node_tree.links)})
 assert counts['visibleTriangles']<=40000 and counts['collisionTriangles']<=8000 and counts['drawsPerPass']<=24 and counts['textureBytesWithMipmaps']<=24*1024**2,counts
 # Hidden editable scale witness, omitted from runtime.
-bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.17,depth=1.65,location=(-560,-54,.825))
+bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.17,depth=1.65,location=(D['minX']-10,-54,.825))
 reference=bpy.context.object;reference.name='QA_SCALE_REFERENCE_1.65mm';reference.hide_render=True;reference.hide_set(True)
 bpy.context.scene['atelierLayout']=json.dumps(LAYOUT)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'environment.blend'))
 runtime=ROOT/'explorer/public/bench-local/environment.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
-report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original authored tabletop, rim and mat geometry with noise textures; no external models, artwork or maker CAD embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','closedSurfaceAudit':'All slab, rim and mat mesh edges have exactly two incident faces after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
-for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim, mat and reference-inspired protective containers; no external models, reference photographs or maker CAD buffers embedded. Hand packet bounds guide the procedural membrane envelope.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','closedSurfaceAudit':'All colliding shells, slab, rim and mat meshes are closed manifold after triangulation. Sealed internal elastic sheets are intentionally single surfaces and noncolliding.','budgets':counts,'semantics':semantics,'files':[]}
+for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',ROOT/'assets/authored/bench-parts-layout.json',ROOT/'scripts/bench/containers.py',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 (ROOT/'assets/source-manifest/workshop-environment.json').write_text(json.dumps(report,indent=2)+'\n')
 print('WORKSHOP',json.dumps(counts))

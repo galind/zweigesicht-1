@@ -3,6 +3,42 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Compact tabletop with protected watch components — 25 October 2026
+
+Implemented the local handoff from `66c2952`: **450 × 330 mm** tabletop, unchanged
+mat and 10 mm front border, working movement/holders and visitor controls. Added
+one steel case with both attached lug packets, central and small dials in separate
+45 mm protectors, and Fine/Lance hands in separate 39 × 39 × 17.8 mm membrane
+boxes. All 80 added CAD leaves retain their original geometry and appropriate
+finishes; crowns remain only on the working movement. Five stationary groups
+clear the actual continuous flip envelopes and both holders by at least 2 mm.
+
+Original procedural containers follow inspected Horotec/Bergeon photographs.
+Unknown construction details and support/film clearances are documented visual
+approximations. Both transparent films surround the actual hand/bushing packets
+near mid-height, independently verified against all 10,543 vertices. Outer shells
+collide; sealed interiors are noncolliding. Reviewed full-table, part detail,
+membrane side/top/oblique, arrival and both movement-side captures.
+
+Regenerated Blender/GLB and contact shading; provenance hashes match. Environment:
+**26,900 visible / 6,708 collision triangles, 19 draws/pass, 6.67 MiB textures,
+0.874 MiB GLB**. Added CAD: **344,845 triangles**. Full overview: **590 draws /
+2.21M submitted triangles**, one existing shared transmission target. Matched M4
+headless fixtures stayed at **16.7–16.8 ms p95**; overview render CPU rose
+5.1 → 5.8 ms. Device/human qualification remains outstanding.
+
+Verified **141 CPU tests**, inventory, typecheck/lint, production build,
+**64 environment**, **67 jetpack/collision**, **32 flip**, **8 lifecycle** and
+**10 detached-part checks**. Independent CAD/holder audit passes both rests and
+all **16 source-surface drops**. All bench GPU resources dispose exactly once;
+loading cancellation, graphics recovery and re-entry pass.
+
+Evidence: `artifacts/workshop-parts-layout/`; detailed assumptions, selection,
+budgets and comparison results are in [walking documentation](docs/BENCH_EXPERIENCE.md).
+Production preview rebuilt/restarted at <http://127.0.0.1:4198/bench>.
+Next: owner walkthrough of the compact arrangement. No push, deployment or CAD
+redistribution; generated assets and reference images remain local and ignored.
+
 ## Rectangular tabletop and closer mat border — 25 October 2026
 
 Simplified the tabletop to a straight **1100 × 600 mm rectangle** at the owner's
