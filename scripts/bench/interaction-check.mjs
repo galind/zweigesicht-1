@@ -34,7 +34,7 @@ try {
   );
   // Real browser input/capture; no direct call of the look handler.
   await page
-    .getByRole('button', { name: 'Enter the movement', exact: true })
+    .getByRole('button', { name: 'Start exploring', exact: true })
     .click();
   await page.waitForFunction(() => !!document.pointerLockElement);
   await page.waitForTimeout(500);

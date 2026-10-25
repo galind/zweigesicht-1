@@ -1,10 +1,12 @@
 'use client';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import type { BenchViewer, BenchStatus } from './BenchViewer';
 import { BenchControls } from './BenchControls';
 import { FLIP_KEY } from './bindings';
-import { consumeBenchEntry } from './entryIntent';
+import { useBenchAccess } from './useBenchAccess';
+import { useTextScalePreview } from '../experience/useTextScalePreview';
 import './bench.css';
 const flipNotice = 'Move away from the movement to flip it.';
 const initial: BenchStatus = {
@@ -15,30 +17,54 @@ const initial: BenchStatus = {
   flipBlocked: false,
   quality: 'Auto',
 };
+function BenchHeader() {
+  return (
+    <header className="bench-header">
+      <Link href="/" aria-label="Back to the explorer">
+        ← Zweigesicht-1
+      </Link>
+    </header>
+  );
+}
 export default function Bench() {
+  useTextScalePreview();
+  const access = useBenchAccess();
+  if (access === 'ready') return <BenchScene />;
+  return (
+    <main className="bench-experience">
+      <BenchHeader />
+      <section className="bench-start" aria-labelledby="bench-access-title">
+        <h1 id="bench-access-title">
+          {access === 'checking' ? 'The workbench' : 'Explore on desktop'}
+        </h1>
+        <p className="bench-introduction">
+          {access === 'checking'
+            ? 'Checking controls…'
+            : 'Keyboard and mouse required. Touch controls are not available for this experience.'}
+        </p>
+        {access === 'unsupported' && (
+          <p className="bench-introduction">
+            This browser does not support mouse capture. Try another desktop
+            browser.
+          </p>
+        )}
+        <Link href="/" className="bench-enter">
+          Return to the explorer
+        </Link>
+      </section>
+    </main>
+  );
+}
+function BenchScene() {
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<BenchViewer | null>(null);
   const enter = useRef<HTMLButtonElement>(null);
-  const entryIntent = useRef<boolean | null>(null);
+  const introduction = useRef<HTMLHeadingElement>(null);
   const [hasEntered, setHasEntered] = useState(false);
   const [state, setState] = useState(initial),
     [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let disposed = false;
-    if (entryIntent.current === null) entryIntent.current = consumeBenchEntry();
-    let shouldEnter = attempt === 0 && entryIntent.current;
-    const cancelEntry = () => {
-      shouldEnter = false;
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') cancelEntry();
-    };
-    const onVisibility = () => {
-      if (document.hidden) cancelEntry();
-    };
-    window.addEventListener('blur', cancelEntry);
-    document.addEventListener('keydown', onKey);
-    document.addEventListener('visibilitychange', onVisibility);
     void import('./BenchViewer')
       .then(({ BenchViewer }) => {
         if (disposed || !host.current) return;
@@ -51,18 +77,7 @@ export default function Bench() {
           viewer.current = v;
           if (new URLSearchParams(location.search).has('inspect'))
             (window as unknown as { bench: BenchViewer | undefined }).bench = v;
-          void v.load().then(() => {
-            if (
-              !disposed &&
-              shouldEnter &&
-              v.status.ready &&
-              document.hasFocus() &&
-              !document.hidden
-            ) {
-              shouldEnter = false;
-              void v.enter();
-            }
-          });
+          void v.load();
         } catch (error) {
           console.error(error);
           setState({
@@ -76,22 +91,22 @@ export default function Bench() {
         if (!disposed)
           setState({
             ...initial,
-            error: 'The walking experience could not load. Retry to reconnect.',
+            error: 'The workbench could not load. Retry to reconnect.',
           });
       });
     return () => {
       disposed = true;
-      window.removeEventListener('blur', cancelEntry);
-      document.removeEventListener('keydown', onKey);
-      document.removeEventListener('visibilitychange', onVisibility);
       viewer.current?.dispose();
       viewer.current = null;
       delete (window as unknown as { bench?: BenchViewer }).bench;
     };
   }, [attempt]);
   useEffect(() => {
-    if (!state.captured && (state.ready || state.error)) enter.current?.focus();
-  }, [state.ready, state.captured, state.error]);
+    introduction.current?.focus({ preventScroll: true });
+  }, []);
+  useEffect(() => {
+    if (!state.captured && (hasEntered || state.error)) enter.current?.focus();
+  }, [hasEntered, state.ready, state.captured, state.error]);
   return (
     <main className="bench-experience">
       <div className="bench-canvas" ref={host} />
@@ -101,17 +116,20 @@ export default function Bench() {
           aria-hidden="true"
         />
       )}
-      <header className="bench-header">
-        <Link href="/" aria-label="Back to the explorer">
-          ← Zweigesicht-1
-        </Link>
-      </header>
+      <BenchHeader />
       {!state.captured && (
         <section
           className={hasEntered ? 'bench-menu' : 'bench-start'}
-          aria-label="Walking menu"
+          aria-labelledby="bench-title"
         >
-          {hasEntered && <h1>Walk inside the movement</h1>}
+          <h1 id="bench-title" ref={introduction} tabIndex={-1}>
+            The workbench
+          </h1>
+          {!hasEntered && (
+            <p className="bench-introduction">
+              Explore the movement, holders and detached parts.
+            </p>
+          )}
           {state.error && (
             <p role="alert" className="bench-error">
               {state.error}
@@ -123,7 +141,8 @@ export default function Bench() {
               className="bench-enter"
               onClick={() => void viewer.current?.enter()}
             >
-              {hasEntered ? 'Resume exploring' : 'Enter the movement'}
+              {hasEntered ? 'Resume exploring' : 'Start exploring'}
+              <ArrowRight aria-hidden="true" />
             </button>
           ) : state.error ? (
             <button
@@ -134,31 +153,43 @@ export default function Bench() {
               Retry loading
             </button>
           ) : (
-            <output className="bench-loading">Loading the movement…</output>
+            <output className="bench-loading">Preparing the workbench…</output>
           )}
           {state.flipBlocked && (
             <output className="bench-flip-notice">{flipNotice}</output>
           )}
-          {hasEntered && <BenchControls />}
+          <BenchControls />
+          {!hasEntered && (
+            <p className="bench-input-note">Keyboard and mouse required.</p>
+          )}
           {state.ready && hasEntered && (
             <div className="bench-options">
               <button onClick={() => viewer.current?.reset()}>
                 Reset position
               </button>
-              <button
-                title="Auto adjusts resolution for responsiveness. Low and High stay fixed."
-                onClick={() =>
-                  viewer.current?.quality(
-                    state.quality === 'Auto'
-                      ? 'Low'
-                      : state.quality === 'Low'
-                        ? 'High'
-                        : 'Auto',
-                  )
-                }
-              >
-                Detail: {state.quality}
-              </button>
+              <label className="bench-quality">
+                Detail
+                <select
+                  value={state.quality}
+                  aria-describedby="bench-quality-help"
+                  onChange={(event) => {
+                    const quality = event.currentTarget.value;
+                    if (
+                      quality === 'Auto' ||
+                      quality === 'Low' ||
+                      quality === 'High'
+                    )
+                      viewer.current?.quality(quality);
+                  }}
+                >
+                  <option value="Auto">Auto</option>
+                  <option value="Low">Low</option>
+                  <option value="High">High</option>
+                </select>
+              </label>
+              <p id="bench-quality-help" className="bench-sr">
+                Auto balances detail and responsiveness.
+              </p>
             </div>
           )}
         </section>

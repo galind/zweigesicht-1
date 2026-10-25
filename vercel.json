@@ -5,6 +5,7 @@
   "buildCommand": "cd explorer && npm run build:vercel && cd .. && rm -rf .vercel/output && mkdir -p .vercel/output && cp -R explorer/.vercel/output/. .vercel/output/",
   "git": {
     "deploymentEnabled": {
+      "codex/bench-entry-flow": false,
       "codex/workshop-environment": false,
       "codex/public-documentation-review": false,
       "codex/publication-blockers": false,

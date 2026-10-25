@@ -82,7 +82,7 @@ Hold either **Shift** while using WASD to run at **11 mm/s**, twice the ordinary
 5.5 mm/s horizontal speed. Existing 22 mm/s² acceleration smoothly transitions
 between speeds; diagonals are normalized. Shift also speeds horizontal travel in
 air but never alters vertical thrust or gravity. Releasing Shift returns to walk;
-menu, focus loss and reset clear the held input. The entry popup, pause menu and
+menu, focus loss and reset clear the held input. The Bench introduction, pause menu and
 walking hint show **Shift · Hold to run**. Physics substeps account for run speed.
 
 Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
@@ -358,8 +358,8 @@ Other internal CAD limitations remain unchanged.
 ## Flip and player continuity
 
 **F is provisional**, unused by the prior walking controls. Change `FLIP_KEY` in
-`explorer/src/bench/bindings.ts` to update the input handler, homepage controls
-popup, Escape menu and concise exploration hints together. No flight HUD,
+`explorer/src/bench/bindings.ts` to update the input handler, Bench controls
+introduction, Escape menu and concise exploration hints together. No flight HUD,
 settings panel, particles, camera shake or camera animation was added.
 
 The four-second operation uses quintic easing: 1.05 seconds of vertical lift,
@@ -404,17 +404,82 @@ not capture the mouse automatically. Retry recreates a resting bridge-up scene.
 Loading ignores F and cannot queue a flip; disposal cannot revive a late load.
 R remains an explicit reset, including during a flip. T remains unused.
 
+## Homepage invitation — 25 October 2026
+
+Reviewed the actual homepage, controls popup, loading and mat-level arrival before
+changing the invitation. Three wording/placement directions were compared:
+
+| Direction | Assessment |
+| --- | --- |
+| “Step into the workshop” in the centered header slot | Inviting, but implies a room and conflicts with the separate `/workshop` assembly puzzle; still lacks context. |
+| **“Explore the workbench” beneath the watch identity** | Initial choice: names the actual destination and makes room for the miniature first-person premise. Revised below after owner review. |
+| “Walk among the watch’s parts” near the bottom action dock | Descriptive, but competes with the controls that operate the current explorer and does not name the destination. |
+
+After owner review, the invitation moves to the **bottom left** and uses
+**Explore it in first person**. This single-line action explains the viewpoint
+without a supporting paragraph. The keyboard-and-mouse requirement moves into
+the existing controls introduction. The initial light-filled treatment was
+replaced after further feedback with a warmer charcoal surface, semibold text
+and a restrained brass outline. The fill, border and arrow use the existing site
+accent palette to improve visibility while fitting the page. It retains 10 px
+corners and a static decorative arrow;
+its meaning does not depend on that arrow. Hover, pressed/expanded and
+keyboard-focus states remain distinct.
+
+On wide screens it aligns with the bottom of the movement dock. Below 1200 px,
+or with enlarged text, it sits above the measured dock to avoid overlap. It
+remains outside header measurement and yields to open panels and focused
+part/group views. The preview-only Workshop action retains its existing location
+and build policy.
+
+The homepage invitation is now a direct link to `/bench`, with no popup and no
+prefetch. The route owns an introduction titled **The workbench**: scene context,
+shared controls, keyboard/mouse requirement and **Preparing the workbench…**.
+The scene loads visibly behind it. Once ready, **Start exploring** requests mouse
+capture from that user action. Loading completion, browser Back, reloads and
+bookmarks never capture automatically. The old cross-route capture intent and
+homepage popup were removed.
+
+Initial focus goes to the introduction heading; loading completion does not move
+focus. Tab reaches Start once available; the return link stays accessible.
+The introduction is centered horizontally and vertically, with symmetric height
+limits that keep the back link clear. It scrolls at short/narrow sizes and
+enlarged text. The touch-only explanation uses the same centered placement.
+After entry, Esc opens the matching pause menu with full controls and Resume.
+Capture refusal, missing assets and graphics errors keep their recovery actions.
+
+`useBenchAccess` checks any fine pointer, any hover capability and the standard
+pointer-lock API. It listens for pointer/hover capability changes, supports hybrid
+devices and does not classify by screen width or user-agent. Browsers cannot
+reliably detect physical keyboards, so the requirement stays explicit. API
+presence cannot guarantee capture permission; runtime refusal still has recovery.
+Touch-only devices see a non-interactive **Explore on desktop** invitation with
+**Keyboard and mouse required.** Direct `/bench` visits show the explanation and
+a return link, without importing the viewer or requesting scene assets. Browsers
+without the mouse-capture API get an additional browser-support explanation.
+
+Visible review covers desktop, narrow windows, 200% text, native Chrome capture,
+movement and Esc, and native touch emulation toggled in both directions. Automated
+checks include phone/tablet touch emulation, API absence, keyboard navigation,
+normal/reduced motion, explicit entry, loading/errors and lifecycle cleanup.
+Evidence is local in `artifacts/bench-route-introduction/`; current results are in
+`PROGRESS.md`. Emulation does not replace physical-device or release gates.
+
 ## Existing interface and physics
 
-The homepage **Walk inside the movement** button opens the glass controls popup.
-**Enter the movement** navigates to `/bench` and requests capture when ready;
-direct visits/Back show the compact Enter button. Escape, blur or document hiding
-while loading cancels automatic capture. Capture refusal, missing assets and
-graphics errors retain the existing recovery actions. Popup and Escape menu keep
-the homepage's typography, colors, rounded corners and glass blur. The Escape menu
-is centered horizontally and vertically in the viewport, with bounded scrolling
-on short screens. Exploration keeps the scene sharp with compact navigation and
-one hint row; a rejected flip temporarily replaces that row with a message
+The homepage **Explore it in first person** link opens the Bench introduction.
+**Start exploring** captures the mouse after loading; direct visits and Back use
+the same introduction. Loading never captures automatically. The introduction
+and Escape menu share a centered warm-charcoal panel with a restrained brass edge,
+the homepage's typography and a prominent Start/Resume action. The compact panel
+uses one title, a short first-use description and key badges without additional
+visible section headings. Controls stack into a single column when the panel is
+narrow or text is enlarged. The pause
+menu's quieter footer contains Reset and an explicit **Detail: Auto / Low / High**
+select; its Auto explanation remains available to screen readers. All actions have visible keyboard
+focus, and scrolling brings them into view on short screens. Hover/pressed states
+use color changes without movement. Exploration keeps the scene sharp with compact
+navigation and one hint row; a rejected flip temporarily replaces that row with a message
 centered horizontally and vertically in the viewport.
 
 WASD moves on ground/in air; mouse look is unchanged. Space supplies continuous

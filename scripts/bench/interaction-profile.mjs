@@ -44,7 +44,7 @@ try {
     timeout: 90000,
   });
   await page
-    .getByRole('button', { name: 'Enter the movement', exact: true })
+    .getByRole('button', { name: 'Start exploring', exact: true })
     .click();
   await page.waitForFunction(
     () => window.bench.status.captured || !!window.bench.status.error,

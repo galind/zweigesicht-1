@@ -3,6 +3,193 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Clean entry-flow PR branch — 25 October 2026
+
+Recreated the eight entry/menu commits on `origin/develop` as
+`codex/bench-entry-flow`, removing the old pre-squash workshop history from the
+replacement PR. Verified the resulting tracked files exactly match the previously
+tested branch before adding this note and disabling Vercel deployment for the new
+branch. Application files remain identical; existing verification still applies.
+The old branch is preserved; the replacement PR supersedes #32 without force-push.
+
+## Simpler Bench menus — 25 October 2026
+
+Kept the centered charcoal/brass styling and prominent Start/Resume action while
+removing the uppercase state labels, control-group headings, extra divider and
+Reset icon. Shortened the introduction and reduced panel width/padding. The Detail
+explanation is now screen-reader help rather than another visible line. All key
+instructions, settings and scene behavior remain available.
+
+Verified typecheck, lint, production build and **159 Bench UI checks**, including
+capture/resume, settings, focus, hover/pressed states, reduced motion and enlarged
+text. Visible review covers desktop, 390 px and 320 px with 200% text. Screenshots
+and report: `artifacts/bench-menu-simplified/`. Preview:
+<http://127.0.0.1:4198/bench>. Local commit only; no push or publication.
+
+## Bench introduction and Esc menu redesign — 25 October 2026
+
+Redesigned both centered panels around one prominent **Start / Resume exploring**
+action, with a warm charcoal surface, restrained brass edge and small state label.
+Grouped key badges into **Move around** and **At the bench**; controls stack at
+narrow widths and enlarged text. Reset sits in a quieter settings row, alongside
+an explicit **Auto / Low / High** Detail selector replacing the cycling button.
+The introduction, loading, error recovery and pause states share the same visual
+language. Existing capture, movement, scene and CAD behavior is preserved.
+
+Verified typecheck, lint, production build, **159 Bench UI checks**,
+**22 homepage/input journeys** and **32 flip checks**. Coverage includes centered layouts, keyboard focus,
+scrolling, direct Detail selection, contrast, actual capture/movement/resume,
+loading and recovery. Added primary-action hover/pressed checks under normal and
+reduced motion, plus an icon-independent label assertion. Visible browser review
+covers 1440 × 900, 390 × 844 and 320 × 640 at 200% text; native Chrome confirms
+Start → Esc, focus through Reset/Detail, and the native Detail options.
+
+Screenshots and reports: `artifacts/bench-menu-redesign/`. Updated interface docs.
+Preview: <http://127.0.0.1:4198/bench>. Local commit only; no push or publication.
+
+## Centered Bench introduction — 25 October 2026
+
+Centered the first-use Bench panel horizontally and vertically, as requested.
+The loading and touch-only explanation panels share this placement. Symmetric
+height limits keep the back link clear; overflowing content remains scrollable.
+The existing centered pause menu is unchanged.
+
+Verified lint, production build and **137 Bench UI checks**, including explicit
+center measurements at five viewport/text configurations. Visible review confirms
+1440 × 900, 390 × 844 and 320 × 640 at 200% text; Tab scrolls Start into view while
+the panel stays centered. Screenshots/report: `artifacts/bench-centered-introduction/`.
+Updated Bench documentation. Preview: <http://127.0.0.1:4198/bench>.
+Local commit only; no push or publication.
+
+## Bench introduction and input support — 25 October 2026
+
+The homepage **Explore it in first person** invitation now links directly to
+`/bench`. The route shows scene context and shared controls while loading, then
+**Start exploring** captures the mouse only on user action. Direct links, reloads
+and Back use the same introduction. Removed the homepage popup and cross-route
+automatic capture intent. Heading focus preserves the beginning of the scrollable
+introduction; loading completion does not steal focus. Esc still opens the
+existing controls, Resume, Reset and Detail menu.
+
+A shared capability check uses any fine pointer, any hover and pointer-lock API
+availability, with live input-capability updates. It does not use viewport width
+or user-agent. Touch-only visitors see **Explore on desktop — Keyboard and mouse
+required.** Direct `/bench` visits explain the limitation and offer a return link
+without loading scene assets. API absence has a separate browser explanation;
+capture refusal keeps recovery. Physical keyboard presence cannot be reliably
+detected, so the requirement stays visible. Homepage Bench prefetch is disabled.
+
+Verified **149 CPU tests**, typecheck, lint, production build, **22 entry/device
+journeys**, **132 Bench UI checks** and **8 lifecycle checks**. Coverage includes
+phone/tablet emulation, 320 px with 200% text, normal/reduced motion, missing capture
+API, no scene requests on touch-only devices, direct/Back entry, actual capture,
+walking/look/thrust, pause/resume, slow loads, failed capture/assets, graphics
+retry, focus loss and disposal during loading. Removed obsolete popup assertions
+and updated existing runners to the new entry label. Production CSS verification
+also caught and fixed backdrop-filter declaration ordering after removing the
+homepage CSS import.
+
+Visible browser review confirms desktop and narrow/enlarged layouts. Native
+Chrome verifies homepage → introduction → explicit capture → movement → Esc,
+and live desktop/touch switching in DevTools. Emulation was reset afterward.
+Evidence: `artifacts/bench-route-introduction/` (desktop introduction, native
+pause/touch views, phone/tablet states and reports). Scene, CAD, physics and
+bindings are unchanged. Preview: <http://127.0.0.1:4198/>. Local commit only;
+no push or publication. Physical-device/release gates remain unchanged.
+
+## Balanced invitation contrast — 25 October 2026
+
+Refined the bottom-left first-person invitation with a brighter warm charcoal
+fill, semibold text, a restrained brass border and a warm arrow. Colors derive
+from the existing site accent and neutral palette. The compact wording, position,
+shape and entry flow remain intact. Hover brightens the surface; pressed/expanded
+states deepen it, with the existing visible keyboard focus ring.
+
+Verified lint, production build and **18 homepage journeys**, including narrow
+and enlarged text layouts, keyboard/focus return, hover/pressed states, reduced
+motion and no-icon clarity. Visible browser review covers desktop, 390 px and
+320 px at 200% text. Evidence: `artifacts/bench-entry-balanced/`. Only invitation
+CSS and documentation changed. Preview: <http://127.0.0.1:4198/>. Local commit
+only; no push or publication.
+
+## First-person invitation refinement — 25 October 2026
+
+Changed the bottom-left label to the owner's suggested **Explore it in first
+person**. Removed the secondary line and restored the page's dark glass,
+regular-weight text and a subtle outline. This keeps the invitation compact and
+consistent with the movement controls. The keyboard-and-mouse requirement now
+appears in the existing introduction; no additional step was added.
+
+Verified typecheck, lint, production build, **157 Bench UI checks** and **18
+homepage journeys** (responsive placement, keyboard/focus, hover/pressed states,
+200% text, reduced motion and no-icon clarity). The dialog-bounds check now waits
+for the opening transition to settle before asserting visibility. Visible review
+covers desktop, 390 px and 320 px at 200% text, including keyboard opening and
+focus return. Evidence: `artifacts/bench-entry-first-person/`. Updated README,
+Bench design notes and browser selectors. Controls, scene and CAD are unchanged.
+Preview: <http://127.0.0.1:4198/>. Local commit only; no push or publication.
+
+## Bottom-left workbench invitation revision — 25 October 2026
+
+Following owner feedback, moved **Explore the workbench** to the bottom left,
+removed its descriptive paragraph and replaced dark glass with a solid warm light
+surface and dark text. The short **First-person · Keyboard & mouse** line retains
+the essential expectation. The smaller button has stronger contrast without
+animation. It aligns with the dock on wide screens and lifts above it below
+1200 px or with enlarged text. Existing panel/inspection hiding remains intact.
+
+Verified typecheck, lint, production build, **157 Bench UI checks** and **18
+homepage journeys**, covering
+the 1200 px placement boundary, narrow/landscape views, 200% text, reduced motion,
+keyboard entry/focus return, hover/pressed states, menu access and no-icon clarity.
+Visible browser review confirms desktop, 390 px, and 320 px with 200% text.
+Screenshots and reports are in `artifacts/bench-entry-bottom-left/`. The controls
+introduction, loading, arrival, scene and CAD are unchanged. Preview:
+<http://127.0.0.1:4198/>. Local commit only; no push or publication.
+
+## Initial homepage workbench invitation — 25 October 2026
+
+Replaced the centered **Walk inside the movement** button with **Explore the
+workbench**, a restrained glass invitation beneath the watch identity. Supporting
+copy sets the miniature first-person expectation, names the movement, holders
+and detached parts, and states **Keyboard & mouse**. A decorative static arrow
+suggests navigation; the text stands on its own. Compared a renamed header link,
+this contextual invitation and a dock-adjacent prompt; the choice and tradeoffs
+are recorded in [Bench experience](docs/BENCH_EXPERIENCE.md#homepage-invitation--25-october-2026).
+
+The invitation yields to inspection views and open panels, and stays outside the
+header's size measurement. This fixes the cramped existing menu found during
+320 px / 200% text review. The shared controls popup now says **Before you begin**,
+with one Escape/pointer-release explanation, then **Enter workbench**. Loading says
+**Preparing the workbench…** and leads to the existing captured arrival without
+another introduction. Overflowing controls focus the heading first so the
+introduction stays visible; Tab reaches Enter, and Escape restores the invitation.
+Hover, pressed/expanded and focus states are distinct. README, route metadata,
+canvas description and existing browser selectors use the updated terminology.
+
+Reviewed the actual visible homepage and old entry sequence before editing.
+Final visible in-app review covers 1440 × 900, 390 × 844 and 320 × 640, including
+200% text, keyboard opening, focus containment/return and the existing menu.
+Native Chrome on macOS independently verifies keyboard entry, automatic mouse
+capture, arrival, movement and Escape. Its DevTools reduced-motion emulation was
+visibly checked and reset. The in-app browser rejects mouse capture; its existing
+recovery is intact, with native Chrome and automated capture checks passing.
+
+Verified **149 CPU tests**, inventory, typecheck, lint and production build;
+**157 Bench UI checks**, **350 explorer checks** across seven suites, and **14
+homepage journeys** across seven viewport/text combinations with normal and
+reduced motion. The entry checks cover a short landscape view, 200% text down to
+320 px, hover/pressed states, keyboard focus, menu access and an explicitly hidden
+arrow. Final screenshot/report evidence is local in
+`artifacts/bench-entry-redesign/` (desktop, narrow focus, controls and enlarged
+controls, native reduced motion, UI/explorer reports and input-state fixtures).
+
+Bench bindings, scene, materials, CAD, physics and arrival are unchanged; no
+assets were regenerated. Preview remains <http://127.0.0.1:4198/>. Local commit
+only; no push, publication or redistribution. Existing release and physical-device
+qualification gates remain. Next action: owner review of the invitation and entry
+sequence in the local preview.
+
 ## Bench pull-request preparation — 25 October 2026
 
 Prepared the complete Bench/workshop branch for review against `develop`, including

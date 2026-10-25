@@ -22,21 +22,19 @@ const check = (name, pass, detail) => {
 const shot = (name) => page.screenshot({ path: `${out}/${name}.png` });
 const ready = () =>
   page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
-const enter = () => page.getByRole("button", { name: /^(Enter the movement|Resume exploring)$/ });
+const enter = () => page.getByRole("button", { name: /^(Start exploring|Resume exploring)$/ });
 const layout = () =>
   page.evaluate(() =>
-    [
-      ...document.querySelectorAll(
-        ".bench-header a,.bench-start,.bench-start button,.bench-menu,.bench-menu button,.bench-menu-controls,.bench-legend,.bench-entry-popup",
-      ),
-    ].map((e) => {
-      const r = e.getBoundingClientRect();
-      return {
-        text: e.textContent,
-        within: r.x >= 0 && r.y >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
-        overflow: e.scrollWidth > e.clientWidth + 1,
-      };
-    }),
+    [...document.querySelectorAll(".bench-header a,.bench-start,.bench-menu,.bench-legend")].map(
+      (e) => {
+        const r = e.getBoundingClientRect();
+        return {
+          text: e.textContent,
+          within: r.x >= 0 && r.y >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+          overflow: e.scrollWidth > e.clientWidth + 1,
+        };
+      },
+    ),
   );
 try {
   await page.goto(base + "/");
@@ -59,81 +57,28 @@ try {
     const label = `${width}x${height}-${text}`;
     await page.setViewportSize({ width, height });
     await page.goto(base + "/?text=" + text);
-    const trigger = page.getByRole("button", { name: "Walk inside the movement", exact: true });
-    await trigger.click();
-    const popup = page.getByRole("dialog");
-    await popup.waitFor();
-    check(
-      label + " homepage shows controls before navigation",
-      new URL(page.url()).pathname === "/" &&
-        (await popup
-          .innerText()
-          .then((t) => ["WASD", "Mouse", "Space", "F", "R", "Esc"].every((k) => t.includes(k)))),
-    );
-    check(
-      label + " popup layout",
-      (await layout()).every((x) => x.within && !x.overflow),
-      await layout(),
-    );
-    await page.keyboard.press("Escape");
-    await popup.waitFor({ state: "hidden" });
-    await page.waitForFunction(
-      () => document.activeElement?.textContent?.trim() === "Walk inside the movement",
-    );
-    check(
-      label + " cancel restores homepage focus",
-      await trigger.evaluate((e) => e === document.activeElement),
-    );
+    const trigger = page.getByRole("link", { name: "Explore it in first person", exact: true });
     await trigger.press("Enter");
-    await popup.waitFor();
-    await enter().waitFor();
-    await page.waitForFunction(
-      () => document.activeElement?.textContent?.trim() === "Enter the movement",
-    );
-    check(
-      label + " popup focuses Enter",
-      await enter().evaluate((e) => e === document.activeElement),
-    );
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Tab");
-    await page.waitForFunction(() =>
-      document.querySelector('[role="dialog"]')?.contains(document.activeElement),
-    );
-    check(
-      label + " popup contains keyboard focus",
-      await popup.evaluate((e) => e.contains(document.activeElement)),
-    );
-    await page.waitForFunction(() => {
-      const overlay = document.querySelector('[data-slot="sheet-overlay"]');
-      return (
-        overlay &&
-        getComputedStyle(overlay).opacity === "1" &&
-        overlay.getAnimations().every((animation) => animation.playState === "finished")
-      );
-    });
-    const popupGlass = await popup.evaluate((e) => {
-      const style = getComputedStyle(e);
-      const backdrop = getComputedStyle(document.querySelector('[data-slot="sheet-overlay"]'));
-      return {
-        background: style.backgroundColor,
-        blur: style.backdropFilter,
-        radius: style.borderRadius,
-        backdrop: backdrop.backdropFilter,
-      };
-    });
-    check(label + " popup blurs background", popupGlass.backdrop.includes("blur("), popupGlass);
-    await shot("popup-" + label);
-    await enter().click();
     await page.waitForURL(base + "/bench");
-    await page.waitForFunction(() => !!document.pointerLockElement);
-    await page.locator(".bench-legend").waitFor();
+    await enter().waitFor();
     check(
-      label + " popup enters captured scene without another instruction screen",
-      (await page.locator(".bench-menu,.bench-start,.bench-entry-popup").count()) === 0,
+      label + " homepage goes directly to Bench introduction",
+      await page
+        .locator(".bench-start")
+        .innerText()
+        .then((t) => ["WASD", "Mouse", "Space", "Esc"].every((k) => t.includes(k))),
     );
     check(
-      label + " scene is sharp while captured",
-      (await page.locator(".bench-menu-backdrop,[data-slot='sheet-overlay']").count()) === 0,
+      label + " loading never captures automatically",
+      await page.evaluate(() => !document.pointerLockElement),
+    );
+    await shot("introduction-" + label);
+    await enter().click();
+    await page.waitForFunction(() => !!document.pointerLockElement);
+    await page.locator(".bench-start").waitFor({ state: "hidden" });
+    check(
+      label + " explicit start removes introduction",
+      (await page.locator(".bench-start").count()) === 0,
     );
     await shot("arrival-" + label);
     await page.keyboard.press("Escape");
@@ -144,7 +89,7 @@ try {
     await page.waitForURL(base + "/bench");
     await enter().waitFor();
     check(
-      label + " browser Back never reuses capture intent",
+      label + " browser Back shows introduction without capture",
       (await page.evaluate(() => !document.pointerLockElement)) &&
         (await page.locator(".bench-start").isVisible()),
     );
@@ -166,7 +111,22 @@ try {
       (await layout()).every((x) => x.within && !x.overflow),
       await layout(),
     );
-    check(label + " entry focused", await enter().evaluate((e) => e === document.activeElement));
+    check(
+      label + " introduction focused",
+      await page
+        .getByRole("heading", { name: "The workbench" })
+        .evaluate((e) => e === document.activeElement),
+    );
+    check(
+      label + " introduction is centered in the viewport",
+      await page.locator(".bench-start").evaluate((e) => {
+        const r = e.getBoundingClientRect();
+        return (
+          Math.abs(r.x + r.width / 2 - innerWidth / 2) < 1 &&
+          Math.abs(r.y + r.height / 2 - innerHeight / 2) < 1
+        );
+      }),
+    );
     check(label + " no entry settings", (await page.locator(".bench-options").count()) === 0);
     check(
       label + " navigation and menu do not overlap",
@@ -179,6 +139,7 @@ try {
     const contrast = await page.evaluate(() => {
       const luminance = (color) => {
         const channels = color.match(/[\d.]+/g).map(Number);
+        if (color.startsWith("color(srgb")) for (let i = 0; i < 3; i++) channels[i] *= 255;
         const alpha = channels[3] ?? 1;
         // Conservative contrast: composite translucent surfaces over pure white.
         const rgb = channels
@@ -208,10 +169,51 @@ try {
       contrast,
     );
     check(
-      label + " direct visit has no repeated instructions",
-      (await page.locator(".bench-menu-controls,h1").count()) === 0,
+      label + " direct visit includes one controls introduction",
+      (await page.locator(".bench-menu-controls").count()) === 1,
     );
+    if (width === 1440) {
+      for (const reducedMotion of ["no-preference", "reduce"]) {
+        await page.emulateMedia({ reducedMotion });
+        await page.mouse.move(0, 0);
+        // The global reduced-motion rule uses a 0.01ms transition; sample after paint.
+        await page.waitForTimeout(50);
+        const resting = await enter().evaluate((e) => getComputedStyle(e).backgroundColor);
+        await enter().hover();
+        await page.waitForTimeout(50);
+        const hovered = await enter().evaluate((e) => getComputedStyle(e).backgroundColor);
+        check(reducedMotion + " primary action has a visible hover state", hovered !== resting);
+        await page.mouse.down();
+        await page.waitForTimeout(50);
+        const pressed = await enter().evaluate((e) => ({
+          color: getComputedStyle(e).backgroundColor,
+          active: e.matches(":active"),
+        }));
+        check(
+          reducedMotion + " primary action has a distinct pressed state",
+          pressed.active && pressed.color !== hovered,
+          { resting, hovered, pressed },
+        );
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+        check(
+          reducedMotion + " primary action does not depend on motion",
+          await enter().evaluate((e) => getComputedStyle(e).animationName === "none"),
+        );
+      }
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      check(
+        "primary action label is independent of its decorative icon",
+        await enter().evaluate(
+          (e) =>
+            e.textContent.trim() === "Start exploring" &&
+            e.querySelector("svg")?.getAttribute("aria-hidden") === "true",
+        ),
+      );
+      await page.getByRole("heading", { name: "The workbench" }).focus();
+    }
     await shot("direct-" + label);
+    await page.keyboard.press("Tab");
     await page.keyboard.press("Shift+Tab");
     check(
       label + " keyboard navigation focus visible",
@@ -298,16 +300,30 @@ try {
         );
       }),
     );
+    // On short/enlarged layouts, Tab must reveal every action inside the scrollable panel.
+    await enter().focus();
+    await page.keyboard.press("Tab");
+    const reset = page.getByRole("button", { name: "Reset position", exact: true });
     check(
-      label + " menu actions are not clipped",
-      await page.evaluate(() => {
-        const menu = document.querySelector(".bench-menu").getBoundingClientRect();
-        return [...document.querySelectorAll(".bench-menu button")].every((e) => {
-          const r = e.getBoundingClientRect();
-          return r.top >= menu.top && r.bottom <= menu.bottom;
-        });
+      label + " keyboard reaches Reset",
+      await reset.evaluate((e) => e === document.activeElement),
+    );
+    await page.keyboard.press("Tab");
+    const detail = page.getByRole("combobox", { name: "Detail", exact: true });
+    check(
+      label + " keyboard reaches Detail with visible focus",
+      await detail.evaluate((e) => {
+        const r = e.getBoundingClientRect(),
+          panel = e.closest(".bench-menu").getBoundingClientRect();
+        return (
+          e === document.activeElement &&
+          getComputedStyle(e).outlineStyle === "solid" &&
+          r.top >= panel.top &&
+          r.bottom <= panel.bottom
+        );
       }),
     );
+    await enter().focus();
     const menuGlass = await page.locator(".bench-menu").evaluate((e) => {
       const style = getComputedStyle(e);
       return {
@@ -318,9 +334,9 @@ try {
       };
     });
     check(
-      label + " Escape menu matches popup glass and backdrop",
-      JSON.stringify(menuGlass) === JSON.stringify(popupGlass),
-      { popupGlass, menuGlass },
+      label + " Escape menu retains glass and backdrop",
+      menuGlass.blur.includes("blur(") && menuGlass.backdrop.includes("blur("),
+      menuGlass,
     );
     await shot("menu-" + label);
     await page.getByRole("button", { name: "Reset position", exact: true }).click();
@@ -330,11 +346,13 @@ try {
         () => Math.abs(window.bench.walker.feet.x) < 1e-8 && window.bench.walker.feet.z === 54,
       ),
     );
-    await page.getByRole("button", { name: "Detail: Auto", exact: true }).click();
-    check(
-      label + " retained detail control",
-      await page.getByRole("button", { name: "Detail: Low", exact: true }).isVisible(),
-    );
+    for (const quality of ["Low", "High", "Auto"]) {
+      await detail.selectOption(quality);
+      check(
+        label + " detail selects " + quality,
+        await page.evaluate((q) => window.bench.status.quality === q, quality),
+      );
+    }
     // Chrome requires a short interval before recapture after a user Escape.
     await page.waitForTimeout(1200);
     await enter().click();
@@ -348,7 +366,7 @@ try {
     check(label + " resume and return navigation", true);
   }
   await page.setViewportSize({ width: 1024, height: 640 });
-  // Escape during a pending homepage entry must cancel future automatic capture.
+  // Loading never opts into capture, even after a homepage entry.
   let finishLoad;
   const heldLoad = new Promise((resolve) => {
     finishLoad = resolve;
@@ -358,16 +376,15 @@ try {
     await route.continue();
   });
   await page.goto(base + "/");
-  await page.getByRole("button", { name: "Walk inside the movement", exact: true }).click();
-  await enter().click();
+  await page.getByRole("link", { name: "Explore it in first person", exact: true }).click();
   await page.waitForURL(base + "/bench");
-  await page.getByText("Loading the movement…", { exact: true }).waitFor();
+  await page.getByText("Preparing the workbench…", { exact: true }).waitFor();
   await page.keyboard.press("Escape");
   await page.waitForTimeout(6000);
   finishLoad();
   await enter().waitFor();
   check(
-    "Escape during slow loading cancels automatic capture",
+    "Slow loading preserves explicit start",
     await page.evaluate(() => !document.pointerLockElement),
   );
   await page.unroute("**/bench-local/environment.glb");
@@ -381,7 +398,7 @@ try {
     await route.abort();
   });
   await page.goto(base + "/bench?inspect=1");
-  await page.getByText("Loading the movement…", { exact: true }).waitFor();
+  await page.getByText("Preparing the workbench…", { exact: true }).waitFor();
   check(
     "loading is announced and cannot enter",
     (await page.locator("output").isVisible()) && (await enter().count()) === 0,

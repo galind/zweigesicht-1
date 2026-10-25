@@ -23,7 +23,7 @@ const speed = (target) =>
     { timeout: 5000 },
   );
 const enter = async () => {
-  await page.getByRole("button", { name: /^(Enter the movement|Resume exploring)$/ }).click();
+  await page.getByRole("button", { name: /^(Start exploring|Resume exploring)$/ }).click();
   await page.waitForFunction(() => window.bench.status.captured);
 };
 try {

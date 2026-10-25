@@ -2178,7 +2178,7 @@ canvas:focus-visible {
   }
 }
 
-/* Equal side tracks keep both experience entries centred and independently clickable. */
+/* Keep the preview-only Workshop entry between identity and navigation. */
 .topbar,
 .text-enlarged .topbar {
   display: grid;
@@ -2254,11 +2254,78 @@ canvas:focus-visible {
   grid-row: 2;
   flex-wrap: wrap;
 }
+/* A separate invitation keeps the workbench distinct from view controls. */
+.bench-invitation {
+  position: absolute;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  left: var(--edge-left);
+  width: max-content;
+  max-width: calc(100% - var(--edge-left) - var(--edge-right));
+  z-index: 2;
+}
 .bench-trigger {
+  text-decoration: none;
+  display: flex;
+  width: 100%;
   min-height: 44px;
-  padding-inline: 14px;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--site-accent) 55%, var(--border));
   border-radius: 10px;
-  background: rgb(38 38 38 / 82%);
+  background: color-mix(in srgb, var(--site-accent) 12%, var(--muted));
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+.bench-invitation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.875rem;
   font-weight: 600;
-  pointer-events: auto;
+  line-height: 1.4;
+}
+.bench-invitation-heading svg {
+  color: var(--site-accent-foreground);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+.bench-trigger:hover {
+  background: color-mix(in srgb, var(--site-accent) 22%, var(--muted));
+  border-color: var(--site-accent);
+}
+.bench-trigger:active,
+.bench-trigger[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--site-accent) 16%, var(--background));
+  border-color: var(--site-accent-foreground);
+}
+.bench-trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+/* Keep the invitation clear of the centered dock when horizontal room is limited. */
+.text-enlarged .bench-invitation {
+  bottom: var(--panel-bottom, 90px);
+}
+@media (max-width: 1199px) {
+  .bench-invitation {
+    bottom: var(--panel-bottom, 90px);
+  }
+}
+
+.bench-unavailable {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  max-width: 20rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--site-panel);
+}
+.bench-invitation-note {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--site-muted);
 }

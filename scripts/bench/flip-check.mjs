@@ -43,7 +43,7 @@ const state = () =>
     };
   });
 const enter = async () => {
-  await page.getByRole("button", { name: /^(Enter the movement|Resume exploring)$/ }).click();
+  await page.getByRole("button", { name: /^(Start exploring|Resume exploring)$/ }).click();
   await page.waitForFunction(() => window.bench.status.captured);
 };
 const done = () => page.waitForFunction(() => !window.bench.flip.active, null, { timeout: 15000 });
@@ -51,15 +51,16 @@ try {
   await page.goto(base + "/?inspect=1");
   await page.locator(".stage canvas").waitFor();
   await page.waitForTimeout(1500);
-  await page.getByRole("button", { name: "Walk inside the movement", exact: true }).click();
+  await page.getByRole("link", { name: "Explore it in first person", exact: true }).click();
+  await page.locator(".bench-menu-controls").waitFor();
   check(
-    "homepage popup has F",
+    "Bench introduction has F",
     await page
-      .getByRole("dialog")
+      .locator(".bench-start")
       .innerText()
-      .then((t) => t.includes("F Flip movement")),
+      .then((t) => /F\s+Flip movement/.test(t)),
   );
-  await page.screenshot({ path: out + "/homepage-controls.png" });
+  await page.screenshot({ path: out + "/entry-controls.png" });
   await page.goto(base + "/bench?inspect=1");
   await page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
   await enter();
@@ -127,7 +128,7 @@ try {
     await page
       .locator(".bench-menu-controls")
       .innerText()
-      .then((t) => t.includes("F Flip movement")),
+      .then((t) => /F\s+Flip movement/.test(t)),
   );
   await done();
   check("Escape settles while visible", (await state()).side === "dial");
