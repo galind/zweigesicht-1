@@ -74,6 +74,14 @@ for Vercel's Git integration. Canonical/social URLs are set in
 `explorer/src/content/seo.ts` and `explorer/app/sitemap.ts`; review them before
 hosting a fork. Building locally does not authorize publication.
 
+Hosted Bench is opt-in: set `BENCH_ASSET_BASE_URL` to an approved HTTPS storage
+directory containing `movement.stl`, `dial.stl` and `environment.glb`. If required,
+set `BENCH_ASSET_TOKEN` as a sensitive Vercel build environment variable; requests
+use Bearer authentication. The build checks all three files against recorded
+source hashes and fails on missing or corrupt files. Redirects are not followed.
+Without the URL, the hosted homepage omits the Bench invitation and `/bench`
+shows an unavailable message. See [Bench deployment](docs/BENCH_EXPERIENCE.md#hosted-delivery).
+
 ## Licensing and source assets
 
 Guillem Galindo's original code and documentation use the standard

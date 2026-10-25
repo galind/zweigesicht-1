@@ -325,9 +325,39 @@ GLB output remain ignored under `assets/generated/bench/` and
 `explorer/public/bench-local/`. A hidden 1.65 mm authoring reference is excluded
 from export. The loader uses `no-store`; rebuild and restart a production preview
 after regenerating assets so its cached content-length metadata also updates.
-`build:vercel` excludes `bench-local`, so the standard hosted build does not
-include the holder/environment payloads. Staging integration does not resolve
-the asset redistribution gates in [release gates](RELEASE_GATES.md).
+
+### Hosted delivery
+
+The staging failure reported on 25 October was three HTTP 404s: both holders
+and `environment.glb`. The route was deployed while Git ignored the files and
+Vercel packaging removed them. A successful build alone did not prove Bench
+availability.
+
+For an approved staging deployment, place the three prepared files in a protected
+HTTPS storage directory. Preserve their names. Use the original holder bytes
+recorded in `assets/source-manifest/holder.json` and the authored environment
+recorded in `assets/source-manifest/workshop-environment.json`; do not regenerate
+or substitute them during deployment. Configure only the intended Vercel project
+and environment:
+
+- `BENCH_ASSET_BASE_URL`: the directory URL, without credentials/query parameters.
+- `BENCH_ASSET_TOKEN`: optional sensitive Bearer credential, used only by the build.
+
+`package-vercel.mjs` downloads into temporary storage, verifies the recorded
+SHA-256 hashes (and holder byte counts), removes incidental local build copies,
+then installs exactly those three verified files. A failed fetch/hash aborts the
+build before new assets enter the output. Redirects are rejected to avoid sending
+the credential to another host. No storage URL or credential enters client code.
+
+Without a configured asset source, hosted builds omit the homepage invitation
+and show an unavailable message at `/bench` without starting its renderer. Local
+development and standard local builds retain their prepared-file workflow.
+
+Storage authentication protects the build source; the deployed files inherit
+the site's access controls. Confirm staging protection and the applicable
+[release gates](RELEASE_GATES.md) before supplying the assets. No assets have
+been uploaded or deployment settings changed by this fix. After provisioning,
+redeploy and verify all three `/bench-local/` responses and actual scene entry.
 
 ## Verification
 

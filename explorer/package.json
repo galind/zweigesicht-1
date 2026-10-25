@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build && node scripts/prune-build-output.mjs",
-    "build:vercel": "NITRO_PRESET=vercel vite build && node scripts/prune-build-output.mjs .vercel/output/static --exclude-local-bench",
+    "build:vercel": "NITRO_PRESET=vercel vite build && node scripts/package-vercel.mjs",
     "start": "vinext start",
     "lint": "oxlint",
     "format": "oxfmt",

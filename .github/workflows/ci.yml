@@ -71,6 +71,5 @@ jobs:
       - name: Build production output
         run: npm --prefix explorer run build
 
-      - name: Build Vercel production output for release PRs
-        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+      - name: Build Vercel output
         run: npm --prefix explorer run build:vercel

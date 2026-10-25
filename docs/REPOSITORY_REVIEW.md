@@ -23,6 +23,7 @@ The cleanup branch targets `develop` and disables its own Vercel Git deployment.
 | Shared material policy | Explorer, Workshop and Bench copied the fitted enamel setup. Centralize fitted/catalog optical transitions, preserve existing Color objects and shader hooks, and store fitted transmission consistently so finish restoration cannot fall back to raw catalog zero. |
 | Partial Bench preparation | Detached-part clones entered the cleanup tree only after finish and pose setup. Track each clone immediately so either failure disposes all allocated materials while retaining shared catalog geometry. CPU fixtures exercise both failure points. |
 | Asset integrity | Four loaders duplicated SHA-256 byte encoding. Share the encoder while preserving each loader's expected hash and rejection behavior. CPU fixtures check known digests and reject corrupt case, surface and diamond payloads before parsing. |
+| Hosted Bench delivery | The owner's staging console confirms 404 for both holders and the environment. Those ignored assets were also pruned from Vercel output while the entry remained visible. Add an explicit build asset source with recorded-hash validation; omit the hosted entry when unconfigured. Vercel builds now run on integration PRs as well as release PRs. Storage/access setup and redeployment remain outstanding. |
 
 Validation results and remaining actions are maintained in [PROGRESS.md](../PROGRESS.md).
 Browser evidence stays in ignored `artifacts/staging-cleanup/`. This review does

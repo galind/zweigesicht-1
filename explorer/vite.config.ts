@@ -102,6 +102,11 @@ export default defineConfig(({ command }) => ({
   // Keep Workshop unlisted in production until it is ready for a code release.
   // Vite supplies the same literal to the server and client.
   define: {
+    __BENCH_ASSETS_ENABLED__: JSON.stringify(
+      command === 'serve' ||
+        !process.env.NITRO_PRESET ||
+        Boolean(process.env.BENCH_ASSET_BASE_URL),
+    ),
     __WORKSHOP_ENTRY_ENABLED__: JSON.stringify(
       command === 'serve' || process.env.VERCEL_ENV === 'preview',
     ),

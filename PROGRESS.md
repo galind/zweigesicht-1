@@ -26,8 +26,8 @@ Repository visibility is public, confirmed through the connected GitHub app.
   Touch-only devices get a desktop explanation without loading the scene.
   [Bench reference](docs/BENCH_EXPERIENCE.md) owns dimensions, reproduction and controls;
   [performance review](docs/BENCH_PERFORMANCE.md) owns measurements and their limits.
-- Holder/environment payloads remain local. Vercel packaging excludes
-  `bench-local`; integrating the code does not make those assets available remotely.
+- Holder/environment payloads remain local. Hosted Bench now requires an explicit,
+  hash-verified build asset source; integrating code does not provision that source.
 
 ## Cleanup under review
 
@@ -68,6 +68,14 @@ harness checks, not a new device-performance qualification. Evidence is local in
 `artifacts/staging-cleanup/` and `artifacts/bench/staging-cleanup-first-use.json`.
 
 ## Remaining work and release limits
+
+The owner's staging screenshot confirms HTTP 404 for all three required Bench
+payloads: `/bench-local/movement.stl`, `dial.stl` and `environment.glb`, followed
+by `Local holder unavailable`. The deployment fix adds an opt-in build source
+with hash validation and disables the hosted entry when no source is configured.
+CI now builds the Vercel package on every integration PR. Asset storage, UAT
+access controls and deployment configuration are not yet provisioned/confirmed;
+no payloads have been uploaded. See [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
 
 Review and merge this cleanup into `develop`, then review staging separately.
 Keep current status concise: replace superseded next actions rather than adding

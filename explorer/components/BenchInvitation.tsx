@@ -5,6 +5,7 @@ import { useBenchAccess } from '@/src/bench/useBenchAccess';
 
 export function BenchInvitation() {
   const access = useBenchAccess();
+  if (!__BENCH_ASSETS_ENABLED__) return null;
   if (access === 'ready')
     return (
       <Link className="bench-trigger site-glass" href="/bench" prefetch={false}>
