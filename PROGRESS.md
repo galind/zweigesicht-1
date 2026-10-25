@@ -3,6 +3,27 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Bench introduction and Esc menu redesign — 25 October 2026
+
+Redesigned both centered panels around one prominent **Start / Resume exploring**
+action, with a warm charcoal surface, restrained brass edge and small state label.
+Grouped key badges into **Move around** and **At the bench**; controls stack at
+narrow widths and enlarged text. Reset sits in a quieter settings row, alongside
+an explicit **Auto / Low / High** Detail selector replacing the cycling button.
+The introduction, loading, error recovery and pause states share the same visual
+language. Existing capture, movement, scene and CAD behavior is preserved.
+
+Verified typecheck, lint, production build, **159 Bench UI checks**,
+**22 homepage/input journeys** and **32 flip checks**. Coverage includes centered layouts, keyboard focus,
+scrolling, direct Detail selection, contrast, actual capture/movement/resume,
+loading and recovery. Added primary-action hover/pressed checks under normal and
+reduced motion, plus an icon-independent label assertion. Visible browser review
+covers 1440 × 900, 390 × 844 and 320 × 640 at 200% text; native Chrome confirms
+Start → Esc, focus through Reset/Detail, and the native Detail options.
+
+Screenshots and reports: `artifacts/bench-menu-redesign/`. Updated interface docs.
+Preview: <http://127.0.0.1:4198/bench>. Local commit only; no push or publication.
+
 ## Centered Bench introduction — 25 October 2026
 
 Centered the first-use Bench panel horizontally and vertically, as requested.
