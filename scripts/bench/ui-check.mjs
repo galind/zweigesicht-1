@@ -25,18 +25,16 @@ const ready = () =>
 const enter = () => page.getByRole("button", { name: /^(Start exploring|Resume exploring)$/ });
 const layout = () =>
   page.evaluate(() =>
-    [
-      ...document.querySelectorAll(
-        ".bench-header a,.bench-start,.bench-menu,.bench-menu button,.bench-legend",
-      ),
-    ].map((e) => {
-      const r = e.getBoundingClientRect();
-      return {
-        text: e.textContent,
-        within: r.x >= 0 && r.y >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
-        overflow: e.scrollWidth > e.clientWidth + 1,
-      };
-    }),
+    [...document.querySelectorAll(".bench-header a,.bench-start,.bench-menu,.bench-legend")].map(
+      (e) => {
+        const r = e.getBoundingClientRect();
+        return {
+          text: e.textContent,
+          within: r.x >= 0 && r.y >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+          overflow: e.scrollWidth > e.clientWidth + 1,
+        };
+      },
+    ),
   );
 try {
   await page.goto(base + "/");
@@ -141,6 +139,7 @@ try {
     const contrast = await page.evaluate(() => {
       const luminance = (color) => {
         const channels = color.match(/[\d.]+/g).map(Number);
+        if (color.startsWith("color(srgb")) for (let i = 0; i < 3; i++) channels[i] *= 255;
         const alpha = channels[3] ?? 1;
         // Conservative contrast: composite translucent surfaces over pure white.
         const rgb = channels
@@ -173,6 +172,46 @@ try {
       label + " direct visit includes one controls introduction",
       (await page.locator(".bench-menu-controls").count()) === 1,
     );
+    if (width === 1440) {
+      for (const reducedMotion of ["no-preference", "reduce"]) {
+        await page.emulateMedia({ reducedMotion });
+        await page.mouse.move(0, 0);
+        // The global reduced-motion rule uses a 0.01ms transition; sample after paint.
+        await page.waitForTimeout(50);
+        const resting = await enter().evaluate((e) => getComputedStyle(e).backgroundColor);
+        await enter().hover();
+        await page.waitForTimeout(50);
+        const hovered = await enter().evaluate((e) => getComputedStyle(e).backgroundColor);
+        check(reducedMotion + " primary action has a visible hover state", hovered !== resting);
+        await page.mouse.down();
+        await page.waitForTimeout(50);
+        const pressed = await enter().evaluate((e) => ({
+          color: getComputedStyle(e).backgroundColor,
+          active: e.matches(":active"),
+        }));
+        check(
+          reducedMotion + " primary action has a distinct pressed state",
+          pressed.active && pressed.color !== hovered,
+          { resting, hovered, pressed },
+        );
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+        check(
+          reducedMotion + " primary action does not depend on motion",
+          await enter().evaluate((e) => getComputedStyle(e).animationName === "none"),
+        );
+      }
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      check(
+        "primary action label is independent of its decorative icon",
+        await enter().evaluate(
+          (e) =>
+            e.textContent.trim() === "Start exploring" &&
+            e.querySelector("svg")?.getAttribute("aria-hidden") === "true",
+        ),
+      );
+      await page.getByRole("heading", { name: "The workbench" }).focus();
+    }
     await shot("direct-" + label);
     await page.keyboard.press("Tab");
     await page.keyboard.press("Shift+Tab");
@@ -261,16 +300,30 @@ try {
         );
       }),
     );
+    // On short/enlarged layouts, Tab must reveal every action inside the scrollable panel.
+    await enter().focus();
+    await page.keyboard.press("Tab");
+    const reset = page.getByRole("button", { name: "Reset position", exact: true });
     check(
-      label + " menu actions are not clipped",
-      await page.evaluate(() => {
-        const menu = document.querySelector(".bench-menu").getBoundingClientRect();
-        return [...document.querySelectorAll(".bench-menu button")].every((e) => {
-          const r = e.getBoundingClientRect();
-          return r.top >= menu.top && r.bottom <= menu.bottom;
-        });
+      label + " keyboard reaches Reset",
+      await reset.evaluate((e) => e === document.activeElement),
+    );
+    await page.keyboard.press("Tab");
+    const detail = page.getByRole("combobox", { name: "Detail", exact: true });
+    check(
+      label + " keyboard reaches Detail with visible focus",
+      await detail.evaluate((e) => {
+        const r = e.getBoundingClientRect(),
+          panel = e.closest(".bench-menu").getBoundingClientRect();
+        return (
+          e === document.activeElement &&
+          getComputedStyle(e).outlineStyle === "solid" &&
+          r.top >= panel.top &&
+          r.bottom <= panel.bottom
+        );
       }),
     );
+    await enter().focus();
     const menuGlass = await page.locator(".bench-menu").evaluate((e) => {
       const style = getComputedStyle(e);
       return {
@@ -293,11 +346,13 @@ try {
         () => Math.abs(window.bench.walker.feet.x) < 1e-8 && window.bench.walker.feet.z === 54,
       ),
     );
-    await page.getByRole("button", { name: "Detail: Auto", exact: true }).click();
-    check(
-      label + " retained detail control",
-      await page.getByRole("button", { name: "Detail: Low", exact: true }).isVisible(),
-    );
+    for (const quality of ["Low", "High", "Auto"]) {
+      await detail.selectOption(quality);
+      check(
+        label + " detail selects " + quality,
+        await page.evaluate((q) => window.bench.status.quality === q, quality),
+      );
+    }
     // Chrome requires a short interval before recapture after a user Escape.
     await page.waitForTimeout(1200);
     await enter().click();

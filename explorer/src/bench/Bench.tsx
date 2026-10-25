@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { ArrowRight, RotateCcw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import type { BenchViewer, BenchStatus } from './BenchViewer';
 import { BenchControls } from './BenchControls';
@@ -33,6 +34,7 @@ export default function Bench() {
     <main className="bench-experience">
       <BenchHeader />
       <section className="bench-start" aria-labelledby="bench-access-title">
+        <p className="bench-eyebrow">First-person exploration</p>
         <h1 id="bench-access-title">
           {access === 'checking' ? 'The workbench' : 'Explore on desktop'}
         </h1>
@@ -121,6 +123,9 @@ function BenchScene() {
           className={hasEntered ? 'bench-menu' : 'bench-start'}
           aria-labelledby="bench-title"
         >
+          <p className="bench-eyebrow">
+            {hasEntered ? 'Exploration paused' : 'First-person exploration'}
+          </p>
           <h1 id="bench-title" ref={introduction} tabIndex={-1}>
             The workbench
           </h1>
@@ -129,10 +134,6 @@ function BenchScene() {
               <p className="bench-introduction">
                 Explore the movement, its holders and detached parts at
                 miniature scale.
-              </p>
-              <BenchControls />
-              <p className="bench-introduction">
-                Keyboard and mouse required. Esc releases the pointer.
               </p>
             </>
           )}
@@ -148,6 +149,7 @@ function BenchScene() {
               onClick={() => void viewer.current?.enter()}
             >
               {hasEntered ? 'Resume exploring' : 'Start exploring'}
+              <ArrowRight aria-hidden="true" />
             </button>
           ) : state.error ? (
             <button
@@ -163,26 +165,38 @@ function BenchScene() {
           {state.flipBlocked && (
             <output className="bench-flip-notice">{flipNotice}</output>
           )}
-          {hasEntered && <BenchControls />}
+          <BenchControls />
+          {!hasEntered && (
+            <p className="bench-input-note">Keyboard and mouse required.</p>
+          )}
           {state.ready && hasEntered && (
             <div className="bench-options">
               <button onClick={() => viewer.current?.reset()}>
-                Reset position
+                <RotateCcw aria-hidden="true" /> Reset position
               </button>
-              <button
-                title="Auto adjusts resolution for responsiveness. Low and High stay fixed."
-                onClick={() =>
-                  viewer.current?.quality(
-                    state.quality === 'Auto'
-                      ? 'Low'
-                      : state.quality === 'Low'
-                        ? 'High'
-                        : 'Auto',
-                  )
-                }
-              >
-                Detail: {state.quality}
-              </button>
+              <label className="bench-quality">
+                Detail
+                <select
+                  value={state.quality}
+                  aria-describedby="bench-quality-help"
+                  onChange={(event) => {
+                    const quality = event.currentTarget.value;
+                    if (
+                      quality === 'Auto' ||
+                      quality === 'Low' ||
+                      quality === 'High'
+                    )
+                      viewer.current?.quality(quality);
+                  }}
+                >
+                  <option value="Auto">Auto</option>
+                  <option value="Low">Low</option>
+                  <option value="High">High</option>
+                </select>
+              </label>
+              <p id="bench-quality-help" className="bench-input-note">
+                Auto balances detail and responsiveness.
+              </p>
             </div>
           )}
         </section>

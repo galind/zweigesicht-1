@@ -52,13 +52,13 @@ try {
   await page.locator(".stage canvas").waitFor();
   await page.waitForTimeout(1500);
   await page.getByRole("link", { name: "Explore it in first person", exact: true }).click();
-  await page.locator('.bench-menu-controls').waitFor();
+  await page.locator(".bench-menu-controls").waitFor();
   check(
     "Bench introduction has F",
     await page
       .locator(".bench-start")
       .innerText()
-      .then((t) => t.includes("F Flip movement")),
+      .then((t) => /F\s+Flip movement/.test(t)),
   );
   await page.screenshot({ path: out + "/entry-controls.png" });
   await page.goto(base + "/bench?inspect=1");
@@ -128,7 +128,7 @@ try {
     await page
       .locator(".bench-menu-controls")
       .innerText()
-      .then((t) => t.includes("F Flip movement")),
+      .then((t) => /F\s+Flip movement/.test(t)),
   );
   await done();
   check("Escape settles while visible", (await state()).side === "dial");
