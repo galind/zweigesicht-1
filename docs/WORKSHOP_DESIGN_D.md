@@ -1,5 +1,13 @@
 # D — Main workbench
 
+**Current owner direction, 25 October 2026:** simplify the local environment to
+the room, one desk and a plain mat before adding objects individually. All
+tabletop props, wall map/frame and mat lettering are removed. The window and
+integrated drawers remain architectural/furniture elements. The working movement
+and original holder remain for interaction testing. The revision 3 brief below
+is retained as the historical approved design; its object list is not the current
+implementation target.
+
 Developed design and implementation brief, revision 3, 24 October 2026.
 **Selected direction: D revision 3. Approved for local implementation on
 24 October 2026. Implemented locally on 25 October 2026; see

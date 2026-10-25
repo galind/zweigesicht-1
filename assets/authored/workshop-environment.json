@@ -1,5 +1,5 @@
 {
-  "status": "Approved revision 3 \u2014 implemented authored environment",
+  "status": "Room and desk/mat only — owner simplification after revision 3",
   "units": "millimetres",
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
@@ -52,68 +52,7 @@
     "maxZ": 100,
     "meaning": "No new props here; existing movement/holder remain. Keep both sides and forward arrival open."
   },
-  "props": [
-    {
-      "id": "task-lamp",
-      "position": [-300, -1, -230],
-      "baseDiameter": 105,
-      "headTarget": [-190, 350, -135],
-      "collisionRole": "walkable",
-      "note": "Weighted base; complete arm/head collider follows visible solid; no cable across mat."
-    },
-    {
-      "id": "loupe",
-      "position": [210, -1, 0],
-      "diameter": 30,
-      "height": 28,
-      "collisionRole": "walkable"
-    },
-    {
-      "id": "tweezers",
-      "position": [225, -1, 70],
-      "length": 115,
-      "width": 8,
-      "height": 3,
-      "alignment": "Z axis; tips toward -Z",
-      "collisionRole": "walkable"
-    },
-    {
-      "id": "closed-notebook",
-      "position": [350, -1, -170],
-      "width": 140,
-      "depth": 95,
-      "height": 8,
-      "collisionRole": "walkable"
-    },
-    {
-      "id": "five-screwdriver-stand",
-      "position": [-380, -1, -90],
-      "width": 130,
-      "depth": 65,
-      "height": 100,
-      "collisionRole": "walkable"
-    },
-    {
-      "id": "empty-parts-tray",
-      "position": [-380, -1, 65],
-      "width": 150,
-      "depth": 90,
-      "height": 12,
-      "collisionRole": "walkable"
-    }
-  ],
-  "wordmark": {
-    "text": "Guillem Galindo",
-    "box": {
-      "minX": 142,
-      "maxX": 167,
-      "minZ": 113,
-      "maxZ": 115.2
-    },
-    "color": "#C6C7B1",
-    "style": "Original understated name-only monoline humanist lettering; no symbol, supplier mark or model number",
-    "collisionRole": "decor"
-  },
+  "props": [],
   "room": {
     "floorY": -921,
     "backWallZ": -500,
@@ -124,16 +63,6 @@
     "wallTopY": 1600
   },
   "wallItems": [
-    {
-      "id": "Dresden-print",
-      "wall": "back",
-      "centerY": 420,
-      "widthAlongWall": 260,
-      "height": 200,
-      "graphic": "Original stylized river-and-street drawing; schematic, not navigational",
-      "centerX": 0,
-      "note": "On the wall directly ahead of the visitor above the main bench; back wall Z=-500. Left wall plain."
-    },
     {
       "id": "frosted-pane",
       "wall": "right",
@@ -148,7 +77,10 @@
     "side workbench or return",
     "wall cupboard",
     "technical drawing",
-    "chair or stool"
+    "chair or stool",
+    "tabletop tools and lamp",
+    "wall map and frame",
+    "mat lettering"
   ],
   "schemaVersion": 1,
   "palette": {
@@ -156,8 +88,7 @@
     "storage": "747467",
     "plaster": "D8D4C5",
     "mat": "3D6252",
-    "ink": "C6C7B1",
-    "steel": "888982",
-    "loupe": "303632"
-  }
+    "steel": "888982"
+  },
+  "stage": "room-and-desk-only"
 }

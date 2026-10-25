@@ -1,11 +1,11 @@
-/** Revision 3 geometry/collision/visibility fixtures. Inspection views are labelled. */
+/** Bare room/desk geometry/collision/visibility fixtures. Inspection views are labelled. */
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-implementation";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-room-only";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -98,7 +98,6 @@ try {
           if (holderBoxes.some((box) => positiveOverlap(box, triangleBox)))
             stats.holderHits.push([mesh.name, i]);
         } else if (
-          mesh.material.name !== "Guillem Galindo" &&
           triangleBox.max.y > -33 &&
           triangleBox.min.x < 550 &&
           triangleBox.max.x > -550 &&
@@ -137,16 +136,16 @@ try {
     for (const [name, x, z, height] of [
       ["wood", 0, 160, -1],
       ["mat", 100, 0, 0],
-      ["stand", -380, -70, 27],
-      ["screwdriver", -380, -90, 99],
-      ["tray interior", -380, 65, 1],
-      ["tray rim", -454, 65, 11],
-      ["loupe", 210, 0, 25.75],
-      ["tweezers", 225, 100, 1.76],
-      ["notebook", 350, -170, 7],
-      ["lamp base", -325, -230, 14],
-      ["lamp hinge", -300, -230, 200],
-      ["lamp head", -190, -135, 385],
+      ["cleared stand area", -380, -70, -1],
+      ["cleared screwdriver area", -380, -90, -1],
+      ["cleared tray area", -380, 65, -1],
+      ["cleared tray rim", -454, 65, -1],
+      ["cleared loupe area", 210, 0, -1],
+      ["cleared tweezers area", 225, 100, -1],
+      ["cleared notebook area", 350, -170, -1],
+      ["cleared lamp base", -325, -230, -1],
+      ["cleared lamp hinge", -300, -230, -1],
+      ["cleared lamp head", -190, -135, -1],
     ]) {
       const floor = b.world.floor(x, z, 500);
       setup(x, floor + 3, z);
@@ -157,7 +156,7 @@ try {
         expected: height,
         grounded: w.grounded,
         feet: w.feet.toArray(),
-        pass: Math.abs(floor - height) < 1.1 && w.grounded && Math.abs(w.feet.y - floor) < 0.03,
+        pass: Math.abs(floor - height) < 0.03 && w.grounded && Math.abs(w.feet.y - floor) < 0.03,
       });
     }
     // Mat descent, walking rejection, then thrust return on all four edges.
@@ -253,6 +252,30 @@ try {
       s.draws === provenance.budgets.drawsPerPass,
   );
   check("all semantics retained; reachable geometry collides", !s.missingIds.length, s.missingIds);
+  const allowedIds = new Set([
+    "main-oak-top",
+    "green-mat",
+    "pedestal",
+    "plinth",
+    "drawer-front",
+    "drawer-cup-pull",
+    "front-apron",
+    "back-stretcher",
+    "room-floor",
+    "back-wall",
+    "left-wall",
+    "right-wall",
+    "front-wall",
+    "skirting",
+    "frosted-pane",
+    "window-frame",
+    "window-sill",
+  ]);
+  check(
+    "only room, desk and plain mat in environment",
+    provenance.semantics.every((part) => allowedIds.has(part.id)),
+    provenance.semantics.map((part) => part.id),
+  );
   check("no new transparent or transmission passes", !s.nonOpaque.length, s.nonOpaque);
   check(
     "continuous per-part flip envelopes clear every static triangle",
@@ -338,8 +361,7 @@ try {
   for (const [name, position, target] of [
     ["room-inspection", [0, 300, 1600], [0, -130, -140]],
     ["desk-inspection", [280, 480, 420], [0, 0, -120]],
-    ["map-inspection", [0, 420, -80], [0, 420, -500]],
-    ["wordmark-inspection", [154, 15, 127], [154, 0, 114]],
+    ["bare-wall-inspection", [0, 420, -80], [0, 420, -500]],
   ]) {
     await page.evaluate(
       ({ position, target }) => {

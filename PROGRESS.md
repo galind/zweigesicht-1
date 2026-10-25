@@ -3,6 +3,32 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Room and desk/mat only — 25 October 2026
+
+Owner requested a plain base scene before adding objects individually. Removed
+all tabletop props (lamp, screwdriver stand/drivers, tray, loupe, tweezers and
+notebook), the Dresden map/frame and mat lettering. Kept the room/window, one
+desk with integrated drawers, and a plain green mat. The working movement,
+original holder, camera and controls remain unchanged for testing. This direction
+supersedes the decorated revision 3 object list below.
+
+Regenerated the Blender/GLB and contact shading, with updated authored settings
+and source/output hashes. The current environment has **2,628 visible / 1,872
+collision triangles**, **8 draws/pass**, **10.0 MiB decoded textures** and a
+**0.76 MiB GLB**. All remain within budget; generated assets remain local/ignored.
+
+Verified: **130 CPU tests**, inventory, typecheck, lint and production build;
+**46 environment**, **67 jetpack/collision** and **32 flip** browser checks, plus
+the independent two-rest CAD/holder audit and **16 CAD drops**. Actual room/desk,
+plain wall, arrival and flight captures reviewed; existing in-app preview refreshed.
+Removed props leave neither colliders nor baked shadows. Resource disposal and
+re-entry pass. Earlier decorated-scene performance measurements below remain
+historical; the renderer and lighting code are unchanged.
+
+Next: owner review of the bare room and furniture before adding objects one by one.
+Preview: <http://127.0.0.1:4198/bench>; current evidence is saved in
+`artifacts/workshop-room-only/`. No push or deployment.
+
 ## Approved workshop revision 3 implemented locally — 25 October 2026
 
 Implemented on `codex/workshop-environment` from the current local `codex/bench-ui`

@@ -34,28 +34,26 @@ Arrival and explicit R reset remain
 at feet (0, 0.002, 54), facing −Z. The visitor stays **1.65 mm tall**, radius
 **0.22 mm**, with eyes **1.48 mm above their feet**, 68° vertical FOV and no bob/roll.
 
-## Approved workshop environment — revision 3
+## Room and bare workbench — current local stage
 
-One oak workbench with integrated olive-grey drawers fills the modest plaster
-room. The original schematic Dresden print is the only wall decoration, centered
-at X0/Y420 on the wall at Z−500. The right pane is opaque and softly emissive;
-there is no exterior scene, ceiling, side furniture or chair. A weighted task lamp,
-five screwdrivers in their stand, an empty tray, loupe, closed tweezers and notebook
-occupy the approved positions outside the movement's approach and flip envelopes.
-The mat has a small original offwhite “Guillem Galindo” monoline mark.
+At the owner's request, the environment now contains only the plaster room,
+one oak workbench with integrated olive-grey drawers, and a plain green mat.
+The right frosted window remains part of the room. The lamp, screwdriver stand
+and five drivers, tray, loupe, tweezers, notebook, Dresden map/frame and mat
+lettering have been removed. The working movement and original holder remain
+unchanged for interaction testing. Objects can be introduced individually after
+reviewing this base scene.
 
-`assets/authored/workshop-environment.json` and `workshop-graphics/*.svg` retain
-the authored design and original vector artwork. No external cartography, font,
-model pack or generated concept-image pixels are used. The Blender exporter
-builds beveled joinery, turned tools and their matching visible colliders, then
-bakes restrained contact shading into albedo atlases. The name decal casts no
-baked shadow and uses an alpha mask; all other surfaces are opaque. There are no
-new transmission or shadow-map passes. The source manifest records semantic
-bounds, budgets, source/output hashes and the Blender version.
+`assets/authored/workshop-environment.json` describes the current empty prop list.
+The Blender exporter builds the room and joinery, then bakes contact shading into
+opaque albedo atlases. There are no new transmission or shadow-map passes.
+The source manifest records semantic bounds, budgets, source/output hashes and
+the Blender version. Original vector artwork remains in `workshop-graphics/*.svg`
+for later use but is neither required by nor embedded in the current export.
 
-The desk, mat and every reachable tool surface retain `atelierVersion: 1` and
+The desk and mat retain `atelierVersion: 1` and
 `collisionRole: walkable`. Merging by material/role preserves semantic IDs for
-inspection. Walls, frames, map and pane remain outside the reachable X/Z column;
+inspection. Walls, window frames and pane remain outside the reachable X/Z column;
 the decorative floor is below the solid desk. The 1 mm mat edge exceeds the
 unchanged 0.22 mm step: walk down to the wood, then use Space to fly back up.
 All eight outer edges/corners remain supported and constrained at every altitude.
@@ -65,25 +63,24 @@ Bench-only lighting now comes principally from the right, with a gentle warm lef
 fill and the existing studio reflections. Short-range fog is removed. Camera far
 range encloses the loaded room bounding sphere from the current camera position,
 including sustained high flight; the 0.035 mm near plane is retained. Reversed
-depth on GPUs supporting `EXT_clip_control` prevents the 1 mm mat and 0.003 mm
-lettering offset from fighting with their
-underlying surfaces in distant room views. CAD materials, jewel transmission and
+depth on GPUs supporting `EXT_clip_control` prevents the 1 mm mat from fighting
+with the underlying desk in distant room views. CAD materials, jewel transmission and
 its half-resolution target remain unchanged.
 
 Measured generated environment budgets (excluding unchanged maker CAD):
 
 | Metric | Measured | Target |
 | --- | ---: | ---: |
-| Visible triangles | 7,808 | ≤40,000 |
-| Collision triangles | 6,616 | ≤8,000 |
-| Environment draws per pass | 15 | ≤24 |
-| Decoded textures including mipmaps | 16.2 MiB | ≤24 MiB |
-| GLB download | 1.35 MiB | ≤8 MiB |
+| Visible triangles | 2,628 | ≤40,000 |
+| Collision triangles | 1,872 | ≤8,000 |
+| Environment draws per pass | 8 | ≤24 |
+| Decoded textures including mipmaps | 10.0 MiB | ≤24 MiB |
+| GLB download | 0.76 MiB | ≤8 MiB |
 
 The new `workshop-check.mjs` checks actual exported triangle budgets, texture
 memory, collision roles, all static triangles against continuous per-part lift
-columns/turnover bounds and both holder bounds, tool drops, desk support, four
-mat-edge routes, actual keyboard jetpack return, high-flight visibility, and exact
+columns/turnover bounds and both holder bounds, cleared tabletop drops, desk support,
+four mat-edge routes, actual keyboard jetpack return, high-flight visibility, and exact
 once-only disposal. The continuous bounds are conservative clearance evidence,
 not exact swept-solid or mechanical certification. Room/desk inspection captures
 use explicitly labelled camera fixtures; arrival and landed captures retain the
@@ -200,14 +197,13 @@ ownership remain unchanged. Narrow/enclosed CAD cavities can require explicit R.
 
 ```sh
 node scripts/bench/prepare-holder.mjs
-node scripts/bench/prepare-workshop-artwork.mjs
 blender --background --python scripts/bench/export-environment.py
 npm --prefix explorer run build
 npm --prefix explorer start -- --hostname 127.0.0.1 --port 4198
 ```
 
 Original holder files must exist and match `holder.json`. Install the pinned
-explorer dependencies before rasterizing the artwork. Blender 5.2.1 LTS was used
+explorer dependencies before building. Blender 5.2.1 LTS was used
 for this export; its CPU bake uses 64 samples. Editable Blender files and packed
 GLB output remain ignored under `assets/generated/bench/` and
 `explorer/public/bench-local/`. A hidden 1.65 mm authoring reference is excluded
@@ -219,7 +215,7 @@ publication or redistribution is authorized.
 ## Verification
 
 Set `PLAYWRIGHT_MODULE` to the installed Playwright `index.mjs` and `CHROME_PATH`
-to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-implementation/regression` for local reports/captures:
+to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-room-only` for local reports/captures:
 
 ```sh
 node --test tests/*.test.mjs
@@ -248,15 +244,19 @@ flip, retry and interrupted loading. UI checks cover four desktop sizes plus 200
 text, controls, navigation, entry, focus and loading/error recovery.
 
 Current counts and remaining actions are in [PROGRESS.md](../PROGRESS.md).
-Current workshop screenshots and reports remain local in
-`artifacts/workshop-implementation/`, with the final suites in `regression/`.
+Current room-only screenshots and reports remain local in
+`artifacts/workshop-room-only/`. The earlier decorated revision 3 review remains
+in `artifacts/workshop-implementation/`, with its suites in `regression/`.
 Earlier flip captures remain in `artifacts/bench-flip-followup/` and
 `artifacts/bench-flip/`. Headless checks do not replace physical-device/mouse-feel
 or human accessibility review.
 Previous paired-station captures, timings and performance claims are historical;
 the remaining sections below describe older revisions.
 
-## Workshop verification and performance — 25 October 2026
+## Historical decorated revision 3 verification and performance — 25 October 2026
+
+These measurements describe the decorated scene before the owner requested the
+room-only stage. Current verification is recorded in [PROGRESS.md](../PROGRESS.md).
 
 The local production build passes **130 CPU tests**, inventory validation,
 typecheck and lint. Browser suites pass **45 workshop checks**, **32 flip checks**,
