@@ -78,12 +78,15 @@ with hash validation and disables the hosted entry when no source is configured.
 CI now builds the Vercel package on every integration PR. The owner explicitly
 approved public delivery of these three files. The matching bytes are uploaded
 to the UAT-only Blob store, and its serving environment has the asset source
-configured. The remote build is ready/promoted; the **Staging delivery** workflow
-checks the live paths and hashes. See [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
-[GitHub CI on `6ca7539`](https://github.com/galind/zweigesicht-1/actions/runs/40233643129)
+configured. The remote build is ready/promoted.
+[Staging delivery passed](https://github.com/galind/zweigesicht-1/actions/runs/40234350355):
+the homepage and `/bench` return HTTP 200 with the Bench entry enabled, and all
+three payloads return HTTP 200 with their recorded SHA-256 hashes.
+See [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
+[GitHub CI on `3472ad5`](https://github.com/galind/zweigesicht-1/actions/runs/40234350183)
 passed all 161 tests, inventory, typecheck, lint and both builds. The hosted-asset
 fixtures exercise successful delivery and missing/corrupt/private-source failures;
-they do not verify a configured live UAT deployment. No local testing was run.
+the separate staging workflow verifies live UAT delivery. No local testing was run.
 
 Review and merge this cleanup into `develop`; UAT currently serves its reviewed
 application snapshot without a PR merge. Actual browser scene-entry review is
