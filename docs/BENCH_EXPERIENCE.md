@@ -442,7 +442,9 @@ homepage popup were removed.
 
 Initial focus goes to the introduction heading; loading completion does not move
 focus. Tab reaches Start once available; the return link stays accessible.
-The introduction scrolls below the header at short/narrow sizes and enlarged text.
+The introduction is centered horizontally and vertically, with symmetric height
+limits that keep the back link clear. It scrolls at short/narrow sizes and
+enlarged text. The touch-only explanation uses the same centered placement.
 After entry, Esc opens the existing pause menu with full controls and Resume.
 Capture refusal, missing assets and graphics errors keep their recovery actions.
 
