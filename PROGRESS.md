@@ -3,6 +3,20 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Centered Bench introduction — 25 October 2026
+
+Centered the first-use Bench panel horizontally and vertically, as requested.
+The loading and touch-only explanation panels share this placement. Symmetric
+height limits keep the back link clear; overflowing content remains scrollable.
+The existing centered pause menu is unchanged.
+
+Verified lint, production build and **137 Bench UI checks**, including explicit
+center measurements at five viewport/text configurations. Visible review confirms
+1440 × 900, 390 × 844 and 320 × 640 at 200% text; Tab scrolls Start into view while
+the panel stays centered. Screenshots/report: `artifacts/bench-centered-introduction/`.
+Updated Bench documentation. Preview: <http://127.0.0.1:4198/bench>.
+Local commit only; no push or publication.
+
 ## Bench introduction and input support — 25 October 2026
 
 The homepage **Explore it in first person** invitation now links directly to
