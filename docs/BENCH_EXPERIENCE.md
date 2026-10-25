@@ -28,8 +28,8 @@ available. The spare holder has no second visible station. No CAD is cut, morphe
 scaled, repaired or silently replaced with a universal holder.
 
 The neutral warm oak tabletop is a straight **230 × 160 mm rectangle**:
-X −115…115, Z −87…73 mm, surface Y−1 and underside Y−15. The 14 mm slab
-has 0.35 mm edge bevels; the rim has 0.25 mm bevels. A continuous 6 mm wide
+X −115…115, Z −87…73 mm, surface Y−1 and underside Y−13. The 12 mm slab
+has 0.35 mm edge bevels and a 1.2 mm underside chamfer; the rim has 0.25 mm bevels. A continuous 6 mm wide
 rim rises 5 mm along the back and sides, ending at Z58; there is no front fence.
 The **200 × 130 × 1 mm** muted green mat spans X−100…100, Z−72…58,
 leaving **15 mm wood borders on all four sides**. Both rectangles are centered
@@ -46,8 +46,8 @@ The movement stays centered at (0, −7). The open steel case now sits to its le
 at (−55, −7), directly on the mat, rotated 90° so its lugs run along Z in line
 with the movement. Both dials and their matching hand sets share one low oak
 stand to the right: X40…96, Z−45…20, top Y2 and bottom Y0 mm.
-The compact 56 × 65 × 2 mm stand has 2 mm clipped corners and a 0.2 mm edge bevel.
-It uses the tabletop's oak material and rebaked contact shading. Each bore mouth
+The compact 56 × 65 × 2 mm stand has 1.5 mm rounded corners and a 0.2 mm edge bevel.
+Its lighter oak finish is distinct from the deeper oiled desk, with rebaked contact shading. Each bore mouth
 has a 0.025 mm chamfer that removes wood without narrowing its fitted clearance. No boxes, glass,
 labels or additional controls were added to the display.
 
@@ -85,8 +85,9 @@ bore evidence: `artifacts/workshop-seating/`; compact stand and aligned case:
 `artifacts/workshop-compact-stand/`; smaller tabletop and mat:
 `artifacts/workshop-small-table/`. The finished surface pass is recorded in
 `artifacts/workshop-polish/`; the centered layout and revised finish are in
-`artifacts/workshop-centered/`. The current environment has **6,244 visible/collision
-triangles, 2 draws/pass and 6.67 MiB baked textures**. Verification includes
+`artifacts/workshop-centered/`. The deeper wood and edge pass is recorded in
+`artifacts/workshop-wood-finish/`. The current environment has **7,196 visible/collision
+triangles, 3 draws/pass and 12 MiB baked textures**. Verification includes
 144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
 32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
 Shift keys, pause and resume. Overview and stand detail captures were reviewed.
@@ -98,25 +99,31 @@ captures hide the CAD only for inspection; ordinary views retain every selected 
 
 ## Finished materials and lighting — 25 October 2026
 
-The desk and mat now center the unchanged movement, and the stand occupies
-37% less area. Source CAD, fitted seating, both original holders, arrival and
-controls are unchanged. The slab is now 14 mm thick; its eased edges, the
-rim and the 2 mm stand share restrained satin oak. The 1 mm mat has
-0.04 mm edge easing at its revised extents. Three-segment outer bevels and smooth
-bore walls retain closed manifold collision geometry. A concealed 0.5 mm rim lap
-is unioned into the slab, eliminating the exposed underside-bevel crevice. Area-weighted
-normals keep large faces planar while the bevels catch light. The ten bore mouths receive
-only a 0.025 mm chamfer; outside radius +0.04 mm the original Y2 seating plane
-is intact, with 0.12 mm nominal pin clearance and 0.5 mm deepest-pin/mat clearance.
+The desk and mat center the unchanged movement; the stand retains its compact
+56 × 65 × 2 mm footprint. The slab is 12 mm thick, with a 1.2 mm underside
+chamfer that reduces the visible mass. Its top and the rim retain 0.35/0.25 mm
+edge easing. The stand has 1.5 mm plan radii (16 segments per quadrant) and
+0.2 mm edge easing. The mat, CAD seating, holders, arrival and controls are unchanged.
+All solids remain closed manifold. The concealed rim lap is unioned into the slab,
+and weighted normals keep broad faces planar. All ten bore mouths retain their
+0.025 mm chamfer, 0.12 mm nominal radial allowance and 0.5 mm deepest-pin clearance.
 
-The existing Blender pipeline bakes only broad, low-contrast wood tone and local
-5 mm contact occlusion. Broad blurred stripes from the former grain bake are
-removed; the wood uses a less yellow palette and higher dry-satin roughness.
-`SurfaceFinish.ts` adds continuous world-space wood fibres/pores and
-fine moulded mat grain, including roughness and derivative bump. It adds no
-textures or displacement, has no repeating UV tile, and filters detail before
-it becomes subpixel. Opaque environment maps use up to 8× anisotropic filtering.
-Maker materials and CAD buffers are unchanged.
+The desk uses deeper oiled oak and the stand a lighter, quieter oak finish.
+Their separate materials use dry-satin roughness with restrained reflections.
+Both wood atlases are 1024² with wider island spacing to prevent baked shading
+from bleeding onto clear surfaces. Blender bakes base colour and local 5 mm
+contact occlusion; wood grain no longer
+comes from a low-resolution albedo image. An exported `_WOOD_COORD` attribute
+stores physical millimetre coordinates for each component: desk/back rail along X,
+side rails and stand along Z. The unioned rim is split at the slab and rail joints
+without removing faces, so grain frames never interpolate across whole walls.
+
+`SurfaceFinish.ts` evaluates an irregular warped radial field, fine fibres and
+sparse, jittered vessel pores. Cut ends and bore interiors sample the same solid
+wood field as the top. Derivative filtering suppresses subpixel detail; shallow
+bump adds no displacement or collision change. The mat retains its existing
+fine-grained finish. All maps remain opaque, with up to 8× anisotropic filtering;
+maker materials and CAD buffers are unchanged.
 
 A softened overhead/right key and warm fill retain metal readability. One cached
 4096² hardware-PCF depth map grounds actual CAD, holders, stand and mat. Only the
@@ -124,16 +131,17 @@ environment receives these shadows, avoiding new self-shadow artifacts on tiny
 metal details. The map refreshes during flips, holder exchanges and lifecycle
 settling, then is reused during walking/look. Bias follows the active reversed
 or conventional depth mode. The additional shadow target is disposed exactly once;
-it is separate from the 6.67 MiB baked-texture budget. No extra continuous
+it is separate from the 12 MiB baked-texture budget. No extra continuous
 postprocessing or per-object render targets are introduced.
 
-`surface-check.mjs` records external overview/detail/profile views and five
+`surface-check.mjs` records external overview/detail/profile views and six
 surface-verified visitor positions with the original 68° FOV and 1.48 mm eyes.
-It checks shadow reuse, refresh for both rests, target disposal, shader errors
+It checks exported grain frames/directions, shadow reuse, refresh for both rests,
+target disposal, shader errors
 and an unobstructed mat sample against unshadowed rendering to catch shadow acne.
 Run in both normal and forced fallback modes, alongside the existing seating,
 parts, workshop, run, flip, atelier and lifecycle suites. Output remains local
-under `artifacts/workshop-centered/`; generated assets and reference images stay
+under `artifacts/workshop-wood-finish/`; generated assets and reference images stay
 ignored. Source/output hashes include both runtime surface/lighting sources.
 
 These are authored visual finishes and finite-resolution shadows, not measured

@@ -314,7 +314,7 @@ try {
   );
   assert.ok(report.geometry.environment.filter(e => e.collides)
     .reduce((n, e) => n + e.triangles, 0) <= 8000);
-  for (const material of ['Oak', 'Matte green'])
+  for (const material of ['Oak', 'Stand oak', 'Matte green'])
     assert.ok(report.geometry.environment.some(e => e.material === material && e.hasAlbedoMap));
   // Boundary and actual first-person captures live in jetpack-check.mjs.
   assert.deepEqual(report.errors, []);

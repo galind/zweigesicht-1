@@ -3,6 +3,56 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Deeper desk and stand finish — 25 October 2026
+
+Reworked the wood and edge treatment after the owner's request for a deeper
+improvement. The centered **230 × 160 mm desk**, **200 × 130 mm mat** and
+**56 × 65 × 2 mm stand** retain their footprint and arrangement. The desk slab
+is now **12 mm thick**, with a **1.2 mm underside chamfer**. The stand has
+**1.5 mm rounded corners**, sampled at 16 segments per quadrant, and its existing
+0.2 mm edge easing. The mat, movement, case, fitted dial/hand poses, holders,
+arrival and controls are unchanged; `bench-parts-layout.json` is byte-identical.
+
+The desk now uses deeper oiled oak; the stand has a separate, lighter neutral oak
+finish. Replaced blurred albedo grain with a continuous procedural wood field:
+irregular growth bands, fine fibres and sparse vessel pores. Authored millimetre
+grain coordinates follow the slab/back rail along X and side rails/stand along Z;
+cut ends and bore interiors sample that same field. Contrast, pore size, shallow
+bump and derivative filtering were corrected after close-up review to remove
+regular stripes and coarse end grain. Contact atlases, dry-satin roughness,
+restrained reflections and smooth edge highlights provide material separation.
+
+Reviewed overview, detail, profile, exposed bores and six visitor-scale surface
+views, including a new close stand-edge fixture. The seating rays now include
+both separate wood meshes, preserving the existing through-bore assertion to
+the actual tabletop. All ten holes retain measured seating and clearance.
+Evidence stays local in `artifacts/workshop-wood-finish/`.
+
+Verified **144 CPU tests**, inventory, typecheck, lint and production build;
+**26 surface checks** across normal/fallback depth, **5 seating**, **10 parts**, **65 environment**,
+**10 running**, **32 flip**, **67 flight/collision** and **8 lifecycle checks**,
+with no runtime/shader errors. The new surface checks verify actual exported
+grain attributes and directions. Both flips, all mat edges and table boundaries pass.
+The independent CAD/holder audit passes both rests with 219 leaves and maximum
+source-relative matrix error 5.55 × 10⁻¹⁷.
+
+In the final image audit, faint atlas bleed on the stand was traced to the baked
+map, then corrected with a 1024² stand atlas and wider UV island spacing.
+The rebuilt surface, seating, parts and environment suites pass again; the spots
+are absent in the final reviewed close-up. Five static profiling fixtures (overview,
+both movement rests, visitor wood and visitor stand) record **16.7–16.8 ms p95**
+and **16.7–16.8 ms p99**, CPU submission p95 **4.1–6.1 ms**, on local M4
+headless Chrome at 1440 × 900 and ratio 1 (150 measured frames each). These
+stationary samples do not qualify sustained device or human-input performance.
+
+The final environment has **7,196 visible/collision triangles**, **3 draws/pass**,
+**12 MiB baked textures** and a **519,892-byte GLB**, within existing budgets.
+All **15 source/output hashes** match, and the production GLB matches the generated
+asset. Preview rebuilt at <http://127.0.0.1:4198/bench>. Generated assets remain
+local/ignored; no push, publication or redistribution. Existing physical-device,
+human input/accessibility and mechanical/release gates remain; these procedural
+finishes and finite-resolution contact shadows are visual approximations.
+
 ## Centered movement and smaller stand — 25 October 2026
 
 Revised the previous surface pass after owner review. The movement is now at

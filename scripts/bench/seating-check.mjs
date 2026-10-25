@@ -35,7 +35,12 @@ try {
       s.mesh.userData.semanticIds?.includes("dial-hand-stand"),
     );
     if (wood.length !== 1) throw Error("Missing bored stand collision mesh");
-    const woodMeshes = new Set(wood.map((s) => s.mesh));
+    // The lighter stand now has its own draw/material. Include the desk in
+    // through-hole rays, as the former combined oak mesh did; exclude the mat.
+    const woodMeshes = new Set(b.world.solids.filter((s) =>
+      s.mesh.userData.semanticIds?.some((id) =>
+        id === "dial-hand-stand" || id === "main-oak-top"),
+    ).map((s) => s.mesh));
     const floor = (x, z) => b.world.floor(x, z, top + 1, woodMeshes);
     const bores = holes.map((h) => {
       const inside = [],

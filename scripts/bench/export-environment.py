@@ -34,21 +34,18 @@ def material(name, color, rough=.7, metal=0, emission=0):
 pal=SPEC['palette']
 finish=SPEC['surfaceFinish']
 oak=material('Oak',pal['oak'],finish['oakRoughness'])
+stand_oak=material('Stand oak',pal['standOak'],finish['standRoughness'])
+woods=(oak,stand_oak)
 green=material('Matte green',pal['mat'],finish['matRoughness'])
-# Packed restrained albedo maps. World-scale UVs; never modify CAD materials.
-for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
+# Wood colour is uniform in the contact atlas. Its complete grain lives in
+# millimetre-space at runtime, including the cut ends and bore interiors.
+for mat,kind,size in [(oak,'oak',4),(stand_oak,'stand oak',4),(green,'mat',256)]:
     img=bpy.data.images.new(kind+' original albedo',width=size,height=size)
     base=mat.diffuse_color[:3];pixels=[]
     for j in range(size):
         for i in range(size):
             u,v=i/size,j/size
-            if kind=='oak':
-                wobble=noise.noise_vector(Vector((u*2,v*3,1)))[0]
-                # Broad tonal variation only: fine fibres are continuous runtime detail,
-                # avoiding enlarged blurry stripes from a small baked atlas.
-                grain=noise.noise(Vector((u*3,v*12+wobble,7)))
-                val=1+.025*grain
-            else:val=1+.018*noise.noise(Vector((u*80,v*80,3)))
+            val=1 if mat in woods else 1+.018*noise.noise(Vector((u*80,v*80,3)))
             rgb=[min(1,max(0,c*val)) for c in base]
             pixels.extend((*[12.92*c if c<=.0031308 else 1.055*c**(1/2.4)-.055 for c in rgb],1))
     img.pixels.foreach_set(pixels);img.pack()
@@ -65,7 +62,7 @@ def mesh(name, verts, faces, mat, role='walkable', bevel=0, smooth=False, uv=Non
     if bevel:
         mod=o.modifiers.new('Small crafted edge','BEVEL');mod.width=bevel;mod.segments=3
         bpy.ops.object.modifier_apply(modifier=mod.name)
-    if mat == oak:
+    if mat in woods:
         bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
     if smooth:
         for poly in data.polygons:poly.use_smooth=len(poly.vertices)==4
@@ -75,7 +72,7 @@ def mesh(name, verts, faces, mat, role='walkable', bevel=0, smooth=False, uv=Non
         for li in poly.loop_indices:
             co=data.vertices[data.loops[li].vertex_index].co
             a,b=(co.x,co.y) if axis==2 else ((co.x,co.z) if axis==1 else (co.y,co.z))
-            uvl.data[li].uv=uv(data.loops[li].vertex_index) if uv else (a/(finish['grainScaleMm'][0] if mat==oak else 12),b/(finish['grainScaleMm'][1] if mat==oak else 12))
+            uvl.data[li].uv=uv(data.loops[li].vertex_index) if uv else (a/(finish['grainScaleMm'][0] if mat in woods else 12),b/(finish['grainScaleMm'][1] if mat in woods else 12))
     o.select_set(False);objects.append(o)
     mins=[min(v[k] for v in verts) for k in range(3)];maxs=[max(v[k] for v in verts) for k in range(3)]
     semantics.append({'id':name,'role':role,'material':mat.name,'min':mins,'max':maxs})
@@ -92,7 +89,15 @@ def slab(name, outline, top, bottom, mat, bevel=0, role='walkable'):
                 [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],mat,role=role,bevel=bevel)
 
 D=SPEC['mainDesk'];M=SPEC['mat'];detail=SPEC['tabletopDetail']
-top_object=slab('main-oak-top',D['footprint'],D['topY'],D['bottomY'],oak,detail['edgeBevel'])
+# A lighter slab with a recessed lower arris. The working plane never moves.
+n=len(D['footprint']);chamfer=detail['undersideChamfer']
+inset=[(x+(chamfer if x<0 else -chamfer),z+(chamfer if z<D['minZ']+1 else -chamfer)) for x,z in D['footprint']]
+rings=[(inset,D['bottomY']),(D['footprint'],D['bottomY']+chamfer),(D['footprint'],D['topY'])]
+verts=[(x,y,z) for outline,y in rings for x,z in outline]
+faces=[tuple(reversed(range(n))),tuple(range(2*n,3*n))]
+for k in range(2):
+    faces += [(k*n+i,k*n+(i+1)%n,(k+1)*n+(i+1)%n,(k+1)*n+i) for i in range(n)]
+top_object=mesh('main-oak-top',verts,faces,oak,bevel=detail['edgeBevel'])
 box('green-mat',M['minX'],M['maxX'],M['minZ'],M['maxZ'],M['topY'],M['bottomY'],green,bevel=M['edgeBevel'])
 # One continuous U-shaped rim: no front fence, overlapping boxes or open ends.
 width=detail['rimWidth'];front=detail['rimFrontZ']
@@ -107,15 +112,25 @@ mod=top_object.modifiers.new('Continuous rim to slab joint','BOOLEAN')
 mod.operation='UNION';mod.solver='EXACT';mod.object=rim_object
 bpy.ops.object.modifier_apply(modifier=mod.name)
 objects.remove(rim_object);bpy.data.objects.remove(rim_object,do_unlink=True)
+# Split, without removing faces, at the slab/rim joint and the rail butt line.
+# This prevents interpolation of different grain frames across a whole wall.
+bm=bmesh.new();bm.from_mesh(top_object.data)
+for point,normal in [((0,0,D['topY']),(0,0,1)),((0,-(D['minZ']+width),0),(0,1,0))]:
+    bmesh.ops.bisect_plane(bm,geom=list(bm.verts)+list(bm.edges)+list(bm.faces),
+        dist=1e-6,plane_co=point,plane_no=normal,clear_inner=False,clear_outer=False)
+bm.to_mesh(top_object.data);bm.free()
 top_object.select_set(True)
 bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
 top_object.select_set(False)
 # Low, solid oak display stand. Same visible triangles carry the visitor.
 stand=next(p for p in SPEC['props'] if p['id']=='dial-hand-stand')
-x0,x1,z0,z1,c=stand['minX'],stand['maxX'],stand['minZ'],stand['maxZ'],stand['cornerCut']
-outline=[(x0+c,z0),(x1-c,z0),(x1,z0+c),(x1,z1-c),
-         (x1-c,z1),(x0+c,z1),(x0,z1-c),(x0,z0+c)]
-stand_object=slab(stand['id'],outline,stand['topY'],stand['bottomY'],oak,stand['edgeBevel'])
+x0,x1,z0,z1,r=stand['minX'],stand['maxX'],stand['minZ'],stand['maxZ'],stand['cornerRadius']
+outline=[]
+for cx,cz,start in [(x0+r,z0+r,180),(x1-r,z0+r,270),(x1-r,z1-r,0),(x0+r,z1-r,90)]:
+    for i in range(17):
+        a=math.radians(start+i*90/16)
+        outline.append((cx+r*math.cos(a),cz+r*math.sin(a)))
+stand_object=slab(stand['id'],outline,stand['topY'],stand['bottomY'],stand_oak,stand['edgeBevel'])
 seating=json.loads((ROOT/'assets/authored/bench-parts-layout.json').read_text())['standSeating']
 # Genuine through-bores, circumscribed so polygon facets preserve radial clearance.
 for hole in seating['holes']:
@@ -123,7 +138,7 @@ for hole in seating['holes']:
         depth=stand['topY']-stand['bottomY']+2,
         location=world((hole['x'],(stand['topY']+stand['bottomY'])/2,hole['z'])))
     cutter=bpy.context.object
-    cutter.data.materials.append(oak)
+    cutter.data.materials.append(stand_oak)
     for layer in list(cutter.data.uv_layers):cutter.data.uv_layers.remove(layer)
     bpy.context.view_layer.objects.active=stand_object
     mod=stand_object.modifiers.new(hole['id'],'BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
@@ -140,7 +155,7 @@ stand_object.select_set(True)
 bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
 stand_object.select_set(False)
 # All new bore walls use the same oak material and participate in its bake.
-stand_object.data.materials.clear();stand_object.data.materials.append(oak)
+stand_object.data.materials.clear();stand_object.data.materials.append(stand_oak)
 for poly in stand_object.data.polygons:poly.material_index=0
 # Reproject the newly cut bore walls before baking; all geometry remains editable.
 for obj in [stand_object,top_object]:
@@ -177,6 +192,20 @@ for (mat,role),parts in groups.items():
     bm=bmesh.new();bm.from_mesh(o.data)
     assert all(e.is_manifold for e in bm.edges), 'Open or nonmanifold surface: '+o.name
     bm.free()
+    if o.data.materials[0] in woods:
+        attr=o.data.attributes.new(name='_WOOD_COORD',type='FLOAT_VECTOR',domain='CORNER')
+        for poly in o.data.polygons:
+            coords=[o.data.vertices[o.data.loops[li].vertex_index].co for li in poly.loop_indices]
+            # Grain follows each long side rail. The desk and back rail run X;
+            # the separate thin stand runs Z. End grain is the same 3D field cut.
+            side=(min(v.z for v in coords)>=D['topY']-.001 and
+                  max(v.z for v in coords)>D['topY']+.05 and
+                  min(-v.y for v in coords)>=D['minZ']+width-.01 and
+                  (min(v.x for v in coords)>=D['maxX']-width-.01 or
+                   max(v.x for v in coords)<=D['minX']+width+.01))
+            along_z=o.data.materials[0]==stand_oak or side
+            for li,v in zip(poly.loop_indices,coords):
+                attr.data[li].vector=(-v.y,v.z,v.x) if along_z else (v.x,v.z,-v.y)
     o.select_set(False)
 # Bake restrained contact occlusion into opaque albedo atlases. Original UVs
 # remain the procedural wood/noise inputs; a second UV set stores the bake.
@@ -185,9 +214,9 @@ bpy.context.scene.render.engine='CYCLES'
 bpy.context.scene.cycles.samples=64
 bpy.context.scene.render.bake.margin=3
 bpy.context.scene.render.bake.use_clear=True
-for mat in [oak,green]:
+for mat in [oak,stand_oak,green]:
     parts=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.data.materials[0]==mat]
-    size=1024 if mat==oak else 512
+    size=1024 if mat in woods else 512
     img=bpy.data.images.new(mat.name+' baked albedo',width=size,height=size)
     nodes=mat.node_tree.nodes;links=mat.node_tree.links
     originalUV=nodes.new('ShaderNodeUVMap');originalUV.uv_map='Authored projection'
@@ -200,7 +229,7 @@ for mat in [oak,green]:
     for o in parts:o.select_set(True)
     bpy.context.view_layer.objects.active=parts[0]
     bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(angle_limit=math.radians(66),island_margin=.008)
+    bpy.ops.uv.smart_project(angle_limit=math.radians(66),island_margin=.02)
     bpy.ops.object.mode_set(mode='OBJECT')
     target=nodes.new('ShaderNodeTexImage');target.image=img;nodes.active=target
     ao=nodes.new('ShaderNodeAmbientOcclusion');ao.inputs['Distance'].default_value=finish['contactBakeDistanceMm'];ao.samples=64
@@ -233,7 +262,7 @@ reference=bpy.context.object;reference.name='QA_SCALE_REFERENCE_1.65mm';referenc
 bpy.context.scene['atelierLayout']=json.dumps(LAYOUT)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'environment.blend'))
 runtime=ROOT/'explorer/public/bench-local/environment.glb'
-bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
+bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,export_attributes=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
 report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','standBores':seating['holes'],'closedSurfaceAudit':'All slab, rim, mat and bored stand meshes are closed manifold after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
 for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',ROOT/'assets/authored/bench-parts-layout.json',Path(__file__),ROOT/'explorer/src/bench/SurfaceFinish.ts',ROOT/'explorer/src/bench/BenchViewer.ts',OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})

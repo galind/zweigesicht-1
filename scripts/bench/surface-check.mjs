@@ -29,6 +29,34 @@ try {
     });
   await page.goto((process.argv[2] || "http://127.0.0.1:4198") + "/bench?inspect=1");
   await page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
+  const woodFrames = await page.evaluate(() => {
+    const frames = [];
+    window.bench.scene.traverse((mesh) => {
+      if (!mesh.isMesh || !["Oak", "Stand oak"].includes(mesh.material.name)) return;
+      const a = mesh.geometry.attributes._wood_coord, p = mesh.geometry.attributes.position;
+      let errors = 0, alongX = 0, alongZ = 0;
+      if (a?.count === p.count) {
+        for (let i = 0; i < p.count; i++) {
+          const v = new window.bench.walker.feet.constructor().fromBufferAttribute(p, i)
+            .applyMatrix4(mesh.matrixWorld);
+          const same = Math.abs(a.getX(i) - v.x) + Math.abs(a.getY(i) - v.y) + Math.abs(a.getZ(i) - v.z);
+          const turned = Math.abs(a.getX(i) - v.z) + Math.abs(a.getY(i) - v.y) + Math.abs(a.getZ(i) - v.x);
+          if (same < 1e-4) alongX++;
+          else if (turned < 1e-4) alongZ++;
+          else errors++;
+        }
+      } else errors++;
+      frames.push({ material: mesh.material.name, errors, alongX, alongZ });
+    });
+    return frames;
+  });
+  check("both woods retain physical grain coordinates through export", woodFrames.length === 2 &&
+    woodFrames.every((f) => f.errors === 0), woodFrames);
+  check("desk grain follows slab/back and side rails; stand grain follows its length",
+    woodFrames.find((f) => f.material === "Oak")?.alongX > 0 &&
+    woodFrames.find((f) => f.material === "Oak")?.alongZ > 0 &&
+    woodFrames.find((f) => f.material === "Stand oak")?.alongZ > 0 &&
+    woodFrames.find((f) => f.material === "Stand oak")?.alongX === 0, woodFrames);
   const shadows = await page.evaluate(() => {
     const b = window.bench;
     cancelAnimationFrame(b.frame);
@@ -68,6 +96,7 @@ try {
     { name: "visitor-arrival", feet: [0, 0.002, 54], target: [0, 1.482, -7] },
     { name: "visitor-mat", feet: [-18, 0.002, 47], target: [-14, 0, 34] },
     { name: "visitor-stand", feet: [91, 2.002, 16], target: [82, 2, -7] },
+    { name: "visitor-stand-edge", feet: [93, 0.002, 24], target: [92, 1, 19] },
     { name: "visitor-wood", feet: [-20, -0.998, 67], target: [5, -0.6, 59] },
     { name: "visitor-rim", feet: [105, -0.998, -20], target: [113, 0.6, -35] },
   ];

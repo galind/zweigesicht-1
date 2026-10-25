@@ -3,7 +3,7 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "centered-compact-surface-pass",
+  "stage": "crafted-wood-surfaces",
   "origin": "Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
   "standBores": [
@@ -90,11 +90,11 @@
   ],
   "closedSurfaceAudit": "All slab, rim, mat and bored stand meshes are closed manifold after triangulation.",
   "budgets": {
-    "visibleTriangles": 6244,
-    "collisionTriangles": 6244,
-    "drawsPerPass": 2,
-    "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 397012
+    "visibleTriangles": 7196,
+    "collisionTriangles": 7196,
+    "drawsPerPass": 3,
+    "textureBytesWithMipmaps": 12582911,
+    "downloadBytes": 519892
   },
   "semantics": [
     {
@@ -103,7 +103,7 @@
       "material": "Oak",
       "min": [
         -115,
-        -15,
+        -13,
         -87
       ],
       "max": [
@@ -145,23 +145,23 @@
     {
       "id": "dial-hand-stand",
       "role": "walkable",
-      "material": "Oak",
+      "material": "Stand oak",
       "min": [
-        40,
+        40.0,
         0,
-        -45
+        -45.0
       ],
       "max": [
-        96,
+        96.0,
         2,
-        20
+        20.0
       ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "4e213961fa45c180586ab663a851ab520b7f68b7d1e598c354fedb8fb96aee88"
+      "sha256": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -173,11 +173,11 @@
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "ee9aa570eb0ff160842fc32888ef365b0fc36cb0c9cf802c1e0d7db739ec9c39"
+      "sha256": "4053e8a4ae4d0e8aa7218c582be983a2d14c3613f2d31d1eee7df258735cbfce"
     },
     {
       "path": "explorer/src/bench/SurfaceFinish.ts",
-      "sha256": "93147cfd26bfb1f6e11f65b4b2831af04e0f4a1c95e698abc9aaf6d6b3286c8d"
+      "sha256": "a10a7f94f8e41c9a954614366da0b3b527a16324ba9127d33e42e785a136f131"
     },
     {
       "path": "explorer/src/bench/BenchViewer.ts",
@@ -185,11 +185,11 @@
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "8b0e32e756942f7489b0335ac22e5b2f4ccaa034dce31008d032a91812c1fff5"
+      "sha256": "9dd6c86679db1976ff4d1d12e49629a865d34b9fd46bd63f3def55ac44a7e096"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "06e61d84e8c4d66a2f0487ce63750ab96fc281664b9b382cf80a3178aff4176f"
+      "sha256": "4647f53f5de635a81208d350dc192faa66658159693b2b851e68d74f1830d954"
     }
   ]
 }

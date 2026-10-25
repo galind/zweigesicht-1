@@ -37,7 +37,7 @@
     },
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "4e213961fa45c180586ab663a851ab520b7f68b7d1e598c354fedb8fb96aee88"
+      "sha256": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585"
     },
     {
       "path": "scripts/bench/prepare-parts.mjs",

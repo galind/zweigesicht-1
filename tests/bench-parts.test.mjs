@@ -130,8 +130,8 @@ test("actual decoded vertices reproduce measured bounds and sit on their visible
       close([support.contactBounds[0][1], support.contactBounds[1][1]], [stand.topY, stand.topY]);
     }
     if (p.id !== "case") {
-      assert.ok(b.min.x > stand.minX + stand.cornerCut && b.max.x < stand.maxX - stand.cornerCut);
-      assert.ok(b.min.z > stand.minZ + stand.cornerCut && b.max.z < stand.maxZ - stand.cornerCut);
+      assert.ok(b.min.x > stand.minX + stand.cornerRadius && b.max.x < stand.maxX - stand.cornerRadius);
+      assert.ok(b.min.z > stand.minZ + stand.cornerRadius && b.max.z < stand.maxZ - stand.cornerRadius);
     }
   }
 });

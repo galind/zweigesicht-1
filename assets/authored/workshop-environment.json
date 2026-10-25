@@ -8,7 +8,7 @@
     "minZ": -87,
     "maxZ": 73,
     "topY": -1,
-    "bottomY": -15,
+    "bottomY": -13,
     "footprint": [
       [
         -115,
@@ -84,7 +84,6 @@
       "maxZ": 20,
       "topY": 2,
       "bottomY": 0,
-      "cornerCut": 2,
       "edgeBevel": 0.2,
       "dialX": 60,
       "handsX": 86,
@@ -99,7 +98,8 @@
         }
       ],
       "boreBevel": 0.025,
-      "handSpacing": 5
+      "handSpacing": 5,
+      "cornerRadius": 1.5
     }
   ],
   "wallItems": [],
@@ -122,27 +122,30 @@
   ],
   "schemaVersion": 1,
   "palette": {
-    "oak": "A28F78",
-    "mat": "3E5747"
+    "oak": "8F7155",
+    "mat": "3E5747",
+    "standOak": "B3A38D"
   },
-  "stage": "centered-compact-surface-pass",
+  "stage": "crafted-wood-surfaces",
   "tabletopDetail": {
     "outline": "Straight rectangular 230 x 160 mm slab centered on the movement, with equal 15 mm mat borders.",
     "edgeBevel": 0.35,
     "rimWidth": 6,
     "rimHeight": 5,
     "rimFrontZ": 58,
-    "finish": "Neutral warm oak, quiet fine grain, softened edges and dry satin roughness.",
-    "rimBevel": 0.25
+    "finish": "Oiled oak with lengthwise grain, softened upper edges and a recessed underside chamfer.",
+    "rimBevel": 0.25,
+    "undersideChamfer": 1.2
   },
   "surfaceFinish": {
-    "oakRoughness": 0.78,
+    "oakRoughness": 0.64,
     "matRoughness": 0.96,
     "grainScaleMm": [
       230,
       160
     ],
     "contactBakeDistanceMm": 5,
-    "contactBakeStrength": 0.38
+    "contactBakeStrength": 0.38,
+    "standRoughness": 0.69
   }
 }
