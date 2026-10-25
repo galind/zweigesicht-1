@@ -73,9 +73,10 @@ The owner's staging screenshot confirms HTTP 404 for all three required Bench
 payloads: `/bench-local/movement.stl`, `dial.stl` and `environment.glb`, followed
 by `Local holder unavailable`. The deployment fix adds an opt-in build source
 with hash validation and disables the hosted entry when no source is configured.
-CI now builds the Vercel package on every integration PR. Asset storage, UAT
-access controls and deployment configuration are not yet provisioned/confirmed;
-no payloads have been uploaded. See [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
+CI now builds the Vercel package on every integration PR. The owner confirms UAT
+is publicly accessible. Public asset delivery clearance, storage and deployment
+configuration remain outstanding; no payloads have been uploaded. See
+[hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
 
 Review and merge this cleanup into `develop`, then review staging separately.
 Keep current status concise: replace superseded next actions rather than adding
