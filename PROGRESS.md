@@ -3,6 +3,16 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Bench pull-request preparation — 25 October 2026
+
+Prepared the complete Bench/workshop branch for review against `develop`, including
+the sustained performance fixes below. The working tree is clean and the fetched
+`develop` is an ancestor. Existing local verification remains applicable; Workshop
+inventory was checked again. Generated CAD assets and raw profiling evidence stay
+ignored/local. Disabled Vercel Git deployment for `codex/workshop-environment`
+before the authorized PR push. This is code review, with no site deployment or
+change to the mechanical, usability, device or redistribution release gates.
+
 ## Sustained Bench performance and entry cleanup — 25 October 2026
 
 Reviewed the actual visible Firefox 158 window on M4/macOS at **1280 × 1327 CSS
