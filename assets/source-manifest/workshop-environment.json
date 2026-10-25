@@ -3,7 +3,7 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "oak-parts-stand",
+  "stage": "finished-surface-pass",
   "origin": "Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
   "standBores": [
@@ -90,11 +90,11 @@
   ],
   "closedSurfaceAudit": "All slab, rim, mat and bored stand meshes are closed manifold after triangulation.",
   "budgets": {
-    "visibleTriangles": 3160,
-    "collisionTriangles": 3160,
+    "visibleTriangles": 6240,
+    "collisionTriangles": 6240,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 386476
+    "downloadBytes": 551212
   },
   "semantics": [
     {
@@ -103,7 +103,7 @@
       "material": "Oak",
       "min": [
         -115,
-        -33,
+        -15,
         -85
       ],
       "max": [
@@ -133,7 +133,7 @@
       "material": "Oak",
       "min": [
         -115,
-        -1,
+        -1.5,
         -85
       ],
       "max": [
@@ -161,7 +161,7 @@
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "e6d38313aa5cc6e5123794c3c3b66c5114db0665d55c5ecfbdf29a987b21c688"
+      "sha256": "408ec46bb1e6897d1cfbf27264a57651a7b36b793da3eedcb7c7ff4149a767af"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -173,15 +173,23 @@
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "44e311960c8a6202141afcbfcab166e592338f46ea8987a76c7f9b132274ada2"
+      "sha256": "67b467796cf97c8d7db54a4b072c7bd9efd3b7f6456dbf064faf0d23801ebc41"
+    },
+    {
+      "path": "explorer/src/bench/SurfaceFinish.ts",
+      "sha256": "509731230dd7030b860bef17cac2c6518f090c6cafc8c091fc9baa9080d6f3c7"
+    },
+    {
+      "path": "explorer/src/bench/BenchViewer.ts",
+      "sha256": "a38999302f6335d908e68cd86c90edb2c6401e147073df16bed4e5d9a65fe690"
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "0ffdaf8c3483ecbbc2bde73115f31e4e5701e0b60877b55aaef5151c51ab76a7"
+      "sha256": "aafc0306e4ed93419901b203cf5435ac1f0ed12030f194712eb8e61faa629e98"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "58453eedbeb9396eb6ca2eb3c8329b483dce5824aee64da0327db42eeefafdd0"
+      "sha256": "fda423a762c3ce838b612a1c332f379c0d7d2577c39ee49b2a5e9eab896f0924"
     }
   ]
 }

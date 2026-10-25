@@ -28,8 +28,8 @@ available. The spare holder has no second visible station. No CAD is cut, morphe
 scaled, repaired or silently replaced with a universal holder.
 
 The light wooden tabletop is a straight **270 × 160 mm rectangle**: X −115…155,
-Z −85…75 mm, with surface Y−1 and underside Y−33. Small 0.12 mm edge bevels
-soften the solid slab. A continuous 6 mm wide rim rises 5 mm along the back and
+Z −85…75 mm, with surface Y−1 and underside Y−15. The 14 mm slab has
+0.35 mm edge bevels; the rim has separate 0.25 mm bevels. A continuous 6 mm wide rim rises 5 mm along the back and
 sides, ending at Z65; there is no front fence. The **240 × 130 × 1 mm** green mat
 spans X−100…140, Z−65…65, leaving **10 mm of wood before the front edge**,
 15 mm at either side and 20 mm behind. The surfaces are centered on the whole
@@ -45,7 +45,8 @@ at (−55, −7), directly on the mat, rotated 90° so its lugs run along Z in l
 with the movement. Both dials and their matching hand sets share one low oak
 stand to the right: X40…116, Z−47…29, top Y2 and bottom Y0 mm.
 The compact 76 × 76 × 2 mm stand has 4 mm clipped corners and a 0.3 mm edge bevel.
-It uses the tabletop's oak material and rebaked contact shading. No boxes, glass,
+It uses the tabletop's oak material and rebaked contact shading. Each bore mouth
+has a 0.025 mm chamfer that removes wood without narrowing its fitted clearance. No boxes, glass,
 labels or additional controls were added to the display.
 
 The central dial is at (62, −25), with its Fine hands beside it at (98, −25).
@@ -80,8 +81,9 @@ walking hint show **Shift · Hold to run**. Physics substeps account for run spe
 Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
 bore evidence: `artifacts/workshop-seating/`; compact stand and aligned case:
 `artifacts/workshop-compact-stand/`; smaller tabletop and mat:
-`artifacts/workshop-small-table/`. The bored environment has **3,160
-visible/collision triangles, 2 draws/pass, 6.67 MiB textures and a 386,476-byte GLB**. Verification includes
+`artifacts/workshop-small-table/`. The finished surface pass is recorded in
+`artifacts/workshop-polish/`; its environment has **6,240 visible/collision
+triangles, 2 draws/pass and 6.67 MiB baked textures**. Verification includes
 144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
 32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
 Shift keys, pause and resume. Overview and stand detail captures were reviewed.
@@ -90,6 +92,47 @@ actual exported wood, verify separated contacts for all seven supported packets,
 and probe every bore center and inner/outer rim. All 11,622 clipped triangle
 points clear the wood with at least 0.12 mm nominal radial clearance. Exposed-bore
 captures hide the CAD only for inspection; ordinary views retain every selected part.
+
+## Finished materials and lighting — 25 October 2026
+
+The compact footprint, source CAD, fitted seating, both original holders, arrival
+and controls are unchanged. The slab is now 14 mm thick; its eased edges, the
+rim and the 2 mm stand share restrained satin oak. The 1 mm mat retains its
+exact extents and has 0.04 mm edge easing. Three-segment outer bevels and smooth
+bore walls retain closed manifold collision geometry. A concealed 0.5 mm rim lap
+is unioned into the slab, eliminating the exposed underside-bevel crevice. Area-weighted
+normals keep large faces planar while the bevels catch light. The ten bore mouths receive
+only a 0.025 mm chamfer; outside radius +0.04 mm the original Y2 seating plane
+is intact, with 0.12 mm nominal pin clearance and 0.5 mm deepest-pin/mat clearance.
+
+The existing Blender pipeline bakes low-contrast grain and local 5 mm contact
+occlusion. `SurfaceFinish.ts` adds continuous world-space wood fibres/pores and
+fine moulded mat grain, including roughness and derivative bump. It adds no
+textures or displacement, has no repeating UV tile, and filters detail before
+it becomes subpixel. Opaque environment maps use up to 8× anisotropic filtering.
+Maker materials and CAD buffers are unchanged.
+
+A softened overhead/right key and warm fill retain metal readability. One cached
+4096² hardware-PCF depth map grounds actual CAD, holders, stand and mat. Only the
+environment receives these shadows, avoiding new self-shadow artifacts on tiny
+metal details. The map refreshes during flips, holder exchanges and lifecycle
+settling, then is reused during walking/look. Bias follows the active reversed
+or conventional depth mode. The additional shadow target is disposed exactly once;
+it is separate from the 6.67 MiB baked-texture budget. No extra continuous
+postprocessing or per-object render targets are introduced.
+
+`surface-check.mjs` records external overview/detail/profile views and five
+surface-verified visitor positions with the original 68° FOV and 1.48 mm eyes.
+It checks shadow reuse, refresh for both rests, target disposal, shader errors
+and an unobstructed mat sample against unshadowed rendering to catch shadow acne.
+Run in both normal and forced fallback modes, alongside the existing seating,
+parts, workshop, run, flip, atelier and lifecycle suites. Output remains local
+under `artifacts/workshop-polish/`; generated assets and reference images stay
+ignored. Source/output hashes include both runtime surface/lighting sources.
+
+These are authored visual finishes and finite-resolution shadows, not measured
+material properties or microscopic contact metrology. Existing device, human
+mouse-feel/accessibility and mechanical release gates remain outstanding.
 
 ## Historical direct-mat arrangement — superseded by the oak stand
 
@@ -399,6 +442,9 @@ npm --prefix explorer run typecheck
 npm --prefix explorer run lint
 npm --prefix explorer run build
 node scripts/bench/workshop-check.mjs http://127.0.0.1:4198
+node scripts/bench/surface-check.mjs http://127.0.0.1:4198
+WORKSHOP_DEPTH=fallback PLAY_QA_OUTPUT=artifacts/workshop-polish/fallback \
+  node scripts/bench/surface-check.mjs http://127.0.0.1:4198
 node scripts/bench/flip-check.mjs http://127.0.0.1:4198
 node scripts/bench/atelier-check.mjs http://127.0.0.1:4198
 node scripts/bench/jetpack-check.mjs http://127.0.0.1:4198

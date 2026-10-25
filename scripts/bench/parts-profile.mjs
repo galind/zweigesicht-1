@@ -2,7 +2,8 @@
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
-const out = "artifacts/workshop-parts-layout";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-parts-layout";
+await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH });
 const page = await browser.newPage({
   viewport: { width: 1440, height: 900 },

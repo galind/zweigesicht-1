@@ -22,6 +22,7 @@ import { CollisionWorld, Walker, WALK } from './physics';
 import { BenchQuality, LookActivity, type QualityMode } from './performance';
 import { BenchFlip } from './flip';
 import { FLIP_KEY } from './bindings';
+import { finishBenchSurface } from './SurfaceFinish';
 import layout from '../../../assets/authored/atelier-layout.json';
 import workshop from '../../../assets/authored/workshop-environment.json';
 import watchConfiguration from '../../../assets/authored/watch-configurations.json';
@@ -69,6 +70,7 @@ export class BenchViewer {
   camera = new THREE.PerspectiveCamera(68, 1, 0.035, 250);
   renderer: THREE.WebGLRenderer;
   environment?: THREE.WebGLRenderTarget;
+  surfaceLight?: THREE.DirectionalLight;
   roomBounds = new THREE.Sphere(new THREE.Vector3(), 250);
   station = {
     root: new THREE.Group(),
@@ -139,13 +141,51 @@ export class BenchViewer {
       // Room-scale visibility: no short-range fog or ceiling/flight cap.
       this.environment = createStudioEnvironment(this.renderer);
       this.scene.environment = this.environment.texture;
-      this.scene.environmentIntensity = 0.85;
-      this.scene.add(new THREE.HemisphereLight(0xf2f4eb, 0x635340, 0.8));
-      const key = new THREE.DirectionalLight(0xf2f4ef, 1.4);
-      key.position.set(600, 650, -140);
-      const fill = new THREE.DirectionalLight(0xffefd9, 0.7);
+      this.scene.environmentIntensity = 0.8;
+      this.scene.add(new THREE.HemisphereLight(0xf2f4eb, 0x756650, 0.65));
+      const key = new THREE.DirectionalLight(0xf2f4ef, 1.65);
+      key.position.set(90, 240, 70);
+      key.target.position.set(20, 0, -5);
+      key.castShadow = true;
+      key.shadow.mapSize.set(4096, 4096);
+      Object.assign(key.shadow.camera, {
+        left: -175,
+        right: 175,
+        top: 130,
+        bottom: -130,
+        near: 1,
+        far: 450,
+      });
+      key.shadow.normalBias = 0.04;
+      // Hardware PCF compares reversed depth directly in the pinned renderer.
+      key.shadow.bias = reversedDepth ? 0.00012 : -0.00012;
+      key.shadow.radius = 2.5;
+      key.shadow.intensity = 0.8;
+      this.surfaceLight = key;
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFShadowMap;
+      this.renderer.shadowMap.autoUpdate = false;
+      // Refresh only when the cast geometry changes, including direct QA rest
+      // fixtures and lifecycle settling. Walking/look alone reuse the depth map.
+      let shadowPose = '';
+      this.scene.onBeforeRender = () => {
+        const movement = this.station.movement;
+        const pose = [
+          movement.position.y,
+          movement.rotation.x,
+          this.station.holders.bridge.visible,
+          this.station.holders.dial.visible,
+          this.detached.visible,
+          this.status.ready,
+        ].join('/');
+        if (pose !== shadowPose) {
+          this.renderer.shadowMap.needsUpdate = true;
+          shadowPose = pose;
+        }
+      };
+      const fill = new THREE.DirectionalLight(0xfff1de, 0.55);
       fill.position.set(-190, 350, -135);
-      this.scene.add(key, fill);
+      this.scene.add(key, key.target, fill);
       const station = this.station;
       station.root.name = 'movement-station';
       station.root.position.set(layout.station.x, 0, layout.station.z);
@@ -385,6 +425,19 @@ export class BenchViewer {
           )
         )
           throw Error('Invalid atelier environment contract: ' + node.name);
+        for (const material of Array.isArray(node.material)
+          ? node.material
+          : [node.material]) {
+          if (material instanceof THREE.MeshStandardMaterial) {
+            finishBenchSurface(material);
+            if (material.map)
+              material.map.anisotropy = Math.min(
+                8,
+                this.renderer.capabilities.getMaxAnisotropy(),
+              );
+          }
+        }
+        node.receiveShadow = true;
       });
       this.scene.add(environment);
       new THREE.Box3()
@@ -424,6 +477,7 @@ export class BenchViewer {
       const solids: THREE.Mesh[] = [];
       for (const group of [this.station.root, this.detached, environment])
         group.traverse((node) => {
+          if (node instanceof THREE.Mesh) node.castShadow = true;
           if (
             node instanceof THREE.Mesh &&
             node.userData.collisionRole !== 'decor'
@@ -707,6 +761,8 @@ export class BenchViewer {
     this.world.solids = [];
     this.world.trees.clear();
     this.environment?.dispose();
+    this.surfaceLight?.shadow.dispose();
+    this.surfaceLight = undefined;
     this.renderer.dispose();
     this.renderer.domElement.remove();
   }

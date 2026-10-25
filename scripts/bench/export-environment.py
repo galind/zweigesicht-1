@@ -32,8 +32,9 @@ def material(name, color, rough=.7, metal=0, emission=0):
     for key,val in [('Base Color',(*rgb,1)),('Roughness',rough),('Metallic',metal),('Emission Color',(*rgb,1)),('Emission Strength',emission)]:p.inputs[key].default_value=val
     return m
 pal=SPEC['palette']
-oak=material('Oak',pal['oak'],.68)
-green=material('Matte green',pal['mat'],.92)
+finish=SPEC['surfaceFinish']
+oak=material('Oak',pal['oak'],finish['oakRoughness'])
+green=material('Matte green',pal['mat'],finish['matRoughness'])
 # Packed restrained albedo maps. World-scale UVs; never modify CAD materials.
 for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
     img=bpy.data.images.new(kind+' original albedo',width=size,height=size)
@@ -44,7 +45,7 @@ for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
             if kind=='oak':
                 wobble=noise.noise_vector(Vector((u*2,v*3,1)))[0]
                 grain=noise.noise(Vector((u*2.5,v*160+wobble*3,7))) + .45*noise.noise(Vector((u*6,v*550,9)))
-                val=1+.065*grain+.018*noise.noise(Vector((u*10,v*210,3)))
+                val=1+.10*grain+.025*noise.noise(Vector((u*10,v*210,3)))
             else:val=1+.018*noise.noise(Vector((u*80,v*80,3)))
             rgb=[min(1,max(0,c*val)) for c in base]
             pixels.extend((*[12.92*c if c<=.0031308 else 1.055*c**(1/2.4)-.055 for c in rgb],1))
@@ -60,7 +61,7 @@ def mesh(name, verts, faces, mat, role='walkable', bevel=0, smooth=False, uv=Non
     bpy.context.view_layer.objects.active=o;o.select_set(True)
     bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.mesh.normals_make_consistent(inside=False);bpy.ops.object.mode_set(mode='OBJECT')
     if bevel:
-        mod=o.modifiers.new('Small crafted edge','BEVEL');mod.width=bevel;mod.segments=2
+        mod=o.modifiers.new('Small crafted edge','BEVEL');mod.width=bevel;mod.segments=3
         bpy.ops.object.modifier_apply(modifier=mod.name)
     if mat == oak:
         bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
@@ -72,7 +73,7 @@ def mesh(name, verts, faces, mat, role='walkable', bevel=0, smooth=False, uv=Non
         for li in poly.loop_indices:
             co=data.vertices[data.loops[li].vertex_index].co
             a,b=(co.x,co.y) if axis==2 else ((co.x,co.z) if axis==1 else (co.y,co.z))
-            uvl.data[li].uv=uv(data.loops[li].vertex_index) if uv else (a/(1100 if mat==oak else 12),b/(650 if mat==oak else 12))
+            uvl.data[li].uv=uv(data.loops[li].vertex_index) if uv else (a/(finish['grainScaleMm'][0] if mat==oak else 12),b/(finish['grainScaleMm'][1] if mat==oak else 12))
     o.select_set(False);objects.append(o)
     mins=[min(v[k] for v in verts) for k in range(3)];maxs=[max(v[k] for v in verts) for k in range(3)]
     semantics.append({'id':name,'role':role,'material':mat.name,'min':mins,'max':maxs})
@@ -89,14 +90,24 @@ def slab(name, outline, top, bottom, mat, bevel=0, role='walkable'):
                 [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],mat,role=role,bevel=bevel)
 
 D=SPEC['mainDesk'];M=SPEC['mat'];detail=SPEC['tabletopDetail']
-slab('main-oak-top',D['footprint'],D['topY'],D['bottomY'],oak,detail['edgeBevel'])
-box('green-mat',M['minX'],M['maxX'],M['minZ'],M['maxZ'],M['topY'],M['bottomY'],green)
+top_object=slab('main-oak-top',D['footprint'],D['topY'],D['bottomY'],oak,detail['edgeBevel'])
+box('green-mat',M['minX'],M['maxX'],M['minZ'],M['maxZ'],M['topY'],M['bottomY'],green,bevel=M['edgeBevel'])
 # One continuous U-shaped rim: no front fence, overlapping boxes or open ends.
 width=detail['rimWidth'];front=detail['rimFrontZ']
 x0,x1,z0=D['minX'],D['maxX'],D['minZ']
 rim=[(x0,front),(x0,z0),(x1,z0),(x1,front),
      (x1-width,front),(x1-width,z0+width),(x0+width,z0+width),(x0+width,front)]
-slab('low-back-side-rim',rim,D['topY']+detail['rimHeight'],D['topY'],oak,detail['edgeBevel'])
+rim_object=slab('low-back-side-rim',rim,D['topY']+detail['rimHeight'],D['topY']-.5,oak,detail['rimBevel'])
+# Join the rim into the slab with a concealed half-mm lap. A true union removes
+# internal faces and the underside-bevel crevice visible at miniature eye height.
+bpy.context.view_layer.objects.active=top_object
+mod=top_object.modifiers.new('Continuous rim to slab joint','BOOLEAN')
+mod.operation='UNION';mod.solver='EXACT';mod.object=rim_object
+bpy.ops.object.modifier_apply(modifier=mod.name)
+objects.remove(rim_object);bpy.data.objects.remove(rim_object,do_unlink=True)
+top_object.select_set(True)
+bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
+top_object.select_set(False)
 # Low, solid oak display stand. Same visible triangles carry the visitor.
 stand=next(p for p in SPEC['props'] if p['id']=='dial-hand-stand')
 x0,x1,z0,z1,c=stand['minX'],stand['maxX'],stand['minZ'],stand['maxZ'],stand['cornerCut']
@@ -116,19 +127,38 @@ for hole in seating['holes']:
     mod=stand_object.modifiers.new(hole['id'],'BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
     bpy.ops.object.modifier_apply(modifier=mod.name)
     bpy.data.objects.remove(cutter,do_unlink=True)
+# Ease only sharp bore mouths by removing wood, never narrowing the fitted bore.
+# One 25-micron chamfer keeps the contact plane outside r+0.04 unchanged.
+bpy.context.view_layer.objects.active=stand_object
+mod=stand_object.modifiers.new('Finished bore mouths','BEVEL')
+mod.width=stand['boreBevel'];mod.segments=1
+mod.limit_method='ANGLE';mod.angle_limit=math.radians(60)
+bpy.ops.object.modifier_apply(modifier=mod.name)
+stand_object.select_set(True)
+bpy.ops.object.shade_smooth_by_angle(angle=math.radians(30))
+stand_object.select_set(False)
 # All new bore walls use the same oak material and participate in its bake.
 stand_object.data.materials.clear();stand_object.data.materials.append(oak)
 for poly in stand_object.data.polygons:poly.material_index=0
 # Reproject the newly cut bore walls before baking; all geometry remains editable.
-for layer in list(stand_object.data.uv_layers):
-    if layer.name!='Authored projection':stand_object.data.uv_layers.remove(layer)
-uvl=stand_object.data.uv_layers.get('Authored projection')
-for poly in stand_object.data.polygons:
-    axis=max(range(3),key=lambda k:abs(poly.normal[k]))
-    for li in poly.loop_indices:
-        co=stand_object.data.vertices[stand_object.data.loops[li].vertex_index].co
-        a,b=(co.x,co.y) if axis==2 else ((co.x,co.z) if axis==1 else (co.y,co.z))
-        uvl.data[li].uv=(a/1100,b/650)
+for obj in [stand_object,top_object]:
+    for layer in list(obj.data.uv_layers):
+        if layer.name!='Authored projection':obj.data.uv_layers.remove(layer)
+    uvl=obj.data.uv_layers.get('Authored projection')
+    for poly in obj.data.polygons:
+        axis=max(range(3),key=lambda k:abs(poly.normal[k]))
+        for li in poly.loop_indices:
+            co=obj.data.vertices[obj.data.loops[li].vertex_index].co
+            a,b=(co.x,co.y) if axis==2 else ((co.x,co.z) if axis==1 else (co.y,co.z))
+            uvl.data[li].uv=(a/finish['grainScaleMm'][0],b/finish['grainScaleMm'][1])
+
+# Area-weighted corner normals keep broad machined faces planar while the small
+# bevels catch light. In particular, Boolean rim junctions must not shade like dents.
+for obj in [top_object,stand_object]:
+    bpy.context.view_layer.objects.active=obj
+    mod=obj.modifiers.new('Planar faces and eased edge highlights','WEIGHTED_NORMAL')
+    mod.keep_sharp=True;mod.weight=50
+    bpy.ops.object.modifier_apply(modifier=mod.name)
 
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}
@@ -171,8 +201,8 @@ for mat in [oak,green]:
     bpy.ops.uv.smart_project(angle_limit=math.radians(66),island_margin=.008)
     bpy.ops.object.mode_set(mode='OBJECT')
     target=nodes.new('ShaderNodeTexImage');target.image=img;nodes.active=target
-    ao=nodes.new('ShaderNodeAmbientOcclusion');ao.inputs['Distance'].default_value=90;ao.samples=64
-    soften=nodes.new('ShaderNodeMixRGB');soften.blend_type='MIX';soften.inputs[0].default_value=.72;soften.inputs[1].default_value=(1,1,1,1);links.new(ao.outputs['Color'],soften.inputs[2])
+    ao=nodes.new('ShaderNodeAmbientOcclusion');ao.inputs['Distance'].default_value=finish['contactBakeDistanceMm'];ao.samples=64
+    soften=nodes.new('ShaderNodeMixRGB');soften.blend_type='MIX';soften.inputs[0].default_value=finish['contactBakeStrength'];soften.inputs[1].default_value=(1,1,1,1);links.new(ao.outputs['Color'],soften.inputs[2])
     mul=nodes.new('ShaderNodeMixRGB');mul.blend_type='MULTIPLY';mul.inputs[0].default_value=1
     p=nodes.get('Principled BSDF');base=p.inputs['Base Color']
     if base.is_linked:links.new(base.links[0].from_socket,mul.inputs[1])
@@ -204,6 +234,6 @@ runtime=ROOT/'explorer/public/bench-local/environment.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
 report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','standBores':seating['holes'],'closedSurfaceAudit':'All slab, rim, mat and bored stand meshes are closed manifold after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
-for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',ROOT/'assets/authored/bench-parts-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',ROOT/'assets/authored/bench-parts-layout.json',Path(__file__),ROOT/'explorer/src/bench/SurfaceFinish.ts',ROOT/'explorer/src/bench/BenchViewer.ts',OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 (ROOT/'assets/source-manifest/workshop-environment.json').write_text(json.dumps(report,indent=2)+'\n')
 print('WORKSHOP',json.dumps(counts))

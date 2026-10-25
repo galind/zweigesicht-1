@@ -3,6 +3,52 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Finished bench surfaces — 25 October 2026
+
+Polished the **270 × 160 mm desk**, **240 × 130 × 1 mm green mat** and
+**76 × 76 × 2 mm oak stand**. The desk slab is now a lighter 14 mm thick,
+with 0.35 mm edges; the rim has 0.25 mm edges and a concealed union into the
+slab, removing the crevice visible at miniature eye height. Weighted normals
+keep broad faces flat. The mat has 0.04 mm eased edges. All ten fitted stand
+bores retain their measured clearance, with smooth interiors and 0.025 mm mouths.
+
+Rebaked restrained wood grain and local contact shading, added nonrepeating
+world-space fibres/pores and fine matte grain with subpixel filtering, and tuned
+the key/fill lighting. One cached soft shadow map grounds the actual parts and
+updates through both flips. Fixed a reversed-depth shadow-bias artifact found
+in the first visual pass; a clear-mat rendering comparison now guards against it.
+The case-left/movement-center/dials-and-hands-right arrangement, CAD geometry,
+poses, scale, holders, arrival and controls are unchanged.
+
+Overview, profile, exposed bores, seated parts and visitor-scale views reviewed;
+all five surface fixtures retain the original 1.48 mm eyes and 68° FOV.
+Evidence and before/after captures remain in `artifacts/workshop-polish/`.
+The flight circuit fixture now follows the current clear aisles; its old X−55
+route ran through the case moved there in the earlier compact-layout milestone.
+
+Verified **144 CPU tests**, inventory, typecheck, lint and production build;
+**20 surface checks** across normal/fallback depth, **5 seating**, **10 parts**,
+**65 environment**, **10 running**, **32 flip**, **67 flight/collision** and
+**8 lifecycle checks**. Independent source/holder audit retains both rests and
+all **16 source-surface drops**. No runtime/shader errors. An intermediate
+focus-loss flip timeout during concurrent validation cleared in the isolated
+final run; all 32 checks passed without changing timing thresholds.
+
+Final overview and both close-up profiling fixtures record **16.7 ms p95** and
+**16.8 ms p99** on local M4 headless Chrome at 1440 × 900, ratio 1 (150 measured
+frames each). CPU submission p95 is 5.4–6.3 ms. These stationary samples are not
+human-input, sustained-device or flip-performance qualification.
+
+The environment has **6,240 visible/collision triangles**, **2 draws/pass**,
+**6.67 MiB baked textures** and a **551,212-byte GLB**. The cached 4096² shadow
+render target is additional GPU storage. All eight recorded source/output hashes
+match, and the production asset matches the generated GLB. Preview rebuilt and
+restarted at <http://127.0.0.1:4198/bench>. The local prototype is finished;
+next action is owner walkthrough. Generated assets remain local/ignored.
+No push, publication or redistribution. Remaining qualification limits are the
+existing physical-device, human mouse-feel/accessibility and mechanical/release
+gates; finite-resolution contact shadows are a visual approximation.
+
 ## Smaller tabletop and mat — 25 October 2026
 
 Reduced the table from 450 × 330 to **270 × 160 mm**, and the mat from

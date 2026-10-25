@@ -8,7 +8,7 @@
     "minZ": -85,
     "maxZ": 75,
     "topY": -1,
-    "bottomY": -33,
+    "bottomY": -15,
     "footprint": [
       [
         -115,
@@ -41,7 +41,8 @@
     "minZ": -65,
     "maxZ": 65,
     "topY": 0,
-    "bottomY": -1
+    "bottomY": -1,
+    "edgeBevel": 0.04
   },
   "station": {
     "x": 0,
@@ -96,7 +97,8 @@
           "face": "small",
           "z": 12
         }
-      ]
+      ],
+      "boreBevel": 0.025
     }
   ],
   "wallItems": [],
@@ -122,13 +124,24 @@
     "oak": "C5A77B",
     "mat": "3D6252"
   },
-  "stage": "oak-parts-stand",
+  "stage": "finished-surface-pass",
   "tabletopDetail": {
     "outline": "Straight rectangular 270 x 160 mm slab; front Z75 preserves 10 mm wood margin.",
-    "edgeBevel": 0.12,
+    "edgeBevel": 0.35,
     "rimWidth": 6,
     "rimHeight": 5,
     "rimFrontZ": 65,
-    "finish": "Light natural wood, restrained irregular grain, matte/satin; original procedural albedo."
+    "finish": "Light oiled oak, continuous fine grain, softened edges and satin roughness.",
+    "rimBevel": 0.25
+  },
+  "surfaceFinish": {
+    "oakRoughness": 0.73,
+    "matRoughness": 0.96,
+    "grainScaleMm": [
+      270,
+      160
+    ],
+    "contactBakeDistanceMm": 5,
+    "contactBakeStrength": 0.38
   }
 }

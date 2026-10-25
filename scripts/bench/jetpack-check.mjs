@@ -289,13 +289,14 @@ try {
         initiallyClear,
       });
     }
-    // Continuous ground circuit, no position changes between its waypoints.
-    setup(-55, 0.001, 40);
+    // Continuous circuit around the current case/stand layout. The old X-55
+    // aisle is now occupied by the case; the back route clears the stand at Z-47.
+    setup(-90, 0.001, 40);
     advance(30);
     for (const [x, z] of [
-      [-55, -35],
-      [55, -35],
-      [55, 40],
+      [-90, -55],
+      [130, -55],
+      [130, 40],
       [30, 40],
       [30, -35],
     ]) {
@@ -304,7 +305,7 @@ try {
       w.yaw = Math.atan2(-(x - w.feet.x), -(z - w.feet.z));
       w.keys.add("KeyW");
       let reached = false;
-      for (let i = 0; i < 5000; i++) {
+      for (let i = 0; i < 8500; i++) {
         w.update(1 / 180);
         if (Math.hypot(w.feet.x - x, w.feet.z - z) < 0.1) {
           reached = true;
