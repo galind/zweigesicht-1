@@ -56,7 +56,10 @@ try {
   // Optional only for this already-synthetic rendering workload. Real keyboard,
   // mouse and lifecycle suites still require actual browser pointer capture.
   if (process.env.PROFILE_CAPTURE !== 'optional')
-    assert.ok(report.captureProbe.captured, JSON.stringify(report.captureProbe));
+    assert.ok(
+      report.captureProbe.captured,
+      JSON.stringify(report.captureProbe),
+    );
   await page.evaluate(() => document.exitPointerLock());
   await page.waitForFunction(() => !window.bench.status.captured);
   await page.addStyleTag({
@@ -74,7 +77,7 @@ try {
     );
   });
   for (const mode of modes) {
-    for (const side of ['bridge', 'dial', 'pair']) {
+    for (const side of ['bridge', 'dial', 'approach']) {
       for (const walk of [false, true]) {
         assert.equal(
           await page.evaluate(() => devicePixelRatio),
@@ -93,31 +96,25 @@ try {
               const b = window.bench;
               b.walker.clear();
               // Focus/visibility are recorded; genuine pointer capture is checked above.
-              b.flip?.setRest(side === 'pair' ? 'bridge' : side);
-              const station = b.station?.root.position ??
-                (b.stations.find((s) => s.id === side) || b.stations[0]);
-              b.walker.clear();
-              b.slowFrames = -1e9; // Hold the baseline manual setting; old code otherwise overrides High.
-              if (mode === 'Auto') b.quality('Auto');
-              else b.quality(mode === 'Low');
+              b.flip?.setRest(side === 'approach' ? 'bridge' : side);
+              const station = b.station.root.position;
+              b.quality(mode === 'Auto' || mode === 'Low' ? mode : 'High');
               b.renderer.transmissionResolutionScale =
                 mode === 'HalfTransmission'
                   ? 0.5
                   : Number(sessionStorage.profileTransmission);
-              (b.station ? [b.station] : b.stations).forEach((station) =>
-                station.movement.traverse((o) => {
-                  if (o.material)
-                    o.material.transmission =
-                      mode === 'NoTransmission'
-                        ? 0
-                        : o.material.userData.finishTransmission || 0;
-                }),
-              );
-              const x = side === 'pair' ? -48 : station.x - 8;
-              const z = side === 'pair' ? 55 : station.z;
+              b.station.movement.traverse((o) => {
+                if (o.material)
+                  o.material.transmission =
+                    mode === 'NoTransmission'
+                      ? 0
+                      : o.material.userData.finishTransmission || 0;
+              });
+              const x = side === 'approach' ? -48 : station.x - 8;
+              const z = side === 'approach' ? 55 : station.z;
               b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);
-              b.walker.yaw = side === 'pair' ? -0.75 : -Math.PI / 2;
-              b.walker.pitch = side === 'pair' ? 0.04 : -0.55;
+              b.walker.yaw = side === 'approach' ? -0.75 : -Math.PI / 2;
+              b.walker.pitch = side === 'approach' ? 0.04 : -0.55;
               b.status.captured = true;
               b.wake();
               await new Promise((r) => setTimeout(r, 700));
@@ -199,10 +196,10 @@ try {
                 inputs++;
                 document.dispatchEvent(
                   new MouseEvent('mousemove', {
-                    movementX: phase * (side === 'pair' ? 2 : 14),
+                    movementX: phase * (side === 'approach' ? 2 : 14),
                     movementY:
                       (Math.floor(elapsed / 350) % 2 ? 1 : -1) *
-                      (side === 'pair' ? 0.4 : 2),
+                      (side === 'approach' ? 0.4 : 2),
                   }),
                 );
                 if (walk) {
@@ -316,10 +313,7 @@ try {
 } finally {
   try {
     await fs.mkdir(out, { recursive: true });
-    await fs.writeFile(
-      `${out}/${label}.json`,
-      JSON.stringify(report, null, 2),
-    );
+    await fs.writeFile(`${out}/${label}.json`, JSON.stringify(report, null, 2));
   } finally {
     await close();
   }

@@ -31,7 +31,7 @@ try {
   // Independent benchmark fixture, not part of the user journey.
   await page.evaluate(() => {
     const b = window.bench;
-    const station = b.station?.root.position ?? b.stations[0],
+    const station = b.station.root.position,
       x = station.x - 12,
       z = station.z;
     b.walker.feet.set(x, b.world.floor(x, z) + 0.002, z);
@@ -91,7 +91,7 @@ try {
     await page.evaluate((side) => {
       const b = window.bench;
       b.flip?.setRest(side);
-      const station = b.station?.root.position ?? b.stations.find((s) => s.id === side);
+      const station = b.station.root.position;
       b.emit();
       b.walker.clear();
       b.walker.grounded = true;

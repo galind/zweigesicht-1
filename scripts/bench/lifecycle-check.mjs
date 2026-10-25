@@ -8,6 +8,8 @@ const { chromium } = await import(
     : 'playwright'
 );
 const base = process.argv[2] || 'http://127.0.0.1:4176';
+const out = process.env.PLAY_QA_OUTPUT || 'artifacts/bench';
+await fs.mkdir(out, { recursive: true });
 const foreground = process.env.HEADED
   ? await launchForeground(chromium, { dpr: 1 })
   : null;
@@ -122,7 +124,9 @@ try {
     'returning window does not capture without action',
     await page.evaluate(() => !window.bench.status.captured),
   );
-  await page.getByRole('button', {name: /^(Start exploring|Resume exploring)$/}).click();
+  await page
+    .getByRole('button', { name: /^(Start exploring|Resume exploring)$/ })
+    .click();
   await page.waitForFunction(() => window.bench.status.captured);
   await page.keyboard.press('f');
   await page.waitForFunction(() => window.bench.flip.active);
@@ -137,7 +141,12 @@ try {
     .getByRole('button', { name: 'Retry loading', exact: true })
     .waitFor();
   check('graphics loss offers retry', true);
-  check('graphics loss finishes flip and removes guard', await page.evaluate(() => !window.bench.flip.active && !window.bench.walker.guard));
+  check(
+    'graphics loss finishes flip and removes guard',
+    await page.evaluate(
+      () => !window.bench.flip.active && !window.bench.walker.guard,
+    ),
+  );
   await page
     .getByRole('button', { name: 'Retry loading', exact: true })
     .click();
@@ -159,7 +168,10 @@ try {
   await page.bringToFront();
   await page.waitForFunction(() => !!window.bench);
   await page.keyboard.press('f');
-  check('shortcut during loading cannot queue a flip', await page.evaluate(() => !window.bench.flip?.active));
+  check(
+    'shortcut during loading cannot queue a flip',
+    await page.evaluate(() => !window.bench.flip?.active),
+  );
   await page.evaluate(() => (window.departingBench = window.bench));
   await page
     .getByRole('link', { name: 'Back to the explorer', exact: true })
@@ -180,10 +192,73 @@ try {
       departed.canvas === 0,
     departed,
   );
+  await page.unroute('**/models/overview-*.glb');
+  await page.goto(base + '/bench?inspect=1');
+  await page.waitForFunction(() => !!window.bench);
+  // Hold the real shader preparation just before it resolves. Navigation can
+  // dispose the viewer in this interval; its continuation must not touch GL.
+  await page.evaluate(() => {
+    const b = window.bench;
+    const compile = b.renderer.compileAsync.bind(b.renderer);
+    b.renderer.compileAsync = async (...args) => {
+      await compile(...args);
+      window.compilationHeld = true;
+      await new Promise((resolve) => {
+        window.releaseCompilation = resolve;
+      });
+    };
+  });
+  await page.waitForFunction(() => window.compilationHeld, null, {
+    timeout: 90000,
+  });
+  await page.evaluate(() => {
+    const b = window.bench;
+    window.departingBench = b;
+    window.cleanupCounts = { environment: 0, renderer: 0, lateTarget: 0 };
+    b.environment.addEventListener(
+      'dispose',
+      () => window.cleanupCounts.environment++,
+    );
+    const dispose = b.renderer.dispose.bind(b.renderer);
+    b.renderer.dispose = () => {
+      window.cleanupCounts.renderer++;
+      dispose();
+    };
+    const setTarget = b.renderer.setRenderTarget.bind(b.renderer);
+    b.renderer.setRenderTarget = (...args) => {
+      if (b.dead) window.cleanupCounts.lateTarget++;
+      return setTarget(...args);
+    };
+  });
+  await page
+    .getByRole('link', { name: 'Back to the explorer', exact: true })
+    .click();
+  await page.waitForURL(base + '/');
+  await page.evaluate(() => {
+    window.departingBench.dispose(); // A repeated owner cleanup is harmless.
+    window.releaseCompilation();
+  });
+  await page.waitForTimeout(300);
+  const cleanup = await page.evaluate(() => ({
+    ...window.cleanupCounts,
+    dead: window.departingBench.dead,
+    ready: window.departingBench.status.ready,
+    frame: window.departingBench.frame,
+  }));
+  check(
+    'disposal during shader preparation releases resources once and never rebinds GL',
+    cleanup.environment === 1 &&
+      cleanup.renderer === 1 &&
+      cleanup.lateTarget === 0 &&
+      cleanup.dead &&
+      !cleanup.ready &&
+      cleanup.frame === 0,
+    cleanup,
+  );
   console.log(JSON.stringify(checks, null, 2));
 } finally {
   await fs.writeFile(
-    (process.env.PLAY_QA_OUTPUT || 'artifacts/bench') + '/lifecycle-report.json',
+    out + '/lifecycle-report.json',
     JSON.stringify(checks, null, 2),
   );
   if (foreground) await foreground.close();

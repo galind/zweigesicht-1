@@ -1,57 +1,82 @@
-# Repository review — 23 October 2026
+# Repository review
 
-Baseline: clean `develop` at `33de8d1`. Changes are in draft PR #30; the exact
-branch has Vercel Git deployment disabled. No release or publication is included.
+## Staging cleanup — 25 October 2026
 
-## Ownership map and risks
+Baseline: clean `develop` at `48ef8b3`, after PRs #31 and #33. The owner reports
+staging release. This review covers tracked application code, Bench lifecycle and
+profiling tools, dependencies/build checks, documentation and their consumers.
+The cleanup branch targets `develop` and disables its own Vercel Git deployment.
 
-| Area | Connections and maintenance risk |
+### Findings and changes
+
+| Area | Evidence and action |
 | --- | --- |
-| Routes/UI | `explorer/app/page.tsx` → domain modules → `MovementViewer`; `app/workshop/page.tsx` → `Play.tsx` → `PlayViewer`. Shared controls/chooser use Base UI. Panel focus/layout and synchronous React refs couple UI to controllers. Robots and sitemap use framework conventions. |
-| State/rendering | `src/experience/` owns selection, configuration, fitting and separation; `src/play/state.ts` replays the prerequisite graph and saves. Controllers own immutable source matrices, presentation, camera, async generations and GPU lifetime. These boundaries need transition/lifecycle coverage when changed. |
-| Assets/reproduction | Authored JSON, generated separation offsets and hashed models/sidecars are distinct authorities. Python XCAF export → movement extraction → lossless Meshopt → runtime preparation; source/fit/appearance probes feed regression evidence. IDs, vertex order and hashes must stay aligned. |
-| Build/dependencies | Separate application and offline asset npm locks. vinext/Vite serves local builds; Nitro packages Vercel; pruning validates build copies. Runtime imports, CSS imports and vinext RSC peers account for dependencies; no package was proven removable. |
-| Tests/release | CPU graph/controller/camera/release tests, retained-input CAD regression and manual browser runners cover different contracts. Read-only CI validates PRs; the main-only release controller uses protected PRs. Server-side settings and live delivery are separate qualification. |
+| Graphics lifecycle | `load()` unconditionally restored its temporary render target after awaited shader compilation, even if route disposal had already finished. Skip that GL call after disposal, make disposal idempotent, clear readiness/frame state, and exercise navigation during held compilation in the lifecycle runner. |
+| Asset loading | Eight positional settled results were repeatedly asserted to fulfilled types. Retain `allSettled` so failure cleanup owns every completed sibling, then unwrap into named, inferred asset types before building the scene. |
+| Stale verification | The interaction runner searched for the removed cycling Detail button and required Auto=1 even on the supported logarithmic fallback. Use the current select and verify the appropriate starting ratio and reduction sequence. |
+| Retired compatibility | Profilers still wrote nonexistent `slowFrames`, traversed the removed paired stations, and passed boolean quality flags. Update those callers and keep one `QualityMode` API. The wider profiling scenario is now named `approach`. Historical comparisons must use each revision's harness. |
+| Unused artwork | Current Blender export has no consumer of the old Dresden print/wordmark PNGs. Remove their rasterizer, authored SVGs and direct `@resvg/resvg-wasm` dev dependency. A transitive resvg installation may remain because vinext uses it. |
+| Redundant scripts | Remove `browser-check`, `collision-check` and `presentation-check` Bench aliases: they only imported `jetpack-check` or `atelier-check`. Document those actual suites. Offline source/fit probes remain supported. |
+| Dependency patch | npm audit found fast-uri 3.1.8 via the webpack/Ajv peer tree. Update only that lockfile package to 3.1.9, within Ajv's existing range. The [upstream advisory](https://github.com/fastify/fast-uri/security/advisories/GHSA-w74x-v6f9-j3xg) identifies the patched version. No visitor-reachable exploit was demonstrated. |
+| Documentation | Replace the 1,608-line progress log with current staging status, correct stale Workshop counts, trim superseded Bench variants, and remove four obsolete design briefs. Retain historical revision links below and the standalone mechanical/performance evidence. |
+| Ongoing checks | Enable TypeScript's unused-local/parameter checks; the application already passes them. No framework or renderer upgrade accompanies this cleanup. |
 
-## Findings and removals
+Validation results and remaining actions are maintained in [PROGRESS.md](../PROGRESS.md).
+Browser evidence stays in ignored `artifacts/staging-cleanup/`. This review does
+not establish live deployment, physical-device performance, mechanical accuracy
+or redistribution rights. Builds retain existing large-chunk/classification and
+Nitro trace-include warnings. Deliberately aborted navigation fixtures emit
+vinext premature-close diagnostics while browser assertions pass.
 
-| Impact | Evidence and action |
+## Ownership map
+
+| Area | Maintenance boundary |
 | --- | --- |
-| P1 correctness | `Play.tsx` redirected fresh visits and difficulty changes to `/?assemble=1`, which production ignores. Reproduced in the production browser/focused suite. The existing chooser now works directly on Workshop; geometry waits for a session. Homepage visibility, saves and confirmations remain. |
-| P1 tooling, exploitability unproven | Audit traced vulnerable Vite, PostCSS's source-map-js and oxfmt's tinypool. Updated only Vite 8.2.4, source-map-js 1.2.2 and tinypool 2.1.2; scoped override retains oxfmt. [Upstream references](LOCAL_ARCHITECTURE.md#dependency-maintenance). No deployed exploit was demonstrated. |
-| P2 dead controller code | UI never enabled retired Hints; cutaway was always false and the selection callback was a no-op. Scale animation fed an ignored `positionStage` argument; `_straightOn` was also ignored. Removed those paths and the single-use return-animation wrapper; tests now inspect actual staged geometry rather than unused argument values. Save-schema `hints` remains. |
-| P2 dead CSS | `globals.css` retained 73 declarations overridden by later declarations for every same selector, property, importance and media/supports/layer context. Removed those and empty rules, plus four obsolete class rules. Generated `camera-${direction}` classes remain. Cascade evidence is retained locally in `artifacts/cleanup-cascade-removals.json`; browser style comparisons validate the result. |
-| P3 stale guidance | Corrected a deleted CAD-document reference and labeled old visibility/release setup claims as historical. Current public visibility does not clear redistribution or release gates. |
+| Explorer | `app/page.tsx` → `src/experience/` → `MovementViewer`; shared controls/chooser use Base UI. Focus/layout and synchronous React refs couple UI to controllers. |
+| Workshop | `app/workshop/page.tsx` → `Play.tsx` → graph/save state and `PlayViewer`. Preserve validated save migration and prerequisite replay. |
+| Bench | `app/bench/page.tsx` → capability check → `Bench.tsx` → `BenchViewer`. `physics.ts` owns capsule/BVH queries, `flip.ts` owns turnover safety, `performance.ts` owns input sampling/quality. Scene resources and listeners belong to the route. |
+| Assets | Authored JSON, generated separation offsets and hashed models/sidecars are distinct authorities. Source matrices, IDs, vertex order and hashes must stay aligned. Source manifests and offline probes are not dead frontend code. |
+| Rendering | Controllers own immutable source matrices, presentation, camera, async generations and GPU lifetime. Shared graphics helpers cover renderer defaults and studio resources; Bench also owns image textures/shadows. |
+| Build/release | Separate application and offline asset npm locks. vinext/Vite builds locally; Nitro packages Vercel; pruning validates build copies. Read-only PR CI and the main-only release controller retain separate responsibilities. |
 
-Inspection modules are lazy `?inspect=1` entry points. Offline probes, source
-manifests, authored overrides, CAD evidence and source-derived assets remain even
-when frontend imports do not reach them. Legacy dial aliases and saved
-session compatibility have explicit consumers/tests. Static search alone was not
-used as a deletion criterion.
+Inspection modules are lazy `?inspect=1` entry points. Save-schema compatibility,
+legacy dial aliases, CAD probes and retained source manifests have consumers
+outside ordinary frontend imports and remain. Build outputs, dependencies and
+original downloads stay ignored. The environment manifest's renderer-source hash
+records `6dfdc04` (PR #31), not the current controller: it is retained as historical
+provenance. Its seven other authored/generated file hashes still match locally;
+this cleanup does not regenerate the environment.
 
-## Validation and limits
+## Historical evidence
 
-Initial validation passed 93 CPU tests, inventory, typecheck/lint, both production
-builds and Preview; 114 CAD/runtime checks, original-source hashes, Meshopt byte
-identity and 1,119 sampled access checks. Browser runs completed 89 Easy and 284
-Hard actions, 87 drag checks, 92 focused checks, nine explorer suites and both
-entry policies; Preview loading/retry/layout passed 175 assertions. All 36 tracked
-asset/provenance/image/license/notice files match baseline. Follow-up results are
-recorded in [PROGRESS.md](../PROGRESS.md); logs/screenshots remain ignored.
+Git preserves the full prior notes at the staging baseline:
+[progress log](https://github.com/galind/zweigesicht-1/blob/48ef8b3/PROGRESS.md),
+[Bench history](https://github.com/galind/zweigesicht-1/blob/48ef8b3/docs/BENCH_EXPERIENCE.md),
+and [earlier repository audit](https://github.com/galind/zweigesicht-1/blob/48ef8b3/docs/REPOSITORY_REVIEW.md).
+Use those dated records when interpreting old local screenshots and reports;
+their pending approvals, ports and next actions are not current instructions.
 
-The original production chooser failure is fixed. Large-chunk/classification
-warnings remain. Abort/route-exit fixtures emit vinext stream diagnostics while
-browser checks pass; their cause was not isolated against baseline. This review
-does not certify actual devices, representative accessibility, mechanics,
-uncached CAD reproduction, hosted settings/history or live deployment.
+| Milestone | Retained evidence / supersession |
+| --- | --- |
+| Publication audit, 3–5 October | [Release gates](RELEASE_GATES.md), publication inventory and removal-path list retain history exposure findings, permissions and remediation requirements. Old branch-rule/app-setup claims are dated snapshots, not a live settings audit. |
+| Repository cleanup, 23 October; PR #30 | Fixed production Workshop entry, removed unused Hints/cutaway/animation arguments and overridden CSS, patched tooling dependencies, removed `/play`. Prior audit records 93 CPU tests, both builds, CAD fidelity/access checks and browser journeys. |
+| Desk concepts, 24 October | [Desk review](https://github.com/galind/zweigesicht-1/blob/48ef8b3/docs/DESK_DESIGN_REVIEW.md), [stairs sketch](https://github.com/galind/zweigesicht-1/blob/48ef8b3/docs/DESK_STAIRS_SKETCH.md), [Stage 1](https://github.com/galind/zweigesicht-1/blob/48ef8b3/docs/WORKSHOP_DESIGN_STAGE1.md) and [D revision 3](https://github.com/galind/zweigesicht-1/blob/48ef8b3/docs/WORKSHOP_DESIGN_D.md) are superseded by the compact open-background desk. Their rooms, stairs, decorations, containers and paired stations are not active requirements. |
+| Holder and wheel reviews, 24 October | Holder seating/cross-fit source manifests and the [wheel](WHEEL_CONTACT_REVIEW.md), [ratchet](RATCHET_CONTACT_REVIEW.md), [remaining pairs](REMAINING_WHEEL_CONTACT_REVIEW.md) reviews remain authoritative evidence for the documented static placement exceptions. |
+| Desk/stand finishes, 25 October | Current dimensions and collision/finish contracts are in [Bench experience](BENCH_EXPERIENCE.md). Local evidence includes `artifacts/workshop-seating/`, `workshop-compact-stand/`, `workshop-centered/` and `workshop-wood-finish/`. Earlier protected/direct-mat arrangements are superseded. |
+| Sustained performance, PR #31 | [Bench performance](BENCH_PERFORMANCE.md) retains Firefox/Chrome workload measurements, causes, Auto policy and limitations. It supersedes short stationary timing claims. |
+| Entry/menu, PR #33 | Direct `/bench` introduction, explicit capture, desktop capability gating and simplified centered menus replace the homepage popup. Historical verification: 149 CPU tests, 159 UI checks, 22 entry/device journeys and eight lifecycle checks; local evidence includes `artifacts/bench-route-introduction/` and `bench-menu-simplified/`. |
+
+To inspect or reproduce a removed historical script/design, use its matching Git
+revision and dependency lock rather than restoring it into the current application.
+The original CAD, source provenance and mechanical evidence are not removed.
 
 ## Deferred decisions
 
-- Split controller/loading/camera boundaries when a feature touches them, with
-  existing behavioral coverage; avoid a rewrite driven only by file size.
-- Agree a loading budget (homepage static JS closure is about 405 KB gzip) and
-  browser-CI provisioning before changing chunking or startup policy.
+- Split large controller/loading/camera boundaries when a feature touches them,
+  with behavioral coverage; file size alone does not justify a rewrite.
+- Agree a loading budget and browser-CI provisioning before changing chunking
+  or startup policy. Large-chunk/build classification warnings remain.
 - Decide Workshop homepage promotion, supported CAD platforms and mechanical/
-  appearance scope separately; representative device/expert evidence is needed.
-- Resolve maker permission versus external-asset/code-only distribution and the
-  outstanding hosted/publication gates before publishing anything further.
+  appearance scope with representative device and expert evidence.
+- Resolve maker permission versus external-asset/code-only distribution and
+  outstanding hosted/publication gates before further publication.
