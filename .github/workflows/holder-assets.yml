@@ -29,6 +29,8 @@ jobs:
         run: |
           npm ci --prefix scripts/assets
           npm ci --prefix explorer
+      - name: Reject invalid source geometry
+        run: node --test scripts/assets/holder-glb.test.mjs
       - name: Convert, decode and compare exact geometry and transfer sizes
         run: node scripts/assets/prepare-holders.mjs
       - name: Retain only optimized GLBs and measurements

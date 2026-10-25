@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 import { NodeIO } from '@gltf-transform/core';
-import { EXTMeshoptCompression } from '@gltf-transform/extensions';
+import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { STLLoader } from '../../explorer/node_modules/three/examples/jsm/loaders/STLLoader.js';
 import { GLTFLoader } from '../../explorer/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
@@ -19,7 +19,7 @@ const sha = data => createHash('sha256').update(data).digest('hex');
 const buffer = data => data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
 await fs.mkdir(out, { recursive: true });
 await Promise.all([MeshoptDecoder.ready, ThreeDecoder.ready]);
-const io = new NodeIO().registerExtensions([EXTMeshoptCompression])
+const io = new NodeIO().registerExtensions([EXTMeshoptCompression, KHRMeshQuantization])
   .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
 const loader = new GLTFLoader().setMeshoptDecoder(ThreeDecoder);
 const files = [];
@@ -35,8 +35,8 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   assert.equal(source.length, entry.bytes);
   assert.equal(sha(source), entry.sha256, 'Source provenance mismatch');
   const candidates = [];
-  for (const reorder of ['none', 'cache', 'spatial']) {
-    const options = { indexed: true, compressed: true, reorder };
+  for (const reorder of ['none', 'cache']) {
+    const options = { reorder };
     const data = await holderGlb(source, options);
     candidates.push({ options, data, bytes: data.length, gzipBytes: gzipSync(data, { level: 9 }).length });
   }
@@ -57,29 +57,47 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   assert.deepEqual(mesh.scale.toArray(), [1, 1, 1]);
   assert.deepEqual(mesh.quaternion.toArray(), [0, 0, 0, 1]);
   const expanded = mesh.geometry.toNonIndexed();
-  // Compare oriented triangles including normals; order and cyclic starting corner may change.
+  // Match oriented position triangles; retain all originals, including duplicates.
   const triangles = geometry => {
     const result = [];
     for (let t = 0; t < geometry.attributes.position.count; t += 3) {
       const corners = [];
       for (let corner = t; corner < t + 3; corner++) {
-        corners.push(['position', 'normal'].map(name => {
-          const array = geometry.attributes[name].array;
-          return Buffer.from(array.buffer, array.byteOffset + corner * 12, 12).toString('hex');
-        }).join(''));
+        const array = geometry.attributes.position.array;
+        corners.push(Buffer.from(array.buffer, array.byteOffset + corner * 12, 12).toString('hex'));
       }
-      result.push([0, 1, 2].map(start => [0, 1, 2].map(n => corners[(start + n) % 3]).join(':')).sort()[0]);
+      const starts = [0, 1, 2].map(start => ({ start, key: [0, 1, 2].map(n => corners[(start + n) % 3]).join(':') }));
+      starts.sort((a, b) => a.key.localeCompare(b.key));
+      result.push({ ...starts[0], triangle: t });
     }
-    return result.sort();
+    return result.sort((a, b) => a.key.localeCompare(b.key));
   };
-  assert.deepEqual(triangles(expanded), triangles(original), 'Oriented triangle positions/normals differ');
+  const before = triangles(original), after = triangles(expanded);
+  assert.deepEqual(after.map(t => t.key), before.map(t => t.key), 'Oriented positions differ');
+  let maxNormalComponentError = 0;
+  for (let i = 0; i < before.length; i++) for (let c = 0; c < 3; c++) {
+    const sourceCorner = before[i].triangle + (before[i].start + c) % 3;
+    const targetCorner = after[i].triangle + (after[i].start + c) % 3;
+    const normal = original.attributes.normal;
+    const a = [normal.getX(sourceCorner), normal.getY(sourceCorner), normal.getZ(sourceCorner)];
+    const b = expanded.attributes.normal;
+    const values = [b.getX(targetCorner), b.getY(targetCorner), b.getZ(targetCorner)];
+    const length = Math.hypot(...a);
+    for (let axis = 0; axis < 3; axis++)
+      maxNormalComponentError = Math.max(maxNormalComponentError, Math.abs(a[axis] / length - values[axis]));
+  }
+  assert.ok(maxNormalComponentError <= 1 / 32767, 'Normal error exceeds SNORM16 precision');
   original.computeBoundingBox(); mesh.geometry.computeBoundingBox();
   assert.ok(original.boundingBox.equals(mesh.geometry.boundingBox));
   const independent = await io.readBinary(glb);
   const primitive = independent.getRoot().listMeshes()[0].listPrimitives()[0];
   assert.deepEqual(primitive.getIndices().getArray(), mesh.geometry.index.array);
-  for (const [semantic, attribute] of [['POSITION', 'position'], ['NORMAL', 'normal']])
-    assert.deepEqual(primitive.getAttribute(semantic).getArray(), mesh.geometry.attributes[attribute].array);
+  assert.deepEqual(primitive.getAttribute('POSITION').getArray(), mesh.geometry.attributes.position.array);
+  const independentNormals = primitive.getAttribute('NORMAL').getArray();
+  const normalAttribute = mesh.geometry.attributes.normal;
+  for (let i = 0; i < normalAttribute.count; i++)
+    for (const [axis, getter] of ['getX', 'getY', 'getZ'].entries())
+      assert.equal(normalAttribute[getter](i), Math.max(-1, independentNormals[i * 3 + axis] / 32767));
   const name = path.basename(entry.path).replace('.stl', '.glb');
   const gzipBytes = gzipSync(glb, { level: 9 }).length;
   const sourceGzipBytes = gzipSync(source, { level: 9 }).length;
@@ -91,7 +109,7 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
     gzipReductionPercent: +(100 * (1 - gzipBytes / sourceGzipBytes)).toFixed(2),
     triangles: original.attributes.position.count / 3,
     sourceVertices: original.attributes.position.count, vertices: mesh.geometry.attributes.position.count,
-    trianglePositionsAndNormalsExact: true, boundsExact: true, deterministic: true,
+    trianglePositionsAndWindingExact: true, maxNormalComponentError, boundsExact: true, deterministic: true,
     threeLoaderDecodePassed: true, independentNodeIoDecodePassed: true };
   await fs.writeFile(new URL(name, out), glb);
   files.push(report);
@@ -99,7 +117,7 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   original.dispose(); expanded.dispose(); mesh.geometry.dispose(); mesh.material.dispose();
 }
 const report = { schemaVersion: 1,
-  method: 'Exact position/normal deduplication; meshopt v0 ATTRIBUTES/INDICES; no quantization, filters or decimation. Lossless vertex/triangle ordering selected by gzip size. Original millimetres and Z-up axes retained for the existing scene transform.',
+  method: 'Exact positions and oriented triangles; SNORM16 lighting normals with component error <= 1/32767; meshopt v0, no geometry quantization or decimation. Vertex/triangle order selected by gzip size. Original millimetres and Z-up axes retained.',
   toolVersions: JSON.parse(await fs.readFile(new URL('scripts/assets/package.json', root))).dependencies,
   files };
 await fs.writeFile(new URL('holder-runtime.json', out), JSON.stringify(report, null, 2) + '\n');
