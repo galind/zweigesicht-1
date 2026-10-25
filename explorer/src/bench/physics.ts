@@ -6,6 +6,7 @@ export const WALK = Object.freeze({
   height: 1.65,
   eye: 1.48,
   speed: 5.5,
+  runSpeed: 11,
   gravity: 18,
   thrust: 26,
   verticalDrag: 0.18,
@@ -248,8 +249,12 @@ export class Walker {
     // Clamp elapsed catch-up, and bound each sweep by capsule radius even for
     // unusually fast motion. The desk constraint is applied on every substep.
     const duration = Math.max(0, Math.min(dt, 0.05));
+    const speed =
+      this.keys.has('ShiftLeft') || this.keys.has('ShiftRight')
+        ? WALK.runSpeed
+        : WALK.speed;
     const maxSpeed =
-      Math.max(WALK.speed, this.velocity.length()) + WALK.thrust * duration;
+      Math.max(speed, this.velocity.length()) + WALK.thrust * duration;
     const steps = Math.ceil(
       duration / Math.min(WALK.tick, WALK.radius / (3 * maxSpeed)),
     );
@@ -262,12 +267,10 @@ export class Walker {
         Number(this.keys.has('KeyD')) - Number(this.keys.has('KeyA'));
       const n = Math.max(1, Math.hypot(forward, right));
       const targetX =
-        ((-Math.sin(this.yaw) * forward + Math.cos(this.yaw) * right) *
-          WALK.speed) /
+        ((-Math.sin(this.yaw) * forward + Math.cos(this.yaw) * right) * speed) /
         n;
       const targetZ =
-        ((-Math.cos(this.yaw) * forward - Math.sin(this.yaw) * right) *
-          WALK.speed) /
+        ((-Math.cos(this.yaw) * forward - Math.sin(this.yaw) * right) * speed) /
         n;
       const delta = new THREE.Vector2(
         targetX - this.velocity.x,

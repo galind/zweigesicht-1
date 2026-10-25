@@ -3,16 +3,16 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "compact-bare-parts",
-  "origin": "Original procedural tabletop, rim and mat; no external models, reference photographs or maker CAD buffers embedded.",
+  "stage": "oak-parts-stand",
+  "origin": "Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
-  "closedSurfaceAudit": "All slab, rim and mat meshes are closed manifold after triangulation.",
+  "closedSurfaceAudit": "All slab, rim, mat and stand meshes are closed manifold after triangulation.",
   "budgets": {
-    "visibleTriangles": 340,
-    "collisionTriangles": 340,
+    "visibleTriangles": 560,
+    "collisionTriangles": 560,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 172216
+    "downloadBytes": 191380
   },
   "semantics": [
     {
@@ -59,12 +59,27 @@
         4,
         125
       ]
+    },
+    {
+      "id": "dial-hand-stand",
+      "role": "walkable",
+      "material": "Oak",
+      "min": [
+        65,
+        0,
+        -61
+      ],
+      "max": [
+        148,
+        4.5,
+        44
+      ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "395d286a9eed167505d4c15aaacad883b10ef774e156bfb46cd2625f59e40876"
+      "sha256": "f1713cbe939b804e05021c1fa9d09b225f48e3b06c50d57165ba0fd4edb13ede"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -72,15 +87,15 @@
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "2838130840fbc518920fe2bc0f3c1e1dd5bf41aadb72c44b55d5cc32a2b37026"
+      "sha256": "a0973d72c827b85375c8d3d3fd030fd897e8899fe6a0e027d1ca8ee641343284"
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "b7a6495446f29e06e805a5b4212dd2ea9fe6d2e1dc3aff5bb84217498d54fb56"
+      "sha256": "125f8d45081cc41e4b973bd874bb14f88da0bb7a1be9c2b8af96ecdf1ded29bb"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "f0ed30ec23794320f73760e3d93143f24385c9d47d724f8dd671716f1c51adcb"
+      "sha256": "edd7435f2fa6c3fae5d1862493d5fb69c7a3e2cb01b428a7f841668194a4e5c8"
     }
   ]
 }

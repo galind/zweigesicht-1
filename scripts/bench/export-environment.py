@@ -97,6 +97,12 @@ x0,x1,z0=D['minX'],D['maxX'],D['minZ']
 rim=[(x0,front),(x0,z0),(x1,z0),(x1,front),
      (x1-width,front),(x1-width,z0+width),(x0+width,z0+width),(x0+width,front)]
 slab('low-back-side-rim',rim,D['topY']+detail['rimHeight'],D['topY'],oak,detail['edgeBevel'])
+# Low, solid oak display stand. Same visible triangles carry the visitor.
+stand=next(p for p in SPEC['props'] if p['id']=='dial-hand-stand')
+x0,x1,z0,z1,c=stand['minX'],stand['maxX'],stand['minZ'],stand['maxZ'],stand['cornerCut']
+outline=[(x0+c,z0),(x1-c,z0),(x1,z0+c),(x1,z1-c),
+         (x1-c,z1),(x0+c,z1),(x0,z1-c),(x0,z0+c)]
+slab(stand['id'],outline,stand['topY'],stand['bottomY'],oak,stand['edgeBevel'])
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}
 for o in objects:
@@ -170,7 +176,7 @@ bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'environment.blend'))
 runtime=ROOT/'explorer/public/bench-local/environment.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
-report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim and mat; no external models, reference photographs or maker CAD buffers embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','closedSurfaceAudit':'All slab, rim and mat meshes are closed manifold after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
+report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','closedSurfaceAudit':'All slab, rim, mat and stand meshes are closed manifold after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
 for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 (ROOT/'assets/source-manifest/workshop-environment.json').write_text(json.dumps(report,indent=2)+'\n')
 print('WORKSHOP',json.dumps(counts))

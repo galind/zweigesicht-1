@@ -103,7 +103,7 @@ test("all presentation transforms are rigid, and non-hand source matrices are ex
     }
   }
 });
-test("actual decoded vertices reproduce measured bounds and sit on the mat at original scale", () => {
+test("actual decoded vertices reproduce measured bounds and sit on their visible support at original scale", () => {
   for (const p of packets) {
     const b = new T.Box3(),
       v = new T.Vector3();
@@ -116,10 +116,17 @@ test("actual decoded vertices reproduce measured bounds and sit on the mat at or
     close(b.min.toArray(), p.bounds[0]);
     close(b.max.toArray(), p.bounds[1]);
     assert.ok(b.min.x >= -175 && b.max.x <= 175 && b.min.z >= -125 && b.max.z <= 125);
-    close([b.min.y], [0]);
+    const stand = read("assets/authored/workshop-environment.json").props.find(
+      (p) => p.id === "dial-hand-stand",
+    );
+    close([b.min.y], [p.id === "case" ? 0 : stand.topY]);
+    if (p.id !== "case") {
+      assert.ok(b.min.x > stand.minX + stand.cornerCut && b.max.x < stand.maxX - stand.cornerCut);
+      assert.ok(b.min.z > stand.minZ + stand.cornerCut && b.max.z < stand.maxZ - stand.cornerCut);
+    }
   }
 });
-test("hand packets remain separated on the mat", () => {
+test("hand packets remain separated on the stand", () => {
   for (const g of layout.groups.filter((g) => g.packets)) {
     for (let i = 0; i < g.packets.length; i++)
       for (let j = i + 1; j < g.packets.length; j++) {

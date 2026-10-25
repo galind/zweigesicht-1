@@ -3,6 +3,29 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Oak parts stand and hold Shift to run — 25 October 2026
+
+Added **hold either Shift to run** at 11 mm/s (ordinary speed 5.5), with existing
+smooth acceleration and normalized diagonal travel. Releasing Shift returns to
+walking; pause/reset clears held input. Horizontal flight uses the same speed
+choice; vertical thrust and gravity stay unchanged. Entry/pause controls and the
+walking hint explain the shortcut. Speed-aware collision substeps prevent tunneling.
+
+Rearranged the mat: **case left, movement center, oak display stand right**.
+The solid 83 × 105 × 4.5 mm stand has clipped, softened corners, the existing oak
+finish and rebaked contact shading. Central and reverse dials occupy separate
+rows, with their Fine/Lance hands beside them. All source geometry, original
+bushings and the open case are preserved. Visible stand/CAD triangles collide;
+all groups clear both holders and movement flips. The front approach stays open.
+
+Verified **144 CPU tests**, typecheck/lint/build, **10 real-keyboard run checks**,
+**10 parts**, **65 environment/collision** and **32 flip checks**. Reviewed overview,
+stand detail and controls captures. No browser errors; all provenance hashes match.
+Environment: **560 visible/collision triangles, 2 draws/pass, 6.67 MiB textures**,
+191,380-byte GLB. Local evidence: `artifacts/workshop-stand/`.
+Production preview rebuilt/restarted at <http://127.0.0.1:4198/bench>.
+Next: owner walkthrough of the stand and running speed. No push or publication.
+
 ## Balanced tabletop arrangement — 25 October 2026
 
 Grouped the dials and matching hands closer to the central movement, following

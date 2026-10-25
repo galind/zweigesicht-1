@@ -6,6 +6,9 @@ export function BenchControls() {
         <kbd>WASD</kbd> Move
       </span>
       <span>
+        <kbd>Shift</kbd> Hold to run
+      </span>
+      <span>
         <kbd>Mouse</kbd> Look
       </span>
       <span className="bench-thrust">

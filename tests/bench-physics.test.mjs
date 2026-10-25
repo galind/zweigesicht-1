@@ -293,3 +293,60 @@ test("flight along a long vertical rim does not treat its triangle seam as a cei
   advance(w, 2);
   assert.ok(w.feet.y > 4 && w.velocity.y > 0, JSON.stringify(w.feet));
 });
+
+test("either Shift runs at double speed, diagonals stay normalized, release returns to walking", () => {
+  for (const fps of [30, 60, 144]) {
+    for (const shift of ["ShiftLeft", "ShiftRight"]) {
+      for (const diagonal of [false, true]) {
+        const { world, w } = rig();
+        box(world, [100, 1, 100], [0, -0.5, 0]);
+        w.keys.add("KeyW");
+        if (diagonal) w.keys.add("KeyD");
+        w.keys.add(shift);
+        advance(w, 0.8, fps);
+        assert.ok(Math.abs(Math.hypot(w.velocity.x, w.velocity.z) - WALK.speed * 2) < 1e-6);
+        assert.ok(w.grounded);
+        w.keys.delete(shift);
+        advance(w, 0.4, fps);
+        assert.ok(Math.abs(Math.hypot(w.velocity.x, w.velocity.z) - WALK.speed) < 1e-6);
+        w.clear();
+        advance(w, 0.4, fps);
+        assert.ok(Math.hypot(w.velocity.x, w.velocity.z) < 1e-6);
+      }
+    }
+  }
+});
+test("running cannot tunnel through thin walls or leave the tabletop during a long frame", () => {
+  for (const fps of [30, 60, 144]) {
+    const { world, w } = rig();
+    box(world, [0.025, 6, 10], [2, 3, 0]);
+    w.keys.add("KeyW");
+    w.keys.add("ShiftLeft");
+    advance(w, 1, fps);
+    w.update(10);
+    assert.ok(w.feet.x > 1.7 && w.feet.x < 1.77);
+    assert.ok(w.grounded);
+    const edge = tabletopRig();
+    edge.feet.set(0, 0.002, tabletop.maxZ - 0.25);
+    edge.yaw = 0;
+    edge.keys.add("KeyS");
+    edge.keys.add("ShiftRight");
+    advance(edge, 1, fps);
+    edge.update(10);
+    supported(edge);
+  }
+});
+test("Shift alone does not move and does not change vertical thrust", () => {
+  const a = rig().w,
+    b = rig().w;
+  a.keys.add("ShiftLeft");
+  advance(a, 0.5);
+  assert.ok(Math.hypot(a.feet.x, a.feet.z) < 1e-8);
+  a.keys.add("Space");
+  b.keys.add("Space");
+  advance(a, 0.7);
+  advance(b, 0.7);
+  assert.ok(Math.abs(a.feet.y - b.feet.y) < 1e-8);
+  a.reset();
+  assert.equal(a.keys.size, 0);
+});

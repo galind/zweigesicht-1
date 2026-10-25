@@ -179,6 +179,9 @@ export default function Bench() {
                 <kbd>WASD</kbd> Move
               </span>
               <span>
+                <kbd>Shift</kbd> Hold to run
+              </span>
+              <span>
                 <kbd>Space</kbd> Hold to rise
               </span>
               <span>

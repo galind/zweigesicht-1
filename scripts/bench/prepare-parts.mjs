@@ -8,6 +8,9 @@ const read = async (p) => JSON.parse(await fs.readFile(p));
 const dials = await read("assets/authored/dial-configurations.json"),
   watch = await read("assets/authored/watch-configurations.json"),
   poses = await read("assets/authored/hand-display-poses.json");
+const environment = await read("assets/authored/workshop-environment.json"),
+  stand = environment.props.find((p) => p.id === "dial-hand-stand");
+if (!stand) throw Error("Missing dial and hand stand");
 const manifest = await read("explorer/public/models/assembly-manifest.json"),
   records = new Map(manifest.instances.map((p) => [p.id, p]));
 const paths = await read("explorer/public/models/asset-paths.json");
@@ -81,19 +84,23 @@ groups.push(
     new T.Matrix4()
       .makeRotationY(Math.PI / 2)
       .multiply(new T.Matrix4().makeRotationX(-Math.PI / 2)),
-    [0, -92],
+    [-85, -7],
     0,
   ),
 );
-for (const [face, x] of [
-  ["central", -62],
-  ["small", 62],
-]) {
+for (const { face, z } of stand.rows) {
   const config = dials.faces[face],
     style = config.styles.find((s) => s.id === dials.defaults[face]);
   const rotation = new T.Matrix4().makeRotationX(face === "central" ? -Math.PI / 2 : Math.PI / 2);
   const dialLocal = new Map(config.structureLeafIds.map((id) => [id, source(id)]));
-  const dial = pack(face + "-dial", config.structureLeafIds, dialLocal, rotation, [x, -12], 0);
+  const dial = pack(
+    face + "-dial",
+    config.structureLeafIds,
+    dialLocal,
+    rotation,
+    [stand.dialX, z],
+    stand.topY,
+  );
   groups.push(dial);
   const packets = [];
   for (const [i, [role, id]] of Object.entries(style.handLeafIds).entries()) {
@@ -116,13 +123,13 @@ for (const [face, x] of [
         ids,
         local,
         r,
-        [x + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, 24],
-        0,
+        [stand.handsX + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, z],
+        stand.topY,
       ),
       role,
     });
   }
-  groups.push({ id: face + "-hands", style: style.id, packets, center: [x, 24] });
+  groups.push({ id: face + "-hands", style: style.id, packets, center: [stand.handsX, z] });
 }
 const selected = groups.flatMap((g) => g.leafIds ?? g.packets.flatMap((p) => p.leafIds));
 if (new Set(selected).size !== selected.length) throw Error("Duplicate");
@@ -131,7 +138,7 @@ const result = {
   units: "mm",
   sourceSha256: watch.sourceSha256,
   notes:
-    "Generated rigid presentation matrices; source buffers and authored fitted poses unchanged. Original parts seated directly on the mat; both case crystals omitted at owner request.",
+    "Generated rigid presentation matrices; source buffers and authored fitted poses unchanged. Case seated on mat; dials and hands seated on original oak display stand; both case crystals omitted at owner request.",
   groups,
   excluded: manifest.instances
     .filter(
@@ -158,7 +165,7 @@ const evidence = {
     "Historical protector references retained with hashes; containers removed at owner request.",
   assumptions: {
     placement:
-      "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets mat Y0. This is a presentation pose, not a servicing instruction.",
+      "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets the oak stand top at Y4.5; the case rests at mat Y0. This is a presentation pose, not a servicing instruction.",
   },
   sourceFiles: [],
 };
@@ -167,6 +174,7 @@ for (const p of [
   "assets/authored/watch-configurations.json",
   "assets/authored/hand-display-poses.json",
   "assets/authored/bench-parts-layout.json",
+  "assets/authored/workshop-environment.json",
   "scripts/bench/prepare-parts.mjs",
   "explorer/public" + paths.catalog,
 ])

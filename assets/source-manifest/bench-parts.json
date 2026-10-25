@@ -16,7 +16,7 @@
   ],
   "referenceStatus": "Historical protector references retained with hashes; containers removed at owner request.",
   "assumptions": {
-    "placement": "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets mat Y0. This is a presentation pose, not a servicing instruction."
+    "placement": "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets the oak stand top at Y4.5; the case rests at mat Y0. This is a presentation pose, not a servicing instruction."
   },
   "sourceFiles": [
     {
@@ -33,11 +33,15 @@
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "3fab5b68338d57be8933ab046910ffeee69de2ea3289bf00b8ca6e38ec14dfa6"
+      "sha256": "dc40e914313327028a4e892ebe3ab0691d669267b55414b13fe04c47ff0703e1"
+    },
+    {
+      "path": "assets/authored/workshop-environment.json",
+      "sha256": "f1713cbe939b804e05021c1fa9d09b225f48e3b06c50d57165ba0fd4edb13ede"
     },
     {
       "path": "scripts/bench/prepare-parts.mjs",
-      "sha256": "fd622951f000eb9aff6c7eefd7a8739930d5135f199b9ae1c5d16ebe78219550"
+      "sha256": "af7bf6886f323fce158a0c1b85f67d5ac07c9a8d7069370e6d926397c886d86f"
     },
     {
       "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",

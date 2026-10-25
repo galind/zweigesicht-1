@@ -47,7 +47,7 @@ catalog.traverse((n) => {
   };
 });
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href),
-  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-arrangement";
+  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-stand";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH }),
   page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
@@ -150,7 +150,7 @@ try {
         packet: m.userData.packet,
         collides: b.world.solids.some((s) => s.mesh === m),
       }));
-      const caseFloor = b.world.floor(0, -92, 50);
+      const caseFloor = b.world.floor(-85, -7, 50);
       const containers = [];
       b.scene.traverse((m) => {
         if (m.isMesh && /Elastic membrane|Clear rigid shell|Dial base/.test(m.material.name))
@@ -270,16 +270,17 @@ try {
   for (const [name, position, target, side, fov] of [
     ["external-full-tabletop", [0, 340, 430], [0, 0, -30], "bridge", 45],
     ["external-top-mat", [0, 300, -1], [0, 0, 0], "bridge", 50],
-    ["external-case", [40, 53, -30], [0, 5, -92], "bridge", 42],
-    ["external-central-dial", [-62, 65, 35], [-62, 3, -12], "bridge", 40],
-    ["external-small-dial", [62, 65, 35], [62, 3, -12], "bridge", 40],
-    ["external-central-hands-top", [-62, 70, 24.1], [-62, 0.5, 24], "bridge", 42],
-    ["external-small-hands-top", [62, 70, 24.1], [62, 0.5, 24], "bridge", 42],
-    ["external-central-hands-oblique", [-39, 31, 70], [-62, 0.5, 24], "bridge", 45],
-    ["external-small-hands-oblique", [85, 31, 70], [62, 0.5, 24], "bridge", 45],
-    ["external-central-hands-side", [-62, 10, 72], [-62, 0.5, 24], "bridge", 50],
-    ["external-small-hands-side", [62, 10, 72], [62, 0.5, 24], "bridge", 50],
-    ["visitor-near-hands", [-62, 1.482, 44.1], [-62, 0.5, 24], "bridge", 68],
+    ["external-stand", [180, 130, 125], [106.5, 4.5, -8.5], "bridge", 42],
+    ["external-case", [-45, 53, 55], [-85, 5, -7], "bridge", 42],
+    ["external-central-dial", [90, 69.5, 15], [90, 7.5, -32], "bridge", 40],
+    ["external-small-dial", [90, 69.5, 68], [90, 7.5, 21], "bridge", 40],
+    ["external-central-hands-top", [126, 74.5, -31.9], [126, 5, -32], "bridge", 42],
+    ["external-small-hands-top", [126, 74.5, 21.1], [126, 5, 21], "bridge", 42],
+    ["external-central-hands-oblique", [149, 35.5, 14], [126, 5, -32], "bridge", 45],
+    ["external-small-hands-oblique", [149, 35.5, 67], [126, 5, 21], "bridge", 45],
+    ["external-central-hands-side", [126, 14.5, 16], [126, 5, -32], "bridge", 50],
+    ["external-small-hands-side", [126, 14.5, 69], [126, 5, 21], "bridge", 50],
+    ["visitor-near-hands", [126, 5.982, -12], [126, 5, -32], "bridge", 68],
     ["visitor-arrival", [0, 1.482, 54], [0, 1.482, -7], "bridge", 68],
     ["visitor-bridge", [-12, 22, -7], [0, 17, -7], "bridge", 68],
     ["visitor-dial", [-12, 22, -7], [0, 17, -7], "dial", 68],
@@ -305,8 +306,8 @@ try {
     await page.screenshot({ path: `${out}/${name}.png` });
   }
   check(
-    "all five groups rest directly on the mat without penetration",
-    a.groups.every((g) => Math.abs(g.min[1]) < 1e-6),
+    "case rests on mat; dials and hands rest on the oak stand without penetration",
+    a.groups.every((g) => Math.abs(g.min[1] - (g.id === "case" ? 0 : 4.5)) < 1e-6),
     a.groups,
   );
   check("no browser errors", !report.errors.length, report.errors);

@@ -563,7 +563,18 @@ export class BenchViewer {
       if (!e.repeat) this.startFlip();
       return;
     }
-    if (!['KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'KeyR'].includes(e.code))
+    if (
+      ![
+        'KeyW',
+        'KeyA',
+        'KeyS',
+        'KeyD',
+        'Space',
+        'KeyR',
+        'ShiftLeft',
+        'ShiftRight',
+      ].includes(e.code)
+    )
       return;
     e.preventDefault();
     if (e.code === 'KeyR' && !e.repeat) this.reset();

@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-arrangement";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-stand";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -135,14 +135,14 @@ try {
     const collisions = [];
     for (const [name, x, z, height] of [
       ["wood", 0, 130, -1],
-      ["mat", 100, 0, 0],
+      ["mat", -130, 0, 0],
       ["left wood border", -200, 0, -1],
       ["right wood border", 200, 0, -1],
       ["back wood border", 0, -150, -1],
-      ["former central protector rim", -126.8, -35, 0],
-      ["former small protector rim", 126.8, -35, 0],
-      ["former central hand box", -121, 35, 0],
-      ["former small hand box", 121, 35, 0],
+      ["open case center", -85, -7, 0],
+      ["stand between rows", 110, 0, 4.5],
+      ["left approach mat", -36, 35, 0],
+      ["stand front surface", 110, 38, 4.5],
     ]) {
       const floor = b.world.floor(x, z, 500);
       setup(x, floor + 3, z);
@@ -232,21 +232,23 @@ try {
       });
     }
     const circulation = [];
-    for (const [name, x, z, key] of [
+    for (const [name, x, z, key, height = 0] of [
       ["left approach aisle", -36, 55, "KeyW"],
       ["right approach aisle", 36, 55, "KeyW"],
-      ["between central pair", -85, 9, "KeyD"],
-      ["between small pair", 45, 9, "KeyD"],
-      ["behind case", -30, -120, "KeyD"],
+      ["front of stand", 80, 52, "KeyD"],
+      ["between dial rows on stand", 85, 0, "KeyD", 4.5],
+      ["behind case", -110, -35, "KeyD"],
     ]) {
-      setup(x, 0.002, z);
+      setup(x, height + 0.002, z);
       w.keys.add(key);
       advance(900);
       circulation.push({
         name,
         feet: w.feet.toArray(),
         pass:
-          w.grounded && Math.abs(w.feet.y) < 0.02 && Math.hypot(w.feet.x - x, w.feet.z - z) > 25,
+          w.grounded &&
+          Math.abs(w.feet.y - height) < 0.02 &&
+          Math.hypot(w.feet.x - x, w.feet.z - z) > 25,
       });
     }
     for (const x of [-121, 121]) {
@@ -254,11 +256,20 @@ try {
       w.keys.add("KeyW");
       advance(240);
       circulation.push({
-        name: "former hand box wall is traversable " + x,
+        name: "front mat remains traversable " + x,
         feet: w.feet.toArray(),
         pass: w.feet.z < 51 && w.grounded && Math.abs(w.feet.y) < 0.02,
       });
     }
+    setup(60, 0.002, 0);
+    w.keys.add("KeyD");
+    w.keys.add("ShiftLeft");
+    advance(500);
+    circulation.push({
+      name: "running stops at the visible stand wall",
+      feet: w.feet.toArray(),
+      pass: w.feet.x > 64.7 && w.feet.x < 64.8 && w.grounded && Math.abs(w.feet.y) < 0.02,
+    });
     const matEdges = [];
     for (const [x, z, outKey, inKey, axis, sign] of [
       [174, 40, "KeyD", "KeyA", "x", 1],
@@ -333,9 +344,9 @@ try {
       s.draws === provenance.budgets.drawsPerPass,
   );
   check("all semantics retained; reachable geometry collides", !s.missingIds.length, s.missingIds);
-  const allowedIds = new Set(["main-oak-top", "green-mat", "low-back-side-rim"]);
+  const allowedIds = new Set(["main-oak-top", "green-mat", "low-back-side-rim", "dial-hand-stand"]);
   check(
-    "only tabletop, low rim and plain mat remain",
+    "tabletop, low rim, plain mat and oak stand are the only environment parts",
     provenance.semantics.every((part) => allowedIds.has(part.id) && part.min[1] >= -33),
     provenance.semantics,
   );

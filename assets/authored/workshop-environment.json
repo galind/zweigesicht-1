@@ -1,5 +1,5 @@
 {
-  "status": "Compact tabletop with detached watch parts directly on the mat",
+  "status": "Central movement, case on left, oak dial and hand stand on right",
   "units": "millimetres",
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
@@ -72,9 +72,33 @@
     "maxX": 40,
     "minZ": -65,
     "maxZ": 100,
-    "meaning": "Clear approach and circulation around the unchanged working movement; paired dials and hands sit outside X +/-40, rear case beyond Z-70.64. Continuous CAD envelopes are independently audited."
+    "meaning": "Clear approach and circulation around the unchanged movement; case lies left of X-60, oak stand begins at X65. Continuous CAD envelopes independently audited."
   },
-  "props": [],
+  "props": [
+    {
+      "id": "dial-hand-stand",
+      "minX": 65,
+      "maxX": 148,
+      "minZ": -61,
+      "maxZ": 44,
+      "topY": 4.5,
+      "bottomY": 0,
+      "cornerCut": 4,
+      "edgeBevel": 0.6,
+      "dialX": 90,
+      "handsX": 126,
+      "rows": [
+        {
+          "face": "central",
+          "z": -32
+        },
+        {
+          "face": "small",
+          "z": 21
+        }
+      ]
+    }
+  ],
   "wallItems": [],
   "excludedAssets": [
     "side workbench or return",
@@ -98,7 +122,7 @@
     "oak": "C5A77B",
     "mat": "3D6252"
   },
-  "stage": "compact-bare-parts",
+  "stage": "oak-parts-stand",
   "tabletopDetail": {
     "outline": "Straight rectangular 450 x 330 mm slab; front Z135 preserves 10 mm wood margin.",
     "edgeBevel": 0.12,

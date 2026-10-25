@@ -37,7 +37,38 @@ Arrival and explicit R reset remain at feet (0, 0.002, 54), facing −Z. The vis
 stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet**,
 68° vertical FOV and no bob/roll.
 
-## Detached parts directly on the mat — current local stage
+## Oak parts stand and hold Shift to run — current local stage
+
+The movement stays centered at (0, −7). The open steel case now sits to its left
+at (−85, −7), directly on the mat. Both dials and their matching hand sets share
+one low oak stand to the right: X65…148, Z−61…44, top Y4.5 and bottom Y0 mm.
+Its 4 mm clipped corners and 0.6 mm edge bevel soften a solid, closed plinth.
+It uses the tabletop's oak material and rebaked contact shading. No boxes, glass,
+labels or additional controls were added to the display.
+
+The central dial is at (90, −32), with its Fine hands beside it at (126, −32).
+The reverse dial is at (90, 21), with its Lance hands at (126, 21). All intact
+packets are rigidly seated by their lowest decoded vertex on the visible stand
+surface. The 78 detached leaves preserve source geometry, finishes and bushing
+relationships. Both case crystals remain omitted. Actual CAD and stand triangles
+collide; the case center opens to the mat. The stand, case and all parts clear
+both holders and the continuous movement flip envelopes. The front approach
+and paths on either side of the movement remain clear.
+
+Hold either **Shift** while using WASD to run at **11 mm/s**, twice the ordinary
+5.5 mm/s horizontal speed. Existing 22 mm/s² acceleration smoothly transitions
+between speeds; diagonals are normalized. Shift also speeds horizontal travel in
+air but never alters vertical thrust or gravity. Releasing Shift returns to walk;
+menu, focus loss and reset clear the held input. The entry popup, pause menu and
+walking hint show **Shift · Hold to run**. Physics substeps account for run speed.
+
+Local evidence: `artifacts/workshop-stand/`. Environment: **560 visible/collision
+triangles, 2 draws/pass, 6.67 MiB textures, 191,380-byte GLB**. Verification includes
+144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
+32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
+Shift keys, pause and resume. Overview and stand detail captures were reviewed.
+
+## Historical direct-mat arrangement — superseded by the oak stand
 
 At the owner's request, both dial protectors, both hand boxes, their supports and
 membranes are removed. Both case crystals (`d_0_1_1_67`, two occurrences) are
@@ -304,7 +335,8 @@ centered horizontally and vertically in the viewport.
 WASD moves on ground/in air; mouse look is unchanged. Space supplies continuous
 26 mm/s² upward acceleration against 18 mm/s² gravity, with quadratic drag
 `−0.18 × vy × |vy|`. Releasing thrust coasts then falls; thrust brakes descent
-before climbing. Horizontal speed is 5.5 mm/s with 22 mm/s² acceleration, stepping
+before climbing. Horizontal speed is 5.5 mm/s, or 11 mm/s while either Shift is held,
+with 22 mm/s² acceleration. Stepping
 is 0.22 mm and disabled while ascending. There is no hover, altitude lock, fuel,
 flight toggle or descend key. Desk boundaries constrain only outward travel at
 every altitude, leaving edge sliding available. Substeps remain at most 1/180 s,
