@@ -4,7 +4,7 @@ import { STLLoader } from '../../explorer/node_modules/three/examples/jsm/loader
 
 const bytes = (array) => Buffer.from(array.buffer, array.byteOffset, array.byteLength);
 
-export async function holderGlb(source) {
+export async function holderGlb(source, { indexed = true, compressed = true } = {}) {
   // These recorded inputs are binary STL. Reject truncation and unsupported variants.
   if (source.length < 84 || source.length !== 84 + source.readUInt32LE(80) * 50)
     throw Error('Invalid binary holder STL');
@@ -21,7 +21,7 @@ export async function holderGlb(source) {
     const positionBytes = bytes(positions), normalBytes = bytes(normals);
     for (let vertex = 0; vertex < positions.length / 3; vertex++) {
       const offset = vertex * 12;
-      const key = positionBytes.subarray(offset, offset + 12).toString('hex') +
+      const key = (indexed ? '' : vertex + ':') + positionBytes.subarray(offset, offset + 12).toString('hex') +
         normalBytes.subarray(offset, offset + 12).toString('hex');
       if (!vertices.has(key)) {
         vertices.set(key, vertices.size);
@@ -46,23 +46,24 @@ export async function holderGlb(source) {
       const raw = bytes(arrays[i]), count = accessors[i].count;
       const stride = raw.length / count, mode = i === 2 ? 'INDICES' : 'ATTRIBUTES';
       // Version 0 and NONE preserve bits and index order in Three's bundled decoder.
-      const encoded = Buffer.from(MeshoptEncoder.encodeGltfBuffer(raw, count, stride, mode, 0));
-      views.push({ buffer: 1, byteOffset: decodedOffset, byteLength: raw.length,
+      const encoded = compressed
+        ? Buffer.from(MeshoptEncoder.encodeGltfBuffer(raw, count, stride, mode, 0)) : raw;
+      views.push({ buffer: compressed ? 1 : 0, byteOffset: compressed ? decodedOffset : compressedOffset, byteLength: raw.length,
         target: i === 2 ? 34963 : 34962,
-        extensions: { EXT_meshopt_compression: { buffer: 0, byteOffset: compressedOffset,
-          byteLength: encoded.length, byteStride: stride, count, mode, filter: 'NONE' } } });
+        ...(compressed ? { extensions: { EXT_meshopt_compression: { buffer: 0, byteOffset: compressedOffset,
+          byteLength: encoded.length, byteStride: stride, count, mode, filter: 'NONE' } } } : {}) });
       const padding = Buffer.alloc((4 - encoded.length % 4) % 4);
       blocks.push(encoded, padding);
       compressedOffset += encoded.length + padding.length;
       decodedOffset += raw.length + (4 - raw.length % 4) % 4;
     }
     const json = { asset: { version: '2.0', generator: 'zweigesicht-holder-lossless-v1' },
-      extensionsUsed: ['EXT_meshopt_compression'], extensionsRequired: ['EXT_meshopt_compression'],
+      ...(compressed ? { extensionsUsed: ['EXT_meshopt_compression'], extensionsRequired: ['EXT_meshopt_compression'] } : {}),
       scene: 0, scenes: [{ nodes: [0] }], nodes: [{ mesh: 0 }],
       meshes: [{ primitives: [{ attributes: { POSITION: 0, NORMAL: 1 }, indices: 2 }] }],
       accessors, bufferViews: views,
-      buffers: [{ byteLength: compressedOffset }, { byteLength: decodedOffset,
-        extensions: { EXT_meshopt_compression: { fallback: true } } }],
+      buffers: [{ byteLength: compressedOffset }, ...(compressed ? [{ byteLength: decodedOffset,
+        extensions: { EXT_meshopt_compression: { fallback: true } } }] : [])],
       extras: { units: 'millimetres', sourceAxis: 'Z-up' } };
     const jsonBytes = Buffer.from(JSON.stringify(json));
     const paddedJson = Buffer.concat([jsonBytes, Buffer.alloc((4 - jsonBytes.length % 4) % 4, 32)]);

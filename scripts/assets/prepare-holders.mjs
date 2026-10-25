@@ -34,8 +34,20 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   }
   assert.equal(source.length, entry.bytes);
   assert.equal(sha(source), entry.sha256, 'Source provenance mismatch');
-  const glb = await holderGlb(source);
-  assert.deepEqual(await holderGlb(source), glb, 'Conversion must be deterministic');
+  const candidates = [];
+  for (const indexed of [true, false]) for (const compressed of [true, false]) {
+    const options = { indexed, compressed };
+    const data = await holderGlb(source, options);
+    candidates.push({ options, data, bytes: data.length, gzipBytes: gzipSync(data, { level: 9 }).length });
+  }
+  console.log(JSON.stringify({ source: path.basename(entry.path), bytes: source.length,
+    gzipBytes: gzipSync(source, { level: 9 }).length,
+    candidates: candidates.map(({ options, bytes, gzipBytes }) => ({ ...options, bytes, gzipBytes })) }));
+  const selected = candidates.filter(candidate => candidate.bytes < source.length)
+    .sort((a, b) => a.gzipBytes - b.gzipBytes)[0];
+  assert.ok(selected, 'A GLB candidate must reduce raw bytes');
+  const glb = selected.data;
+  assert.deepEqual(await holderGlb(source, selected.options), glb, 'Conversion must be deterministic');
   const original = new STLLoader().parse(buffer(source));
   const gltf = await loader.parseAsync(buffer(glb), '');
   const mesh = gltf.scene.children[0];
@@ -60,7 +72,7 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   const sourceGzipBytes = gzipSync(source, { level: 9 }).length;
   assert.ok(glb.length < source.length, `${name}: raw bytes must decrease`);
   assert.ok(gzipBytes < sourceGzipBytes, `${name}: gzip bytes must decrease`);
-  const report = { name, sha256: sha(glb), bytes: glb.length, sourceSha256: entry.sha256,
+  const report = { name, encoding: selected.options, sha256: sha(glb), bytes: glb.length, sourceSha256: entry.sha256,
     sourceBytes: source.length, gzipBytes, sourceGzipBytes,
     reductionPercent: +(100 * (1 - glb.length / source.length)).toFixed(2),
     gzipReductionPercent: +(100 * (1 - gzipBytes / sourceGzipBytes)).toFixed(2),
