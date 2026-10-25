@@ -45,9 +45,9 @@ export function finishBenchSurface(material: THREE.MeshStandardMaterial) {
         vec3 poreP = surfaceP * vec3(0.055, 1.8, 1.8) + vec3(0.0, warp*2.0, warp*2.0);
         float poreFade = 1.0 - smoothstep(0.35, 1.8, length(fwidth(poreP)));
         float pores = (surfaceNoise(poreP) - 0.5) * poreFade;
-        diffuseColor.rgb *= 1.0 + 0.18 * fibre + 0.16 * pores;
-        roughnessFactor = clamp(roughnessFactor + 0.06 * fibre, 0.65, 0.82);
-        float surfaceHeight = 0.010 * fibre + 0.008 * pores;
+        diffuseColor.rgb *= 1.0 + 0.12 * fibre + 0.07 * pores;
+        roughnessFactor = clamp(roughnessFactor + 0.06 * fibre, 0.72, 0.86);
+        float surfaceHeight = 0.006 * fibre + 0.004 * pores;
       `
           : `
         // Fine moulded rubber, with no repeating UV tile or large colour flecks.
@@ -75,5 +75,5 @@ export function finishBenchSurface(material: THREE.MeshStandardMaterial) {
     );
   };
   material.customProgramCacheKey = () =>
-    `bench-surface-v1-${wood ? 'oak' : 'mat'}`;
+    `bench-surface-v2-${wood ? 'oak' : 'mat'}`;
 }

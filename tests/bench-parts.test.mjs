@@ -154,9 +154,16 @@ test("compact tabletop retains arrival, station seats, holder rotations and fron
     { id: "bridge", x: 0, z: -7, seat: 12.2, rotationX: 90, holderRotationY: 90 },
     { id: "dial", x: 0, z: -7, seat: 16.3, rotationX: -90, holderRotationY: 90 },
   ]);
-  assert.deepEqual(a.deskBounds, { minX: -115, maxX: 155, minZ: -85, maxZ: 75 });
+  assert.deepEqual(a.deskBounds, { minX: -115, maxX: 115, minZ: -87, maxZ: 73 });
   for (const k of Object.keys(a.deskBounds)) assert.equal(e.mainDesk[k], a.deskBounds[k]);
-  assert.equal(e.mainDesk.maxZ - e.mat.maxZ, 10);
+  for (const surface of [e.mainDesk, e.mat]) {
+    assert.equal((surface.minX + surface.maxX) / 2, a.station.x);
+    assert.equal((surface.minZ + surface.maxZ) / 2, a.station.z);
+  }
+  for (const axis of ["X", "Z"]) {
+    assert.equal(e.mainDesk["max" + axis] - e.mat["max" + axis], 15);
+    assert.equal(e.mat["min" + axis] - e.mainDesk["min" + axis], 15);
+  }
 });
 test("stored fitted blades remain aligned with their original bushing axes", () => {
   for (const p of packets.filter((p) => p.role)) {

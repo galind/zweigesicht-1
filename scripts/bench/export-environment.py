@@ -44,8 +44,10 @@ for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
             u,v=i/size,j/size
             if kind=='oak':
                 wobble=noise.noise_vector(Vector((u*2,v*3,1)))[0]
-                grain=noise.noise(Vector((u*2.5,v*160+wobble*3,7))) + .45*noise.noise(Vector((u*6,v*550,9)))
-                val=1+.10*grain+.025*noise.noise(Vector((u*10,v*210,3)))
+                # Broad tonal variation only: fine fibres are continuous runtime detail,
+                # avoiding enlarged blurry stripes from a small baked atlas.
+                grain=noise.noise(Vector((u*3,v*12+wobble,7)))
+                val=1+.025*grain
             else:val=1+.018*noise.noise(Vector((u*80,v*80,3)))
             rgb=[min(1,max(0,c*val)) for c in base]
             pixels.extend((*[12.92*c if c<=.0031308 else 1.055*c**(1/2.4)-.055 for c in rgb],1))

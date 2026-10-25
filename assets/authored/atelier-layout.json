@@ -27,9 +27,9 @@
   "worktopHeight": 0,
   "deskBounds": {
     "minX": -115,
-    "maxX": 155,
-    "minZ": -85,
-    "maxZ": 75
+    "maxX": 115,
+    "minZ": -87,
+    "maxZ": 73
   },
   "station": {
     "x": 0,

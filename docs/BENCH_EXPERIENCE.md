@@ -27,13 +27,15 @@ Both local holder assets load before entry; a missing asset keeps loading recove
 available. The spare holder has no second visible station. No CAD is cut, morphed,
 scaled, repaired or silently replaced with a universal holder.
 
-The light wooden tabletop is a straight **270 × 160 mm rectangle**: X −115…155,
-Z −85…75 mm, with surface Y−1 and underside Y−15. The 14 mm slab has
-0.35 mm edge bevels; the rim has separate 0.25 mm bevels. A continuous 6 mm wide rim rises 5 mm along the back and
-sides, ending at Z65; there is no front fence. The **240 × 130 × 1 mm** green mat
-spans X−100…140, Z−65…65, leaving **10 mm of wood before the front edge**,
-15 mm at either side and 20 mm behind. The surfaces are centered on the whole
-parts arrangement; object positions and scale remain unchanged.
+The neutral warm oak tabletop is a straight **230 × 160 mm rectangle**:
+X −115…115, Z −87…73 mm, surface Y−1 and underside Y−15. The 14 mm slab
+has 0.35 mm edge bevels; the rim has 0.25 mm bevels. A continuous 6 mm wide
+rim rises 5 mm along the back and sides, ending at Z58; there is no front fence.
+The **200 × 130 × 1 mm** muted green mat spans X−100…100, Z−72…58,
+leaving **15 mm wood borders on all four sides**. Both rectangles are centered
+exactly on the unchanged movement at (0, −7), following the owner's correction
+to the earlier offset arrangement. The case and movement retain their positions;
+only the right-hand display is packed closer. No watch CAD is rescaled.
 Arrival and explicit R reset remain at feet (0, 0.002, 54), facing −Z. The visitor
 stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet**,
 68° vertical FOV and no bob/roll.
@@ -43,15 +45,15 @@ stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet
 The movement stays centered at (0, −7). The open steel case now sits to its left
 at (−55, −7), directly on the mat, rotated 90° so its lugs run along Z in line
 with the movement. Both dials and their matching hand sets share one low oak
-stand to the right: X40…116, Z−47…29, top Y2 and bottom Y0 mm.
-The compact 76 × 76 × 2 mm stand has 4 mm clipped corners and a 0.3 mm edge bevel.
+stand to the right: X40…96, Z−45…20, top Y2 and bottom Y0 mm.
+The compact 56 × 65 × 2 mm stand has 2 mm clipped corners and a 0.2 mm edge bevel.
 It uses the tabletop's oak material and rebaked contact shading. Each bore mouth
 has a 0.025 mm chamfer that removes wood without narrowing its fitted clearance. No boxes, glass,
 labels or additional controls were added to the display.
 
-The central dial is at (62, −25), with its Fine hands beside it at (98, −25).
-The reverse dial is at (62, 12), with its Lance hands at (98, 12). Both
-dial backs now contact the stand at Y2, with their original pins and screw ends
+The central dial is at (60, −25), with its Fine hands beside it at (86, −25).
+The reverse dial is at (60, 7), with its Lance hands at (86, 7). Hand packet
+centers are 5 mm apart. Both dial backs contact the stand at Y2, with their original pins and screw ends
 entering **ten genuine through-holes**: two central-dial pins, three reverse-dial
 screws and five hand bushings. The central-dial pins extend 1.5 mm below the rear
 support plane; the reverse-dial screw ends extend 0.568041 mm. Horizontal hand blades contact the
@@ -82,7 +84,8 @@ Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
 bore evidence: `artifacts/workshop-seating/`; compact stand and aligned case:
 `artifacts/workshop-compact-stand/`; smaller tabletop and mat:
 `artifacts/workshop-small-table/`. The finished surface pass is recorded in
-`artifacts/workshop-polish/`; its environment has **6,240 visible/collision
+`artifacts/workshop-polish/`; the centered layout and revised finish are in
+`artifacts/workshop-centered/`. The current environment has **6,244 visible/collision
 triangles, 2 draws/pass and 6.67 MiB baked textures**. Verification includes
 144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
 32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
@@ -95,18 +98,21 @@ captures hide the CAD only for inspection; ordinary views retain every selected 
 
 ## Finished materials and lighting — 25 October 2026
 
-The compact footprint, source CAD, fitted seating, both original holders, arrival
-and controls are unchanged. The slab is now 14 mm thick; its eased edges, the
-rim and the 2 mm stand share restrained satin oak. The 1 mm mat retains its
-exact extents and has 0.04 mm edge easing. Three-segment outer bevels and smooth
+The desk and mat now center the unchanged movement, and the stand occupies
+37% less area. Source CAD, fitted seating, both original holders, arrival and
+controls are unchanged. The slab is now 14 mm thick; its eased edges, the
+rim and the 2 mm stand share restrained satin oak. The 1 mm mat has
+0.04 mm edge easing at its revised extents. Three-segment outer bevels and smooth
 bore walls retain closed manifold collision geometry. A concealed 0.5 mm rim lap
 is unioned into the slab, eliminating the exposed underside-bevel crevice. Area-weighted
 normals keep large faces planar while the bevels catch light. The ten bore mouths receive
 only a 0.025 mm chamfer; outside radius +0.04 mm the original Y2 seating plane
 is intact, with 0.12 mm nominal pin clearance and 0.5 mm deepest-pin/mat clearance.
 
-The existing Blender pipeline bakes low-contrast grain and local 5 mm contact
-occlusion. `SurfaceFinish.ts` adds continuous world-space wood fibres/pores and
+The existing Blender pipeline bakes only broad, low-contrast wood tone and local
+5 mm contact occlusion. Broad blurred stripes from the former grain bake are
+removed; the wood uses a less yellow palette and higher dry-satin roughness.
+`SurfaceFinish.ts` adds continuous world-space wood fibres/pores and
 fine moulded mat grain, including roughness and derivative bump. It adds no
 textures or displacement, has no repeating UV tile, and filters detail before
 it becomes subpixel. Opaque environment maps use up to 8× anisotropic filtering.
@@ -127,7 +133,7 @@ It checks shadow reuse, refresh for both rests, target disposal, shader errors
 and an unobstructed mat sample against unshadowed rendering to catch shadow acne.
 Run in both normal and forced fallback modes, alongside the existing seating,
 parts, workshop, run, flip, atelier and lifecycle suites. Output remains local
-under `artifacts/workshop-polish/`; generated assets and reference images stay
+under `artifacts/workshop-centered/`; generated assets and reference images stay
 ignored. Source/output hashes include both runtime surface/lighting sources.
 
 These are authored visual finishes and finite-resolution shadows, not measured

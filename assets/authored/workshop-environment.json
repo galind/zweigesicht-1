@@ -4,42 +4,42 @@
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
     "minX": -115,
-    "maxX": 155,
-    "minZ": -85,
-    "maxZ": 75,
+    "maxX": 115,
+    "minZ": -87,
+    "maxZ": 73,
     "topY": -1,
     "bottomY": -15,
     "footprint": [
       [
         -115,
-        -85
+        -87
       ],
       [
-        155,
-        -85
+        115,
+        -87
       ],
       [
-        155,
-        75
+        115,
+        73
       ],
       [
         -115,
-        75
+        73
       ]
     ]
   },
   "proposedTraversal": {
     "minX": -115,
-    "maxX": 155,
-    "minZ": -85,
-    "maxZ": 75,
+    "maxX": 115,
+    "minZ": -87,
+    "maxZ": 73,
     "rule": "Rectangular capsule-radius inset; outward-only constraints at every altitude. Visible rim triangles collide."
   },
   "mat": {
     "minX": -100,
-    "maxX": 140,
-    "minZ": -65,
-    "maxZ": 65,
+    "maxX": 100,
+    "minZ": -72,
+    "maxZ": 58,
     "topY": 0,
     "bottomY": -1,
     "edgeBevel": 0.04
@@ -79,15 +79,15 @@
     {
       "id": "dial-hand-stand",
       "minX": 40,
-      "maxX": 116,
-      "minZ": -47,
-      "maxZ": 29,
+      "maxX": 96,
+      "minZ": -45,
+      "maxZ": 20,
       "topY": 2,
       "bottomY": 0,
-      "cornerCut": 4,
-      "edgeBevel": 0.3,
-      "dialX": 62,
-      "handsX": 98,
+      "cornerCut": 2,
+      "edgeBevel": 0.2,
+      "dialX": 60,
+      "handsX": 86,
       "rows": [
         {
           "face": "central",
@@ -95,10 +95,11 @@
         },
         {
           "face": "small",
-          "z": 12
+          "z": 7
         }
       ],
-      "boreBevel": 0.025
+      "boreBevel": 0.025,
+      "handSpacing": 5
     }
   ],
   "wallItems": [],
@@ -121,24 +122,24 @@
   ],
   "schemaVersion": 1,
   "palette": {
-    "oak": "C5A77B",
-    "mat": "3D6252"
+    "oak": "A28F78",
+    "mat": "3E5747"
   },
-  "stage": "finished-surface-pass",
+  "stage": "centered-compact-surface-pass",
   "tabletopDetail": {
-    "outline": "Straight rectangular 270 x 160 mm slab; front Z75 preserves 10 mm wood margin.",
+    "outline": "Straight rectangular 230 x 160 mm slab centered on the movement, with equal 15 mm mat borders.",
     "edgeBevel": 0.35,
     "rimWidth": 6,
     "rimHeight": 5,
-    "rimFrontZ": 65,
-    "finish": "Light oiled oak, continuous fine grain, softened edges and satin roughness.",
+    "rimFrontZ": 58,
+    "finish": "Neutral warm oak, quiet fine grain, softened edges and dry satin roughness.",
     "rimBevel": 0.25
   },
   "surfaceFinish": {
-    "oakRoughness": 0.73,
+    "oakRoughness": 0.78,
     "matRoughness": 0.96,
     "grainScaleMm": [
-      270,
+      230,
       160
     ],
     "contactBakeDistanceMm": 5,

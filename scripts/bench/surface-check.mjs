@@ -62,14 +62,14 @@ try {
     content: ".bench-menu,.bench-start,.bench-menu-backdrop,.bench-legend{display:none!important}",
   });
   const fixtures = [
-    { name: "final-overview", position: [20, 200, 250], target: [20, -1, -5], fov: 45 },
-    { name: "final-detail", position: [128, 66, 84], target: [78, 1, -7], fov: 42 },
-    { name: "final-profile", position: [250, 65, 180], target: [20, -1, -5], fov: 45 },
+    { name: "final-overview", position: [0, 180, 225], target: [0, -1, -7], fov: 45 },
+    { name: "final-detail", position: [113, 57, 66], target: [68, 1, -12], fov: 42 },
+    { name: "final-profile", position: [250, 65, 180], target: [0, -1, -7], fov: 45 },
     { name: "visitor-arrival", feet: [0, 0.002, 54], target: [0, 1.482, -7] },
     { name: "visitor-mat", feet: [-18, 0.002, 47], target: [-14, 0, 34] },
-    { name: "visitor-stand", feet: [108, 2.002, 25], target: [96, 2, -5] },
-    { name: "visitor-wood", feet: [-20, -0.998, 71], target: [5, -0.6, 64] },
-    { name: "visitor-rim", feet: [145, -0.998, -20], target: [153, 0.6, -35] },
+    { name: "visitor-stand", feet: [91, 2.002, 16], target: [82, 2, -7] },
+    { name: "visitor-wood", feet: [-20, -0.998, 67], target: [5, -0.6, 59] },
+    { name: "visitor-rim", feet: [105, -0.998, -20], target: [113, 0.6, -35] },
   ];
   for (const fixture of fixtures) {
     const details = await page.evaluate((f) => {

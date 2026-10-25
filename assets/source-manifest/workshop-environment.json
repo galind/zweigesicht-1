@@ -3,14 +3,14 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "finished-surface-pass",
+  "stage": "centered-compact-surface-pass",
   "origin": "Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
   "standBores": [
     {
       "id": "central-dial-clearance-0",
       "packet": "central-dial",
-      "x": 67.89346957206726,
+      "x": 65.89346957206726,
       "z": -11.753591060638428,
       "radius": 0.6204732142099939,
       "minPartY": 0.4999999999999849
@@ -18,7 +18,7 @@
     {
       "id": "central-dial-clearance-1",
       "packet": "central-dial",
-      "x": 59.97777843475342,
+      "x": 57.97777843475342,
       "z": -39.35888719558716,
       "radius": 0.6204732142099939,
       "minPartY": 0.4999999999999867
@@ -26,7 +26,7 @@
     {
       "id": "central-hour-clearance-0",
       "packet": "central-hour",
-      "x": 89.00008012730689,
+      "x": 81.00008012730689,
       "z": -21.199999928474426,
       "radius": 0.9950322873632805,
       "minPartY": 1.4499999999999993
@@ -34,7 +34,7 @@
     {
       "id": "central-minute-clearance-0",
       "packet": "central-minute",
-      "x": 98.00012727576262,
+      "x": 86.00012727576262,
       "z": -18.10929121156659,
       "radius": 0.624177326171691,
       "minPartY": 1.6605246046164135
@@ -42,7 +42,7 @@
     {
       "id": "central-seconds-clearance-0",
       "packet": "central-seconds",
-      "x": 107.0000216929389,
+      "x": 91.0000216929389,
       "z": -20.57610549105206,
       "radius": 0.3459355281692398,
       "minPartY": 1.8856536656757696
@@ -50,51 +50,51 @@
     {
       "id": "small-dial-clearance-0",
       "packet": "small-dial",
-      "x": 57.99622940110038,
-      "z": 11.200217043552406,
-      "radius": 0.4202272796260353,
-      "minPartY": 1.4681209416908958
+      "x": 55.99622940110038,
+      "z": 6.200217043552407,
+      "radius": 0.4202272796260361,
+      "minPartY": 1.4681209416908954
     },
     {
       "id": "small-dial-clearance-1",
       "packet": "small-dial",
-      "x": 65.9962294011004,
-      "z": 11.200217043552403,
-      "radius": 0.4202272796260353,
-      "minPartY": 1.4319586757835392
+      "x": 63.99622940110039,
+      "z": 6.200217043552404,
+      "radius": 0.4202272796260361,
+      "minPartY": 1.4319586757835387
     },
     {
       "id": "small-dial-clearance-2",
       "packet": "small-dial",
-      "x": 61.99622940110039,
-      "z": 15.80021704355241,
-      "radius": 0.42022727962603484,
-      "minPartY": 1.468120941690895
+      "x": 59.99622940110039,
+      "z": 10.800217043552408,
+      "radius": 0.4202272796260332,
+      "minPartY": 1.4681209416908945
     },
     {
       "id": "small-hour-clearance-0",
       "packet": "small-hour",
-      "x": 93.50016007229834,
-      "z": 14.162952294251266,
+      "x": 83.50016007229834,
+      "z": 9.162952294251266,
       "radius": 0.6200287189091628,
       "minPartY": 1.8999999999999986
     },
     {
       "id": "small-minute-clearance-0",
       "packet": "small-minute",
-      "x": 102.5,
-      "z": 15.997042849174857,
+      "x": 88.5,
+      "z": 10.997042849174859,
       "radius": 0.3965430313268062,
       "minPartY": 1.9188318545667564
     }
   ],
   "closedSurfaceAudit": "All slab, rim, mat and bored stand meshes are closed manifold after triangulation.",
   "budgets": {
-    "visibleTriangles": 6240,
-    "collisionTriangles": 6240,
+    "visibleTriangles": 6244,
+    "collisionTriangles": 6244,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 551212
+    "downloadBytes": 397012
   },
   "semantics": [
     {
@@ -104,12 +104,12 @@
       "min": [
         -115,
         -15,
-        -85
+        -87
       ],
       "max": [
-        155,
+        115,
         -1,
-        75
+        73
       ]
     },
     {
@@ -119,12 +119,12 @@
       "min": [
         -100,
         -1,
-        -65
+        -72
       ],
       "max": [
-        140,
+        100,
         0,
-        65
+        58
       ]
     },
     {
@@ -134,12 +134,12 @@
       "min": [
         -115,
         -1.5,
-        -85
+        -87
       ],
       "max": [
-        155,
+        115,
         4,
-        65
+        58
       ]
     },
     {
@@ -149,35 +149,35 @@
       "min": [
         40,
         0,
-        -47
+        -45
       ],
       "max": [
-        116,
+        96,
         2,
-        29
+        20
       ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "408ec46bb1e6897d1cfbf27264a57651a7b36b793da3eedcb7c7ff4149a767af"
+      "sha256": "4e213961fa45c180586ab663a851ab520b7f68b7d1e598c354fedb8fb96aee88"
     },
     {
       "path": "assets/authored/atelier-layout.json",
-      "sha256": "8091e150d74ac419c1b6efda043747d9dd938a92c505cd61ab2a8bab1cdfb254"
+      "sha256": "855c540c9839a18ebcd226f66e4967e99815746da2d7345e86c95510344338d0"
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "4141caaba92df6a14ebb25f7f4ba6fecb8f7d253454dc1718045cca549b731d1"
+      "sha256": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9"
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "67b467796cf97c8d7db54a4b072c7bd9efd3b7f6456dbf064faf0d23801ebc41"
+      "sha256": "ee9aa570eb0ff160842fc32888ef365b0fc36cb0c9cf802c1e0d7db739ec9c39"
     },
     {
       "path": "explorer/src/bench/SurfaceFinish.ts",
-      "sha256": "509731230dd7030b860bef17cac2c6518f090c6cafc8c091fc9baa9080d6f3c7"
+      "sha256": "93147cfd26bfb1f6e11f65b4b2831af04e0f4a1c95e698abc9aaf6d6b3286c8d"
     },
     {
       "path": "explorer/src/bench/BenchViewer.ts",
@@ -185,11 +185,11 @@
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "aafc0306e4ed93419901b203cf5435ac1f0ed12030f194712eb8e61faa629e98"
+      "sha256": "8b0e32e756942f7489b0335ac22e5b2f4ccaa034dce31008d032a91812c1fff5"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "fda423a762c3ce838b612a1c332f379c0d7d2577c39ee49b2a5e9eab896f0924"
+      "sha256": "06e61d84e8c4d66a2f0487ce63750ab96fc281664b9b382cf80a3178aff4176f"
     }
   ]
 }

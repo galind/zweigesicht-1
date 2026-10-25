@@ -259,7 +259,7 @@ for (const { face, z } of stand.rows) {
         ids,
         local,
         r,
-        [stand.handsX + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, z],
+        [stand.handsX + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * stand.handSpacing, z],
         stand.topY,
         [id],
       ),

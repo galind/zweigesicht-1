@@ -20,7 +20,8 @@ const environment = JSON.parse(await fs.readFile("assets/authored/workshop-envir
 const desk = environment.mainDesk,
   mat = environment.mat,
   detail = environment.tabletopDetail;
-const fixtures = { ...provenance, desk, mat, detail };
+const stand = environment.props.find((p) => p.id === "dial-hand-stand");
+const fixtures = { ...provenance, desk, mat, detail, stand };
 const report = { checks: [], errors: [] };
 page.on("pageerror", (e) => report.errors.push(e.message));
 const check = (name, pass, detail) => {
@@ -37,7 +38,7 @@ try {
     });
   await page.goto(base + "/bench?inspect=1");
   await page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
-  report.geometry = await page.evaluate(({ semantics, desk, mat, detail }) => {
+  report.geometry = await page.evaluate(({ semantics, desk, mat, detail, stand }) => {
     const b = window.bench,
       w = b.walker,
       V = w.feet.constructor,
@@ -145,9 +146,9 @@ try {
       ["right wood border", desk.maxX - detail.rimWidth - 4, 0, -1],
       ["back wood border", 0, desk.minZ + detail.rimWidth + 5, -1],
       ["open case center", -55, -7, 0],
-      ["stand between rows", 82, -3, 2],
+      ["stand between rows", stand.handsX, -5, 2],
       ["left approach mat", -36, 35, 0],
-      ["stand front surface", 90, 26, 2],
+      ["stand front surface", stand.handsX, stand.maxZ - 3, 2],
     ]) {
       const floor = b.world.floor(x, z, 500);
       setup(x, floor + 3, z);
@@ -241,7 +242,7 @@ try {
       ["left approach aisle", -36, 55, "KeyW"],
       ["right approach aisle", 36, 55, "KeyW"],
       ["front of stand", 55, 37, "KeyD"],
-      ["between dial rows on stand", 62, -3, "KeyD", 2],
+      ["between dial rows on stand", stand.dialX, -5, "KeyD", 2],
       ["behind case", -80, -36, "KeyD"],
     ]) {
       setup(x, height + 0.002, z);
@@ -288,8 +289,8 @@ try {
     for (const [x, z, outKey, inKey, axis, sign] of [
       [mat.maxX - 1, 40, "KeyD", "KeyA", "x", 1],
       [mat.minX + 1, 40, "KeyA", "KeyD", "x", -1],
-      [100, mat.maxZ - 1, "KeyS", "KeyW", "z", 1],
-      [100, mat.minZ + 1, "KeyW", "KeyS", "z", -1],
+      [30, mat.maxZ - 1, "KeyS", "KeyW", "z", 1],
+      [30, mat.minZ + 1, "KeyW", "KeyS", "z", -1],
     ]) {
       setup(x, 0.002, z);
       advance(20);
@@ -365,10 +366,10 @@ try {
     provenance.semantics,
   );
   check(
-    "mat is 10 mm from the straight front edge",
+    "mat is 15 mm from the straight front edge",
     provenance.semantics.find((p) => p.id === "main-oak-top").max[2] -
       provenance.semantics.find((p) => p.id === "green-mat").max[2] ===
-      10,
+      15,
   );
   check("no transparent environment containers remain", s.nonOpaque.length === 0, s.nonOpaque);
   check(

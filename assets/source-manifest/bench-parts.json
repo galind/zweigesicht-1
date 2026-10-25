@@ -33,15 +33,15 @@
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "4141caaba92df6a14ebb25f7f4ba6fecb8f7d253454dc1718045cca549b731d1"
+      "sha256": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9"
     },
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "e6d38313aa5cc6e5123794c3c3b66c5114db0665d55c5ecfbdf29a987b21c688"
+      "sha256": "4e213961fa45c180586ab663a851ab520b7f68b7d1e598c354fedb8fb96aee88"
     },
     {
       "path": "scripts/bench/prepare-parts.mjs",
-      "sha256": "6ae92a0c2dc97a0d341a6dee1cb5685ed4acaa79d8d6350979c1bd43c5d26eb5"
+      "sha256": "15b3a91f02300f20cfa6f064a821f6feec224a693fe7d0dec27c60e8b4c68473"
     },
     {
       "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",

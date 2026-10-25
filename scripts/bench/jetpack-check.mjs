@@ -289,14 +289,14 @@ try {
         initiallyClear,
       });
     }
-    // Continuous circuit around the current case/stand layout. The old X-55
-    // aisle is now occupied by the case; the back route clears the stand at Z-47.
+    // Continuous circuit outside the case and compact stand, including the
+    // narrow 4 mm mat strip to the right of the stand.
     setup(-90, 0.001, 40);
     advance(30);
     for (const [x, z] of [
       [-90, -55],
-      [130, -55],
-      [130, 40],
+      [98, -55],
+      [98, 40],
       [30, 40],
       [30, -35],
     ]) {

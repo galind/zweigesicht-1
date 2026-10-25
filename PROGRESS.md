@@ -3,6 +3,48 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Centered movement and smaller stand — 25 October 2026
+
+Revised the previous surface pass after owner review. The movement is now at
+**the exact center of both desk and mat**, at its unchanged (0, −7) mm position.
+The desk is **230 × 160 mm** (X−115…115, Z−87…73); the mat is
+**200 × 130 × 1 mm** (X−100…100, Z−72…58). All four wood borders are 15 mm.
+Case position/orientation, movement, holders, arrival, visitor scale and controls
+are unchanged. Only the right-hand display parts receive tighter rigid placement.
+
+The stand is **56 × 65 × 2 mm**, down from 76 × 76 mm (**37% less area**),
+with 2 mm clipped corners and a 0.2 mm edge bevel. Dial centers are at X60,
+rows Z−25 and Z7; hand sets are at X86 with 5 mm packet spacing. All ten bores
+were regenerated from the original pins, screw ends and bushings. The existing
+measured support planes, 0.12 mm nominal radial allowance and 0.5 mm deepest-pin
+clearance above the mat are retained. No CAD geometry or scale changed.
+
+Changed the yellow wood to neutral warm oak and the mat to a quieter green.
+Removed the broad blurred grain from the baked albedo, reduced runtime grain
+contrast/bump and raised wood roughness. The existing lighting/contact-shadow
+pass remains. Reviewed overview, detail, profile, exposed bores and all five
+visitor-scale surface fixtures. Evidence is local in `artifacts/workshop-centered/`.
+
+Verified **144 CPU tests**, inventory, typecheck, lint and production build;
+**20 surface checks** across normal/fallback depth, **5 seating**, **10 parts**,
+**65 environment**, **10 real-keyboard running**, **32 flip**, **67 flight/collision**
+and **8 lifecycle checks**, with no runtime/shader errors. Updated the geometry
+and traversal fixtures for the new borders, packed rows and 4 mm mat aisle beside
+the stand. This includes both full flips, all mat edges and table boundaries.
+The independent CAD/holder audit passes both rests and all 16 source-surface
+drops, retaining 219 movement/crown leaves and all 18 phases; maximum source
+matrix error remains 5.55 × 10⁻¹⁷.
+
+The rebuilt environment has **6,244 visible/collision triangles**, **2 draws/pass**,
+**6.67 MiB baked textures** and a **397,012-byte GLB**. All **15 source/output
+hashes** across the parts/environment manifests match; the production asset
+matches the generated GLB. Preview rebuilt and restarted at
+<http://127.0.0.1:4198/bench>. Generated assets remain local/ignored; no push,
+publication or redistribution. Next: owner walkthrough of this revised design.
+Physical-device, human input/accessibility and mechanical/release qualification
+remain outside these automated checks; contact shadows remain finite-resolution
+visual approximations.
+
 ## Finished bench surfaces — 25 October 2026
 
 Polished the **270 × 160 mm desk**, **240 × 130 × 1 mm green mat** and
