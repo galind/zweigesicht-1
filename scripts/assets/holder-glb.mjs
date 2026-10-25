@@ -4,7 +4,7 @@ import { STLLoader } from '../../explorer/node_modules/three/examples/jsm/loader
 
 const bytes = (array) => Buffer.from(array.buffer, array.byteOffset, array.byteLength);
 
-export async function holderGlb(source, { indexed = true, compressed = true } = {}) {
+export async function holderGlb(source, { indexed = true, compressed = true, reorder = 'none' } = {}) {
   // These recorded inputs are binary STL. Reject truncation and unsupported variants.
   if (source.length < 84 || source.length !== 84 + source.readUInt32LE(80) * 50)
     throw Error('Invalid binary holder STL');
@@ -30,8 +30,20 @@ export async function holderGlb(source, { indexed = true, compressed = true } = 
       }
       indices.push(vertices.get(key));
     }
-    const arrays = [new Float32Array(positionValues), new Float32Array(normalValues),
+    let arrays = [new Float32Array(positionValues), new Float32Array(normalValues),
       vertices.size < 65536 ? new Uint16Array(indices) : new Uint32Array(indices)];
+    await MeshoptEncoder.ready;
+    if (reorder !== 'none') {
+      const ordered = new Uint32Array(indices);
+      const remap = reorder === 'spatial' ? MeshoptEncoder.reorderPoints(arrays[0], 3)
+        : MeshoptEncoder.reorderMesh(ordered, true, true)[0];
+      if (reorder === 'spatial') for (let i = 0; i < ordered.length; i++) ordered[i] = remap[ordered[i]];
+      arrays = arrays.slice(0, 2).map(source => {
+        const target = new Float32Array(source.length);
+        for (let i = 0; i < remap.length; i++) target.set(source.subarray(i * 3, i * 3 + 3), remap[i] * 3);
+        return target;
+      }).concat([vertices.size < 65536 ? new Uint16Array(ordered) : ordered]);
+    }
     geometry.computeBoundingBox();
     const bounds = geometry.boundingBox;
     const accessors = [
@@ -44,7 +56,7 @@ export async function holderGlb(source, { indexed = true, compressed = true } = 
     let compressedOffset = 0, decodedOffset = 0;
     for (let i = 0; i < arrays.length; i++) {
       const raw = bytes(arrays[i]), count = accessors[i].count;
-      const stride = raw.length / count, mode = i === 2 ? 'INDICES' : 'ATTRIBUTES';
+      const stride = raw.length / count, mode = i === 2 ? (reorder === 'cache' ? 'TRIANGLES' : 'INDICES') : 'ATTRIBUTES';
       // Version 0 and NONE preserve bits and index order in Three's bundled decoder.
       const encoded = compressed
         ? Buffer.from(MeshoptEncoder.encodeGltfBuffer(raw, count, stride, mode, 0)) : raw;

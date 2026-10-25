@@ -35,8 +35,8 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   assert.equal(source.length, entry.bytes);
   assert.equal(sha(source), entry.sha256, 'Source provenance mismatch');
   const candidates = [];
-  for (const indexed of [true, false]) for (const compressed of [true, false]) {
-    const options = { indexed, compressed };
+  for (const reorder of ['none', 'cache', 'spatial']) {
+    const options = { indexed: true, compressed: true, reorder };
     const data = await holderGlb(source, options);
     candidates.push({ options, data, bytes: data.length, gzipBytes: gzipSync(data, { level: 9 }).length });
   }
@@ -57,9 +57,22 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   assert.deepEqual(mesh.scale.toArray(), [1, 1, 1]);
   assert.deepEqual(mesh.quaternion.toArray(), [0, 0, 0, 1]);
   const expanded = mesh.geometry.toNonIndexed();
-  for (const attribute of ['position', 'normal'])
-    assert.deepEqual(expanded.attributes[attribute].array, original.attributes[attribute].array,
-      `${attribute}: every triangle corner must match exactly`);
+  // Compare oriented triangles including normals; order and cyclic starting corner may change.
+  const triangles = geometry => {
+    const result = [];
+    for (let t = 0; t < geometry.attributes.position.count; t += 3) {
+      const corners = [];
+      for (let corner = t; corner < t + 3; corner++) {
+        corners.push(['position', 'normal'].map(name => {
+          const array = geometry.attributes[name].array;
+          return Buffer.from(array.buffer, array.byteOffset + corner * 12, 12).toString('hex');
+        }).join(''));
+      }
+      result.push([0, 1, 2].map(start => [0, 1, 2].map(n => corners[(start + n) % 3]).join(':')).sort()[0]);
+    }
+    return result.sort();
+  };
+  assert.deepEqual(triangles(expanded), triangles(original), 'Oriented triangle positions/normals differ');
   original.computeBoundingBox(); mesh.geometry.computeBoundingBox();
   assert.ok(original.boundingBox.equals(mesh.geometry.boundingBox));
   const independent = await io.readBinary(glb);
@@ -86,7 +99,7 @@ for (const entry of manifest.files.filter(file => file.path.endsWith('.stl'))) {
   original.dispose(); expanded.dispose(); mesh.geometry.dispose(); mesh.material.dispose();
 }
 const report = { schemaVersion: 1,
-  method: 'Exact position/normal deduplication; meshopt v0 ATTRIBUTES/INDICES; no quantization, filters, reordering or decimation. Original millimetres and Z-up axes retained for the existing scene transform.',
+  method: 'Exact position/normal deduplication; meshopt v0 ATTRIBUTES/INDICES; no quantization, filters or decimation. Lossless vertex/triangle ordering selected by gzip size. Original millimetres and Z-up axes retained for the existing scene transform.',
   toolVersions: JSON.parse(await fs.readFile(new URL('scripts/assets/package.json', root))).dependencies,
   files };
 await fs.writeFile(new URL('holder-runtime.json', out), JSON.stringify(report, null, 2) + '\n');
