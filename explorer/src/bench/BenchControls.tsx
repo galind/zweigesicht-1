@@ -3,7 +3,6 @@ export function BenchControls() {
   return (
     <div className="bench-menu-controls" aria-label="Controls">
       <section className="bench-control-group" aria-label="Move around">
-        <h2>Move around</h2>
         <dl>
           <div>
             <dt>
@@ -15,7 +14,7 @@ export function BenchControls() {
             <dt>
               <kbd>Mouse</kbd>
             </dt>
-            <dd>Look around</dd>
+            <dd>Look</dd>
           </div>
           <div>
             <dt>
@@ -34,7 +33,6 @@ export function BenchControls() {
         </dl>
       </section>
       <section className="bench-control-group" aria-label="At the bench">
-        <h2>At the bench</h2>
         <dl>
           <div>
             <dt>
@@ -53,7 +51,7 @@ export function BenchControls() {
               <kbd>Esc</kbd>
             </dt>
             <dd>
-              Open menu<small>Release the pointer</small>
+              Menu<small>Release the pointer</small>
             </dd>
           </div>
         </dl>
