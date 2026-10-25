@@ -583,9 +583,9 @@ export default function Home() {
         >
           <SheetTrigger
             ref={walkButton}
-            className="bench-trigger site-glass"
+            className="bench-trigger"
             aria-labelledby="bench-invitation-title"
-            aria-describedby="bench-invitation-description bench-invitation-input"
+            aria-describedby="bench-invitation-input"
           >
             <span
               className="bench-invitation-heading"
@@ -593,13 +593,6 @@ export default function Home() {
             >
               Explore the workbench
               <ArrowRight aria-hidden="true" />
-            </span>
-            <span
-              className="bench-invitation-description"
-              id="bench-invitation-description"
-            >
-              Walk among the movement, its holders and detached parts at
-              miniature scale.
             </span>
             <span
               className="bench-invitation-input"

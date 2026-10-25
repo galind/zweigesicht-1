@@ -3,7 +3,25 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
-## Homepage workbench invitation — 25 October 2026
+## Bottom-left workbench invitation revision — 25 October 2026
+
+Following owner feedback, moved **Explore the workbench** to the bottom left,
+removed its descriptive paragraph and replaced dark glass with a solid warm light
+surface and dark text. The short **First-person · Keyboard & mouse** line retains
+the essential expectation. The smaller button has stronger contrast without
+animation. It aligns with the dock on wide screens and lifts above it below
+1200 px or with enlarged text. Existing panel/inspection hiding remains intact.
+
+Verified typecheck, lint, production build, **157 Bench UI checks** and **18
+homepage journeys**, covering
+the 1200 px placement boundary, narrow/landscape views, 200% text, reduced motion,
+keyboard entry/focus return, hover/pressed states, menu access and no-icon clarity.
+Visible browser review confirms desktop, 390 px, and 320 px with 200% text.
+Screenshots and reports are in `artifacts/bench-entry-bottom-left/`. The controls
+introduction, loading, arrival, scene and CAD are unchanged. Preview:
+<http://127.0.0.1:4198/>. Local commit only; no push or publication.
+
+## Initial homepage workbench invitation — 25 October 2026
 
 Replaced the centered **Walk inside the movement** button with **Explore the
 workbench**, a restrained glass invitation beneath the watch identity. Supporting
