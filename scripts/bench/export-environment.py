@@ -102,7 +102,34 @@ stand=next(p for p in SPEC['props'] if p['id']=='dial-hand-stand')
 x0,x1,z0,z1,c=stand['minX'],stand['maxX'],stand['minZ'],stand['maxZ'],stand['cornerCut']
 outline=[(x0+c,z0),(x1-c,z0),(x1,z0+c),(x1,z1-c),
          (x1-c,z1),(x0+c,z1),(x0,z1-c),(x0,z0+c)]
-slab(stand['id'],outline,stand['topY'],stand['bottomY'],oak,stand['edgeBevel'])
+stand_object=slab(stand['id'],outline,stand['topY'],stand['bottomY'],oak,stand['edgeBevel'])
+seating=json.loads((ROOT/'assets/authored/bench-parts-layout.json').read_text())['standSeating']
+# Genuine through-bores, circumscribed so polygon facets preserve radial clearance.
+for hole in seating['holes']:
+    bpy.ops.mesh.primitive_cylinder_add(vertices=64,radius=hole['radius']/math.cos(math.pi/64),
+        depth=stand['topY']-stand['bottomY']+2,
+        location=world((hole['x'],(stand['topY']+stand['bottomY'])/2,hole['z'])))
+    cutter=bpy.context.object
+    cutter.data.materials.append(oak)
+    for layer in list(cutter.data.uv_layers):cutter.data.uv_layers.remove(layer)
+    bpy.context.view_layer.objects.active=stand_object
+    mod=stand_object.modifiers.new(hole['id'],'BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
+    bpy.ops.object.modifier_apply(modifier=mod.name)
+    bpy.data.objects.remove(cutter,do_unlink=True)
+# All new bore walls use the same oak material and participate in its bake.
+stand_object.data.materials.clear();stand_object.data.materials.append(oak)
+for poly in stand_object.data.polygons:poly.material_index=0
+# Reproject the newly cut bore walls before baking; all geometry remains editable.
+for layer in list(stand_object.data.uv_layers):
+    if layer.name!='Authored projection':stand_object.data.uv_layers.remove(layer)
+uvl=stand_object.data.uv_layers.get('Authored projection')
+for poly in stand_object.data.polygons:
+    axis=max(range(3),key=lambda k:abs(poly.normal[k]))
+    for li in poly.loop_indices:
+        co=stand_object.data.vertices[stand_object.data.loops[li].vertex_index].co
+        a,b=(co.x,co.y) if axis==2 else ((co.x,co.z) if axis==1 else (co.y,co.z))
+        uvl.data[li].uv=(a/1100,b/650)
+
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}
 for o in objects:
@@ -136,7 +163,7 @@ for mat in [oak,green]:
         if node.type=='TEX_IMAGE':links.new(originalUV.outputs['UV'],node.inputs['Vector'])
     for o in parts:
         o.data.uv_layers.new(name='Baked atlas')
-        o.data.uv_layers.active_index=1
+        o.data.uv_layers.active_index=o.data.uv_layers.find('Baked atlas')
     bpy.ops.object.select_all(action='DESELECT')
     for o in parts:o.select_set(True)
     bpy.context.view_layer.objects.active=parts[0]
@@ -176,7 +203,7 @@ bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'environment.blend'))
 runtime=ROOT/'explorer/public/bench-local/environment.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
-report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','closedSurfaceAudit':'All slab, rim, mat and stand meshes are closed manifold after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
-for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':SPEC['stage'],'origin':'Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','standBores':seating['holes'],'closedSurfaceAudit':'All slab, rim, mat and bored stand meshes are closed manifold after triangulation.','budgets':counts,'semantics':semantics,'files':[]}
+for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',ROOT/'assets/authored/bench-parts-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 (ROOT/'assets/source-manifest/workshop-environment.json').write_text(json.dumps(report,indent=2)+'\n')
 print('WORKSHOP',json.dumps(counts))

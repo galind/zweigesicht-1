@@ -3,6 +3,31 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Fitted stand holes and seated dials/hands — 25 October 2026
+
+Cut ten actual through-bores in the oak stand for the two central-dial pins,
+three reverse-dial screw ends and five hand bushings. Both dial backs now contact
+the wood; the central dial lowers 1.5 mm and the reverse dial 0.568041 mm.
+Three curved hand packets receive rigid 1.421°, 1.155° and 4.103° tilts to rest
+on their original lower blade support points. Original shapes, relative bushing
+poses, plan arrangement, case and movement remain intact.
+
+Seating is measured from decoded CAD, with authored 0.12 mm radial clearance.
+Hole centers/radii and contact evidence are recorded in `bench-parts-layout.json`.
+The independent runtime audit checks **11,622 clipped triangle points**, finds
+zero wood overlap, confirms separated wood contacts for all seven packets and
+verifies all ten actual bores are open. Pins stay above the mat. Boolean cutter UVs
+are removed before atlas baking to prevent texture-channel artifacts; final close-up
+and exposed-bore captures were reviewed.
+
+Verified **144 CPU tests**, typecheck/lint/build, **5 seating**, **10 parts**
+(including both full flips) and **65 environment checks**, without browser errors.
+Source/output hashes match. Environment: **3,160 visible/collision triangles**,
+**2 draws/pass**, 6.67 MiB textures and 400,276-byte GLB. Evidence:
+`artifacts/workshop-seating/`. Preview rebuilt/restarted at
+<http://127.0.0.1:4198/bench>. Next: owner review of fitted seating.
+Local only; no push or publication.
+
 ## Oak parts stand and hold Shift to run — 25 October 2026
 
 Added **hold either Shift to run** at 11 mm/s (ordinary speed 5.5), with existing

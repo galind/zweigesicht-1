@@ -119,7 +119,13 @@ test("actual decoded vertices reproduce measured bounds and sit on their visible
     const stand = read("assets/authored/workshop-environment.json").props.find(
       (p) => p.id === "dial-hand-stand",
     );
-    close([b.min.y], [p.id === "case" ? 0 : stand.topY]);
+    if (p.id === "case") close([b.min.y], [0]);
+    else {
+      assert.ok(b.min.y < stand.topY && b.min.y > stand.bottomY);
+      const support = layout.standSeating.packets.find((s) => s.id === p.id);
+      assert.ok(support.contactVertices >= 2);
+      close([support.contactBounds[0][1], support.contactBounds[1][1]], [stand.topY, stand.topY]);
+    }
     if (p.id !== "case") {
       assert.ok(b.min.x > stand.minX + stand.cornerCut && b.max.x < stand.maxX - stand.cornerCut);
       assert.ok(b.min.z > stand.minZ + stand.cornerCut && b.max.z < stand.maxZ - stand.cornerCut);

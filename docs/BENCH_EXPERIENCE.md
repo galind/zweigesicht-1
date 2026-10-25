@@ -47,10 +47,23 @@ It uses the tabletop's oak material and rebaked contact shading. No boxes, glass
 labels or additional controls were added to the display.
 
 The central dial is at (90, −32), with its Fine hands beside it at (126, −32).
-The reverse dial is at (90, 21), with its Lance hands at (126, 21). All intact
-packets are rigidly seated by their lowest decoded vertex on the visible stand
-surface. The 78 detached leaves preserve source geometry, finishes and bushing
-relationships. Both case crystals remain omitted. Actual CAD and stand triangles
+The reverse dial is at (90, 21), with its Lance hands at (126, 21). Both
+dial backs now contact the stand at Y4.5, with their original pins and screw ends
+entering **ten genuine through-holes**: two central-dial pins, three reverse-dial
+screws and five hand bushings. The central dial lowers 1.5 mm and the reverse dial
+0.568041 mm from the earlier pin-tip seating. Horizontal hand blades contact the
+wood directly; the three curved blades receive rigid tilts of 1.421°, 1.155° and
+4.103° so their original lower support points meet the wood. No blade is reshaped.
+
+`prepare-parts.mjs` measures broad downward dial surfaces and lower blade support
+planes from decoded CAD. It clips every protruding triangle at the stand surface
+and groups connected projections, then fits through-bores with 0.12 mm radial
+clearance. This is an authored display allowance. Hole centers, radii, contact
+spans, support areas and tilts are recorded in `bench-parts-layout.json`.
+Blender subtracts circumscribed 64-sided cylinders before UV projection and the
+contact bake; the rendered and collision surfaces share those actual bores.
+All pin and bushing tips remain above the mat. The 78 detached leaves preserve
+source geometry, finishes and bushing relationships. Both case crystals remain omitted. Actual CAD and stand triangles
 collide; the case center opens to the mat. The stand, case and all parts clear
 both holders and the continuous movement flip envelopes. The front approach
 and paths on either side of the movement remain clear.
@@ -62,11 +75,17 @@ air but never alters vertical thrust or gravity. Releasing Shift returns to walk
 menu, focus loss and reset clear the held input. The entry popup, pause menu and
 walking hint show **Shift · Hold to run**. Physics substeps account for run speed.
 
-Local evidence: `artifacts/workshop-stand/`. Environment: **560 visible/collision
-triangles, 2 draws/pass, 6.67 MiB textures, 191,380-byte GLB**. Verification includes
+Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
+bore evidence: `artifacts/workshop-seating/`. The bored environment has **3,160
+visible/collision triangles, 2 draws/pass, 6.67 MiB textures and a 400,276-byte GLB**. Verification includes
 144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
 32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
 Shift keys, pause and resume. Overview and stand detail captures were reviewed.
+The **5 seating checks** independently check all clipped source triangles against the
+actual exported wood, verify separated contacts for all seven supported packets,
+and probe every bore center and inner/outer rim. All 11,622 clipped triangle
+points clear the wood with at least 0.12 mm nominal radial clearance. Exposed-bore
+captures hide the CAD only for inspection; ordinary views retain every selected part.
 
 ## Historical direct-mat arrangement — superseded by the oak stand
 

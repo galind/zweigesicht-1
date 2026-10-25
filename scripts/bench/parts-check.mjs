@@ -47,7 +47,7 @@ catalog.traverse((n) => {
   };
 });
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href),
-  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-stand";
+  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-seating";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH }),
   page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
@@ -270,6 +270,7 @@ try {
   for (const [name, position, target, side, fov] of [
     ["external-full-tabletop", [0, 340, 430], [0, 0, -30], "bridge", 45],
     ["external-top-mat", [0, 300, -1], [0, 0, 0], "bridge", 50],
+    ["external-dial-seating", [114, 8, -6], [90, 4.5, -32], "bridge", 42],
     ["external-stand", [180, 130, 125], [106.5, 4.5, -8.5], "bridge", 42],
     ["external-case", [-45, 53, 55], [-85, 5, -7], "bridge", 42],
     ["external-central-dial", [90, 69.5, 15], [90, 7.5, -32], "bridge", 40],
@@ -306,8 +307,10 @@ try {
     await page.screenshot({ path: `${out}/${name}.png` });
   }
   check(
-    "case rests on mat; dials and hands rest on the oak stand without penetration",
-    a.groups.every((g) => Math.abs(g.min[1] - (g.id === "case" ? 0 : 4.5)) < 1e-6),
+    "case rests on mat; pins and bushings enter the stand above the mat",
+    a.groups.every((g) =>
+      g.id === "case" ? Math.abs(g.min[1]) < 1e-6 : g.min[1] > 0 && g.min[1] < 4.5,
+    ),
     a.groups,
   );
   check("no browser errors", !report.errors.length, report.errors);

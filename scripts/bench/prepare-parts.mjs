@@ -55,11 +55,11 @@ const vertices = (leafIds, local, transform) =>
     return out;
   });
 const box = (ids, local, m) => new T.Box3().setFromPoints(vertices(ids, local, m));
-const pack = (id, ids, local, rotation, center, y) => {
+const pack = (id, ids, local, rotation, center, y, seatIds = ids) => {
   const b = box(ids, local, rotation),
     c = b.getCenter(new T.Vector3());
   const transform = new T.Matrix4()
-    .makeTranslation(center[0] - c.x, y - b.min.y, center[1] - c.z)
+    .makeTranslation(center[0] - c.x, y - box(seatIds, local, rotation).min.y, center[1] - c.z)
     .multiply(rotation);
   const final = box(ids, local, transform);
   return {
@@ -70,6 +70,142 @@ const pack = (id, ids, local, rotation, center, y) => {
     bounds: [final.min.toArray(), final.max.toArray()],
   };
 };
+// Seat the visible bodies, allowing their original pins/bushings to enter the stand.
+const seating = { topY: stand.topY, radialClearance: 0.12, holes: [], packets: [] };
+function lowerSupport(ids, local, rotation) {
+  const pts = vertices(ids, local, rotation)
+    .map((v) => [v.z, v.y])
+    .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const hull = [];
+  for (const p of pts) {
+    while (hull.length > 1) {
+      const a = hull.at(-2),
+        b = hull.at(-1);
+      if ((b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]) > 1e-10) break;
+      hull.pop();
+    }
+    hull.push(p);
+  }
+  const edges = hull.slice(1).map((b, i) => ({ a: hull[i], b, span: b[0] - hull[i][0] }));
+  edges.sort((a, b) => b.span - a.span);
+  const e = edges[0];
+  if (!e || e.span < 1) throw Error("Missing blade support span");
+  return Math.atan2(e.b[1] - e.a[1], e.b[0] - e.a[0]);
+}
+function dialRearPlane(spec, local) {
+  const levels = new Map(),
+    transform = new T.Matrix4().fromArray(spec.transform);
+  for (const id of spec.leafIds) {
+    const g = meshes.get(id).geometry,
+      m = transform.clone().multiply(local.get(id));
+    for (let i = 0; i < g.index.count; i += 3) {
+      const [a, b, c] = [0, 1, 2].map((j) =>
+        new T.Vector3()
+          .fromBufferAttribute(g.attributes.position, g.index.getX(i + j))
+          .applyMatrix4(m),
+      );
+      const n = b.clone().sub(a).cross(c.clone().sub(a)),
+        area = n.length() / 2;
+      if (area < 1e-10 || n.y / n.length() > -0.99999) continue;
+      const y = (a.y + b.y + c.y) / 3,
+        key = y.toFixed(5),
+        level = levels.get(key) || { area: 0, sumY: 0, leafIds: new Set() };
+      level.area += area;
+      level.sumY += area * y;
+      level.leafIds.add(id);
+      levels.set(key, level);
+    }
+  }
+  const plane = [...levels.values()].sort((a, b) => b.area - a.area)[0];
+  if (!plane || plane.area < 10) throw Error("Missing broad rear dial surface");
+  return { y: plane.sumY / plane.area, area: plane.area, leafIds: [...plane.leafIds] };
+}
+function recordSeating(spec, supportingIds, tiltDegrees = 0) {
+  const local = new Map(
+      Object.entries(spec.localMatrices).map(([id, m]) => [id, new T.Matrix4().fromArray(m)]),
+    ),
+    transform = new T.Matrix4().fromArray(spec.transform),
+    vs = vertices(supportingIds, local, transform),
+    contacts = vs.filter((v) => Math.abs(v.y - stand.topY) < 1e-5);
+  if (contacts.length < 2) throw Error("Missing seating contacts: " + spec.id);
+  const contactBounds = new T.Box3().setFromPoints(contacts);
+  seating.packets.push({
+    id: spec.id,
+    supportingIds,
+    tiltDegrees,
+    contactBounds: [contactBounds.min.toArray(), contactBounds.max.toArray()],
+    contactVertices: contacts.length,
+  });
+  // Clip every source triangle at the wood surface, then group connected protrusions.
+  // Cylinders enclose the complete clipped triangles, not just below-surface vertices.
+  const points = [],
+    parent = [],
+    shared = new Map();
+  const root = (i) => {
+    while (parent[i] !== i) {
+      parent[i] = parent[parent[i]];
+      i = parent[i];
+    }
+    return i;
+  };
+  const add = (v) => {
+    const key = v
+      .toArray()
+      .map((n) => n.toFixed(5))
+      .join(",");
+    if (shared.has(key)) return shared.get(key);
+    const i = points.length;
+    points.push(v);
+    parent.push(i);
+    shared.set(key, i);
+    return i;
+  };
+  for (const id of spec.leafIds) {
+    const g = meshes.get(id).geometry,
+      m = transform.clone().multiply(local.get(id));
+    for (let i = 0; i < g.index.count; i += 3) {
+      const tri = [0, 1, 2].map((j) =>
+        new T.Vector3()
+          .fromBufferAttribute(g.attributes.position, g.index.getX(i + j))
+          .applyMatrix4(m),
+      );
+      if (Math.min(...tri.map((v) => v.y)) >= stand.topY - 1e-6) continue;
+      const clipped = [];
+      for (let j = 0; j < 3; j++) {
+        const a = tri[j],
+          b = tri[(j + 1) % 3],
+          inside = a.y <= stand.topY,
+          next = b.y <= stand.topY;
+        if (inside) clipped.push(a);
+        if (inside !== next) clipped.push(a.clone().lerp(b, (stand.topY - a.y) / (b.y - a.y)));
+      }
+      const ids = clipped.map(add);
+      for (const id of ids) parent[root(id)] = root(ids[0]);
+    }
+  }
+  const components = new Map();
+  for (let i = 0; i < points.length; i++) {
+    const k = root(i);
+    if (!components.has(k)) components.set(k, []);
+    components.get(k).push(points[i]);
+  }
+  for (const pts of components.values()) {
+    const bounds = new T.Box3().setFromPoints(pts),
+      c = bounds.getCenter(new T.Vector3()),
+      radius =
+        Math.max(...pts.map((v) => Math.hypot(v.x - c.x, v.z - c.z))) + seating.radialClearance;
+    if (radius > 2 || bounds.min.y < stand.bottomY)
+      throw Error("Unexpected protrusion: " + spec.id);
+    seating.holes.push({
+      id: spec.id + "-clearance-" + seating.holes.filter((h) => h.packet === spec.id).length,
+      packet: spec.id,
+      x: c.x,
+      z: c.z,
+      radius,
+      minPartY: bounds.min.y,
+    });
+  }
+}
 const caseIds = watch.leaves
     .filter((p) => p.packet !== "crown" && records.get(p.id).definitionId !== "d_0_1_1_67")
     .map((p) => p.id),
@@ -101,6 +237,13 @@ for (const { face, z } of stand.rows) {
     [stand.dialX, z],
     stand.topY,
   );
+  const rear = dialRearPlane(dial, dialLocal);
+  const shift = stand.topY - rear.y;
+  dial.transform[13] += shift;
+  dial.bounds[0][1] += shift;
+  dial.bounds[1][1] += shift;
+  recordSeating(dial, rear.leafIds);
+  seating.packets.at(-1).rearSupportArea = rear.area;
   groups.push(dial);
   const packets = [];
   for (const [i, [role, id]] of Object.entries(style.handLeafIds).entries()) {
@@ -116,7 +259,9 @@ for (const { face, z } of stand.rows) {
         .applyMatrix4(local.get(id))
         .applyMatrix4(rotation);
     const yaw = Math.atan2(tip.x - pivot.x, -(tip.z - pivot.z));
-    const r = new T.Matrix4().makeRotationY(yaw).multiply(rotation);
+    const aligned = new T.Matrix4().makeRotationY(yaw).multiply(rotation);
+    const tilt = lowerSupport([id], local, aligned);
+    const r = new T.Matrix4().makeRotationX(tilt).multiply(aligned);
     packets.push({
       ...pack(
         face + "-" + role,
@@ -125,9 +270,11 @@ for (const { face, z } of stand.rows) {
         r,
         [stand.handsX + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, z],
         stand.topY,
+        [id],
       ),
       role,
     });
+    recordSeating(packets.at(-1), [id], (tilt * 180) / Math.PI);
   }
   groups.push({ id: face + "-hands", style: style.id, packets, center: [stand.handsX, z] });
 }
@@ -138,8 +285,9 @@ const result = {
   units: "mm",
   sourceSha256: watch.sourceSha256,
   notes:
-    "Generated rigid presentation matrices; source buffers and authored fitted poses unchanged. Case seated on mat; dials and hands seated on original oak display stand; both case crystals omitted at owner request.",
+    "Generated rigid presentation matrices; source buffers and authored fitted poses unchanged. Case seated on mat; dial backs and hand blades seated on oak with fitted through-holes for their projections; both case crystals omitted at owner request.",
   groups,
+  standSeating: seating,
   excluded: manifest.instances
     .filter(
       (p) => !p.isAssembly && p.id.startsWith(watch.rootId + "__") && !selected.includes(p.id),
@@ -165,7 +313,7 @@ const evidence = {
     "Historical protector references retained with hashes; containers removed at owner request.",
   assumptions: {
     placement:
-      "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets the oak stand top at Y4.5; the case rests at mat Y0. This is a presentation pose, not a servicing instruction.",
+      "Broad dial back surfaces contact Y4.5, with original pins/screws entering through-holes. Each complete hand/bushing packet is rigidly tilted onto a lower supporting blade plane; bushings enter measured clearance holes. Radial clearance is 0.12 mm, an authored display allowance. The case rests at mat Y0. This is a presentation pose, not a servicing instruction.",
   },
   sourceFiles: [],
 };
