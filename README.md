@@ -37,8 +37,11 @@ Workshop is excluded from indexing and the sitemap.
 
 The homepage’s **Explore it in first person** invitation introduces `/bench`: a
 first-person, miniature-scale view of the static movement, its holders and detached
-watch parts. A brief controls popup leads to **Enter workbench**. This desktop
-experience requires a keyboard and mouse. Local holder files
+watch parts. It opens `/bench` directly, where the controls appear while the scene
+loads. **Start exploring** captures the mouse only after an explicit action.
+This experience requires a keyboard and mouse. Touch-only devices show
+**Explore on desktop** instead; direct visits explain the requirement without
+loading the scene. Local holder files
 and the Blender environment must be prepared first; see the
 [bench setup, controls, design decisions and testing strategy](docs/BENCH_EXPERIENCE.md).
 Holder downloads and generated bench assets remain local and release-gated.

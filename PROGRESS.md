@@ -3,6 +3,42 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Bench introduction and input support — 25 October 2026
+
+The homepage **Explore it in first person** invitation now links directly to
+`/bench`. The route shows scene context and shared controls while loading, then
+**Start exploring** captures the mouse only on user action. Direct links, reloads
+and Back use the same introduction. Removed the homepage popup and cross-route
+automatic capture intent. Heading focus preserves the beginning of the scrollable
+introduction; loading completion does not steal focus. Esc still opens the
+existing controls, Resume, Reset and Detail menu.
+
+A shared capability check uses any fine pointer, any hover and pointer-lock API
+availability, with live input-capability updates. It does not use viewport width
+or user-agent. Touch-only visitors see **Explore on desktop — Keyboard and mouse
+required.** Direct `/bench` visits explain the limitation and offer a return link
+without loading scene assets. API absence has a separate browser explanation;
+capture refusal keeps recovery. Physical keyboard presence cannot be reliably
+detected, so the requirement stays visible. Homepage Bench prefetch is disabled.
+
+Verified **149 CPU tests**, typecheck, lint, production build, **22 entry/device
+journeys**, **132 Bench UI checks** and **8 lifecycle checks**. Coverage includes
+phone/tablet emulation, 320 px with 200% text, normal/reduced motion, missing capture
+API, no scene requests on touch-only devices, direct/Back entry, actual capture,
+walking/look/thrust, pause/resume, slow loads, failed capture/assets, graphics
+retry, focus loss and disposal during loading. Removed obsolete popup assertions
+and updated existing runners to the new entry label. Production CSS verification
+also caught and fixed backdrop-filter declaration ordering after removing the
+homepage CSS import.
+
+Visible browser review confirms desktop and narrow/enlarged layouts. Native
+Chrome verifies homepage → introduction → explicit capture → movement → Esc,
+and live desktop/touch switching in DevTools. Emulation was reset afterward.
+Evidence: `artifacts/bench-route-introduction/` (desktop introduction, native
+pause/touch views, phone/tablet states and reports). Scene, CAD, physics and
+bindings are unchanged. Preview: <http://127.0.0.1:4198/>. Local commit only;
+no push or publication. Physical-device/release gates remain unchanged.
+
 ## Balanced invitation contrast — 25 October 2026
 
 Refined the bottom-left first-person invitation with a brighter warm charcoal

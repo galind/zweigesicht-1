@@ -33,7 +33,7 @@ try {
       const label = `${width}x${height}-${text}-${reducedMotion}`;
       await page.setViewportSize({ width, height });
       await page.goto(base + "/?no3d=1&text=" + text, { waitUntil: "networkidle" });
-      const entry = page.getByRole("button", { name: "Explore it in first person", exact: true });
+      const entry = page.getByRole("link", { name: "Explore it in first person", exact: true });
       const accessible = await entry.evaluate((e) => {
         const r = e.getBoundingClientRect();
         const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
@@ -85,35 +85,6 @@ try {
         await page.screenshot({ path: `${out}/pressed-${reducedMotion}.png` });
       await page.mouse.move(width - 2, height / 2);
       await page.mouse.up();
-      // A keyboard activation, Escape cancellation and restoration are all required.
-      await entry.press("Enter");
-      const popup = page.getByRole("dialog", { name: "Before you begin" });
-      await popup.waitFor();
-      assert.match(await popup.innerText(), /Keyboard and mouse required/);
-      await page.waitForFunction(() => {
-        const dialog = document.querySelector('[role="dialog"]');
-        return dialog?.contains(document.activeElement);
-      });
-      assert.equal(new URL(page.url()).pathname, "/");
-      // Focus may land before the popup's opening transition has settled.
-      await page.waitForFunction(() => {
-        const e = document.querySelector('[role="dialog"]');
-        if (!e) return false;
-        const r = e.getBoundingClientRect();
-        const title = e.querySelector("h2").getBoundingClientRect();
-        return (
-          r.x >= 0 &&
-          r.right <= innerWidth &&
-          r.y >= 0 &&
-          r.bottom <= innerHeight &&
-          e.scrollWidth <= e.clientWidth + 1 &&
-          title.top >= r.top &&
-          title.bottom <= r.bottom
-        );
-      });
-      await page.keyboard.press("Escape");
-      await popup.waitFor({ state: "hidden" });
-      await page.waitForFunction(() => document.activeElement?.matches(".bench-trigger"));
       // The invitation must yield space to the original header navigation.
       const menu = page.getByRole("button", { name: "Menu", exact: true });
       if (await menu.isVisible()) {
@@ -134,40 +105,63 @@ try {
         assert.ok(await entry.isVisible());
       }
       await entry.press("Enter");
-      await popup.waitFor();
-      assert.match(await popup.innerText(), /Keyboard and mouse required/);
-      await page.waitForFunction(() => {
-        const dialog = document.querySelector('[role="dialog"]');
-        return dialog?.contains(document.activeElement);
-      });
-      const enter = page.getByRole("button", { name: "Enter workbench", exact: true });
-      if (
-        await page
-          .getByRole("heading", { name: "Before you begin" })
-          .evaluate((e) => e === document.activeElement)
-      ) {
-        await page.keyboard.press("Tab");
-      }
-      assert.ok(await enter.evaluate((e) => e === document.activeElement));
-      await page.keyboard.press("Tab");
-      assert.ok(
-        await page
-          .getByRole("button", { name: "Close", exact: true })
-          .evaluate((e) => e === document.activeElement),
-      );
-      await page.keyboard.press("Tab");
-      await page.waitForFunction(() =>
-        document.activeElement?.matches('.bench-enter,[data-slot="sheet-title"]'),
-      );
-      assert.ok(
-        await popup.evaluate((e) => e.contains(document.activeElement)),
-        label + " focus stays in popup",
-      );
-      await enter.press("Enter");
       await page.waitForURL(base + "/bench");
+      await page.getByRole("heading", { name: "The workbench", exact: true }).waitFor();
+      await page.locator('.bench-menu-controls').waitFor();
+      assert.match(await page.locator(".bench-start").innerText(), /WASD/);
+      assert.equal(await page.getByRole("dialog").count(), 0);
+      assert.equal(await page.evaluate(() => !!document.pointerLockElement), false);
       report.push({ width, height, text, reducedMotion, pass: true });
     }
   }
+  // Real touch emulation: a wide tablet must not be mistaken for a desktop.
+  for (const [width, height, text] of [
+    [390, 844, 100],
+    [1024, 768, 100],
+    [320, 640, 200],
+  ]) {
+    const context = await browser.newContext({
+      viewport: { width, height },
+      isMobile: true,
+      hasTouch: true,
+    });
+    const mobile = await context.newPage();
+    const assets = [];
+    mobile.on("request", (r) => {
+      if (r.url().includes("/bench-local/")) assets.push(r.url());
+    });
+    await mobile.goto(base + "/?no3d=1&text=" + text);
+    await mobile.getByText("Explore on desktop", { exact: true }).waitFor();
+    assert.equal(await mobile.getByRole("link", { name: "Explore it in first person" }).count(), 0);
+    assert.match(
+      await mobile.locator(".bench-unavailable").innerText(),
+      /Keyboard and mouse required/,
+    );
+    await mobile.screenshot({ path: `${out}/touch-home-${width}.png` });
+    await mobile.goto(base + "/bench?text=" + text);
+    await mobile.getByRole("heading", { name: "Explore on desktop" }).waitFor();
+    assert.equal(await mobile.getByRole("button", { name: "Start exploring" }).count(), 0);
+    assert.equal(await mobile.locator("canvas").count(), 0);
+    assert.deepEqual(assets, []);
+    await mobile.screenshot({ path: `${out}/touch-bench-${width}.png` });
+    await mobile.getByRole("link", { name: "Return to the explorer", exact: true }).click();
+    await mobile.waitForURL(base + "/");
+    report.push({ width, height, touch: true, pass: true });
+    await context.close();
+  }
+  // API absence is distinct from refusal after a user starts; neither should auto-capture.
+  const unsupported = await browser.newContext();
+  await unsupported.addInitScript(() => {
+    Element.prototype.requestPointerLock = undefined;
+  });
+  const unavailable = await unsupported.newPage();
+  await unavailable.goto(base + "/bench");
+  await unavailable
+    .getByText("This browser does not support mouse capture.", { exact: false })
+    .waitFor();
+  assert.equal(await unavailable.locator("canvas").count(), 0);
+  await unsupported.close();
+  report.push({ pointerLockUnavailable: true, pass: true });
   assert.deepEqual(errors, []);
   console.log(`${report.length} homepage layout, input-state and keyboard journeys passed.`);
 } finally {
