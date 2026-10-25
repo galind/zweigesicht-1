@@ -17,8 +17,10 @@ and short-lived feature branches.
 4. Merge the approved pull request into `develop`.
 5. Review the updated `develop` branch deployment as the shared staging build.
 
-The CI workflow runs tests, inventory validation, TypeScript, lint and the
-production build for pull requests and pushes involving `develop` or `main`.
+The CI workflow runs tests, inventory validation, TypeScript, lint, the standard
+production build and Vercel packaging for pull requests and pushes involving
+`develop` or `main`. CI uses synthetic Bench delivery fixtures and does not
+receive the private asset source or its credential.
 It rejects direct feature pull requests to `main`; only this repository’s
 `develop` may be promoted there, including when a fork names its branch `develop`.
 PR CI uses read-only permissions and does not persist checkout credentials.

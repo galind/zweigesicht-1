@@ -44,7 +44,8 @@ This experience requires a keyboard and mouse. Touch-only devices show
 loading the scene. Local holder files
 and the Blender environment must be prepared first; see the
 [bench setup, controls, design decisions and testing strategy](docs/BENCH_EXPERIENCE.md).
-Holder downloads and generated bench assets remain local and release-gated.
+Holder downloads and generated bench assets stay out of Git; hosted delivery
+requires an approved asset source and the applicable release gates.
 
 ## Check changes
 

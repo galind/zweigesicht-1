@@ -77,6 +77,10 @@ CI now builds the Vercel package on every integration PR. The owner confirms UAT
 is publicly accessible. Public asset delivery clearance, storage and deployment
 configuration remain outstanding; no payloads have been uploaded. See
 [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
+[GitHub CI on `6ca7539`](https://github.com/galind/zweigesicht-1/actions/runs/40233643129)
+passed all 161 tests, inventory, typecheck, lint and both builds. The hosted-asset
+fixtures exercise successful delivery and missing/corrupt/private-source failures;
+they do not verify a configured live UAT deployment. No local testing was run.
 
 Review and merge this cleanup into `develop`, then review staging separately.
 Keep current status concise: replace superseded next actions rather than adding

@@ -59,15 +59,18 @@ Free mouse/one-finger orbit matches the explorer. Flip, Reset and bounded center
 
 ## Bench
 
-`/bench` checks input capabilities before dynamically importing `BenchViewer`.
+Hosted builds first check whether Bench asset delivery is configured; unavailable
+builds omit its invitation and never start the renderer. When enabled, `/bench`
+checks input capabilities before dynamically importing `BenchViewer`.
 `useBenchAccess` also gates the homepage invitation; touch-only visits do not load
 scene assets. Start explicitly requests pointer capture after the scene is ready.
 `physics.ts` owns
 the visitor capsule and per-definition BVH collision queries; `Bench.tsx` owns
 the capture/menu/loading UI. Source transforms remain immutable inside an outer
 presentation group. The two maker fixtures and authored Blender environment
-are local-only payloads, with hashes and nominal seating evidence recorded
-separately. See [bench reproduction and verification](BENCH_EXPERIENCE.md).
+stay out of Git, with hashes and nominal seating evidence recorded separately.
+Configured Vercel builds fetch them from an approved source and verify their
+hashes before packaging. See [bench reproduction and verification](BENCH_EXPERIENCE.md).
 
 ## Extended verification
 
