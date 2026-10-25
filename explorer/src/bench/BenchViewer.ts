@@ -105,7 +105,7 @@ export class BenchViewer {
   frameTimes: number[] = [];
   cpuTimes: number[] = [];
   activity = new LookActivity();
-  detail = new BenchQuality(devicePixelRatio);
+  detail: BenchQuality;
   inspect = new URLSearchParams(location.search).has('inspect');
   constructor(
     public host: HTMLElement,
@@ -117,6 +117,14 @@ export class BenchViewer {
       alpha: false,
     });
     const reversedDepth = !!context?.getExtension('EXT_clip_control');
+    // Fragment-depth writes on the logarithmic fallback make close CAD much
+    // more expensive. Start Auto with measured headroom, then assess its tail.
+    // Explicit High/Low retain their existing fixed resolutions.
+    this.detail = new BenchQuality(
+      devicePixelRatio,
+      reversedDepth ? 1 : 0.85,
+      reversedDepth ? 0.7 : 0.5,
+    );
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       context: context ?? undefined,
@@ -176,7 +184,6 @@ export class BenchViewer {
           this.station.holders.bridge.visible,
           this.station.holders.dial.visible,
           this.detached.visible,
-          this.status.ready,
         ].join('/');
         if (pose !== shadowPose) {
           this.renderer.shadowMap.needsUpdate = true;
@@ -498,23 +505,54 @@ export class BenchViewer {
         this.walker,
         layout.stations,
       );
-      // Compile the single assembly before capture.
-      // Transmission renders opaque finishes a second time without tone mapping.
-      const toneMapping = this.renderer.toneMapping;
-      const outputColorSpace = this.renderer.outputColorSpace;
+      // Compile against an actual linear render target. Changing outputColorSpace
+      // on the renderer creates different cache keys from the transmission pass,
+      // which leaves the renderer's output space unchanged (Three r186).
+      const target = new THREE.WebGLRenderTarget(1, 1);
+      const previousTarget = this.renderer.getRenderTarget();
       try {
-        this.renderer.toneMapping = THREE.NoToneMapping;
-        this.renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+        this.renderer.setRenderTarget(target);
         await this.renderer.compileAsync(this.scene, this.camera);
       } finally {
-        this.renderer.toneMapping = toneMapping;
-        this.renderer.outputColorSpace = outputColorSpace;
+        this.renderer.setRenderTarget(previousTarget);
+        target.dispose();
       }
       if (this.dead || generation !== this.generation) return;
       await this.renderer.compileAsync(this.scene, this.camera);
       if (this.dead || generation !== this.generation) return;
-      this.status.ready = true;
       this.walker.reset();
+      this.updateCamera();
+      // compileAsync alone does not upload textures/buffers or initialize the
+      // shadow and transmission render targets and their actual shader variants.
+      // Keep entry disabled until that first real frame has finished on the GPU.
+      this.renderer.render(this.scene, this.camera);
+      const gl = this.renderer.getContext() as WebGL2RenderingContext;
+      const fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+      if (fence) {
+        gl.flush();
+        try {
+          while (
+            !this.dead &&
+            generation === this.generation &&
+            !gl.isContextLost()
+          ) {
+            const state = gl.clientWaitSync(fence, 0, 0);
+            if (
+              state === gl.ALREADY_SIGNALED ||
+              state === gl.CONDITION_SATISFIED
+            )
+              break;
+            if (state === gl.WAIT_FAILED)
+              throw new Error('Initial graphics upload failed');
+            await new Promise((resolve) => setTimeout(resolve, 4));
+          }
+        } finally {
+          gl.deleteSync(fence);
+        }
+      }
+      if (this.dead || generation !== this.generation || gl.isContextLost())
+        return;
+      this.status.ready = true;
       this.emit();
       this.wake();
     } catch (error) {
@@ -667,6 +705,20 @@ export class BenchViewer {
     this.camera.updateProjectionMatrix();
     this.wake();
   };
+  updateCamera() {
+    this.camera.position.copy(this.walker.feet).y += WALK.eye;
+    // Enclose every room corner from any flight altitude, retaining CAD near depth.
+    const far = Math.ceil(
+      this.camera.position.distanceTo(this.roomBounds.center) +
+        this.roomBounds.radius +
+        100,
+    );
+    if (this.camera.far !== far) {
+      this.camera.far = far;
+      this.camera.updateProjectionMatrix();
+    }
+    this.camera.rotation.set(this.walker.pitch, this.walker.yaw, 0, 'YXZ');
+  }
   wake = () => {
     this.dirty = true;
     this.schedule();
@@ -707,19 +759,7 @@ export class BenchViewer {
       this.walker.update(elapsed / 1000);
     this.updateStation();
     if (shouldRender) {
-      this.camera.position.copy(this.walker.feet).y += WALK.eye;
-      // Enclose every room corner from any flight altitude. The near plane
-      // remains 0.035 mm for original CAD detail.
-      const far = Math.ceil(
-        this.camera.position.distanceTo(this.roomBounds.center) +
-          this.roomBounds.radius +
-          100,
-      );
-      if (this.camera.far !== far) {
-        this.camera.far = far;
-        this.camera.updateProjectionMatrix();
-      }
-      this.camera.rotation.set(this.walker.pitch, this.walker.yaw, 0, 'YXZ');
+      this.updateCamera();
       this.renderer.render(this.scene, this.camera);
       this.renderCount++;
     }
@@ -764,6 +804,10 @@ export class BenchViewer {
     this.surfaceLight?.shadow.dispose();
     this.surfaceLight = undefined;
     this.renderer.dispose();
+    // Three's internal transmission targets are not exposed for owner disposal.
+    // Release this route-owned context rather than waiting for canvas/GL GC on
+    // repeated navigation. Input/context listeners are already disconnected.
+    this.renderer.forceContextLoss();
     this.renderer.domElement.remove();
   }
 }

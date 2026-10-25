@@ -181,7 +181,7 @@
     },
     {
       "path": "explorer/src/bench/BenchViewer.ts",
-      "sha256": "a38999302f6335d908e68cd86c90edb2c6401e147073df16bed4e5d9a65fe690"
+      "sha256": "94577e87faeacf710d6ef816605a01fda728d0a790b3d3ce76c792d84aad7e0a"
     },
     {
       "path": "assets/generated/bench/environment.blend",

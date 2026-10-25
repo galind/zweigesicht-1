@@ -48,12 +48,14 @@ export class BenchQuality {
   mode: QualityMode = 'Auto';
   ratio: number;
   readonly ceiling: number;
+  private readonly minimum: number;
   private samples: number[] = [];
   private duration = 0;
   private slowWindows = 0;
   private cooldown = 0;
-  constructor(dpr: number) {
-    this.ceiling = Math.min(dpr, 1);
+  constructor(dpr: number, ceiling = 1, minimum = 0.7) {
+    this.minimum = minimum;
+    this.ceiling = Math.min(dpr, ceiling);
     this.ratio = this.ceiling;
   }
   select(mode: QualityMode, dpr: number) {
@@ -83,13 +85,20 @@ export class BenchQuality {
     this.duration += ms;
     if (this.duration < 1500 || this.samples.length < 40) return false;
     const sorted = this.samples.sort((a, b) => a - b);
-    const slow = sorted[Math.floor((sorted.length - 1) * 0.75)] > 22;
+    // Repeated missed refreshes are stutter even with a healthy median/p75.
+    // Require two windows with a slow p95; isolated stalls still do
+    // not resize the scene. This includes close CAD on logarithmic-depth GPUs.
+    const slow = sorted[Math.floor((sorted.length - 1) * 0.95)] > 22;
     this.slowWindows = slow ? this.slowWindows + 1 : 0;
     this.samples = [];
     this.duration = 0;
     if (this.slowWindows < 2) return false;
     this.slowWindows = 0;
-    const next = [1, 0.85, 0.7].find((r) => r < this.ratio - 0.01);
+    // Slower fallback backends can still miss refresh at .7. Only that path
+    // permits the extra bounded steps; explicit High/Low are never altered.
+    const next = [1, 0.85, 0.7, 0.6, 0.5].find(
+      (r) => r >= this.minimum && r < this.ratio - 0.01,
+    );
     if (next === undefined) return false;
     this.ratio = next;
     this.cooldown = 5000;

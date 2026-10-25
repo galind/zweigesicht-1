@@ -39,7 +39,12 @@ export async function launchBenchBrowser(
       child.kill('SIGTERM');
       await exited;
     }
-    await fs.rm(profile, { recursive: true, force: true });
+    await fs.rm(profile, {
+      recursive: true,
+      force: true,
+      maxRetries: 3,
+      retryDelay: 100,
+    });
   };
   try {
     let port;

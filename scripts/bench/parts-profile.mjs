@@ -1,4 +1,7 @@
-/** Matched overview, movement and visitor-scale camera fixtures. Run before and after with the same browser/settings. */
+/** Static visual-cost spot-check only: fixed ratio 1, stationary camera, 30
+ * discarded warmup frames, bypasses the viewer/physics loop. It cannot qualify
+ * interaction, entry or transitions. Use workload-check.mjs and the native
+ * workload-probe.js recorder for performance regressions during actual use. */
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);

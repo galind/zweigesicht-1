@@ -108,3 +108,44 @@ test('very slow continuous look frames remain performance evidence', () => {
   activity.add(1, 0, 9999);
   assert.equal(activity.consume(10000, false).elapsed, null);
 });
+
+test('Auto responds to recurring missed frames even when most frames meet refresh', () => {
+  const q = new BenchQuality(2);
+  // A close CAD view repeatedly misses one in five refreshes. Median and p75
+  // remain 16.7 ms, but p95 is 33.3 ms: the reported foreground failure.
+  for (let i = 0; i < 180; i++) q.sample(i % 5 === 0 ? 33.3 : 16.7);
+  assert.equal(q.ratio, 0.85);
+});
+test('infrequent scheduling outliers do not downgrade a healthy scene', () => {
+  const q = new BenchQuality(2);
+  for (let i = 0; i < 1000; i++) q.sample(i % 50 === 0 ? 55 : 16.7);
+  assert.equal(q.ratio, 1);
+});
+
+test('Auto also catches the residual seven-percent CAD stutter after its first reduction', () => {
+  const q = new BenchQuality(2);
+  feed(q, 30, 100);
+  assert.equal(q.ratio, 0.85);
+  for (let i = 0; i < 600; i++) q.sample(i % 14 === 0 ? 33.3 : 16.7);
+  assert.equal(q.ratio, 0.7);
+});
+
+test('fallback Auto starts with headroom and preserves explicit quality choices', () => {
+  const q = new BenchQuality(2, 0.85);
+  assert.equal(q.ratio, 0.85);
+  assert.equal(q.select('High', 2), 1.5);
+  assert.equal(q.select('Low', 2), 0.85);
+  assert.equal(q.select('Auto', 2), 0.85);
+  for (let i = 0; i < 200; i++) q.sample(i % 14 === 0 ? 33.3 : 16.7);
+  assert.equal(q.ratio, 0.7);
+  assert.equal(new BenchQuality(0.6, 0.85).ratio, 0.6);
+});
+
+test('fallback Auto can recover sustained GPU overload below the old .7 floor', () => {
+  const q = new BenchQuality(2, 0.85, 0.5);
+  feed(q, 30, 1200);
+  assert.equal(q.ratio, 0.5);
+  assert.equal(feed(q, 30, 1000), 0);
+  assert.equal(q.select('High', 2), 1.5);
+  assert.equal(feed(q, 30, 1000), 0);
+});

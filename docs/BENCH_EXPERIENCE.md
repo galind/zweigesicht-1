@@ -1,5 +1,10 @@
 # Single-station walking experience
 
+The current interaction-performance review, including visible Firefox evidence,
+entry preparation, Auto policy and remaining limits, is recorded in
+[Bench performance](BENCH_PERFORMANCE.md). Earlier static frame-time results
+below are historical spot-checks, not sustained interaction qualification.
+
 `/bench` presents **one movement at one station** on the approved oak workbench
 and green mat. Press **F** to lift, turn and reseat the complete movement between
 bridge-up and dial-side-up. The original matching holder is exchanged while the

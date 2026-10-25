@@ -3,6 +3,70 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Sustained Bench performance and entry cleanup — 25 October 2026
+
+Reviewed the actual visible Firefox 158 window on M4/macOS at **1280 × 1327 CSS
+pixels / DPR 2**, starting from `6a8ae7e`, before changing the preview. Reproduced
+recurring close-CAD stutter that the earlier short stationary profile missed.
+The full CAD draws about 1.4 million triangles across main/transmission passes;
+the environment-only budget did not describe this workload. Render CPU p95 was
+about 5 ms and collision/physics 1–2 ms. Separate Chrome GPU/CPU evidence supports
+rendering pressure, with no evidence of collision or GC as the recurring cause.
+
+Fixed three issues: Auto used p75 and ignored recurring missed frames in the
+slowest 7–20%; precompilation used a different program cache key from the actual
+transmission pass and left uploads/new shaders until after entry was enabled;
+and route disposal left a live GL context with internal render targets. Auto now
+uses sustained p95 windows, with measured headroom and additional bounded steps
+for logarithmic depth. Entry renders/uploads while loading and waits on an
+asynchronous GPU fence. Disposal explicitly releases the route-owned context.
+The context-retention finding is a verified cleanup defect, not a proven cause
+of a particular historical stall.
+
+Matched two-circuit synthetic workloads in the **actual visible Firefox window**
+cover look, walk/run, flight, close wood/stand/CAD, both flips and pause/resume.
+Before/after Auto starts at 1/.85 and settles at .85/.7; this is a quality-policy
+comparison, not equal resolution. Repeated close CAD improves from **17 / 33–34 /
+35 ms p50/p95/p99 to 17 / 18 / 18 ms**. Across approximately three minutes,
+intervals >25 ms fall **212/9,974 → 25/10,159**, with >50 ms **1 → 0**. First
+bridge approach retains 23 slow frames during adaptation. Three native link/Back
+entries previously spent **642–666 ms** in the first ready render; preparation
+moves that work into loading, leaving **4–5 ms** first-ready renders and **40 → 29**
+shader programs. Warm entry still takes about one second overall.
+
+Native OS keyboard/capture, flight, both flips and pause/resume were separately
+verified. Native automation did not deliver relative pointer deltas, so mouse
+measurements use explicitly synthetic DOM input; **human mouse feel is not
+qualified**. A separate headless Chrome forced-fallback workload passes two
+circuits and three entry/cleanup checks. Its repeated bridge/dial p95 is
+18.2/23.9 ms after adaptation, with residual dial stutter; see the full
+[performance evidence, reproduction and limitations](docs/BENCH_PERFORMANCE.md).
+Raw reports and traces remain ignored in `artifacts/bench-performance/`.
+
+The procedural wood/grain, contact atlases, lighting, 230 × 160 mm centered desk,
+compact stand, original CAD scale/poses, fitted seating, holders, mat, arrival
+and controls are unchanged. Only the runtime-source hash was refreshed; all
+15 recorded source/output hashes and the production environment GLB match.
+Generated assets remain local. No push, publication or redistribution.
+
+Verified **149 CPU tests**, typecheck, lint and production build. Browser
+regressions pass: **26 surfaces** across normal/fallback depth, **5 seating**,
+**10 parts**, **65 environment**, **10 running**, **32 flips**, **67 flight/collision**,
+**8 lifecycle**, **11 interaction**, **157 UI** and **5 homepage entries**. The
+independent audit passes both original 219-leaf CAD/holder rests and 16 drop
+fixtures (maximum source-relative matrix error 5.55 × 10⁻¹⁷). All mat edges and
+table boundaries pass. Reviewed final overview, visitor wood and stand-edge
+images. The new focused workload retains transition evidence, checks completed
+flips, post-ready shader stability and released contexts, and can enforce a
+repeated-circuit p95 budget; five CPU regressions cover the missed-frame policy.
+
+Remaining qualification: human pointer feel, other physical GPUs/high-refresh
+displays, cold-driver startup and prolonged thermal use. Auto's assessment takes
+time; fixed High can remain GPU-bound and warm initial uploads still block the
+main thread during loading. Existing mechanical/accessibility/release gates
+remain. Next action is physical-user/device qualification using the sustained
+probe, rather than treating the historical static 16.7–16.8 ms profile as proof.
+
 ## Deeper desk and stand finish — 25 October 2026
 
 Reworked the wood and edge treatment after the owner's request for a deeper
