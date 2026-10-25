@@ -48,8 +48,10 @@ fitted transmission for finish restoration in Workshop. Detached Bench materials
 enter the cleanup tree before finish/pose preparation. All four hashed asset
 loaders share one SHA-256 encoder while retaining their existing integrity gates.
 New CPU regressions cover finish transitions, failure cleanup and corrupt assets.
-Validation for this follow-up runs in GitHub CI; no local tests, builds or browser
-automation are run. This preference is recorded in [AGENTS.md](AGENTS.md).
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/40231829429)
+passed on `b29c081`: all 157 CPU tests, Workshop inventory, typecheck, lint and
+production build. No local tests, builds or browser automation were run for this
+follow-up. This preference is recorded in [AGENTS.md](AGENTS.md).
 
 The preceding cleanup milestone verified: 149 CPU tests, Workshop inventory,
 typecheck with unused-code checks, lint, production build, HTTP/SEO checks,
