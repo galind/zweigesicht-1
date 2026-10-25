@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-bare-parts";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-arrangement";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -233,10 +233,10 @@ try {
     }
     const circulation = [];
     for (const [name, x, z, key] of [
-      ["left approach aisle", -65, 55, "KeyW"],
-      ["right approach aisle", 65, 55, "KeyW"],
-      ["between central pair", -130, 0, "KeyD"],
-      ["between small pair", 80, 0, "KeyD"],
+      ["left approach aisle", -36, 55, "KeyW"],
+      ["right approach aisle", 36, 55, "KeyW"],
+      ["between central pair", -85, 9, "KeyD"],
+      ["between small pair", 45, 9, "KeyD"],
       ["behind case", -30, -120, "KeyD"],
     ]) {
       setup(x, 0.002, z);

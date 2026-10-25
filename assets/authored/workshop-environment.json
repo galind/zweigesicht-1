@@ -68,11 +68,11 @@
     "verification": "Design reserve only. Verify actual source-derived swept envelope and both holders after authoring."
   },
   "openCore": {
-    "minX": -70,
-    "maxX": 70,
+    "minX": -40,
+    "maxX": 40,
     "minZ": -65,
     "maxZ": 100,
-    "meaning": "Approach and circulation around the unchanged working movement; rear case sits beyond Z-70.64. Continuous CAD envelopes are independently audited."
+    "meaning": "Clear approach and circulation around the unchanged working movement; paired dials and hands sit outside X +/-40, rear case beyond Z-70.64. Continuous CAD envelopes are independently audited."
   },
   "props": [],
   "wallItems": [],

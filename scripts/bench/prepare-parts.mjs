@@ -86,14 +86,14 @@ groups.push(
   ),
 );
 for (const [face, x] of [
-  ["central", -105],
-  ["small", 105],
+  ["central", -62],
+  ["small", 62],
 ]) {
   const config = dials.faces[face],
     style = config.styles.find((s) => s.id === dials.defaults[face]);
   const rotation = new T.Matrix4().makeRotationX(face === "central" ? -Math.PI / 2 : Math.PI / 2);
   const dialLocal = new Map(config.structureLeafIds.map((id) => [id, source(id)]));
-  const dial = pack(face + "-dial", config.structureLeafIds, dialLocal, rotation, [x, -35], 0);
+  const dial = pack(face + "-dial", config.structureLeafIds, dialLocal, rotation, [x, -12], 0);
   groups.push(dial);
   const packets = [];
   for (const [i, [role, id]] of Object.entries(style.handLeafIds).entries()) {
@@ -116,13 +116,13 @@ for (const [face, x] of [
         ids,
         local,
         r,
-        [x + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, 35],
+        [x + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, 24],
         0,
       ),
       role,
     });
   }
-  groups.push({ id: face + "-hands", style: style.id, packets, center: [x, 35] });
+  groups.push({ id: face + "-hands", style: style.id, packets, center: [x, 24] });
 }
 const selected = groups.flatMap((g) => g.leafIds ?? g.packets.flatMap((p) => p.leafIds));
 if (new Set(selected).size !== selected.length) throw Error("Duplicate");

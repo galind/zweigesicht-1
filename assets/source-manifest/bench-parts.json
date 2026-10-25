@@ -33,11 +33,11 @@
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "cb58cb2f40a579cb7d2d5e1bd01c52b93d2b30f17e218fb27ddf3883d94eefb2"
+      "sha256": "3fab5b68338d57be8933ab046910ffeee69de2ea3289bf00b8ca6e38ec14dfa6"
     },
     {
       "path": "scripts/bench/prepare-parts.mjs",
-      "sha256": "7409a9b4ca9fc58e3870b5663055503b3f34cf863b69fe6ac4e9429823a0f9d7"
+      "sha256": "fd622951f000eb9aff6c7eefd7a8739930d5135f199b9ae1c5d16ebe78219550"
     },
     {
       "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",

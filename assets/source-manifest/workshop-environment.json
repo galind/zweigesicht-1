@@ -12,7 +12,7 @@
     "collisionTriangles": 340,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 175336
+    "downloadBytes": 172216
   },
   "semantics": [
     {
@@ -64,7 +64,7 @@
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "16f66111e37635ba6c3cc10767a476ed02644f311008aa14be0b4c855e733a66"
+      "sha256": "395d286a9eed167505d4c15aaacad883b10ef774e156bfb46cd2625f59e40876"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -76,11 +76,11 @@
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "df380cbf27c211330249b283971dd7caf3a71f8804b779d13d5b8153697720e3"
+      "sha256": "b7a6495446f29e06e805a5b4212dd2ea9fe6d2e1dc3aff5bb84217498d54fb56"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "d25618ba79035dee4353b3784018ec61fed793a9ee6b8b9dfe8613181911c4c2"
+      "sha256": "f0ed30ec23794320f73760e3d93143f24385c9d47d724f8dd671716f1c51adcb"
     }
   ]
 }

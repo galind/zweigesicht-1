@@ -45,8 +45,10 @@ omitted from this bench view. The original catalog and other experiences retain 
 The case contains 35 leaves; the two dials and five intact blade/bushing packets
 bring the detached total to **78 leaves**, or **297** with the working movement.
 
-Plan positions and orientations are unchanged: case (0, −92), central/small dials
-(−105/+105, −35), central/small hands (−105/+105, 35). Each complete dial or hand
+The balanced arrangement keeps the case at (0, −92), places the central/small
+dials at (−62/+62, −12), and groups their hands immediately below at
+(−62/+62, 24). Positions are bounding-box centers in mm; orientations are
+unchanged. The front third of the mat stays clear. Each complete dial or hand
 packet is lowered rigidly until its lowest original vertex meets mat Y0. No
 source geometry is flattened or rescaled. This is a presentation arrangement,
 not a servicing instruction. All exposed CAD triangles now participate in collision;
@@ -59,13 +61,17 @@ manifest; pose generation no longer requires those photographs. The small dial
 retains its fitted enamel material and shared transmission rendering.
 
 Environment: **340 visible/collision triangles, 2 draws/pass, 6.67 MiB textures,
-175,336-byte GLB**. Detached CAD: **328,017 triangles**. Source/output hashes match.
-Verified **141 CPU tests**, inventory, typecheck/lint/build, **64 environment**,
+172,216-byte GLB**. Detached CAD: **328,017 triangles**. Source/output hashes match.
+The direct-mat baseline passed **141 CPU tests**, inventory, typecheck/lint/build, **64 environment**,
 **10 detached-part**, **32 flip** checks, both CAD/holder rest audits and all
 **16 source-surface drops**. No browser errors; full-table and detail captures
 were reviewed. Production preview rebuilt/restarted at <http://127.0.0.1:4198/bench>.
 
-Current evidence is in `artifacts/workshop-bare-parts/`. The protected arrangement
+Direct-mat evidence is in `artifacts/workshop-bare-parts/`; the closer balanced
+arrangement is captured in `artifacts/workshop-arrangement/` and passes **7 focused
+geometry tests**, typecheck/lint/build, **10 parts** and **64 environment checks**.
+These include both complete flips, continuous clearance and walking between the
+dial/hand pairs. The protected arrangement
 below records the superseded `ef9c8fe` milestone and its measurements.
 
 ## Historical protected parts — superseded by direct mat placement

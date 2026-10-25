@@ -3,6 +3,22 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Balanced tabletop arrangement — 25 October 2026
+
+Grouped the dials and matching hands closer to the central movement, following
+the approved balanced layout. Dial centers are X−62/+62, Z−12; hand sets are
+X−62/+62, Z24. The case stays at (0, −92). This moves each pair 43 mm inward
+and reduces row separation from 70 to 36 mm, leaving the front third clear.
+Heights, orientations, source geometry, working movement and controls are unchanged.
+
+Verified **7 focused geometry tests**, typecheck, lint, production build,
+**10 parts checks** (including both complete flips and continuous clearance),
+and **64 environment checks**, including walking between each dial/hand pair
+and through both approach aisles. Reviewed overview and detail captures; no
+browser errors. Provenance hashes match. Evidence: `artifacts/workshop-arrangement/`.
+Preview rebuilt/restarted at <http://127.0.0.1:4198/bench>.
+Next: owner review of the closer arrangement. Local only; no push or publication.
+
 ## Dials and hands directly on the mat — 25 October 2026
 
 Removed both dial protectors and both hand boxes, including supports, membranes,

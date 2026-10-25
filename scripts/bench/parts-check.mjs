@@ -47,7 +47,7 @@ catalog.traverse((n) => {
   };
 });
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href),
-  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-bare-parts";
+  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-arrangement";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH }),
   page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
@@ -271,15 +271,15 @@ try {
     ["external-full-tabletop", [0, 340, 430], [0, 0, -30], "bridge", 45],
     ["external-top-mat", [0, 300, -1], [0, 0, 0], "bridge", 50],
     ["external-case", [40, 53, -30], [0, 5, -92], "bridge", 42],
-    ["external-central-dial", [-105, 65, 12], [-105, 3, -35], "bridge", 40],
-    ["external-small-dial", [105, 65, 12], [105, 3, -35], "bridge", 40],
-    ["external-central-hands-top", [-105, 70, 35.1], [-105, 0.5, 35], "bridge", 42],
-    ["external-small-hands-top", [105, 70, 35.1], [105, 0.5, 35], "bridge", 42],
-    ["external-central-hands-oblique", [-82, 31, 81], [-105, 0.5, 35], "bridge", 45],
-    ["external-small-hands-oblique", [128, 31, 81], [105, 0.5, 35], "bridge", 45],
-    ["external-central-hands-side", [-105, 10, 83], [-105, 0.5, 35], "bridge", 50],
-    ["external-small-hands-side", [105, 10, 83], [105, 0.5, 35], "bridge", 50],
-    ["visitor-near-hands", [-105, 1.482, 55.1], [-105, 0.5, 35], "bridge", 68],
+    ["external-central-dial", [-62, 65, 35], [-62, 3, -12], "bridge", 40],
+    ["external-small-dial", [62, 65, 35], [62, 3, -12], "bridge", 40],
+    ["external-central-hands-top", [-62, 70, 24.1], [-62, 0.5, 24], "bridge", 42],
+    ["external-small-hands-top", [62, 70, 24.1], [62, 0.5, 24], "bridge", 42],
+    ["external-central-hands-oblique", [-39, 31, 70], [-62, 0.5, 24], "bridge", 45],
+    ["external-small-hands-oblique", [85, 31, 70], [62, 0.5, 24], "bridge", 45],
+    ["external-central-hands-side", [-62, 10, 72], [-62, 0.5, 24], "bridge", 50],
+    ["external-small-hands-side", [62, 10, 72], [62, 0.5, 24], "bridge", 50],
+    ["visitor-near-hands", [-62, 1.482, 44.1], [-62, 0.5, 24], "bridge", 68],
     ["visitor-arrival", [0, 1.482, 54], [0, 1.482, -7], "bridge", 68],
     ["visitor-bridge", [-12, 22, -7], [0, 17, -7], "bridge", 68],
     ["visitor-dial", [-12, 22, -7], [0, 17, -7], "dial", 68],
