@@ -471,12 +471,12 @@ The homepage **Explore it in first person** link opens the Bench introduction.
 **Start exploring** captures the mouse after loading; direct visits and Back use
 the same introduction. Loading never captures automatically. The introduction
 and Escape menu share a centered warm-charcoal panel with a restrained brass edge,
-the homepage's typography and a prominent Start/Resume action. A small state label
-distinguishes first-person exploration from the paused state. Keyboard controls
-are grouped into **Move around** and **At the bench**, with key badges and a
-single-column layout when the panel is narrow or text is enlarged. The pause
+the homepage's typography and a prominent Start/Resume action. The compact panel
+uses one title, a short first-use description and key badges without additional
+visible section headings. Controls stack into a single column when the panel is
+narrow or text is enlarged. The pause
 menu's quieter footer contains Reset and an explicit **Detail: Auto / Low / High**
-select; Auto balances detail and responsiveness. All actions have visible keyboard
+select; its Auto explanation remains available to screen readers. All actions have visible keyboard
 focus, and scrolling brings them into view on short screens. Hover/pressed states
 use color changes without movement. Exploration keeps the scene sharp with compact
 navigation and one hint row; a rejected flip temporarily replaces that row with a message

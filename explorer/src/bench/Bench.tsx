@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ArrowRight, RotateCcw } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import type { BenchViewer, BenchStatus } from './BenchViewer';
 import { BenchControls } from './BenchControls';
@@ -34,7 +34,6 @@ export default function Bench() {
     <main className="bench-experience">
       <BenchHeader />
       <section className="bench-start" aria-labelledby="bench-access-title">
-        <p className="bench-eyebrow">First-person exploration</p>
         <h1 id="bench-access-title">
           {access === 'checking' ? 'The workbench' : 'Explore on desktop'}
         </h1>
@@ -123,19 +122,13 @@ function BenchScene() {
           className={hasEntered ? 'bench-menu' : 'bench-start'}
           aria-labelledby="bench-title"
         >
-          <p className="bench-eyebrow">
-            {hasEntered ? 'Exploration paused' : 'First-person exploration'}
-          </p>
           <h1 id="bench-title" ref={introduction} tabIndex={-1}>
             The workbench
           </h1>
           {!hasEntered && (
-            <>
-              <p className="bench-introduction">
-                Explore the movement, its holders and detached parts at
-                miniature scale.
-              </p>
-            </>
+            <p className="bench-introduction">
+              Explore the movement, holders and detached parts.
+            </p>
           )}
           {state.error && (
             <p role="alert" className="bench-error">
@@ -172,7 +165,7 @@ function BenchScene() {
           {state.ready && hasEntered && (
             <div className="bench-options">
               <button onClick={() => viewer.current?.reset()}>
-                <RotateCcw aria-hidden="true" /> Reset position
+                Reset position
               </button>
               <label className="bench-quality">
                 Detail
@@ -194,7 +187,7 @@ function BenchScene() {
                   <option value="High">High</option>
                 </select>
               </label>
-              <p id="bench-quality-help" className="bench-input-note">
+              <p id="bench-quality-help" className="bench-sr">
                 Auto balances detail and responsiveness.
               </p>
             </div>

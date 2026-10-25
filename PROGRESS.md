@@ -3,6 +3,29 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Clean entry-flow PR branch — 25 October 2026
+
+Recreated the eight entry/menu commits on `origin/develop` as
+`codex/bench-entry-flow`, removing the old pre-squash workshop history from the
+replacement PR. Verified the resulting tracked files exactly match the previously
+tested branch before adding this note and disabling Vercel deployment for the new
+branch. Application files remain identical; existing verification still applies.
+The old branch is preserved; the replacement PR supersedes #32 without force-push.
+
+## Simpler Bench menus — 25 October 2026
+
+Kept the centered charcoal/brass styling and prominent Start/Resume action while
+removing the uppercase state labels, control-group headings, extra divider and
+Reset icon. Shortened the introduction and reduced panel width/padding. The Detail
+explanation is now screen-reader help rather than another visible line. All key
+instructions, settings and scene behavior remain available.
+
+Verified typecheck, lint, production build and **159 Bench UI checks**, including
+capture/resume, settings, focus, hover/pressed states, reduced motion and enlarged
+text. Visible review covers desktop, 390 px and 320 px with 200% text. Screenshots
+and report: `artifacts/bench-menu-simplified/`. Preview:
+<http://127.0.0.1:4198/bench>. Local commit only; no push or publication.
+
 ## Bench introduction and Esc menu redesign — 25 October 2026
 
 Redesigned both centered panels around one prominent **Start / Resume exploring**
