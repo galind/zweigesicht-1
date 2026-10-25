@@ -419,8 +419,10 @@ After owner review, the invitation moves to the **bottom left** and uses
 **Explore it in first person**. This single-line action explains the viewpoint
 without a supporting paragraph. The keyboard-and-mouse requirement moves into
 the existing controls introduction. The initial light-filled treatment was
-replaced after further feedback with the page's dark glass, regular-weight text
-and a subtle outline. It retains 10 px corners and a static decorative arrow;
+replaced after further feedback with a warmer charcoal surface, semibold text
+and a restrained brass outline. The fill, border and arrow use the existing site
+accent palette to improve visibility while fitting the page. It retains 10 px
+corners and a static decorative arrow;
 its meaning does not depend on that arrow. Hover, pressed/expanded and
 keyboard-focus states remain distinct.
 

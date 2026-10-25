@@ -3,6 +3,21 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Balanced invitation contrast — 25 October 2026
+
+Refined the bottom-left first-person invitation with a brighter warm charcoal
+fill, semibold text, a restrained brass border and a warm arrow. Colors derive
+from the existing site accent and neutral palette. The compact wording, position,
+shape and entry flow remain intact. Hover brightens the surface; pressed/expanded
+states deepen it, with the existing visible keyboard focus ring.
+
+Verified lint, production build and **18 homepage journeys**, including narrow
+and enlarged text layouts, keyboard/focus return, hover/pressed states, reduced
+motion and no-icon clarity. Visible browser review covers desktop, 390 px and
+320 px at 200% text. Evidence: `artifacts/bench-entry-balanced/`. Only invitation
+CSS and documentation changed. Preview: <http://127.0.0.1:4198/>. Local commit
+only; no push or publication.
+
 ## First-person invitation refinement — 25 October 2026
 
 Changed the bottom-left label to the owner's suggested **Explore it in first
