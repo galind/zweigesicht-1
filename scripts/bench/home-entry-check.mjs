@@ -21,6 +21,8 @@ try {
     await page.emulateMedia({ reducedMotion });
     for (const [width, height, text] of [
       [1440, 900, 100],
+      [1200, 800, 100],
+      [1199, 800, 100],
       [390, 844, 100],
       [320, 640, 100],
       [844, 390, 100],
@@ -38,7 +40,12 @@ try {
         const dock = document.querySelector(".action-dock").getBoundingClientRect();
         return {
           hit: e === hit || e.contains(hit),
-          within: r.x >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= dock.top,
+          within:
+            r.x >= 0 &&
+            r.right <= innerWidth &&
+            r.top >= 0 &&
+            r.bottom <= innerHeight &&
+            (r.right <= dock.left || r.bottom <= dock.top),
           overflow: e.scrollWidth > e.clientWidth + 1,
           description: e
             .getAttribute("aria-describedby")
@@ -51,7 +58,7 @@ try {
         accessible.hit && accessible.within && !accessible.overflow,
         label + JSON.stringify(accessible),
       );
-      assert.match(accessible.description, /miniature scale/);
+      assert.match(accessible.description, /First-person/);
       assert.match(accessible.description, /Keyboard & mouse/);
       // Removing the decorative arrow must not change the usable name or copy.
       await page.addStyleTag({ content: ".bench-trigger svg { display: none; }" });

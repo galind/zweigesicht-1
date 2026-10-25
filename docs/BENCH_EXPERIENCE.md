@@ -412,20 +412,22 @@ changing the invitation. Three wording/placement directions were compared:
 | Direction | Assessment |
 | --- | --- |
 | “Step into the workshop” in the centered header slot | Inviting, but implies a room and conflicts with the separate `/workshop` assembly puzzle; still lacks context. |
-| **“Explore the workbench” beneath the watch identity** | Chosen: names the actual destination, makes room for the miniature first-person premise and leaves the movement dominant. |
+| **“Explore the workbench” beneath the watch identity** | Initial choice: names the actual destination and makes room for the miniature first-person premise. Revised below after owner review. |
 | “Walk among the watch’s parts” near the bottom action dock | Descriptive, but competes with the controls that operate the current explorer and does not name the destination. |
 
-The chosen invitation uses the existing dark glass, quiet border, 10 px corners
-and sans-serif typography. Its full surface is one button, with an optional,
-non-animated right arrow. The accessible name is the visible action; the description
-names the movement, holders and detached parts at miniature scale, plus
-**First-person · Keyboard & mouse**. It remains understandable with the arrow hidden.
-Hover, pressed/expanded and keyboard-focus states are distinct.
+After owner review, the invitation moves to the **bottom left** and drops the
+explanatory paragraph. **Explore the workbench** and **First-person · Keyboard &
+mouse** provide the action and essential input expectation. A solid warm light
+surface with dark text gives the smaller button greater visibility against the
+canvas. It retains 10 px corners, the existing typography and a static decorative
+arrow; its meaning does not depend on that arrow. Hover, pressed/expanded and
+keyboard-focus states remain distinct.
 
-The invitation is positioned below the measured header, independently of its
-height, and yields to open panels and focused part/group views. This preserves
-usable menu and inspection space, especially at 320 px with 200% text. The
-preview-only Workshop action retains its existing location and build policy.
+On wide screens it aligns with the bottom of the movement dock. Below 1200 px,
+or with enlarged text, it sits above the measured dock to avoid overlap. It
+remains outside header measurement and yields to open panels and focused
+part/group views. The preview-only Workshop action retains its existing location
+and build policy.
 
 The controls introduction is now **Before you begin**, with a short Escape/pointer
 release explanation and the unchanged shared bindings. **Enter workbench** leads
