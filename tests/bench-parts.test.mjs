@@ -115,7 +115,10 @@ test("actual decoded vertices reproduce measured bounds and sit on their visible
     }
     close(b.min.toArray(), p.bounds[0]);
     close(b.max.toArray(), p.bounds[1]);
-    assert.ok(b.min.x >= -175 && b.max.x <= 175 && b.min.z >= -125 && b.max.z <= 125);
+    const mat = read("assets/authored/workshop-environment.json").mat;
+    assert.ok(
+      b.min.x >= mat.minX && b.max.x <= mat.maxX && b.min.z >= mat.minZ && b.max.z <= mat.maxZ,
+    );
     const stand = read("assets/authored/workshop-environment.json").props.find(
       (p) => p.id === "dial-hand-stand",
     );
@@ -151,7 +154,7 @@ test("compact tabletop retains arrival, station seats, holder rotations and fron
     { id: "bridge", x: 0, z: -7, seat: 12.2, rotationX: 90, holderRotationY: 90 },
     { id: "dial", x: 0, z: -7, seat: 16.3, rotationX: -90, holderRotationY: 90 },
   ]);
-  assert.deepEqual(a.deskBounds, { minX: -225, maxX: 225, minZ: -195, maxZ: 135 });
+  assert.deepEqual(a.deskBounds, { minX: -115, maxX: 155, minZ: -85, maxZ: 75 });
   for (const k of Object.keys(a.deskBounds)) assert.equal(e.mainDesk[k], a.deskBounds[k]);
   assert.equal(e.mainDesk.maxZ - e.mat.maxZ, 10);
 });

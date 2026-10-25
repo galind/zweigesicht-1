@@ -281,8 +281,8 @@ try {
     content: ".bench-menu,.bench-start,.bench-menu-backdrop,.bench-legend{display:none!important}",
   });
   for (const [name, position, target, side, fov] of [
-    ["external-full-tabletop", [0, 340, 430], [0, 0, -30], "bridge", 45],
-    ["external-top-mat", [0, 300, -1], [0, 0, 0], "bridge", 50],
+    ["external-full-tabletop", [20, 200, 250], [20, 0, -5], "bridge", 45],
+    ["external-top-mat", [20, 190, -1], [20, 0, 0], "bridge", 50],
     ["external-dial-seating", [dx + 24, sy + 3.5, cz + 26], [dx, sy, cz], "bridge", 42],
     [
       "external-stand",

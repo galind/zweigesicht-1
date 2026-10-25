@@ -94,7 +94,7 @@
     "collisionTriangles": 3160,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 387072
+    "downloadBytes": 386476
   },
   "semantics": [
     {
@@ -102,14 +102,14 @@
       "role": "walkable",
       "material": "Oak",
       "min": [
-        -225,
+        -115,
         -33,
-        -195
+        -85
       ],
       "max": [
-        225,
+        155,
         -1,
-        135
+        75
       ]
     },
     {
@@ -117,14 +117,14 @@
       "role": "walkable",
       "material": "Matte green",
       "min": [
-        -175,
+        -100,
         -1,
-        -125
+        -65
       ],
       "max": [
-        175,
+        140,
         0,
-        125
+        65
       ]
     },
     {
@@ -132,14 +132,14 @@
       "role": "walkable",
       "material": "Oak",
       "min": [
-        -225,
+        -115,
         -1,
-        -195
+        -85
       ],
       "max": [
-        225,
+        155,
         4,
-        125
+        65
       ]
     },
     {
@@ -161,11 +161,11 @@
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "9bc66a84d73846f438d4376b7af7323e02b59ac08f13ebdc1d6e3ea37f565da4"
+      "sha256": "e6d38313aa5cc6e5123794c3c3b66c5114db0665d55c5ecfbdf29a987b21c688"
     },
     {
       "path": "assets/authored/atelier-layout.json",
-      "sha256": "d3bd541f94129bd54b3e0e474cc76aa1e0a51fe1ec1ff49d371d149d47bc6ea9"
+      "sha256": "8091e150d74ac419c1b6efda043747d9dd938a92c505cd61ab2a8bab1cdfb254"
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
@@ -177,11 +177,11 @@
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "68292bddb6e82e74fbb0ee607aa7a1723cc24d3c1668b8325643fe3039ac399f"
+      "sha256": "0ffdaf8c3483ecbbc2bde73115f31e4e5701e0b60877b55aaef5151c51ab76a7"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "236d3f942855262d1f1c64392478c18f3c64de24deb87dd93eb4b94cf85121ac"
+      "sha256": "58453eedbeb9396eb6ca2eb3c8329b483dce5824aee64da0327db42eeefafdd0"
     }
   ]
 }

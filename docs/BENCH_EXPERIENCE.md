@@ -27,12 +27,13 @@ Both local holder assets load before entry; a missing asset keeps loading recove
 available. The spare holder has no second visible station. No CAD is cut, morphed,
 scaled, repaired or silently replaced with a universal holder.
 
-The light wooden tabletop is a straight **450 × 330 mm rectangle**: X −225…225,
-Z −195…135 mm, with surface Y−1 and underside Y−33. Small 0.12 mm edge bevels
+The light wooden tabletop is a straight **270 × 160 mm rectangle**: X −115…155,
+Z −85…75 mm, with surface Y−1 and underside Y−33. Small 0.12 mm edge bevels
 soften the solid slab. A continuous 6 mm wide rim rises 5 mm along the back and
-sides, ending at Z125; there is no front fence. The unchanged 350 × 250 × 1 mm
-green mat ends at Z125, leaving just **10 mm of wood before the front edge**
-(previously 60 mm at the central projection).
+sides, ending at Z65; there is no front fence. The **240 × 130 × 1 mm** green mat
+spans X−100…140, Z−65…65, leaving **10 mm of wood before the front edge**,
+15 mm at either side and 20 mm behind. The surfaces are centered on the whole
+parts arrangement; object positions and scale remain unchanged.
 Arrival and explicit R reset remain at feet (0, 0.002, 54), facing −Z. The visitor
 stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet**,
 68° vertical FOV and no bob/roll.
@@ -78,8 +79,9 @@ walking hint show **Shift · Hold to run**. Physics substeps account for run spe
 
 Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
 bore evidence: `artifacts/workshop-seating/`; compact stand and aligned case:
-`artifacts/workshop-compact-stand/`. The bored environment has **3,160
-visible/collision triangles, 2 draws/pass, 6.67 MiB textures and a 387,072-byte GLB**. Verification includes
+`artifacts/workshop-compact-stand/`; smaller tabletop and mat:
+`artifacts/workshop-small-table/`. The bored environment has **3,160
+visible/collision triangles, 2 draws/pass, 6.67 MiB textures and a 386,476-byte GLB**. Verification includes
 144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
 32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
 Shift keys, pause and resume. Overview and stand detail captures were reviewed.

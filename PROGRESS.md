@@ -3,6 +3,27 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Smaller tabletop and mat — 25 October 2026
+
+Reduced the table from 450 × 330 to **270 × 160 mm**, and the mat from
+350 × 250 to **240 × 130 mm**. The table spans X−115…155, Z−85…75; the
+mat spans X−100…140, Z−65…65. Wood borders are 15 mm at either side,
+20 mm behind and 10 mm in front. The rim and walking boundaries follow the
+new footprint. All objects, the fitted stand, movement, holders and arrival
+retain their positions and scale.
+
+Rebuilt and rebaked the environment; reviewed front and oblique renders.
+Verified **144 CPU tests**, typecheck/lint/build, **10 parts**, **5 seating**
+and **65 environment checks**, with no browser errors. All four mat edges,
+the rim, high-speed table containment and both full movement flips pass.
+The running-wall fixture now checks both the blocked running position and
+stable grounded rest after releasing movement, avoiding a transient contact frame.
+All source/output hashes match. Environment: **3,160 visible/collision triangles**,
+**2 draws/pass**, 6.67 MiB textures and 386,476-byte GLB. Evidence:
+`artifacts/workshop-small-table/`. Preview rebuilt/restarted at
+<http://127.0.0.1:4198/bench>. Next: owner review of the smaller work surface.
+Local only; no push or publication.
+
 ## Lower, compact stand and aligned case — 25 October 2026
 
 Reduced the oak stand from 83 × 105 × 4.5 mm to **76 × 76 × 2 mm**, with a

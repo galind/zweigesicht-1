@@ -3,43 +3,43 @@
   "units": "millimetres",
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
-    "minX": -225,
-    "maxX": 225,
-    "minZ": -195,
-    "maxZ": 135,
+    "minX": -115,
+    "maxX": 155,
+    "minZ": -85,
+    "maxZ": 75,
     "topY": -1,
     "bottomY": -33,
     "footprint": [
       [
-        -225,
-        -195
+        -115,
+        -85
       ],
       [
-        225,
-        -195
+        155,
+        -85
       ],
       [
-        225,
-        135
+        155,
+        75
       ],
       [
-        -225,
-        135
+        -115,
+        75
       ]
     ]
   },
   "proposedTraversal": {
-    "minX": -225,
-    "maxX": 225,
-    "minZ": -195,
-    "maxZ": 135,
+    "minX": -115,
+    "maxX": 155,
+    "minZ": -85,
+    "maxZ": 75,
     "rule": "Rectangular capsule-radius inset; outward-only constraints at every altitude. Visible rim triangles collide."
   },
   "mat": {
-    "minX": -175,
-    "maxX": 175,
-    "minZ": -125,
-    "maxZ": 125,
+    "minX": -100,
+    "maxX": 140,
+    "minZ": -65,
+    "maxZ": 65,
     "topY": 0,
     "bottomY": -1
   },
@@ -70,8 +70,8 @@
   "openCore": {
     "minX": -28,
     "maxX": 28,
-    "minZ": -65,
-    "maxZ": 100,
+    "minZ": -55,
+    "maxZ": 60,
     "meaning": "Clear approach and circulation around the unchanged movement; case lies left of X-33, oak stand begins at X40. Continuous CAD envelopes independently audited."
   },
   "props": [
@@ -124,11 +124,11 @@
   },
   "stage": "oak-parts-stand",
   "tabletopDetail": {
-    "outline": "Straight rectangular 450 x 330 mm slab; front Z135 preserves 10 mm wood margin.",
+    "outline": "Straight rectangular 270 x 160 mm slab; front Z75 preserves 10 mm wood margin.",
     "edgeBevel": 0.12,
     "rimWidth": 6,
     "rimHeight": 5,
-    "rimFrontZ": 125,
+    "rimFrontZ": 65,
     "finish": "Light natural wood, restrained irregular grain, matte/satin; original procedural albedo."
   }
 }

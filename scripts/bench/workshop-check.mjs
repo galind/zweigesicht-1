@@ -16,6 +16,11 @@ const base = process.argv[2] || "http://127.0.0.1:4198";
 const provenance = JSON.parse(
   await fs.readFile("assets/source-manifest/workshop-environment.json"),
 );
+const environment = JSON.parse(await fs.readFile("assets/authored/workshop-environment.json"));
+const desk = environment.mainDesk,
+  mat = environment.mat,
+  detail = environment.tabletopDetail;
+const fixtures = { ...provenance, desk, mat, detail };
 const report = { checks: [], errors: [] };
 page.on("pageerror", (e) => report.errors.push(e.message));
 const check = (name, pass, detail) => {
@@ -32,7 +37,7 @@ try {
     });
   await page.goto(base + "/bench?inspect=1");
   await page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
-  report.geometry = await page.evaluate(({ semantics }) => {
+  report.geometry = await page.evaluate(({ semantics, desk, mat, detail }) => {
     const b = window.bench,
       w = b.walker,
       V = w.feet.constructor,
@@ -98,11 +103,11 @@ try {
           if (holderBoxes.some((box) => positiveOverlap(box, triangleBox)))
             stats.holderHits.push([mesh.name, i]);
         } else if (
-          triangleBox.max.y > -33 &&
-          triangleBox.min.x < 225 &&
-          triangleBox.max.x > -225 &&
-          triangleBox.min.z < 135 &&
-          triangleBox.max.z > -195
+          triangleBox.max.y > desk.bottomY &&
+          triangleBox.min.x < desk.maxX &&
+          triangleBox.max.x > desk.minX &&
+          triangleBox.min.z < desk.maxZ &&
+          triangleBox.max.z > desk.minZ
         )
           stats.decorIntrusions.push([mesh.name, i]);
       }
@@ -134,11 +139,11 @@ try {
     };
     const collisions = [];
     for (const [name, x, z, height] of [
-      ["wood", 0, 130, -1],
-      ["mat", -130, 0, 0],
-      ["left wood border", -200, 0, -1],
-      ["right wood border", 200, 0, -1],
-      ["back wood border", 0, -150, -1],
+      ["wood", 0, (mat.maxZ + desk.maxZ) / 2, -1],
+      ["mat", mat.minX + 10, 0, 0],
+      ["left wood border", desk.minX + detail.rimWidth + 4, 0, -1],
+      ["right wood border", desk.maxX - detail.rimWidth - 4, 0, -1],
+      ["back wood border", 0, desk.minZ + detail.rimWidth + 5, -1],
       ["open case center", -55, -7, 0],
       ["stand between rows", 82, -3, 2],
       ["left approach mat", -36, 35, 0],
@@ -185,13 +190,13 @@ try {
     }
     const frontEdges = [];
     for (const sign of [-1, 1]) {
-      const x = sign * 195;
+      const x = sign < 0 ? desk.minX + 15 : desk.maxX - 15;
       frontEdges.push({
         name: "no invisible support " + sign,
-        pass: !Number.isFinite(b.world.floor(x, 150, 50)),
+        pass: !Number.isFinite(b.world.floor(x, desk.maxZ + 15, 50)),
       });
       for (const y of [-0.998, 50, 6000]) {
-        setup(x, y, 134.77);
+        setup(x, y, desk.maxZ - 0.23);
         w.velocity.set(sign * 100, 0, 100);
         w.keys.add("KeyS");
         w.update(10);
@@ -211,11 +216,11 @@ try {
     }
     const rimContacts = [];
     for (const [name, x, z, key, axis, limit, sign] of [
-      ["left", -217, 0, "KeyA", "x", -219, -1],
-      ["right", 217, 0, "KeyD", "x", 219, 1],
-      ["back", 0, -187, "KeyW", "z", -189, -1],
-      ["left end", -222, 127, "KeyW", "z", 125, -1],
-      ["right end", 222, 127, "KeyW", "z", 125, -1],
+      ["left", desk.minX + detail.rimWidth + 2, 0, "KeyA", "x", desk.minX + detail.rimWidth, -1],
+      ["right", desk.maxX - detail.rimWidth - 2, 0, "KeyD", "x", desk.maxX - detail.rimWidth, 1],
+      ["back", 0, desk.minZ + detail.rimWidth + 2, "KeyW", "z", desk.minZ + detail.rimWidth, -1],
+      ["left end", desk.minX + 3, detail.rimFrontZ + 2, "KeyW", "z", detail.rimFrontZ, -1],
+      ["right end", desk.maxX - 3, detail.rimFrontZ + 2, "KeyW", "z", detail.rimFrontZ, -1],
     ]) {
       setup(x, -0.998, z);
       w.keys.add(key);
@@ -251,7 +256,7 @@ try {
           Math.hypot(w.feet.x - x, w.feet.z - z) > 25,
       });
     }
-    for (const x of [-121, 121]) {
+    for (const x of [mat.minX + 12, mat.maxX - 12]) {
       setup(x, 0.002, 57);
       w.keys.add("KeyW");
       advance(240);
@@ -265,17 +270,26 @@ try {
     w.keys.add("KeyD");
     w.keys.add("ShiftLeft");
     advance(500);
+    const runningStopX = w.feet.x;
+    w.clear();
+    advance(90); // Settle after contact before asserting the resting grounded state.
     circulation.push({
       name: "running stops at the visible stand wall",
+      runningStopX,
       feet: w.feet.toArray(),
-      pass: w.feet.x > 39.7 && w.feet.x < 39.8 && w.grounded && Math.abs(w.feet.y) < 0.02,
+      pass:
+        runningStopX > 39.7 &&
+        runningStopX < 39.8 &&
+        w.feet.x < 39.8 &&
+        w.grounded &&
+        Math.abs(w.feet.y) < 0.02,
     });
     const matEdges = [];
     for (const [x, z, outKey, inKey, axis, sign] of [
-      [174, 40, "KeyD", "KeyA", "x", 1],
-      [-174, 40, "KeyA", "KeyD", "x", -1],
-      [100, 124, "KeyS", "KeyW", "z", 1],
-      [100, -124, "KeyW", "KeyS", "z", -1],
+      [mat.maxX - 1, 40, "KeyD", "KeyA", "x", 1],
+      [mat.minX + 1, 40, "KeyA", "KeyD", "x", -1],
+      [100, mat.maxZ - 1, "KeyS", "KeyW", "z", 1],
+      [100, mat.minZ + 1, "KeyW", "KeyS", "z", -1],
     ]) {
       setup(x, 0.002, z);
       advance(20);
@@ -287,7 +301,7 @@ try {
       w.keys.add(inKey);
       advance(180);
       const blocked = w.feet.toArray();
-      const edge = axis === "x" ? 175 : 125;
+      const edge = axis === "x" ? (sign > 0 ? mat.maxX : mat.minX) : sign > 0 ? mat.maxZ : mat.minZ;
       w.keys.add("Space");
       advance(170);
       w.clear();
@@ -299,7 +313,7 @@ try {
         back,
         pass:
           Math.abs(off[1] + 1) < 0.01 &&
-          sign * blocked[axis === "x" ? 0 : 2] > edge &&
+          sign * blocked[axis === "x" ? 0 : 2] > sign * edge &&
           Math.abs(back[1]) < 0.01 &&
           w.grounded,
       });
@@ -323,7 +337,7 @@ try {
       station: b.station.root.position.toArray(),
       arrival: w.spawn.toArray(),
     };
-  }, provenance);
+  }, fixtures);
   const g = report.geometry,
     s = g.stats;
   check("one precision depth path enabled", g.depth.reversed !== g.depth.logarithmic, g.depth);
@@ -370,10 +384,10 @@ try {
   check("decor stays outside reachable column", !s.decorIntrusions.length, s.decorIntrusions);
   check(
     "approved desk boundaries",
-    g.bounds.minX === -225 &&
-      g.bounds.maxX === 225 &&
-      g.bounds.minZ === -195 &&
-      g.bounds.maxZ === 135 &&
+    g.bounds.minX === desk.minX &&
+      g.bounds.maxX === desk.maxX &&
+      g.bounds.minZ === desk.minZ &&
+      g.bounds.maxZ === desk.maxZ &&
       g.bounds.footprint.length === 4,
     g.bounds,
   );
@@ -393,12 +407,12 @@ try {
   for (const [i, row] of g.matEdges.entries())
     check("mat edge descent/block/jetpack " + i, row.pass, row);
   // Real keyboard input across a mat edge, in addition to labelled fixtures.
-  await page.evaluate(() => {
+  await page.evaluate((maxX) => {
     const b = window.bench;
     b.walker.reset();
-    b.walker.feet.set(173, 0.002, 40);
+    b.walker.feet.set(maxX - 2, 0.002, 40);
     b.wake();
-  });
+  }, mat.maxX);
   await page.getByRole("button", { name: "Enter the movement", exact: true }).click();
   await page.waitForFunction(() => window.bench.status.captured);
   await page.keyboard.down("KeyD");
@@ -415,7 +429,8 @@ try {
   check(
     "actual walking cannot climb 1 mm mat",
     await page.evaluate(
-      () => window.bench.walker.feet.x > 175 && window.bench.walker.feet.y < -0.9,
+      (maxX) => window.bench.walker.feet.x > maxX && window.bench.walker.feet.y < -0.9,
+      mat.maxX,
     ),
   );
   await page.keyboard.down("Space");
@@ -445,11 +460,11 @@ try {
   });
   // Explicit camera fixtures, never exposed as visitor camera controls.
   for (const [name, position, target] of [
-    ["open-space-inspection", [440, 300, 550], [0, -10, -30]],
-    ["reference-front-overview", [0, 340, 430], [0, -1, -30]],
-    ["rim-profile-overview", [400, 100, 310], [0, -1, -30]],
-    ["underside-overview", [320, -210, 400], [0, -17, -30]],
-    ["desk-inspection", [220, 350, 320], [0, 0, -30]],
+    ["open-space-inspection", [270, 180, 320], [20, -10, -5]],
+    ["reference-front-overview", [20, 200, 250], [20, -1, -5]],
+    ["rim-profile-overview", [250, 65, 180], [20, -1, -5]],
+    ["underside-overview", [200, -150, 240], [20, -17, -5]],
+    ["desk-inspection", [150, 210, 190], [20, 0, -5]],
   ]) {
     await page.evaluate(
       ({ position, target }) => {
@@ -470,9 +485,9 @@ try {
     await page.screenshot({ path: out + "/" + name + ".png" });
   }
   for (const [name, x, z, yaw, pitch] of [
-    ["mat-edge-visitor", 177, 40, Math.PI / 2, -0.3],
-    ["rim-visitor", 534, -100, -Math.PI / 2, 0.1],
-    ["front-edge-visitor", 295, 133, Math.PI, -0.35],
+    ["mat-edge-visitor", mat.maxX + 2, 40, Math.PI / 2, -0.3],
+    ["rim-visitor", desk.maxX - 8, -30, -Math.PI / 2, 0.1],
+    ["front-edge-visitor", desk.maxX - 15, desk.maxZ - 2, Math.PI, -0.35],
   ]) {
     await page.evaluate(
       ({ x, z, yaw, pitch }) => {
