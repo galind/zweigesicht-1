@@ -121,6 +121,13 @@ const report = { schemaVersion: 1,
   toolVersions: JSON.parse(await fs.readFile(new URL('scripts/assets/package.json', root))).dependencies,
   files };
 await fs.writeFile(new URL('holder-runtime.json', out), JSON.stringify(report, null, 2) + '\n');
+const recordedPath = new URL('assets/source-manifest/holder-runtime.json', root);
+try {
+  const recorded = JSON.parse(await fs.readFile(recordedPath, 'utf8'));
+  assert.deepEqual(report, recorded, 'Generated holders differ from the reviewed runtime manifest');
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
 // Originals are never written to public output or uploaded as workflow artifacts.
 if (process.argv.includes('--local')) {
   const publicDir = new URL('explorer/public/bench-local/', root);

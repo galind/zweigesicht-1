@@ -24,8 +24,8 @@ and the two resting specifications; those specifications are not two instances.
 
 | Resting side | Movement X rotation / local Y | Original holder |
 | --- | --- | --- |
-| Bridge-up | +90° / 12.2 mm | `movement.stl` |
-| Dial-side-up | −90° / 16.3 mm | `dial.stl` |
+| Bridge-up | +90° / 12.2 mm | `movement.glb` |
+| Dial-side-up | −90° / 16.3 mm | `dial.glb` |
 
 Both intact holders retain source X −90° followed by world Y +90°, aligning the
 source −Y stem relief with the crown. Only one is visible and colliding at rest.
@@ -318,7 +318,9 @@ npm --prefix explorer run build
 npm --prefix explorer start -- --hostname 127.0.0.1 --port 4198
 ```
 
-Original holder files must exist and match `holder.json`. Install the pinned
+Original holder files must exist privately and match `holder.json`. Install the
+conversion dependencies with `npm ci --prefix scripts/assets`; `prepare-holder.mjs`
+writes only GLBs into `public/bench-local/` and removes obsolete STL copies. Install the pinned
 explorer dependencies before building. Blender 5.2.1 LTS was used
 for this export; its CPU bake uses 64 samples. Editable Blender files and packed
 GLB output remain ignored under `assets/generated/bench/` and
@@ -333,37 +335,43 @@ and `environment.glb`. The route was deployed while Git ignored the files and
 Vercel packaging removed them. A successful build alone did not prove Bench
 availability.
 
-For an approved staging deployment, place the three prepared files in a protected
-HTTPS storage directory. Preserve their names. Use the original holder bytes
-recorded in `assets/source-manifest/holder.json` and the authored environment
-recorded in `assets/source-manifest/workshop-environment.json`; do not regenerate
-or substitute them during deployment. Configure only the intended Vercel project
-and environment:
+For approved staging, the HTTPS asset directory contains only `movement.glb`,
+`dial.glb` and `environment.glb`. Holder runtime hashes and measurements live in
+`assets/source-manifest/holder-runtime.json`; original URLs/hashes remain in
+`holder.json`. Environment provenance remains in `workshop-environment.json`.
+Configure only the intended Vercel project and environment:
 
 - `BENCH_ASSET_BASE_URL`: the directory URL, without credentials/query parameters.
 - `BENCH_ASSET_TOKEN`: optional sensitive Bearer credential, used only by the build.
 
-`package-vercel.mjs` downloads into temporary storage, verifies the recorded
-SHA-256 hashes (and holder byte counts), removes incidental local build copies,
-then installs exactly those three verified files. A failed fetch/hash aborts the
-build before new assets enter the output. Redirects are rejected to avoid sending
-the credential to another host. No storage URL or credential enters client code.
+`package-vercel.mjs` downloads into temporary storage, verifies recorded hashes
+and byte counts, removes incidental build copies, then installs exactly those
+three GLBs. A missing/corrupt asset aborts the build. Redirects are rejected;
+private URLs and credentials stay out of logs and client code. Both standard and
+Vercel build packaging remove original holder STLs.
 
-Without a configured asset source, hosted builds omit the homepage invitation
-and show an unavailable message at `/bench` without starting its renderer. Local
-development and standard local builds retain their prepared-file workflow.
+The **Holder assets** workflow downloads originals from their recorded maker URLs
+into runner memory, checks their hashes, and converts them using pinned tools.
+Exact float32 positions, triangle winding, source axes, units and bounds survive.
+Lighting normals use normalized signed 16-bit components; CI bounds the error to
+1/32767 per component. Geometry is never decimated. Meshopt compression and vertex
+ordering reduce payload size; CI compares both raw and gzip level-9 bytes and
+requires savings for each holder. These are byte measurements, not FPS claims.
+Three.js and an independent glTF decoder verify the generated models.
+Only GLBs and the measurement report become workflow artifacts; STLs are never
+committed, cached as assets or uploaded as artifacts.
 
-Storage authentication protects the build source; the deployed files inherit
-the site's access controls. Confirm staging protection and the applicable
-[release gates](RELEASE_GATES.md) before supplying the assets. The owner has now
-approved these three files for public UAT delivery. Their recorded bytes are in
-the `zweigesicht-uat-bench` Blob store under `bench-20261025/`, and only the UAT
-project's serving environment has `BENCH_ASSET_BASE_URL` configured. No build
-read token is needed for these approved public objects. Originals stay out of Git.
+Without an asset source, hosted builds omit the Bench invitation and show an
+unavailable page without loading a renderer. Local reproduction uses the private
+originals and the same converter. Owner-requested UAT delivery now uses optimized
+GLBs; original holder STLs must not remain in Blob storage or historical
+STL-serving deployments. This changes the delivery format, not the accessibility
+of geometry rendered in a public browser.
 
-The **Staging delivery** GitHub Actions workflow checks the deployed homepage,
-`/bench`, and all three payload hashes without using the owner's computer.
-It does not execute browser/WebGL interaction or replace actual scene-entry review.
+The **Staging delivery** workflow checks live entry pages, GLB hashes and the
+absence of legacy STL downloads from UAT, the former Blob URLs and the retired
+deployment. Checks run on GitHub runners. They do not execute browser/WebGL
+interaction or replace scene-entry review.
 
 ## Verification
 

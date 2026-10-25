@@ -28,4 +28,16 @@ for (const asset of await expectedBenchAssets()) {
   if (asset.bytes !== undefined) assert.equal(bytes.length, asset.bytes, asset.name);
   console.log(`${asset.name}: HTTP 200, ${bytes.length} bytes, recorded SHA-256 matches`);
 }
+for (const name of ['movement.stl', 'dial.stl']) {
+  for (const base of [
+    origin + '/bench-local/',
+    'https://juxa6femshouoyvs.public.blob.vercel-storage.com/bench-20261025/',
+    'https://zweigesicht-aqwlmf8cs-guillem-galindos-projects.vercel.app/bench-local/',
+  ]) {
+    const response = await fetch(base + name, { redirect: 'manual', signal: AbortSignal.timeout(30000) });
+    await response.body?.cancel();
+    assert.ok([404, 410].includes(response.status), `Legacy STL is still accessible: ${base}${name} (HTTP ${response.status})`);
+    console.log(`${new URL(base).host}/${name}: HTTP ${response.status}, original unavailable`);
+  }
+}
 console.log('Staging delivery verified. This HTTP check does not execute WebGL or browser interaction.');

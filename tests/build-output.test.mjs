@@ -48,18 +48,20 @@ test('incomplete and mismatched builds fail before deleting anything', async t =
   await assert.rejects(pruneBuildOutput(output), /Surface\/overview mismatch/);
 });
 
-test('local bench assets survive a local build but unconfigured Vercel packaging excludes them', async t => {
+test('local builds retain holder GLBs but never original STLs; unconfigured hosting excludes Bench', async t => {
   const { output } = await fixture(t);
   const bench = path.join(output, 'bench-local');
   await fs.mkdir(bench);
-  await fs.writeFile(path.join(bench, 'movement.stl'), 'local maker asset');
+  await fs.writeFile(path.join(bench, 'movement.stl'), 'private source');
+  await fs.writeFile(path.join(bench, 'movement.glb'), 'prepared runtime asset');
   await pruneBuildOutput(output);
-  assert.equal(await fs.readFile(path.join(bench, 'movement.stl'), 'utf8'), 'local maker asset');
+  await assert.rejects(fs.access(path.join(bench, 'movement.stl')), { code: 'ENOENT' });
+  assert.equal(await fs.readFile(path.join(bench, 'movement.glb'), 'utf8'), 'prepared runtime asset');
   assert.deepEqual(await packageVercel(output), { benchEnabled: false });
   await assert.rejects(fs.access(bench), { code: 'ENOENT' });
 });
 
-const payloads = new Map(['movement.stl', 'dial.stl', 'environment.glb'].map(name => [name, Buffer.from('fixture:' + name)]));
+const payloads = new Map(['movement.glb', 'dial.glb', 'environment.glb'].map(name => [name, Buffer.from('fixture:' + name)]));
 const benchAssets = [...payloads].map(([name, bytes]) => ({
   name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'),
 }));
@@ -113,13 +115,26 @@ test('asset configuration rejects unsafe sources and does not leak credentials i
   await assert.rejects(downloadBenchAssets({
     baseUrl: benchSource, token: 'fixture-token', assets: benchAssets,
     fetchImpl() { throw Error('fixture-token and private storage details'); },
-  }), { message: 'Bench asset request failed: movement.stl' });
+  }), { message: 'Bench asset request failed: movement.glb' });
+});
+
+test('hosted packaging rejects original holder STL payloads', async () => {
+  await assert.rejects(downloadBenchAssets({
+    baseUrl: benchSource, assets: [{ ...benchAssets[0], name: 'movement.stl' }],
+    fetchImpl() { assert.fail('Original holder payloads must not be fetched for publishing'); },
+  }), /Invalid Bench asset provenance/);
 });
 
 test('Bench packaging derives the three payload identities from reviewed manifests', async () => {
   const assets = await expectedBenchAssets();
-  assert.deepEqual(assets.map(asset => asset.name), ['movement.stl', 'dial.stl', 'environment.glb']);
-  assert.equal(assets[0].sha256, 'd8177c22d9f844c424d6abb80a31c7a33b913811b7e000142f98bc914192bc4a');
-  assert.equal(assets[1].sha256, '2f95f97ebd6d5a56881788b957e98d8186d25ac8084491027f5f177182c5bba4');
+  assert.deepEqual(assets.map(asset => asset.name), ['movement.glb', 'dial.glb', 'environment.glb']);
+  const holders = JSON.parse(await fs.readFile(new URL('../assets/source-manifest/holder-runtime.json', import.meta.url)));
+  for (const asset of assets.slice(0, 2)) {
+    const holder = holders.files.find(file => file.name === asset.name);
+    assert.equal(asset.sha256, holder.sha256);
+    assert.equal(asset.bytes, holder.bytes);
+    assert.ok(holder.bytes < holder.sourceBytes);
+    assert.ok(holder.gzipBytes < holder.sourceGzipBytes);
+  }
   assert.match(assets[2].sha256, /^[a-f0-9]{64}$/);
 });

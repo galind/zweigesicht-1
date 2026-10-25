@@ -1,7 +1,6 @@
 import { assemblyFittingPresent } from '../experience/assemblyFittings';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
   configureRenderer,
@@ -26,7 +25,7 @@ import { finishBenchSurface } from './SurfaceFinish';
 import layout from '../../../assets/authored/atelier-layout.json';
 import workshop from '../../../assets/authored/workshop-environment.json';
 import watchConfiguration from '../../../assets/authored/watch-configurations.json';
-import holderManifest from '../../../assets/source-manifest/holder.json';
+import holderManifest from '../../../assets/source-manifest/holder-runtime.json';
 export type BenchStatus = {
   ready: boolean;
   captured: boolean;
@@ -281,22 +280,26 @@ export class BenchViewer {
         return o;
       };
       const holder = async (name: string) => {
-        const response = await fetch('/bench-local/' + name + '.stl');
-        if (!response.ok) throw Error('Local holder unavailable');
+        const response = await fetch('/bench-local/' + name + '.glb');
+        if (!response.ok) throw Error('Holder unavailable');
         const data = await response.arrayBuffer();
         if (
           (await sha256(data)) !==
-          holderManifest.files.find((f) => f.path.endsWith('/' + name + '.stl'))
+          holderManifest.files.find((f) => f.name === name + '.glb')
             ?.sha256
         )
           throw Error('Holder integrity mismatch');
-        const mesh = new THREE.Mesh(
-          new STLLoader().parse(data),
-          printedPlastic(),
-        );
+        const gltf = await loader.parseAsync(data, '/bench-local/');
+        track(gltf.scene);
+        const mesh = gltf.scene.children[0];
+        if (gltf.scene.children.length !== 1 || !(mesh instanceof THREE.Mesh))
+          throw Error('Invalid holder model');
+        for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material])
+          this.releaseMaterial(material);
+        mesh.material = printedPlastic();
         mesh.rotation.x = -Math.PI / 2;
         mesh.name = name + '-holder';
-        track(mesh);
+        track(mesh); // Retain ownership when the mesh moves out of the glTF scene.
         return mesh;
       };
       const loadEnvironment = async () => {

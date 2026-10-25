@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "method": "Exact positions and oriented triangles; SNORM16 lighting normals with component error <= 1/32767; meshopt v0, no geometry quantization or decimation. Vertex/triangle order selected by gzip size. Original millimetres and Z-up axes retained.",
+  "toolVersions": {
+    "@gltf-transform/core": "4.5.0",
+    "@gltf-transform/extensions": "4.5.0",
+    "meshoptimizer": "1.2.0"
+  },
+  "files": [
+    {
+      "name": "movement.glb",
+      "encoding": {
+        "reorder": "cache"
+      },
+      "sha256": "647af36dcc34649a227cf77bcbd11c366b5cd83c059464957904d9254aebdc76",
+      "bytes": 872928,
+      "sourceSha256": "d8177c22d9f844c424d6abb80a31c7a33b913811b7e000142f98bc914192bc4a",
+      "sourceBytes": 1592184,
+      "gzipBytes": 646333,
+      "sourceGzipBytes": 679922,
+      "reductionPercent": 45.17,
+      "gzipReductionPercent": 4.94,
+      "triangles": 31842,
+      "sourceVertices": 95526,
+      "vertices": 82588,
+      "trianglePositionsAndWindingExact": true,
+      "maxNormalComponentError": 0.00001525892933484929,
+      "boundsExact": true,
+      "deterministic": true,
+      "threeLoaderDecodePassed": true,
+      "independentNodeIoDecodePassed": true
+    },
+    {
+      "name": "dial.glb",
+      "encoding": {
+        "reorder": "cache"
+      },
+      "sha256": "0c48ae32902da7862fbdad1286fdb420f45d3124b92d7b9bb4757986f3e39392",
+      "bytes": 534408,
+      "sourceSha256": "2f95f97ebd6d5a56881788b957e98d8186d25ac8084491027f5f177182c5bba4",
+      "sourceBytes": 1092584,
+      "gzipBytes": 399123,
+      "sourceGzipBytes": 400823,
+      "reductionPercent": 51.09,
+      "gzipReductionPercent": 0.42,
+      "triangles": 21850,
+      "sourceVertices": 65550,
+      "vertices": 52702,
+      "trianglePositionsAndWindingExact": true,
+      "maxNormalComponentError": 0.000015258901318176976,
+      "boundsExact": true,
+      "deterministic": true,
+      "threeLoaderDecodePassed": true,
+      "independentNodeIoDecodePassed": true
+    }
+  ]
+}

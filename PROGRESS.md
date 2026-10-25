@@ -101,3 +101,16 @@ and authored placement evidence remain in their existing manifests. The
 [release gates](docs/RELEASE_GATES.md) contain the decisions and remediation paths;
 the [permission request](docs/ASSET_PERMISSION_REQUEST.md) remains unsent.
 Original code/documentation use MIT; maker design/CAD and derivatives do not.
+
+## Holder GLB follow-up
+
+Owner requested optimized GLBs, private original STLs and CI-only verification.
+[Holder conversion CI](https://github.com/galind/zweigesicht-1/actions/runs/40237583360)
+passed: combined raw size drops from 2,684,768 to 1,407,336 bytes (47.6%);
+gzip level-9 drops from 1,080,745 to 1,045,456 bytes (3.3%). Triangle coordinates,
+winding and bounds are exact; SNORM16 lighting-normal component error is below
+0.000016. Three.js and an independent decoder pass. Runtime hashes/measurements
+are recorded in `assets/source-manifest/holder-runtime.json`. No local conversion,
+benchmark, build or test was run. CI artifacts contain only GLBs and the report.
+Next: publish these GLBs, deploy the updated loader to UAT, remove public STL
+objects and their old deployment, and verify the live paths from CI.

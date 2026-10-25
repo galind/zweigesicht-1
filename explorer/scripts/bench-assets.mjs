@@ -9,11 +9,11 @@ export async function expectedBenchAssets() {
     new URL('../../assets/source-manifest/' + name, import.meta.url), 'utf8',
   ));
   const [holders, environment] = await Promise.all([
-    read('holder.json'), read('workshop-environment.json'),
+    read('holder-runtime.json'), read('workshop-environment.json'),
   ]);
   return [
-    ...['movement.stl', 'dial.stl'].map((name) => {
-      const entry = holders.files.find((file) => file.path.endsWith('/' + name));
+    ...['movement.glb', 'dial.glb'].map((name) => {
+      const entry = holders.files.find((file) => file.name === name);
       if (!entry) throw Error(`Missing provenance for ${name}`);
       return { name, sha256: entry.sha256, bytes: entry.bytes };
     }),
@@ -35,7 +35,7 @@ export async function downloadBenchAssets({
     throw Error('BENCH_ASSET_BASE_URL must be an HTTPS directory URL without credentials or query parameters');
   if (!base.pathname.endsWith('/')) base.pathname += '/';
   if (!assets.length || assets.some((asset) =>
-    !/^[a-z]+\.(stl|glb)$/.test(asset.name) || !/^[a-f0-9]{64}$/.test(asset.sha256)))
+    !/^[a-z]+\.glb$/.test(asset.name) || !/^[a-f0-9]{64}$/.test(asset.sha256)))
     throw Error('Invalid Bench asset provenance');
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zweigesicht-bench-'));
   try {

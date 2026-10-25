@@ -38,9 +38,7 @@ export async function holderGlb(source, { reorder = 'cache' } = {}) {
     await MeshoptEncoder.ready;
     if (reorder !== 'none') {
       const ordered = new Uint32Array(indices);
-      const remap = reorder === 'spatial' ? MeshoptEncoder.reorderPoints(arrays[0], 3)
-        : MeshoptEncoder.reorderMesh(ordered, true, true)[0];
-      if (reorder === 'spatial') for (let i = 0; i < ordered.length; i++) ordered[i] = remap[ordered[i]];
+      const remap = MeshoptEncoder.reorderMesh(ordered, true, true)[0];
       arrays = arrays.slice(0, 2).map((source, attribute) => {
         const width = attribute === 0 ? 3 : 4;
         const target = new source.constructor(source.length);
@@ -55,13 +53,12 @@ export async function holderGlb(source, { reorder = 'cache' } = {}) {
       { bufferView: 1, componentType: 5122, normalized: true, count: vertices.size, type: 'VEC3' },
       { bufferView: 2, componentType: arrays[2] instanceof Uint16Array ? 5123 : 5125, count: indices.length, type: 'SCALAR' },
     ];
-    await MeshoptEncoder.ready;
     const blocks = [], views = [];
     let compressedOffset = 0, decodedOffset = 0;
     for (let i = 0; i < arrays.length; i++) {
       const raw = bytes(arrays[i]), count = accessors[i].count;
       const stride = raw.length / count, mode = i === 2 ? (reorder === 'cache' ? 'TRIANGLES' : 'INDICES') : 'ATTRIBUTES';
-      // Version 0 and NONE preserve bits and index order in Three's bundled decoder.
+      // Version 0 and NONE preserve attribute bits; TRIANGLES may rotate starting corners.
       const encoded = Buffer.from(MeshoptEncoder.encodeGltfBuffer(raw, count, stride, mode, 0));
       views.push({ buffer: 1, byteOffset: decodedOffset, byteLength: raw.length,
         target: i === 2 ? 34963 : 34962, ...(i === 1 ? { byteStride: 8 } : {}),
