@@ -1,11 +1,11 @@
-/** Sculpted tabletop geometry/collision/visibility fixtures. Inspection views are labelled. */
+/** Rectangular tabletop geometry/collision/visibility fixtures. Inspection views are labelled. */
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-tabletop";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-rectangle";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -101,7 +101,7 @@ try {
           triangleBox.max.y > -33 &&
           triangleBox.min.x < 550 &&
           triangleBox.max.x > -550 &&
-          triangleBox.min.z < 185 &&
+          triangleBox.min.z < 135 &&
           triangleBox.max.z > -465
         )
           stats.decorIntrusions.push([mesh.name, i]);
@@ -134,7 +134,7 @@ try {
     };
     const collisions = [];
     for (const [name, x, z, height] of [
-      ["wood", 0, 160, -1],
+      ["wood", 0, 130, -1],
       ["mat", 100, 0, 0],
       ["cleared stand area", -380, -70, -1],
       ["cleared screwdriver area", -380, -90, -1],
@@ -159,7 +159,7 @@ try {
         pass: Math.abs(floor - height) < 0.03 && w.grounded && Math.abs(w.feet.y - floor) < 0.03,
       });
     }
-    // Every sampled visible outline segment and corner, including both recesses.
+    // Every sampled visible outline segment and corner, including the straight front edge.
     // Starting on the rim uses its real top; the boundary never supplies a floor.
     const outerEdges = [];
     const outline = w.bounds.footprint;
@@ -186,15 +186,15 @@ try {
         });
       }
     }
-    const recesses = [];
+    const frontEdges = [];
     for (const sign of [-1, 1]) {
       const x = sign * 295;
-      recesses.push({
+      frontEdges.push({
         name: "no invisible support " + sign,
         pass: !Number.isFinite(b.world.floor(x, 150, 50)),
       });
       for (const y of [-0.998, 50, 6000]) {
-        setup(x, y, 109.77);
+        setup(x, y, 134.77);
         w.velocity.set(sign * 100, 0, 100);
         w.keys.add("KeyS");
         w.update(10);
@@ -205,8 +205,8 @@ try {
         const start = w.feet.z;
         w.keys.add("KeyW");
         advance(180);
-        recesses.push({
-          name: "fast curved edge and free inward travel " + sign + " at " + y,
+        frontEdges.push({
+          name: "fast front edge and free inward travel " + sign + " at " + y,
           pass: contained && w.feet.z < start - 4,
           feet: w.feet.toArray(),
         });
@@ -217,15 +217,15 @@ try {
       ["left", -542, 0, "KeyA", "x", -544, -1],
       ["right", 542, 0, "KeyD", "x", 544, 1],
       ["back", 0, -457, "KeyW", "z", -459, -1],
-      ["left end", -547, 162, "KeyW", "z", 160, -1],
-      ["right end", 547, 162, "KeyW", "z", 160, -1],
+      ["left end", -547, 127, "KeyW", "z", 125, -1],
+      ["right end", 547, 127, "KeyW", "z", 125, -1],
     ]) {
       setup(x, -0.998, z);
       w.keys.add(key);
       advance(180);
       const blocked = sign * (w.feet[axis] - limit) < -0.2 && w.feet.y < -0.9;
       w.keys.add("Space");
-      advance(240);
+      advance(360);
       w.clear();
       advance(400);
       rimContacts.push({
@@ -274,7 +274,7 @@ try {
       collisions,
       matEdges,
       outerEdges,
-      recesses,
+      frontEdges,
       rimContacts,
       bounds: w.bounds,
       near: b.camera.near,
@@ -314,6 +314,12 @@ try {
       provenance.semantics.every((part) => allowedIds.has(part.id) && part.min[1] >= -33),
     provenance.semantics,
   );
+  check(
+    "mat is 10 mm from the straight front edge",
+    provenance.semantics.find((p) => p.id === "main-oak-top").max[2] -
+      provenance.semantics.find((p) => p.id === "green-mat").max[2] ===
+      10,
+  );
   check("no new transparent or transmission passes", !s.nonOpaque.length, s.nonOpaque);
   check(
     "continuous per-part flip envelopes clear every static triangle",
@@ -331,8 +337,8 @@ try {
     g.bounds.minX === -550 &&
       g.bounds.maxX === 550 &&
       g.bounds.minZ === -465 &&
-      g.bounds.maxZ === 185 &&
-      g.bounds.footprint.length > 100,
+      g.bounds.maxZ === 135 &&
+      g.bounds.footprint.length === 4,
     g.bounds,
   );
   check(
@@ -346,7 +352,7 @@ try {
   for (const row of g.collisions) check("drop on " + row.name, row.pass, row);
   for (const row of g.outerEdges)
     check("solid outline segment/corner " + row.edge + "/" + row.t, row.pass, row);
-  for (const row of [...g.recesses, ...g.rimContacts]) check(row.name, row.pass, row);
+  for (const row of [...g.frontEdges, ...g.rimContacts]) check(row.name, row.pass, row);
   for (const [i, row] of g.matEdges.entries())
     check("mat edge descent/block/jetpack " + i, row.pass, row);
   // Real keyboard input across a mat edge, in addition to labelled fixtures.
@@ -429,7 +435,7 @@ try {
   for (const [name, x, z, yaw, pitch] of [
     ["mat-edge-visitor", 177, 40, Math.PI / 2, -0.3],
     ["rim-visitor", 534, -100, -Math.PI / 2, 0.1],
-    ["recess-visitor", 295, 108, Math.PI, -0.35],
+    ["front-edge-visitor", 295, 133, Math.PI, -0.35],
   ]) {
     await page.evaluate(
       ({ x, z, yaw, pitch }) => {

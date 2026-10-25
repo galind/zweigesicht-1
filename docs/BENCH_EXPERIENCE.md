@@ -27,42 +27,39 @@ Both local holder assets load before entry; a missing asset keeps loading recove
 available. The spare holder has no second visible station. No CAD is cut, morphed,
 scaled, repaired or silently replaced with a universal holder.
 
-The light wooden tabletop retains the 1100 × 650 mm envelope: X −550…550 and
-Z −465…185 mm, with surface Y−1 and underside Y−33. Its +Z front has two
-370 mm wide, 75 mm deep curved recesses, separated by a 220 mm central projection.
-The 8 mm plan corners and 0.12 mm edge bevel soften the closed slab. A continuous
-6 mm wide rim rises 5 mm along the back and sides, ending at Z160; no front fence.
-The 350 × 250 × 1 mm green mat remains at Y0. Arrival and explicit R reset remain
-at feet (0, 0.002, 54), facing −Z. The visitor stays **1.65 mm tall**, radius
-**0.22 mm**, with eyes **1.48 mm above their feet**, 68° vertical FOV and no bob/roll.
+The light wooden tabletop is a straight **1100 × 600 mm rectangle**: X −550…550,
+Z −465…135 mm, with surface Y−1 and underside Y−33. Small 0.12 mm edge bevels
+soften the solid slab. A continuous 6 mm wide rim rises 5 mm along the back and
+sides, ending at Z125; there is no front fence. The unchanged 350 × 250 × 1 mm
+green mat ends at Z125, leaving just **10 mm of wood before the front edge**
+(previously 60 mm at the central projection).
+Arrival and explicit R reset remain at feet (0, 0.002, 54), facing −Z. The visitor
+stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet**,
+68° vertical FOV and no bob/roll.
 
-## Sculpted tabletop — current local stage
+## Rectangular tabletop — current local stage
 
-The upper photograph supplied by the owner is the primary shape/finish reference.
-Only the light natural tabletop, raised rim and plain green mat remain against the
-existing warm neutral background. Drawers, pedestals, pulls, apron and stretcher
-are removed from the export. There are no legs, armrests, holes, tools, lettering,
-room, floor or other furniture. The movement and original holders are unchanged.
-Reference imagery stays local in `artifacts/workshop-tabletop-reference/` and is
-not embedded as a texture or redistributed.
+The owner requested a simpler rectangular shape and a mat much closer to the
+border. The front edge moves from Z185 to Z135; the mat, watch station and arrival
+stay in place. This supersedes the two curved recesses and central projection.
+Light natural wood, the low back/side rim and the plain mat remain against the
+warm neutral background. There is no lower furniture or added scenery.
 
-`assets/authored/workshop-environment.json` owns the counterclockwise sampled X/Z
-outline used by both the Blender slab and the walker. The exporter creates closed
-front, side and underside faces, checks manifold edges after triangulation, and
-bakes fresh contact shading. The original procedural wood has subtle irregular
-grain, no repeated plank stripes, roughness 0.68 and a lighter natural base color.
-The mat's material and dimensions are unchanged. No shared material or lighting
-code changed; there are no added shadow-map or transmission passes.
+`assets/authored/workshop-environment.json` defines the four-corner outline and
+export dimensions; `atelier-layout.json` records the same desk bounds. The exporter
+creates closed front, side and underside faces, checks manifold edges after
+triangulation, and bakes fresh contact shading. Wood finish, mat appearance,
+watch materials and lighting remain unchanged. Generated assets stay local.
 
 The tabletop, rim and mat retain `atelierVersion: 1` and `collisionRole: walkable`.
-Their visible triangles are their collision geometry. The walker now applies a
-capsule-radius inset to the actual nonconvex footprint, projecting only outward
-velocity; inward/tangential motion and vertical flight remain free. This avoids
-invisible support in the recesses and preserves the central projection. Triangle
-collision independently blocks the raised rim, including its ends. All sampled
-outline segments and corners are checked against actual exported support.
-The 1 mm mat edge still exceeds the unchanged 0.22 mm step: walk down onto the
-wood, then use Space to fly back up. No ramps or automatic camera motion are added.
+Visible triangles are collision geometry. The simpler rectangular capsule-radius
+constraint replaces the previous nonconvex projection, preserving outward-only
+containment at every altitude and free inward/tangential movement. Triangle
+collision blocks the rim, including both ends. The 1 mm mat edge retains the
+existing walk-down/jetpack-return behavior. No ramps or automatic camera motion
+are added. A focused collision correction distinguishes a vertical triangle seam
+from a ceiling, so pressing against the rim while thrusting no longer cancels ascent.
+Actual ceiling contacts still stop upward velocity; both cases have CPU coverage.
 
 The unchanged bench lighting comes principally from the right, with warm left fill
 and studio reflections. Camera far range encloses the loaded environment sphere
@@ -75,28 +72,24 @@ Measured generated environment budgets (excluding unchanged maker CAD):
 
 | Metric | Measured | Target |
 | --- | ---: | ---: |
-| Visible triangles | 2,156 | ≤40,000 |
-| Collision triangles | 2,156 | ≤8,000 |
+| Visible triangles | 340 | ≤40,000 |
+| Collision triangles | 340 | ≤8,000 |
 | Environment draws per pass | 2 | ≤24 |
 | Decoded textures including mipmaps | 6.67 MiB | ≤24 MiB |
-| GLB download | 0.23 MiB | ≤8 MiB |
+| GLB download | 0.16 MiB | ≤8 MiB |
 
-`workshop-check.mjs` verifies the actual exported budgets, semantic objects,
-continuous per-part flip envelopes and both complete holder bounds against every
-static triangle. It also checks all 134 outline segments/corners, both recesses
-under fast grounded/high-flight travel, rim walls/ends and jetpack landings,
-four mat-edge routes, real keyboard descent/return, high-flight visibility and
-exactly-once disposal/re-entry. Continuous bounds are conservative clearance
-evidence, not exact swept-solid or mechanical certification. CPU tests independently
-triangulate the authored surface to verify capsule support around every edge/corner
-and test outward-only velocity projection, free tangency/inward motion and fast
-substeps at heights up to 6000 mm.
+`workshop-check.mjs` verifies actual exported budgets, semantic objects, the
+10 mm front margin, continuous per-part flip envelopes and both holder bounds.
+It checks all four edges/corners, fast grounded/high-flight travel, rim walls/ends
+and jetpack landings, all four mat-edge routes, actual keyboard descent/return,
+high-flight visibility and exactly-once disposal/re-entry. CPU tests independently
+triangulate the authored rectangle to verify capsule support around its boundary.
+Continuous bounds are conservative clearance evidence, not mechanical certification.
 
-Actual rendered evidence is in `artifacts/workshop-tabletop/`. Files ending in
-`overview` or `inspection` use explicitly labelled external camera fixtures;
-arrival, mat-edge, rim/recess visitor and both landed movement views use the
-normal miniature visitor camera. The local review sheet compares the upper
-reference photograph, the prior furniture scene and the implemented tabletop.
+Current actual captures and reports are in `artifacts/workshop-rectangle/`.
+Overview/inspection captures use labelled external camera fixtures; arrival,
+mat-edge, rim/front-edge and both landed movement views use the normal miniature
+visitor camera. Prior curved-tabletop evidence remains in `artifacts/workshop-tabletop/`.
 
 ## Holder fit and the authorized exchange
 
@@ -223,7 +216,7 @@ publication or redistribution is authorized.
 ## Verification
 
 Set `PLAYWRIGHT_MODULE` to the installed Playwright `index.mjs` and `CHROME_PATH`
-to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-tabletop` for local reports/captures:
+to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-rectangle` for local reports/captures:
 
 ```sh
 node --test tests/*.test.mjs
@@ -253,7 +246,7 @@ text, controls, navigation, entry, focus and loading/error recovery.
 
 Current counts and remaining actions are in [PROGRESS.md](../PROGRESS.md).
 Current tabletop screenshots and reports remain local in
-`artifacts/workshop-tabletop/`. The previous open-space furniture review remains in
+`artifacts/workshop-rectangle/`. The previous open-space furniture review remains in
 `artifacts/workshop-open-space/`; the previous bare-room review remains in
 `artifacts/workshop-room-only/`. The earlier decorated revision 3 review remains
 in `artifacts/workshop-implementation/`, with its suites in `regression/`.

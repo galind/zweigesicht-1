@@ -219,7 +219,7 @@ function supported(w) {
     );
   }
 }
-test("sculpted footprint contains every edge and rounded corner at all flight heights", () => {
+test("rectangular tabletop contains every edge and corner at all flight heights", () => {
   const w = tabletopRig(),
     points = tabletop.footprint;
   for (const y of [-0.998, 50, 6000]) {
@@ -237,7 +237,7 @@ test("sculpted footprint contains every edge and rounded corner at all flight he
     }
   }
 });
-test("recess edges reject outward motion, preserving inward and tangent momentum", () => {
+test("tabletop edges reject outward motion, preserving inward and tangent momentum", () => {
   const w = tabletopRig(),
     points = tabletop.footprint;
   for (let i = 0; i < points.length; i++) {
@@ -258,11 +258,11 @@ test("recess edges reject outward motion, preserving inward and tangent momentum
     }
   }
 });
-test("fast substeps slide along both recesses without crossing unsupported gaps or trapping inward travel", () => {
+test("fast substeps stay on the straight front edge and permit inward travel", () => {
   const w = tabletopRig();
   for (const sign of [-1, 1])
     for (const y of [-0.998, 50, 6000]) {
-      w.feet.set(sign * 295, y, 109.77);
+      w.feet.set(sign * 295, y, tabletop.maxZ - 0.23);
       w.velocity.set(sign * 80, 0, 100);
       w.yaw = 0;
       w.keys.add("KeyS");
@@ -278,4 +278,18 @@ test("fast substeps slide along both recesses without crossing unsupported gaps 
       w.clear();
       assert.equal(w.resets, 0);
     }
+});
+
+test("flight along a long vertical rim does not treat its triangle seam as a ceiling", () => {
+  const world = new CollisionWorld();
+  box(world, [1100, 1, 600], [0, -1.5, -165]);
+  box(world, [6, 5, 590], [547, 1.5, -170]);
+  const w = new Walker(world);
+  w.feet.set(542, -0.998, 0);
+  w.yaw = 0;
+  w.keys.add("KeyD");
+  advance(w, 1);
+  w.keys.add("Space");
+  advance(w, 2);
+  assert.ok(w.feet.y > 4 && w.velocity.y > 0, JSON.stringify(w.feet));
 });

@@ -3,6 +3,32 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Rectangular tabletop and closer mat border — 25 October 2026
+
+Simplified the tabletop to a straight **1100 × 600 mm rectangle** at the owner's
+request. The front edge is now Z135, leaving **10 mm** beyond the existing mat
+at Z125 (previously 60 mm at the center). Light wood, the low back/side rim, mat,
+watch, original holders, station, arrival and controls remain in place. No lower
+furniture was reintroduced. This supersedes the curved-front design below.
+
+Removed the nonconvex traversal projection and restored the simpler rectangular
+capsule inset with outward-only containment. During validation, a vertical rim's
+internal triangle seam incorrectly stopped ascent as if it were a ceiling. A focused
+surface-normal check fixes that case; the new failing-then-passing regression and
+existing real-ceiling tests cover it. Geometry, Blender scene and contact shading
+were regenerated; source/output hashes match. New budgets: **340 visible/collision
+triangles**, **2 draws/pass**, **6.67 MiB textures**, **0.16 MiB GLB**.
+
+Verified **134 CPU tests**, typecheck, lint, production build, **60 environment**,
+**67 jetpack/collision** and **32 flip** browser checks. Independent CAD/holder
+audit passes both rests and **16 source-surface drops**. Visual review confirms
+the straight front and narrow mat border. Existing device/human qualification
+limits remain unchanged. Next: owner review of the simplified tabletop.
+
+Current evidence is local in `artifacts/workshop-rectangle/`, including front,
+profile and miniature visitor captures. Production preview was rebuilt and restarted
+at <http://127.0.0.1:4198/bench>. No push, deployment or redistribution.
+
 ## Reference-inspired tabletop — 25 October 2026
 
 Implemented the owner's upper-photo reference as a light natural wooden tabletop

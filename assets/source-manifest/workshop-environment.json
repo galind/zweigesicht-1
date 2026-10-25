@@ -3,16 +3,16 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "sculpted-tabletop",
+  "stage": "rectangular-tabletop",
   "origin": "Original authored tabletop, rim and mat geometry with noise textures; no external models, artwork or maker CAD embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
   "closedSurfaceAudit": "All slab, rim and mat mesh edges have exactly two incident faces after triangulation.",
   "budgets": {
-    "visibleTriangles": 2156,
-    "collisionTriangles": 2156,
+    "visibleTriangles": 340,
+    "collisionTriangles": 340,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 239420
+    "downloadBytes": 164044
   },
   "semantics": [
     {
@@ -20,14 +20,14 @@
       "role": "walkable",
       "material": "Oak",
       "min": [
-        -550.0,
+        -550,
         -33,
-        -465.0
+        -465
       ],
       "max": [
-        550.0,
+        550,
         -1,
-        185.0
+        135
       ]
     },
     {
@@ -52,35 +52,35 @@
       "min": [
         -550,
         -1,
-        -465.0
+        -465
       ],
       "max": [
-        550.0,
+        550,
         4,
-        160
+        125
       ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "46221dec4860f4b3c96ceaa3a4d5eb7b31dab0b1e783998b946e73178831eeee"
+      "sha256": "a346ed64548e8678b968c9f99c5b34d089e05ed6159c13a2f6aa8f6c5f8fbcae"
     },
     {
       "path": "assets/authored/atelier-layout.json",
-      "sha256": "74023ae234a543c11f4c1e2580f821b6cb1db30c28fb55478b3d828e218c1420"
+      "sha256": "d16313fff3b6e8752a01f3cc2933c0fa47db81fdc21a3efe6fca3f1a9fe1ac42"
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "e071901c106938f89ab2f7c1117fd8fcb5de911d133b236365949474a580facf"
+      "sha256": "d8dc6578114dfc1191516f11626a861f12351745dccebb5a1bf81bb4cb6672d6"
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "ca2d867997307794e70d152ae36c1f63372ff02c186278c5d974e2e9e332680b"
+      "sha256": "ce4190a5de39def0a814a308b4bd5d1d80a34bd42a5e88720a394adabf931f61"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "225360ca27575ffb21084b8e75467b5a11f69090edefcd82fcf4a36d1cd16ea2"
+      "sha256": "f04ef7a1096abeb5034510c6881d38a057fe200987027d6d73b50a122b4d71ff"
     }
   ]
 }

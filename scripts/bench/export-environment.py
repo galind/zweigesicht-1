@@ -92,17 +92,10 @@ D=SPEC['mainDesk'];M=SPEC['mat'];detail=SPEC['tabletopDetail']
 slab('main-oak-top',D['footprint'],D['topY'],D['bottomY'],oak,detail['edgeBevel'])
 box('green-mat',M['minX'],M['maxX'],M['minZ'],M['maxZ'],M['topY'],M['bottomY'],green)
 # One continuous U-shaped rim: no front fence, overlapping boxes or open ends.
-# The rear outer arcs share the slab's 8 mm corner radius; inner radius is 2 mm.
-rim_width=detail['rimWidth'];inner_radius=8-rim_width
-rim=[(-550,detail['rimFrontZ'])]
-for cx,start in [(-542,180),(542,270)]:
-    rim += [(cx+8*math.cos(math.radians(start+i*90/8)),
-             -457+8*math.sin(math.radians(start+i*90/8))) for i in range(9)]
-rim += [(550,detail['rimFrontZ']),(550-rim_width,detail['rimFrontZ'])]
-for cx,start in [(542,0),(-542,-90)]:
-    rim += [(cx+inner_radius*math.cos(math.radians(start-i*90/8)),
-             -457+inner_radius*math.sin(math.radians(start-i*90/8))) for i in range(9)]
-rim += [(-550+rim_width,detail['rimFrontZ'])]
+width=detail['rimWidth'];front=detail['rimFrontZ']
+x0,x1,z0=D['minX'],D['maxX'],D['minZ']
+rim=[(x0,front),(x0,z0),(x1,z0),(x1,front),
+     (x1-width,front),(x1-width,z0+width),(x0+width,z0+width),(x0+width,front)]
 slab('low-back-side-rim',rim,D['topY']+detail['rimHeight'],D['topY'],oak,detail['edgeBevel'])
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}

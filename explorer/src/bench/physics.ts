@@ -124,6 +124,7 @@ export class CollisionWorld {
   }
   resolve(feet: THREE.Vector3) {
     let grounded = false;
+    let ceiling = false;
     const start = feet.clone().add(new THREE.Vector3(0, WALK.radius, 0));
     const end = feet
       .clone()
@@ -160,6 +161,15 @@ export class CollisionWorld {
               .clone()
               .transformDirection(s.mesh.matrixWorld);
             if (worldNormal.y > 0.55) grounded = true;
+            // A closest-point contact on a vertical triangle's internal diagonal
+            // can point down. Only a surface with a vertical normal component
+            // can stop ascent; sliding up a wall must not kill thrust velocity.
+            if (worldNormal.y < -0.5) {
+              const faceNormal = triangle
+                .getNormal(new THREE.Vector3())
+                .transformDirection(s.mesh.matrixWorld);
+              if (Math.abs(faceNormal.y) > 0.5) ceiling = true;
+            }
             contacts.push(worldNormal);
             moved = true;
             return false;
@@ -171,7 +181,7 @@ export class CollisionWorld {
       if (!moved) break;
     }
     feet.copy(start).add(new THREE.Vector3(0, -WALK.radius, 0));
-    return { grounded, contacts };
+    return { grounded, contacts, ceiling };
   }
   floor(x: number, z: number, top = 30, meshes?: Set<THREE.Mesh>) {
     const ray = new THREE.Ray(
@@ -201,8 +211,6 @@ export type DeskBounds = {
   maxX: number;
   minZ: number;
   maxZ: number;
-  /** Counterclockwise X/Z outline, shared with the authored visible slab. */
-  footprint?: number[][];
 };
 
 export class Walker {
@@ -311,14 +319,13 @@ export class Walker {
           const check = this.world.resolve(trial);
           if (trial.y <= before.y + WALK.step + 0.01) {
             this.feet.copy(trial);
-            result = { grounded: true, contacts: check.contacts };
+            result = { ...check, grounded: true };
           }
         }
       }
       this.grounded = result.grounded;
       if (this.grounded && this.velocity.y < 0) this.velocity.y = 0;
-      for (const normal of result.contacts)
-        if (normal.y < -0.5 && this.velocity.y > 0) this.velocity.y = 0;
+      if (result.ceiling && this.velocity.y > 0) this.velocity.y = 0;
       this.constrainToDesk();
       this.guard?.(before);
     }
@@ -326,64 +333,6 @@ export class Walker {
   /** Project only outward displacement; tangential travel and Y remain free. */
   constrainToDesk() {
     if (!this.bounds) return;
-    const outline = this.bounds.footprint;
-    if (outline) {
-      // Erode the actual nonconvex polygon by the capsule radius. A global
-      // half-plane intersection would incorrectly flatten the two recesses.
-      // Nearest finite edges also handle rounded corners and concave vertices.
-      for (let pass = 0; pass < 8; pass++) {
-        const x = this.feet.x,
-          z = this.feet.z;
-        let inside = false,
-          distance2 = Infinity;
-        let qx = 0,
-          qz = 0,
-          nx = 0,
-          nz = 0;
-        for (let i = 0; i < outline.length; i++) {
-          const [ax, az] = outline[i];
-          const [bx, bz] = outline[(i + 1) % outline.length];
-          if (az > z !== bz > z && x < ax + ((z - az) * (bx - ax)) / (bz - az))
-            inside = !inside;
-          const dx = bx - ax,
-            dz = bz - az;
-          const length2 = dx * dx + dz * dz;
-          const t = THREE.MathUtils.clamp(
-            ((x - ax) * dx + (z - az) * dz) / length2,
-            0,
-            1,
-          );
-          const px = ax + t * dx,
-            pz = az + t * dz;
-          const d2 = (x - px) ** 2 + (z - pz) ** 2;
-          if (d2 < distance2) {
-            distance2 = d2;
-            qx = px;
-            qz = pz;
-            const length = Math.sqrt(length2);
-            nx = -dz / length;
-            nz = dx / length;
-          }
-        }
-        const distance = Math.sqrt(distance2);
-        if (inside && distance > WALK.radius + 1e-7) break;
-        if (distance > 1e-9) {
-          const sign = inside ? 1 : -1;
-          nx = (sign * (x - qx)) / distance;
-          nz = (sign * (z - qz)) / distance;
-        }
-        const push = Math.max(0, WALK.radius - (inside ? distance : -distance));
-        this.feet.x += nx * push;
-        this.feet.z += nz * push;
-        const outward = this.velocity.x * nx + this.velocity.z * nz;
-        if (outward < 0) {
-          this.velocity.x -= nx * outward;
-          this.velocity.z -= nz * outward;
-        }
-        if (push < 1e-9) break;
-      }
-      return;
-    }
     for (const [axis, min, max] of [
       ['x', this.bounds.minX + WALK.radius, this.bounds.maxX - WALK.radius],
       ['z', this.bounds.minZ + WALK.radius, this.bounds.maxZ - WALK.radius],
