@@ -9,7 +9,7 @@ Updated 25 October 2026. Setup: [README](README.md). Technical reference:
 `develop` includes the Bench feature in [PR #31](https://github.com/galind/zweigesicht-1/pull/31)
 and the homepage/Bench onboarding in [PR #33](https://github.com/galind/zweigesicht-1/pull/33).
 This review starts at `48ef8b3`. UAT now manually serves PR #34's application
-commit `cdde799`; Vercel reports deployment `dpl_6uRrfS9xnkM7ZsKWr1511YShTD5p`
+commit `c127cc8`; Vercel reports deployment `dpl_FaFSZZJQdMex7PcVXAfz7P4ScKah`
 ready and promoted to `zweigesicht-uat.vercel.app`. The PR remains open toward
 `develop`; the separate production project and `main` were not changed.
 Repository visibility is public, confirmed through the connected GitHub app.
@@ -29,7 +29,7 @@ Repository visibility is public, confirmed through the connected GitHub app.
   [Bench reference](docs/BENCH_EXPERIENCE.md) owns dimensions, reproduction and controls;
   [performance review](docs/BENCH_PERFORMANCE.md) owns measurements and their limits.
 - Original holder files remain outside Git. The three prepared Bench payloads
-  now have owner-approved public delivery through UAT's verified build asset source.
+  are served as owner-approved optimized GLBs through UAT's verified build asset source.
 
 ## Cleanup under review
 
@@ -69,28 +69,29 @@ High fixtures and all 18 Auto/High/Low profiling scenarios complete; these are
 harness checks, not a new device-performance qualification. Evidence is local in
 `artifacts/staging-cleanup/` and `artifacts/bench/staging-cleanup-first-use.json`.
 
-## Remaining work and release limits
+## Hosted delivery and remaining review
 
-The owner's staging screenshot confirms HTTP 404 for all three required Bench
-payloads: `/bench-local/movement.stl`, `dial.stl` and `environment.glb`, followed
-by `Local holder unavailable`. The deployment fix adds an opt-in build source
-with hash validation and disables the hosted entry when no source is configured.
-CI now builds the Vercel package on every integration PR. The owner explicitly
-approved public delivery of these three files. The matching bytes are uploaded
-to the UAT-only Blob store, and its serving environment has the asset source
-configured. The remote build is ready/promoted.
-[Staging delivery passed](https://github.com/galind/zweigesicht-1/actions/runs/40234350355):
-the homepage and `/bench` return HTTP 200 with the Bench entry enabled, and all
-three payloads return HTTP 200 with their recorded SHA-256 hashes.
-See [hosted delivery](docs/BENCH_EXPERIENCE.md#hosted-delivery).
-[GitHub CI on `3472ad5`](https://github.com/galind/zweigesicht-1/actions/runs/40234350183)
-passed all 161 tests, inventory, typecheck, lint and both builds. The hosted-asset
-fixtures exercise successful delivery and missing/corrupt/private-source failures;
-the separate staging workflow verifies live UAT delivery. No local testing was run.
+The missing Bench payloads are fixed. UAT serves `movement.glb`, `dial.glb` and
+`environment.glb` from the verified asset source. Original holder STLs stay outside
+Git and public output. Their Blob copies and the previous STL-serving deployment
+have been deleted. [Live delivery CI passed](https://github.com/galind/zweigesicht-1/actions/runs/40237774201):
+entry pages and GLBs return HTTP 200 with matching hashes; the six old holder STL
+URLs across UAT, Blob and the retired deployment return HTTP 404/410.
+[Integration CI on `c127cc8`](https://github.com/galind/zweigesicht-1/actions/runs/40237774186)
+passed all 162 tests, inventory, typecheck, lint and both builds.
 
-Review and merge this cleanup into `develop`; UAT currently serves its reviewed
-application snapshot without a PR merge. Actual browser scene-entry review is
-separate from the cloud HTTP/asset checks.
+[Holder conversion CI](https://github.com/galind/zweigesicht-1/actions/runs/40237774203)
+checks recorded source hashes and exact triangle positions, winding and bounds.
+Combined raw size drops from 2,684,768 to 1,407,336 bytes (47.6%); gzip level-9 drops
+from 1,080,745 to 1,045,456 bytes (3.3%). SNORM16 lighting normals have component
+error below 0.000016. Three.js and an independent decoder pass. Runtime hashes and
+measurements are in `assets/source-manifest/holder-runtime.json`; workflow artifacts
+contain only GLBs and the report. Original source URLs/hashes remain unchanged.
+No local conversion, benchmark, build, test or browser automation was run for this
+follow-up. These are size/geometry checks, not live WebGL or FPS measurements.
+
+Review and merge PR #34 into `develop`; UAT serves its checked application snapshot
+without a merge. Actual browser scene-entry review remains separate.
 Keep current status concise: replace superseded next actions rather than adding
 another chronological entry.
 
@@ -101,16 +102,3 @@ and authored placement evidence remain in their existing manifests. The
 [release gates](docs/RELEASE_GATES.md) contain the decisions and remediation paths;
 the [permission request](docs/ASSET_PERMISSION_REQUEST.md) remains unsent.
 Original code/documentation use MIT; maker design/CAD and derivatives do not.
-
-## Holder GLB follow-up
-
-Owner requested optimized GLBs, private original STLs and CI-only verification.
-[Holder conversion CI](https://github.com/galind/zweigesicht-1/actions/runs/40237583360)
-passed: combined raw size drops from 2,684,768 to 1,407,336 bytes (47.6%);
-gzip level-9 drops from 1,080,745 to 1,045,456 bytes (3.3%). Triangle coordinates,
-winding and bounds are exact; SNORM16 lighting-normal component error is below
-0.000016. Three.js and an independent decoder pass. Runtime hashes/measurements
-are recorded in `assets/source-manifest/holder-runtime.json`. No local conversion,
-benchmark, build or test was run. CI artifacts contain only GLBs and the report.
-Next: publish these GLBs, deploy the updated loader to UAT, remove public STL
-objects and their old deployment, and verify the live paths from CI.
