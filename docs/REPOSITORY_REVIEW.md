@@ -20,6 +20,9 @@ The cleanup branch targets `develop` and disables its own Vercel Git deployment.
 | Dependency patch | npm audit found fast-uri 3.1.8 via the webpack/Ajv peer tree. Update only that lockfile package to 3.1.9, within Ajv's existing range. The [upstream advisory](https://github.com/fastify/fast-uri/security/advisories/GHSA-w74x-v6f9-j3xg) identifies the patched version. No visitor-reachable exploit was demonstrated. |
 | Documentation | Replace the 1,608-line progress log with current staging status, correct stale Workshop counts, trim superseded Bench variants, and remove four obsolete design briefs. Retain historical revision links below and the standalone mechanical/performance evidence. |
 | Ongoing checks | Enable TypeScript's unused-local/parameter checks; the application already passes them. No framework or renderer upgrade accompanies this cleanup. |
+| Shared material policy | Explorer, Workshop and Bench copied the fitted enamel setup. Centralize fitted/catalog optical transitions, preserve existing Color objects and shader hooks, and store fitted transmission consistently so finish restoration cannot fall back to raw catalog zero. |
+| Partial Bench preparation | Detached-part clones entered the cleanup tree only after finish and pose setup. Track each clone immediately so either failure disposes all allocated materials while retaining shared catalog geometry. CPU fixtures exercise both failure points. |
+| Asset integrity | Four loaders duplicated SHA-256 byte encoding. Share the encoder while preserving each loader's expected hash and rejection behavior. CPU fixtures check known digests and reject corrupt case, surface and diamond payloads before parsing. |
 
 Validation results and remaining actions are maintained in [PROGRESS.md](../PROGRESS.md).
 Browser evidence stays in ignored `artifacts/staging-cleanup/`. This review does
@@ -27,6 +30,9 @@ not establish live deployment, physical-device performance, mechanical accuracy
 or redistribution rights. Builds retain existing large-chunk/classification and
 Nitro trace-include warnings. Deliberately aborted navigation fixtures emit
 vinext premature-close diagnostics while browser assertions pass.
+The deeper material/asset follow-up uses GitHub CI; the preceding browser evidence
+does not constitute a visual rerun of that follow-up. Local testing/builds/browser
+automation are avoided at the owner's request, now recorded in `AGENTS.md`.
 
 ## Ownership map
 

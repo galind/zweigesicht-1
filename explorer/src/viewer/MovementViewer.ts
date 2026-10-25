@@ -76,7 +76,7 @@ import {
 import { makeSpread, type SpreadPlacement } from '../experience/spread';
 import {
   createMaterial,
-  FITTED_BLUE_ENAMEL,
+  applyDialEnamel,
   finishFor,
   setFinishEnabled,
   setEmphasis,
@@ -1915,23 +1915,7 @@ export class MovementViewer {
             ![...this.fittedCase].some((id) => belongs(id, selection))
           );
         // Translucent vitreous enamel; the raw catalog presentation stays separate.
-        const optical = FITTED_BLUE_ENAMEL;
-        enamel.color.setHex(fitted ? optical.color : finish.color);
-        enamel.metalness = fitted ? optical.metalness : finish.metalness;
-        enamel.roughness = fitted ? optical.roughness : finish.roughness;
-        enamel.transmission = fitted ? optical.transmission : 0;
-        enamel.userData.finishTransmission = enamel.transmission;
-        enamel.ior = optical.ior;
-        enamel.thickness = optical.thickness;
-        enamel.attenuationColor.setHex(optical.attenuationColor);
-        enamel.attenuationDistance = optical.attenuationDistance;
-        enamel.clearcoat = fitted ? optical.clearcoat : 0;
-        enamel.clearcoatRoughness = optical.clearcoatRoughness;
-        // The supplied carrier and enamel share coplanar outward faces.
-        // Depth bias resolves their source overlap without moving either mesh.
-        enamel.polygonOffset = fitted;
-        enamel.polygonOffsetFactor = -1;
-        enamel.polygonOffsetUnits = -1;
+        applyDialEnamel(enamel, fitted ? 'fitted' : finish);
       }
       // Highlighting changes emphasis, not craftsmanship. Any part that remains
       // in the scene keeps its authored finish, including muted context and

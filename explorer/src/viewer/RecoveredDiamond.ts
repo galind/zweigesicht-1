@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import type { Part } from '../experience/catalog';
-import { assetRequestUrl } from '../experience/loading';
+import { assetRequestUrl, sha256 } from '../experience/loading';
 
 export const DIAMOND_ID =
   'p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2';
@@ -22,11 +22,7 @@ export async function loadRecoveredDiamond(parts: Part[]) {
   );
   if (!response.ok) throw new Error('Maker diamond STL unavailable');
   const buffer = await response.arrayBuffer();
-  const digest = Array.from(
-    new Uint8Array(await crypto.subtle.digest('SHA-256', buffer)),
-    (b) => b.toString(16).padStart(2, '0'),
-  ).join('');
-  if (digest !== DIAMOND_SHA)
+  if ((await sha256(buffer)) !== DIAMOND_SHA)
     throw new Error('Maker diamond STL integrity mismatch');
   const geometry = new STLLoader().parse(buffer);
   // These original coordinates cancel the source instance's -125/-105 offset.

@@ -5,6 +5,14 @@ export type LoadStage =
   | 'recovering'
   | 'error';
 
+/** Lowercase SHA-256 for the immutable asset hashes recorded in manifests. */
+export async function sha256(buffer: ArrayBuffer) {
+  return Array.from(
+    new Uint8Array(await crypto.subtle.digest('SHA-256', buffer)),
+    (byte) => byte.toString(16).padStart(2, '0'),
+  ).join('');
+}
+
 /** A transfer percentage is never an estimate of scene preparation. */
 export function transferProgress(loaded: number, total: number) {
   return Number.isFinite(total) && total > 0 && Number.isFinite(loaded)

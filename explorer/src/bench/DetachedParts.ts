@@ -3,7 +3,7 @@ import type { Part } from '../experience/catalog';
 import {
   createMaterial,
   setFinishEnabled,
-  FITTED_BLUE_ENAMEL,
+  applyDialEnamel,
 } from '../viewer/materials';
 import {
   attachSourceSurface,
@@ -57,6 +57,10 @@ export function createDetachedParts(
         original.geometry,
         id,
       );
+      // Own the material before finish or pose preparation can fail. Geometry
+      // remains catalog-owned, including when this partial group is discarded.
+      const mesh = new THREE.Mesh(original.geometry, material);
+      group.add(mesh);
       if (
         watch.caseMaterialDefinitions.includes(record.definitionId) &&
         spec.id === 'case'
@@ -66,26 +70,9 @@ export function createDetachedParts(
         material.metalness = 1;
         material.roughness = steel.roughness;
       }
-      if (dials.presentationOverrides.some((p) => p.leafId === id)) {
-        const enamel = material as THREE.MeshPhysicalMaterial,
-          optical = FITTED_BLUE_ENAMEL;
-        enamel.color.setHex(optical.color);
-        enamel.metalness = optical.metalness;
-        enamel.roughness = optical.roughness;
-        enamel.transmission = optical.transmission;
-        enamel.userData.finishTransmission = optical.transmission;
-        enamel.ior = optical.ior;
-        enamel.thickness = optical.thickness;
-        enamel.attenuationColor.setHex(optical.attenuationColor);
-        enamel.attenuationDistance = optical.attenuationDistance;
-        enamel.clearcoat = optical.clearcoat;
-        enamel.clearcoatRoughness = optical.clearcoatRoughness;
-        enamel.polygonOffset = true;
-        enamel.polygonOffsetFactor = -1;
-        enamel.polygonOffsetUnits = -1;
-      }
+      if (dials.presentationOverrides.some((p) => p.leafId === id))
+        applyDialEnamel(material);
       setFinishEnabled(material, true);
-      const mesh = new THREE.Mesh(original.geometry, material);
       mesh.name = record.name;
       mesh.matrixAutoUpdate = false;
       mesh.matrix.fromArray(
@@ -98,7 +85,6 @@ export function createDetachedParts(
         packet: spec.id,
         collisionRole: 'walkable',
       };
-      group.add(mesh);
     }
     return group;
   };

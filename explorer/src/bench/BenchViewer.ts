@@ -16,7 +16,7 @@ import { loadCaseRecovery, recoverCaseSurfaces } from '../viewer/CaseRecovery';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
 import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
-import { assetRequestUrl } from '../experience/loading';
+import { assetRequestUrl, sha256 } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
 import { CollisionWorld, Walker, WALK } from './physics';
 import { BenchQuality, LookActivity, type QualityMode } from './performance';
@@ -284,12 +284,8 @@ export class BenchViewer {
         const response = await fetch('/bench-local/' + name + '.stl');
         if (!response.ok) throw Error('Local holder unavailable');
         const data = await response.arrayBuffer();
-        const hash = Array.from(
-          new Uint8Array(await crypto.subtle.digest('SHA-256', data)),
-          (v) => v.toString(16).padStart(2, '0'),
-        ).join('');
         if (
-          hash !==
+          (await sha256(data)) !==
           holderManifest.files.find((f) => f.path.endsWith('/' + name + '.stl'))
             ?.sha256
         )

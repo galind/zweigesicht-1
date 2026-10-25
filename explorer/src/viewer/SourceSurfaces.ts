@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { assetRequestUrl } from '../experience/loading';
+import { assetRequestUrl, sha256 } from '../experience/loading';
 
 export type SourceSurfaces = Map<string, Float32Array>;
 
@@ -25,11 +25,7 @@ export async function loadSourceSurfaces(
   const data = await fetch(assetRequestUrl(manifest.file));
   if (!data.ok) throw new Error('Source surface buffer unavailable');
   const buffer = await data.arrayBuffer();
-  const digest = Array.from(
-    new Uint8Array(await crypto.subtle.digest('SHA-256', buffer)),
-    (b) => b.toString(16).padStart(2, '0'),
-  ).join('');
-  if (digest !== manifest.sha256)
+  if ((await sha256(buffer)) !== manifest.sha256)
     throw new Error('Source surface buffer integrity mismatch');
   const result: SourceSurfaces = new Map();
   for (const [id, entry] of Object.entries(manifest.definitions) as [

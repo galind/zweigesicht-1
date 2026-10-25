@@ -43,8 +43,17 @@ when shader preparation completes after navigation. Profilers use explicit quali
 modes and the current single station. Interaction checks use the current Detail
 select and handle both reversed-depth and fallback Auto settings.
 
-Verified: 149 CPU tests, Workshop inventory, typecheck with unused-code checks,
-lint, production build, HTTP/SEO checks, 159 Bench UI checks, 22 entry/device
+A deeper pass shares dial-enamel setup across all three routes and records the
+fitted transmission for finish restoration in Workshop. Detached Bench materials
+enter the cleanup tree before finish/pose preparation. All four hashed asset
+loaders share one SHA-256 encoder while retaining their existing integrity gates.
+New CPU regressions cover finish transitions, failure cleanup and corrupt assets.
+Validation for this follow-up runs in GitHub CI; no local tests, builds or browser
+automation are run. This preference is recorded in [AGENTS.md](AGENTS.md).
+
+The preceding cleanup milestone verified: 149 CPU tests, Workshop inventory,
+typecheck with unused-code checks, lint, production build, HTTP/SEO checks,
+159 Bench UI checks, 22 entry/device
 journeys, nine lifecycle checks, 32 flip checks and 11 interaction checks in each
 of normal and forced fallback depth modes. The independent geometry audit retains
 219 movement/crown leaves in each rest, source/collision agreement and 16 drops.
