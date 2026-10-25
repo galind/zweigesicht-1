@@ -2265,15 +2265,13 @@ canvas:focus-visible {
 }
 .bench-trigger {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
   width: 100%;
   min-height: 44px;
   padding: 12px 16px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   border-radius: 10px;
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--site-panel);
+  color: var(--foreground);
   text-align: left;
   cursor: pointer;
 }
@@ -2282,8 +2280,8 @@ canvas:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 400;
   line-height: 1.4;
 }
 .bench-invitation-heading svg {
@@ -2291,18 +2289,14 @@ canvas:focus-visible {
   height: 1rem;
   flex-shrink: 0;
 }
-.bench-invitation-input {
-  color: #484641;
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
 .bench-trigger:hover {
-  background: var(--foreground);
+  background: var(--muted);
+  border-color: var(--site-muted);
 }
 .bench-trigger:active,
 .bench-trigger[aria-expanded='true'] {
-  background: #c2bfb6;
-  border-color: var(--primary-foreground);
+  background: var(--border);
+  border-color: var(--foreground);
 }
 .bench-trigger:focus-visible {
   outline: 2px solid var(--ring);

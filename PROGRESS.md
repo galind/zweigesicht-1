@@ -3,6 +3,23 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## First-person invitation refinement — 25 October 2026
+
+Changed the bottom-left label to the owner's suggested **Explore it in first
+person**. Removed the secondary line and restored the page's dark glass,
+regular-weight text and a subtle outline. This keeps the invitation compact and
+consistent with the movement controls. The keyboard-and-mouse requirement now
+appears in the existing introduction; no additional step was added.
+
+Verified typecheck, lint, production build, **157 Bench UI checks** and **18
+homepage journeys** (responsive placement, keyboard/focus, hover/pressed states,
+200% text, reduced motion and no-icon clarity). The dialog-bounds check now waits
+for the opening transition to settle before asserting visibility. Visible review
+covers desktop, 390 px and 320 px at 200% text, including keyboard opening and
+focus return. Evidence: `artifacts/bench-entry-first-person/`. Updated README,
+Bench design notes and browser selectors. Controls, scene and CAD are unchanged.
+Preview: <http://127.0.0.1:4198/>. Local commit only; no push or publication.
+
 ## Bottom-left workbench invitation revision — 25 October 2026
 
 Following owner feedback, moved **Explore the workbench** to the bottom left,

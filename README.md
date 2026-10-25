@@ -35,7 +35,7 @@ Workshop is excluded from indexing and the sitemap.
 
 ## Explore the workbench
 
-The homepage’s **Explore the workbench** invitation introduces `/bench`: a
+The homepage’s **Explore it in first person** invitation introduces `/bench`: a
 first-person, miniature-scale view of the static movement, its holders and detached
 watch parts. A brief controls popup leads to **Enter workbench**. This desktop
 experience requires a keyboard and mouse. Local holder files

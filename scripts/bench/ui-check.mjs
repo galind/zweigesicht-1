@@ -59,7 +59,7 @@ try {
     const label = `${width}x${height}-${text}`;
     await page.setViewportSize({ width, height });
     await page.goto(base + "/?text=" + text);
-    const trigger = page.getByRole("button", { name: "Explore the workbench", exact: true });
+    const trigger = page.getByRole("button", { name: "Explore it in first person", exact: true });
     await trigger.click();
     const popup = page.getByRole("dialog");
     await popup.waitFor();
@@ -358,7 +358,7 @@ try {
     await route.continue();
   });
   await page.goto(base + "/");
-  await page.getByRole("button", { name: "Explore the workbench", exact: true }).click();
+  await page.getByRole("button", { name: "Explore it in first person", exact: true }).click();
   await enter().click();
   await page.waitForURL(base + "/bench");
   await page.getByText("Preparing the workbench…", { exact: true }).waitFor();

@@ -54,7 +54,8 @@ export function BenchEntry({
             Before you begin
           </SheetTitle>
           <SheetDescription>
-            Press Esc to release the pointer and open the menu.
+            Keyboard and mouse required. Esc releases the pointer and opens the
+            menu.
           </SheetDescription>
         </SheetHeader>
         <BenchControls />

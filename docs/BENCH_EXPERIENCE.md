@@ -415,12 +415,13 @@ changing the invitation. Three wording/placement directions were compared:
 | **“Explore the workbench” beneath the watch identity** | Initial choice: names the actual destination and makes room for the miniature first-person premise. Revised below after owner review. |
 | “Walk among the watch’s parts” near the bottom action dock | Descriptive, but competes with the controls that operate the current explorer and does not name the destination. |
 
-After owner review, the invitation moves to the **bottom left** and drops the
-explanatory paragraph. **Explore the workbench** and **First-person · Keyboard &
-mouse** provide the action and essential input expectation. A solid warm light
-surface with dark text gives the smaller button greater visibility against the
-canvas. It retains 10 px corners, the existing typography and a static decorative
-arrow; its meaning does not depend on that arrow. Hover, pressed/expanded and
+After owner review, the invitation moves to the **bottom left** and uses
+**Explore it in first person**. This single-line action explains the viewpoint
+without a supporting paragraph. The keyboard-and-mouse requirement moves into
+the existing controls introduction. The initial light-filled treatment was
+replaced after further feedback with the page's dark glass, regular-weight text
+and a subtle outline. It retains 10 px corners and a static decorative arrow;
+its meaning does not depend on that arrow. Hover, pressed/expanded and
 keyboard-focus states remain distinct.
 
 On wide screens it aligns with the bottom of the movement dock. Below 1200 px,
