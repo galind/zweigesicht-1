@@ -1,11 +1,11 @@
-/** Bare room/desk geometry/collision/visibility fixtures. Inspection views are labelled. */
+/** Standalone desk geometry/collision/visibility fixtures. Inspection views are labelled. */
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-room-only";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-open-space";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -261,18 +261,9 @@ try {
     "drawer-cup-pull",
     "front-apron",
     "back-stretcher",
-    "room-floor",
-    "back-wall",
-    "left-wall",
-    "right-wall",
-    "front-wall",
-    "skirting",
-    "frosted-pane",
-    "window-frame",
-    "window-sill",
   ]);
   check(
-    "only room, desk and plain mat in environment",
+    "only desk and plain mat in environment",
     provenance.semantics.every((part) => allowedIds.has(part.id)),
     provenance.semantics.map((part) => part.id),
   );
@@ -359,9 +350,8 @@ try {
   });
   // Explicit camera fixtures, never exposed as visitor camera controls.
   for (const [name, position, target] of [
-    ["room-inspection", [0, 300, 1600], [0, -130, -140]],
+    ["open-space-inspection", [900, 500, 2000], [0, -380, -100]],
     ["desk-inspection", [280, 480, 420], [0, 0, -120]],
-    ["bare-wall-inspection", [0, 420, -80], [0, 420, -500]],
   ]) {
     await page.evaluate(
       ({ position, target }) => {
@@ -369,8 +359,11 @@ try {
         cancelAnimationFrame(b.frame);
         b.frame = 0;
         b.camera.fov = 45;
-        b.camera.updateProjectionMatrix();
         b.camera.position.fromArray(position);
+        b.camera.far = Math.ceil(
+          b.camera.position.distanceTo(b.roomBounds.center) + b.roomBounds.radius + 100,
+        );
+        b.camera.updateProjectionMatrix();
         b.camera.lookAt(...target);
         b.renderer.render(b.scene, b.camera);
       },
@@ -414,7 +407,7 @@ try {
     });
     report.highFlight.push(row);
     check(
-      "high flight room containment " + yaw,
+      "high flight environment containment " + yaw,
       row.far > row.needed && row.height > 5900 && row.near === 0.035,
       row,
     );

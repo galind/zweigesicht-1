@@ -3,15 +3,15 @@
   "generator": "scripts/bench/export-environment.py",
   "blender": "5.2.1 LTS",
   "designRevision": 3,
-  "stage": "room-and-desk-only",
-  "origin": "Original authored room, desk and mat geometry with noise textures; no external models, artwork or maker CAD embedded.",
+  "stage": "desk-in-open-space",
+  "origin": "Original authored desk and mat geometry with noise textures; no external models, artwork or maker CAD embedded.",
   "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
   "budgets": {
-    "visibleTriangles": 2628,
+    "visibleTriangles": 1872,
     "collisionTriangles": 1872,
-    "drawsPerPass": 8,
-    "textureBytesWithMipmaps": 10485758,
-    "downloadBytes": 801976
+    "drawsPerPass": 4,
+    "textureBytesWithMipmaps": 8738132,
+    "downloadBytes": 552956
   },
   "semantics": [
     {
@@ -313,237 +313,12 @@
         -740,
         -410
       ]
-    },
-    {
-      "id": "room-floor",
-      "role": "decor",
-      "material": "Oak",
-      "min": [
-        -620,
-        -941,
-        -520
-      ],
-      "max": [
-        620,
-        -921,
-        1720
-      ]
-    },
-    {
-      "id": "back-wall",
-      "role": "decor",
-      "material": "Warm plaster",
-      "min": [
-        -620,
-        -921,
-        -520
-      ],
-      "max": [
-        620,
-        1600,
-        -500
-      ]
-    },
-    {
-      "id": "left-wall",
-      "role": "decor",
-      "material": "Warm plaster",
-      "min": [
-        -620,
-        -921,
-        -500
-      ],
-      "max": [
-        -600,
-        1600,
-        1720
-      ]
-    },
-    {
-      "id": "right-wall",
-      "role": "decor",
-      "material": "Warm plaster",
-      "min": [
-        600,
-        -921,
-        -500
-      ],
-      "max": [
-        620,
-        1600,
-        1720
-      ]
-    },
-    {
-      "id": "front-wall",
-      "role": "decor",
-      "material": "Warm plaster",
-      "min": [
-        -600,
-        -921,
-        1700
-      ],
-      "max": [
-        600,
-        1600,
-        1720
-      ]
-    },
-    {
-      "id": "skirting",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        -600,
-        -921,
-        -500
-      ],
-      "max": [
-        600,
-        -856,
-        -493
-      ]
-    },
-    {
-      "id": "skirting",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        -600,
-        -921,
-        -500
-      ],
-      "max": [
-        -593,
-        -856,
-        1700
-      ]
-    },
-    {
-      "id": "skirting",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        593,
-        -921,
-        -500
-      ],
-      "max": [
-        600,
-        -856,
-        1700
-      ]
-    },
-    {
-      "id": "frosted-pane",
-      "role": "decor",
-      "material": "Opaque frosted daylight",
-      "min": [
-        594,
-        100,
-        -390
-      ],
-      "max": [
-        599,
-        900,
-        110
-      ]
-    },
-    {
-      "id": "window-frame",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        580,
-        90,
-        -400
-      ],
-      "max": [
-        599,
-        910,
-        -390
-      ]
-    },
-    {
-      "id": "window-frame",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        580,
-        90,
-        110
-      ],
-      "max": [
-        599,
-        910,
-        120
-      ]
-    },
-    {
-      "id": "window-frame",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        580,
-        90,
-        -390
-      ],
-      "max": [
-        599,
-        100,
-        110
-      ]
-    },
-    {
-      "id": "window-frame",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        580,
-        900,
-        -390
-      ],
-      "max": [
-        599,
-        910,
-        110
-      ]
-    },
-    {
-      "id": "window-frame",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        580,
-        790,
-        -390
-      ],
-      "max": [
-        599,
-        801,
-        110
-      ]
-    },
-    {
-      "id": "window-sill",
-      "role": "decor",
-      "material": "Olive grey joinery",
-      "min": [
-        570,
-        87,
-        -405
-      ],
-      "max": [
-        600,
-        100,
-        125
-      ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "91a5dba82ddb1ee3ad0fcd5257f37529ae255839c3dcb1b4ca0e114b91977510"
+      "sha256": "120338cea699a24244f33682834c5a7aebad79aeedda8071121a9ba51450233e"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -551,15 +326,15 @@
     },
     {
       "path": "scripts/bench/export-environment.py",
-      "sha256": "9c4d7f4a64835c85a2d53b9fc8acc516f8a5a3b21f7f34800dc663bbf65085b3"
+      "sha256": "5b3cc8c792cb8e32d9efab90fee7c141cda856c7635c46a7cb320183fc5b5cc7"
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "c29ebde476f35b5733e191a28b0a39e507c8fda4ccbf2c4b7442dc2fe7e1c7b8"
+      "sha256": "e4aee124bc07f70685038a50fcd71bcc5a26b0646a94d258d2203f1659146998"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "fc8a40ce6cdd399f5861d1d3fa37f9b499a55556f4824e89e3dc3a458015f848"
+      "sha256": "e39f18c8d5b0abfe91c83df54d0d9baae2a5e721244d86edb24742ebd80f2804"
     }
   ]
 }

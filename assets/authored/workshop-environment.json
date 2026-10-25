@@ -1,5 +1,5 @@
 {
-  "status": "Room and desk/mat only — owner simplification after revision 3",
+  "status": "Standalone desk/mat — owner requested an open background",
   "units": "millimetres",
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
@@ -53,26 +53,7 @@
     "meaning": "No new props here; existing movement/holder remain. Keep both sides and forward arrival open."
   },
   "props": [],
-  "room": {
-    "floorY": -921,
-    "backWallZ": -500,
-    "leftWallX": -600,
-    "rightWallX": 600,
-    "frontWallZ": 1700,
-    "note": "Walls and frames outside desk bounds; floor below solid desk. No ceiling geometry or flight cap. Neutral background above walls; no exterior city geometry.",
-    "wallTopY": 1600
-  },
-  "wallItems": [
-    {
-      "id": "frosted-pane",
-      "wall": "right",
-      "centerZ": -140,
-      "bottomY": 100,
-      "widthAlongWall": 500,
-      "height": 800,
-      "note": "Opaque lit surface with roughness, no transmission pass, no exterior vista"
-    }
-  ],
+  "wallItems": [],
   "excludedAssets": [
     "side workbench or return",
     "wall cupboard",
@@ -80,15 +61,17 @@
     "chair or stool",
     "tabletop tools and lamp",
     "wall map and frame",
-    "mat lettering"
+    "mat lettering",
+    "room walls and floor",
+    "window, frame and sill",
+    "skirting"
   ],
   "schemaVersion": 1,
   "palette": {
     "oak": "A17D50",
     "storage": "747467",
-    "plaster": "D8D4C5",
     "mat": "3D6252",
     "steel": "888982"
   },
-  "stage": "room-and-desk-only"
+  "stage": "desk-in-open-space"
 }

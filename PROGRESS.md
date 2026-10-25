@@ -3,6 +3,25 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Standalone desk in open space — 25 October 2026
+
+Owner requested removing the surrounding room. Removed all walls, the window,
+frame/sill, skirting and floor, leaving the desk and plain mat against the existing
+warm neutral background. The working movement, original holder, desk dimensions,
+lighting and controls remain unchanged. Regenerated contact shading and the
+source/output manifest; the environment now has **1,872 visible/collision
+triangles**, **4 draws/pass**, **8.33 MiB decoded textures** and a **0.53 MiB GLB**.
+
+Production build and all **46 environment checks** pass, including desk edges,
+mat descent/jetpack return, continuous flip/holder clearance, high-flight range
+and disposal/re-entry. The independent CAD/holder audit also passes both rests
+and 16 source-surface drops. Reviewed the full desk and arrival captures and
+refreshed the local preview at <http://127.0.0.1:4198/bench>.
+Next: owner review of the desk in open space.
+
+Current evidence: `artifacts/workshop-open-space/`. Previous room-only and
+decorated revision 3 entries below are historical. No push or deployment.
+
 ## Room and desk/mat only — 25 October 2026
 
 Owner requested a plain base scene before adding objects individually. Removed

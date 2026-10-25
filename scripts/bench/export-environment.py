@@ -1,4 +1,4 @@
-"""Workshop room and bare desk/mat, simplified after revision 3.
+"""Standalone desk/mat in an open background, simplified after revision 3.
 Numeric mm, glTF Y up. Run blender --background --python this-file.
 Visible walkable triangles are collision triangles; no proxy slabs or hidden ramps.
 """
@@ -33,10 +33,8 @@ def material(name, color, rough=.7, metal=0, emission=0):
 pal=SPEC['palette']
 oak=material('Oak',pal['oak'],.68)
 paint=material('Olive grey joinery',pal['storage'],.78)
-plaster=material('Warm plaster',pal['plaster'],.95)
 green=material('Matte green',pal['mat'],.92)
 steel=material('Brushed tool steel',pal['steel'],.5,.65)
-window=material('Opaque frosted daylight','E5EBE7',.96,0,.35)
 # Packed restrained albedo maps. World-scale UVs; never modify CAD materials.
 for mat,kind,size in [(oak,'oak',1024),(green,'mat',256)]:
     img=bpy.data.images.new(kind+' original albedo',width=size,height=size)
@@ -108,19 +106,6 @@ for x in [-430,430]:
         mesh('drawer-cup-pull',verts,faces,steel,smooth=True)
 box('front-apron',-325,325,130,150,-35,-125,paint,bevel=2)
 box('back-stretcher',-330,330,-430,-410,-740,-815,paint,bevel=2)
-# Room shell entirely beyond the reachable column. No ceiling or flight cap.
-R=SPEC['room'];fy=R['floorY'];ty=R['wallTopY']
-box('room-floor',-620,620,-520,1720,fy,fy-20,oak,'decor')
-box('back-wall',-620,620,-520,-500,ty,fy,plaster,'decor')
-box('left-wall',-620,-600,-500,1720,ty,fy,plaster,'decor')
-box('right-wall',600,620,-500,1720,ty,fy,plaster,'decor')
-box('front-wall',-600,600,1700,1720,ty,fy,plaster,'decor')
-for x0,x1,z0,z1 in [(-600,600,-500,-493),(-600,-593,-500,1700),(593,600,-500,1700)]:box('skirting',x0,x1,z0,z1,fy+65,fy,paint,'decor')
-# Opaque frosted panel and thin painted frame. Sill remains outside bounds.
-box('frosted-pane',594,599,-390,110,900,100,window,'decor')
-for z0,z1,y0,y1 in [(-400,-390,90,910),(110,120,90,910),(-390,110,90,100),(-390,110,900,910),(-390,110,790,801)]:box('window-frame',580,599,z0,z1,y1,y0,paint,'decor',1)
-box('window-sill',570,600,-405,125,100,87,paint,'decor',1)
-
 # Merge material / collision role. Semantic bounds retained independently for QA.
 groups={}
 for o in objects:groups.setdefault((o.data.materials[0].name,o['collisionRole']),[]).append(o)
@@ -139,9 +124,9 @@ bpy.context.scene.render.engine='CYCLES'
 bpy.context.scene.cycles.samples=64
 bpy.context.scene.render.bake.margin=3
 bpy.context.scene.render.bake.use_clear=True
-for mat in [oak,paint,plaster,green,steel,window]:
+for mat in [oak,paint,green,steel]:
     parts=[o for o in bpy.context.scene.objects if o.type=='MESH' and o.data.materials[0]==mat]
-    size=1024 if mat==oak else 512 if mat in [plaster,green,paint] else 256
+    size=1024 if mat==oak else 512 if mat in [green,paint] else 256
     img=bpy.data.images.new(mat.name+' baked albedo',width=size,height=size)
     nodes=mat.node_tree.nodes;links=mat.node_tree.links
     originalUV=nodes.new('ShaderNodeUVMap');originalUV.uv_map='Authored projection'
@@ -189,7 +174,7 @@ bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'environment.blend'))
 runtime=ROOT/'explorer/public/bench-local/environment.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',export_yup=True,export_extras=True,use_renderable=True)
 counts['downloadBytes']=runtime.stat().st_size;assert counts['downloadBytes']<=8*1024**2
-report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':'room-and-desk-only','origin':'Original authored room, desk and mat geometry with noise textures; no external models, artwork or maker CAD embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','budgets':counts,'semantics':semantics,'files':[]}
+report={'schemaVersion':1,'generator':'scripts/bench/export-environment.py','blender':bpy.app.version_string,'designRevision':3,'stage':'desk-in-open-space','origin':'Original authored desk and mat geometry with noise textures; no external models, artwork or maker CAD embedded.','license':'Original project contributions under repository MIT; maker CAD remains separately gated.','budgets':counts,'semantics':semantics,'files':[]}
 for p in [ROOT/'assets/authored/workshop-environment.json',ROOT/'assets/authored/atelier-layout.json',Path(__file__),OUT/'environment.blend',runtime]:report['files'].append({'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
 (ROOT/'assets/source-manifest/workshop-environment.json').write_text(json.dumps(report,indent=2)+'\n')
 print('WORKSHOP',json.dumps(counts))

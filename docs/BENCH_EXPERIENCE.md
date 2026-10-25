@@ -34,18 +34,17 @@ Arrival and explicit R reset remain
 at feet (0, 0.002, 54), facing −Z. The visitor stays **1.65 mm tall**, radius
 **0.22 mm**, with eyes **1.48 mm above their feet**, 68° vertical FOV and no bob/roll.
 
-## Room and bare workbench — current local stage
+## Standalone workbench — current local stage
 
-At the owner's request, the environment now contains only the plaster room,
-one oak workbench with integrated olive-grey drawers, and a plain green mat.
-The right frosted window remains part of the room. The lamp, screwdriver stand
-and five drivers, tray, loupe, tweezers, notebook, Dresden map/frame and mat
-lettering have been removed. The working movement and original holder remain
-unchanged for interaction testing. Objects can be introduced individually after
-reviewing this base scene.
+At the owner's request, one oak workbench with integrated olive-grey drawers and
+a plain green mat now stands in an open, warm neutral background. There are no
+walls, windows, floor, skirting or exterior scenery. Tabletop props and lettering
+remain removed. The working movement and original holder remain unchanged for
+interaction testing. Objects can be introduced individually after reviewing this
+base scene.
 
 `assets/authored/workshop-environment.json` describes the current empty prop list.
-The Blender exporter builds the room and joinery, then bakes contact shading into
+The Blender exporter builds the desk joinery, then bakes contact shading into
 opaque albedo atlases. There are no new transmission or shadow-map passes.
 The source manifest records semantic bounds, budgets, source/output hashes and
 the Blender version. Original vector artwork remains in `workshop-graphics/*.svg`
@@ -53,36 +52,35 @@ for later use but is neither required by nor embedded in the current export.
 
 The desk and mat retain `atelierVersion: 1` and
 `collisionRole: walkable`. Merging by material/role preserves semantic IDs for
-inspection. Walls, window frames and pane remain outside the reachable X/Z column;
-the decorative floor is below the solid desk. The 1 mm mat edge exceeds the
+inspection. No room or decorative floor geometry is exported. The 1 mm mat edge exceeds the
 unchanged 0.22 mm step: walk down to the wood, then use Space to fly back up.
 All eight outer edges/corners remain supported and constrained at every altitude.
 No ramps, proxy movement floors, altered speed or automatic camera lift were added.
 
 Bench-only lighting now comes principally from the right, with a gentle warm left
 fill and the existing studio reflections. Short-range fog is removed. Camera far
-range encloses the loaded room bounding sphere from the current camera position,
+range encloses the loaded environment bounding sphere from the current camera position,
 including sustained high flight; the 0.035 mm near plane is retained. Reversed
 depth on GPUs supporting `EXT_clip_control` prevents the 1 mm mat from fighting
-with the underlying desk in distant room views. CAD materials, jewel transmission and
+with the underlying desk in distant desk views. CAD materials, jewel transmission and
 its half-resolution target remain unchanged.
 
 Measured generated environment budgets (excluding unchanged maker CAD):
 
 | Metric | Measured | Target |
 | --- | ---: | ---: |
-| Visible triangles | 2,628 | ≤40,000 |
+| Visible triangles | 1,872 | ≤40,000 |
 | Collision triangles | 1,872 | ≤8,000 |
-| Environment draws per pass | 8 | ≤24 |
-| Decoded textures including mipmaps | 10.0 MiB | ≤24 MiB |
-| GLB download | 0.76 MiB | ≤8 MiB |
+| Environment draws per pass | 4 | ≤24 |
+| Decoded textures including mipmaps | 8.33 MiB | ≤24 MiB |
+| GLB download | 0.53 MiB | ≤8 MiB |
 
 The new `workshop-check.mjs` checks actual exported triangle budgets, texture
 memory, collision roles, all static triangles against continuous per-part lift
 columns/turnover bounds and both holder bounds, cleared tabletop drops, desk support,
 four mat-edge routes, actual keyboard jetpack return, high-flight visibility, and exact
 once-only disposal. The continuous bounds are conservative clearance evidence,
-not exact swept-solid or mechanical certification. Room/desk inspection captures
+not exact swept-solid or mechanical certification. Desk inspection captures
 use explicitly labelled camera fixtures; arrival and landed captures retain the
 actual miniature visitor camera.
 
@@ -215,7 +213,7 @@ publication or redistribution is authorized.
 ## Verification
 
 Set `PLAYWRIGHT_MODULE` to the installed Playwright `index.mjs` and `CHROME_PATH`
-to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-room-only` for local reports/captures:
+to Chrome, then use `PLAY_QA_OUTPUT=artifacts/workshop-open-space` for local reports/captures:
 
 ```sh
 node --test tests/*.test.mjs
@@ -244,7 +242,8 @@ flip, retry and interrupted loading. UI checks cover four desktop sizes plus 200
 text, controls, navigation, entry, focus and loading/error recovery.
 
 Current counts and remaining actions are in [PROGRESS.md](../PROGRESS.md).
-Current room-only screenshots and reports remain local in
+Current open-space screenshots and reports remain local in
+`artifacts/workshop-open-space/`. The previous bare-room review remains in
 `artifacts/workshop-room-only/`. The earlier decorated revision 3 review remains
 in `artifacts/workshop-implementation/`, with its suites in `regression/`.
 Earlier flip captures remain in `artifacts/bench-flip-followup/` and
