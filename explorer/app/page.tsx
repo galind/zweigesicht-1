@@ -583,22 +583,15 @@ export default function Home() {
         >
           <SheetTrigger
             ref={walkButton}
-            className="bench-trigger"
+            className="bench-trigger site-glass"
             aria-labelledby="bench-invitation-title"
-            aria-describedby="bench-invitation-input"
           >
             <span
               className="bench-invitation-heading"
               id="bench-invitation-title"
             >
-              Explore the workbench
+              Explore it in first person
               <ArrowRight aria-hidden="true" />
-            </span>
-            <span
-              className="bench-invitation-input"
-              id="bench-invitation-input"
-            >
-              First-person · Keyboard &amp; mouse
             </span>
           </SheetTrigger>
         </BenchEntry>

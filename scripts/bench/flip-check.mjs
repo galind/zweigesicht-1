@@ -51,7 +51,7 @@ try {
   await page.goto(base + "/?inspect=1");
   await page.locator(".stage canvas").waitFor();
   await page.waitForTimeout(1500);
-  await page.getByRole("button", { name: "Explore the workbench", exact: true }).click();
+  await page.getByRole("button", { name: "Explore it in first person", exact: true }).click();
   check(
     "homepage popup has F",
     await page

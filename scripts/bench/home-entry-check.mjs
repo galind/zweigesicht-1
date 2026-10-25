@@ -33,7 +33,7 @@ try {
       const label = `${width}x${height}-${text}-${reducedMotion}`;
       await page.setViewportSize({ width, height });
       await page.goto(base + "/?no3d=1&text=" + text, { waitUntil: "networkidle" });
-      const entry = page.getByRole("button", { name: "Explore the workbench", exact: true });
+      const entry = page.getByRole("button", { name: "Explore it in first person", exact: true });
       const accessible = await entry.evaluate((e) => {
         const r = e.getBoundingClientRect();
         const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
@@ -47,19 +47,12 @@ try {
             r.bottom <= innerHeight &&
             (r.right <= dock.left || r.bottom <= dock.top),
           overflow: e.scrollWidth > e.clientWidth + 1,
-          description: e
-            .getAttribute("aria-describedby")
-            .split(" ")
-            .map((id) => document.getElementById(id).textContent)
-            .join(" "),
         };
       });
       assert.ok(
         accessible.hit && accessible.within && !accessible.overflow,
         label + JSON.stringify(accessible),
       );
-      assert.match(accessible.description, /First-person/);
-      assert.match(accessible.description, /Keyboard & mouse/);
       // Removing the decorative arrow must not change the usable name or copy.
       await page.addStyleTag({ content: ".bench-trigger svg { display: none; }" });
       assert.ok(await entry.isVisible());
@@ -96,27 +89,28 @@ try {
       await entry.press("Enter");
       const popup = page.getByRole("dialog", { name: "Before you begin" });
       await popup.waitFor();
+      assert.match(await popup.innerText(), /Keyboard and mouse required/);
       await page.waitForFunction(() => {
         const dialog = document.querySelector('[role="dialog"]');
         return dialog?.contains(document.activeElement);
       });
       assert.equal(new URL(page.url()).pathname, "/");
-      assert.ok(
-        await popup.evaluate((e) => {
-          const r = e.getBoundingClientRect();
-          const title = e.querySelector("h2").getBoundingClientRect();
-          return (
-            r.x >= 0 &&
-            r.right <= innerWidth &&
-            r.y >= 0 &&
-            r.bottom <= innerHeight &&
-            e.scrollWidth <= e.clientWidth + 1 &&
-            title.top >= r.top &&
-            title.bottom <= r.bottom
-          );
-        }),
-        label + " introduction visible with no horizontal clipping",
-      );
+      // Focus may land before the popup's opening transition has settled.
+      await page.waitForFunction(() => {
+        const e = document.querySelector('[role="dialog"]');
+        if (!e) return false;
+        const r = e.getBoundingClientRect();
+        const title = e.querySelector("h2").getBoundingClientRect();
+        return (
+          r.x >= 0 &&
+          r.right <= innerWidth &&
+          r.y >= 0 &&
+          r.bottom <= innerHeight &&
+          e.scrollWidth <= e.clientWidth + 1 &&
+          title.top >= r.top &&
+          title.bottom <= r.bottom
+        );
+      });
       await page.keyboard.press("Escape");
       await popup.waitFor({ state: "hidden" });
       await page.waitForFunction(() => document.activeElement?.matches(".bench-trigger"));
@@ -141,6 +135,7 @@ try {
       }
       await entry.press("Enter");
       await popup.waitFor();
+      assert.match(await popup.innerText(), /Keyboard and mouse required/);
       await page.waitForFunction(() => {
         const dialog = document.querySelector('[role="dialog"]');
         return dialog?.contains(document.activeElement);
