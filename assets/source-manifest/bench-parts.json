@@ -16,7 +16,7 @@
   ],
   "referenceStatus": "Historical protector references retained with hashes; containers removed at owner request.",
   "assumptions": {
-    "placement": "Broad dial back surfaces contact Y4.5, with original pins/screws entering through-holes. Each complete hand/bushing packet is rigidly tilted onto a lower supporting blade plane; bushings enter measured clearance holes. Radial clearance is 0.12 mm, an authored display allowance. The case rests at mat Y0. This is a presentation pose, not a servicing instruction."
+    "placement": "Broad dial back surfaces contact Y2, with original pins/screws entering through-holes. Each complete hand/bushing packet is rigidly tilted onto a lower supporting blade plane; bushings enter measured clearance holes. Radial clearance is 0.12 mm, an authored display allowance. The case rests at mat Y0. This is a presentation pose, not a servicing instruction."
   },
   "sourceFiles": [
     {
@@ -33,15 +33,15 @@
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "6a65e3f5b61f2fa1134920c1a420273fb74286056d4b43d8bc65dc44bf18e2a7"
+      "sha256": "4141caaba92df6a14ebb25f7f4ba6fecb8f7d253454dc1718045cca549b731d1"
     },
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "f1713cbe939b804e05021c1fa9d09b225f48e3b06c50d57165ba0fd4edb13ede"
+      "sha256": "9bc66a84d73846f438d4376b7af7323e02b59ac08f13ebdc1d6e3ea37f565da4"
     },
     {
       "path": "scripts/bench/prepare-parts.mjs",
-      "sha256": "08d817ed0b85ecc39f73ab10679349d93c3782116134d9bba7588880cd42f16f"
+      "sha256": "6ae92a0c2dc97a0d341a6dee1cb5685ed4acaa79d8d6350979c1bd43c5d26eb5"
     },
     {
       "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",

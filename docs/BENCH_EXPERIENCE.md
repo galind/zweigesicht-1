@@ -40,18 +40,19 @@ stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet
 ## Oak parts stand and hold Shift to run — current local stage
 
 The movement stays centered at (0, −7). The open steel case now sits to its left
-at (−85, −7), directly on the mat. Both dials and their matching hand sets share
-one low oak stand to the right: X65…148, Z−61…44, top Y4.5 and bottom Y0 mm.
-Its 4 mm clipped corners and 0.6 mm edge bevel soften a solid, closed plinth.
+at (−55, −7), directly on the mat, rotated 90° so its lugs run along Z in line
+with the movement. Both dials and their matching hand sets share one low oak
+stand to the right: X40…116, Z−47…29, top Y2 and bottom Y0 mm.
+The compact 76 × 76 × 2 mm stand has 4 mm clipped corners and a 0.3 mm edge bevel.
 It uses the tabletop's oak material and rebaked contact shading. No boxes, glass,
 labels or additional controls were added to the display.
 
-The central dial is at (90, −32), with its Fine hands beside it at (126, −32).
-The reverse dial is at (90, 21), with its Lance hands at (126, 21). Both
-dial backs now contact the stand at Y4.5, with their original pins and screw ends
+The central dial is at (62, −25), with its Fine hands beside it at (98, −25).
+The reverse dial is at (62, 12), with its Lance hands at (98, 12). Both
+dial backs now contact the stand at Y2, with their original pins and screw ends
 entering **ten genuine through-holes**: two central-dial pins, three reverse-dial
-screws and five hand bushings. The central dial lowers 1.5 mm and the reverse dial
-0.568041 mm from the earlier pin-tip seating. Horizontal hand blades contact the
+screws and five hand bushings. The central-dial pins extend 1.5 mm below the rear
+support plane; the reverse-dial screw ends extend 0.568041 mm. Horizontal hand blades contact the
 wood directly; the three curved blades receive rigid tilts of 1.421°, 1.155° and
 4.103° so their original lower support points meet the wood. No blade is reshaped.
 
@@ -62,7 +63,7 @@ clearance. This is an authored display allowance. Hole centers, radii, contact
 spans, support areas and tilts are recorded in `bench-parts-layout.json`.
 Blender subtracts circumscribed 64-sided cylinders before UV projection and the
 contact bake; the rendered and collision surfaces share those actual bores.
-All pin and bushing tips remain above the mat. The 78 detached leaves preserve
+All pin and bushing tips remain above the mat; the deepest pins retain 0.5 mm clearance. The 78 detached leaves preserve
 source geometry, finishes and bushing relationships. Both case crystals remain omitted. Actual CAD and stand triangles
 collide; the case center opens to the mat. The stand, case and all parts clear
 both holders and the continuous movement flip envelopes. The front approach
@@ -76,8 +77,9 @@ menu, focus loss and reset clear the held input. The entry popup, pause menu and
 walking hint show **Shift · Hold to run**. Physics substeps account for run speed.
 
 Initial stand/running evidence: `artifacts/workshop-stand/`; fitted seating and
-bore evidence: `artifacts/workshop-seating/`. The bored environment has **3,160
-visible/collision triangles, 2 draws/pass, 6.67 MiB textures and a 400,276-byte GLB**. Verification includes
+bore evidence: `artifacts/workshop-seating/`; compact stand and aligned case:
+`artifacts/workshop-compact-stand/`. The bored environment has **3,160
+visible/collision triangles, 2 draws/pass, 6.67 MiB textures and a 387,072-byte GLB**. Verification includes
 144 CPU tests, typecheck/lint/build, 10 parts checks, 65 environment checks and
 32 flip checks. **10 real-keyboard run checks** cover both Shift keys, release, simultaneous
 Shift keys, pause and resume. Overview and stand detail captures were reviewed.

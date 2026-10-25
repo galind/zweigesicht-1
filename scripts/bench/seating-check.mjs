@@ -4,6 +4,12 @@ import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
 const layout = JSON.parse(await fs.readFile("assets/authored/bench-parts-layout.json"));
+const stand = JSON.parse(await fs.readFile("assets/authored/workshop-environment.json")).props.find(
+  (p) => p.id === "dial-hand-stand",
+);
+const { dialX: dx, handsX: hx, topY: sy } = stand;
+const cz = stand.rows.find((r) => r.face === "central").z,
+  sz = stand.rows.find((r) => r.face === "small").z;
 const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-seating";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH });
@@ -121,7 +127,7 @@ try {
     report.geometry.bores,
   );
   check(
-    "wood remains around every bore at the original stand height",
+    "wood remains around every bore at the specified stand height",
     report.geometry.bores.every((h) =>
       h.outside.every((y) => Math.abs(y - layout.standSeating.topY) < 1e-4),
     ),
@@ -144,10 +150,15 @@ try {
     content: ".bench-menu,.bench-start,.bench-menu-backdrop,.bench-legend{display:none!important}",
   });
   for (const [name, position, target, hidden] of [
-    ["stand-bores-exposed", [155, 100, 80], [106, 4.5, -8], true],
-    ["central-dial-flush", [109, 6, -10], [90, 4.5, -32], false],
-    ["small-dial-flush", [108, 6, 42], [90, 4.5, 21], false],
-    ["hand-seating-close", [148, 9, -9], [126, 4.5, -32], false],
+    [
+      "stand-bores-exposed",
+      [hx + 29, 100, sz + 59],
+      [(stand.minX + stand.maxX) / 2, sy, (cz + sz) / 2],
+      true,
+    ],
+    ["central-dial-flush", [dx + 19, sy + 1.5, cz + 22], [dx, sy, cz], false],
+    ["small-dial-flush", [dx + 18, sy + 1.5, sz + 21], [dx, sy, sz], false],
+    ["hand-seating-close", [hx + 22, sy + 4.5, cz + 23], [hx, sy, cz], false],
   ]) {
     await page.evaluate(
       ({ position, target, hidden }) => {

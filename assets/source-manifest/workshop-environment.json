@@ -10,82 +10,82 @@
     {
       "id": "central-dial-clearance-0",
       "packet": "central-dial",
-      "x": 95.89346957206726,
-      "z": -18.753591060638428,
+      "x": 67.89346957206726,
+      "z": -11.753591060638428,
       "radius": 0.6204732142099939,
-      "minPartY": 2.9999999999999876
+      "minPartY": 0.4999999999999849
     },
     {
       "id": "central-dial-clearance-1",
       "packet": "central-dial",
-      "x": 87.97777843475342,
-      "z": -46.35888719558716,
+      "x": 59.97777843475342,
+      "z": -39.35888719558716,
       "radius": 0.6204732142099939,
-      "minPartY": 2.9999999999999893
+      "minPartY": 0.4999999999999867
     },
     {
       "id": "central-hour-clearance-0",
       "packet": "central-hour",
-      "x": 117.00008012730689,
-      "z": -28.199999928474426,
+      "x": 89.00008012730689,
+      "z": -21.199999928474426,
       "radius": 0.9950322873632805,
-      "minPartY": 3.9499999999999997
+      "minPartY": 1.4499999999999993
     },
     {
       "id": "central-minute-clearance-0",
       "packet": "central-minute",
-      "x": 126.00012727576262,
-      "z": -25.10929121156659,
+      "x": 98.00012727576262,
+      "z": -18.10929121156659,
       "radius": 0.624177326171691,
-      "minPartY": 4.160524604616414
+      "minPartY": 1.6605246046164135
     },
     {
       "id": "central-seconds-clearance-0",
       "packet": "central-seconds",
-      "x": 135.0000216929389,
-      "z": -27.57610549105206,
+      "x": 107.0000216929389,
+      "z": -20.57610549105206,
       "radius": 0.3459355281692398,
-      "minPartY": 4.385653665675769
+      "minPartY": 1.8856536656757696
     },
     {
       "id": "small-dial-clearance-0",
       "packet": "small-dial",
-      "x": 85.99622940110038,
-      "z": 20.20021704355241,
+      "x": 57.99622940110038,
+      "z": 11.200217043552406,
       "radius": 0.4202272796260353,
-      "minPartY": 3.9681209416909002
+      "minPartY": 1.4681209416908958
     },
     {
       "id": "small-dial-clearance-1",
       "packet": "small-dial",
-      "x": 93.9962294011004,
-      "z": 20.200217043552403,
+      "x": 65.9962294011004,
+      "z": 11.200217043552403,
       "radius": 0.4202272796260353,
-      "minPartY": 3.9319586757835436
+      "minPartY": 1.4319586757835392
     },
     {
       "id": "small-dial-clearance-2",
       "packet": "small-dial",
-      "x": 89.9962294011004,
-      "z": 24.80021704355241,
-      "radius": 0.4202272796260353,
-      "minPartY": 3.9681209416908994
+      "x": 61.99622940110039,
+      "z": 15.80021704355241,
+      "radius": 0.42022727962603484,
+      "minPartY": 1.468120941690895
     },
     {
       "id": "small-hour-clearance-0",
       "packet": "small-hour",
-      "x": 121.50016007229834,
-      "z": 23.16295229425127,
-      "radius": 0.62002871890916,
-      "minPartY": 4.399999999999999
+      "x": 93.50016007229834,
+      "z": 14.162952294251266,
+      "radius": 0.6200287189091628,
+      "minPartY": 1.8999999999999986
     },
     {
       "id": "small-minute-clearance-0",
       "packet": "small-minute",
-      "x": 130.5,
-      "z": 24.997042849174857,
-      "radius": 0.3965430313268061,
-      "minPartY": 4.418831854566757
+      "x": 102.5,
+      "z": 15.997042849174857,
+      "radius": 0.3965430313268062,
+      "minPartY": 1.9188318545667564
     }
   ],
   "closedSurfaceAudit": "All slab, rim, mat and bored stand meshes are closed manifold after triangulation.",
@@ -94,7 +94,7 @@
     "collisionTriangles": 3160,
     "drawsPerPass": 2,
     "textureBytesWithMipmaps": 6990506,
-    "downloadBytes": 400276
+    "downloadBytes": 387072
   },
   "semantics": [
     {
@@ -147,21 +147,21 @@
       "role": "walkable",
       "material": "Oak",
       "min": [
-        65,
+        40,
         0,
-        -61
+        -47
       ],
       "max": [
-        148,
-        4.5,
-        44
+        116,
+        2,
+        29
       ]
     }
   ],
   "files": [
     {
       "path": "assets/authored/workshop-environment.json",
-      "sha256": "f1713cbe939b804e05021c1fa9d09b225f48e3b06c50d57165ba0fd4edb13ede"
+      "sha256": "9bc66a84d73846f438d4376b7af7323e02b59ac08f13ebdc1d6e3ea37f565da4"
     },
     {
       "path": "assets/authored/atelier-layout.json",
@@ -169,7 +169,7 @@
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "6a65e3f5b61f2fa1134920c1a420273fb74286056d4b43d8bc65dc44bf18e2a7"
+      "sha256": "4141caaba92df6a14ebb25f7f4ba6fecb8f7d253454dc1718045cca549b731d1"
     },
     {
       "path": "scripts/bench/export-environment.py",
@@ -177,11 +177,11 @@
     },
     {
       "path": "assets/generated/bench/environment.blend",
-      "sha256": "78b00cb18e93b18a8b5566975d5b7c61ede9d40c7c2f12af76a4572438eda229"
+      "sha256": "68292bddb6e82e74fbb0ee607aa7a1723cc24d3c1668b8325643fe3039ac399f"
     },
     {
       "path": "explorer/public/bench-local/environment.glb",
-      "sha256": "f95194b629505d9a5e69d62f848558edf2d82823bfab1c6113952bc5a2933cc3"
+      "sha256": "236d3f942855262d1f1c64392478c18f3c64de24deb87dd93eb4b94cf85121ac"
     }
   ]
 }

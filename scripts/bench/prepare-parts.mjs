@@ -210,19 +210,10 @@ const caseIds = watch.leaves
     .filter((p) => p.packet !== "crown" && records.get(p.id).definitionId !== "d_0_1_1_67")
     .map((p) => p.id),
   groups = [];
-// Central opening up, complete attached source lug packets run along world X.
+// Central opening up, complete attached source lug packets run along world Z, matching the movement orientation.
 const caseLocal = new Map(caseIds.map((id) => [id, source(id)]));
 groups.push(
-  pack(
-    "case",
-    caseIds,
-    caseLocal,
-    new T.Matrix4()
-      .makeRotationY(Math.PI / 2)
-      .multiply(new T.Matrix4().makeRotationX(-Math.PI / 2)),
-    [-85, -7],
-    0,
-  ),
+  pack("case", caseIds, caseLocal, new T.Matrix4().makeRotationX(-Math.PI / 2), [-55, -7], 0),
 );
 for (const { face, z } of stand.rows) {
   const config = dials.faces[face],
@@ -312,8 +303,7 @@ const evidence = {
   referenceStatus:
     "Historical protector references retained with hashes; containers removed at owner request.",
   assumptions: {
-    placement:
-      "Broad dial back surfaces contact Y4.5, with original pins/screws entering through-holes. Each complete hand/bushing packet is rigidly tilted onto a lower supporting blade plane; bushings enter measured clearance holes. Radial clearance is 0.12 mm, an authored display allowance. The case rests at mat Y0. This is a presentation pose, not a servicing instruction.",
+    placement: `Broad dial back surfaces contact Y${stand.topY}, with original pins/screws entering through-holes. Each complete hand/bushing packet is rigidly tilted onto a lower supporting blade plane; bushings enter measured clearance holes. Radial clearance is 0.12 mm, an authored display allowance. The case rests at mat Y0. This is a presentation pose, not a servicing instruction.`,
   },
   sourceFiles: [],
 };

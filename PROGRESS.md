@@ -3,6 +3,28 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Lower, compact stand and aligned case — 25 October 2026
+
+Reduced the oak stand from 83 × 105 × 4.5 mm to **76 × 76 × 2 mm**, with a
+0.3 mm edge bevel. Moved its left edge inward from X65 to X40, tightened the
+rows from 53 to 37 mm apart and moved the case from X−85 to X−55. The case
+rotates 90° so its lugs run along Z, matching the movement orientation.
+The movement, holders and arrival remain unchanged.
+
+Recomputed all ten fitted through-bores at the new positions and rebaked the
+wood. Both dial backs and the original hand support points still contact the
+stand; the deepest pins retain **0.5 mm clearance above the mat**. Actual CAD,
+stand and case clear both holders and continuous flip envelopes. Close-up,
+exposed-bore and full-table renders reviewed.
+
+Verified **144 CPU tests**, typecheck/lint/build, **5 seating**, **10 parts**
+(including both full flips) and **65 environment checks**, without browser errors.
+All source/output hashes match. Environment: **3,160 visible/collision triangles**,
+**2 draws/pass**, 6.67 MiB textures and 387,072-byte GLB. Evidence:
+`artifacts/workshop-compact-stand/`. Production preview rebuilt/restarted at
+<http://127.0.0.1:4198/bench>. Next: owner review of the compact arrangement.
+Local only; no push or publication.
+
 ## Fitted stand holes and seated dials/hands — 25 October 2026
 
 Cut ten actual through-bores in the oak stand for the two central-dial pins,

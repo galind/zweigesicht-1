@@ -68,33 +68,33 @@
     "verification": "Design reserve only. Verify actual source-derived swept envelope and both holders after authoring."
   },
   "openCore": {
-    "minX": -40,
-    "maxX": 40,
+    "minX": -28,
+    "maxX": 28,
     "minZ": -65,
     "maxZ": 100,
-    "meaning": "Clear approach and circulation around the unchanged movement; case lies left of X-60, oak stand begins at X65. Continuous CAD envelopes independently audited."
+    "meaning": "Clear approach and circulation around the unchanged movement; case lies left of X-33, oak stand begins at X40. Continuous CAD envelopes independently audited."
   },
   "props": [
     {
       "id": "dial-hand-stand",
-      "minX": 65,
-      "maxX": 148,
-      "minZ": -61,
-      "maxZ": 44,
-      "topY": 4.5,
+      "minX": 40,
+      "maxX": 116,
+      "minZ": -47,
+      "maxZ": 29,
+      "topY": 2,
       "bottomY": 0,
       "cornerCut": 4,
-      "edgeBevel": 0.6,
-      "dialX": 90,
-      "handsX": 126,
+      "edgeBevel": 0.3,
+      "dialX": 62,
+      "handsX": 98,
       "rows": [
         {
           "face": "central",
-          "z": -32
+          "z": -25
         },
         {
           "face": "small",
-          "z": 21
+          "z": 12
         }
       ]
     }

@@ -139,10 +139,10 @@ try {
       ["left wood border", -200, 0, -1],
       ["right wood border", 200, 0, -1],
       ["back wood border", 0, -150, -1],
-      ["open case center", -85, -7, 0],
-      ["stand between rows", 110, 0, 4.5],
+      ["open case center", -55, -7, 0],
+      ["stand between rows", 82, -3, 2],
       ["left approach mat", -36, 35, 0],
-      ["stand front surface", 110, 38, 4.5],
+      ["stand front surface", 90, 26, 2],
     ]) {
       const floor = b.world.floor(x, z, 500);
       setup(x, floor + 3, z);
@@ -235,9 +235,9 @@ try {
     for (const [name, x, z, key, height = 0] of [
       ["left approach aisle", -36, 55, "KeyW"],
       ["right approach aisle", 36, 55, "KeyW"],
-      ["front of stand", 80, 52, "KeyD"],
-      ["between dial rows on stand", 85, 0, "KeyD", 4.5],
-      ["behind case", -110, -35, "KeyD"],
+      ["front of stand", 55, 37, "KeyD"],
+      ["between dial rows on stand", 62, -3, "KeyD", 2],
+      ["behind case", -80, -36, "KeyD"],
     ]) {
       setup(x, height + 0.002, z);
       w.keys.add(key);
@@ -261,14 +261,14 @@ try {
         pass: w.feet.z < 51 && w.grounded && Math.abs(w.feet.y) < 0.02,
       });
     }
-    setup(60, 0.002, 0);
+    setup(35, 0.002, -3);
     w.keys.add("KeyD");
     w.keys.add("ShiftLeft");
     advance(500);
     circulation.push({
       name: "running stops at the visible stand wall",
       feet: w.feet.toArray(),
-      pass: w.feet.x > 64.7 && w.feet.x < 64.8 && w.grounded && Math.abs(w.feet.y) < 0.02,
+      pass: w.feet.x > 39.7 && w.feet.x < 39.8 && w.grounded && Math.abs(w.feet.y) < 0.02,
     });
     const matEdges = [];
     for (const [x, z, outKey, inKey, axis, sign] of [

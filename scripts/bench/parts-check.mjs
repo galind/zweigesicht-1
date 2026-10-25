@@ -10,6 +10,14 @@ const layout = await read("assets/authored/bench-parts-layout.json"),
   manifest = await read("explorer/public/models/assembly-manifest.json"),
   paths = await read("explorer/public/models/asset-paths.json"),
   recovery = await read("explorer/public/models/case-lug-recovery.json");
+const stand = (await read("assets/authored/workshop-environment.json")).props.find(
+  (p) => p.id === "dial-hand-stand",
+);
+const { dialX: dx, handsX: hx, topY: sy } = stand;
+const cz = stand.rows.find((r) => r.face === "central").z,
+  sz = stand.rows.find((r) => r.face === "small").z,
+  caseBounds = layout.groups.find((g) => g.id === "case").bounds,
+  caseX = (caseBounds[0][0] + caseBounds[1][0]) / 2;
 const bytes = await fs.readFile("explorer/public" + paths.catalog),
   catalog = (
     await new GLTFLoader()
@@ -150,7 +158,12 @@ try {
         packet: m.userData.packet,
         collides: b.world.solids.some((s) => s.mesh === m),
       }));
-      const caseFloor = b.world.floor(-85, -7, 50);
+      const caseBounds = layout.groups.find((g) => g.id === "case").bounds;
+      const caseFloor = b.world.floor(
+        (caseBounds[0][0] + caseBounds[1][0]) / 2,
+        (caseBounds[0][2] + caseBounds[1][2]) / 2,
+        50,
+      );
       const containers = [];
       b.scene.traverse((m) => {
         if (m.isMesh && /Elastic membrane|Clear rigid shell|Dial base/.test(m.material.name))
@@ -270,18 +283,30 @@ try {
   for (const [name, position, target, side, fov] of [
     ["external-full-tabletop", [0, 340, 430], [0, 0, -30], "bridge", 45],
     ["external-top-mat", [0, 300, -1], [0, 0, 0], "bridge", 50],
-    ["external-dial-seating", [114, 8, -6], [90, 4.5, -32], "bridge", 42],
-    ["external-stand", [180, 130, 125], [106.5, 4.5, -8.5], "bridge", 42],
-    ["external-case", [-45, 53, 55], [-85, 5, -7], "bridge", 42],
-    ["external-central-dial", [90, 69.5, 15], [90, 7.5, -32], "bridge", 40],
-    ["external-small-dial", [90, 69.5, 68], [90, 7.5, 21], "bridge", 40],
-    ["external-central-hands-top", [126, 74.5, -31.9], [126, 5, -32], "bridge", 42],
-    ["external-small-hands-top", [126, 74.5, 21.1], [126, 5, 21], "bridge", 42],
-    ["external-central-hands-oblique", [149, 35.5, 14], [126, 5, -32], "bridge", 45],
-    ["external-small-hands-oblique", [149, 35.5, 67], [126, 5, 21], "bridge", 45],
-    ["external-central-hands-side", [126, 14.5, 16], [126, 5, -32], "bridge", 50],
-    ["external-small-hands-side", [126, 14.5, 69], [126, 5, 21], "bridge", 50],
-    ["visitor-near-hands", [126, 5.982, -12], [126, 5, -32], "bridge", 68],
+    ["external-dial-seating", [dx + 24, sy + 3.5, cz + 26], [dx, sy, cz], "bridge", 42],
+    [
+      "external-stand",
+      [hx + 54, sy + 120, sz + 100],
+      [(stand.minX + stand.maxX) / 2, sy, (cz + sz) / 2],
+      "bridge",
+      42,
+    ],
+    ["external-case", [caseX + 40, 53, 55], [caseX, 5, -7], "bridge", 42],
+    ["external-central-dial", [dx, sy + 65, cz + 47], [dx, sy + 3, cz], "bridge", 40],
+    ["external-small-dial", [dx, sy + 65, sz + 47], [dx, sy + 3, sz], "bridge", 40],
+    ["external-central-hands-top", [hx, sy + 70, cz + 0.1], [hx, sy + 0.5, cz], "bridge", 42],
+    ["external-small-hands-top", [hx, sy + 70, sz + 0.1], [hx, sy + 0.5, sz], "bridge", 42],
+    [
+      "external-central-hands-oblique",
+      [hx + 23, sy + 31, cz + 46],
+      [hx, sy + 0.5, cz],
+      "bridge",
+      45,
+    ],
+    ["external-small-hands-oblique", [hx + 23, sy + 31, sz + 46], [hx, sy + 0.5, sz], "bridge", 45],
+    ["external-central-hands-side", [hx, sy + 10, cz + 48], [hx, sy + 0.5, cz], "bridge", 50],
+    ["external-small-hands-side", [hx, sy + 10, sz + 48], [hx, sy + 0.5, sz], "bridge", 50],
+    ["visitor-near-hands", [hx, sy + 1.482, cz + 20], [hx, sy + 0.5, cz], "bridge", 68],
     ["visitor-arrival", [0, 1.482, 54], [0, 1.482, -7], "bridge", 68],
     ["visitor-bridge", [-12, 22, -7], [0, 17, -7], "bridge", 68],
     ["visitor-dial", [-12, 22, -7], [0, 17, -7], "dial", 68],
@@ -309,7 +334,9 @@ try {
   check(
     "case rests on mat; pins and bushings enter the stand above the mat",
     a.groups.every((g) =>
-      g.id === "case" ? Math.abs(g.min[1]) < 1e-6 : g.min[1] > 0 && g.min[1] < 4.5,
+      g.id === "case"
+        ? Math.abs(g.min[1]) < 1e-6
+        : g.min[1] > 0 && g.min[1] < layout.standSeating.topY,
     ),
     a.groups,
   );
