@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Bench from '../../src/bench/Bench';
 export const metadata: Metadata = {
-  title: 'Walk inside the movement · Zweigesicht-1',
-  description: 'A tiny walk across the static Zweigesicht-1 movement.',
+  title: 'Explore the workbench · Zweigesicht-1',
+  description:
+    'Explore a first-person workbench with the static Zweigesicht-1 movement, its holders and detached watch parts.',
   alternates: { canonical: '/bench' },
   robots: { index: false, follow: false },
 };

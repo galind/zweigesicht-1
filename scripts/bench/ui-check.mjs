@@ -22,7 +22,7 @@ const check = (name, pass, detail) => {
 const shot = (name) => page.screenshot({ path: `${out}/${name}.png` });
 const ready = () =>
   page.waitForFunction(() => window.bench?.status.ready, null, { timeout: 90000 });
-const enter = () => page.getByRole("button", { name: /^(Enter the movement|Resume exploring)$/ });
+const enter = () => page.getByRole("button", { name: /^(Enter workbench|Resume exploring)$/ });
 const layout = () =>
   page.evaluate(() =>
     [
@@ -59,7 +59,7 @@ try {
     const label = `${width}x${height}-${text}`;
     await page.setViewportSize({ width, height });
     await page.goto(base + "/?text=" + text);
-    const trigger = page.getByRole("button", { name: "Walk inside the movement", exact: true });
+    const trigger = page.getByRole("button", { name: "Explore the workbench", exact: true });
     await trigger.click();
     const popup = page.getByRole("dialog");
     await popup.waitFor();
@@ -78,7 +78,7 @@ try {
     await page.keyboard.press("Escape");
     await popup.waitFor({ state: "hidden" });
     await page.waitForFunction(
-      () => document.activeElement?.textContent?.trim() === "Walk inside the movement",
+      () => document.activeElement?.getAttribute("aria-labelledby") === "bench-invitation-title",
     );
     check(
       label + " cancel restores homepage focus",
@@ -88,7 +88,7 @@ try {
     await popup.waitFor();
     await enter().waitFor();
     await page.waitForFunction(
-      () => document.activeElement?.textContent?.trim() === "Enter the movement",
+      () => document.activeElement?.textContent?.trim() === "Enter workbench",
     );
     check(
       label + " popup focuses Enter",
@@ -358,10 +358,10 @@ try {
     await route.continue();
   });
   await page.goto(base + "/");
-  await page.getByRole("button", { name: "Walk inside the movement", exact: true }).click();
+  await page.getByRole("button", { name: "Explore the workbench", exact: true }).click();
   await enter().click();
   await page.waitForURL(base + "/bench");
-  await page.getByText("Loading the movement…", { exact: true }).waitFor();
+  await page.getByText("Preparing the workbench…", { exact: true }).waitFor();
   await page.keyboard.press("Escape");
   await page.waitForTimeout(6000);
   finishLoad();
@@ -381,7 +381,7 @@ try {
     await route.abort();
   });
   await page.goto(base + "/bench?inspect=1");
-  await page.getByText("Loading the movement…", { exact: true }).waitFor();
+  await page.getByText("Preparing the workbench…", { exact: true }).waitFor();
   check(
     "loading is announced and cannot enter",
     (await page.locator("output").isVisible()) && (await enter().count()) === 0,

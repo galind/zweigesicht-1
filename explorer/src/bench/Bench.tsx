@@ -76,7 +76,7 @@ export default function Bench() {
         if (!disposed)
           setState({
             ...initial,
-            error: 'The walking experience could not load. Retry to reconnect.',
+            error: 'The workbench could not load. Retry to reconnect.',
           });
       });
     return () => {
@@ -111,7 +111,7 @@ export default function Bench() {
           className={hasEntered ? 'bench-menu' : 'bench-start'}
           aria-label="Walking menu"
         >
-          {hasEntered && <h1>Walk inside the movement</h1>}
+          {hasEntered && <h1>The workbench</h1>}
           {state.error && (
             <p role="alert" className="bench-error">
               {state.error}
@@ -123,7 +123,7 @@ export default function Bench() {
               className="bench-enter"
               onClick={() => void viewer.current?.enter()}
             >
-              {hasEntered ? 'Resume exploring' : 'Enter the movement'}
+              {hasEntered ? 'Resume exploring' : 'Enter workbench'}
             </button>
           ) : state.error ? (
             <button
@@ -134,7 +134,7 @@ export default function Bench() {
               Retry loading
             </button>
           ) : (
-            <output className="bench-loading">Loading the movement…</output>
+            <output className="bench-loading">Preparing the workbench…</output>
           )}
           {state.flipBlocked && (
             <output className="bench-flip-notice">{flipNotice}</output>

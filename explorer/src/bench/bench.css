@@ -124,6 +124,10 @@
 .bench-enter:hover {
   background: var(--border);
 }
+.bench-enter:active {
+  background: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--foreground);
+}
 .bench-options button:hover {
   background: #ffffff0a;
 }
@@ -232,6 +236,9 @@
     Helvetica,
     sans-serif;
   letter-spacing: -0.02em;
+}
+.bench-entry-popup [data-slot='sheet-title']:focus {
+  outline: none;
 }
 .bench-entry-popup [data-slot='sheet-description'] {
   margin-top: 12px;

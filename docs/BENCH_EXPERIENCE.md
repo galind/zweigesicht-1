@@ -404,10 +404,53 @@ not capture the mouse automatically. Retry recreates a resting bridge-up scene.
 Loading ignores F and cannot queue a flip; disposal cannot revive a late load.
 R remains an explicit reset, including during a flip. T remains unused.
 
+## Homepage invitation — 25 October 2026
+
+Reviewed the actual homepage, controls popup, loading and mat-level arrival before
+changing the invitation. Three wording/placement directions were compared:
+
+| Direction | Assessment |
+| --- | --- |
+| “Step into the workshop” in the centered header slot | Inviting, but implies a room and conflicts with the separate `/workshop` assembly puzzle; still lacks context. |
+| **“Explore the workbench” beneath the watch identity** | Chosen: names the actual destination, makes room for the miniature first-person premise and leaves the movement dominant. |
+| “Walk among the watch’s parts” near the bottom action dock | Descriptive, but competes with the controls that operate the current explorer and does not name the destination. |
+
+The chosen invitation uses the existing dark glass, quiet border, 10 px corners
+and sans-serif typography. Its full surface is one button, with an optional,
+non-animated right arrow. The accessible name is the visible action; the description
+names the movement, holders and detached parts at miniature scale, plus
+**First-person · Keyboard & mouse**. It remains understandable with the arrow hidden.
+Hover, pressed/expanded and keyboard-focus states are distinct.
+
+The invitation is positioned below the measured header, independently of its
+height, and yields to open panels and focused part/group views. This preserves
+usable menu and inspection space, especially at 320 px with 200% text. The
+preview-only Workshop action retains its existing location and build policy.
+
+The controls introduction is now **Before you begin**, with a short Escape/pointer
+release explanation and the unchanged shared bindings. **Enter workbench** leads
+to **Preparing the workbench…**, then the existing captured arrival; no second
+introduction or new step is added. If the popup overflows, initial focus goes to
+its heading so the introduction is visible, with Tab reaching the entry action.
+Otherwise the entry action retains initial focus. Cancellation restores the
+invitation's focus. Direct entry, capture refusal, loading cancellation, retry and
+pause/resume behavior are preserved. Route metadata, canvas description and the
+pause heading use workbench terminology. Scene, physics and CAD are unchanged.
+
+Visible checks cover desktop and narrow layouts, keyboard/focus, 200% text and
+native Chrome reduced-motion emulation. Native Chrome also verifies actual
+capture/arrival and Escape; the in-app preview refuses pointer capture, and its
+existing recovery action remains available. Automated entry checks cover seven
+viewport/text combinations in both motion modes, including a short landscape
+viewport, and remove the arrow to verify the text remains sufficient. Local
+screenshots and reports are in `artifacts/bench-entry-redesign/`; current test
+results are recorded in `PROGRESS.md`. These checks do not replace the existing
+physical-device, human usability or release gates.
+
 ## Existing interface and physics
 
-The homepage **Walk inside the movement** button opens the glass controls popup.
-**Enter the movement** navigates to `/bench` and requests capture when ready;
+The homepage **Explore the workbench** invitation opens the glass controls popup.
+**Enter workbench** navigates to `/bench` and requests capture when ready;
 direct visits/Back show the compact Enter button. Escape, blur or document hiding
 while loading cancels automatic capture. Capture refusal, missing assets and
 graphics errors retain the existing recovery actions. Popup and Escape menu keep

@@ -414,7 +414,7 @@ try {
     b.walker.feet.set(maxX - 2, 0.002, 40);
     b.wake();
   }, mat.maxX);
-  await page.getByRole("button", { name: "Enter the movement", exact: true }).click();
+  await page.getByRole("button", { name: "Enter workbench", exact: true }).click();
   await page.waitForFunction(() => window.bench.status.captured);
   await page.keyboard.down("KeyD");
   await page.waitForTimeout(1000);

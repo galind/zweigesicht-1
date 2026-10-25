@@ -452,19 +452,6 @@ export default function Home() {
         data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
       >
         <div className="experience-entries">
-          <BenchEntry
-            open={walk}
-            onOpenChange={(open) => openPanel(setWalk, open)}
-            style={panelStyle}
-            finalFocus={walkButton}
-          >
-            <SheetTrigger
-              ref={walkButton}
-              className="text-button bench-trigger site-glass"
-            >
-              Walk inside the movement
-            </SheetTrigger>
-          </BenchEntry>
           {__WORKSHOP_ENTRY_ENABLED__ && (
             <WorkshopChooser
               open={assemble}
@@ -569,6 +556,60 @@ export default function Home() {
           </SheetContent>
         </Sheet>
       </SiteHeader>
+      <div
+        className="bench-invitation"
+        hidden={Boolean(
+          group ||
+          selected ||
+          s.layout === 'spread' ||
+          menu ||
+          more ||
+          catalog ||
+          about ||
+          acknowledgements ||
+          explore ||
+          separate ||
+          dials ||
+          options ||
+          details ||
+          assemble,
+        )}
+      >
+        <BenchEntry
+          open={walk}
+          onOpenChange={(open) => openPanel(setWalk, open)}
+          style={panelStyle}
+          finalFocus={walkButton}
+        >
+          <SheetTrigger
+            ref={walkButton}
+            className="bench-trigger site-glass"
+            aria-labelledby="bench-invitation-title"
+            aria-describedby="bench-invitation-description bench-invitation-input"
+          >
+            <span
+              className="bench-invitation-heading"
+              id="bench-invitation-title"
+            >
+              Explore the workbench
+              <ArrowRight aria-hidden="true" />
+            </span>
+            <span
+              className="bench-invitation-description"
+              id="bench-invitation-description"
+            >
+              Walk among the movement, its holders and detached parts at
+              miniature scale.
+            </span>
+            <span
+              className="bench-invitation-input"
+              id="bench-invitation-input"
+            >
+              First-person · Keyboard &amp; mouse
+            </span>
+          </SheetTrigger>
+        </BenchEntry>
+      </div>
       <section className="workspace" aria-label="Movement explorer">
         <div
           className="stage"

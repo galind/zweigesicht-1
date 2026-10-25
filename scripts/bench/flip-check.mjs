@@ -43,7 +43,7 @@ const state = () =>
     };
   });
 const enter = async () => {
-  await page.getByRole("button", { name: /^(Enter the movement|Resume exploring)$/ }).click();
+  await page.getByRole("button", { name: /^(Enter workbench|Resume exploring)$/ }).click();
   await page.waitForFunction(() => window.bench.status.captured);
 };
 const done = () => page.waitForFunction(() => !window.bench.flip.active, null, { timeout: 15000 });
@@ -51,7 +51,7 @@ try {
   await page.goto(base + "/?inspect=1");
   await page.locator(".stage canvas").waitFor();
   await page.waitForTimeout(1500);
-  await page.getByRole("button", { name: "Walk inside the movement", exact: true }).click();
+  await page.getByRole("button", { name: "Explore the workbench", exact: true }).click();
   check(
     "homepage popup has F",
     await page
