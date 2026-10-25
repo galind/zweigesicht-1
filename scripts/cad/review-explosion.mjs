@@ -66,7 +66,7 @@ export function reviewExplosion({v,THREE,initialState,load,ROOT,parts,results}) 
  assert.ok(v.renderParts.get(prefix+'60__0_1_1_227_1').offset.length()>0,'No staged waiting: bridges move from the first beat');
  const before=new Map([...v.renderParts].map(([id,p])=>[id,p.mesh.matrix.clone()]));v.scrub({separation:0});v.applyPose(0);
  for(const [id,matrix]of before)assert.ok(v.renderParts.get(id).mesh.matrix.equals(matrix),'Reversal starts at displayed geometry');
- for(let i=0;i<120;i++)v.applyPose(1/60);assert.equal(v.assemblyError(),0);
+ for(let i=0;i<120;i++)v.applyPose(1/60);assert.equal(v.assemblyError('presentation'),0);
  results.push({check:'actual controller moves all layers together and reverses from the displayed pose without jumps',status:'pass'});
  v.reduced=true;v.reset();v.applyPose(0);v.reduced=false;
 }

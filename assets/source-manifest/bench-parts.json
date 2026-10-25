@@ -1,0 +1,51 @@
+{
+  "accessed": "2026-10-25",
+  "references": [
+    {
+      "id": "horotec",
+      "url": "https://www.hswalsh.com/product/plastic-case-for-dial-packing-45mm-hd17583-45",
+      "imageUrl": "https://img.hswalsh.com/original/31431.jpg",
+      "sha256": "e750cdf64d676b6a09f8cf63f0fc893d95e328da4bee1d3ada3f55595e61f103"
+    },
+    {
+      "id": "bergeon",
+      "url": "https://www.hswalsh.com/product/perspex-elastic-membrane-boxes-39mm-x-39mm-x-178mm-bergeon-6799-01-hb6799-01",
+      "imageUrl": "https://img.hswalsh.com/original/12280.jpg",
+      "sha256": "587662568a70d4e98c568fe1154b3e7c46d73caf0b4cda392833cc0872d0a93e"
+    }
+  ],
+  "referenceStatus": "Historical protector references retained with hashes; containers removed at owner request.",
+  "assumptions": {
+    "placement": "Broad dial back surfaces contact Y2, with original pins/screws entering through-holes. Each complete hand/bushing packet is rigidly tilted onto a lower supporting blade plane; bushings enter measured clearance holes. Radial clearance is 0.12 mm, an authored display allowance. The case rests at mat Y0. This is a presentation pose, not a servicing instruction."
+  },
+  "sourceFiles": [
+    {
+      "path": "assets/authored/dial-configurations.json",
+      "sha256": "383b3a3180f668551a68e5da01329e087d577c1914c398088c2f093f7f51def1"
+    },
+    {
+      "path": "assets/authored/watch-configurations.json",
+      "sha256": "7c986558a2d82165bef846eb3c42183ea2d20b07491c302fd61ca040d804d8d4"
+    },
+    {
+      "path": "assets/authored/hand-display-poses.json",
+      "sha256": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c"
+    },
+    {
+      "path": "assets/authored/bench-parts-layout.json",
+      "sha256": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9"
+    },
+    {
+      "path": "assets/authored/workshop-environment.json",
+      "sha256": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585"
+    },
+    {
+      "path": "scripts/bench/prepare-parts.mjs",
+      "sha256": "15b3a91f02300f20cfa6f064a821f6feec224a693fe7d0dec27c60e8b4c68473"
+    },
+    {
+      "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",
+      "sha256": "0d8f8da54d0bac5787e8f4c0f5202b8921c027e1cc0cb5ffd965d6f8ad265f6a"
+    }
+  ]
+}

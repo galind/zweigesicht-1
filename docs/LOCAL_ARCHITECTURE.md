@@ -26,15 +26,22 @@ The catalog promise coalesces optional requests, including the hash-checked orig
 
 The fitted case has 41 leaves. Focus, All parts, raw external inspection and isolation can hide it without clearing its preference. Selecting a fitted case part retains configured context. Crystals permit pointer selection through them while remaining catalog-selectable. Exterior alloy presets and Fine hand overrides are scoped to the reviewed occurrences; raw inspection retains its own finishes.
 
+`WheelDisplayPose.ts` applies the 18 separately reviewed wheel-packet occurrence phases to all
+three experiences. Explorer retains its raw assembled matrix and applies the
+phase as a display matrix, including spread layout. Workshop retains base target
+poses and derives corrected seat bounds at load. Bench builds collision from the
+same corrected mesh. See the [latest contact review](REMAINING_WHEEL_CONTACT_REVIEW.md); this is
+a set of static placement exceptions, not a running-gear model.
+
 `CasePose.ts` stages upper withdrawal, lower withdrawal, CAD-X case turnover, lower reseating and upper reseating. Camera and attachments share an inverse rotation frame, leaving source case/movement matrices intact. Exact endpoints reuse original counterpart occurrences. Reversal continues from the displayed phase; reduced motion snaps. Hidden-case turns skip invisible withdrawal/reseating time. Lug disassembly vectors follow the current attachment frame, and camera refits defer during turnover. The four unresolved locking pins stay seated. Detailed constraints are in [CAD notes](CAD_NOTES.md).
 
 `?inspect=1` dynamically loads the inspection panel and browser QA/benchmark modules. `?no3d=1` and `?text=200` are explicit verification modes. No database or visitor account is required.
 
 ## Workshop
 
-`Play.tsx` owns selection, Ready now/All parts, grouping/search, explicit workbench navigation, confirmations and storage feedback. `state.ts` owns graph readiness, validated replay, physical accounting and Undo. `play-manifest.json` version `play-4` owns exact leaf sets, endpoints, exclusions, action IDs and prerequisite edges; display order never defines dependencies.
+`Play.tsx` owns selection, Ready now/All parts, grouping/search, explicit workbench navigation, confirmations and storage feedback. `state.ts` owns graph readiness, validated replay, physical accounting and Undo. `play-manifest.json` version `play-5` owns exact leaf sets, endpoints, exclusions, action IDs and prerequisite edges; display order never defines dependencies. Previous `play-4` saves migrate by removing only the six retired case-fitting actions; all other validated progress is preserved.
 
-Easy has 89 placements. Hard has 249 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 265 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
+Easy has 83 placements. Hard has 243 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 259 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
 
 The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid
 saves; absent mode/save opens the shared chooser on Workshop without starting
@@ -49,6 +56,15 @@ warning and retained mode query.
 Free mouse/one-finger orbit matches the explorer. Flip, Reset and bounded centered zoom remain quick actions. The shock workbench has an angled face pair; radial dial screws have explicit edge presets in `fixedViews.ts`. Selection, placement and Undo preserve the camera; returning from a workbench restores the main view. Camera changes never hide fitted geometry. A drop requires the active workspace, prerequisites and an exposed source-surface sample. This is visual reachability, not physical collision certification.
 
 [Release gates](RELEASE_GATES.md) distinguish automated/browser checks from mechanical, physical-device and representative human review.
+
+## Bench
+
+`/bench` dynamically imports `BenchViewer` after route entry. `physics.ts` owns
+the visitor capsule and per-definition BVH collision queries; `Bench.tsx` owns
+the capture/menu/loading UI. Source transforms remain immutable inside an outer
+presentation group. The two maker fixtures and authored Blender environment
+are local-only payloads, with hashes and nominal seating evidence recorded
+separately. See [bench reproduction and verification](BENCH_EXPERIENCE.md).
 
 ## Extended verification
 

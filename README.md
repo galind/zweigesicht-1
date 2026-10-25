@@ -33,6 +33,14 @@ it is hidden in production. Direct `/workshop` access remains available.
 Fresh direct visits choose a difficulty on Workshop; valid saves resume.
 Workshop is excluded from indexing and the sitemap.
 
+## Walk inside the movement
+
+The homepage’s **Walk inside the movement** button shows a controls popup before
+entering `/bench`, a separate first-person desktop experience on the actual static CAD. Local holder files
+and the Blender environment must be prepared first; see the
+[bench setup, controls, design decisions and testing strategy](docs/BENCH_EXPERIENCE.md).
+Holder downloads and generated bench assets remain local and release-gated.
+
 ## Check changes
 
 ```sh

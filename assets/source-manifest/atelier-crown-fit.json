@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "status": "Historical evidence at the incorrect X-only holder orientation. Static crown conflict superseded by the owner-requested seating correction; see holder-seating.json. Original measurements and decision retained below.",
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "sourceProvenance": "assets/source-manifest/watch-configuration.json",
+  "holderProvenance": "assets/source-manifest/holder.json",
+  "configuration": "assets/authored/watch-configurations.json",
+  "layout": "assets/authored/atelier-layout.json",
+  "geometryPolicy": "All original source meshes and source-relative transforms preserved; 18 existing movement phases retained. No source repair.",
+  "decision": "Owner explicitly chose to retain original holders and record crown fit as unresolved on 24 October 2026. No relieved derivative is authorized.",
+  "coordinateFrame": "station-local Y-up millimetres",
+  "evidence": {
+    "script": "scripts/bench/crown-holder-probe.py",
+    "report": "artifacts/paired-atelier/crown-holder-solids.json",
+    "reportSha256": "c4934dbbfc406025d1b1d1e128a71a4af26e06d57fd577da86170c56e37986ee"
+  },
+  "pairs": [
+    {
+      "station": "bridge",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_1",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 2.29709635901753,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [20.149991888530124, 11.484180491261581, -2.6208713260063585],
+        [21.0000001, 13.300000100000004, 2.6144019700440024]
+      ]
+    },
+    {
+      "station": "bridge",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_2",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 0.0,
+      "distanceMm": 0.0600000000000023,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "bridge",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_3",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 0.22777430945410496,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [20.409999900043655, 12.95001607612671, -1.0499785314849268],
+        [21.0000001, 13.3000001, 1.0499785314849281]
+      ]
+    },
+    {
+      "station": "bridge",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_4",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 0.14533630487318164,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [20.099999899999993, 12.95036512425546, -1.0493966694471992],
+        [20.4000001, 13.3000001, 1.0493966694471997]
+      ]
+    },
+    {
+      "station": "dial",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_1",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 3.874614059082857,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [20.149990685534156, 10.584148139008239, -2.9426439434990748],
+        [21.0000001, 13.500000100000014, 2.9394495309256827]
+      ]
+    },
+    {
+      "station": "dial",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_2",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 0.0,
+      "distanceMm": 0.060000000000002274,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "dial",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_3",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 1.1908600395438684,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [20.4099999, 12.049983723873291, -1.7240968795963079],
+        [21.0000001, 13.500000100000001, 1.7240968795963074]
+      ]
+    },
+    {
+      "station": "dial",
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_4",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "commonVolumeMm3": 0.5530914544958331,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [20.099999899999993, 12.050332772002042, -1.723742586219552],
+        [20.4000001, 13.5000001, 1.723742586219551]
+      ]
+    }
+  ]
+}

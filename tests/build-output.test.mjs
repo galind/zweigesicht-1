@@ -44,3 +44,14 @@ test('incomplete and mismatched builds fail before deleting anything', async t =
   await fs.writeFile(path.join(models, 'finish-surfaces.json'), JSON.stringify({ overview: 'wrong', file: '/models/finish-surfaces-123456abcdef.bin' }));
   await assert.rejects(pruneBuildOutput(output), /Surface\/overview mismatch/);
 });
+
+test('local bench assets survive a local build but cannot enter Vercel output', async t => {
+  const { output } = await fixture(t);
+  const bench = path.join(output, 'bench-local');
+  await fs.mkdir(bench);
+  await fs.writeFile(path.join(bench, 'movement.stl'), 'local maker asset');
+  await pruneBuildOutput(output);
+  assert.equal(await fs.readFile(path.join(bench, 'movement.stl'), 'utf8'), 'local maker asset');
+  await pruneBuildOutput(output, { localBench: false });
+  await assert.rejects(fs.access(bench), { code: 'ENOENT' });
+});

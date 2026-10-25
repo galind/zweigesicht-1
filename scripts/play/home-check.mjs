@@ -33,7 +33,7 @@ async function home() {
   const trigger=page.getByRole('button',{name:'Be a watchmaker',exact:true});
   check('Homepage exposes the assembly action',await trigger.isVisible());
   await trigger.click();
-  check('Mode popup has final copy',await page.getByText('Choose how much of the movement you want to build.',{exact:true}).isVisible()&&await page.getByText('89 prepared fits · Best for a first build',{exact:true}).isVisible()&&await page.getByText('249 individual parts · 35 subassemblies',{exact:true}).isVisible()&&await page.getByText('Progress is saved on this device.',{exact:true}).isVisible());
+  check('Mode popup has final copy',await page.getByText('Choose how much of the movement you want to build.',{exact:true}).isVisible()&&await page.getByText('83 prepared fits · Best for a first build',{exact:true}).isVisible()&&await page.getByText('243 individual parts · 35 subassemblies',{exact:true}).isVisible()&&await page.getByText('Progress is saved on this device.',{exact:true}).isVisible());
   await page.keyboard.press('Escape');
   await page.waitForTimeout(250);
   check('Escape closes chooser and restores trigger focus',await trigger.evaluate(element=>element===document.activeElement));

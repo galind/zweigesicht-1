@@ -72,7 +72,7 @@ try {
   if(i===1||i===10||selected.packetId==='movement-29'&&i%7===0)await page.screenshot({path:path.join(out,`${level}-${String(i).padStart(3,'0')}.png`)});
  }
  if((await inspect()).workspace) {await page.getByRole('button',{name:'Return to watch',exact:true}).first().click();await settle();}
- const end=await inspect();check('Exact 265 fitted and visible leaves',same(end.fitted,manifest.finalLeafIds)&&same(end.visible,manifest.finalLeafIds));
+ const end=await inspect();check('Exact 259 fitted and visible leaves',same(end.fitted,manifest.finalLeafIds)&&same(end.visible,manifest.finalLeafIds));
  await page.screenshot({path:path.join(out,`${level}-complete.png`)});
  check('No uncaught browser errors',report.errors.length===0,report.errors);
  console.log(`${level}: ${report.steps.length} actions, ${report.checks.length} checks passed`);

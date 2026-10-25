@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "sourcePage": "https://www.marcolangwatches.com/cad/werkhalter/",
+  "retrieved": "2026-10-23",
+  "units": "millimetres",
+  "files": [
+    {
+      "path": "assets/source-originals/holder/movement.jpg",
+      "url": "https://www.marcolangwatches.com/cad/werkhalter/?wpdmdl=2308&ind=1692972025594",
+      "bytes": 915203,
+      "sha256": "c5c193208bbf6aac1e808e468cbb674d0f7d5ea0a7372e293e065de020eac6e4"
+    },
+    {
+      "path": "assets/source-originals/holder/movement.stp",
+      "url": "https://www.marcolangwatches.com/cad/werkhalter/?wpdmdl=2308&ind=1692972024264",
+      "bytes": 508493,
+      "sha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab"
+    },
+    {
+      "path": "assets/source-originals/holder/movement.stl",
+      "url": "https://www.marcolangwatches.com/cad/werkhalter/?wpdmdl=2308&ind=1692972023171",
+      "bytes": 1592184,
+      "sha256": "d8177c22d9f844c424d6abb80a31c7a33b913811b7e000142f98bc914192bc4a"
+    },
+    {
+      "path": "assets/source-originals/holder/dial.jpg",
+      "url": "https://www.marcolangwatches.com/cad/werkhalter/?wpdmdl=2308&ind=1692972019074",
+      "bytes": 776894,
+      "sha256": "3de8ff04e9de569d91e14694ef4afcffbf87bf254df0bf7f1376075aa2acf74b"
+    },
+    {
+      "path": "assets/source-originals/holder/dial.stp",
+      "url": "https://www.marcolangwatches.com/cad/werkhalter/?wpdmdl=2308&ind=1692972021370",
+      "bytes": 227928,
+      "sha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce"
+    },
+    {
+      "path": "assets/source-originals/holder/dial.stl",
+      "url": "https://www.marcolangwatches.com/cad/werkhalter/?wpdmdl=2308&ind=1692972020536",
+      "bytes": 1092584,
+      "sha256": "2f95f97ebd6d5a56881788b957e98d8186d25ac8084491027f5f177182c5bba4"
+    }
+  ],
+  "review": {
+    "referenceImages": "Both supplied JPGs visually inspected. Separate bridge-side and dial-side holders; no turnover mechanism claimed.",
+    "holderBoundsMm": [
+      [
+        -21,
+        -21,
+        0
+      ],
+      [
+        21,
+        21,
+        15
+      ]
+    ],
+    "bridge": "Werkplattenhalter: 12.8 mm seating shoulder, 17.1 mm pocket radius. Source movement rotated +90 degrees around X, translated +12.2 mm world Y; plate source Z=-0.6 seats at Y=12.8.",
+    "dial": "ZBseite: 13.7 mm seating shoulders, 9.2 mm internal clearance floor. Source movement rotated -90 degrees around X, translated +16.3 mm world Y; plate source Z=-2.6 seats at Y=13.7.",
+    "holderOrientation": "Both original holders: source Z-up to world Y-up with X -90 degrees, then world Y +90 degrees. This maps the actual source -Y stem relief to world +X. The previous X-only orientation was incorrect.",
+    "limits": "Original-STEP mainplate seating and crown clearances verified in assets/source-manifest/holder-seating.json. Nominal static fit only; not a mechanical tolerance or holding certification.",
+    "redistribution": "No public redistribution grant established. Originals and prepared holder payloads remain ignored/local."
+  }
+}

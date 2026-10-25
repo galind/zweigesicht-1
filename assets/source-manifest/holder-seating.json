@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "holderProvenance": "assets/source-manifest/holder.json",
+  "layout": "assets/authored/atelier-layout.json",
+  "correction": "Original holders rotate +90 degrees around world Y after source-to-world X -90. Source -Y stem relief aligns with movement +X; mainplate heights and all internal poses stay unchanged.",
+  "decision": "Owner requested correct seating in the original holders. No geometry modification, source repair, holder redesign or CAD publication.",
+  "coordinateFrame": "station-local Y-up mm",
+  "mainplates": [
+    {
+      "station": "bridge",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "holderRotationY": 90,
+      "seat": 12.2,
+      "shoulderY": 12.8,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": null,
+      "supportWitnessCount": 189
+    },
+    {
+      "station": "dial",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "holderRotationY": 90,
+      "seat": 16.3,
+      "shoulderY": 13.7,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": null,
+      "supportWitnessCount": 48
+    }
+  ],
+  "crowns": [
+    {
+      "station": "bridge",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_1",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          20.14999989999697,
+          11.428612314761635,
+          -3.300001557716949
+        ],
+        [
+          23.644882842866313,
+          17.97142003749179,
+          3.30000155771695
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.75,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "bridge",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_2",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          21.0599999,
+          12.95001607612671,
+          -1.7500000999999998
+        ],
+        [
+          21.710000100000002,
+          16.45001627612671,
+          1.7500001000000007
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 1.6864293916447044,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "bridge",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_3",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          20.4099999,
+          12.95001607612671,
+          -1.7500000999999998
+        ],
+        [
+          21.0600001,
+          16.45001627612671,
+          1.7500001000000007
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 1.0489898826309358,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "bridge",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_4",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          20.099999899999997,
+          12.95036512425546,
+          -1.7496510518712496
+        ],
+        [
+          20.4000001,
+          16.44966722799796,
+          1.7496510518712505
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.702107625359247,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "dial",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_1",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          20.14999989999697,
+          10.528579962508214,
+          -3.30000155771695
+        ],
+        [
+          23.644882842866313,
+          17.071387685238367,
+          3.300001557716949
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.14999999999999858,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "dial",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_2",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          21.0599999,
+          12.049983723873291,
+          -1.7500001000000007
+        ],
+        [
+          21.710000100000002,
+          15.54998392387329,
+          1.7500000999999998
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 1.0620283248162827,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "dial",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_3",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          20.4099999,
+          12.049983723873291,
+          -1.7500001000000007
+        ],
+        [
+          21.0600001,
+          15.54998392387329,
+          1.7500000999999998
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.4138149794384663,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "station": "dial",
+      "holderRotationY": 90,
+      "crownId": "p_0_1_1_1__0_1_1_1_3__0_1_1_43_2__0_1_1_45_4",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "crownValid": true,
+      "holderValid": true,
+      "crownSolids": 1,
+      "holderSolids": 1,
+      "crownBoundsMm": [
+        [
+          20.099999899999997,
+          12.050332772002042,
+          -1.7496510518712505
+        ],
+        [
+          20.4000001,
+          15.54963487574454,
+          1.7496510518712496
+        ]
+      ],
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "commonValid": true,
+      "distanceMm": 0.09999999999999787,
+      "commonBoundsWorldMm": null
+    }
+  ],
+  "evidence": [
+    {
+      "script": "scripts/bench/holder-seating-probe.py",
+      "report": "artifacts/holder-fit/seating-solids.json",
+      "sha256": "f3293992370842cd41d68e3330c14762e4285289f03eee80b64036806e9951f8"
+    },
+    {
+      "script": "scripts/bench/crown-holder-probe.py",
+      "report": "artifacts/holder-fit/crown-holder-solids.json",
+      "sha256": "2c7aa6cbbdc6de63106be54f77f58bdc14e7be56a9dc1f45cb6b12f303bccb96"
+    }
+  ],
+  "limitations": [
+    "Static nominal seating and clearance, not manufacturing-tolerance or clamping certification.",
+    "Mainplate/crown originals checked as solids; other runtime leaves checked for surface intersections with holders.",
+    "Historical crown interference at the old orientation remains recorded in atelier-crown-fit.json; it is not present at this corrected pose.",
+    "Other previously recorded internal CAD/mechanical uncertainties remain unchanged."
+  ]
+}

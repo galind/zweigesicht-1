@@ -110,9 +110,9 @@ export async function runExplosionChecks(v: MovementViewer) {
   v.reset();
   await settle(v);
   checks.push({
-    name: 'Rapid interrupted scrubbing and mechanism changes restore exact source assembly',
+    name: 'Interrupted scrubbing restores the reviewed display and immutable source matrices',
     pass:
-      v.assemblyError() === 0 &&
+      v.assemblyError('presentation') === 0 &&
       [...source].every(([id, m]) =>
         v.renderParts.get(id)!.assembled.equals(m),
       ),
@@ -156,8 +156,8 @@ export async function runExplosionChecks(v: MovementViewer) {
   await settle(v);
   v.reduced = reduced;
   checks.push({
-    name: 'Reduced motion reaches complete endpoint and restores source assembly',
-    pass: v.assemblyError() === 0,
+    name: 'Reduced motion reaches complete endpoint and restores the reviewed display',
+    pass: v.assemblyError('presentation') === 0,
   });
   const before = v.stats();
   for (let i = 0; i < 3; i++) {

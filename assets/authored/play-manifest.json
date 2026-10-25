@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "version": "play-4",
+  "version": "play-5",
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "coordinateSystem": {
     "units": "mm",
@@ -157,15 +157,9 @@
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_36",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_42",
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43",
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44",
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_46",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_47",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_48",
@@ -3449,58 +3443,6 @@
         1.0
       ]
     ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38": [
-      [
-        -0.9612616959383188,
-        -0.27563735581699994,
-        0.0,
-        4.5480163709805
-      ],
-      [
-        0.27563735581699994,
-        -0.9612616959383188,
-        0.0,
-        15.8608179829823
-      ],
-      [
-        0.0,
-        0.0,
-        1.0,
-        -2.380000000000007
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39": [
-      [
-        0.48480962024633817,
-        0.8746197071393953,
-        0.0,
-        -14.4312251678
-      ],
-      [
-        -0.8746197071393953,
-        0.48480962024633817,
-        0.0,
-        -7.99935873406457
-      ],
-      [
-        0.0,
-        0.0,
-        1.0,
-        -2.380000000000007
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ]
-    ],
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1": [
       [
         -0.9237280213470681,
@@ -3553,32 +3495,6 @@
         1.0
       ]
     ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41": [
-      [
-        0.4848096202463377,
-        -0.8746197071393955,
-        0.0,
-        14.4312251678
-      ],
-      [
-        0.8746197071393955,
-        0.4848096202463377,
-        0.0,
-        -7.99935873406457
-      ],
-      [
-        0.0,
-        0.0,
-        1.0,
-        -2.380000000000007
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ]
-    ],
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_42": [
       [
         -0.9237280213470681,
@@ -3597,84 +3513,6 @@
         0.0,
         -1.0,
         -5.834292641643716
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43": [
-      [
-        -0.9237280213470681,
-        -0.38304900806323805,
-        0.0,
-        13.9064533435164
-      ],
-      [
-        -0.38304900806323805,
-        0.9237280213470681,
-        0.0,
-        -7.70847296191677
-      ],
-      [
-        0.0,
-        0.0,
-        -1.0,
-        -2.7700000000000067
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44": [
-      [
-        -0.9237280213470681,
-        -0.38304900806323805,
-        0.0,
-        -13.9064533435164
-      ],
-      [
-        -0.38304900806323805,
-        0.9237280213470681,
-        0.0,
-        -7.70847296191677
-      ],
-      [
-        0.0,
-        0.0,
-        -1.0,
-        -2.7700000000000067
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45": [
-      [
-        -0.9237280213470681,
-        -0.38304900806323805,
-        0.0,
-        4.3826339574903
-      ],
-      [
-        -0.38304900806323805,
-        0.9237280213470681,
-        0.0,
-        15.2840609654193
-      ],
-      [
-        0.0,
-        0.0,
-        -1.0,
-        -2.7700000000000067
       ],
       [
         0.0,
@@ -8647,30 +8485,6 @@
         -4.6100000000000065
       ]
     ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38": [
-      [
-        3.176657345967186,
-        14.078084337549637,
-        -2.7699999856948923
-      ],
-      [
-        5.705756435378079,
-        16.89857377968537,
-        -2.380000000000007
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39": [
-      [
-        -15.603610335236736,
-        -9.23996067135449,
-        -2.7699999856948923
-      ],
-      [
-        -12.581009696051392,
-        -6.383029323745594,
-        -2.380000000000007
-      ]
-    ],
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1": [
       [
         -2.6977559319302915,
@@ -8695,18 +8509,6 @@
         -5.389999997019775
       ]
     ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41": [
-      [
-        12.581009696051392,
-        -9.23996067135449,
-        -2.7699999856948923
-      ],
-      [
-        15.603610335236736,
-        -6.383029323745594,
-        -2.380000000000007
-      ]
-    ],
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_42": [
       [
         -3.185951387138397,
@@ -8717,42 +8519,6 @@
         -2.0148345726719232,
         8.782663743510907,
         -4.534968844417764
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43": [
-      [
-        12.862021713625722,
-        -8.753009414354581,
-        -3.170000005960471
-      ],
-      [
-        14.951671508294131,
-        -6.663144536818153,
-        -1.3700000238418646
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44": [
-      [
-        -14.950884973407078,
-        -8.753009414354581,
-        -3.170000005960471
-      ],
-      [
-        -12.861235178738669,
-        -6.663144536818153,
-        -1.3700000238418646
-      ]
-    ],
-    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45": [
-      [
-        3.338202327599623,
-        14.23952451298149,
-        -3.170000005960471
-      ],
-      [
-        5.427852122268031,
-        16.329389390517917,
-        -1.3700000238418646
       ]
     ],
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_46": [
@@ -11673,96 +11439,6 @@
           "packetId": "movement-72"
         },
         {
-          "id": "movement-38",
-          "label": "Movement clamp 1",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
-          "prerequisiteStepIds": [],
-          "groupId": "fittings",
-          "kind": "place",
-          "workspaceId": null,
-          "packetId": "movement-38"
-        },
-        {
-          "id": "movement-39",
-          "label": "Movement clamp 2",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39",
-          "prerequisiteStepIds": [],
-          "groupId": "fittings",
-          "kind": "place",
-          "workspaceId": null,
-          "packetId": "movement-39"
-        },
-        {
-          "id": "movement-41",
-          "label": "Movement clamp 3",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41",
-          "prerequisiteStepIds": [],
-          "groupId": "fittings",
-          "kind": "place",
-          "workspaceId": null,
-          "packetId": "movement-41"
-        },
-        {
-          "id": "movement-43",
-          "label": "Screw 32",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43",
-          "prerequisiteStepIds": [
-            "movement-38"
-          ],
-          "groupId": "fittings",
-          "kind": "place",
-          "workspaceId": null,
-          "packetId": "movement-43"
-        },
-        {
-          "id": "movement-44",
-          "label": "Screw 33",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44",
-          "prerequisiteStepIds": [
-            "movement-39"
-          ],
-          "groupId": "fittings",
-          "kind": "place",
-          "workspaceId": null,
-          "packetId": "movement-44"
-        },
-        {
-          "id": "movement-45",
-          "label": "Screw 34",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45",
-          "prerequisiteStepIds": [
-            "movement-41"
-          ],
-          "groupId": "fittings",
-          "kind": "place",
-          "workspaceId": null,
-          "packetId": "movement-45"
-        },
-        {
           "id": "central-dial",
           "label": "Three-hands dial",
           "leafIds": [
@@ -11859,13 +11535,7 @@
             "movement-46",
             "movement-8",
             "movement-71",
-            "movement-72",
-            "movement-38",
-            "movement-39",
-            "movement-41",
-            "movement-43",
-            "movement-44",
-            "movement-45"
+            "movement-72"
           ],
           "groupId": "dials",
           "kind": "place",
@@ -12075,13 +11745,7 @@
             "movement-46",
             "movement-8",
             "movement-71",
-            "movement-72",
-            "movement-38",
-            "movement-39",
-            "movement-41",
-            "movement-43",
-            "movement-44",
-            "movement-45"
+            "movement-72"
           ],
           "groupId": "dials",
           "kind": "place",
@@ -12123,8 +11787,8 @@
           "packetId": "small-minute"
         }
       ],
-      "placementCount": 89,
-      "physicalLeafCount": 265,
+      "placementCount": 83,
+      "physicalLeafCount": 259,
       "transfers": []
     },
     "hard": {
@@ -15270,96 +14934,6 @@
           "kind": "place"
         },
         {
-          "id": "movement-38",
-          "label": "Movement clamp 1",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
-          "prerequisiteStepIds": [],
-          "groupId": "fittings",
-          "packetId": "movement-38",
-          "workspaceId": null,
-          "kind": "place"
-        },
-        {
-          "id": "movement-39",
-          "label": "Movement clamp 2",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39",
-          "prerequisiteStepIds": [],
-          "groupId": "fittings",
-          "packetId": "movement-39",
-          "workspaceId": null,
-          "kind": "place"
-        },
-        {
-          "id": "movement-41",
-          "label": "Movement clamp 3",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41",
-          "prerequisiteStepIds": [],
-          "groupId": "fittings",
-          "packetId": "movement-41",
-          "workspaceId": null,
-          "kind": "place"
-        },
-        {
-          "id": "movement-43",
-          "label": "Screw 32",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43",
-          "prerequisiteStepIds": [
-            "movement-38"
-          ],
-          "groupId": "fittings",
-          "packetId": "movement-43",
-          "workspaceId": null,
-          "kind": "place"
-        },
-        {
-          "id": "movement-44",
-          "label": "Screw 33",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44",
-          "prerequisiteStepIds": [
-            "movement-39"
-          ],
-          "groupId": "fittings",
-          "packetId": "movement-44",
-          "workspaceId": null,
-          "kind": "place"
-        },
-        {
-          "id": "movement-45",
-          "label": "Screw 34",
-          "leafIds": [
-            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45"
-          ],
-          "side": "front",
-          "assemblyId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45",
-          "prerequisiteStepIds": [
-            "movement-41"
-          ],
-          "groupId": "fittings",
-          "packetId": "movement-45",
-          "workspaceId": null,
-          "kind": "place"
-        },
-        {
           "id": "leaf-p_0_1_1_1__0_1_1_1_2__0_1_1_22_1",
           "label": "Dial transition ring",
           "leafIds": [
@@ -16101,8 +15675,8 @@
           "kind": "place"
         }
       ],
-      "placementCount": 249,
-      "physicalLeafCount": 265,
+      "placementCount": 243,
+      "physicalLeafCount": 259,
       "transfers": [
         {
           "id": "seat:movement-1",
@@ -16940,13 +16514,7 @@
             "movement-46",
             "seat:movement-8",
             "movement-71",
-            "movement-72",
-            "movement-38",
-            "movement-39",
-            "movement-41",
-            "movement-43",
-            "movement-44",
-            "movement-45"
+            "movement-72"
           ],
           "groupId": "dials",
           "kind": "transfer",
@@ -17127,13 +16695,7 @@
             "movement-46",
             "seat:movement-8",
             "movement-71",
-            "movement-72",
-            "movement-38",
-            "movement-39",
-            "movement-41",
-            "movement-43",
-            "movement-44",
-            "movement-45"
+            "movement-72"
           ],
           "groupId": "dials",
           "kind": "transfer",
@@ -17581,6 +17143,30 @@
     {
       "leafId": "p_0_1_1_1__0_1_1_1_5",
       "reason": "Presentation/regulation support outside the playable watch."
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
+      "reason": "Case-mounting clamp or fastening screw: this Workshop assembly has no case."
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39",
+      "reason": "Case-mounting clamp or fastening screw: this Workshop assembly has no case."
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_41",
+      "reason": "Case-mounting clamp or fastening screw: this Workshop assembly has no case."
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_43",
+      "reason": "Case-mounting clamp or fastening screw: this Workshop assembly has no case."
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_44",
+      "reason": "Case-mounting clamp or fastening screw: this Workshop assembly has no case."
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45",
+      "reason": "Case-mounting clamp or fastening screw: this Workshop assembly has no case."
     }
   ],
   "sourceExceptions": [
@@ -17793,7 +17379,7 @@
     },
     {
       "id": "fittings",
-      "label": "Plates & clamps"
+      "label": "Plates & fittings"
     },
     {
       "id": "dials",
@@ -18582,5 +18168,22 @@
     "hostAndCoverConstraints": "Source-based host/cover pairs and explicit internal supports; interpretation and limitations in docs/CAD_NOTES.md.",
     "assumptions": "Conservative puzzle DAG; no certified servicing order. Both dial closures wait for all movement work. Workbench fixtures hold the first free body; no modeled leaf is added.",
     "legacy": "play-3 exact prefixes are explicitly incompatible; never silently remapped."
+  },
+  "previousVersion": {
+    "version": "play-4",
+    "retiredActions": {
+      "movement-38": [],
+      "movement-39": [],
+      "movement-41": [],
+      "movement-43": [
+        "movement-38"
+      ],
+      "movement-44": [
+        "movement-39"
+      ],
+      "movement-45": [
+        "movement-41"
+      ]
+    }
   }
 }

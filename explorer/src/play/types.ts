@@ -28,6 +28,10 @@ export interface PlayPacket {
 
 export interface PlayManifest {
   version: string;
+  previousVersion?: {
+    version: string;
+    retiredActions: Readonly<Record<string, readonly string[]>>;
+  };
   foundationRootId: string;
   groups: readonly { id: string; label: string }[];
   packets: readonly PlayPacket[];

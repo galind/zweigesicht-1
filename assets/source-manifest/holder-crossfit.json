@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-24",
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "holderProvenance": "assets/source-manifest/holder.json",
+  "correctedSeating": "assets/source-manifest/holder-seating.json",
+  "coordinateFrame": "station-local Y-up mm",
+  "decision": "Owner chose exchanging the two intact original holders at one station while the movement is lifted. No universal-holder redesign or source geometry changes. The exchange is a visual exploration operation, not a maker-supplied mechanism.",
+  "rows": [
+    {
+      "holder": "movement",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "side": "bridge",
+      "seat": 12.2,
+      "shoulder": 12.8,
+      "supportWitnessCount": 189,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "adaptiveIntegrationRelativeErrorEstimates": [],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": null
+    },
+    {
+      "holder": "movement",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "side": "dial",
+      "seat": 15.4,
+      "shoulder": 12.8,
+      "supportWitnessCount": 226,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 1.980906370085307,
+      "rawVolumeIntegralMm3": 1.9809063700852831,
+      "commonSolidCount": 1,
+      "adaptiveIntegrationRelativeErrorEstimates": [
+        1.9932023969339395e-15
+      ],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [
+          -16.972613332780707,
+          12.799999999999994,
+          -2.080258322906141
+        ],
+        [
+          -16.0727983136956,
+          14.500000100000001,
+          -0.230501869885903
+        ]
+      ]
+    },
+    {
+      "holder": "movement",
+      "holderSha256": "77aa67fd2d39c493a1312fbedf5918b80efd741f11674d02e597308bcd65e8ab",
+      "side": "dial",
+      "seat": 16.3,
+      "shoulder": 12.8,
+      "supportWitnessCount": 0,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 0.8912363541583405,
+      "rawVolumeIntegralMm3": 0.8912363541583401,
+      "commonSolidCount": 1,
+      "adaptiveIntegrationRelativeErrorEstimates": [
+        1.8421402284605245e-15
+      ],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [
+          -16.972613432780676,
+          13.699999999999994,
+          -2.080258422905994
+        ],
+        [
+          -16.0727983136956,
+          14.500000100000001,
+          -0.230501869885903
+        ]
+      ]
+    },
+    {
+      "holder": "dial",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "side": "bridge",
+      "seat": 12.2,
+      "shoulder": 13.7,
+      "supportWitnessCount": 61,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 38.749128784169145,
+      "rawVolumeIntegralMm3": 38.75199307850427,
+      "commonSolidCount": 8,
+      "adaptiveIntegrationRelativeErrorEstimates": [
+        6.929785469385461e-15,
+        7.006781694033483e-15,
+        5.165141757310938e-15,
+        9.826346365630267e-12,
+        4.182971701370278e-14,
+        2.5495285890222705e-15,
+        5.3122443580247354e-15,
+        5.049680356475177e-16
+      ],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [
+          -16.975,
+          12.799999900000007,
+          -16.975
+        ],
+        [
+          16.881616554974876,
+          14.800000000000006,
+          16.48478465130801
+        ]
+      ]
+    },
+    {
+      "holder": "dial",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "side": "bridge",
+      "seat": 13.1,
+      "shoulder": 13.7,
+      "supportWitnessCount": 29,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 0.3303186208111396,
+      "rawVolumeIntegralMm3": 0.3303186208111389,
+      "commonSolidCount": 1,
+      "adaptiveIntegrationRelativeErrorEstimates": [
+        3.976912165614391e-15
+      ],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [
+          -16.9730905329221,
+          13.7,
+          0.23539078362226956
+        ],
+        [
+          -16.568593929692444,
+          15.0,
+          2.1100722780636825
+        ]
+      ]
+    },
+    {
+      "holder": "dial",
+      "holderSha256": "0cae1cb61d3a7b23a3aad6c334ceee78968e129129fe709d80779e8ff985efce",
+      "side": "dial",
+      "seat": 16.3,
+      "shoulder": 13.7,
+      "supportWitnessCount": 48,
+      "plateValid": true,
+      "holderValid": true,
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "adaptiveIntegrationRelativeErrorEstimates": [],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": null
+    }
+  ],
+  "evidence": {
+    "script": "scripts/bench/holder-crossfit-probe.py",
+    "report": "artifacts/bench-flip/crossfit.json",
+    "sha256": "6774578443e1e9a890ac0247c43736ab1e88a0e2a78676f1cef62a8bc122b440"
+  },
+  "limitations": [
+    "Mainplate-only nominal solid check, not full assembly certification.",
+    "Fixed corrected stem alignment; existing and shoulder-adjusted heights only.",
+    "Support witnesses do not establish a valid seat when overlap is positive."
+  ]
+}

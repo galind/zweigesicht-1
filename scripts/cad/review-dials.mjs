@@ -3,6 +3,7 @@ import fs from 'node:fs';
 /** Invoked by review-runtime: actual decoded catalog meshes + controller source. */
 export async function reviewDials({v, Viewer, THREE, initialState, load, sourceModules, ROOT, parts, results, modelFetch, caseFixtureScene}) {
  const {DIALS,fittedLeaves}=load('explorer/src/experience/dials.ts');
+ const {wheelDisplayMatrix}=load('explorer/src/viewer/WheelDisplayPose.ts');
  const {ROOT:movement,belongs}=load('explorer/src/experience/catalog.ts');
  const {DISPLAY_LAYERS,displaySeparationOffsets}=load('explorer/src/experience/explosion.ts');
  const handRecords=JSON.parse(fs.readFileSync(ROOT+'/assets/authored/hand-display-poses.json')).hands;
@@ -44,6 +45,9 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
        assert.equal(p.mesh.geometry,geometry.get(p.source.id).geometry);
        assert.ok(p.assembled.equals(geometry.get(p.source.id).matrix));
        if (!p.displayMatrix) assert.ok(p.mesh.matrix.equals(p.assembled));
+       else if (wheelDisplayMatrix(p.source.id,p.assembled)) {
+         assert.ok(p.mesh.matrix.equals(wheelDisplayMatrix(p.source.id,p.assembled)), 'Wheel phase survives dial configuration');
+       }
        else {
          const record=poseAudit.records.find(r=>r.leafId===p.source.id);
          assert.ok(record && record.brepValid && record.maximumAxialSeatOverlapMm > .1);
@@ -87,8 +91,8 @@ export async function reviewDials({v, Viewer, THREE, initialState, load, sourceM
    }
   }
   assert.equal(controller.assemblyError('presentation'),0);
-  controller.allParts();pose();assert.equal(controller.spread.size,216+expected.length);
-  assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,216+expected.length);
+  controller.allParts();pose();assert.equal(controller.spread.size,(dialsVisible?216:214)+expected.length);
+  assert.equal([...controller.renderParts.values()].filter(p=>p.mesh.visible).length,(dialsVisible?216:214)+expected.length);
   // Actual transformed boxes must equal packing boxes, including off-axis Lance seconds.
   for(const id of expected) {
    const p=controller.renderParts.get(id),box=p.mesh.geometry.boundingBox.clone().applyMatrix4(p.mesh.matrix);

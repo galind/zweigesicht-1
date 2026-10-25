@@ -162,7 +162,16 @@ const overviewScene=(await parse('overview.glb')).scene;rememberGeometry(overvie
 v.ingest(overviewScene);v.retarget();v.applyPose(0);
 assert.equal(v.renderParts.size,222);
 assert.equal(new Set([...v.renderParts.values()].map(p=>p.mesh.geometry)).size,138);
-assert.equal(v.assemblyError(),0);
+assert.equal(v.assemblyError('presentation'),0);
+const reviewedPhases=new Map(Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT,'assets/source-manifest/remaining-wheel-contact.json'),'utf8')).expectedLocalPhases));
+for(const [id,p] of v.renderParts){
+ assert.ok(p.assembled.equals(new THREE.Matrix4().set(...p.source.worldTransform.flat())), 'Immutable raw source pose');
+ const expected=p.assembled.clone();
+ if(reviewedPhases.has(id))expected.multiply(new THREE.Matrix4().makeRotationZ(reviewedPhases.get(id)*Math.PI/180));
+ assert.ok(Math.max(...p.mesh.matrix.elements.map((v,i)=>Math.abs(v-expected.elements[i])))<1e-12, 'Only reviewed wheel packets receive static phases');
+}
+assert.ok(v.assemblyError('source')>0, 'Raw-source audit still exposes the intentional phase difference');
+results.push({check:'18 reviewed occurrences phased; every source matrix immutable and every other displayed movement pose unchanged',status:'pass'});
 let annotatedMeshes=0;
 for(const part of v.renderParts.values()){
  const data=v.sourceSurfaces.get(part.source.definitionId),g=part.mesh.geometry;
@@ -189,23 +198,23 @@ assert.throws(()=>fallback.ingest(mismatchedScene),/vertex count changed/);
 assert.equal(fallback.renderParts.size,0);assert.equal(fallback.root.children.length,0);assert.match(fallback.sourceSurfaceError,/vertex count changed/);
 fallback.disposeObject(mismatchedScene);fallback.selectionBox.geometry.dispose();fallback.selectionBox.material.dispose();
 results.push({check:'invalid per-definition vertex counts reject ingestion before any movement leaves enter the visible scene',status:'pass'});
-results.push({check:'overview ingest preserves shared geometry and world placements',status:'pass',renderedParts:222,sharedGeometries:138,assemblyError:0});
+results.push({check:'overview ingest preserves shared geometry and authored display placements',status:'pass',renderedParts:222,sharedGeometries:138,assemblyError:0});
 // A legacy input cannot recover a timing mode or alter source poses.
 v.patch({study:true,playing:true,time:.172,speed:1});
 assert.equal('study' in v.state,false);assert.equal('playing' in v.state,false);
 assert.equal('time' in v.state,false);assert.equal('speed' in v.state,false);
 for(let i=0;i<120;i++)v.applyPose(1/60);
-assert.equal(v.assemblyError(),0);
+assert.equal(v.assemblyError('presentation'),0);
 const essentials=[...v.renderParts.values()].filter(p=>['112','114','116','126','127','128','129','130','96'].includes(p.source.definitionId.replace('d_0_1_1_','')));
 assert.equal(essentials.length,10);assert.ok(essentials.every(p=>p.mesh.visible));
-results.push({check:'legacy timing input is discarded; all ten essential former omissions retain exact visible source poses',status:'pass'});
+results.push({check:'legacy timing input is discarded; all ten essential former omissions remain visible at reviewed static poses',status:'pass'});
 v.state={...initialState,group:'regulation',reveal:1};v.retarget();
 const bridge=[...v.renderParts.values()].find(p=>belongs(p.source.id,PREFIX+'6'));
 for(const p of v.renderParts.values())p.offset.copy(p.target);
 v.retargetVisibility();assert.equal(bridge.mesh.visible,false);
 v.state.reveal=0;v.retarget();
 for(let i=0;i<240;i++){v.applyPose(1/60);v.retargetVisibility()}
-assert.equal(bridge.mesh.visible,true,'Bridge must return when Uncover returns to zero');assert.equal(v.assemblyError(),0);
+assert.equal(bridge.mesh.visible,true,'Bridge must return when Uncover returns to zero');assert.equal(v.assemblyError('presentation'),0);
 results.push({check:'completed reveal reverses visibility and exact assembled placement',status:'pass'});
 v.state={...initialState,part:PREFIX+'66'};v.retarget();v.retargetVisibility();
 assert.equal(v.renderParts.get(PREFIX+'66').mesh.visible,true);assert.equal(v.renderParts.get(PREFIX+'53').mesh.visible,false);
@@ -214,7 +223,7 @@ results.push({check:'setting-spring alternative is exclusive and default restore
 const movementObjects=new Map([...v.renderParts].map(([id,p])=>[id,p.mesh]));
 const catalogScene=(await parse('catalog.glb')).scene;rememberGeometry(catalogScene);v.ingest(catalogScene);assert.equal(v.renderParts.size,364);
 for(const [id,mesh]of movementObjects)assert.equal(v.renderParts.get(id).mesh,mesh,'Catalog must not replace existing movement objects');
-v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError(),0);
+v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError('presentation'),0);
 results.push({check:'catalog adds external leaves without replacing movement objects',status:'pass',totalRenderedParts:v.renderParts.size});
 v.camera=new THREE.PerspectiveCamera(33,1,.05,2000);v.camera.position.set(0,0,200);v.controls=new OrbitControls(v.camera,null);v.controls.minDistance=3;v.controls.maxDistance=200;
 const casing=parts.find(p=>p.name==='ml01 Gehäuse SS montiert');const low=new THREE.Vector3(...casing.boundsWorldMm[0]),high=new THREE.Vector3(...casing.boundsWorldMm[1]);const distance=low.distanceTo(high)*2.2;
@@ -1089,7 +1098,7 @@ assert.ok(placed.center.distanceTo(new THREE.Vector3(0,-9.999833239,-5.220654917
 v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(placed.mesh.visible,true);assert.equal(placed.material.transmission,.92);
 v.state={...initialState,part:recovery.DIAMOND_ID,isolated:true};v.retarget();assert.equal(placed.mesh.visible,true);
 v.patch({treatment:'function'});assert.equal(placed.material.transmission,.92);
-v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError(),0);
+v.state={...initialState};v.retarget();v.applyPose(0);assert.equal(v.assemblyError('presentation'),0);
 await assert.rejects(()=>recovery.loadRecoveredDiamond([]),/empty source record/);
 const badRecovery=sourceModules({fetchImpl:async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(84)})})('explorer/src/viewer/RecoveredDiamond.ts');
 await assert.rejects(()=>badRecovery.loadRecoveredDiamond(parts),/integrity mismatch/);
@@ -1108,18 +1117,21 @@ for(const d of leafDefs)assert.equal(finishFor(d.name,d.id).assignment,'source-d
 results.push({check:'all 202 leaf definitions explicit; three steel screw axes coincide with clamp holes; shared definition remains blue; both warm cap identities fixed',status:'pass'});
 // Redesign: exercise the actual source controller on all decoded assets, including recovered diamond.
 const {makeSpread,spreadMember,SPREAD_EXCLUSIONS}=load('explorer/src/experience/spread.ts');
-v.spread=makeSpread(v.renderParts.values());
-const expectedSpread=parts.filter(p=>!p.isAssembly&&belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT)&&![38,39,41,43,44,45,66].map(n=>PREFIX+n).includes(p.id));
-assert.equal(expectedSpread.length,216);assert.equal(v.spread.size,216);
+const {wheelDisplayMatrix}=load('explorer/src/viewer/WheelDisplayPose.ts');
+const spreadParts=()=>[...v.renderParts.values()].map(p=>({...p,assembled:wheelDisplayMatrix(p.source.id,p.assembled)??p.assembled}));
+v.spread=makeSpread(spreadParts());
+const fittingRules=JSON.parse(fs.readFileSync(path.join(ROOT,'assets/authored/assembly-fittings.json')));
+const expectedSpread=parts.filter(p=>!fittingRules.dialRetainers.includes(p.id)&&!p.isAssembly&&belongs(p.id,load('explorer/src/experience/catalog.ts').ROOT)&&![38,39,41,43,44,45,66].map(n=>PREFIX+n).includes(p.id));
+assert.equal(expectedSpread.length,214);assert.equal(v.spread.size,214);
 assert.deepEqual([...v.spread.keys()].sort(),expectedSpread.map(p=>p.id).sort());
 assert.ok(v.spread.has(recovery.DIAMOND_ID));
 for(const id of SPREAD_EXCLUSIONS)assert.ok(parts.some(p=>p.id===id)&&!v.spread.has(id));
-const reverse=makeSpread([...v.renderParts.values()].reverse());
+const reverse=makeSpread(spreadParts().reverse());
 for(const [id,placement]of v.spread){
  assert.ok(reverse.get(id).offset.equals(placement.offset));assert.ok(reverse.get(id).rotation.equals(placement.rotation));
  assert.ok(Math.abs(placement.rotation.length()-1)<1e-12);
 }
-results.push({check:'216 unique active physical leaves, explicit seven exclusions, recovered diamond, deterministic layout independent of traversal/catalog order',status:'pass'});
+results.push({check:'214 unique active physical leaves, explicit nine exclusions, recovered diamond, deterministic layout independent of traversal/catalog order',status:'pass'});
 v.state={...initialState,layout:'spread'};v.retarget();v.reduced=true;v.applyPose(0);v.root.updateMatrixWorld(true);
 const spreadBoxes=[...v.renderParts.values()].filter(p=>spreadMember(p.source)).map(p=>({id:p.source.id,box:new THREE.Box3().setFromObject(p.mesh)}));
 for(let i=0;i<spreadBoxes.length;i++)for(let j=i+1;j<spreadBoxes.length;j++){
@@ -1133,8 +1145,8 @@ for(const p of v.renderParts.values()) {
 // Verify perspective projection from the actual spread overview method at all requested aspect ratios.
 const corners=box=>[0,1,2,3,4,5,6,7].map(i=>new THREE.Vector3(i&1?box.max.x:box.min.x,i&2?box.max.y:box.min.y,i&4?box.max.z:box.min.z));
 for(const aspect of [1280/480,1600/740,390/500,320/390,600/220]){
- v.camera.aspect=aspect;v.spread=makeSpread(v.renderParts.values(),aspect);v.retarget();v.applyPose(0);v.root.updateMatrixWorld(true);
- const repeated=makeSpread([...v.renderParts.values()].reverse(),aspect);
+ v.camera.aspect=aspect;v.spread=makeSpread(spreadParts(),aspect);v.retarget();v.applyPose(0);v.root.updateMatrixWorld(true);
+ const repeated=makeSpread(spreadParts().reverse(),aspect);
  for(const [id,p]of v.spread)assert.ok(p.offset.equals(repeated.get(id).offset));
  const spreadBoxes=[...v.renderParts.values()].filter(p=>spreadMember(p.source)).map(p=>({id:p.source.id,box:new THREE.Box3().setFromObject(p.mesh)}));
  v.camera.aspect=aspect;v.frameSpread();v.camera.updateProjectionMatrix();v.camera.updateMatrixWorld(true);
@@ -1158,15 +1170,15 @@ for(let i=0;i<24;i++) {
  v.patch({partSpread:.6,reveal:.6});v.applyPose(.03);v.allParts();v.applyPose(.02);
  await v.select(recovery.DIAMOND_ID);v.patch({isolated:true});v.applyPose(.01);v.back();
  const retainedSide=v.state.side;v.reset();for(let n=0;n<260;n++)v.applyPose(1/60);v.retargetVisibility();
- assert.equal(v.assemblyError(),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,222);
+ assert.equal(v.assemblyError('presentation'),0);assert.equal([...v.renderParts.values()].filter(p=>p.mesh.visible).length,214);
  assert.equal(v.state.layout,'assembly');assert.equal(v.state.side,retainedSide);assert.equal('treatment' in v.state,false);assert.equal(v.history.length,0);assert.equal(v.state.part,null);
 }
 for(const [geometry,digest]of geometryBefore)assert.equal(geometryDigest(geometry),digest);
-results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 222 leaves, preserve geometry bytes',status:'pass'});
+results.push({check:'24 mixed interrupted spread/reveal/section/select/isolate/Back/reset cycles return exactly, restore all 214 uncased undialed leaves, preserve geometry bytes',status:'pass'});
 v.reset();v.applyPose(10);v.cameraUserOwned=true;v.travel=null;v.reduced=false;
 v.patch({separation:1});assert.equal(v.explosionTravel.duration,1.25);
 v.patch({separation:0});v.applyPose(1.5);
-assert.equal(v.assemblyError(),0,'Opening reversed before its first frame must never open later');
+assert.equal(v.assemblyError('presentation'),0,'Opening reversed before its first frame must never open later');
 for(const hz of [30,60,120]){
  v.reset();v.applyPose(10);v.patch({separation:1});
  let previous=0;
@@ -1180,7 +1192,7 @@ for(const hz of [30,60,120]){
  const displayed=new Map([...v.renderParts].map(([id,p])=>[id,p.offset.clone()]));
  v.patch({separation:1});v.applyPose(0);
  for(const [id,offset] of displayed)assert.ok(v.renderParts.get(id).offset.distanceTo(offset)<1e-10,'Reversal must start at the displayed pose');
- v.applyPose(2);v.patch({separation:0});v.applyPose(2);assert.equal(v.assemblyError(),0);
+ v.applyPose(2);v.patch({separation:0});v.applyPose(2);assert.equal(v.assemblyError('presentation'),0);
 }
 results.push({check:'Separate opens in 1.25 s and closes in 1.05 s at 30/60/120 Hz; immediate and mid-flight reversals preserve poses and exact endpoints',status:'pass'});
 v.reset();v.applyPose(1);v.cameraUserOwned=true;v.travel=null;
@@ -1189,7 +1201,7 @@ const displayed=probe.offset.clone();v.applyPose(0);assert.ok(probe.offset.equal
 v.applyPose(.03);const reversed=probe.offset.clone();v.scrub({separation:.1});v.applyPose(0);assert.ok(probe.offset.equals(reversed));
 v.applyPose(.075);assert.ok(probe.offset.equals(probe.target));assert.equal(v.travel,null,'Scrubbing cannot retake a manually owned camera');
 v.allParts();v.applyPose(.3);const poseBefore=probe.mesh.matrix.clone();v.group('regulation');v.applyPose(0);assert.ok(Math.max(...probe.mesh.matrix.elements.map((n,i)=>Math.abs(n-poseBefore.elements[i])))<1e-10,'Retarget must start at displayed matrix');
-v.reset();v.applyPose(.85);assert.equal(v.assemblyError(),0);assert.ok([...v.renderParts.values()].every(p=>!p.motion));
+v.reset();v.applyPose(.85);assert.equal(v.assemblyError('presentation'),0);assert.ok([...v.renderParts.values()].every(p=>!p.motion));
 results.push({check:'direct slider reversal starts from displayed pose and settles in 75 ms; camera ownership survives; interrupted layout returns exactly within bounded 850 ms',status:'pass'});
 // Source field handlers are extracted because CPU tests intentionally do not construct WebGL/DOM.
 const handlers={};
@@ -1379,4 +1391,32 @@ for(const face of ['central','small']) {
  }
 }
 results.push({check:'both case seal/back packets preserve monotone outward interval ordering for all source dial/hand alternatives and >8 mm final gaps',status:'pass',minCaseGap});
+// Host-dependent fittings must follow actual available assemblies, not merely
+// remembered UI intent. Original meshes remain available for explicit inspection.
+const fittingIds = [...fittingRules.caseMounts, ...fittingRules.dialRetainers];
+const fittingSources = new Map(fittingIds.map(id => [id, v.renderParts.get(id).assembled.clone()]));
+for (const caseVisible of [false, true]) for (const dialsVisible of [false, true]) {
+  v.state={...initialState,caseVisible,dialsVisible,centralVisible:dialsVisible,smallVisible:dialsVisible};
+  v.reduced=true;v.retarget();v.applyPose(0);
+  for(const id of fittingRules.caseMounts) assert.equal(v.renderParts.get(id).mesh.visible,caseVisible,id);
+  for(const id of fittingRules.dialRetainers) assert.equal(v.renderParts.get(id).mesh.visible,dialsVisible,id);
+  v.state.part=load('explorer/src/experience/catalog.ts').ROOT;v.retarget();v.applyPose(0);
+  for(const id of fittingRules.caseMounts) assert.equal(v.renderParts.get(id).mesh.visible,caseVisible,'Whole-movement selection cannot restore absent case fittings');
+  for(const id of fittingRules.dialRetainers) assert.equal(v.renderParts.get(id).mesh.visible,dialsVisible,'Whole-movement selection cannot restore absent dial fittings');
+}
+v.state={...initialState,caseVisible:true,centralVisible:true,smallVisible:true};v.retarget();
+const missingCaseId=[...watchReview.CASE_LEAVES][0],missingCase=v.renderParts.get(missingCaseId);
+v.renderParts.delete(missingCaseId);v.retarget();
+assert.ok(fittingRules.caseMounts.every(id=>!v.renderParts.get(id).mesh.visible));
+v.renderParts.set(missingCaseId,missingCase);
+const missingDialId=displayReview.DIALS.faces.central.structureLeafIds[0],missingDial=v.renderParts.get(missingDialId);
+v.renderParts.delete(missingDialId);v.retarget();
+assert.ok(fittingRules.dialRetainers.every(id=>!v.renderParts.get(id).mesh.visible));
+v.renderParts.set(missingDialId,missingDial);
+for(const id of fittingIds) {
+  v.state={...initialState,part:id,isolated:true};v.retarget();
+  assert.equal(v.renderParts.get(id).mesh.visible,true);
+  assert.ok(v.renderParts.get(id).assembled.equals(fittingSources.get(id)));
+}
+results.push({check:'six case mounts and two radial dial retainers follow all four assembly configurations, whole-root selection and missing host assets; direct source-part inspection and original matrices remain intact',status:'pass'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

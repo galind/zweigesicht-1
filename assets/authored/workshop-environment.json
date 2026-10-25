@@ -1,0 +1,151 @@
+{
+  "status": "Central movement, case on left, oak dial and hand stand on right",
+  "units": "millimetres",
+  "axes": "Y up; visitor at +Z facing -Z",
+  "mainDesk": {
+    "minX": -115,
+    "maxX": 115,
+    "minZ": -87,
+    "maxZ": 73,
+    "topY": -1,
+    "bottomY": -13,
+    "footprint": [
+      [
+        -115,
+        -87
+      ],
+      [
+        115,
+        -87
+      ],
+      [
+        115,
+        73
+      ],
+      [
+        -115,
+        73
+      ]
+    ]
+  },
+  "proposedTraversal": {
+    "minX": -115,
+    "maxX": 115,
+    "minZ": -87,
+    "maxZ": 73,
+    "rule": "Rectangular capsule-radius inset; outward-only constraints at every altitude. Visible rim triangles collide."
+  },
+  "mat": {
+    "minX": -100,
+    "maxX": 100,
+    "minZ": -72,
+    "maxZ": 58,
+    "topY": 0,
+    "bottomY": -1,
+    "edgeBevel": 0.04
+  },
+  "station": {
+    "x": 0,
+    "y": 0,
+    "z": -7,
+    "unchanged": true
+  },
+  "arrival": {
+    "feet": [
+      0,
+      0.002,
+      54
+    ],
+    "eyesAboveFeet": 1.48,
+    "unchanged": true
+  },
+  "flipDesignReserve": {
+    "minX": -50,
+    "maxX": 50,
+    "minZ": -57,
+    "maxZ": 43,
+    "minY": 0,
+    "maxY": 100,
+    "verification": "Design reserve only. Verify actual source-derived swept envelope and both holders after authoring."
+  },
+  "openCore": {
+    "minX": -28,
+    "maxX": 28,
+    "minZ": -55,
+    "maxZ": 60,
+    "meaning": "Clear approach and circulation around the unchanged movement; case lies left of X-33, oak stand begins at X40. Continuous CAD envelopes independently audited."
+  },
+  "props": [
+    {
+      "id": "dial-hand-stand",
+      "minX": 40,
+      "maxX": 96,
+      "minZ": -45,
+      "maxZ": 20,
+      "topY": 2,
+      "bottomY": 0,
+      "edgeBevel": 0.2,
+      "dialX": 60,
+      "handsX": 86,
+      "rows": [
+        {
+          "face": "central",
+          "z": -25
+        },
+        {
+          "face": "small",
+          "z": 7
+        }
+      ],
+      "boreBevel": 0.025,
+      "handSpacing": 5,
+      "cornerRadius": 1.5
+    }
+  ],
+  "wallItems": [],
+  "excludedAssets": [
+    "side workbench or return",
+    "wall cupboard",
+    "technical drawing",
+    "chair or stool",
+    "tabletop tools and lamp",
+    "wall map and frame",
+    "mat lettering",
+    "room walls and floor",
+    "window, frame and sill",
+    "skirting",
+    "drawers and pedestals",
+    "legs and frame",
+    "handles and hardware",
+    "apron and stretcher",
+    "front fence and armrests"
+  ],
+  "schemaVersion": 1,
+  "palette": {
+    "oak": "8F7155",
+    "mat": "3E5747",
+    "standOak": "B3A38D"
+  },
+  "stage": "crafted-wood-surfaces",
+  "tabletopDetail": {
+    "outline": "Straight rectangular 230 x 160 mm slab centered on the movement, with equal 15 mm mat borders.",
+    "edgeBevel": 0.35,
+    "rimWidth": 6,
+    "rimHeight": 5,
+    "rimFrontZ": 58,
+    "finish": "Oiled oak with lengthwise grain, softened upper edges and a recessed underside chamfer.",
+    "rimBevel": 0.25,
+    "undersideChamfer": 1.2
+  },
+  "surfaceFinish": {
+    "oakRoughness": 0.64,
+    "matRoughness": 0.96,
+    "grainScaleMm": [
+      230,
+      160
+    ],
+    "contactBakeDistanceMm": 5,
+    "contactBakeStrength": 0.38,
+    "standRoughness": 0.69
+  }
+}

@@ -1,5 +1,6 @@
 'use client';
 
+import { BenchEntry } from '@/components/BenchEntry';
 import { WorkshopChooser } from '@/components/WorkshopChooser';
 import { InformationPanel } from '@/components/InformationPanel';
 import { makerUrl } from '@/src/content/about';
@@ -102,6 +103,7 @@ export default function Home() {
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const assembleButton = useRef<HTMLButtonElement>(null);
+  const walkButton = useRef<HTMLButtonElement>(null);
   const moreButton = useRef<HTMLButtonElement>(null);
   const visibleTrigger = (
     selector: string,
@@ -177,6 +179,7 @@ export default function Home() {
     [options, setOptions] = useState(false),
     [details, setDetails] = useState(false),
     [assemble, setAssemble] = useState(false),
+    [walk, setWalk] = useState(false),
     [inspect, setInspect] = useState(false);
   useEffect(() => {
     if (!__WORKSHOP_ENTRY_ENABLED__) return;
@@ -337,7 +340,8 @@ export default function Home() {
         dials ||
         options ||
         details ||
-        assemble
+        assemble ||
+        walk
       )
         return;
       event.preventDefault();
@@ -358,6 +362,7 @@ export default function Home() {
     options,
     details,
     assemble,
+    walk,
   ]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
@@ -395,6 +400,7 @@ export default function Home() {
     setCatalog(false);
     setAbout(false);
     setAssemble(false);
+    setWalk(false);
   };
   const openPanel = (update: (open: boolean) => void, open: boolean) => {
     if (open) {
@@ -445,21 +451,36 @@ export default function Home() {
         identityClassName="identity"
         data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
       >
-        {__WORKSHOP_ENTRY_ENABLED__ && (
-          <WorkshopChooser
-            open={assemble}
-            onOpenChange={(open) => openPanel(setAssemble, open)}
+        <div className="experience-entries">
+          <BenchEntry
+            open={walk}
+            onOpenChange={(open) => openPanel(setWalk, open)}
             style={panelStyle}
-            finalFocus={assembleButton}
+            finalFocus={walkButton}
           >
             <SheetTrigger
-              ref={assembleButton}
-              className="text-button assemble-trigger site-glass"
+              ref={walkButton}
+              className="text-button bench-trigger site-glass"
             >
-              Be a watchmaker
+              Walk inside the movement
             </SheetTrigger>
-          </WorkshopChooser>
-        )}
+          </BenchEntry>
+          {__WORKSHOP_ENTRY_ENABLED__ && (
+            <WorkshopChooser
+              open={assemble}
+              onOpenChange={(open) => openPanel(setAssemble, open)}
+              style={panelStyle}
+              finalFocus={assembleButton}
+            >
+              <SheetTrigger
+                ref={assembleButton}
+                className="text-button assemble-trigger site-glass"
+              >
+                Be a watchmaker
+              </SheetTrigger>
+            </WorkshopChooser>
+          )}
+        </div>
         <SiteHeaderActions
           className="header-actions"
           aria-label="Information and settings"

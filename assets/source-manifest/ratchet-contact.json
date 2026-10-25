@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-10-24",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "review": "docs/RATCHET_CONTACT_REVIEW.md",
+  "override": "assets/authored/wheel-display-poses.json",
+  "correction": "Rigid +1.8 degree world-Z static phase of barrel II ratchet occurrence 15 and keyed core; all axes and axial placements remain fixed.",
+  "correctedOccurrences": [
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:15",
+      "definitionId": "d_0_1_1_131",
+      "name": "ml01 Sperrrad z62 m0,20",
+      "parentId": "p_0_1_1_1__0_1_1_1_4",
+      "localTransform": [
+        [-0.92556893151046, 0.378579123859974, 0.0, -6.2],
+        [0.378579123859974, 0.92556893151046, 0.0, 8.1],
+        [0.0, 0.0, -1.0, -0.400000000000001],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "worldTransform": [
+        [-0.92556893151046, 0.378579123859974, 0.0, -6.2],
+        [0.378579123859974, 0.92556893151046, 0.0, 8.1],
+        [0.0, 0.0, -1.0, -1.000000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0,
+      "meshBoundsWorldMm": [
+        [-12.66105457012641, 1.6416396742822386, -1.30000000000001],
+        [0.2610545701264071, 14.558360325717752, -0.6700000000000079]
+      ],
+      "localZDegrees": -1.8,
+      "pivotLocalMm": [0, 0, 0],
+      "displayMatrix": [
+        [-0.9370036767669798, 0.3493194951976792, 0.0, -6.2],
+        [0.3493194951976792, 0.9370036767669798, 0.0, 8.1],
+        [0.0, 0.0, -1.0, -1.000000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "axisEvidence": {
+        "face": 323,
+        "type": "cylinder",
+        "originLocalMm": [0.0, 0.0, 18.2764319307055],
+        "axisLocal": [0.0, 0.0, -1.0],
+        "radiusMm": 0.725,
+        "originWorldMm": [-6.2, 8.1, -19.276431930705506],
+        "axisWorld": [0.0, 0.0, 1.0]
+      }
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:1/0:1:1:84:3",
+      "definitionId": "d_0_1_1_87",
+      "name": "ml01 Federkern1",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1",
+      "localTransform": [
+        [-0.9907463991370186, -0.13572609401670593, 0.0, -1.25843949062997e-16],
+        [-0.13572609401670593, 0.9907463991370186, 0.0, 2.53537325945633e-15],
+        [-0.0, 0.0, -1.0, -0.939999999999999],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "worldTransform": [
+        [0.9255689315104593, 0.3785791238599762, 0.0, -6.1999999999999895],
+        [-0.3785791238599762, 0.9255689315104593, 0.0, 8.100000000000001],
+        [0.0, 0.0, 1.0, -3.350000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "freshSourceMatrixMaxError": 0.0,
+      "meshBoundsWorldMm": [
+        [-7.5995351889963985, 6.700464811003592, -4.940000000000008],
+        [-4.6511904291837425, 9.499896862938751, -1.0500000000000083]
+      ],
+      "localZDegrees": 1.8,
+      "pivotLocalMm": [0, 0, 0],
+      "displayMatrix": [
+        [0.9370036767669792, 0.34931949519768146, 0.0, -6.1999999999999895],
+        [-0.34931949519768146, 0.9370036767669792, 0.0, 8.100000000000001],
+        [0.0, 0.0, 1.0, -3.350000000000008],
+        [0.0, 0.0, 0.0, 1.0]
+      ],
+      "axisEvidence": {
+        "face": 6,
+        "type": "cylinder",
+        "originLocalMm": [0.0, 0.0, 4.5],
+        "axisLocal": [0.0, 0.0, 1.0],
+        "radiusMm": 0.794999999999999,
+        "originWorldMm": [-6.1999999999999895, 8.100000000000001, 1.149999999999992],
+        "axisWorld": [0.0, 0.0, 1.0]
+      }
+    }
+  ],
+  "unchangedRatchet": {
+    "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_14",
+    "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:14",
+    "definitionId": "d_0_1_1_131",
+    "name": "ml01 Sperrrad z62 m0,20",
+    "parentId": "p_0_1_1_1__0_1_1_1_4",
+    "localTransform": [
+      [-0.978866245993212, -0.204501521889586, -3.07198699813042e-18, 6.20387182362031],
+      [-0.204501521889586, 0.978866245993212, 1.85705868939039e-18, 8.10591683883909],
+      [2.627293052381266e-18, 2.4460380842153373e-18, -1.0, -0.399999999999809],
+      [0.0, 0.0, 0.0, 1.0]
+    ],
+    "worldTransform": [
+      [-0.978866245993212, -0.204501521889586, -3.07198699813042e-18, 6.20387182362031],
+      [-0.204501521889586, 0.978866245993212, 1.85705868939039e-18, 8.10591683883909],
+      [2.627293052381266e-18, 2.4460380842153373e-18, -1.0, -0.9999999999998159],
+      [0.0, 0.0, 0.0, 1.0]
+    ],
+    "freshSourceMatrixMaxError": 0.0,
+    "meshBoundsWorldMm": [
+      [-0.2580936056104335, 1.6511747020619962, -1.299999999999818],
+      [12.665837252851054, 14.56065897561619, -0.6699999999998159]
+    ]
+  },
+  "packetRelativeMatrixMaxError": 8.881784197001252e-16,
+  "toothContact": {
+    "key": "131-131",
+    "before": {
+      "commonVolumeMm3": 0.06069277881226437,
+      "rawVolumeIntegralMm3": 0.06069277881226314,
+      "commonSolidCount": 5,
+      "adaptiveIntegrationRelativeErrorEstimates": [
+        2.9748552985346006e-15, 3.7143487680312123e-16, 5.334244636307992e-16,
+        3.4605470284599253e-16, 3.384205035405795e-15
+      ],
+      "commonValid": true,
+      "distanceMm": 0.0,
+      "commonBoundsWorldMm": [
+        [-0.25809360561043704, 6.817077709089361, -1.000000000000008],
+        [0.26105457012641153, 9.470950440349768, -0.6699999999998159]
+      ]
+    },
+    "after": {
+      "commonVolumeMm3": 0.0,
+      "rawVolumeIntegralMm3": 0.0,
+      "commonSolidCount": 0,
+      "adaptiveIntegrationRelativeErrorEstimates": [],
+      "commonValid": true,
+      "distanceMm": 0.03173093914379677,
+      "commonBoundsWorldMm": null
+    },
+    "runtimeMeshes": {
+      "key": "131-131",
+      "occurrenceIds": ["p_0_1_1_1__0_1_1_1_4__0_1_1_83_14", "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15"],
+      "before": {
+        "triangleSurfaceIntersection": true,
+        "minimumTriangleDistanceMm": 0
+      },
+      "after": {
+        "triangleSurfaceIntersection": false,
+        "minimumTriangleDistanceMm": 0.03222530234281116
+      }
+    }
+  },
+  "neighborReview": {
+    "exactPairs": 32,
+    "broadPhaseExclusions": 694,
+    "recoveredDiamondChecks": [
+      {
+        "moved": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_15",
+        "other": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2",
+        "sha256": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+        "axisSeparationMm": [-1.2412279879635255, 10.652647247708893, 3.291309757172225],
+        "disjoint": true
+      },
+      {
+        "moved": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_3",
+        "other": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2",
+        "sha256": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+        "axisSeparationMm": [3.6631664740178964, 15.714632229026137, -0.348690142827774],
+        "disjoint": true
+      }
+    ],
+    "validation": {
+      "same-rigid-packet": true,
+      "moved-source-shapes-valid-solids": true,
+      "teeth-clear": true,
+      "no-increased-solid-penetration": true,
+      "all-tested-neighbors-valid-solids": true,
+      "all-leaves-accounted-for": true,
+      "recovered-diamond-disjoint": true,
+      "click-spring-crown-explicitly-tested": true
+    }
+  },
+  "rejectedOptions": "artifacts/ratchet-contact/rejected-options.json",
+  "localEvidence": [
+    {
+      "path": "artifacts/ratchet-contact/review.json",
+      "sha256": "87c73d20babd072ca9baa4499ec1281af573f6b7444666f151e648d7680e58c6"
+    },
+    {
+      "path": "artifacts/ratchet-contact/phase.json",
+      "sha256": "f380f7d1f13402edc9e623779346e713e9758c7a5e2e8bcfa41629b827bb2835"
+    },
+    {
+      "path": "artifacts/ratchet-contact/rejected-options.json",
+      "sha256": "d2fc133faefd19c5c344e4f8bc0d0c48454c18dac21a701b7086bda669c2e8a2"
+    },
+    {
+      "path": "artifacts/ratchet-contact/validation.json",
+      "sha256": "08458c61df03778806beeff82e3d69b71bc85a8aa1e919b1a2b8bb5f1206c9ef"
+    },
+    {
+      "path": "artifacts/ratchet-contact/ratchet-before-after.png",
+      "sha256": "fc7f6c485888ed4409b6866c9a9115ac788e10f4794ebc948fcceefb8189d756"
+    },
+    {
+      "path": "artifacts/ratchet-contact/asset-preservation.json",
+      "sha256": "7b0988356f67c4b5790c9a05ec72d7916ca2a0ae1f0dd06c82ea52e40962731f"
+    },
+    {
+      "path": "artifacts/ratchet-contact/browser-before/report.json",
+      "sha256": "9b33c397c9ef12785331fc26e5eecb3c9e9c58ceb19086e016f65b69d88aaf55"
+    },
+    {
+      "path": "artifacts/ratchet-contact/browser-before/ratchet-closeup.png",
+      "sha256": "e7c43ab6c448eedbcfca6124b2387bbdae2bb390706d8d3c4274a3006cce7b5e"
+    },
+    {
+      "path": "artifacts/ratchet-contact/browser-after/report.json",
+      "sha256": "131f5d05c77a25da1b3953e76ef9cb45e8bd06b32d0ffb6d4d502f68f952fea0"
+    },
+    {
+      "path": "artifacts/ratchet-contact/browser-after/ratchet-closeup.png",
+      "sha256": "b20008a16daf530487acda5b1e4293a0ae59e7a2da9137297f080f51570c6bfc"
+    },
+    {
+      "path": "artifacts/ratchet-contact/explorer/explorer-report.json",
+      "sha256": "a3bae66f3d5ea2ce2e089ea575b9d0169c176d1eaaa4588dd134f846c3b7e38c"
+    },
+    {
+      "path": "artifacts/ratchet-contact/workshop-focused/focused-redesign-report.json",
+      "sha256": "db4cd6a084d6832d27bec47480ebac4f6473c9a3e37acf9251f97f7928b1fa1c"
+    },
+    {
+      "path": "artifacts/ratchet-contact/workshop-easy/easy-redesign-report.json",
+      "sha256": "0039bb4f3379300eaadc701579cf8cff27114e85a0267f72dc662f306cb9766d"
+    },
+    {
+      "path": "artifacts/ratchet-contact/workshop-hard/hard-redesign-report.json",
+      "sha256": "063b10c8b9adbaf320883a112081cb6197cef77d827c40d3c3ab8448e7a65413"
+    },
+    {
+      "path": "artifacts/ratchet-contact/bench/browser-report.json",
+      "sha256": "c96106548ffc61435889b79b9d01326065e505f00c408b914b08979d7d5de6f4"
+    },
+    {
+      "path": "artifacts/ratchet-contact/bench/collision-report.json",
+      "sha256": "daa48f90bfffdbcbf1e2b8736d1019e00292946cc0b700f9bc0561a203113424"
+    },
+    {
+      "path": "artifacts/explode-cad/source-mounts.json",
+      "sha256": "f5d25c5ef8c4fbb3424808b18e5f3656612d1232812b98f867b48daba2afaf84"
+    }
+  ],
+  "limitations": [
+    "Static endpoint selection, not maker clocking, loaded running contact, backlash or manufacturing certification.",
+    "Mainspring/core modeled gap is unchanged; attachment, preload, elastic deformation and torque transmission are not established.",
+    "Existing core/screw overlap and other nominal contacts are preserved, not certified.",
+    "Nine other confirmed tooth pairs and the open-shell d144 finding remain unresolved."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "stations": [
+    {
+      "id": "bridge",
+      "x": 0,
+      "z": -7,
+      "seat": 12.2,
+      "rotationX": 90,
+      "holderRotationY": 90
+    },
+    {
+      "id": "dial",
+      "x": 0,
+      "z": -7,
+      "seat": 16.3,
+      "rotationX": -90,
+      "holderRotationY": 90
+    }
+  ],
+  "arrival": [
+    0,
+    0.002,
+    54
+  ],
+  "arrivalYaw": 0,
+  "worktopHeight": 0,
+  "deskBounds": {
+    "minX": -115,
+    "maxX": 115,
+    "minZ": -87,
+    "maxZ": 73
+  },
+  "station": {
+    "x": 0,
+    "z": -7
+  }
+}

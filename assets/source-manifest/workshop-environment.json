@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/bench/export-environment.py",
+  "blender": "5.2.1 LTS",
+  "designRevision": 3,
+  "stage": "crafted-wood-surfaces",
+  "origin": "Original procedural tabletop, rim, mat and oak parts stand; no external models, reference photographs or maker CAD buffers embedded.",
+  "license": "Original project contributions under repository MIT; maker CAD remains separately gated.",
+  "standBores": [
+    {
+      "id": "central-dial-clearance-0",
+      "packet": "central-dial",
+      "x": 65.89346957206726,
+      "z": -11.753591060638428,
+      "radius": 0.6204732142099939,
+      "minPartY": 0.4999999999999849
+    },
+    {
+      "id": "central-dial-clearance-1",
+      "packet": "central-dial",
+      "x": 57.97777843475342,
+      "z": -39.35888719558716,
+      "radius": 0.6204732142099939,
+      "minPartY": 0.4999999999999867
+    },
+    {
+      "id": "central-hour-clearance-0",
+      "packet": "central-hour",
+      "x": 81.00008012730689,
+      "z": -21.199999928474426,
+      "radius": 0.9950322873632805,
+      "minPartY": 1.4499999999999993
+    },
+    {
+      "id": "central-minute-clearance-0",
+      "packet": "central-minute",
+      "x": 86.00012727576262,
+      "z": -18.10929121156659,
+      "radius": 0.624177326171691,
+      "minPartY": 1.6605246046164135
+    },
+    {
+      "id": "central-seconds-clearance-0",
+      "packet": "central-seconds",
+      "x": 91.0000216929389,
+      "z": -20.57610549105206,
+      "radius": 0.3459355281692398,
+      "minPartY": 1.8856536656757696
+    },
+    {
+      "id": "small-dial-clearance-0",
+      "packet": "small-dial",
+      "x": 55.99622940110038,
+      "z": 6.200217043552407,
+      "radius": 0.4202272796260361,
+      "minPartY": 1.4681209416908954
+    },
+    {
+      "id": "small-dial-clearance-1",
+      "packet": "small-dial",
+      "x": 63.99622940110039,
+      "z": 6.200217043552404,
+      "radius": 0.4202272796260361,
+      "minPartY": 1.4319586757835387
+    },
+    {
+      "id": "small-dial-clearance-2",
+      "packet": "small-dial",
+      "x": 59.99622940110039,
+      "z": 10.800217043552408,
+      "radius": 0.4202272796260332,
+      "minPartY": 1.4681209416908945
+    },
+    {
+      "id": "small-hour-clearance-0",
+      "packet": "small-hour",
+      "x": 83.50016007229834,
+      "z": 9.162952294251266,
+      "radius": 0.6200287189091628,
+      "minPartY": 1.8999999999999986
+    },
+    {
+      "id": "small-minute-clearance-0",
+      "packet": "small-minute",
+      "x": 88.5,
+      "z": 10.997042849174859,
+      "radius": 0.3965430313268062,
+      "minPartY": 1.9188318545667564
+    }
+  ],
+  "closedSurfaceAudit": "All slab, rim, mat and bored stand meshes are closed manifold after triangulation.",
+  "budgets": {
+    "visibleTriangles": 7196,
+    "collisionTriangles": 7196,
+    "drawsPerPass": 3,
+    "textureBytesWithMipmaps": 12582911,
+    "downloadBytes": 519892
+  },
+  "semantics": [
+    {
+      "id": "main-oak-top",
+      "role": "walkable",
+      "material": "Oak",
+      "min": [
+        -115,
+        -13,
+        -87
+      ],
+      "max": [
+        115,
+        -1,
+        73
+      ]
+    },
+    {
+      "id": "green-mat",
+      "role": "walkable",
+      "material": "Matte green",
+      "min": [
+        -100,
+        -1,
+        -72
+      ],
+      "max": [
+        100,
+        0,
+        58
+      ]
+    },
+    {
+      "id": "low-back-side-rim",
+      "role": "walkable",
+      "material": "Oak",
+      "min": [
+        -115,
+        -1.5,
+        -87
+      ],
+      "max": [
+        115,
+        4,
+        58
+      ]
+    },
+    {
+      "id": "dial-hand-stand",
+      "role": "walkable",
+      "material": "Stand oak",
+      "min": [
+        40.0,
+        0,
+        -45.0
+      ],
+      "max": [
+        96.0,
+        2,
+        20.0
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/authored/workshop-environment.json",
+      "sha256": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585"
+    },
+    {
+      "path": "assets/authored/atelier-layout.json",
+      "sha256": "855c540c9839a18ebcd226f66e4967e99815746da2d7345e86c95510344338d0"
+    },
+    {
+      "path": "assets/authored/bench-parts-layout.json",
+      "sha256": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9"
+    },
+    {
+      "path": "scripts/bench/export-environment.py",
+      "sha256": "4053e8a4ae4d0e8aa7218c582be983a2d14c3613f2d31d1eee7df258735cbfce"
+    },
+    {
+      "path": "explorer/src/bench/SurfaceFinish.ts",
+      "sha256": "a10a7f94f8e41c9a954614366da0b3b527a16324ba9127d33e42e785a136f131"
+    },
+    {
+      "path": "explorer/src/bench/BenchViewer.ts",
+      "sha256": "94577e87faeacf710d6ef816605a01fda728d0a790b3d3ce76c792d84aad7e0a"
+    },
+    {
+      "path": "assets/generated/bench/environment.blend",
+      "sha256": "9dd6c86679db1976ff4d1d12e49629a865d34b9fd46bd63f3def55ac44a7e096"
+    },
+    {
+      "path": "explorer/public/bench-local/environment.glb",
+      "sha256": "4647f53f5de635a81208d350dc192faa66658159693b2b851e68d74f1830d954"
+    }
+  ]
+}

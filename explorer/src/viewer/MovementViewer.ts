@@ -1,3 +1,4 @@
+import { assemblyFittingPresent } from '../experience/assemblyFittings';
 import { MOTION, motionEase } from '../experience/motion';
 import {
   caseDisplayMatrix,
@@ -30,6 +31,7 @@ import {
 } from '../experience/dials';
 import type { Benchmark } from './benchmark';
 import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
+import { wheelDisplayMatrix } from './WheelDisplayPose';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
@@ -930,8 +932,12 @@ export class MovementViewer {
     // A selected outgoing blade/dial must not override its visibility toggle.
     if (
       next.part &&
-      (this.fitted.has(next.part) || CASE_LEAVES.has(next.part)) &&
-      !requestedWatchLeaves(next).has(next.part)
+      (((this.fitted.has(next.part) || CASE_LEAVES.has(next.part)) &&
+        !requestedWatchLeaves(next).has(next.part)) ||
+        !assemblyFittingPresent(next.part, {
+          casePresent: next.caseVisible,
+          centralDialPresent: next.dialsVisible,
+        }))
     ) {
       next.part = null;
       next.isolated = false;
@@ -1510,7 +1516,7 @@ export class MovementViewer {
         ...p,
         assembled: fitted.has(p.source.id)
           ? (handDisplayMatrix(p.source.id, p.assembled) ?? p.assembled)
-          : p.assembled,
+          : (wheelDisplayMatrix(p.source.id, p.assembled) ?? p.assembled),
       })),
       this.camera.aspect,
       fitted,
@@ -1829,7 +1835,7 @@ export class MovementViewer {
           ? handDisplayMatrix(id, p.assembled)
           : this.fittedCase.has(id)
             ? caseDisplayMatrix(id, p.assembled, caseTo)
-            : undefined;
+            : wheelDisplayMatrix(id, p.assembled);
       p.targetRotation.identity();
       p.target.fromArray(
         CASE_LEAVES.has(id) && !this.fittedCase.has(id)
@@ -2503,13 +2509,23 @@ export class MovementViewer {
       (!fittedCaseSelection || this.fittedCase.has(id));
     if (this.state.layout === 'spread')
       return this.spread.has(id) && (!this.state.isolated || selected);
-    if (this.state.isolated) return selected;
     // A raw external selection replaces fitted display overlays until Back.
     const raw =
       !!selection &&
       !belongs(selection, ROOT) &&
       !this.fitted.has(selection) &&
       ![...(this.fittedCase ?? [])].some((id) => belongs(id, selection));
+    // Direct inspection can still show an original catalog fitting on its own.
+    // Selecting the whole movement must not bring absent host hardware back.
+    if (
+      selection !== id &&
+      !assemblyFittingPresent(id, {
+        casePresent: !raw && (this.fittedCase?.size ?? 0) > 0,
+        centralDialPresent: !raw && (this.fitted?.size ?? 0) > 0,
+      })
+    )
+      return false;
+    if (this.state.isolated) return selected;
     let visible =
       belongs(id, ROOT) ||
       selected ||

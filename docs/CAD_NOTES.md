@@ -36,6 +36,31 @@ The winding stem cannot withdraw together with the larger coupling wheels throug
 
 Running-watch playback was removed because the timing study omitted the spring/contact mechanism and did not drive the full chain. Tooth counts and pivots do not establish tooth phase, escapement contact or elastic spring behavior. The abandoned timing experiments remain in Git; `assets/authored/motion-evidence.json` now records only the static-product decision and current face-flip evidence.
 
+### Static wheel contact correction — 24 October 2026
+
+The [wheel contact review](WHEEL_CONTACT_REVIEW.md) distinguishes 12 non-coaxial
+source-solid penetrations from five coaxial joints, one open-shell false volume
+signal and disjoint projected overlaps. Original XCAF matrices match exactly;
+the confirmed contacts persist in original solids and two mesh resolutions.
+Transfer wheel d96 receives a separate **+6.25° local-Z static phase** in
+[wheel-display-poses.json](../assets/authored/wheel-display-poses.json). It clears
+d85/d96 and d93/d96 (0.026971 / 0.022584 mm minimum distances) without moving axes,
+changing geometry or increasing any of 14 tested neighbor commons. The
+[ratchet follow-up](RATCHET_CONTACT_REVIEW.md) adds a +1.8° world-Z rigid
+phase to d131 occurrence 15 and its keyed barrel II core d87, clearing their
+ratchet contact by 0.031731 mm while preserving the four-lobed mounting fit.
+The [remaining-pairs follow-up](REMAINING_WHEEL_CONTACT_REVIEW.md) clears the
+other nine with 15 further occurrence phases, preserving joined packets and
+leaving crown/click and escapement phases fixed. All 12 initial tooth pairs are
+clear; d144 remains an open shell and d27 is an invalid source dial solid.
+
+Explorer retains raw `assembled` matrices and uses a display override; Workshop
+derives its rendered seats from unchanged base targets; walking uses the same
+posed mesh for rendering and collision. Source GLBs and mesh buffers are
+unchanged. Raw-source pose error intentionally includes all 18 phased occurrences; compare presentation pose separately. See the review for reproduction, per-pair local
+close-ups, provenance, source-shell limitations and the lack of dynamic or
+mechanical certification.
+
 ## Appearance evidence
 
 STEP colors identify source faces, not measured physical materials. Face mapping uses position and original normal, retaining hard boundaries and exact occurrence overrides. Ambiguous mappings need source-face evidence. Geometry and analytic shading normals remain separate; fitted-only color/depth corrections do not redefine raw catalog appearance.
@@ -60,9 +85,33 @@ The historical [PR #19 audit](https://github.com/galind/zweigesicht-1/pull/19), 
 
 Two consequential exclusions remain: independent main plate d195 narrows the setting slot from Y=±1.30 to ±1.15 mm (0.30 mm total), and the d61 buckle-screw candidate has a 2.2 mm head instead of 1.9 mm, with different shoulders/axial extent. Minimal candidate URLs/hashes are in [source provenance](../assets/source-manifest/sources.json). Retain the assembly variants pending maker/mechanical review. Closed independent d111 and d27 STLs do not establish valid equivalent interfaces: the eccentric comparison failed on invalid source geometry and the inner dial remains unresolved. Existing recoveries and face mappings stay authoritative.
 
+## Conditional assembly fittings — 24 October 2026
+
+The owner requested that exposed movements omit fittings whose host is absent.
+[Assembly-fitting membership](../assets/authored/assembly-fittings.json) identifies
+exact source occurrences, independently of shared definition names:
+
+- Three `ml01 Werkhaltelasche` case-mounting clamps (d185, movement occurrences
+  38/39/41), with their fastening screws (d189, 45/44/43 respectively), require
+  a displayed case. Existing original-source head/hole checks in `explosion.json`
+  associate these screw axes with their clamp seats.
+- The two radial dial-retaining screws (d201, mainplate occurrences 11/12) require
+  the central dial. Other occurrences of d189 or d201 are unaffected.
+
+The explorer follows actual loaded case/dial availability, including toggles,
+partial load failure and whole-movement selection. Inventory retains dial screws
+only with the fitted dials; the original catalog still supports explicit
+individual-part inspection. The walking movement remains uncased and undialed,
+so its two resting poses omit all eight leaves from rendering and collision.
+The separately stored case and dials on the mat do not enable fittings on the
+working movement. Workshop has no case and therefore omits the six clamps/fasteners; its two dial screws remain explicit
+placements after the central dial. This is a presentation/configuration decision,
+not deletion or modification of the original CAD or certification of service order.
+All source poses, geometry, reviewed phases and finishes remain unchanged.
+
 ## Workshop membership and dependencies
 
-[play-manifest.json](../assets/authored/play-manifest.json), version `play-4`, is the sole membership/dependency representation. The 265-leaf finish contains 222 selected movement and 43 dial/hand leaves; 100 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Only five blade endpoints differ from original source matrices, through the recorded hand-display correction; the other 260 are exact source endpoints.
+[play-manifest.json](../assets/authored/play-manifest.json), version `play-5`, is the sole membership/dependency representation. The 259-leaf finish contains 216 selected movement and 43 dial/hand leaves; 106 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Its stored base targets contain five corrected blade endpoints and 254 exact source endpoints. The separate 18 reviewed occurrence phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades and 18 wheel-packet components. The save shape is unchanged. Existing `play-4` histories migrate by removing the six retired case-fitting actions and replay-validating the remaining progress; invalid histories still fail validation.
 
 The shared mainplate subtree has 18 leaves: 16 remain fitted (plate, eight direct jewels, two pins and five Incabloc leaves), while radial d201 screws `194_11`/`194_12` are player placements. They wait for the complete central dial and precede its hands. Their source-local +Z withdrawal axes transform into radial XY directions; the original head/shank and mainplate seat faces are recorded in `explosion.json`. Guided edge cameras are presentation choices, not screw-turn simulation.
 

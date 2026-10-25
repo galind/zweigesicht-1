@@ -1,3 +1,4 @@
+import { assemblyFittingPresent, CASE_MOUNTS } from './assemblyFittings';
 import * as THREE from 'three';
 import handPoses from '../../../assets/authored/hand-display-poses.json';
 import { displayFace } from './dials';
@@ -6,13 +7,14 @@ import { ROOT, PREFIX, GROUPS, belongs, inMembers, type Part } from './catalog';
 const hands = new Map(handPoses.hands.map((hand) => [hand.leafId, hand]));
 
 /** Case-mounting fittings and the incompatible alternate setting spring.
- * These remain in the accepted assembly and/or optional source catalog. */
-export const SPREAD_EXCLUSIONS = [38, 39, 41, 43, 44, 45, 66].map(
-  (n) => PREFIX + n,
-);
-export function spreadMember(p: Part) {
+ * These remain available in the original source catalog; case fittings require a case. */
+export const SPREAD_EXCLUSIONS = [...CASE_MOUNTS, PREFIX + '66'];
+export function spreadMember(p: Part, centralDialPresent = false) {
   return (
-    !p.isAssembly && belongs(p.id, ROOT) && !SPREAD_EXCLUSIONS.includes(p.id)
+    !p.isAssembly &&
+    belongs(p.id, ROOT) &&
+    !SPREAD_EXCLUSIONS.includes(p.id) &&
+    assemblyFittingPresent(p.id, { casePresent: false, centralDialPresent })
   );
 }
 export type SpreadInput = {
@@ -41,7 +43,9 @@ export function makeSpreadSlots(
   fitted = new Set<string>(),
 ) {
   const entries = [...parts]
-    .filter((p) => spreadMember(p.source) || fitted.has(p.source.id))
+    .filter(
+      (p) => spreadMember(p.source, fitted.size > 0) || fitted.has(p.source.id),
+    )
     .sort((a, b) => a.source.id.localeCompare(b.source.id));
   const blocks = SPREAD_GROUPS.map(
     () =>
