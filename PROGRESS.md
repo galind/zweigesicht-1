@@ -3,6 +3,49 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Homepage workbench invitation — 25 October 2026
+
+Replaced the centered **Walk inside the movement** button with **Explore the
+workbench**, a restrained glass invitation beneath the watch identity. Supporting
+copy sets the miniature first-person expectation, names the movement, holders
+and detached parts, and states **Keyboard & mouse**. A decorative static arrow
+suggests navigation; the text stands on its own. Compared a renamed header link,
+this contextual invitation and a dock-adjacent prompt; the choice and tradeoffs
+are recorded in [Bench experience](docs/BENCH_EXPERIENCE.md#homepage-invitation--25-october-2026).
+
+The invitation yields to inspection views and open panels, and stays outside the
+header's size measurement. This fixes the cramped existing menu found during
+320 px / 200% text review. The shared controls popup now says **Before you begin**,
+with one Escape/pointer-release explanation, then **Enter workbench**. Loading says
+**Preparing the workbench…** and leads to the existing captured arrival without
+another introduction. Overflowing controls focus the heading first so the
+introduction stays visible; Tab reaches Enter, and Escape restores the invitation.
+Hover, pressed/expanded and focus states are distinct. README, route metadata,
+canvas description and existing browser selectors use the updated terminology.
+
+Reviewed the actual visible homepage and old entry sequence before editing.
+Final visible in-app review covers 1440 × 900, 390 × 844 and 320 × 640, including
+200% text, keyboard opening, focus containment/return and the existing menu.
+Native Chrome on macOS independently verifies keyboard entry, automatic mouse
+capture, arrival, movement and Escape. Its DevTools reduced-motion emulation was
+visibly checked and reset. The in-app browser rejects mouse capture; its existing
+recovery is intact, with native Chrome and automated capture checks passing.
+
+Verified **149 CPU tests**, inventory, typecheck, lint and production build;
+**157 Bench UI checks**, **350 explorer checks** across seven suites, and **14
+homepage journeys** across seven viewport/text combinations with normal and
+reduced motion. The entry checks cover a short landscape view, 200% text down to
+320 px, hover/pressed states, keyboard focus, menu access and an explicitly hidden
+arrow. Final screenshot/report evidence is local in
+`artifacts/bench-entry-redesign/` (desktop, narrow focus, controls and enlarged
+controls, native reduced motion, UI/explorer reports and input-state fixtures).
+
+Bench bindings, scene, materials, CAD, physics and arrival are unchanged; no
+assets were regenerated. Preview remains <http://127.0.0.1:4198/>. Local commit
+only; no push, publication or redistribution. Existing release and physical-device
+qualification gates remain. Next action: owner review of the invitation and entry
+sequence in the local preview.
+
 ## Bench pull-request preparation — 25 October 2026
 
 Prepared the complete Bench/workshop branch for review against `develop`, including

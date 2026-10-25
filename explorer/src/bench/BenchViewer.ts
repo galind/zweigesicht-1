@@ -143,7 +143,7 @@ export class BenchViewer {
       host.appendChild(this.renderer.domElement);
       this.renderer.domElement.setAttribute(
         'aria-label',
-        'First-person walk across the watch movement',
+        'First-person workbench with the movement, holders and detached watch parts',
       );
       this.scene.background = new THREE.Color(0xdfd6c4);
       // Room-scale visibility: no short-range fog or ceiling/flight cap.

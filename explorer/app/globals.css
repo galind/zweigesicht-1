@@ -2178,7 +2178,7 @@ canvas:focus-visible {
   }
 }
 
-/* Equal side tracks keep both experience entries centred and independently clickable. */
+/* Keep the preview-only Workshop entry between identity and navigation. */
 .topbar,
 .text-enlarged .topbar {
   display: grid;
@@ -2254,11 +2254,70 @@ canvas:focus-visible {
   grid-row: 2;
   flex-wrap: wrap;
 }
+/* A separate invitation keeps the workbench distinct from view controls. */
+.bench-invitation {
+  position: absolute;
+  top: calc(var(--header-bottom, 60px) + 20px);
+  left: var(--edge-left);
+  width: min(22rem, calc(100% - var(--edge-left) - var(--edge-right)));
+  z-index: 2;
+}
 .bench-trigger {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
   min-height: 44px;
-  padding-inline: 14px;
+  padding: 16px;
+  border: 1px solid var(--panel-rule);
   border-radius: 10px;
-  background: rgb(38 38 38 / 82%);
+  background: var(--panel-surface);
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+.bench-invitation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  pointer-events: auto;
+  line-height: 1.4;
+}
+.bench-invitation-heading svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+.bench-invitation-description {
+  color: var(--site-control);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.bench-invitation-input {
+  color: var(--site-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.bench-trigger:hover {
+  border-color: var(--site-muted);
+  background: var(--muted);
+}
+.bench-trigger:active,
+.bench-trigger[aria-expanded='true'] {
+  background: var(--border);
+  border-color: var(--foreground);
+}
+.bench-trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .bench-invitation {
+    top: calc(var(--header-bottom, 52px) + 12px);
+  }
+  .bench-trigger {
+    padding: 12px 14px;
+  }
 }

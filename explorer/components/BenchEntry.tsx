@@ -32,6 +32,7 @@ export function BenchEntry({
 }) {
   const router = useRouter();
   const enter = useRef<HTMLButtonElement>(null);
+  const title = useRef<HTMLHeadingElement>(null);
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       {children}
@@ -39,13 +40,21 @@ export function BenchEntry({
         side="top"
         style={style}
         className="bench-entry-popup"
-        initialFocus={enter}
+        initialFocus={() => {
+          const popup = enter.current?.closest('[data-slot="sheet-content"]');
+          // Keep the introduction visible when large text needs a scrollable panel.
+          return popup && popup.scrollHeight > popup.clientHeight
+            ? title.current
+            : enter.current;
+        }}
         finalFocus={finalFocus}
       >
         <SheetHeader>
-          <SheetTitle>Walk inside the movement</SheetTitle>
+          <SheetTitle ref={title} tabIndex={-1}>
+            Before you begin
+          </SheetTitle>
           <SheetDescription>
-            Use a keyboard and mouse to explore.
+            Press Esc to release the pointer and open the menu.
           </SheetDescription>
         </SheetHeader>
         <BenchControls />
@@ -57,7 +66,7 @@ export function BenchEntry({
             router.push('/bench');
           }}
         >
-          Enter the movement
+          Enter workbench
         </button>
       </SheetContent>
     </Sheet>

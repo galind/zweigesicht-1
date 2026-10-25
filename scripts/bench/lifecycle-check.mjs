@@ -35,7 +35,7 @@ try {
     timeout: 90000,
   });
   await page
-    .getByRole('button', { name: 'Enter the movement', exact: true })
+    .getByRole('button', { name: 'Enter workbench', exact: true })
     .click();
   await page.waitForFunction(() => window.bench.status.captured);
   await page.keyboard.down('KeyW');
@@ -122,7 +122,7 @@ try {
     'returning window does not capture without action',
     await page.evaluate(() => !window.bench.status.captured),
   );
-  await page.getByRole('button', {name: /^(Enter the movement|Resume exploring)$/}).click();
+  await page.getByRole('button', {name: /^(Enter workbench|Resume exploring)$/}).click();
   await page.waitForFunction(() => window.bench.status.captured);
   await page.keyboard.press('f');
   await page.waitForFunction(() => window.bench.flip.active);
