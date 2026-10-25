@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
-const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-parts-layout";
+const out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-bare-parts";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
@@ -98,7 +98,6 @@ try {
           if (holderBoxes.some((box) => positiveOverlap(box, triangleBox)))
             stats.holderHits.push([mesh.name, i]);
         } else if (
-          !mesh.userData.protectedInterior &&
           triangleBox.max.y > -33 &&
           triangleBox.min.x < 225 &&
           triangleBox.max.x > -225 &&
@@ -140,10 +139,10 @@ try {
       ["left wood border", -200, 0, -1],
       ["right wood border", 200, 0, -1],
       ["back wood border", 0, -150, -1],
-      ["central protector lid", -105, -35, 8],
-      ["small protector lid", 105, -35, 8],
-      ["central hand-box lid", -105, 35, 17.8],
-      ["small hand-box lid", 105, 35, 17.8],
+      ["former central protector rim", -126.8, -35, 0],
+      ["former small protector rim", 126.8, -35, 0],
+      ["former central hand box", -121, 35, 0],
+      ["former small hand box", 121, 35, 0],
     ]) {
       const floor = b.world.floor(x, z, 500);
       setup(x, floor + 3, z);
@@ -250,14 +249,14 @@ try {
           w.grounded && Math.abs(w.feet.y) < 0.02 && Math.hypot(w.feet.x - x, w.feet.z - z) > 25,
       });
     }
-    for (const x of [-105, 105]) {
+    for (const x of [-121, 121]) {
       setup(x, 0.002, 57);
       w.keys.add("KeyW");
       advance(240);
       circulation.push({
-        name: "closed hand box wall " + x,
+        name: "former hand box wall is traversable " + x,
         feet: w.feet.toArray(),
-        pass: w.feet.z > 54.5 && w.feet.y < 0.02,
+        pass: w.feet.z < 51 && w.grounded && Math.abs(w.feet.y) < 0.02,
       });
     }
     const matEdges = [];
@@ -336,11 +335,8 @@ try {
   check("all semantics retained; reachable geometry collides", !s.missingIds.length, s.missingIds);
   const allowedIds = new Set(["main-oak-top", "green-mat", "low-back-side-rim"]);
   check(
-    "tabletop, low rim, plain mat and four protective containers",
-    provenance.semantics.every(
-      (part) =>
-        (allowedIds.has(part.id) || /^(central|small)-/.test(part.id)) && part.min[1] >= -33,
-    ),
+    "only tabletop, low rim and plain mat remain",
+    provenance.semantics.every((part) => allowedIds.has(part.id) && part.min[1] >= -33),
     provenance.semantics,
   );
   check(
@@ -349,11 +345,7 @@ try {
       provenance.semantics.find((p) => p.id === "green-mat").max[2] ===
       10,
   );
-  check(
-    "four clear protectors and paired transparent films present",
-    s.nonOpaque.length >= 8,
-    s.nonOpaque,
-  );
+  check("no transparent environment containers remain", s.nonOpaque.length === 0, s.nonOpaque);
   check(
     "continuous per-part flip envelopes clear every static triangle",
     !s.sweepHits.length,

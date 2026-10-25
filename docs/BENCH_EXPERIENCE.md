@@ -37,7 +37,38 @@ Arrival and explicit R reset remain at feet (0, 0.002, 54), facing −Z. The vis
 stays **1.65 mm tall**, radius **0.22 mm**, with eyes **1.48 mm above their feet**,
 68° vertical FOV and no bob/roll.
 
-## Compact tabletop and protected parts — current local stage
+## Detached parts directly on the mat — current local stage
+
+At the owner's request, both dial protectors, both hand boxes, their supports and
+membranes are removed. Both case crystals (`d_0_1_1_67`, two occurrences) are
+omitted from this bench view. The original catalog and other experiences retain them.
+The case contains 35 leaves; the two dials and five intact blade/bushing packets
+bring the detached total to **78 leaves**, or **297** with the working movement.
+
+Plan positions and orientations are unchanged: case (0, −92), central/small dials
+(−105/+105, −35), central/small hands (−105/+105, 35). Each complete dial or hand
+packet is lowered rigidly until its lowest original vertex meets mat Y0. No
+source geometry is flattened or rescaled. This is a presentation arrangement,
+not a servicing instruction. All exposed CAD triangles now participate in collision;
+the open case center reaches the mat with no glass or invisible floor above it.
+
+The Blender environment contains only tabletop, rim and mat. Contact shading is
+rebaked without containers, and their transparency shaders and authoring module
+are removed. Historical reference URLs and image hashes remain in the provenance
+manifest; pose generation no longer requires those photographs. The small dial
+retains its fitted enamel material and shared transmission rendering.
+
+Environment: **340 visible/collision triangles, 2 draws/pass, 6.67 MiB textures,
+175,336-byte GLB**. Detached CAD: **328,017 triangles**. Source/output hashes match.
+Verified **141 CPU tests**, inventory, typecheck/lint/build, **64 environment**,
+**10 detached-part**, **32 flip** checks, both CAD/holder rest audits and all
+**16 source-surface drops**. No browser errors; full-table and detail captures
+were reviewed. Production preview rebuilt/restarted at <http://127.0.0.1:4198/bench>.
+
+Current evidence is in `artifacts/workshop-bare-parts/`. The protected arrangement
+below records the superseded `ef9c8fe` milestone and its measurements.
+
+## Historical protected parts — superseded by direct mat placement
 
 The 450 × 330 mm tabletop surrounds the unchanged 350 × 250 mm mat with 50 mm
 wood borders at the sides, 70 mm behind it and 10 mm in front. The closed slab,
@@ -279,7 +310,7 @@ ownership remain unchanged. Narrow/enclosed CAD cavities can require explicit R.
 
 ```sh
 node scripts/bench/prepare-holder.mjs
-# Only when re-deriving CAD storage poses (requires the local reference images):
+# Only when re-deriving CAD storage poses:
 node scripts/bench/prepare-parts.mjs
 blender --background --python scripts/bench/export-environment.py
 npm --prefix explorer run build

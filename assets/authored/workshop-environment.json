@@ -1,5 +1,5 @@
 {
-  "status": "Compact tabletop with protected detached watch parts",
+  "status": "Compact tabletop with detached watch parts directly on the mat",
   "units": "millimetres",
   "axes": "Y up; visitor at +Z facing -Z",
   "mainDesk": {
@@ -74,36 +74,7 @@
     "maxZ": 100,
     "meaning": "Approach and circulation around the unchanged working movement; rear case sits beyond Z-70.64. Continuous CAD envelopes are independently audited."
   },
-  "props": [
-    {
-      "id": "central-dial-protector",
-      "center": [
-        -105,
-        -35
-      ]
-    },
-    {
-      "id": "central-hand-box",
-      "center": [
-        -105,
-        35
-      ]
-    },
-    {
-      "id": "small-dial-protector",
-      "center": [
-        105,
-        -35
-      ]
-    },
-    {
-      "id": "small-hand-box",
-      "center": [
-        105,
-        35
-      ]
-    }
-  ],
+  "props": [],
   "wallItems": [],
   "excludedAssets": [
     "side workbench or return",
@@ -127,7 +98,7 @@
     "oak": "C5A77B",
     "mat": "3D6252"
   },
-  "stage": "compact-protected-parts",
+  "stage": "compact-bare-parts",
   "tabletopDetail": {
     "outline": "Straight rectangular 450 x 330 mm slab; front Z135 preserves 10 mm wood margin.",
     "edgeBevel": 0.12,

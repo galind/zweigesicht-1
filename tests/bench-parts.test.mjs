@@ -38,11 +38,15 @@ catalog.traverse((o) => {
 });
 test("five stationary groups, one case, two dial identities and exact default hand memberships", () => {
   assert.equal(layout.groups.length, 5);
-  assert.equal(ids.length, 80);
-  assert.equal(new Set(ids).size, 80);
+  assert.equal(ids.length, 78);
+  assert.equal(new Set(ids).size, 78);
   assert.deepEqual(
     new Set(layout.groups[0].leafIds),
-    new Set(watch.leaves.filter((p) => p.packet !== "crown").map((p) => p.id)),
+    new Set(
+      watch.leaves
+        .filter((p) => p.packet !== "crown" && records.get(p.id).definitionId !== "d_0_1_1_67")
+        .map((p) => p.id),
+    ),
   );
   for (const face of ["central", "small"]) {
     assert.deepEqual(
@@ -72,6 +76,12 @@ test("crown leaves, alternate lugs, straps and buckle remain explicitly excluded
   );
   assert.equal(caseSource.length, layout.groups[0].leafIds.length + layout.excluded.length);
   for (const p of layout.excluded) assert.ok(!ids.includes(p.id));
+  const crystals = caseSource.filter((p) => p.definitionId === "d_0_1_1_67");
+  assert.equal(crystals.length, 2);
+  for (const p of crystals) {
+    assert.ok(!ids.includes(p.id));
+    assert.match(layout.excluded.find((e) => e.id === p.id).reason, /crystals removed/);
+  }
 });
 test("all presentation transforms are rigid, and non-hand source matrices are exact", () => {
   for (const p of packets) {
@@ -93,7 +103,7 @@ test("all presentation transforms are rigid, and non-hand source matrices are ex
     }
   }
 });
-test("actual decoded vertices reproduce measured bounds and fit shells at original scale", () => {
+test("actual decoded vertices reproduce measured bounds and sit on the mat at original scale", () => {
   for (const p of packets) {
     const b = new T.Box3(),
       v = new T.Vector3();
@@ -106,28 +116,10 @@ test("actual decoded vertices reproduce measured bounds and fit shells at origin
     close(b.min.toArray(), p.bounds[0]);
     close(b.max.toArray(), p.bounds[1]);
     assert.ok(b.min.x >= -175 && b.max.x <= 175 && b.min.z >= -125 && b.max.z <= 125);
-    if (p.id === "case") assert.equal(b.min.y, 0);
-    else if (p.id.endsWith("-dial")) {
-      assert.ok(b.min.y > 1.6);
-      assert.ok(b.max.y < 7.5);
-      const x = p.id === "central-dial" ? -105 : 105;
-      const pts = [...p.leafIds].flatMap((id) => {
-        const g = geometry.get(id),
-          m = matrix(p.transform).multiply(matrix(p.localMatrices[id]));
-        return Array.from({ length: g.attributes.position.count }, (_, i) =>
-          new T.Vector3().fromBufferAttribute(g.attributes.position, i).applyMatrix4(m),
-        );
-      });
-      assert.ok(Math.max(...pts.map((v) => Math.hypot(v.x - x, v.z + 35))) < 21.6);
-    } else {
-      const x = p.id.startsWith("central") ? -105 : 105;
-      assert.ok(b.min.x > x - 18.7 && b.max.x < x + 18.7 && b.min.z > 16.3 && b.max.z < 53.7);
-      assert.ok(b.min.y > 8 && b.max.y < 10);
-      close([b.getCenter(v).y], [8.9]);
-    }
+    close([b.min.y], [0]);
   }
 });
-test("packets separated; conservative elastic surfaces never cross hand bounds", () => {
+test("hand packets remain separated on the mat", () => {
   for (const g of layout.groups.filter((g) => g.packets)) {
     for (let i = 0; i < g.packets.length; i++)
       for (let j = i + 1; j < g.packets.length; j++) {
@@ -135,8 +127,6 @@ test("packets separated; conservative elastic surfaces never cross hand bounds",
           b = g.packets[j].bounds;
         assert.ok(a[1][0] + 2 < b[0][0] || b[1][0] + 2 < a[0][0]);
       }
-    // The film plateau extends 1.2 mm, exceeding the .777 mm cell diagonal.
-    assert.ok(1.2 > (Math.SQRT2 * 37.3) / 48);
   }
 });
 test("compact tabletop retains arrival, station seats, holder rotations and front margin", () => {

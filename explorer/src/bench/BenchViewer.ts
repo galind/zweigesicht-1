@@ -385,29 +385,6 @@ export class BenchViewer {
           )
         )
           throw Error('Invalid atelier environment contract: ' + node.name);
-        const material = node.material as THREE.MeshStandardMaterial;
-        if (material.transparent) {
-          material.depthWrite = false;
-          material.side =
-            material.name === 'Elastic membrane'
-              ? THREE.DoubleSide
-              : THREE.FrontSide;
-          material.forceSinglePass = true;
-          if (
-            material.name === 'Elastic membrane' ||
-            material.name === 'Clear rigid shell'
-          ) {
-            const film = material.name === 'Elastic membrane';
-            material.onBeforeCompile = (shader) => {
-              shader.fragmentShader = shader.fragmentShader.replace(
-                '#include <opaque_fragment>',
-                `diffuseColor.a = ${film ? '0.018 + 0.36' : '0.025 + 0.24'} * pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 3.0);\n#include <opaque_fragment>`,
-              );
-            };
-            material.customProgramCacheKey = () =>
-              film ? 'bench-film-fresnel-v1' : 'bench-shell-fresnel-v1';
-          }
-        }
       });
       this.scene.add(environment);
       new THREE.Box3()

@@ -52,11 +52,11 @@ const vertices = (leafIds, local, transform) =>
     return out;
   });
 const box = (ids, local, m) => new T.Box3().setFromPoints(vertices(ids, local, m));
-const pack = (id, ids, local, rotation, center, y, mid = false) => {
+const pack = (id, ids, local, rotation, center, y) => {
   const b = box(ids, local, rotation),
     c = b.getCenter(new T.Vector3());
   const transform = new T.Matrix4()
-    .makeTranslation(center[0] - c.x, y - (mid ? c.y : b.min.y), center[1] - c.z)
+    .makeTranslation(center[0] - c.x, y - b.min.y, center[1] - c.z)
     .multiply(rotation);
   const final = box(ids, local, transform);
   return {
@@ -67,7 +67,9 @@ const pack = (id, ids, local, rotation, center, y, mid = false) => {
     bounds: [final.min.toArray(), final.max.toArray()],
   };
 };
-const caseIds = watch.leaves.filter((p) => p.packet !== "crown").map((p) => p.id),
+const caseIds = watch.leaves
+    .filter((p) => p.packet !== "crown" && records.get(p.id).definitionId !== "d_0_1_1_67")
+    .map((p) => p.id),
   groups = [];
 // Central opening up, complete attached source lug packets run along world X.
 const caseLocal = new Map(caseIds.map((id) => [id, source(id)]));
@@ -91,40 +93,8 @@ for (const [face, x] of [
     style = config.styles.find((s) => s.id === dials.defaults[face]);
   const rotation = new T.Matrix4().makeRotationX(face === "central" ? -Math.PI / 2 : Math.PI / 2);
   const dialLocal = new Map(config.structureLeafIds.map((id) => [id, source(id)]));
-  const dial = pack(face + "-dial", config.structureLeafIds, dialLocal, rotation, [x, -35], 2);
+  const dial = pack(face + "-dial", config.structureLeafIds, dialLocal, rotation, [x, -35], 0);
   groups.push(dial);
-  const supports = [],
-    ringId = config.structureLeafIds[face === "central" ? 1 : 0],
-    geo = meshes.get(ringId).geometry;
-  const m = new T.Matrix4().fromArray(dial.transform).multiply(dialLocal.get(ringId));
-  const candidates = [];
-  for (let i = 0; i < geo.index.count; i += 3) {
-    const vs = [0, 1, 2].map((j) =>
-      new T.Vector3()
-        .fromBufferAttribute(geo.attributes.position, geo.index.getX(i + j))
-        .applyMatrix4(m),
-    );
-    const normal = vs[1].clone().sub(vs[0]).cross(vs[2].clone().sub(vs[0]));
-    if (normal.y >= -0.01 || Math.abs(normal.clone().normalize().y) < 0.99) continue;
-    const c = vs[0]
-      .clone()
-      .add(vs[1])
-      .add(vs[2])
-      .multiplyScalar(1 / 3);
-    candidates.push(c);
-  }
-  for (const angle of [20, 140, 260]) {
-    const a = (angle * Math.PI) / 180,
-      px = x + (face === "central" ? 16 : 8.5) * Math.cos(a),
-      pz = -35 + (face === "central" ? 16 : 8.5) * Math.sin(a);
-    candidates.sort(
-      (a, b) => (a.x - px) ** 2 + (a.z - pz) ** 2 - ((b.x - px) ** 2 + (b.z - pz) ** 2),
-    );
-    if (!candidates.length) throw Error("Missing rear support");
-    const c = candidates[0];
-    supports.push({ x: c.x, z: c.z, top: c.y });
-  }
-  dial.supports = supports;
   const packets = [];
   for (const [i, [role, id]] of Object.entries(style.handLeafIds).entries()) {
     const h = poses.hands.find((h) => h.leafId === id);
@@ -147,8 +117,7 @@ for (const [face, x] of [
         local,
         r,
         [x + (i - (Object.keys(style.handLeafIds).length - 1) / 2) * 9, 35],
-        8.9,
-        true,
+        0,
       ),
       role,
     });
@@ -162,7 +131,7 @@ const result = {
   units: "mm",
   sourceSha256: watch.sourceSha256,
   notes:
-    "Generated rigid presentation matrices; source buffers and authored fitted poses unchanged. Container internals are visual approximations, not packaging certification.",
+    "Generated rigid presentation matrices; source buffers and authored fitted poses unchanged. Original parts seated directly on the mat; both case crystals omitted at owner request.",
   groups,
   excluded: manifest.instances
     .filter(
@@ -173,7 +142,9 @@ const result = {
       reason:
         watch.leaves.find((w) => w.id === p.id)?.packet === "crown"
           ? "Already on working movement"
-          : "Alternate lug occurrence, strap or buckle excluded by reviewed case manifest",
+          : p.definitionId === "d_0_1_1_67"
+            ? "Both case crystals removed at owner request; catalog geometry retained"
+            : "Alternate lug occurrence, strap or buckle excluded by reviewed case manifest",
     })),
 };
 await fs.writeFile(
@@ -182,30 +153,15 @@ await fs.writeFile(
 );
 const evidence = {
   accessed: "2026-10-25",
-  references: [
-    [
-      "horotec",
-      "https://www.hswalsh.com/product/plastic-case-for-dial-packing-45mm-hd17583-45",
-      "https://img.hswalsh.com/original/31431.jpg",
-    ],
-    [
-      "bergeon",
-      "https://www.hswalsh.com/product/perspex-elastic-membrane-boxes-39mm-x-39mm-x-178mm-bergeon-6799-01-hb6799-01",
-      "https://img.hswalsh.com/original/12280.jpg",
-    ],
-  ].map(([id, url, imageUrl]) => ({ id, url, imageUrl })),
+  references: (await read("assets/source-manifest/bench-parts.json")).references,
+  referenceStatus:
+    "Historical protector references retained with hashes; containers removed at owner request.",
   assumptions: {
-    dialProtector:
-      "Published nominal diameter 45 mm. Authored outer diameter 45, height 8, internal radius 21.6, floor 1.2, lid underside 7.5. Black base and three curved clear rear support arms follow photographs. Three contact pads land on actual rear ring surfaces; all heights and support details inferred.",
-    handBox:
-      "Published 39 x 39 x 17.8 mm. Authored wall 0.8, corner radius 4, seam 8.9, skin 0.02 mm. Paired films meet at 8.9 away from packets and deform conservatively around actual packet thickness. No measured elasticity or engineering certification.",
+    placement:
+      "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets mat Y0. This is a presentation pose, not a servicing instruction.",
   },
   sourceFiles: [],
 };
-for (const r of evidence.references) {
-  const b = await fs.readFile("artifacts/workshop-parts-layout/references/" + r.id + ".jpg");
-  r.sha256 = crypto.createHash("sha256").update(b).digest("hex");
-}
 for (const p of [
   "assets/authored/dial-configurations.json",
   "assets/authored/watch-configurations.json",
@@ -229,7 +185,6 @@ console.log(
   groups.map((g) => ({
     id: g.id,
     bounds: g.bounds,
-    supports: g.supports,
     packets: g.packets?.map((p) => ({ id: p.id, bounds: p.bounds })),
   })),
 );

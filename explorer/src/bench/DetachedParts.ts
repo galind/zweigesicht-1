@@ -40,7 +40,7 @@ export function createDetachedParts(
     transform: number[];
     localMatrices: object;
   };
-  const populate = (spec: Packet, parent: THREE.Group, collides: boolean) => {
+  const populate = (spec: Packet, parent: THREE.Group) => {
     const group = new THREE.Group();
     group.name = spec.id;
     group.matrixAutoUpdate = false;
@@ -65,15 +65,6 @@ export function createDetachedParts(
         material.color.set(steel.color);
         material.metalness = 1;
         material.roughness = steel.roughness;
-      }
-      if (record.definitionId === 'd_0_1_1_67') {
-        const crystal = material as THREE.MeshPhysicalMaterial;
-        crystal.transmission = 0;
-        crystal.userData.finishTransmission = 0;
-        crystal.transparent = true;
-        crystal.opacity = 0.12;
-        crystal.depthWrite = false;
-        crystal.side = THREE.FrontSide;
       }
       if (dials.presentationOverrides.some((p) => p.leafId === id)) {
         const enamel = material as THREE.MeshPhysicalMaterial,
@@ -105,8 +96,7 @@ export function createDetachedParts(
         partId: id,
         instanceId: spec.id + ':' + id,
         packet: spec.id,
-        collisionRole: collides ? 'walkable' : 'decor',
-        protectedInterior: !collides,
+        collisionRole: 'walkable',
       };
       group.add(mesh);
     }
@@ -114,12 +104,12 @@ export function createDetachedParts(
   };
   try {
     for (const spec of layout.groups) {
-      if (spec.leafIds) populate(spec as Packet, root, spec.id === 'case');
+      if (spec.leafIds) populate(spec as Packet, root);
       else {
         const group = new THREE.Group();
         group.name = spec.id;
         root.add(group);
-        for (const packet of spec.packets!) populate(packet, group, false);
+        for (const packet of spec.packets!) populate(packet, group);
       }
     }
   } catch (error) {

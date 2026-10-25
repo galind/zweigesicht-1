@@ -14,9 +14,9 @@
       "sha256": "587662568a70d4e98c568fe1154b3e7c46d73caf0b4cda392833cc0872d0a93e"
     }
   ],
+  "referenceStatus": "Historical protector references retained with hashes; containers removed at owner request.",
   "assumptions": {
-    "dialProtector": "Published nominal diameter 45 mm. Authored outer diameter 45, height 8, internal radius 21.6, floor 1.2, lid underside 7.5. Black base and three curved clear rear support arms follow photographs. Three contact pads land on actual rear ring surfaces; all heights and support details inferred.",
-    "handBox": "Published 39 x 39 x 17.8 mm. Authored wall 0.8, corner radius 4, seam 8.9, skin 0.02 mm. Paired films meet at 8.9 away from packets and deform conservatively around actual packet thickness. No measured elasticity or engineering certification."
+    "placement": "Each intact dial or blade/bushing packet is rigidly lowered until its lowest decoded source vertex meets mat Y0. This is a presentation pose, not a servicing instruction."
   },
   "sourceFiles": [
     {
@@ -33,11 +33,11 @@
     },
     {
       "path": "assets/authored/bench-parts-layout.json",
-      "sha256": "5a83a1d0a6dafb51fc4a782b822c19cfd97a1e5bb5278dd91fbe5297760de768"
+      "sha256": "cb58cb2f40a579cb7d2d5e1bd01c52b93d2b30f17e218fb27ddf3883d94eefb2"
     },
     {
       "path": "scripts/bench/prepare-parts.mjs",
-      "sha256": "d5726185a63db72e23c43318b8262db6bd6dc18029e08a1256bddbb21f6e3a58"
+      "sha256": "7409a9b4ca9fc58e3870b5663055503b3f34cf863b69fe6ac4e9429823a0f9d7"
     },
     {
       "path": "explorer/public/models/catalog-0d8f8da54d0b.glb",

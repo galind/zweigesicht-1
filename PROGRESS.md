@@ -3,6 +3,27 @@
 Updated 25 October 2026. Setup is in the [README](README.md); extended checks are
 in [architecture](docs/LOCAL_ARCHITECTURE.md). Repository visibility is public (changed by the owner).
 
+## Dials and hands directly on the mat — 25 October 2026
+
+Removed both dial protectors and both hand boxes, including supports, membranes,
+transparency shaders and baked container shadows. Each intact dial and hand/bushing
+packet now rests at mat Y0. Removed both case crystals from the bench presentation;
+the open center reaches the mat. The original catalog is unchanged. All 78 remaining
+detached leaves now collide using their visible source geometry; the 219-leaf
+working movement, layout, holders and controls remain unchanged.
+
+Regenerated local Blender/GLB and verified provenance hashes. Environment returns
+to **340 visible/collision triangles, 2 draws/pass, 6.67 MiB textures**, with a
+175,336-byte GLB. Detached CAD totals **328,017 triangles**. Reviewed full-table,
+case, dial and hand captures. Verified **141 CPU tests**, inventory, typecheck,
+lint, production build, **64 environment**, **10 detached-part**, **32 flip**
+checks and both independent CAD/holder rest audits with **16 source-surface drops**.
+No browser errors. Evidence: `artifacts/workshop-bare-parts/`.
+
+Preview rebuilt/restarted at <http://127.0.0.1:4198/bench> and the open tab refreshed.
+Next: owner walkthrough of the simplified arrangement. Local only; no push or
+publication. The protected layout below is historical, superseded by this change.
+
 ## Compact tabletop with protected watch components — 25 October 2026
 
 Implemented the local handoff from `66c2952`: **450 × 330 mm** tabletop, unchanged

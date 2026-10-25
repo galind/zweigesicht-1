@@ -47,7 +47,8 @@ catalog.traverse((n) => {
   };
 });
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href),
-  out = "artifacts/workshop-parts-layout";
+  out = process.env.PLAY_QA_OUTPUT || "artifacts/workshop-bare-parts";
+await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH }),
   page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 const report = { checks: [], errors: [] };
@@ -148,79 +149,13 @@ try {
         id: m.userData.partId,
         packet: m.userData.packet,
         collides: b.world.solids.some((s) => s.mesh === m),
-        protected: m.userData.protectedInterior,
       }));
-      const films = [];
+      const caseFloor = b.world.floor(0, -92, 50);
+      const containers = [];
       b.scene.traverse((m) => {
-        if (m.isMesh && m.material.name === "Elastic membrane") {
-          const box = new B().setFromObject(m, true);
-          films.push({
-            name: m.name,
-            min: box.min.toArray(),
-            max: box.max.toArray(),
-            collides: b.world.solids.some((s) => s.mesh === m),
-            protected: m.userData.protectedInterior,
-            transmission: m.material.transmission || 0,
-            depthTest: m.material.depthTest,
-          });
-        }
+        if (m.isMesh && /Elastic membrane|Clear rigid shell|Dial base/.test(m.material.name))
+          containers.push(m.name);
       });
-      const membraneChecks = [];
-      for (const face of ["central", "small"]) {
-        const sheets = {};
-        b.scene.traverse((m) => {
-          if (
-            !m.isMesh ||
-            m.material.name !== "Elastic membrane" ||
-            !m.userData.semanticIds[0].startsWith(face)
-          )
-            return;
-          const cells = new Map(),
-            p = m.geometry.attributes.position,
-            idx = m.geometry.index;
-          for (let i = 0; i < idx.count; i += 3) {
-            const vs = [0, 1, 2].map((j) =>
-              new V().fromBufferAttribute(p, idx.getX(i + j)).applyMatrix4(m.matrixWorld),
-            );
-            const xs = vs.map((v) => v.x),
-              zs = vs.map((v) => v.z);
-            for (let x = Math.floor(Math.min(...xs)); x <= Math.floor(Math.max(...xs)); x++)
-              for (let z = Math.floor(Math.min(...zs)); z <= Math.floor(Math.max(...zs)); z++) {
-                const key = x + "," + z;
-                if (!cells.has(key)) cells.set(key, []);
-                cells.get(key).push(vs);
-              }
-          }
-          sheets[m.userData.semanticIds[0].includes("upper") ? "upper" : "lower"] = (v) => {
-            for (const [a, c, d] of cells.get(Math.floor(v.x) + "," + Math.floor(v.z)) ?? []) {
-              const den = (c.z - d.z) * (a.x - d.x) + (d.x - c.x) * (a.z - d.z);
-              if (Math.abs(den) < 1e-10) continue;
-              const u = ((c.z - d.z) * (v.x - d.x) + (d.x - c.x) * (v.z - d.z)) / den,
-                w = ((d.z - a.z) * (v.x - d.x) + (a.x - d.x) * (v.z - d.z)) / den,
-                t = 1 - u - w;
-              if (Math.min(u, w, t) >= -1e-5) return u * a.y + w * c.y + t * d.y;
-            }
-            return NaN;
-          };
-        });
-        let count = 0,
-          minGap = Infinity,
-          missing = 0;
-        for (const mesh of meshes.filter(
-          (m) => m.userData.packet.startsWith(face) && !m.userData.packet.endsWith("-dial"),
-        )) {
-          const p = mesh.geometry.attributes.position;
-          for (let i = 0; i < p.count; i++) {
-            const v = new V().fromBufferAttribute(p, i).applyMatrix4(mesh.matrixWorld),
-              lo = sheets.lower(v),
-              hi = sheets.upper(v);
-            if (!Number.isFinite(lo) || !Number.isFinite(hi)) missing++;
-            else minGap = Math.min(minGap, v.y - lo, hi - v.y);
-            count++;
-          }
-        }
-        membraneChecks.push({ face, count, minGap, missing });
-      }
       const packetTransforms = [];
       for (const spec of layout.groups.flatMap((g) => (g.leafIds ? [g] : g.packets))) {
         const group = b.detached.getObjectByName(spec.id);
@@ -234,7 +169,8 @@ try {
         });
       }
       return {
-        membraneChecks,
+        caseFloor,
+        containers,
         buffers,
         unique: union.size,
         total: b.station.movement.children.length + meshes.length,
@@ -242,7 +178,6 @@ try {
         clearance,
         unchanged,
         collision,
-        films,
         packetTransforms,
         expectedCount: Object.keys(expected).length,
         triangles: buffers.reduce((n, p) => n + p.triangles, 0),
@@ -252,8 +187,8 @@ try {
   );
   const a = report.audit;
   check(
-    "80 unique exact source leaves; no duplication with 219 working leaves",
-    a.buffers.length === 80 && a.unique === a.total && a.total === 299,
+    "78 unique exact source leaves; no duplication with 219 working leaves",
+    a.buffers.length === 78 && a.unique === a.total && a.total === 297,
     a.total,
   );
   check(
@@ -277,22 +212,15 @@ try {
   );
   check("new groups remain stationary and visible when movement changes side", a.unchanged);
   check(
-    "every case surface collides; sealed contents inaccessible and noncolliding",
-    a.collision.every((p) => (p.packet === "case" ? p.collides : !p.collides && p.protected)),
+    "all exposed case, dial and hand meshes collide using their actual geometry",
+    a.collision.every((p) => p.collides),
   );
   check(
-    "four interior films near box midpoint, depth tested, no added transmission capture",
-    a.films.length === 4 &&
-      a.films.every(
-        (f) =>
-          f.min[1] > 8 &&
-          f.max[1] < 10 &&
-          !f.collides &&
-          f.protected &&
-          f.depthTest &&
-          !f.transmission,
-      ),
-    a.films,
+    "case opening reaches the mat; both crystals and all containers are absent",
+    Math.abs(a.caseFloor) < 1e-6 &&
+      a.containers.length === 0 &&
+      a.buffers.every((p) => records.get(p.id).definitionId !== "d_0_1_1_67"),
+    { caseFloor: a.caseFloor, containers: a.containers },
   );
   report.renderPasses = await page.evaluate(() => {
     const b = window.bench;
@@ -345,14 +273,13 @@ try {
     ["external-case", [40, 53, -30], [0, 5, -92], "bridge", 42],
     ["external-central-dial", [-105, 65, 12], [-105, 3, -35], "bridge", 40],
     ["external-small-dial", [105, 65, 12], [105, 3, -35], "bridge", 40],
-    ["external-central-hands-top", [-105, 70, 35.1], [-105, 8.9, 35], "bridge", 42],
-    ["external-small-hands-top", [105, 70, 35.1], [105, 8.9, 35], "bridge", 42],
-    ["external-central-hands-oblique", [-82, 31, 81], [-105, 8.9, 35], "bridge", 45],
-    ["external-small-hands-oblique", [128, 31, 81], [105, 8.9, 35], "bridge", 45],
-    ["external-central-hands-side", [-105, 10, 83], [-105, 8.9, 35], "bridge", 50],
-    ["external-small-hands-side", [105, 10, 83], [105, 8.9, 35], "bridge", 50],
-    ["visitor-near-box", [-105, 1.482, 55.1], [-105, 9, 35], "bridge", 68],
-    ["external-inside-shell", [-105, 8.9, 51], [-105, 8.9, 35], "bridge", 68],
+    ["external-central-hands-top", [-105, 70, 35.1], [-105, 0.5, 35], "bridge", 42],
+    ["external-small-hands-top", [105, 70, 35.1], [105, 0.5, 35], "bridge", 42],
+    ["external-central-hands-oblique", [-82, 31, 81], [-105, 0.5, 35], "bridge", 45],
+    ["external-small-hands-oblique", [128, 31, 81], [105, 0.5, 35], "bridge", 45],
+    ["external-central-hands-side", [-105, 10, 83], [-105, 0.5, 35], "bridge", 50],
+    ["external-small-hands-side", [105, 10, 83], [105, 0.5, 35], "bridge", 50],
+    ["visitor-near-hands", [-105, 1.482, 55.1], [-105, 0.5, 35], "bridge", 68],
     ["visitor-arrival", [0, 1.482, 54], [0, 1.482, -7], "bridge", 68],
     ["visitor-bridge", [-12, 22, -7], [0, 17, -7], "bridge", 68],
     ["visitor-dial", [-12, 22, -7], [0, 17, -7], "dial", 68],
@@ -378,9 +305,9 @@ try {
     await page.screenshot({ path: `${out}/${name}.png` });
   }
   check(
-    "all actual hand vertices enclosed between the two deformed films",
-    a.membraneChecks.every((c) => c.count > 0 && c.missing === 0 && c.minGap > 0.02),
-    a.membraneChecks,
+    "all five groups rest directly on the mat without penetration",
+    a.groups.every((g) => Math.abs(g.min[1]) < 1e-6),
+    a.groups,
   );
   check("no browser errors", !report.errors.length, report.errors);
   check(
