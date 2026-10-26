@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "status": "Prescribed continuous visual train coupling feasible within recorded scope; mainspring power-source model unresolved",
+  "branch": "codex/escapement-clearance-study",
+  "applicationBaselineCommit": "8c0a36779dc1818bc9b3c9c5c5568fbcbf489ad1",
+  "precedingStudyCommit": "1f2a36f",
+  "source": {
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b"
+  },
+  "historicalEvidenceCommit": "e5726231760cbc734d77e571bae215b528242acc",
+  "runtimeInstalled": false,
+  "sourceOriginalsModified": false,
+  "mechanicalCycleAccepted": false,
+  "additionalGearOrPhaseChangesRequired": false,
+  "report": "docs/TRAIN_COUPLING_STUDY.md",
+  "inputSha256": {
+    "assets/source-manifest/escapement-clearance-study.json": "289194e24b3464dfd35276a7bce17ae48b070ffdb4e71898e0725f0dc516e262",
+    "assets/source-manifest/escapement-interfaces-study.json": "72871113c574a14ef1acb396f72d9eeea456bfcb22d0100f018b1df194df9767",
+    "explorer/public/models/assembly-manifest.json": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+    "assets/authored/wheel-display-poses.json": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "artifacts/escapement-clearance-20261026/cycle.json": "a115faf11562d732e763523245875f9ef084be9ccf4ac63154342af743b55e99",
+    "artifacts/escapement-clearance-20261026/candidate-fork.brep": "75d85945c20cd0d69b33d34a8b9c641e84ba70840c57b9620d336cbf59a7057b",
+    "artifacts/escapement-interfaces-20261026/source-cache.json": "4145d8fd580bac139c09f227e9467c35ddd7656cf108130e28090526b97c2596",
+    "artifacts/escapement-interfaces-20261026/spring-interfaces.json": "1e09b9067cf28b508db2ed56d3bd48dee61d7b6d80a4c58505cebf4be69bb7cc"
+  },
+  "kinematics": {
+    "phaseSha256": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "cycleSha256": "a115faf11562d732e763523245875f9ef084be9ccf4ac63154342af743b55e99",
+    "rule": "E(n,u) = 18*n + localEscape(u); theta(packet) = ratio * E, applied about the world +Z source axis after current display poses",
+    "timing": "Prescribed common scalar phase; no frequency, force or smooth time interpolation solved here",
+    "cycleEscapeEndpointsDegrees": [
+      -0.09999999999974563,
+      17.90000000000051
+    ],
+    "wholeTrainRepeatEscapeRevolutions": 140400,
+    "wholeTrainRepeatBalanceCycles": 2808000,
+    "packets": [
+      {
+        "name": "escape",
+        "ratioToEscape": "1",
+        "advanceDegreesPerBalanceCycle": "18",
+        "worldPivotMm": [
+          -1.9998981789018702,
+          -4.131405,
+          -1.8700000000000068
+        ],
+        "seamResidualDegrees": 2.5579538487363607e-13,
+        "turnsPerWholeTrainRepeat": "140400",
+        "members": [
+          {
+            "definition": 233,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_1",
+            "name": "ml01 Gangrad Niv20.5"
+          },
+          {
+            "definition": 234,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_2",
+            "name": "ml01 Gangtrieb z9 m0,102"
+          },
+          {
+            "definition": 235,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_62__0_1_1_232_3",
+            "name": "ml01 Butzen Gangrad"
+          }
+        ]
+      },
+      {
+        "name": "seconds",
+        "ratioToEscape": "-1/9",
+        "advanceDegreesPerBalanceCycle": "-2",
+        "worldPivotMm": [
+          5.204170427930427e-15,
+          -6.0715321659188185e-15,
+          -4.310000000000008
+        ],
+        "seamResidualDegrees": -2.842170943040401e-14,
+        "turnsPerWholeTrainRepeat": "-15600",
+        "members": [
+          {
+            "definition": 242,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1",
+            "name": "ml01 Sekundentrieb z8 m0,1159"
+          },
+          {
+            "definition": 243,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_2",
+            "name": "ml01 Sekundenrad z81 m0,102"
+          }
+        ]
+      },
+      {
+        "name": "third",
+        "ratioToEscape": "8/675",
+        "advanceDegreesPerBalanceCycle": "16/75",
+        "worldPivotMm": [
+          3.17046045103862,
+          -3.617219999999998,
+          -3.2100000000000066
+        ],
+        "seamResidualDegrees": 3.0316490059097606e-15,
+        "turnsPerWholeTrainRepeat": "1664",
+        "members": [
+          {
+            "definition": 237,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_1",
+            "name": "ml01 Kleinbodentrieb z10 m0,13"
+          },
+          {
+            "definition": 238,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_63__0_1_1_236_2",
+            "name": "ml01 Kleinbodenrad z75 m0,1159"
+          }
+        ]
+      },
+      {
+        "name": "center",
+        "ratioToEscape": "-1/540",
+        "advanceDegreesPerBalanceCycle": "-1/30",
+        "worldPivotMm": [
+          0.0,
+          0.0,
+          -2.9800000000000066
+        ],
+        "seamResidualDegrees": -4.736951571734001e-16,
+        "turnsPerWholeTrainRepeat": "-260",
+        "members": [
+          {
+            "definition": 93,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+            "name": "ml01 Minutentrieb z12 m0,15"
+          },
+          {
+            "definition": 94,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_2",
+            "name": "ml01 Minutenrad z64 m0,13"
+          },
+          {
+            "definition": 95,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_3",
+            "name": "ml01 Sekundenwellenlager"
+          }
+        ]
+      },
+      {
+        "name": "transfer",
+        "ratioToEscape": "1/1170",
+        "advanceDegreesPerBalanceCycle": "1/65",
+        "worldPivotMm": [
+          -2.6790503757237,
+          0.972208354384323,
+          -2.070000000000007
+        ],
+        "seamResidualDegrees": 2.1862853408003084e-16,
+        "turnsPerWholeTrainRepeat": "120",
+        "members": [
+          {
+            "definition": 96,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
+            "name": "ml01 \u00dcFHMinRad z26 m0,15"
+          }
+        ]
+      },
+      {
+        "name": "barrel",
+        "ratioToEscape": "-1/3600",
+        "advanceDegreesPerBalanceCycle": "-1/200",
+        "worldPivotMm": [
+          -6.199999999999988,
+          8.100000000000001,
+          -4.290000000000007
+        ],
+        "seamResidualDegrees": -7.105427357601002e-17,
+        "turnsPerWholeTrainRepeat": "-39",
+        "members": [
+          {
+            "definition": 85,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_1",
+            "name": "ml01 Federhaustrommel II z80 m0,15"
+          },
+          {
+            "definition": 86,
+            "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_1__0_1_1_84_2",
+            "name": "ml01 Federhausdeckel II"
+          }
+        ]
+      }
+    ],
+    "excludedFromRigidDrive": [
+      "Both mainsprings and arbors",
+      "Barrel I and ratchets",
+      "Motion works, dials and hands"
+    ]
+  },
+  "gearMeshes": {
+    "sectionConfigurations": 105461,
+    "selectedWholeSolidConfigurations": 75,
+    "pairs": [
+      {
+        "definitions": [
+          234,
+          243
+        ],
+        "teeth": [
+          9,
+          81
+        ],
+        "configurations": 3889,
+        "minimumSectionGapMm": 0.0225114256340423,
+        "continuousPolygonGapLowerBoundMm": 0.015162604302471884,
+        "minimumSelectedSolidGapMm": 0.02251094009724244
+      },
+      {
+        "definitions": [
+          242,
+          238
+        ],
+        "teeth": [
+          8,
+          75
+        ],
+        "configurations": 28801,
+        "minimumSectionGapMm": 0.02511724220462372,
+        "continuousPolygonGapLowerBoundMm": 0.016679497730897847,
+        "minimumSelectedSolidGapMm": 0.025117141967646656
+      },
+      {
+        "definitions": [
+          237,
+          94
+        ],
+        "teeth": [
+          10,
+          64
+        ],
+        "configurations": 15361,
+        "minimumSectionGapMm": 0.021693557443198817,
+        "continuousPolygonGapLowerBoundMm": 0.012358966036470256,
+        "minimumSelectedSolidGapMm": 0.021687220758769502
+      },
+      {
+        "definitions": [
+          93,
+          96
+        ],
+        "teeth": [
+          12,
+          26
+        ],
+        "configurations": 7489,
+        "minimumSectionGapMm": 0.02256572773947388,
+        "continuousPolygonGapLowerBoundMm": 0.011887341658447743,
+        "minimumSelectedSolidGapMm": 0.022559978147861714
+      },
+      {
+        "definitions": [
+          96,
+          85
+        ],
+        "teeth": [
+          26,
+          80
+        ],
+        "configurations": 49921,
+        "minimumSectionGapMm": 0.026891908626831423,
+        "continuousPolygonGapLowerBoundMm": 0.01663075864926724,
+        "minimumSelectedSolidGapMm": 0.02688438069629441
+      }
+    ]
+  },
+  "neighbors": {
+    "newMovingLeaves": 10,
+    "angularSamplesPerLeaf": 36,
+    "poseBooleanQueries": 6052,
+    "boundingExclusions": 121712,
+    "increasedOverlapPairs": 0,
+    "unqualifiedLeaves": 7,
+    "retainedSourceFits": [
+      {
+        "moving": 242,
+        "other": 41,
+        "baselineCommonMm3": 0.0003427180880268277,
+        "maximumCommonMm3": 0.0003427180880270237
+      },
+      {
+        "moving": 96,
+        "other": 139,
+        "baselineCommonMm3": 0.16987157063462432,
+        "maximumCommonMm3": 0.16987157063462516
+      }
+    ]
+  },
+  "springAndEscapement": {
+    "minimumNewTrainToSampledCoilBoxGapMm": 0.5092254772803442,
+    "validBalancePalletBoxPairs": 110,
+    "cylinderRefinementPairs": 4,
+    "minimumRefinedRadialGapMm": 0.16040251932342287
+  },
+  "barrelBoundary": {
+    "rigidPoses": 36,
+    "booleanQueries": 144,
+    "sourceDistances": {
+      "springCore": {
+        "gapMm": 0.006985294117648773,
+        "commonMm3": 0.0
+      },
+      "springDrum": {
+        "gapMm": 8.881784197001252e-16,
+        "commonMm3": 0.0
+      },
+      "springCover": {
+        "gapMm": 0.10000000000000009,
+        "commonMm3": 0.0
+      }
+    },
+    "unwindingSolved": false
+  },
+  "limits": [
+    "Prescribed kinematics, no force or torque acceptance",
+    "Continuous polygon separation is not continuous whole-solid clearance",
+    "Neighbor screen freezes other leaves; it does not certify every simultaneous nonmeshing phase",
+    "Invalid source BReps remain unqualified",
+    "Mainspring, arbors, ratchets, second barrel and motion works are outside rigid coupling",
+    "Spring and timing interpolation, fitted product states and sustained rendering remain untested"
+  ],
+  "localEvidenceRoot": "artifacts/train-coupling-20261026",
+  "localEvidenceSha256": {
+    "sections.json": "5a57af7f711278fbb844b4e8f84274025e2dca3852ed9d502ed8cc503cefb648",
+    "initial-pitches.json": "88e221e75bbace4e9c9be73ef96cdefb2d87834ca1b5320cd374dd349cbf6d09",
+    "periods.json": "d7e5431a514da0f705b2fd80637eb81c80ed9a00f7e1d38d9ff69dcd72e12450",
+    "solids.json": "458e4f568282bf0fb512f5fe1337d0f31a09319e6ed160868853f8b238d72829",
+    "neighbors.json": "9cc698451782617df34afb71a52c6e8b6f74ee6d9a1f68378a711eefcc41a5b5",
+    "kinematics.json": "409503fddf7b9544f1a7f4c6a7c704c651a7d3e4c44af8a1eb15c4ed627f8b4a",
+    "barrel.json": "bbf82ff0c634a0c2d5fc37b28241ac8cea4e29b9470ebb9cf2c6a695c953774a",
+    "envelopes.json": "b6b0fbd43fceee14a9fd95b4f0568f92abb9f901141fdc1b9b5892264aac4a33",
+    "period-234-243.npz": "3d22d3fa0373aefe48ee502ee1deb135260cae7dd795524b344d8d8dd78c5661",
+    "period-242-238.npz": "4c944a6d3e0cda4f24744ce64b49bc7cff4ea540ec707f9e657f7487c7ff646e",
+    "period-237-94.npz": "8128e0a2e86eed53d80acc2776d87d822c3c4ecf320a3a693cc9e500f3222906",
+    "period-93-96.npz": "efadd65bd69b1e445ffc2879dde7e50cbe0d2a60b02545f00ddc6ddb35484e2e",
+    "period-96-85.npz": "5506670ea0aae2f43a91c51f7bce285b7c16eb4cd60d9d48d884972d5b246929"
+  },
+  "scriptSha256": {
+    "scripts/cad/escapement-clearance/train_coupling.py": "af24f48cf5f0843665d15cc18d345255225339f40c9476c36660afe5d9e7a7ce",
+    "scripts/cad/escapement-clearance/train_periods.py": "a328596b9da3433ade6eb7e91016b6de360fa88295699005587e9bc419c4742c",
+    "scripts/cad/escapement-clearance/train_solids.py": "9afc217d029565bd0e2160c8f0808cbde0f0faae8f83c0c60600b65ab3e9ca4d",
+    "scripts/cad/escapement-clearance/train_neighbors.py": "6cb5766916bc76d26fd21b504fd9212883e8769071dcf8a58d90d4de5ef3ce03",
+    "scripts/cad/escapement-clearance/train_kinematics.py": "4a9a7b3443f64b78b6d3a393d203546685f59c16f85943a0a06d738335596da2",
+    "scripts/cad/escapement-clearance/train_barrel.py": "2d9e94d34de8b7fc4928f70a322a108c1783594ddbbae16b5fd027d526f5d423",
+    "scripts/cad/escapement-clearance/train_envelopes.py": "74844df1d8d733e406a3f4c70fd8d5b9dd16aa689539913aaaa0e0978e50f3e9",
+    "scripts/cad/escapement-clearance/record_train.py": "374c7f3e967b41232234455d0419c293c70a4164b5526c87ca39df5470ce6fcf"
+  }
+}

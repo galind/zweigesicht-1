@@ -18,8 +18,8 @@ correction: approximately 25 µm floor relief, 31 µm maximum sampled local chan
 and 0.1823% removed body volume. Both swings advance the original escape wheel by
 one tooth pitch. Core original-solid, refined section and supplementary cross-shaft
 checks pass within their recorded sampled scope. This is authored kinematics,
-not a force-driven or mechanically accepted escapement; train coupling,
-physical spring behavior and runtime performance remain open. Experimental
+not a force-driven or mechanically accepted escapement; physical spring behavior
+and runtime performance remain open. Experimental
 CAD and preview stay ignored in `artifacts/escapement-clearance-20261026/`.
 Application code, runtime models and display overrides are unchanged; no push,
 deployment or publication.
@@ -28,9 +28,24 @@ The [interfaces and hairspring follow-up](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPR
 finds no new sampled support interference and a constrained spring deformation
 that preserves both attachments and clears the sampled surrounding geometry.
 Rendered eccentric envelopes also clear, while their original solids remain
-invalid. Integration is still deferred: the escape pinion hits the frozen seconds
-wheel, and coupling that shaft exposes the next frozen train boundary. Next:
-investigate consistent train coupling before runtime spring/timing integration.
+invalid. That study exposed the frozen seconds/third train boundary.
+
+The [train coupling study](docs/TRAIN_COUPLING_STUDY.md) now resolves that boundary
+for a prescribed visual cycle back to barrel II. Five meshes clear 105,461 actual
+source-section configurations across complete tooth-pair periods, plus 75 selected
+whole-solid configurations. No new gear/axis/display-phase correction was needed.
+Full-turn neighbor screens find no increased overlap beyond two existing source
+fits; new train motion also clears the sampled hairspring coil envelope and valid
+balance/pallet rotation bounds. Exact ratios and an accumulated escape angle close
+the cycle without resetting the slower shafts. These scoped results do not prove
+continuous whole-assembly collision freedom or torque-driven operation.
+
+The mainspring/arbor/ratchet boundary remains illustrative: rigid alternatives
+clear the sampled geometry but do not establish unwinding or load sharing. Next:
+choose that representation, then verify timed interpolation, product states and
+rendering before integration. The app, runtime assets and authored poses remain
+unchanged; no push or publication. Local evidence is in
+`artifacts/train-coupling-20261026/`.
 
 ## Integration state
 

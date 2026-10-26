@@ -182,8 +182,12 @@ OPENBLAS_NUM_THREADS=1 .venv-cad/bin/python scripts/cad/escapement-clearance/spr
 .venv-cad/bin/python scripts/cad/escapement-clearance/record_interfaces.py
 ```
 
-Before application integration: qualify the coupled train through its upstream
-boundary, then implement and verify a separate spring deformation representation
+Follow-up: the [train coupling study](TRAIN_COUPLING_STUDY.md) resolves the frozen
+gear-train boundary for prescribed visual motion through barrel II, while keeping
+the mainspring power-source model explicitly unresolved.
+
+Before application integration: choose that power-source representation, then
+implement and verify a separate spring deformation representation
 and smooth timing in the existing view. Fitted-case/hand presets, separation and
 other product states, continuous collision freedom and sustained rendering are
 not established here. Original CAD tolerances prevent treating nominal gaps as
