@@ -1,8 +1,23 @@
 # Current project status
 
-Updated 25 October 2026. Setup: [README](README.md). Technical reference:
+Updated 26 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
+
+## Escapement feasibility investigation
+
+The isolated [clearance study](docs/ESCAPEMENT_CLEARANCE_STUDY.md), starting from
+`8c0a367`, finds an illustrative two-swing rigid cycle with one separate fork-body
+correction: approximately 25 µm floor relief, 31 µm maximum sampled local change,
+and 0.1823% removed body volume. Both swings advance the original escape wheel by
+one tooth pitch. Core original-solid, refined section and supplementary cross-shaft
+checks pass within their recorded sampled scope. This is authored kinematics,
+not a force-driven or mechanically accepted escapement; spring deformation,
+remaining assembly interfaces and runtime performance remain open. Experimental
+CAD and preview stay ignored in `artifacts/escapement-clearance-20261026/`.
+Application code, runtime models and display overrides are unchanged; no push,
+deployment or publication. Next: review the candidate's visual approximation and
+qualify remaining interfaces before considering application integration.
 
 ## Integration state
 
