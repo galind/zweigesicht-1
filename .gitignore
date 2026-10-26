@@ -54,3 +54,7 @@ docs/*_PROMPT.md
 
 # Local bench prototype: maker holder and generated Blender environment.
 explorer/public/bench-local/
+
+# Prescribed movement runtime sidecar; still subject to CAD release gates.
+!explorer/public/models/movement-11e388509c0a.bin
+!explorer/public/models/movement-runtime.json

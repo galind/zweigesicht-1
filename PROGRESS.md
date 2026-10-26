@@ -1,51 +1,52 @@
 # Current project status
 
-Updated 26 October 2026. Setup: [README](README.md). Technical reference:
+Updated 27 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
-## Escapement feasibility investigation
+## Running movement implementation
 
-Active investigation branch: `codex/escapement-clearance-study`.
-`codex/escapement-foundation` and the earlier `codex/running-movement` are
-deprecated for new work and retained as historical evidence. Their findings about
-the unchanged source geometry remain valid; the clearance study supersedes their
-illustrative-animation feasibility status, without establishing mechanical operation.
+Active branch: `codex/escapement-clearance-study`, starting from verified research
+milestone `4785cc2`. The existing assembled view now automatically runs the studied
+escapement, deforming attached hairspring, and exact-ratio train through barrel-II
+drum/lid. Eight seconds per balance oscillation is explicitly illustrative.
+World-axis overlays retain display phases and accumulate escape angle through
+recoil and cycle seams. No new page or playback controls were added.
 
-The isolated [clearance study](docs/ESCAPEMENT_CLEARANCE_STUDY.md), starting from
-`8c0a367`, finds an illustrative two-swing rigid cycle with one separate fork-body
-correction: approximately 25 µm floor relief, 31 µm maximum sampled local change,
-and 0.1823% removed body volume. Both swings advance the original escape wheel by
-one tooth pitch. Core original-solid, refined section and supplementary cross-shaft
-checks pass within their recorded sampled scope. This is authored kinematics,
-not a force-driven or mechanically accepted escapement; physical spring behavior
-and runtime performance remain open. Experimental
-CAD and preview stay ignored in `artifacts/escapement-clearance-20261026/`.
-Application code, runtime models and display overrides are unchanged; no push,
-deployment or publication.
+The [runtime record](docs/RUNNING_MOVEMENT.md) documents implementation, state
+policy, reproduction and limits. Explorer inspection/separation/inventory and
+incomplete Workshop states retain static source geometry. Reassembly and Workshop
+completion resume the clock; hidden tabs suspend without catch-up. Bench parent
+flips carry the visual motion while visitor collisions retain the original static
+internal reference geometry. Mainsprings, arbors, ratchets, barrel I, motion works
+and hands remain static; this is not torque-driven or self-sustained simulation.
 
-The [interfaces and hairspring follow-up](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md)
-finds no new sampled support interference and a constrained spring deformation
-that preserves both attachments and clears the sampled surrounding geometry.
-Rendered eccentric envelopes also clear, while their original solids remain
-invalid. That study exposed the frozen seconds/third train boundary.
+Actual runtime checks cover 8,557 timed escapement poses in source and decoded
+mesh sections and 361 GPU spring poses. No sampled section overlaps; minimum
+rendered fork/jewel gap 1.994 µm and wheel/pallet-jewel gap 2.966 µm. Spring
+attachments remain within 0.6 µm and the coil stays inside the previously checked
+annulus. Another 2,695 terminal-distance queries across those spring poses clear
+the non-attachment region by at least 50.04 µm within the sampled scope. Browser
+checks cover sustained assembled rendering, fitted configurations,
+separation/reassembly, partial and completed Workshop, Bench flip, suspension and
+cleanup. Local evidence stays ignored in `artifacts/running-movement/`.
 
-The [train coupling study](docs/TRAIN_COUPLING_STUDY.md) now resolves that boundary
-for a prescribed visual cycle back to barrel II. Five meshes clear 105,461 actual
-source-section configurations across complete tooth-pair periods, plus 75 selected
-whole-solid configurations. No new gear/axis/display-phase correction was needed.
-Full-turn neighbor screens find no increased overlap beyond two existing source
-fits; new train motion also clears the sampled hairspring coil envelope and valid
-balance/pallet rotation bounds. Exact ratios and an accumulated escape angle close
-the cycle without resetting the slower shafts. These scoped results do not prove
-continuous whole-assembly collision freedom or torque-driven operation.
+Local checks were necessary to validate private-CAD interpolation and the actual
+runtime without an authorized push. See the runtime record and provenance for
+final validation measurements and hashes. All 171 CPU tests, inventory validation,
+typecheck, lint, production build, 16 runtime browser checks and 32 Bench flip
+checks pass locally. Original CAD, GLBs and display
+phase files remain unchanged. The generated sidecar is separate and hash checked.
+No push, PR, merge, deployment or publication. Next: review this local implementation
+and its explicit visual/physical limitations before any release decision.
 
-The mainspring/arbor/ratchet boundary remains illustrative: rigid alternatives
-clear the sampled geometry but do not establish unwinding or load sharing. Next:
-choose that representation, then verify timed interpolation, product states and
-rendering before integration. The app, runtime assets and authored poses remain
-unchanged; no push or publication. Local evidence is in
-`artifacts/train-coupling-20261026/`.
+The [clearance](docs/ESCAPEMENT_CLEARANCE_STUDY.md),
+[interfaces/hairspring](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md) and
+[train](docs/TRAIN_COUPLING_STUDY.md) studies remain the supporting evidence.
+Earlier `codex/escapement-foundation` and `codex/running-movement` branches are
+historical and deprecated for new work. Invalid original solids, comprehensive
+continuous contacts, physical-device qualification, expert mechanical acceptance
+and CAD redistribution permission remain unresolved.
 
 ## Integration state
 

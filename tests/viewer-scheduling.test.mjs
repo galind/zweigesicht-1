@@ -196,3 +196,25 @@ test('first reveal waits for stable dimensions and refits before exposing a resi
   assert.equal(v.frame, 0, 'The extra preparation draw must return to idle');
   v.controls.dispose();
 });
+
+test('assembled animation sustains RAF, while inspection and hidden tabs release it', () => {
+  const f = fixture();
+  Object.assign(f.v.state, {layout: 'assembly', separation: 0, partSpread: 0, reveal: 0, isolated: false, part: null});
+  f.v.contentPrepared = true;
+  let updates = 0, suspensions = 0;
+  f.v.runningMovement = {restore() {}, update(now, eligible) {updates++; return eligible;}, clock: {suspend() {suspensions++;}}};
+  f.v.requestRender();
+  for (let i = 0; i < 10; i++) f.frame();
+  assert.equal(f.draws(), 10); assert.equal(f.callbacks.size, 1);
+  f.document.hidden = true; f.v.onVisibility();
+  assert.equal(f.callbacks.size, 0); assert.equal(suspensions, 1);
+  f.document.hidden = false; f.v.onVisibility(); f.frame();
+  assert.equal(f.callbacks.size, 1);
+  f.v.state.part = 'inspected-part'; f.v.requestRender(); f.settle();
+  assert.equal(f.callbacks.size, 0); assert.ok(updates >= 12);
+  f.v.state.part = null; f.v.requestRender(); f.frame();
+  assert.equal(f.callbacks.size, 1);
+  f.v.state.separation = .5; f.v.requestRender(); f.settle();
+  assert.equal(f.callbacks.size, 0);
+  f.v.controls.dispose();
+});

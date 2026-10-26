@@ -350,3 +350,28 @@ test("Shift alone does not move and does not change vertical thrust", () => {
   a.reset();
   assert.equal(a.keys.size, 0);
 });
+
+test("illustrated internals retain their collision pose through parent turnover", () => {
+  const world = new CollisionWorld();
+  const parent = new THREE.Group();
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 4, 6));
+  mesh.geometry.computeBoundingBox();
+  parent.add(mesh);
+  mesh.updateMatrix();
+  world.add(mesh, mesh.matrix);
+  const original = world.solids[0].bounds.clone();
+  mesh.rotation.z = Math.PI / 3;
+  mesh.updateMatrix();
+  // The visual spring can replace geometry; collisions still own their rest BVH.
+  mesh.geometry = new THREE.SphereGeometry(20);
+  parent.updateMatrixWorld(true);
+  world.sync();
+  assert.ok(world.solids[0].bounds.equals(original));
+  parent.rotation.x = Math.PI / 2;
+  parent.position.set(7, 8, 9);
+  parent.updateMatrixWorld(true);
+  world.sync();
+  const expected = original.clone().applyMatrix4(parent.matrixWorld);
+  assert.ok(world.solids[0].bounds.equals(expected));
+  assert.ok(world.solids[0].inverse.equals(parent.matrixWorld.clone().invert()));
+});

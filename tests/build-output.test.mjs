@@ -1,4 +1,5 @@
 import test from 'node:test';
+import movement from '../explorer/public/models/movement-runtime.json' with { type: 'json' };
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -17,7 +18,7 @@ async function fixture(t) {
   const surfaces = { overview: assets.overview, file: '/models/finish-surfaces-123456abcdef.bin' };
   await fs.writeFile(path.join(models, 'asset-paths.json'), JSON.stringify(assets));
   await fs.writeFile(path.join(models, 'finish-surfaces.json'), JSON.stringify(surfaces));
-  for (const name of ['assembly-manifest.json', 'case-lug-recovery.json', 'diamond-c74ee2731a1f.stl', ...Object.values(assets).map(p => path.basename(p)), path.basename(surfaces.file)]) {
+  for (const name of [path.basename(movement.file), 'movement-runtime.json', 'assembly-manifest.json', 'case-lug-recovery.json', 'diamond-c74ee2731a1f.stl', ...Object.values(assets).map(p => path.basename(p)), path.basename(surfaces.file)]) {
     await fs.writeFile(path.join(models, name), 'fixture');
   }
   await fs.writeFile(path.join(models, 'overview-123456abcdef.glb.gz'), 'compressed');
@@ -137,4 +138,11 @@ test('Bench packaging derives the three payload identities from reviewed manifes
     assert.ok(holder.gzipBytes < holder.sourceGzipBytes);
   }
   assert.match(assets[2].sha256, /^[a-f0-9]{64}$/);
+});
+
+test('missing motion sidecar fails packaging before pruning', async t => {
+  const {output, models} = await fixture(t);
+  await fs.rm(path.join(models, path.basename(movement.file)));
+  await assert.rejects(pruneBuildOutput(output), {code: 'ENOENT'});
+  await fs.access(path.join(models, 'obsolete.bin'));
 });

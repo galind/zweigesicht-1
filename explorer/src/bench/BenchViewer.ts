@@ -14,6 +14,11 @@ import { createDetachedParts } from './DetachedParts';
 import { loadCaseRecovery, recoverCaseSurfaces } from '../viewer/CaseRecovery';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
 import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
+import {
+  MOVEMENT,
+  RunningMovement,
+  loadMovementBuffer,
+} from '../viewer/RunningMovement';
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
 import { assetRequestUrl, sha256 } from '../experience/loading';
 import type { Manifest, Part } from '../experience/catalog';
@@ -70,6 +75,7 @@ function printedPlastic() {
 
 /** Route-owned scene; every input listener and GPU resource has one lifetime. */
 export class BenchViewer {
+  runningMovement?: RunningMovement;
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(68, 1, 0.035, 250);
   renderer: THREE.WebGLRenderer;
@@ -406,6 +412,16 @@ export class BenchViewer {
       }
       if (required.some((p) => !accepted.has(p.id)))
         throw Error('Incomplete movement');
+      const movementBuffer = await loadMovementBuffer();
+      if (this.dead || generation !== this.generation) return;
+      this.runningMovement = new RunningMovement(
+        movementBuffer,
+        new Map(
+          this.station.movement.children
+            .filter((m): m is THREE.Mesh => m instanceof THREE.Mesh)
+            .map((mesh) => [mesh.userData.partId as string, mesh]),
+        ),
+      );
       this.detached = createDetachedParts(catalog, records, surfaces);
       track(this.detached);
       this.scene.add(this.detached);
@@ -479,9 +495,17 @@ export class BenchViewer {
           )
             solids.push(node);
         });
+      const illustrated = new Set([
+        ...MOVEMENT.packets.flatMap((p) => p.members),
+        MOVEMENT.spring.id,
+      ]);
       for (let i = 0; i < solids.length; i++) {
         if (this.dead) return;
-        this.world.add(solids[i]);
+        const mesh = solids[i];
+        this.world.add(
+          mesh,
+          illustrated.has(mesh.userData.partId) ? mesh.matrix : undefined,
+        );
         if (i % 16 === 0)
           await new Promise((resolve) => setTimeout(resolve, 0));
       }
@@ -546,6 +570,8 @@ export class BenchViewer {
       this.emit();
       this.wake();
     } catch (error) {
+      this.runningMovement?.dispose();
+      this.runningMovement = undefined;
       console.error('Bench load', error);
       this.release(loaded);
       if (!this.dead) {
@@ -610,6 +636,7 @@ export class BenchViewer {
     this.emit();
   };
   visibility = () => {
+    this.runningMovement?.clock.suspend();
     if (document.hidden) {
       this.flip?.finish();
       this.updateStation();
@@ -619,6 +646,7 @@ export class BenchViewer {
     } else this.wake();
   };
   contextLost = (e: Event) => {
+    this.runningMovement?.clock.suspend();
     e.preventDefault();
     this.flip?.finish();
     this.updateStation();
@@ -723,10 +751,11 @@ export class BenchViewer {
       this.walker.keys.size > 0 ||
       !this.walker.grounded ||
       this.walker.velocity.lengthSq() > 1e-8;
+    const running = this.runningMovement?.update(now, true) ?? false;
     const activity = this.activity.consume(now, moving);
     const dirty = this.dirty;
     this.dirty = false;
-    if (!activity.active && !dirty && this.walker.grounded) {
+    if (!running && !activity.active && !dirty && this.walker.grounded) {
       this.last = 0;
       this.detail.resetSamples();
       return;
@@ -739,7 +768,7 @@ export class BenchViewer {
     );
     if (activity.elapsed === null) this.detail.resetSamples();
     const shouldRender =
-      dirty || moving || !this.walker.grounded || activity.looked;
+      running || dirty || moving || !this.walker.grounded || activity.looked;
     this.flip?.update(elapsed / 1000);
     if (this.status.ready && (moving || !this.walker.grounded))
       this.walker.update(elapsed / 1000);
@@ -761,8 +790,8 @@ export class BenchViewer {
       if (this.detail.sample(activity.elapsed)) this.applyResolution();
     }
     this.last = now;
-    // A bounded scheduling-only tail ends sampling when a look burst stops.
-    if (activity.active || !this.walker.grounded) this.schedule();
+    // Animation owns continuous rendering; input sampling still ends after its tail.
+    if (running || activity.active || !this.walker.grounded) this.schedule();
     if (!moving && this.walker.grounded) this.last = 0;
   };
   dispose() {
@@ -786,6 +815,7 @@ export class BenchViewer {
       'webglcontextlost',
       this.contextLost,
     );
+    this.runningMovement?.dispose();
     this.release([this.scene, ...this.assets]);
     this.world.solids = [];
     this.world.trees.clear();

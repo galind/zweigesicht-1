@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import movement from '../public/models/movement-runtime.json' with { type: 'json' };
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -31,6 +32,7 @@ export async function pruneBuildOutput(output, { localBench = true } = {}) {
   if (surfaces.overview !== assets.overview)
     throw new Error('Surface/overview mismatch');
   const required = [
+    'movement-runtime.json',
     'assembly-manifest.json',
     'case-lug-recovery.json',
     'asset-paths.json',
@@ -39,6 +41,7 @@ export async function pruneBuildOutput(output, { localBench = true } = {}) {
     overview,
     catalog,
     finish,
+    asset(movement.file, /^\/models\/movement-[a-f0-9]{12}\.bin$/),
   ];
   // Incomplete output is an error, never a successful but unpruned release.
   await Promise.all(required.map((name) => fs.access(path.join(models, name))));

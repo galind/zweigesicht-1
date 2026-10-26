@@ -39,7 +39,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, fixedViewDirection, motionEase, MOTION, wheelDisplayMatrix, ...graphics(globals), console: {error() {}}, ...globals,
+    module, THREE, performance, document: {hidden: false, addEventListener() {}, removeEventListener() {}}, loadMovementBuffer: async () => new ArrayBuffer(0), RunningMovement: class { restore() {} dispose() {} update() { return false; } clock = { suspend() {} }; }, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, fixedViewDirection, motionEase, MOTION, wheelDisplayMatrix, ...graphics(globals), console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }
@@ -120,7 +120,7 @@ test('Workshop load and reload apply the reviewed wheel phase once to seat and m
 });
 
 test('all required load failures retain a disabled session, dispose successful siblings, and retry', async () => {
-  for (const failure of ['overview', 'catalog', 'diamond', 'surfaces', 'metadata']) {
+  for (const failure of ['overview', 'catalog', 'diamond', 'surfaces', 'metadata', 'motion']) {
     let failing = true;
     const resources = [];
     const produce = (asset) => async () => {
@@ -131,6 +131,7 @@ test('all required load failures retain a disabled session, dispose successful s
       overview: produce('overview'), catalog: produce('catalog'), diamond: produce('diamond'),
       surfaces: async () => { if (failing && failure === 'surfaces') throw Error('Annotation failure'); return new Map(); },
     });
+    globals.loadMovementBuffer = async () => { if (failing && failure === 'motion') throw Error('Motion integrity failure'); return new ArrayBuffer(0); };
     const fetch = globals.fetch;
     globals.fetch = async (...args) => failing && failure === 'metadata' ? {ok: false} : fetch(...args);
     const v = fixture(globals);

@@ -31,7 +31,9 @@ three experiences. Explorer retains its raw assembled matrix and applies the
 phase as a display matrix, including spread layout. Workshop retains base target
 poses and derives corrected seat bounds at load. Bench builds collision from the
 same corrected mesh. See the [latest contact review](REMAINING_WHEEL_CONTACT_REVIEW.md); this is
-a set of static placement exceptions, not a running-gear model.
+a set of static placement exceptions. `RunningMovement.ts` applies the separate
+prescribed-motion overlay after those poses; see [running movement](RUNNING_MOVEMENT.md)
+for the clock, geometry ownership, product-state policy and validation.
 
 `CasePose.ts` stages upper withdrawal, lower withdrawal, CAD-X case turnover, lower reseating and upper reseating. Camera and attachments share an inverse rotation frame, leaving source case/movement matrices intact. Exact endpoints reuse original counterpart occurrences. Reversal continues from the displayed phase; reduced motion snaps. Hidden-case turns skip invisible withdrawal/reseating time. Lug disassembly vectors follow the current attachment frame, and camera refits defer during turnover. The four unresolved locking pins stay seated. Detailed constraints are in [CAD notes](CAD_NOTES.md).
 

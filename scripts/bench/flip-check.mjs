@@ -391,7 +391,10 @@ try {
         errors = [];
       for (const solid of b.world.solids) {
         if (solid.mesh.userData.stationId !== "movement") continue;
-        const identity = solid.inverse.clone().multiply(solid.mesh.matrixWorld);
+        const expected = solid.referencePose
+          ? solid.mesh.parent.matrixWorld.clone().multiply(solid.referencePose)
+          : solid.mesh.matrixWorld;
+        const identity = solid.inverse.clone().multiply(expected);
         if (identity.elements.some((v, i) => Math.abs(v - (i % 5 === 0 ? 1 : 0)) > 1e-10))
           errors.push(solid.mesh.name);
         if (
@@ -409,7 +412,7 @@ try {
       samples.push({ elapsed: f.elapsed, contacts, errors });
     }
     row(
-      "animation collision matrices align",
+      "collision reference matrices follow holder turnover",
       samples.every((s) => !s.errors.length),
       samples,
     );
@@ -419,7 +422,7 @@ try {
       samples.filter((s) => s.contacts.length),
     );
     row(
-      "reviewed local matrices never change",
+      "turnover leaves internal local matrices unchanged during synchronous fixture",
       b.station.movement.children.every((m, i) =>
         m.matrix.toArray().every((v, j) => v === matrices[i][j]),
       ),

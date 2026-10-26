@@ -1,0 +1,191 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import crypto from "node:crypto";
+import * as THREE from "../explorer/node_modules/three/build/three.module.js";
+import {
+  MOVEMENT,
+  movementPose,
+  MovementClock,
+  RunningMovement,
+  RunningSpring,
+  shaftMatrix,
+  loadMovementBuffer,
+} from "../explorer/src/viewer/RunningMovement.ts";
+import { wheelDisplayMatrix } from "../explorer/src/viewer/WheelDisplayPose.ts";
+const read = (p) => JSON.parse(fs.readFileSync(new URL(p, import.meta.url), "utf8"));
+const manifest = read("../explorer/public/models/assembly-manifest.json");
+const train = read("../assets/source-manifest/train-coupling-study.json");
+const data = fs.readFileSync(new URL("../explorer/public" + MOVEMENT.file, import.meta.url));
+const buffer = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
+const pose = (t) => movementPose(t, { balance: 0, pallet: 0, escape: 0 });
+const close = (a, b, eps = 1e-9) => assert.ok(Math.abs(a - b) < eps, `${a} ≠ ${b}`);
+function fixture() {
+  const meshes = new Map();
+  for (const id of [...MOVEMENT.packets.flatMap((p) => p.members), MOVEMENT.spring.id]) {
+    const p = manifest.instances.find((p) => p.id === id),
+      mesh = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshStandardMaterial());
+    const source = new THREE.Matrix4().set(...p.worldTransform.flat());
+    mesh.matrixAutoUpdate = false;
+    mesh.matrix.copy(wheelDisplayMatrix(id, source) ?? source);
+    meshes.set(id, mesh);
+  }
+  return { meshes, run: new RunningMovement(buffer, meshes) };
+}
+test("runtime sidecar integrity and exact evidence memberships, pivots and ratios", () => {
+  assert.equal(crypto.createHash("sha256").update(data).digest("hex"), MOVEMENT.sha256);
+  assert.equal(data.length, MOVEMENT.byteLength);
+  assert.equal(MOVEMENT.sourceSha256, manifest.source.sha256);
+  assert.equal(MOVEMENT.packets[0].members.length, 9);
+  assert.equal(MOVEMENT.packets[1].members.length, 6);
+  for (const p of train.kinematics.packets) {
+    const actual = MOVEMENT.packets.find((a) => a.name === p.name);
+    assert.deepEqual(
+      actual.members,
+      p.members.map((m) => m.id),
+    );
+    assert.deepEqual(actual.pivot, p.worldPivotMm);
+    const [num, den = 1] = p.ratioToEscape.split("/").map(Number);
+    assert.deepEqual(actual.ratio, [num, den]);
+  }
+});
+test("multiple cycles, turn boundary and recoil retain continuous slower-shaft phases", () => {
+  for (const n of [0, 1, 19, 20, 199, 2807999]) {
+    const start = pose(n * 8),
+      end = pose((n + 1) * 8);
+    close(end.escape - start.escape, 18, 1e-7);
+    close(start.balance, end.balance);
+    close(start.pallet, end.pallet);
+    for (const p of MOVEMENT.packets.slice(2)) {
+      close(
+        ((end.escape - start.escape) * p.ratio[0]) / p.ratio[1],
+        (18 * p.ratio[0]) / p.ratio[1],
+        1e-7,
+      );
+      const before = pose((n + 1) * 8 - 1e-6),
+        after = pose((n + 1) * 8 + 1e-6);
+      close(
+        (before.escape * p.ratio[0]) / p.ratio[1],
+        (after.escape * p.ratio[0]) / p.ratio[1],
+        1e-7,
+      );
+    }
+  }
+  let recoils = 0;
+  for (let i = 1; i <= 16000; i++)
+    if (pose(i / 2000).escape < pose((i - 1) / 2000).escape - 1e-9) recoils++;
+  assert.ok(recoils > 0);
+});
+test("clock is frame-rate independent and resumes without hidden catch-up", () => {
+  for (const fps of [15, 30, 60, 120]) {
+    const c = new MovementClock();
+    for (let i = 0; i <= fps * 24; i++) c.advance(1000 + (i * 1000) / fps, true);
+    close(c.seconds, 24);
+  }
+  const c = new MovementClock();
+  c.advance(0, true);
+  c.advance(16000, true);
+  close(c.seconds, 16);
+  c.suspend();
+  c.advance(500000, true);
+  close(c.seconds, 16);
+  c.advance(501000, true);
+  close(c.seconds, 17);
+  c.advance(502000, false);
+  c.advance(600000, true);
+  close(c.seconds, 17);
+});
+test("actual controller retains display phases, handles reversed axes and restores detached geometry", () => {
+  const { meshes, run } = fixture(),
+    bases = new Map([...meshes].map(([id, m]) => [id, m.matrix.clone()]));
+  const originalSpring = meshes.get(MOVEMENT.spring.id).geometry;
+  run.update(0, true);
+  run.update(195000, true);
+  for (const packet of MOVEMENT.packets) {
+    const deg =
+      packet.name === "balance"
+        ? run.pose.balance
+        : packet.name === "pallet"
+          ? run.pose.pallet
+          : (run.pose.escape * packet.ratio[0]) / packet.ratio[1];
+    for (const id of packet.members) {
+      const expected = shaftMatrix(new THREE.Matrix4(), packet.pivot, deg).multiply(bases.get(id));
+      for (let i = 0; i < 16; i++) close(meshes.get(id).matrix.elements[i], expected.elements[i]);
+    }
+    const [id, ...others] = packet.members;
+    for (const other of others) {
+      const before = bases.get(id).clone().invert().multiply(bases.get(other));
+      const after = meshes.get(id).matrix.clone().invert().multiply(meshes.get(other).matrix);
+      before.elements.forEach((v, i) => close(v, after.elements[i]));
+    }
+  }
+  assert.notEqual(meshes.get(MOVEMENT.spring.id).geometry, originalSpring);
+  run.update(196000, false);
+  for (const [id, m] of meshes) assert.ok(m.matrix.equals(bases.get(id)));
+  assert.equal(meshes.get(MOVEMENT.spring.id).geometry, originalSpring);
+  let disposals = 0;
+  run.fork.addEventListener("dispose", () => disposals++);
+  run.spring.geometry.addEventListener("dispose", () => disposals++);
+  run.dispose();
+  run.dispose();
+  assert.equal(disposals, 2);
+  assert.equal(run.update(200000, true), false);
+});
+test("spring attachment neighborhoods are rigid at interpolated angles, normals and topology remain valid", () => {
+  const spring = new RunningSpring(buffer),
+    g = spring.geometry,
+    positions = g.getAttribute("position"),
+    normals = g.getAttribute("normal");
+  const weights = new Float32Array(
+    buffer,
+    MOVEMENT.spring.weights.offset * 4,
+    MOVEMENT.spring.weights.count,
+  );
+  const world = new THREE.Matrix4().set(...MOVEMENT.spring.sourceMatrix.flat());
+  spring.update(0);
+  const source = spring.points.slice();
+  for (const deg of [-177.614, -123.17, -0.47, 2.385806786849, 67.41, 181.37]) {
+    spring.update(deg);
+    const a = (deg * Math.PI) / 180,
+      c = Math.cos(a),
+      s = Math.sin(a);
+    for (let i = 0; i < weights.length; i++)
+      if (weights[i] === 0 || weights[i] === 1) {
+        const x = source[2 * i],
+          y = source[2 * i + 1] + 10;
+        close(spring.points[2 * i], weights[i] ? c * x - s * y : x, 2e-6);
+        close(spring.points[2 * i + 1], (weights[i] ? s * x + c * y : y) - 10, 2e-6);
+      }
+    for (let i = 0; i < positions.count; i++) assert.ok(Number.isFinite(positions.getX(i)));
+    for (let i = 0; i < MOVEMENT.spring.pointCount * 8; i += 43)
+      close(Math.hypot(normals.getX(i), normals.getY(i), normals.getZ(i)), 1, 1e-6);
+    // Actual GPU ribbon retains both thickness and width under source's reversed axis.
+    for (let i = 0; i < MOVEMENT.spring.pointCount; i += 71) {
+      const a = new THREE.Vector3().fromBufferAttribute(positions, i * 8).applyMatrix4(world);
+      const b = new THREE.Vector3().fromBufferAttribute(positions, i * 8 + 1).applyMatrix4(world);
+      close(a.distanceTo(b), 0.035, 1e-6);
+    }
+  }
+  const ps = positions.array,
+    ns = normals.array;
+  for (let k = 0; k < (MOVEMENT.spring.pointCount - 1) * 24; k += 3) {
+    const ids = [g.index.array[k], g.index.array[k + 1], g.index.array[k + 2]];
+    const [a, b, c] = ids.map((i) => new THREE.Vector3().fromArray(ps, i * 3));
+    const face = b.sub(a).cross(c.sub(a));
+    assert.ok(face.dot(new THREE.Vector3().fromArray(ns, ids[0] * 3)) > 0, "outward winding");
+  }
+  g.dispose();
+});
+test("loader rejects missing and corrupt motion assets", async () => {
+  const old = globalThis.fetch;
+  try {
+    globalThis.fetch = async () => ({ ok: false });
+    await assert.rejects(loadMovementBuffer(), /unavailable/);
+    globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(16) });
+    await assert.rejects(loadMovementBuffer(), /integrity/);
+    globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => buffer });
+    assert.equal(await loadMovementBuffer(), buffer);
+  } finally {
+    globalThis.fetch = old;
+  }
+});

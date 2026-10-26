@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b"
+  },
+  "baselineCommit": "4785cc2",
+  "runtimeInstalled": true,
+  "mechanicalCycleAccepted": false,
+  "inputs": {
+    "assets/authored/running-movement.json": "ce8eef3e57f2a378d54e1e66011a670f0472c3a4aefc90842e39a592586c116d",
+    "assets/source-manifest/escapement-clearance-study.json": "289194e24b3464dfd35276a7bce17ae48b070ffdb4e71898e0725f0dc516e262",
+    "artifacts/escapement-clearance-20261026/cycle.json": "a115faf11562d732e763523245875f9ef084be9ccf4ac63154342af743b55e99",
+    "artifacts/escapement-clearance-20261026/candidate-fork.brep": "75d85945c20cd0d69b33d34a8b9c641e84ba70840c57b9620d336cbf59a7057b",
+    "assets/source-manifest/escapement-interfaces-study.json": "72871113c574a14ef1acb396f72d9eeea456bfcb22d0100f018b1df194df9767",
+    "artifacts/escapement-interfaces-20261026/spring-curves.npz": "1991d04a745118320186bcc44bcc2b60e1d49b8edff40017f4abd683b6817847",
+    "assets/source-manifest/train-coupling-study.json": "f039d63fbd4b5f3c56b11144b975e3d217ff61f5d543f5d9f43a94a8c88056f6"
+  },
+  "generated": {
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9"
+  },
+  "generator": "scripts/cad/escapement-clearance/export_runtime.py",
+  "limitations": [
+    "Prescribed visual animation; no dynamics or operating-frequency claim",
+    "Mainsprings, arbors, ratchets, barrel I, motion works and hands remain static",
+    "Redistribution and publication gates remain uncleared"
+  ],
+  "report": "docs/RUNNING_MOVEMENT.md",
+  "validation": {
+    "date": "2026-10-27",
+    "cpuTests": 171,
+    "timedRuntimeConfigurations": 8557,
+    "minimumSourceSectionGapsMm": {
+      "fork": 0.0019943471164867404,
+      "wheel": 0.00296993497967798
+    },
+    "minimumRuntimeMeshSectionGapsMm": {
+      "fork": 0.0019942965317257446,
+      "wheel": 0.00296595362056866
+    },
+    "springConfigurations": 361,
+    "minimumInterturnGapMm": 0.0940513315229245,
+    "maximumAttachmentErrorMm": 5.278600382704503e-7,
+    "maximumTotalCenterlineLengthChangeMm": 0.00027027180297523046,
+    "maximumFreshSolveDifferenceMm": 0.00009170016229980548,
+    "terminalDistanceQueries": 2695,
+    "terminalConservativeGapLowerBoundMm": 0.05004449263305499,
+    "browserChecks": 16,
+    "benchFlipChecks": 32,
+    "sustainedRendering": {
+      "start": {
+        "seconds": 2.0831999999999975,
+        "escape": 4.948709443683922,
+        "render": 117,
+        "memory": {
+          "geometries": 136,
+          "textures": 8
+        }
+      },
+      "end": {
+        "seconds": 27.0987999999997,
+        "escape": 63.40000000000039,
+        "render": 1618,
+        "memory": {
+          "geometries": 136,
+          "textures": 8
+        }
+      },
+      "p50": 16.69999999999891,
+      "p95": 16.700000000000728,
+      "frames": 1501
+    },
+    "build": "Local production build and asset pruning passed",
+    "scope": "Prescribed visual motion; sampled geometry and desktop runtime evidence, not physical or publication acceptance"
+  },
+  "implementationSha256": {
+    "explorer/src/viewer/RunningMovement.ts": "ac2a062ab9f108c3dba644644341c7d73357fb56abb1a56d64e7b92e86e7e75b",
+    "explorer/src/viewer/MovementViewer.ts": "242db020770238576060a83fb874bc8a60f0ebea428dd31128e3d81587e96529",
+    "explorer/src/play/PlayViewer.ts": "1b5cb8984f4a9da842440379f65152901257e5395caff6d1cb01434517359c6b",
+    "explorer/src/bench/BenchViewer.ts": "43c57faa5bbb7b65a3f57d652c0268b8be374f685b657a55262d1290b2afe6f8",
+    "explorer/src/bench/physics.ts": "d52c31866a304e6ca69f35cb1d037ed30fad068d434220079c5cd76444a8589f",
+    "explorer/scripts/prune-build-output.mjs": "6e29a0499e0c3a30e3191a440bf44abb965386d5b1649e72094e7400634ef75e",
+    "scripts/cad/escapement-clearance/export_runtime.py": "0e7ae3d31826d226a6ae3cfa8b53b7fef0b0e2eb24b68093ddb537a26dce9767",
+    "scripts/cad/escapement-clearance/check_runtime.py": "da2e8a580e4e71ea43184e048fe8634e46c07e6adab117553b6ed5c27ba289f9",
+    "scripts/cad/escapement-clearance/check_runtime_meshes.py": "b6b05bcc8d7a6569e19ebe5be97191084d045321a39dee5cb95fc54698217c02",
+    "scripts/movement/sample-runtime.mjs": "46704278f3177371d824ab8ad4efee216cc6151a778ad93b6d9079a09ede2e7b",
+    "scripts/movement/export-meshes.mjs": "402dc664ad2763f35d1f132119311165c2154df8fc35cb5df28aa4386d963521",
+    "scripts/movement/browser-check.mjs": "a00e6bbad90ae6af9e628923ecc750a46f3772865d6d0ecc7bb558ac709d650e",
+    "scripts/movement/record-validation.mjs": "b1f76888e7156d8e190fd9b26ca5d0a9bd67ee691dbb16202e168f5cebb60644",
+    "scripts/bench/flip-check.mjs": "ff686c5b121ead92ce041a06a5babad53b1db1bf4535c7f3e8ead903581fe5bc"
+  },
+  "localEvidenceSha256": {
+    "artifacts/running-movement/geometry-check.json": "7c1194641cf7f80bbe7de8b5afd2da59e07e2c79a9d13bc316ea8c5bf59c9751",
+    "artifacts/running-movement/mesh-check.json": "6257b6364cf449eb15b96b31d05dfa8b8cdae4f4732a641a7b6e5cd65e8f624c",
+    "artifacts/running-movement/browser-report.json": "585f6d0f180a3902936edf8dbae1408e48cb5cd81fa0939f2af9f70dbcd2e393",
+    "artifacts/running-movement/cpu-tests.txt": "9ef8c28a2ff1dc2f7154ebd8aeec9af27593c297e78cf7a4376f09a608a91399",
+    "artifacts/running-movement/focused-tests.txt": "167f0d7092af41e44f18f4dd547332cf4f039821136dc022cacb032e90599516",
+    "artifacts/running-movement/sample-hashes.json": "5cab69a216e6b4e3adca255357c311371584861ca2a17745d9ed9475f078f3fd",
+    "artifacts/running-movement/inventory.txt": "660e74c5b37f01676ad09195b74c88de2dfa95022affd7cdceecfe61ea7d670b",
+    "artifacts/running-movement/build.txt": "d68e46f2a56a66f0fe911f2c58c6e27b8553fe84ebde7ea902ab5976bbb41d91",
+    "artifacts/running-movement/bench-flip/flip-report.json": "f254bce9e216f64442a77cb87916638a23574a194d04b8064f3203df74273f97",
+    "artifacts/running-movement/assembled.png": "713ac82698ec7e85ea53f23cba42ba66663695040a08475c0468d7dc5e4720ff",
+    "artifacts/running-movement/fitted-front.png": "ab90eb2c73ccbf5648c659f848272436daf253fac8b022cf2aadbdd7f7656e3f",
+    "artifacts/running-movement/fitted-back.png": "8a5ce96e46e0e2ffc93c0ff24693a490e6abaa34a8f7b4d5415f10c5b383b02d",
+    "artifacts/running-movement/escapement-0.png": "11fefb7ffac79821083951fced72c99fcd7714e608b82ac8805a63c2d5f922eb",
+    "artifacts/running-movement/escapement-4.png": "39a3ce1f0bd751524e47af680b8133006ceba421bd69cd2a36f4f70531193632",
+    "artifacts/running-movement/workshop-partial.png": "937552074db9623445f50cf7d35251d2ca879be2e3cf2c2a819a74456a5d9ea3",
+    "artifacts/running-movement/isolated.png": "5ed10e378e8d678ee202e067d17ba9c4f96d6d37e0e693fa86da6206c522946a",
+    "artifacts/running-movement/bench.png": "9605cd4c4a46a43297c7db168d8f7fc32c90f288a64a214e0574591c9d54363f"
+  }
+}
