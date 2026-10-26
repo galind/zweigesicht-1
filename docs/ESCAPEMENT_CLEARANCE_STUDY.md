@@ -6,6 +6,11 @@ a solved force-driven escapement or a mechanically accepted operating cycle.**
 The application, runtime models, authored display poses and original CAD are
 unchanged. Nothing has been pushed, deployed or published by this investigation.
 
+The subsequent [interfaces and hairspring investigation](ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md)
+extends the support checks and establishes a separate geometric spring candidate.
+It also finds that the escape pinion cannot run indefinitely against a frozen
+train. Integration remains deferred pending train coupling qualification.
+
 Continue investigation on `codex/escapement-clearance-study`. The earlier
 `codex/escapement-foundation` and `codex/running-movement` branches are deprecated
 for new work and retained for historical evidence and reproduction. This study

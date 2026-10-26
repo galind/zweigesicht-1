@@ -18,12 +18,19 @@ correction: approximately 25 µm floor relief, 31 µm maximum sampled local chan
 and 0.1823% removed body volume. Both swings advance the original escape wheel by
 one tooth pitch. Core original-solid, refined section and supplementary cross-shaft
 checks pass within their recorded sampled scope. This is authored kinematics,
-not a force-driven or mechanically accepted escapement; spring deformation,
-remaining assembly interfaces and runtime performance remain open. Experimental
+not a force-driven or mechanically accepted escapement; train coupling,
+physical spring behavior and runtime performance remain open. Experimental
 CAD and preview stay ignored in `artifacts/escapement-clearance-20261026/`.
 Application code, runtime models and display overrides are unchanged; no push,
-deployment or publication. Next: review the candidate's visual approximation and
-qualify remaining interfaces before considering application integration.
+deployment or publication.
+
+The [interfaces and hairspring follow-up](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md)
+finds no new sampled support interference and a constrained spring deformation
+that preserves both attachments and clears the sampled surrounding geometry.
+Rendered eccentric envelopes also clear, while their original solids remain
+invalid. Integration is still deferred: the escape pinion hits the frozen seconds
+wheel, and coupling that shaft exposes the next frozen train boundary. Next:
+investigate consistent train coupling before runtime spring/timing integration.
 
 ## Integration state
 
