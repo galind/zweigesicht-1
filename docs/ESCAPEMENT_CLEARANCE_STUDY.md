@@ -6,6 +6,12 @@ a solved force-driven escapement or a mechanically accepted operating cycle.**
 The application, runtime models, authored display poses and original CAD are
 unchanged. Nothing has been pushed, deployed or published by this investigation.
 
+Continue investigation on `codex/escapement-clearance-study`. The earlier
+`codex/escapement-foundation` and `codex/running-movement` branches are deprecated
+for new work and retained for historical evidence and reproduction. This study
+supersedes their illustrative-animation feasibility status; it does not invalidate
+their source-geometry obstruction evidence or resolve force-driven operation.
+
 The study starts at `8c0a36779dc1818bc9b3c9c5c5568fbcbf489ad1` and uses the
 source-hashed evidence/cache retained from `codex/escapement-foundation`, commit
 `e5726231760cbc734d77e571bae215b528242acc`. All 55 historical component identities

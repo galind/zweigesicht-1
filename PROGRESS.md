@@ -6,6 +6,12 @@ Updated 26 October 2026. Setup: [README](README.md). Technical reference:
 
 ## Escapement feasibility investigation
 
+Active investigation branch: `codex/escapement-clearance-study`.
+`codex/escapement-foundation` and the earlier `codex/running-movement` are
+deprecated for new work and retained as historical evidence. Their findings about
+the unchanged source geometry remain valid; the clearance study supersedes their
+illustrative-animation feasibility status, without establishing mechanical operation.
+
 The isolated [clearance study](docs/ESCAPEMENT_CLEARANCE_STUDY.md), starting from
 `8c0a367`, finds an illustrative two-swing rigid cycle with one separate fork-body
 correction: approximately 25 µm floor relief, 31 µm maximum sampled local change,
