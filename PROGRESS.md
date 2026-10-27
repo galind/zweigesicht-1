@@ -4,6 +4,17 @@ Updated 27 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
+## Dial washer visibility
+
+The thin brass dial washer (d121, movement occurrence 9) now follows the shared
+dial-fitting visibility rule: hidden on the bare movement and shown with loaded
+dials. Inventory and the undialed Bench use the same membership; direct source
+inspection and Workshop placement remain available. Existing review expectations
+now include the washer and the Bench's 218 rendered movement/crown leaves.
+
+Source and diff review only; no local tests, build or browser automation were run.
+Next: validate through GitHub CI when a push is authorized. No push or publication.
+
 ## Reverse-face mesh diagnosis
 
 Research from clean `ac6e37c` separates original source poses, authored phases

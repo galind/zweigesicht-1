@@ -12,12 +12,12 @@ bridge-up and dial-side-up. The original matching holder is exchanged while the
 movement is raised, as explicitly chosen by the owner. The former simultaneous
 pair and its aisle are superseded. Explorer and Workshop retain separate resources.
 
-## Current scene and resting poses — 25 October 2026
+## Current scene and resting poses — 27 October 2026
 
-One assembly contains **215 movement leaves and four original crown leaves**.
+One assembly contains **214 movement leaves and four original crown leaves**.
 Its source-relative matrices, all 18 reviewed phases, materials, crowns and
 geometry remain unchanged. The uncased, undialed presentation continues to omit
-three case clamps, their screws and two radial dial-retaining screws under the
+three case clamps, their screws, two radial dial-retaining screws and the thin dial washer under the
 [shared assembly rule](CAD_NOTES.md#conditional-assembly-fittings--24-october-2026).
 The single station is at **(0, 0, −7) mm**. `atelier-layout.json` stores its position
 and the two resting specifications; those specifications are not two instances.

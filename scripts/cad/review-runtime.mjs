@@ -1418,5 +1418,5 @@ for(const id of fittingIds) {
   assert.equal(v.renderParts.get(id).mesh.visible,true);
   assert.ok(v.renderParts.get(id).assembled.equals(fittingSources.get(id)));
 }
-results.push({check:'six case mounts and two radial dial retainers follow all four assembly configurations, whole-root selection and missing host assets; direct source-part inspection and original matrices remain intact',status:'pass'});
+results.push({check:'six case mounts, two radial dial retainers and the thin dial washer follow all four assembly configurations, whole-root selection and missing host assets; direct source-part inspection and original matrices remain intact',status:'pass'});
 console.log(JSON.stringify({scope:'CPU source/asset regression checks; not browser/WebGL/device QA',results},null,2));

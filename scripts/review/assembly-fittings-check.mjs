@@ -110,7 +110,7 @@ try {
     );
     check(
       "inventory follows fitted dial state " + dialsVisible,
-      s.mounts.length === 0 && s.retainers.length === (dialsVisible ? 2 : 0),
+      s.mounts.length === 0 && s.retainers.length === (dialsVisible ? rules.dialRetainers.length : 0),
       s,
     );
   }
@@ -130,8 +130,8 @@ try {
     };
   }, rules);
   check(
-    "both walking stations omit all eight fittings from rendering and collision",
-    bench.counts.every((n) => n === 219) && !bench.rendered.length && !bench.colliders,
+    "walking movement omits all nine fittings from rendering and collision",
+    bench.counts.every((n) => n === 218) && !bench.rendered.length && !bench.colliders,
     bench,
   );
   // Load completed old saves to verify migration through the actual route UI,

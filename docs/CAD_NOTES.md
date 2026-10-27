@@ -97,12 +97,14 @@ exact source occurrences, independently of shared definition names:
   associate these screw axes with their clamp seats.
 - The two radial dial-retaining screws (d201, mainplate occurrences 11/12) require
   the central dial. Other occurrences of d189 or d201 are unaffected.
+- The thin brass dial washer (d121, movement occurrence 9) also requires the
+  central dial, as requested by the owner on 27 October 2026.
 
 The explorer follows actual loaded case/dial availability, including toggles,
-partial load failure and whole-movement selection. Inventory retains dial screws
+partial load failure and whole-movement selection. Inventory retains dial screws and the washer
 only with the fitted dials; the original catalog still supports explicit
 individual-part inspection. The walking movement remains uncased and undialed,
-so its two resting poses omit all eight leaves from rendering and collision.
+so its two resting poses omit all nine leaves from rendering and collision.
 The separately stored case and dials on the mat do not enable fittings on the
 working movement. Workshop has no case and therefore omits the six clamps/fasteners; its two dial screws remain explicit
 placements after the central dial. This is a presentation/configuration decision,
