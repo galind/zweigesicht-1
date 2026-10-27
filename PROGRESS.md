@@ -4,6 +4,31 @@ Updated 27 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
+## Friction connection source follow-up
+
+Research-only follow-up from clean `a62c820`: [the interface report](docs/FRICTION_CONNECTIONS.md)
+compares four independently downloaded maker STEP components with the original
+assembly. All four pairs have zero-volume Boolean differences in both directions
+and valid inputs/results. The center interface has matching 0.375 mm radius
+shaft lands and bore; the cross-face shaft has an analytic taper interfering
+with pinion 217's bore. The standalone models reproduce both fits.
+
+A same-world-direction 1:1 normal-running drive at each interface is supported
+by the fitted geometry and display function, but **no explicit maker constraint
+was found**. Center friction treatment and the cross-face fit's permanent versus
+slipping character remain undocumented in the inspected sources. Missing torque
+data alone does not make the sticking ratio unknown; it limits physical claims.
+No source was found that clears either previously measured reverse mesh conflict.
+
+The app and authored assets remain byte-identical to `a62c820`; no new packet
+moves. Focused local CAD comparison was explained before execution. No app
+tests, build or browser automation were run for this research-only pass.
+[Provenance](assets/source-manifest/friction-connections.json) records primary
+URLs/hashes, exact occurrences and evidence limits; downloads remain ignored.
+Next: obtain an explicit maker drawing/instruction for each joint's normal and
+setting states, then separately resolve the reverse running meshes. No maker
+message, push, PR, deployment or publication.
+
 ## Motion-work extension investigation
 
 Reviewed from clean `073a870` on `codex/escapement-clearance-study` after the balance
@@ -29,7 +54,7 @@ before execution because no push is authorized; app runtime, phases, timing and
 motion assets remain byte-identical to `073a870`. The local evidence is ignored
 under `artifacts/motion-works/`; [provenance](assets/source-manifest/motion-works-study.json)
 records the decision and hashes. No push, PR, merge, deployment or publication.
-Next: obtain source-specific friction/shaft connection evidence and resolve both
+The source follow-up above refines this next action: obtain explicit joint-state evidence and resolve both
 reverse running contacts through a separately reviewed proposal before enabling
 any dependent display packet. The existing prescribed movement remains available
 locally for review; this milestone is an investigation, not a completed extension.

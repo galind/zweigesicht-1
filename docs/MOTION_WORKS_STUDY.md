@@ -1,5 +1,11 @@
 # Motion-work running review — 27 October 2026
 
+Follow-up: [the independent component/fit investigation](FRICTION_CONNECTIONS.md)
+confirms both mating geometries against separate maker STEP files and refines
+the friction evidence boundary. It supports an intended 1:1 normal-running
+interpretation without finding an explicit maker joint-state constraint. The
+running-clearance findings below and unchanged application decision still apply.
+
 **No additional packet is enabled.** The seven requested candidates contain 13
 source leaves. The three front-side gear interfaces clear the conditional running
 sweep, but that does not establish a driven front train. The center/cannon friction
