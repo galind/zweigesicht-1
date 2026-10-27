@@ -1,0 +1,727 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "baselineCommit": "ac6e37c5bf11c813e3b4dfddd20b0e624dbdb590",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "decision": {
+    "183/216": "Source phase incompatibility under prescribed 8:24 rotation; no authored phase offsets; isolated phase clears reviewed source polygons and selected solids",
+    "217/187": "Source phase incompatibility partly relieved by authored hour phase; isolated phase clears reviewed source polygons and selected solids with only about 45 nm nominal sampled clearance",
+    "runtime": "No transform fault detected: independent point and witness transforms agree with production controller",
+    "appChanged": false,
+    "installedCandidatePhases": false
+  },
+  "comparisons": {
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "phaseSha256": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "ocpVersion": "7.9.3.1",
+    "scope": "Source/display/isolated phase full-material-period planar sweeps and selected whole solids; no application edits or continuous whole-solid acceptance",
+    "pairs": [
+      {
+        "pair": [
+          183,
+          216
+        ],
+        "teeth": [
+          8,
+          24
+        ],
+        "sectionZMm": -5.2,
+        "centerDistanceMm": 2.3999999999999897,
+        "authoredWorldPhasesDegrees": [
+          -0.0,
+          0.0
+        ],
+        "freshSourceSectionHausdorffMm": [
+          0.0,
+          0.0
+        ],
+        "toothSymmetryDiagnostic": [
+          {
+            "exteriorOnePitchHausdorffMm": 9.34256953120651e-10,
+            "maximumHoleRadiusMm": 0.20000000047528918,
+            "otherBodyMinimumReachRadiusMm": 0.4109999995217688
+          },
+          {
+            "exteriorOnePitchHausdorffMm": 1.1198874909191142e-09,
+            "maximumHoleRadiusMm": 1.35,
+            "otherBodyMinimumReachRadiusMm": 1.6260000003953168
+          }
+        ],
+        "cases": [
+          {
+            "label": "source",
+            "offsetWorldDegrees": 0.0,
+            "subdivisions": 192,
+            "configurations": 4609,
+            "fastPeriodDegrees": 1080.0,
+            "followerPeriodDegrees": -360.0,
+            "minimumSampledGapMm": 0.0,
+            "maximumOverlapAreaMm2": 0.00031303413008725153,
+            "overlapConfigurations": 2736,
+            "worstOverlapFastDegrees": 596.71875,
+            "worstGapFastDegrees": 1.171875,
+            "betweenSampleMotionBoundMm": 0.002939106886909592,
+            "continuousPolygonGapLowerBoundMm": -0.002939106886909592,
+            "selectedSolids": [
+              {
+                "fastDegrees": 0.0,
+                "followerDegrees": 0.0,
+                "commonMm3": 0,
+                "gapMm": 0.001481550500730515
+              },
+              {
+                "fastDegrees": 1.171875,
+                "followerDegrees": -0.390625,
+                "commonMm3": 6.059141059637461e-08,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 5.625,
+                "followerDegrees": -1.875,
+                "commonMm3": 3.718081505755501e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 22.5,
+                "followerDegrees": -7.5,
+                "commonMm3": 1.8704541614098903e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 39.375,
+                "followerDegrees": -13.125,
+                "commonMm3": 0,
+                "gapMm": 0.0049298459532391295
+              },
+              {
+                "fastDegrees": 596.71875,
+                "followerDegrees": -198.90625,
+                "commonMm3": 6.279195040099024e-05,
+                "gapMm": 0.0
+              }
+            ]
+          },
+          {
+            "label": "display",
+            "offsetWorldDegrees": 0.0,
+            "subdivisions": 192,
+            "configurations": 4609,
+            "fastPeriodDegrees": 1080.0,
+            "followerPeriodDegrees": -360.0,
+            "minimumSampledGapMm": 0.0,
+            "maximumOverlapAreaMm2": 0.00031303413008725153,
+            "overlapConfigurations": 2736,
+            "worstOverlapFastDegrees": 596.71875,
+            "worstGapFastDegrees": 1.171875,
+            "betweenSampleMotionBoundMm": 0.002939106886909592,
+            "continuousPolygonGapLowerBoundMm": -0.002939106886909592,
+            "selectedSolids": [
+              {
+                "fastDegrees": 0.0,
+                "followerDegrees": 0.0,
+                "commonMm3": 0,
+                "gapMm": 0.001481550500730515
+              },
+              {
+                "fastDegrees": 1.171875,
+                "followerDegrees": -0.390625,
+                "commonMm3": 6.059141059637461e-08,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 5.625,
+                "followerDegrees": -1.875,
+                "commonMm3": 3.718081505755501e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 22.5,
+                "followerDegrees": -7.5,
+                "commonMm3": 1.8704541614098903e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 39.375,
+                "followerDegrees": -13.125,
+                "commonMm3": 0,
+                "gapMm": 0.0049298459532391295
+              },
+              {
+                "fastDegrees": 596.71875,
+                "followerDegrees": -198.90625,
+                "commonMm3": 6.279195040099024e-05,
+                "gapMm": 0.0
+              }
+            ]
+          },
+          {
+            "label": "isolated-phase",
+            "offsetWorldDegrees": -0.3076171875,
+            "subdivisions": 1536,
+            "configurations": 36865,
+            "fastPeriodDegrees": 1080.0,
+            "followerPeriodDegrees": -360.0,
+            "minimumSampledGapMm": 0.0028204405552818023,
+            "maximumOverlapAreaMm2": 0.0,
+            "overlapConfigurations": 0,
+            "worstOverlapFastDegrees": 0.0,
+            "worstGapFastDegrees": 529.62890625,
+            "betweenSampleMotionBoundMm": 0.0003673883980480668,
+            "continuousPolygonGapLowerBoundMm": 0.0024530521572337354,
+            "selectedSolids": [
+              {
+                "fastDegrees": 0.0,
+                "followerDegrees": -0.3076171875,
+                "commonMm3": 0,
+                "gapMm": 0.00877741004807328
+              },
+              {
+                "fastDegrees": 5.625,
+                "followerDegrees": -2.1826171875,
+                "commonMm3": 0,
+                "gapMm": 0.003968056701531435
+              },
+              {
+                "fastDegrees": 22.5,
+                "followerDegrees": -7.8076171875,
+                "commonMm3": 0,
+                "gapMm": 0.006623545478007571
+              },
+              {
+                "fastDegrees": 39.375,
+                "followerDegrees": -13.4326171875,
+                "commonMm3": 0,
+                "gapMm": 0.003987243953907212
+              },
+              {
+                "fastDegrees": 529.62890625,
+                "followerDegrees": -176.8505859375,
+                "commonMm3": 0,
+                "gapMm": 0.0028195658240974435
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "pair": [
+          217,
+          187
+        ],
+        "teeth": [
+          8,
+          32
+        ],
+        "sectionZMm": -5.48,
+        "centerDistanceMm": 2.399999999999987,
+        "authoredWorldPhasesDegrees": [
+          -0.0,
+          0.25
+        ],
+        "freshSourceSectionHausdorffMm": [
+          0.0,
+          1.1858732014247962e-09
+        ],
+        "toothSymmetryDiagnostic": [
+          {
+            "exteriorOnePitchHausdorffMm": 9.496671440321905e-10,
+            "maximumHoleRadiusMm": 0.13000000058833522,
+            "otherBodyMinimumReachRadiusMm": 0.3275999995206216
+          },
+          {
+            "exteriorOnePitchHausdorffMm": 1.2202217309495097e-09,
+            "maximumHoleRadiusMm": 1.4999999997189182,
+            "otherBodyMinimumReachRadiusMm": 1.7807999994732693
+          }
+        ],
+        "cases": [
+          {
+            "label": "source",
+            "offsetWorldDegrees": 0.0,
+            "subdivisions": 192,
+            "configurations": 6145,
+            "fastPeriodDegrees": 1440.0,
+            "followerPeriodDegrees": -360.0,
+            "minimumSampledGapMm": 0.0,
+            "maximumOverlapAreaMm2": 0.0004693523319750363,
+            "overlapConfigurations": 5569,
+            "worstOverlapFastDegrees": 887.578125,
+            "worstGapFastDegrees": 0.0,
+            "betweenSampleMotionBoundMm": 0.0023261282357807155,
+            "continuousPolygonGapLowerBoundMm": -0.0023261282357807155,
+            "selectedSolids": [
+              {
+                "fastDegrees": 0.0,
+                "followerDegrees": 0.0,
+                "commonMm3": 1.033995660952012e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 5.625,
+                "followerDegrees": -1.40625,
+                "commonMm3": 0,
+                "gapMm": 3.129547891515308e-05
+              },
+              {
+                "fastDegrees": 22.5,
+                "followerDegrees": -5.625,
+                "commonMm3": 5.904899160675214e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 39.375,
+                "followerDegrees": -9.84375,
+                "commonMm3": 6.692422864809187e-05,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 887.578125,
+                "followerDegrees": -221.89453125,
+                "commonMm3": 9.402016061448562e-05,
+                "gapMm": 0.0
+              }
+            ]
+          },
+          {
+            "label": "display",
+            "offsetWorldDegrees": 0.25,
+            "subdivisions": 192,
+            "configurations": 6145,
+            "fastPeriodDegrees": 1440.0,
+            "followerPeriodDegrees": -360.0,
+            "minimumSampledGapMm": 0.0,
+            "maximumOverlapAreaMm2": 9.177566188007366e-06,
+            "overlapConfigurations": 1216,
+            "worstOverlapFastDegrees": 843.75,
+            "worstGapFastDegrees": 29.0625,
+            "betweenSampleMotionBoundMm": 0.0023261282357807155,
+            "continuousPolygonGapLowerBoundMm": -0.0023261282357807155,
+            "selectedSolids": [
+              {
+                "fastDegrees": 0.0,
+                "followerDegrees": 0.25,
+                "commonMm3": 0,
+                "gapMm": 0.0044788941796565255
+              },
+              {
+                "fastDegrees": 5.625,
+                "followerDegrees": -1.15625,
+                "commonMm3": 0,
+                "gapMm": 0.0017213573303027608
+              },
+              {
+                "fastDegrees": 22.5,
+                "followerDegrees": -5.375,
+                "commonMm3": 0,
+                "gapMm": 0.0020075261812444773
+              },
+              {
+                "fastDegrees": 29.0625,
+                "followerDegrees": -7.015625,
+                "commonMm3": 5.365780341159426e-08,
+                "gapMm": 0.0
+              },
+              {
+                "fastDegrees": 39.375,
+                "followerDegrees": -9.59375,
+                "commonMm3": 0,
+                "gapMm": 0.0005306865496469838
+              },
+              {
+                "fastDegrees": 843.75,
+                "followerDegrees": -210.6875,
+                "commonMm3": 1.8819142720461597e-06,
+                "gapMm": 0.0
+              }
+            ]
+          },
+          {
+            "label": "isolated-phase",
+            "offsetWorldDegrees": 0.27165787111074224,
+            "subdivisions": 1536,
+            "configurations": 49153,
+            "fastPeriodDegrees": 1440.0,
+            "followerPeriodDegrees": -360.0,
+            "minimumSampledGapMm": 5.3782168107299925e-05,
+            "maximumOverlapAreaMm2": 0.0,
+            "overlapConfigurations": 0,
+            "worstOverlapFastDegrees": 0.0,
+            "worstGapFastDegrees": 708.896484375,
+            "betweenSampleMotionBoundMm": 0.0002907660580553305,
+            "continuousPolygonGapLowerBoundMm": -0.00023698388994803054,
+            "selectedSolids": [
+              {
+                "fastDegrees": 0.0,
+                "followerDegrees": 0.27165787111074224,
+                "commonMm3": 0,
+                "gapMm": 0.004986975300593154
+              },
+              {
+                "fastDegrees": 5.625,
+                "followerDegrees": -1.1345921288892578,
+                "commonMm3": 0,
+                "gapMm": 0.0011162564973559096
+              },
+              {
+                "fastDegrees": 22.5,
+                "followerDegrees": -5.353342128889258,
+                "commonMm3": 0,
+                "gapMm": 0.002698440957219362
+              },
+              {
+                "fastDegrees": 39.375,
+                "followerDegrees": -9.572092128889258,
+                "commonMm3": 0,
+                "gapMm": 0.0011349699422268434
+              },
+              {
+                "fastDegrees": 708.896484375,
+                "followerDegrees": -176.95246322263927,
+                "commonMm3": 0,
+                "gapMm": 4.580792731506884e-05
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "fineHourPair": {
+    "scope": "Continuous bound for planar polygons only; adaptive one-pitch cover plus explicit edge-displacement bounds for every material-period tooth copy. No continuous BRep or manufacturing claim.",
+    "sectionChordSamplingToleranceMm": 2e-07,
+    "offsetWorldDegrees": 0.27165787111074224,
+    "evaluations": 2422,
+    "certifiedIntervals": 2421,
+    "unresolved": [],
+    "remainingIntervals": 0,
+    "minimumSampledGapMm": 4.525350337179597e-05,
+    "worstSampleFastDegrees": 33.760986328125,
+    "minimumCertifiedOnePitchPolygonBoundMm": 1.0444806791913683e-06,
+    "symmetry": [
+      {
+        "teeth": 8,
+        "vertices": 16400,
+        "allPitchCopiesEdgeDisplacementBoundMm": 1.2296959224790777e-09,
+        "maximumHoleRadiusMm": 0.13000000065638292,
+        "otherBodyMinimumReachRadiusMm": 0.327599999300737
+      },
+      {
+        "teeth": 32,
+        "vertices": 66112,
+        "allPitchCopiesEdgeDisplacementBoundMm": 1.350578574557542e-09,
+        "maximumHoleRadiusMm": 1.4999999999446423,
+        "otherBodyMinimumReachRadiusMm": 1.7807999993732693
+      }
+    ],
+    "fullMaterialPeriodPolygonGapLowerBoundMm": 1.0419004046943317e-06,
+    "importedTolerances": [
+      {
+        "definition": 217,
+        "maxFaceToleranceMm": 1e-07,
+        "maxEdgeToleranceMm": 1e-05,
+        "maxVertexToleranceMm": 1e-05
+      },
+      {
+        "definition": 187,
+        "maxFaceToleranceMm": 1e-07,
+        "maxEdgeToleranceMm": 1e-05,
+        "maxVertexToleranceMm": 1e-05
+      }
+    ],
+    "fineWholeSolidWitnesses": [
+      {
+        "fastDegrees": 33.760986328125,
+        "followerDegrees": -8.168588710920508,
+        "commonMm3": 0,
+        "gapMm": 4.514132133764976e-05
+      },
+      {
+        "fastDegrees": 11.19140625,
+        "followerDegrees": -2.526193691389258,
+        "commonMm3": 0,
+        "gapMm": 4.515218376666687e-05
+      }
+    ]
+  },
+  "runtime": {
+    "scope": "Source/display/isolated phase variants in memory; independent point rotation versus production RunningMovement; selected decoded-mesh witnesses",
+    "timesSeconds": [
+      0,
+      0.017,
+      0.3333333333333333,
+      123.456,
+      10800,
+      43200,
+      1000000000
+    ],
+    "maxPointErrorMm": 1.7763568394002505e-15,
+    "maxDisplayBaseMatrixError": 0,
+    "maxPivotErrorMm": 3.183178474426563e-15,
+    "overview": {
+      "path": "/models/overview-2337df2dca58.glb",
+      "sha256": "2337df2dca58a8d07d7f3ed5173cdfa67613951ba1b88d88480eb5c06db7aca5"
+    }
+  },
+  "runtimeWitnessSummary": [
+    {
+      "label": "source",
+      "pair": [
+        183,
+        216
+      ],
+      "samples": 6,
+      "intersections": 3,
+      "minimumSampledTriangleGapMm": 0
+    },
+    {
+      "label": "source",
+      "pair": [
+        217,
+        187
+      ],
+      "samples": 5,
+      "intersections": 4,
+      "minimumSampledTriangleGapMm": 0
+    },
+    {
+      "label": "display",
+      "pair": [
+        183,
+        216
+      ],
+      "samples": 6,
+      "intersections": 3,
+      "minimumSampledTriangleGapMm": 0
+    },
+    {
+      "label": "display",
+      "pair": [
+        217,
+        187
+      ],
+      "samples": 6,
+      "intersections": 1,
+      "minimumSampledTriangleGapMm": 0
+    },
+    {
+      "label": "isolated-phase",
+      "pair": [
+        183,
+        216
+      ],
+      "samples": 5,
+      "intersections": 0,
+      "minimumSampledTriangleGapMm": 0.0033185998396407694
+    },
+    {
+      "label": "isolated-phase",
+      "pair": [
+        217,
+        187
+      ],
+      "samples": 5,
+      "intersections": 0,
+      "minimumSampledTriangleGapMm": 0.0002866332406518719
+    }
+  ],
+  "independentWitnessAudit": {
+    "comparedPoses": 33,
+    "maxPointErrorMm": 1.1479706074624119e-13,
+    "method": "Recorded controller matrices versus source occurrence plus CAD witness world rotation, independently evaluated without importing controller"
+  },
+  "equivalentSimultaneousDiagnosticPacketPhases": {
+    "motion3WorldDegrees": 0,
+    "cannon2WorldDegrees": -0.9228515625,
+    "hour2WorldDegrees": 0.27165787111074224,
+    "scope": "Complete packets only in isolated runtime diagnostic; not installed or neighbor-qualified"
+  },
+  "validation": {
+    "appFilesByteCompared": 126,
+    "baseline": "ac6e37c",
+    "appTestsBuildBrowserAutomationRun": false,
+    "cadAndIsolatedRuntimeReason": "Necessary to isolate source, phase and actual controller transforms; explained before execution",
+    "selectedOriginalSolidQueries": 35
+  },
+  "unchangedRuntimeAndDisplaySha256": {
+    "assets/authored/wheel-display-poses.json": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "assets/authored/hand-display-poses.json": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+    "assets/authored/running-movement.json": "d3e3fb68189de4f1c983953d005f97b5658a513a58bdcebc9bbd56530a0871aa",
+    "explorer/src/viewer/RunningMovement.ts": "c54575aa864f1552a4e174933af8d2fdd6936e0a49d487fd3d0a0af93ae8488f",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9",
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b"
+  },
+  "localEvidenceSha256": {
+    "artifacts/reverse-mesh-diagnosis/scan.json": "de46d2b4081a9fe29fccbda7f4509fe76e45ccfe10fd81d46bab41149936914e",
+    "artifacts/reverse-mesh-diagnosis/comparison.json": "bebdb535772576bd8b178e6865211f116aeefcd8212b620cf71dd6e18aeedd9e",
+    "artifacts/reverse-mesh-diagnosis/fine-sections.json": "1fcf02806bc6c26bc72232de90b4ace92b2346dcf0133c1757999d9664b30d31",
+    "artifacts/reverse-mesh-diagnosis/fine-search.json": "17d2024c8acaa17bb62cd8ded345fc34e21e394361e8e5f2766b0eda517b1de7",
+    "artifacts/reverse-mesh-diagnosis/fine-bound.json": "86874c92f61bcb7e45faa716b03da0ccc0f9e6b1beb2c3f4436129ca7b251290",
+    "artifacts/reverse-mesh-diagnosis/runtime.json": "0d5719c94403512eba8d74ec022b00c3e3abf9d9a9f0a2a60ad4c2531963cf07"
+  },
+  "toolSha256": {
+    "scripts/cad/escapement-clearance/reverse_mesh_diagnosis.py": "4100ba06131f69442630998b70bd7b3c410a52b9af7be6ed1793c815c94f0eb3",
+    "scripts/cad/escapement-clearance/reverse_mesh_fine.py": "303ccaf61bbac475edc84ecbdfb7787b45c578681293694eb33234c369a53ea3",
+    "scripts/cad/escapement-clearance/reverse_mesh_fine_bound.py": "38f4d317fcc37d46018cc8e530f3c1392460242541d29acd26612bd6eaa09c96",
+    "scripts/cad/escapement-clearance/record_reverse_mesh.py": "4b0b3e17c5df216f746e72a162076d8f7e9aeb142a0dafcfa5d184654b6d7dd3",
+    "scripts/movement/review-reverse-mesh-transforms.mjs": "cf3a58dac83260516d4978bdbf452558add8c8987c7a6f3e260d46205bcfaee1"
+  },
+  "limitations": [
+    "Continuous bounds apply only to planar polygons, not whole solids or manufactured teeth",
+    "Source section chord tolerance is a sampling parameter, not a certified analytic-curve error bound",
+    "Rear hour candidate has about 45 nm nominal sampled solid gap; imported edge/vertex tolerance is 10 nm and STEP length uncertainty is 5 micrometres; no tolerance-qualified running acceptance",
+    "No all-phase neighboring-part, hand-fit or full coupled-train acceptance",
+    "No new friction joint-state evidence; all candidate packets and hands remain static",
+    "No app change, push, PR, deployment or publication"
+  ],
+  "sourceOccurrences": {
+    "183": {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:37/0:1:1:182:1",
+      "definitionId": "d_0_1_1_183",
+      "name": "ml01 Viertelrohr2 z8 m0,15",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37",
+      "worldTransform": [
+        [
+          -0.9237280213470681,
+          -0.38304900806323805,
+          0.0,
+          -4.63553877842402e-15
+        ],
+        [
+          -0.38304900806323805,
+          0.9237280213470681,
+          0.0,
+          7.39999999999999
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -5.3600000000000065
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "216": {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:1",
+      "definitionId": "d_0_1_1_216",
+      "name": "ml01 Wechselrad3 z 24 m0,15",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57",
+      "worldTransform": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          1.29742652452144e-15
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          5.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -5.100000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "217": {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:2",
+      "definitionId": "d_0_1_1_217",
+      "name": "ml01 Wechseltrieb3 z8 m0,12",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57",
+      "worldTransform": [
+        [
+          -0.9237280213470681,
+          -0.38304900806323805,
+          0.0,
+          1.2705710541153772e-15
+        ],
+        [
+          -0.38304900806323805,
+          0.9237280213470681,
+          0.0,
+          5.000000000000003
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -5.680000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "187": {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:1",
+      "definitionId": "d_0_1_1_187",
+      "name": "ml01 Stundenrad2 z32 m0,12",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40",
+      "worldTransform": [
+        [
+          -0.9237280213470681,
+          -0.38304900806323805,
+          0.0,
+          -4.67706903509508e-15
+        ],
+        [
+          -0.38304900806323805,
+          0.9237280213470681,
+          0.0,
+          7.39999999999999
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -5.590000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "inputEvidenceSha256": {
+    "artifacts/motion-works/source.json": "6b1b7b3bf31d560cb3a21568719b39d54ddbad614745bfa64e734421545159c6",
+    "artifacts/motion-works/sections.json": "95cfd559ec224025da968e85b5560e03520439636c7dd85ae55138d3d2656dce",
+    "artifacts/motion-works/runtime-meshes.json": "41f8bad85c25fa59b31c7bb68ebffce8d7780214cb957a120b252d034d2f3019",
+    "artifacts/escapement-interfaces-20261026/source-cache.json": "4145d8fd580bac139c09f227e9467c35ddd7656cf108130e28090526b97c2596"
+  },
+  "sourceExportLengthUncertaintyValues": [
+    "0.005"
+  ]
+}

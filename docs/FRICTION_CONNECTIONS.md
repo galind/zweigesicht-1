@@ -12,6 +12,8 @@ The app, geometry, phases and all moving/static boundaries are unchanged from
 `a62c820`. No setting simulation or motion is added. The two reverse running-mesh
 conflicts in the earlier study remain independently unresolved. This report
 does not certify loaded operation or physically self-sustaining motion.
+The later [reverse-mesh diagnosis](REVERSE_MESH_DIAGNOSIS.md) investigates phase
+alternatives separately; the joint-state evidence limits here are unchanged.
 
 ## Primary evidence inspected
 

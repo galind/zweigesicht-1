@@ -5,6 +5,10 @@ confirms both mating geometries against separate maker STEP files and refines
 the friction evidence boundary. It supports an intended 1:1 normal-running
 interpretation without finding an explicit maker joint-state constraint. The
 running-clearance findings below and unchanged application decision still apply.
+The subsequent [reverse-mesh diagnosis](REVERSE_MESH_DIAGNOSIS.md) separates
+source/display phases from runtime transforms and evaluates isolated phase
+alternatives. It does not install those alternatives or overturn the failures
+at the existing phases documented here.
 
 **No additional packet is enabled.** The seven requested candidates contain 13
 source leaves. The three front-side gear interfaces clear the conditional running

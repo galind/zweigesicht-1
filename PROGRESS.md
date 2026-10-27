@@ -4,6 +4,35 @@ Updated 27 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
+## Reverse-face mesh diagnosis
+
+Research from clean `ac6e37c` separates original source poses, authored phases
+and actual runtime transforms. [The diagnosis](docs/REVERSE_MESH_DIAGNOSIS.md)
+finds **phase incompatibilities in the current nominal configuration, with no
+runtime transform fault detected**. Pair 183/216 has no authored phase offsets
+and already fails at the source clocking during rotation. Pair 217/187 fails
+more severely at the source phase; the current +0.25° world hour-wheel phase
+clears its static pose but leaves running penetration.
+
+Isolated phase experiments clear reviewed source polygons and selected original
+solids without editing teeth or axes. Pair 183/216 has about 2.8 µm sampled solid
+clearance; pair 217/187 has only about **45 nm**. Positive continuous bounds apply
+to planar polygons only. The latter margin is not tolerance-qualified, and no
+all-phase neighbor, hand-fit or complete-train acceptance is claimed.
+
+The review records 107,526 baseline/experimental section configurations, a finer
+adaptive hour-pair bound, 35 selected original-solid queries and 33 matching
+runtime witnesses. Independent controller point error is below 1.8e−15 mm;
+runtime witness/CAD pose error is below 1.2e−13 mm. All 126 tracked app/authored
+files remain byte-identical to `ac6e37c`. No new packets move; no phase is installed.
+Local CAD and isolated runtime checks were explained before execution. No app
+build, app test suite or browser automation was run. [Provenance](assets/source-manifest/reverse-mesh-diagnosis.json)
+retains hashes and limitations; detailed outputs remain ignored.
+
+Next: assess whether the nominal phase candidates warrant a separate complete
+train/neighbor review, with the rear-hour precision limitation explicit. Maker
+joint-state evidence remains outstanding. No push, PR, deployment or publication.
+
 ## Friction connection source follow-up
 
 Research-only follow-up from clean `a62c820`: [the interface report](docs/FRICTION_CONNECTIONS.md)
@@ -18,7 +47,8 @@ by the fitted geometry and display function, but **no explicit maker constraint
 was found**. Center friction treatment and the cross-face fit's permanent versus
 slipping character remain undocumented in the inspected sources. Missing torque
 data alone does not make the sticking ratio unknown; it limits physical claims.
-No source was found that clears either previously measured reverse mesh conflict.
+No source was found that clears either previously measured reverse mesh conflict;
+the later diagnosis above separately investigates nominal phase alternatives.
 
 The app and authored assets remain byte-identical to `a62c820`; no new packet
 moves. Focused local CAD comparison was explained before execution. No app
