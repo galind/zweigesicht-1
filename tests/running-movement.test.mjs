@@ -20,9 +20,13 @@ const data = fs.readFileSync(new URL("../explorer/public" + MOVEMENT.file, impor
 const buffer = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
 const pose = (t) => movementPose(t, { balance: 0, pallet: 0, escape: 0 });
 const close = (a, b, eps = 1e-9) => assert.ok(Math.abs(a - b) < eps, `${a} ≠ ${b}`);
-function fixture() {
+function fixture(staticIds = []) {
   const meshes = new Map();
-  for (const id of [...MOVEMENT.packets.flatMap((p) => p.members), MOVEMENT.spring.id]) {
+  for (const id of [
+    ...MOVEMENT.packets.flatMap((p) => p.members),
+    MOVEMENT.spring.id,
+    ...staticIds,
+  ]) {
     const p = manifest.instances.find((p) => p.id === id),
       mesh = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshStandardMaterial());
     const source = new THREE.Matrix4().set(...p.worldTransform.flat());
@@ -253,4 +257,32 @@ test("loader rejects missing and corrupt motion assets", async () => {
   } finally {
     globalThis.fetch = old;
   }
+});
+
+// These source packets have no accepted driven path; clear static meshes are insufficient.
+test("unresolved display packets and hand leaves stay static through long clocks and lifecycle changes", () => {
+  const study = read("../assets/source-manifest/motion-works-study.json");
+  const candidates = study.packets.flatMap((p) => p.members.map((m) => m.id));
+  assert.equal(candidates.length, 13);
+  const hands = manifest.instances
+    .filter(
+      (p) => !p.isAssembly && /Zeiger|Zeigerbuchse/.test(p.name) && !candidates.includes(p.id),
+    )
+    .map((p) => p.id);
+  const ids = [...candidates, ...hands];
+  for (const id of ids) assert.ok(!MOVEMENT.packets.some((p) => p.members.includes(id)), id);
+  const { run, meshes } = fixture(ids);
+  const bases = new Map(ids.map((id) => [id, meshes.get(id).matrix.clone()]));
+  for (const [ms, active] of [
+    [0, true],
+    [43200137, true],
+    [43200138, false],
+    [90000000, true],
+    [90000271, true],
+  ]) {
+    run.update(ms, active);
+    for (const id of ids) assert.ok(meshes.get(id).matrix.equals(bases.get(id)), id);
+  }
+  run.dispose();
+  for (const id of ids) assert.ok(meshes.get(id).matrix.equals(bases.get(id)), id);
 });

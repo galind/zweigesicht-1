@@ -7,7 +7,7 @@ def frame(p,origin,theta):
  c,s=np.cos(theta),np.sin(theta);x,y=origin
  return affine_transform(p,[c,s,-s,c,-c*x-s*y,s*x-c*y])
 
-def run():
+def run(subdivisions=48):
  _,by,pivots=setup();polys=sections(by);summary=[]
  for a,b,na,nb,z,oa,ob in PAIRS:
   start=time.monotonic();aa,bb=[polys[f'{n}@{z}'] for n in [a,b]]
@@ -18,7 +18,7 @@ def run():
   # Any cross-body pair closer than 0.05 mm is inside the overlap of the
   # two radial bounding squares padded by 0.05 mm. Outside is bounded clear.
   margin=.05;window=(d-rb-margin,-min(ra,rb)-margin,ra+margin,min(ra,rb)+margin)
-  events=na*nb//gcd(na,nb);subdivisions=48;count=events*subdivisions
+  events=na*nb//gcd(na,nb);count=events*subdivisions
   angles=np.arange(count+1)*360/(na*subdivisions);gaps=np.empty(count+1);areas=np.empty(count+1)
   for i,angle in enumerate(angles):
    p=shapely.clip_by_rect(rotate(aa,float(angle%360),origin=(0,0)),*window)
@@ -41,7 +41,7 @@ def run():
   np.savez_compressed(TRAIN/f'period-{a}-{b}.npz',fastDegrees=angles,gapBoundsMm=gaps,overlapAreasMm2=areas)
   summary.append(result);save_train('periods.partial.json',summary);print(json.dumps(result),flush=True)
  save_train('periods.json',{'sectionSha256':digest(TRAIN/'sections.json'),
-  'scope':'Complete material orientation period of each actual source section pair; 48 phase subdivisions per tooth event; conservative clipping and rigid-motion distance bounds apply to polygon sections only, not a whole-solid/contact certificate',
+  'scope':f'Complete material orientation period of each actual source section pair; {subdivisions} phase subdivisions per tooth event; conservative clipping and rigid-motion distance bounds apply to polygon sections only, not a whole-solid/contact certificate',
   'pairs':summary});(TRAIN/'periods.partial.json').unlink()
 
 if __name__=='__main__':run()

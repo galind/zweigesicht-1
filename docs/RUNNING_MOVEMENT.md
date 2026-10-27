@@ -48,6 +48,18 @@ fit clears those rotating surfaces, but this does not depict spring attachment,
 unwinding, energy storage or load sharing. Static hands do not report elapsed
 time. No unsupported coupling has been introduced to disguise these limitations.
 
+## Motion-work extension review — 27 October 2026
+
+The [seven-packet investigation](MOTION_WORKS_STUDY.md) confirms 13 exact source
+leaves and derives conditional ratios for both displays. **No additional packet
+is enabled.** Center/cannon and cross-face shaft sticking constraints remain
+unresolved, and both reverse-face gear meshes develop source-solid and actual
+runtime-mesh penetration during the full relative-period sweeps. Front meshes
+clear conditionally, but no independently supported driven portion is established.
+The existing clock, motion, phases, hands and barrel-II boundary remain unchanged.
+See the study for 32,261 source and runtime configurations, sampled versus continuous
+bounds, neighbor limitations and the precise evidence needed to proceed.
+
 ## Nominal-frequency evidence and shaft periods
 
 The maker's [Caliber ml-01 specification](https://www.marcolangwatches.com/en/watches/),

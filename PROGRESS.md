@@ -4,6 +4,36 @@ Updated 27 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
+## Motion-work extension investigation
+
+Reviewed from clean `073a870` on `codex/escapement-clearance-study` after the balance
+smoothing revert. [The new study](docs/MOTION_WORKS_STUDY.md) confirms all seven
+candidate packets (13 leaves), tooth counts, axes and conditional signed ratios.
+**No additional packets move.** The normal-running center/cannon friction link and
+cross-face shaft fit are not source-confirmed constraints. Both reverse meshes
+(183/216 and 217/187) penetrate during unchanged-phase coupled motion; original
+solids and actual decoded runtime geometry independently corroborate the failures.
+
+Each mesh was swept through its complete material orientation period: 32,261
+source-section and 32,261 runtime-section configurations, plus 77 selected
+whole-solid and runtime-triangle poses. The three front meshes pass conditionally;
+freezing their meshed dependents also causes interference, so there is no verified
+independently driven subset. Full-turn neighbor boxes are recorded; unresolved
+neighbor candidates are not certified after the mesh rejection. Existing source
+fit, invalid-solid and physical/continuous-clearance limits remain.
+
+All nine focused movement tests and all 18 browser lifecycle checks pass on the
+current-source local development server, with no application/shader errors.
+Local CAD and lifecycle checks were explained
+before execution because no push is authorized; app runtime, phases, timing and
+motion assets remain byte-identical to `073a870`. The local evidence is ignored
+under `artifacts/motion-works/`; [provenance](assets/source-manifest/motion-works-study.json)
+records the decision and hashes. No push, PR, merge, deployment or publication.
+Next: obtain source-specific friction/shaft connection evidence and resolve both
+reverse running contacts through a separately reviewed proposal before enabling
+any dependent display packet. The existing prescribed movement remains available
+locally for review; this milestone is an investigation, not a completed extension.
+
 ## Running movement implementation
 
 Active branch: `codex/escapement-clearance-study`; nominal-speed work starts from
@@ -37,8 +67,8 @@ was rerun. Local validation was essential because no push is authorized and
 higher-speed rendering required inspection. Evidence remains ignored under
 `artifacts/nominal-movement/`; the original `artifacts/running-movement/` is preserved.
 
-No push, PR, merge, deployment or publication. Next: review this local nominal-speed
-milestone and its temporal-sampling limitations before any release decision.
+No push, PR, merge, deployment or publication. The motion-work investigation above
+supersedes the next action; nominal-speed sampling limitations still apply.
 The [clearance](docs/ESCAPEMENT_CLEARANCE_STUDY.md),
 [interfaces/hairspring](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md) and
 [train](docs/TRAIN_COUPLING_STUDY.md) studies retain the supporting mechanical

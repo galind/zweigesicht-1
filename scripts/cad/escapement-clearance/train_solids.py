@@ -5,7 +5,7 @@ def run():
  _,by,pivots=setup();periods=json.loads((TRAIN/'periods.json').read_text());results=[]
  for pair,period in zip(PAIRS,periods['pairs']):
   a,b,na,nb,z,oa,ob=pair
-  angles=sorted(set([0.,period['worstGapFastDegrees'],period['fastPeriodDegrees']]+
+  angles=sorted(set([0.,period['worstGapFastDegrees'],period['worstOverlapFastDegrees'],period['fastPeriodDegrees']]+
    [float(i*360/na/8) for i in range(1,9)]+[float(period['fastPeriodDegrees']*f) for f in [.125,.333,.5,.777]]))
   rows=[]
   for angle in angles:
