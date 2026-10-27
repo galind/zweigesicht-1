@@ -51,8 +51,8 @@ test("runtime sidecar integrity and exact evidence memberships, pivots and ratio
 });
 test("multiple cycles, turn boundary and recoil retain continuous slower-shaft phases", () => {
   for (const n of [0, 1, 19, 20, 199, 2807999]) {
-    const start = pose(n * 8),
-      end = pose((n + 1) * 8);
+    const start = pose(n * MOVEMENT.secondsPerCycle),
+      end = pose((n + 1) * MOVEMENT.secondsPerCycle);
     close(end.escape - start.escape, 18, 1e-7);
     close(start.balance, end.balance);
     close(start.pallet, end.pallet);
@@ -62,8 +62,8 @@ test("multiple cycles, turn boundary and recoil retain continuous slower-shaft p
         (18 * p.ratio[0]) / p.ratio[1],
         1e-7,
       );
-      const before = pose((n + 1) * 8 - 1e-6),
-        after = pose((n + 1) * 8 + 1e-6);
+      const before = pose((n + 1) * MOVEMENT.secondsPerCycle - 1e-6),
+        after = pose((n + 1) * MOVEMENT.secondsPerCycle + 1e-6);
       close(
         (before.escape * p.ratio[0]) / p.ratio[1],
         (after.escape * p.ratio[0]) / p.ratio[1],
@@ -73,14 +73,47 @@ test("multiple cycles, turn boundary and recoil retain continuous slower-shaft p
   }
   let recoils = 0;
   for (let i = 1; i <= 16000; i++)
-    if (pose(i / 2000).escape < pose((i - 1) / 2000).escape - 1e-9) recoils++;
+    if (
+      pose((i * MOVEMENT.secondsPerCycle) / 16000).escape <
+      pose(((i - 1) * MOVEMENT.secondsPerCycle) / 16000).escape - 1e-9
+    )
+      recoils++;
   assert.ok(recoils > 0);
 });
+test("nominal 3 Hz, two beats per oscillation and all shaft periods agree independently", () => {
+  close(MOVEMENT.secondsPerCycle, 1 / 3);
+  close((2 * 3600) / MOVEMENT.secondsPerCycle, 21600);
+  // Independent expected periods from the recorded tooth counts, in active seconds.
+  const periods = {
+    escape: 20 / 3,
+    seconds: 60,
+    third: 562.5,
+    center: 3600,
+    transfer: 7800,
+    barrel: 24000,
+  };
+  for (const packet of MOVEMENT.packets.slice(2)) {
+    const period = periods[packet.name];
+    assert.ok(period, packet.name);
+    // All periods are whole cycles except third (1687.5); two turns retain local phase.
+    const elapsed = packet.name === "third" ? 2 * period : period;
+    const turns = packet.name === "third" ? 2 : 1;
+    close(
+      ((pose(elapsed).escape - pose(0).escape) * packet.ratio[0]) / packet.ratio[1],
+      Math.sign(packet.ratio[0]) * turns * 360,
+      1e-8,
+    );
+  }
+});
 test("clock is frame-rate independent and resumes without hidden catch-up", () => {
-  for (const fps of [15, 30, 60, 120]) {
+  for (const fps of [15, 24, 30, 60, 90, 120, 144]) {
     const c = new MovementClock();
-    for (let i = 0; i <= fps * 24; i++) c.advance(1000 + (i * 1000) / fps, true);
-    close(c.seconds, 24);
+    for (let i = 0; i <= fps * 61; i++) c.advance(1000 + (i * 1000) / fps, true);
+    c.advance(62137, true); // Off-cycle endpoint catches phase errors hidden by full turns.
+    close(c.seconds, 61.137);
+    const expected = pose(61.137),
+      actual = pose(c.seconds);
+    for (const key of Object.keys(expected)) close(actual[key], expected[key], 1e-7);
   }
   const c = new MovementClock();
   c.advance(0, true);
@@ -94,6 +127,38 @@ test("clock is frame-rate independent and resumes without hidden catch-up", () =
   c.advance(502000, false);
   c.advance(600000, true);
   close(c.seconds, 17);
+});
+test("delayed frames, hidden time and reassembly retain the shared pose, shafts and spring", () => {
+  const { run, meshes } = fixture();
+  const { run: reference, meshes: expectedMeshes } = fixture();
+  run.update(1000, true);
+  for (const ms of [1016, 1033, 1250, 12000, 62137]) run.update(ms, true);
+  close(run.clock.seconds, 61.137);
+  reference.update(0, true);
+  reference.update(61137, true);
+  function compare() {
+    for (const key of Object.keys(run.pose)) close(run.pose[key], reference.pose[key], 1e-7);
+    for (const [id, mesh] of meshes)
+      mesh.matrix.elements.forEach((v, i) =>
+        close(v, expectedMeshes.get(id).matrix.elements[i], 1e-7),
+      );
+    const actual = run.spring.geometry.getAttribute("position").array;
+    const expected = reference.spring.geometry.getAttribute("position").array;
+    actual.forEach((v, i) => close(v, expected[i], 1e-6));
+  }
+  compare();
+  run.clock.suspend(); // Same visibility lifecycle used by all viewers.
+  run.update(900000, true);
+  compare();
+  run.update(900010, false); // Original source poses while disassembled.
+  assert.equal(run.active, false);
+  run.update(1800000, true);
+  compare();
+  run.update(1800271, true);
+  reference.update(61408, true);
+  compare();
+  run.dispose();
+  reference.dispose();
 });
 test("actual controller retains display phases, handles reversed axes and restores detached geometry", () => {
   const { meshes, run } = fixture(),

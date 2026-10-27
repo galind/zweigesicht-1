@@ -8,9 +8,10 @@ Publication and mechanical acceptance remain subject to [release gates](RELEASE_
 ## Behavior and scope
 
 The existing Explorer, completed Workshop and assembled Bench movement run without
-another page or playback controls. A deliberately slowed **eight seconds per
-complete balance oscillation** makes the motion readable. It is not an inferred
-operating frequency. Balance amplitude remains the study's ±180°, around its
+another page or playback controls. The shared clock uses the maker-specified
+**3 Hz: one complete balance oscillation every 1/3 second, two beats per
+oscillation, 21,600 beats/hour**. This supersedes the initial eight-second
+illustration (24 times slower). Balance amplitude remains the study's ±180°, around its
 +2.385806786849° center. The pallet uses the recorded center-following law and
 bank angles; piecewise linear interpolation follows the two studied escape paths,
 including their recoil. Timing is sinusoidal in balance angle. This prescribes
@@ -46,6 +47,40 @@ mainspring as the study's explicitly illustrative boundary. The studied source
 fit clears those rotating surfaces, but this does not depict spring attachment,
 unwinding, energy storage or load sharing. Static hands do not report elapsed
 time. No unsupported coupling has been introduced to disguise these limitations.
+
+## Nominal-frequency evidence and shaft periods
+
+The maker's [Caliber ml-01 specification](https://www.marcolangwatches.com/en/watches/),
+consulted 27 October 2026, explicitly states “frequency 3 Hertz (21.600 osz./ hour)”.
+The 3 Hz figure counts complete balance cycles; the hourly figure counts the two
+half-oscillations/beats per cycle. This is an independent manufacturer nominal
+specification, not a frequency inferred solely from this animation or a measured
+rate of the supplied CAD assembly. The CAD download page does not specify timing.
+Source URL, local HTML snapshot hash and implementation/validation hashes are in
+[nominal-operating-speed.json](../assets/source-manifest/nominal-operating-speed.json).
+
+The recorded 20-tooth escape wheel advances one tooth (18°) per complete cycle.
+Its 9-tooth pinion drives the 81-tooth seconds wheel: −18 × 9/81 = −2°/cycle.
+A seconds-shaft revolution per minute therefore requires 360/2/60 = **3 Hz**.
+That ratio-derived check agrees with the independent specification; on its own it
+would depend on assuming a 60-second seconds-shaft revolution. The subsequent
+8/75, 10/64, 12/26 and 26/80 meshes give these net mean rates:
+
+| Shaft | Signed degrees/active second | Mean revolution period |
+| --- | ---: | ---: |
+| Escape | +54 | 6⅔ s |
+| Seconds | −6 | 60 s |
+| Third | +0.64 | 562.5 s (9 min 22.5 s) |
+| Center | −0.1 | 3,600 s (1 h) |
+| Transfer | +3/65 | 7,800 s (2 h 10 min) |
+| Barrel II drum/lid | −0.015 | 24,000 s (6 h 40 min) |
+
+These are accumulated net advances about world +Z, not constant instantaneous
+velocities: the existing lock, release and recoil remain. Balance and pallet
+repeat every 1/3 second; each half swing lasts 1/6 second. Hands and motion works
+remain excluded. Every existing packet and the hairspring still consume the same
+active-time clock. No amplitude, geometry, display phase, gear ratio or lifecycle
+code changed.
 
 ## State and lifetime policy
 
@@ -89,7 +124,81 @@ The ribbon keeps the original 0.035 mm width and 0.215 mm height. Interpolation
 is an approximation, with measured length/shape errors below; it is not an elastic
 material solution.
 
-## Verification
+## Nominal-speed validation — 27 October 2026
+
+The separate [nominal-speed provenance](../assets/source-manifest/nominal-operating-speed.json)
+records this milestone's source snapshot and hashes. New evidence is ignored under
+`artifacts/nominal-movement/`; the earlier runtime/CAD evidence remains intact.
+Local validation was explained before execution: no push is authorized, so CI
+cannot check this local change, and rendering at the new speed needs a real GPU
+browser check.
+
+- All **8 focused movement tests**, typecheck, lint and the production build pass.
+  The build retains its existing vinext route-classification notice. Timing checks
+  cover 15/24/30/60/90/120/144 FPS at an off-cycle endpoint, multi-cycle delays,
+  hidden suspension and reassembly. Controller checks compare every coupled matrix
+  and the actual spring buffer after resume, as well as source restoration,
+  recoil, long-running accumulation, display phases and independent shaft periods.
+- **18 production-browser checks** pass across Explorer, Workshop and Bench,
+  including separation/reassembly, fitted views, completion/Undo, Bench flip,
+  suspension and cleanup. The visibility fixture invokes the real handler with a
+  synthetic hidden document; this does not qualify actual OS/browser lifecycle
+  behavior on every device. The existing local Vercel analytics 404 is excluded;
+  application assets load and there are no runtime or shader errors.
+- A deliberate visible 250 ms main-thread stall advances active time by 249.9 ms
+  (measured wall interval 254.8 ms). It skips intermediate displayed poses without
+  clamping elapsed time. Hidden time is excluded instead, as before.
+- A **25.016-second** headless desktop Chrome interval delivers **1,501 frames**,
+  with frame-spacing p50/p95 **16.7/16.7 ms** and movement-update CPU p50/p95
+  **0.5/0.8 ms**. Renderer counts stay at **136 geometries / 8 textures**.
+  This covers about 75 balance cycles. There is no per-cycle loop or extra render
+  pass: increasing speed leaves per-frame work unchanged. These measurements do
+  not establish GPU completion time, physical-device or sustained thermal limits.
+- The nominal sampler still covers **8,557 normalized poses**. Against the retained
+  eight-second export, maximum balance/pallet/escape differences are below
+  **3.2×10⁻¹³ degrees**, and the 361-pose GPU spring export is byte-identical.
+  Generated geometry and runtime-metadata hashes are unchanged. Therefore the
+  previous geometry evidence applies to the same paths; no CAD sweep was rerun
+  and no new continuous-solid or dynamic clearance claim is made.
+
+Twenty consecutive 60 FPS macro poses were inspected. The spring remains attached
+and the existing path is preserved, but instantaneous sampling cannot show every
+brief release or recoil. At 15/30/60/120 FPS there are 5/10/20/40 samples per cycle;
+the tested grid's largest balance steps are about 201/111/56/28 degrees. The
+four-spoke symmetry can produce apparent reversals or strobing, particularly at
+lower rates; polished highlights can also change abruptly. This is a rendering
+limitation, not a slower clock or a new mechanical recoil law. No temporal blur,
+amplitude reduction, geometry change or extra playback control was introduced.
+
+Reproduce using the existing dependencies and local production server commands
+below, with a separate evidence directory:
+
+```sh
+mkdir -p artifacts/nominal-movement
+node --test tests/running-movement.test.mjs > artifacts/nominal-movement/focused-tests.txt 2>&1
+npm --prefix explorer run typecheck > artifacts/nominal-movement/typecheck.txt 2>&1
+npm --prefix explorer run lint > artifacts/nominal-movement/lint.txt 2>&1
+npm --prefix explorer run build > artifacts/nominal-movement/build.txt 2>&1
+# In a separate terminal:
+npm --prefix explorer start -- --hostname 127.0.0.1 --port 4178
+# Then use the existing Playwright/Chrome paths:
+MOVEMENT_EVIDENCE_ROOT=artifacts/nominal-movement \
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs \
+CHROME_PATH=/absolute/path/to/Chrome \
+node scripts/movement/browser-check.mjs http://127.0.0.1:4178
+MOVEMENT_EVIDENCE_ROOT=artifacts/nominal-movement node scripts/movement/sample-runtime.mjs
+node scripts/movement/record-nominal-validation.mjs
+```
+
+The recorder requires the retained maker HTML snapshot and reviewed frame contact
+sheet as well as the earlier sample exports; it is an evidence recorder, not a
+clean-machine downloader. The original broad CPU/Bench flip suites were not rerun
+for this timing-only change. No push, PR, merge, deployment or publication.
+
+## Verification of the initial eight-second implementation
+
+The results in this section are the historical `bdf8259` baseline. Nominal-speed
+validation is recorded separately above; these are not newly rerun CAD checks.
 
 Evidence is retained locally in `artifacts/running-movement/`; the provenance
 record is [running-movement.json](../assets/source-manifest/running-movement.json).
@@ -191,5 +300,7 @@ binary alongside it. Both final runtime outputs are allowlisted for Git and buil
 Original CAD, study BReps, screenshots, caches and experimental geometry remain
 ignored. No push, PR, merge, deployment or publication is part of this milestone.
 
-After all local evidence is complete, `node scripts/movement/record-validation.mjs`
-verifies the reports and records their hashes in the provenance manifest.
+The original `node scripts/movement/record-validation.mjs` records a complete
+geometry/runtime audit. For the nominal-speed milestone, use
+`node scripts/movement/record-nominal-validation.mjs`; it preserves the earlier
+geometry evidence and records the separate speed validation.

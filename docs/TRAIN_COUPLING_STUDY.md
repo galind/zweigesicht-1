@@ -12,6 +12,14 @@ The app remains unchanged. This work adds research scripts, this report and a
 measurements remain ignored under `artifacts/train-coupling-20261026/`. Nothing
 was pushed, published or installed in the runtime.
 
+## Subsequent runtime integration
+
+This report preserves the 26 October research baseline. The subsequent
+[running movement record](RUNNING_MOVEMENT.md#nominal-frequency-evidence-and-shaft-periods)
+now uses the maker-specified 3 Hz (21,600 beats/hour), independently consistent
+with this study's −2° seconds-shaft advance per complete oscillation and a
+60-second seconds-shaft revolution. Timing does not establish physical dynamics.
+
 ## Drive path and membership
 
 The original tooth counts and shaft locations give this path from the power

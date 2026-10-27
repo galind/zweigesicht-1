@@ -2,10 +2,13 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import settings from "../../assets/authored/running-movement.json" with { type: "json" };
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH });
-const root = "artifacts/running-movement",
+const root = process.env.MOVEMENT_EVIDENCE_ROOT ?? "artifacts/running-movement",
   report = { checks: [], errors: [], httpFailures: [] };
+await fs.mkdir(root, { recursive: true });
+const secondsPerCycle = 1 / settings.frequencyHz;
 const base = process.argv[2] ?? "http://127.0.0.1:4173";
 async function viewer(page) {
   await page.waitForFunction(
@@ -61,6 +64,14 @@ try {
       memory: { ...v.renderer.info.memory },
     };
     const deltas = [];
+    const updateMs = [];
+    const update = r.update;
+    r.update = function (...args) {
+      const start = performance.now();
+      const result = update.apply(this, args);
+      updateMs.push(performance.now() - start);
+      return result;
+    };
     let last = performance.now();
     await new Promise((resolve) => {
       const until = last + 25000;
@@ -72,7 +83,9 @@ try {
       }
       requestAnimationFrame(tick);
     });
+    r.update = update;
     deltas.sort((a, b) => a - b);
+    updateMs.sort((a, b) => a - b);
     return {
       start,
       end: {
@@ -84,14 +97,40 @@ try {
       p50: deltas[Math.floor(deltas.length * 0.5)],
       p95: deltas[Math.floor(deltas.length * 0.95)],
       frames: deltas.length,
+      updateP50Ms: updateMs[Math.floor(updateMs.length * 0.5)],
+      updateP95Ms: updateMs[Math.floor(updateMs.length * 0.95)],
     };
   });
   check(
     "Sustained rendering spans multiple cycles without resource growth",
     sample.end.seconds - sample.start.seconds > 24 &&
       sample.end.render - sample.start.render > 100 &&
-      sample.end.memory.geometries === sample.start.memory.geometries,
+      sample.end.memory.geometries === sample.start.memory.geometries &&
+      sample.end.memory.textures === sample.start.memory.textures,
     sample,
+  );
+  const elapsed = sample.end.seconds - sample.start.seconds;
+  check(
+    "Nominal escape rate agrees with elapsed active time",
+    Math.abs(sample.end.escape - sample.start.escape - (elapsed * 18) / secondsPerCycle) < 18,
+    { elapsed, escapeAdvance: sample.end.escape - sample.start.escape },
+  );
+  const delayed = await page.evaluate(async () => {
+    const r = window.movementAudit.runningMovement;
+    await new Promise(requestAnimationFrame);
+    const before = r.clock.seconds,
+      start = performance.now();
+    // One deliberate visible main-thread stall: verify there is no dt clamp.
+    while (performance.now() - start < 250) {
+      /* test-only delayed frame */
+    }
+    await new Promise(requestAnimationFrame);
+    return { activeDelta: r.clock.seconds - before, wallDelta: (performance.now() - start) / 1000 };
+  });
+  check(
+    "Visible delayed frame advances elapsed time without a clamp",
+    delayed.activeDelta >= 0.24 && Math.abs(delayed.activeDelta - delayed.wallDelta) < 0.05,
+    delayed,
   );
   // Snapshot then deterministic verification through the production controller.
   const product = await page.evaluate(async () => {
@@ -152,14 +191,18 @@ try {
     v.requestRender();
     window.savedAdvance = v.runningMovement.clock.advance;
   });
-  for (const seconds of [0, 4]) {
+  // Full-cycle consecutive frame samples for inspection of temporal aliasing.
+  // Freeze only this audit's shared clock; no production playback controls.
+  for (const seconds of Array.from({ length: 20 }, (_, i) => (i * secondsPerCycle) / 20)) {
     await page.evaluate((seconds) => {
       const v = window.movementAudit;
       v.runningMovement.clock.advance = () => seconds;
       v.requestRender();
     }, seconds);
     await page.waitForTimeout(200);
-    await page.screenshot({ path: root + `/escapement-${seconds}.png` });
+    await page.screenshot({
+      path: root + `/escapement-frame-${Math.round((seconds / secondsPerCycle) * 20)}.png`,
+    });
   }
   await page.evaluate(() => {
     window.movementAudit.runningMovement.clock.advance = window.savedAdvance;
@@ -266,7 +309,11 @@ try {
     cleanup,
   );
   check("No browser runtime or shader errors", report.errors.length === 0, report.errors);
-  check('All application assets load', report.httpFailures.every(r => new URL(r.url).pathname === '/_vercel/insights/script.js'), report.httpFailures);
+  check(
+    "All application assets load",
+    report.httpFailures.every((r) => new URL(r.url).pathname === "/_vercel/insights/script.js"),
+    report.httpFailures,
+  );
 } finally {
   await fs.writeFile(root + "/browser-report.json", JSON.stringify(report, null, 2));
   await browser.close();

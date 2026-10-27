@@ -4,7 +4,8 @@ import settings from '../../../assets/authored/running-movement.json' with { typ
 
 export const MOVEMENT = {
   ...specification,
-  secondsPerCycle: settings.secondsPerCycle,
+  // Hz counts complete balance oscillations; each has two beats.
+  secondsPerCycle: 1 / settings.frequencyHz,
 };
 const RAD = Math.PI / 180;
 type Slice = { offset: number; count: number };

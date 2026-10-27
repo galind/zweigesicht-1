@@ -6,7 +6,7 @@ import {
   RunningSpring,
   movementPose,
 } from "../../explorer/src/viewer/RunningMovement.ts";
-const root = "artifacts/running-movement";
+const root = process.env.MOVEMENT_EVIDENCE_ROOT ?? "artifacts/running-movement";
 fs.mkdirSync(root, { recursive: true });
 const raw = fs.readFileSync("explorer/public" + MOVEMENT.file);
 const spring = new RunningSpring(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
@@ -29,12 +29,14 @@ for (let k = 0; k < angles.length; k++) {
 }
 fs.writeFileSync(root + "/runtime-spring.bin", Buffer.from(points.buffer));
 // Uniform times plus midpoints in every tabulated pallet interval on both swings.
-const times = new Set(Array.from({ length: 8001 }, (_, i) => i / 1000));
+const times = new Set(
+  Array.from({ length: 8001 }, (_, i) => (i * MOVEMENT.secondsPerCycle) / 8000),
+);
 for (let side = 0; side < 2; side++)
   for (let i = 0; i < MOVEMENT.segments[side].length - 1; i++) {
     const target = (MOVEMENT.segments[side][i][0] + MOVEMENT.segments[side][i + 1][0]) / 2;
-    let lo = side * 4,
-      hi = (side + 1) * 4;
+    let lo = (side * MOVEMENT.secondsPerCycle) / 2,
+      hi = ((side + 1) * MOVEMENT.secondsPerCycle) / 2;
     for (let k = 0; k < 55; k++) {
       const mid = (lo + hi) / 2,
         p = movementPose(mid, {}).pallet - MOVEMENT.centers.pallet;

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "secondsPerCycle": 8,
-  "speedBasis": "Deliberately slowed visual illustration; not a measured operating rate",
+  "frequencyHz": 3,
+  "speedBasis": "Maker-specified ML-01 nominal frequency, independently consistent with the recorded train ratios and 18-degree escape advance per complete oscillation; prescribed motion, not measured dynamics",
   "statePolicy": "Run only complete, seated mechanisms; retain active time across inspection, separation and visibility suspension",
   "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I, motion works and hands remain static",
   "evidence": "docs/RUNNING_MOVEMENT.md"

@@ -55,8 +55,8 @@ record.implementationSha256 = Object.fromEntries([
 record.localEvidenceSha256 = Object.fromEntries([
   'geometry-check.json', 'mesh-check.json', 'browser-report.json', 'cpu-tests.txt',
   'focused-tests.txt', 'sample-hashes.json', 'inventory.txt', 'build.txt', 'bench-flip/flip-report.json',
-  'assembled.png', 'fitted-front.png', 'fitted-back.png', 'escapement-0.png',
-  'escapement-4.png', 'workshop-partial.png', 'isolated.png', 'bench.png',
+  'assembled.png', 'fitted-front.png', 'fitted-back.png', 'escapement-frame-0.png',
+  'escapement-frame-10.png', 'workshop-partial.png', 'isolated.png', 'bench.png',
 ].map(p => [root + p, hash(root + p)]));
 fs.writeFileSync(path, JSON.stringify(record, null, 2) + '\n');
 console.log(JSON.stringify(record.validation, null, 2));
