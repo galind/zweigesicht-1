@@ -13,6 +13,7 @@ import {
   loadMovementBuffer,
 } from "../explorer/src/viewer/RunningMovement.ts";
 import { wheelDisplayMatrix } from "../explorer/src/viewer/WheelDisplayPose.ts";
+import { EXPOSURE_SAMPLES, MAX_EXPOSURE_SECONDS } from "../explorer/src/viewer/BalanceExposure.ts";
 const read = (p) => JSON.parse(fs.readFileSync(new URL(p, import.meta.url), "utf8"));
 const manifest = read("../explorer/public/models/assembly-manifest.json");
 const train = read("../assets/source-manifest/train-coupling-study.json");
@@ -253,4 +254,68 @@ test("loader rejects missing and corrupt motion assets", async () => {
   } finally {
     globalThis.fetch = old;
   }
+});
+
+test("balance exposure preserves exact poses and samples only the rim/eccentrics on the shared clock", () => {
+  const { meshes, run } = fixture();
+  const group = new THREE.Group();
+  for (const mesh of meshes.values()) group.add(mesh);
+  const originals = [...meshes.values()];
+  const bases = originals.slice(0, 5).map((m) => m.matrix.clone());
+  run.update(0, true);
+  assert.equal(group.children.length, originals.length, "first frame has no shutter history");
+  run.update(1000 / 12, true);
+  const proxies = group.children.filter((m) => m.userData.balanceExposure);
+  assert.equal(proxies.length, 5);
+  assert.equal(EXPOSURE_SAMPLES, 9);
+  close(run.pose.balance, MOVEMENT.centers.balance);
+  for (let j = 0; j < 5; j++) {
+    const proxy = proxies[j],
+      source = originals[j];
+    assert.equal(proxy.geometry, source.geometry);
+    assert.equal(source.visible, false);
+    assert.equal(proxy.count, EXPOSURE_SAMPLES);
+    for (const i of [0, 4, 8]) {
+      const t = 1 / 12 + MAX_EXPOSURE_SECONDS * (i / 8 - 0.5);
+      const expected = shaftMatrix(
+        new THREE.Matrix4(),
+        MOVEMENT.packets[0].pivot,
+        pose(t).balance,
+      ).multiply(bases[j]);
+      const actual = new THREE.Matrix4();
+      proxy.getMatrixAt(i, actual);
+      actual.elements.forEach((v, k) => close(v, expected.elements[k], 2e-6));
+    }
+    // Render-only siblings cannot change exact transforms or intercept picking.
+    const exact = shaftMatrix(
+      new THREE.Matrix4(),
+      MOVEMENT.packets[0].pivot,
+      run.pose.balance,
+    ).multiply(bases[j]);
+    source.matrix.elements.forEach((v, k) => close(v, exact.elements[k]));
+    const hits = [];
+    proxy.raycast(new THREE.Raycaster(), hits);
+    assert.equal(hits.length, 0);
+  }
+  assert.ok(
+    originals.slice(5).every((m) => m.visible),
+    "attachments and train remain exact",
+  );
+  run.clock.suspend();
+  run.update(900000, true);
+  assert.ok(
+    proxies.every((m) => !m.visible),
+    "resume has no stale exposure",
+  );
+  assert.ok(originals.every((m) => m.visible));
+  run.update(900017, true);
+  run.update(900020, false);
+  assert.ok(proxies.every((m) => !m.visible));
+  assert.ok(originals.every((m) => m.visible));
+  let disposed = 0;
+  for (const p of proxies) p.material.addEventListener("dispose", () => disposed++);
+  run.dispose();
+  run.dispose();
+  assert.equal(disposed, 5);
+  assert.equal(group.children.length, originals.length);
 });

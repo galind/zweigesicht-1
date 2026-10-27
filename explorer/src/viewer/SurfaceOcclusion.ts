@@ -41,6 +41,15 @@ export class SurfaceOcclusion {
       override = this.pass.scene.overrideMaterial,
       visibility: [THREE.Object3D, boolean][] = [];
     this.pass.scene.traverse((object) => {
+      const source = object.userData.balanceExposureSource as
+        | THREE.Mesh
+        | undefined;
+      if (source && object.visible) {
+        // Contact shading uses the exact center pose, not opaque shutter instances.
+        visibility.push([object, object.visible], [source, source.visible]);
+        object.visible = false;
+        source.visible = true;
+      }
       if (
         object instanceof THREE.Line ||
         object instanceof THREE.Points ||

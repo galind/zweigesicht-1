@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import specification from '../../public/models/movement-runtime.json' with { type: 'json' };
 import settings from '../../../assets/authored/running-movement.json' with { type: 'json' };
+import { BalanceExposure, MAX_EXPOSURE_SECONDS } from './BalanceExposure.ts';
 
 export const MOVEMENT = {
   ...specification,
@@ -280,6 +281,7 @@ export class RunningMovement {
   readonly pose: MovementPose = { balance: 0, pallet: 0, escape: 0 };
   readonly spring: RunningSpring;
   readonly fork: THREE.BufferGeometry;
+  readonly exposure: BalanceExposure;
   active = false;
   private dead = false;
   private readonly delta = new THREE.Matrix4();
@@ -308,9 +310,12 @@ export class RunningMovement {
     this.sourceFork = fork.geometry;
     this.spring = new RunningSpring(buffer);
     this.fork = geometry(buffer, MOVEMENT.fork);
+    // Recorded packet order: rim, four eccentrics, then jewel/staff/rollers.
+    this.exposure = new BalanceExposure(this.entries.slice(0, 5));
   }
   /** Call before the owning viewer writes presentation poses or reparents pieces. */
   restore() {
+    this.exposure.hide();
     if (!this.active) return;
     for (const entry of this.entries) {
       entry.mesh.matrix.copy(entry.base);
@@ -323,7 +328,9 @@ export class RunningMovement {
   update(now: number, eligible: boolean) {
     if (this.dead) return false;
     this.restore();
-    movementPose(this.clock.advance(now, eligible), this.pose);
+    const before = this.clock.seconds;
+    const seconds = this.clock.advance(now, eligible);
+    movementPose(seconds, this.pose);
     if (!eligible) return false;
     for (const entry of this.entries) {
       entry.base.copy(entry.mesh.matrix);
@@ -343,6 +350,12 @@ export class RunningMovement {
     this.springMesh.geometry = this.spring.geometry;
     this.forkMesh.geometry = this.fork;
     this.active = true;
+    this.exposure.show(
+      seconds,
+      Math.min(MAX_EXPOSURE_SECONDS, (seconds - before) / 2),
+      balanceAngle,
+      shaftMatrix,
+    );
     return true;
   }
   /** Expected displayed matrix for diagnostics, including prescribed motion. */
@@ -363,8 +376,16 @@ export class RunningMovement {
     if (this.dead) return;
     this.restore();
     this.clock.suspend();
+    this.exposure.dispose();
     this.spring.geometry.dispose();
     this.fork.dispose();
     this.dead = true;
   }
+}
+
+function balanceAngle(seconds: number) {
+  return (
+    MOVEMENT.centers.balance -
+    180 * Math.cos(2 * Math.PI * ((seconds / MOVEMENT.secondsPerCycle) % 1))
+  );
 }

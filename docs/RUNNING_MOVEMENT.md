@@ -124,6 +124,81 @@ The ribbon keeps the original 0.035 mm width and 0.215 mm height. Interpolation
 is an approximation, with measured length/shape errors below; it is not an elastic
 material solution.
 
+## Balance rendering exposure — 27 October 2026
+
+A subsequent local rendering milestone, based on `38fc38a`, softens the fast
+balance rim and its four eccentrics without changing the shared clock, the 3 Hz
+frequency, ±180° amplitude, exact pose matrices, gear ratios or recoil. Evidence
+and hashes are recorded in
+[balance-exposure.json](../assets/source-manifest/balance-exposure.json).
+
+`BalanceExposure.ts` draws nine instanced poses from a centered shutter interval:
+half the last active frame interval, capped at **1/120 second**. Each pixel chooses
+one sample using a stable spatial dither shared by all five surfaces. This
+approximates a short exposure with normal opaque depth testing, avoiding multiple
+transparent ghost layers or repeated full-scene passes. The renderer reuses the
+source geometry; it adds five sibling meshes, instance buffers and owned materials.
+The authored finish basis includes the instance rotation. Exact originals remain
+available for picking and diagnostics, and are restored for inspection/separation.
+
+The staff, impulse jewel, roller, collet, hairspring, pallet and coupled gears keep
+their exact instantaneous poses. Contact shading also uses the center pose; it
+must not treat all shutter instances as opaque occluders. This is an optical
+presentation approximation, not a change to the escapement law or geometry.
+
+There is no frame history or independent clock. The first frame and first frame
+after suspension render sharply. Delayed frames retain correct elapsed time but
+do not lengthen the shutter past the cap. Pausing/inspection hides the instances
+and restores original visibility. Disposal removes the siblings, disposes their
+owned materials/instance buffers once, and leaves shared source geometry alone.
+
+Local validation was explained before execution because this local-only change
+needs actual shader/rendering review. **Nine focused movement tests**, typecheck,
+lint and the production build pass. The added controller regression checks source
+matrices against the exact pose, shutter endpoint/center matrices, unchanged
+attachments/train visibility, picking, suspension, source restoration and cleanup.
+All **18 production-browser lifecycle checks** also pass across Explorer, Workshop
+and Bench, including separation/reassembly, completion/Undo, flip, visibility and
+cleanup. The A/B browser fixture compares six identical clock poses with exposure disabled
+and enabled, verifies both actual compiled shader variants, and records screenshots.
+
+The final nine-sample, short-shutter A/B desktop run records **597 sharp frames
+versus 592 exposed frames** in successive 12-second intervals. Both have frame
+spacing p50 ≈16.7 ms and p95 ≈33.4 ms, and unchanged **136 geometries / 8 textures**.
+This run had concurrent application load and missed frames in both modes; it does
+not establish universal 60 FPS or a statistically significant performance delta.
+A maximum-speed crop comparison across two consecutive 60 FPS transitions reduces
+spatially filtered mean pixel change by **20.7%** (11.91 → 9.44 on an 8-bit scale).
+This is a narrow sampling diagnostic, not a perceptual usability score.
+
+Reviewed macro pairs show a softened sweep with sharp fixed bridges, jewels and
+spring. **Fine dithering is visible at extreme zoom**, especially at low pixel
+density. The effect reduces hard strobing; it cannot create missing display frames
+or remove low-FPS aliasing. The shorter shutter retains more edge definition than
+a full-frame exposure. No new controls, force simulation or mechanical acceptance
+claim is introduced. Earlier nominal-speed and CAD audits below remain historical.
+
+Reproduction uses the same installed Chrome/Playwright and local production server:
+
+```sh
+node --test tests/running-movement.test.mjs > artifacts/balance-exposure/movement-tests.txt 2>&1
+# After typecheck, lint and a production build, start the server on port 4179.
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs \
+CHROME_PATH=/absolute/path/to/Chrome \
+node scripts/movement/exposure-check.mjs http://127.0.0.1:4179
+MOVEMENT_EVIDENCE_ROOT=artifacts/balance-exposure \
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs \
+CHROME_PATH=/absolute/path/to/Chrome \
+node scripts/movement/browser-check.mjs http://127.0.0.1:4179
+node scripts/movement/record-exposure-validation.mjs
+```
+
+The recorder also requires retained `image-comparison.json` and successful build,
+typecheck/lint logs under the evidence directory. The image diagnostic crops
+`(280,70)–(1160,900)` from frames 4/5/6, applies a 0.7-pixel Gaussian filter, then
+averages RGB absolute differences over the two transitions. Images and reports
+remain ignored; provenance includes hashes. No publication or remote Git action.
+
 ## Nominal-speed validation — 27 October 2026
 
 The separate [nominal-speed provenance](../assets/source-manifest/nominal-operating-speed.json)
