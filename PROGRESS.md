@@ -15,6 +15,34 @@ now include the washer and the Bench's 218 rendered movement/crown leaves.
 Source and diff review only; no local tests, build or browser automation were run.
 Next: validate through GitHub CI when a push is authorized. No push or publication.
 
+## Connected display-train phase and clearance review
+
+From clean `35c7835`, the [complete conditional review](docs/DISPLAY_PHASE_CLEARANCE_REVIEW.md)
+applies both rear phase candidates together in isolated diagnostics. All five
+meshes pass **32,261 actual-runtime triangle configurations**, with 12 additional
+source-critical rear witnesses clear. Exact ratios preserve all seven rigid
+packets; the front phases and the existing clock remain unchanged.
+
+The 13 leaves are screened against every source occurrence and all 15 authored
+fitted-hand poses: 4,516 full-turn box exclusions and 231 candidate neighbor
+pairs. Of those, 121 clear by continuous enclosing/radial bounds, 3 have an
+invariant nonpenetrating relative pose, 101 pass sampled full-period checks, and
+6 retain original overlaps. There are 9,578 neighbor configurations and 9,434
+sampled solid-common queries. No new/increased overlap was found. A 690-pose
+runtime neighbor replay retains 11 pre-existing triangle-contact pairs; fresh
+source queries identify five as zero-common-volume contact interfaces. These
+are not described as positive clearances. Invalid/non-solid source exceptions
+and prior spring-envelope limitations remain explicit.
+
+**No app change or new animation.** All 126 app/authored files match the baseline.
+The rear-hour ~45 nm source margin remains unqualified; 101 neighbor pairs still
+lack continuous whole-solid certification; both joint states still need explicit
+maker confirmation. Next: obtain joint/fit and source-precision evidence before
+accepting a phase installation. Local CAD and isolated runtime checks were
+explained before execution; no app build, test suite or browser automation.
+[Provenance](assets/source-manifest/display-phase-review.json) records the inputs
+and limits. No push, PR, merge, deployment or publication.
+
 ## Reverse-face mesh diagnosis
 
 Research from clean `ac6e37c` separates original source poses, authored phases

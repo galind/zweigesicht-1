@@ -60,6 +60,11 @@ The existing clock, motion, phases, hands and barrel-II boundary remain unchange
 See the study for 32,261 source and runtime configurations, sampled versus continuous
 bounds, neighbor limitations and the precise evidence needed to proceed.
 
+The subsequent [connected phase and clearance review](DISPLAY_PHASE_CLEARANCE_REVIEW.md)
+evaluates simultaneous rear phase candidates only in offline diagnostics. The
+nominal mesh/neighbor findings do not remove the source-precision, contact or
+joint-state limitations, and do not enable any additional app packet.
+
 ## Nominal-frequency evidence and shaft periods
 
 The maker's [Caliber ml-01 specification](https://www.marcolangwatches.com/en/watches/),

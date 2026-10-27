@@ -1,5 +1,11 @@
 # Reverse-face running contacts — 27 October 2026
 
+Follow-up: the [connected phase and clearance review](DISPLAY_PHASE_CLEARANCE_REVIEW.md)
+tests both candidates together across both display trains and their neighbors.
+It finds no new phase-induced collision in the scoped checks, while retaining
+source contacts, sampled-neighbor limits, the rear-hour precision limitation
+and the unresolved joint states. No candidate is installed.
+
 **No runtime transform fault was found. Both contacts are phase incompatibilities
 in the current nominal source/display configuration.** Isolated phase changes
 clear the reviewed planar profiles and selected original-solid poses without
