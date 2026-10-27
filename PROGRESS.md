@@ -6,42 +6,45 @@ Updated 27 October 2026. Setup: [README](README.md). Technical reference:
 
 ## Running movement implementation
 
-Active branch: `codex/escapement-clearance-study`. The assembled escapement,
-attached hairspring and coupled train through barrel-II drum/lid share the maker's
-**3 Hz / 21,600 beats per hour** nominal speed (1/3 second per complete oscillation).
-The independent ML-01 specification agrees with the recorded −2° seconds-shaft
-advance per cycle. Mean periods: escape 6⅔ s, seconds 60 s, third 562.5 s,
-center 1 h, transfer 2 h 10 min, barrel II 6 h 40 min.
-
-The local rendering follow-up to `38fc38a` softens the balance rim and four
-eccentrics with nine spatially dithered shutter samples. The half-frame exposure
-is capped at 1/120 second; frequency, ±180° amplitude, shared clock, exact matrices,
-source geometry, recoil, display phases and ratios remain unchanged. Staff,
-roller, collet, spring and train retain exact instantaneous poses. Inspection,
-separation and resume restore sharp source geometry. Hidden time remains excluded.
+Active branch: `codex/escapement-clearance-study`; nominal-speed work starts from
+clean local milestone `bdf8259`. The assembled escapement, attached hairspring and
+entire currently coupled train through barrel-II drum/lid now share the maker's
+**3 Hz / 21,600 beats per hour** nominal speed (1/3 second per complete oscillation),
+replacing the eight-second illustration. The maker's ML-01 specification independently
+confirms the −2° seconds-shaft/cycle ratio derivation. Mean periods: escape 6⅔ s,
+seconds 60 s, third 562.5 s, center 1 h, transfer 2 h 10 min, barrel II 6 h 40 min.
 
 The [runtime record](docs/RUNNING_MOVEMENT.md) and
-[rendering provenance](assets/source-manifest/balance-exposure.json) document the
-method, source evidence, validation and limits. Nine focused movement tests,
-typecheck, lint, build, 18 browser checks and six A/B pose pairs pass locally.
-The paired 12-second desktop runs show 597 sharp versus 592 exposed frames,
-identical p95 ≈33.4 ms and stable resource counts. Both missed frames under
-concurrent app load. The effect reduces hard strobing, but fine dithering remains
-visible at extreme zoom and low-FPS aliasing is not eliminated. Local rendering
-validation was explained before execution; no push was authorized.
+[nominal-speed provenance](assets/source-manifest/nominal-operating-speed.json)
+record source evidence, timing, sampling and validation. Balance amplitude,
+geometry, display phases, recoil, accumulated shaft ratios and pause/resume
+policies remain intact. Hidden tabs and disassembly exclude time; reassembly
+resumes the retained clock. Mainsprings, arbors, ratchets, barrel I, motion works
+and hands remain static. This is prescribed kinematics, not self-sustaining motion.
 
-Earlier nominal-speed evidence stays in
-[nominal-operating-speed.json](assets/source-manifest/nominal-operating-speed.json).
-The 8,557 normalized poses and unchanged geometry retain the earlier CAD audit's
-scope; this rendering change is not a new clearance or dynamics certification.
-Evidence remains ignored under `artifacts/balance-exposure/`; previous evidence
-folders are preserved. Mainsprings, arbors, ratchets, barrel I, motion works and
-hands remain static. Motion is prescribed, not physically self-sustaining.
+All **8 focused movement tests**, typecheck, lint, production build and **18 browser
+checks** pass locally. Checks cover varied frame rates, delayed frames, hidden
+lifecycle, reassembly, Workshop completion/Undo, Bench flip and cleanup. A 25-second
+Chrome interval delivers 1,501 frames, p95 16.7 ms, movement-update p95 0.8 ms,
+and stable geometry/texture counts. At 60 FPS there are only 20 samples/cycle;
+fast spokes and brief releases can strobe. This single desktop run and synthetic
+visibility fixture do not qualify all devices or OS lifecycle behavior.
 
-No push, PR, merge, deployment or publication. Next: review the softened local
-movement view and its close-zoom tradeoff before any release decision. Invalid
-original solids, continuous contacts, physical-device qualification, expert
-mechanical acceptance and CAD redistribution permission remain unresolved.
+The 8,557 normalized runtime poses agree with the earlier verified path to less
+than 3.2×10⁻¹³ degrees; the GPU spring export is identical. Existing CAD clearance
+evidence remains historical and applicable to unchanged geometry; no CAD sweep
+was rerun. Local validation was essential because no push is authorized and
+higher-speed rendering required inspection. Evidence remains ignored under
+`artifacts/nominal-movement/`; the original `artifacts/running-movement/` is preserved.
+
+No push, PR, merge, deployment or publication. Next: review this local nominal-speed
+milestone and its temporal-sampling limitations before any release decision.
+The [clearance](docs/ESCAPEMENT_CLEARANCE_STUDY.md),
+[interfaces/hairspring](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md) and
+[train](docs/TRAIN_COUPLING_STUDY.md) studies retain the supporting mechanical
+evidence. Invalid original solids, continuous contacts, physical-device qualification,
+expert acceptance and CAD redistribution permission remain unresolved. Earlier
+`codex/escapement-foundation` and `codex/running-movement` branches are historical.
 
 ## Integration state
 
