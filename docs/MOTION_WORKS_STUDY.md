@@ -1,10 +1,9 @@
 # Motion-work running review — 27 October 2026
 
-**28 October implementation follow-up:** [four front/transfer packets now move](FRONT_DISPLAY_ANIMATION.md)
-under the user's explicit 93/137 sticking assumption. The 214/217 boundary is
-an incomplete illustration, with no physical slip claim. Rear packets and all
-phases remain unchanged. The research below is historical; its source-fit,
-sampled/continuous and physical-acceptance limitations remain.
+**28 October implementation follow-up:** [both display trains now move](REAR_DISPLAY_ANIMATION.md)
+under documented sticking assumptions at 93/137 and 214/217, with the two reviewed
+rear packet phases installed. Hands remain static. The research below is
+historical; its source-fit, sampled/continuous and physical-acceptance limits remain.
 
 
 Follow-up: [the independent component/fit investigation](FRICTION_CONNECTIONS.md)

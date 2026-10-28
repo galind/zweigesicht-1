@@ -1,5 +1,10 @@
 # Front/transfer display animation
 
+**Follow-up:** the [rear-display implementation](REAR_DISPLAY_ANIMATION.md) now
+enables 216/217, 183/184 and 187/188 with a modeled sticking connection and two
+reviewed rear phases. This report records the preceding four-packet milestone.
+
+
 28 October 2026. Implemented from the verified clean `58c7e27` checkout on
 `codex/escapement-clearance-study`. This is **prescribed kinematics**, not
 physically self-sustaining motion. The user explicitly authorized normal-running

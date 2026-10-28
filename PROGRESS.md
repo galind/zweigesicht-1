@@ -4,7 +4,53 @@ Updated 28 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
-## Front/transfer display animation — current milestone
+## Movement-side display animation — current milestone
+
+Implemented from clean `5fd50f0` on `codex/escapement-clearance-study`.
+[The rear extension](docs/REAR_DISPLAY_ANIMATION.md) enables motion works 3
+(216/217), cannon pinion 2 (183/184) and hour wheel 2 (187/188), rigidly driven
+from the existing accumulated E at −1/1620, +1/540 and +1/6480: mean periods
+3 h, 1 h and 12 h. All hands, winding and setting remain static.
+
+214/217 is modeled as sticking 1:1 for the requested prescribed animation;
+this is a supported fitted-joint interpretation, not maker-confirmed evidence.
+The two jointly reviewed rear packet phases are installed: −0.9228515625° world
+for 183/184 and +0.27165787111074224° for 187/188. All other phases, geometry,
+teeth, shaft locations, 3 Hz / 21,600 beats/hour, balance amplitude, escapement
+path/recoil, earlier train ratios, clock and lifecycle policies remain unchanged.
+The rear-hour source witness margin is still only **~45 nm**, not tolerance-qualified.
+
+Validation passes: **11 movement tests, 3 phase tests, typecheck, lint, production
+build and 22 browser checks** across Explorer, completed Workshop and assembled
+Bench. Actual installed transforms agree with the complete reviewed train within
+5.56×10⁻¹⁷ per matrix entry. All **32,261** full-period runtime mesh configurations
+and 12 critical rear runtime witnesses clear. **23 fresh original-solid configurations**
+recheck the 12 rear mesh witnesses and 11 witnesses covering six retained-fit pairs.
+No new/increased interference was detected in checked configurations.
+
+The rebuilt inventory transfers 231 neighbor results only after exact kinematic
+and transform-equivalence checks: 113 enclosing-cylinder and 8 radial continuous
+bounds, 3 invariant nonpenetrating poses, **101 sampled-only pairs**, and 6 retained
+source overlaps. There are 4,516 box exclusions and 91 invalid/non-solid exceptions.
+The 690-pose runtime neighbor replay retains the same 11 contact/overlap pairs.
+214/217's ~0.007245609 mm³ overlap and the shaft/hand and wheel/dial-ring overlaps
+remain disclosed. Static hands are the remaining incomplete display boundary;
+no physical slip or self-sustaining motion is claimed.
+
+A 25.032-second desktop Chrome interval delivered 1,296 frames, frame p50/p95
+16.7/33.4 ms, movement-update p95 0.6 ms and stable 135 geometries / 8 textures.
+No application/shader errors. Synthetic visibility/completion fixtures and one
+desktop run do not qualify all devices or OS lifecycle behavior. The local
+production movement view is refreshed at `http://127.0.0.1:4178/`.
+[Provenance](assets/source-manifest/rear-display-animation.json) records exact
+membership, phases, assumptions, inherited/fresh evidence and hashes. 124 other
+app/authored files remain byte-identical, including the controller and geometry.
+
+Next: user review of the local illustration. Joint-state/manufacturing evidence,
+source-fit qualification and continuous whole-solid clearance remain physical
+acceptance work. No push, PR, merge, deployment or publication; gates remain.
+
+## Front/transfer display animation — preceding milestone
 
 Implemented from clean `58c7e27` on `codex/escapement-clearance-study`.
 [The scoped animation](docs/FRONT_DISPLAY_ANIMATION.md) enables exactly seven

@@ -58,9 +58,9 @@ async function displayScope(page, label) {
       totalEntries:r.entries.length, rear:r.entries.filter(e=>['motion3','cannon2','hour2'].includes(e.packet.name)).length,
       maxError, namedMembers:installed.length};
   }, settings.displayPackets);
-  check(label + " uses the exact four display packets and shared escape phase",
-    result.active && result.entries === 7 && result.totalEntries === 35 && result.rear === 0 &&
-    result.names.length === 4 && result.maxError < 1e-9, result);
+  check(label + " uses the exact seven display packets and shared escape phase",
+    result.active && result.entries === 13 && result.totalEntries === 41 && result.rear === 6 &&
+    result.names.length === 7 && result.maxError < 1e-9, result);
 }
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });

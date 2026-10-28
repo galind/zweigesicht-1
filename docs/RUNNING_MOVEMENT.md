@@ -21,9 +21,10 @@ The nine balance and six pallet leaves move as their recorded rigid packets.
 The fork body alone uses the studied subtractive clearance correction. No shaft,
 jewel or gear has been repositioned. A separate deforming hairspring retains the
 original raised terminal and source's small staff cylinder. The original overview
-and catalog files, source CAD, and display-phase overrides remain unchanged.
+and catalog files and source CAD remain unchanged. The rear display phase
+overrides are documented below.
 
-The 13 drive-train leaves and seven front/transfer display leaves use world +Z
+The 13 drive-train leaves and 13 display leaves use world +Z
 increments from the **accumulated** escape angle E, after the existing display poses:
 
 | Packet | Definitions | Angle/E |
@@ -38,6 +39,9 @@ increments from the **accumulated** escape angle E, after the existing display p
 | Motion works 1 | 210, 211 | +1/1620 |
 | Hour wheel 1 | 141, 142 | −1/6480 |
 | Motion works 2 | 213, 214 | −1/1620 |
+| Motion works 3 | 216, 217 | −1/1620 |
+| Cannon pinion 2 | 183, 184 | +1/540 |
+| Hour wheel 2 | 187, 188 | +1/6480 |
 
 E is `18 * completedCycles + localEscape`. Only each final shaft angle is reduced
 modulo 360°, after its ratio is applied. The −0.1° local start is retained rather
@@ -45,21 +49,24 @@ than re-zeroing the source display. Left multiplication around each recorded
 world pivot handles reversed local axes. The third, seconds and transfer display
 phases remain +16.6°, +2.3° and +6.25° in world coordinates.
 
-Both mainsprings, arbors, ratchets, barrel I, rear display packets and all hands
-remain in their existing static representations. The barrel-II drum/lid rotates around its frozen
+Both mainsprings, arbors, ratchets, barrel I and all hands remain in their
+existing static representations. The barrel-II drum/lid rotates around its frozen
 mainspring as the study's explicitly illustrative boundary. The studied source
 fit clears those rotating surfaces, but this does not depict spring attachment,
 unwinding, energy storage or load sharing. Static hands do not report elapsed
 time. The front/transfer extension uses the user-authorized sticking assumption
-at 93/137. Moving 214 against static 217 is an explicitly incomplete illustration;
-no physical slipping is modeled or claimed. See the
-[implemented scope and validation](FRONT_DISPLAY_ANIMATION.md).
+at 93/137. The [rear extension](REAR_DISPLAY_ANIMATION.md) models 214/217 as
+sticking 1:1 and installs the two jointly reviewed rear packet phases. Those
+phases resolve sampled nominal mesh conflicts but retain the ~45 nm rear-hour
+precision limit. Static hands are an incomplete display boundary; no physical
+slipping is modeled or claimed.
 
 ## Historical motion-work extension review — 27 October 2026
 
 The following research preceded the [28 October partial implementation](FRONT_DISPLAY_ANIMATION.md).
-Its no-animation decision is superseded only for the four explicitly authorized
-front/transfer packets. Rear packets and all authored phases remain unchanged.
+The subsequent [rear implementation](REAR_DISPLAY_ANIMATION.md) extends this to
+all seven display packets with documented connection assumptions and two rear
+phase installations. The historical research below retains its evidence limits.
 
 The [seven-packet investigation](MOTION_WORKS_STUDY.md) confirms 13 exact source
 leaves and derives conditional ratios for both displays. **No additional packet
@@ -106,14 +113,17 @@ would depend on assuming a 60-second seconds-shaft revolution. The subsequent
 | Motion works 1 | +1/30 | 10,800 s (3 h) |
 | Hour wheel 1 | −1/120 | 43,200 s (12 h) |
 | Motion works 2 | −1/30 | 10,800 s (3 h) |
+| Motion works 3 | −1/30 | 10,800 s (3 h) |
+| Cannon pinion 2 | +0.1 | 3,600 s (1 h) |
+| Hour wheel 2 | +1/120 | 43,200 s (12 h) |
 
 These are accumulated net advances about world +Z, not constant instantaneous
 velocities: the existing lock, release and recoil remain. Balance and pallet
-repeat every 1/3 second; each half swing lasts 1/6 second. All hands and rear
-display packets remain excluded. Every enabled packet and the hairspring still consume the same
+repeat every 1/3 second; each half swing lasts 1/6 second. All hands remain
+excluded. Every enabled packet and the hairspring still consume the same
 active-time clock. No amplitude, geometry, display phase, gear ratio or lifecycle
-code changed in the nominal-speed milestone. The later four-packet extension
-only adds authored membership/ratios to that same controller.
+code changed in the nominal-speed milestone. The later display extensions
+use that same controller, with the rear phase changes documented separately.
 
 ## State and lifetime policy
 

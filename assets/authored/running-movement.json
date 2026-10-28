@@ -3,10 +3,10 @@
   "frequencyHz": 3,
   "speedBasis": "Maker-specified ML-01 nominal frequency, independently consistent with the recorded train ratios and 18-degree escape advance per complete oscillation; prescribed motion, not measured dynamics",
   "statePolicy": "Run only complete, seated mechanisms; retain active time across inspection, separation and visibility suspension",
-  "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I, all hands and rear display packets remain static",
+  "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I and all hands remain static; winding and setting are excluded",
   "evidence": "docs/RUNNING_MOVEMENT.md",
   "displayTrainAssumption": "User-authorized normal-running sticking at center shaft/cannon pinion 93/137, same-world-direction 1:1. Modeling assumption, not maker-confirmed evidence.",
-  "displayTrainBoundary": "Moving shaft 214 / static pinion 217 is an explicitly incomplete illustration; no physical slipping is modeled or claimed.",
+  "displayTrainBoundary": "All seven display packets share E; the remaining incomplete illustration boundaries are their static hands and the existing power-source boundary. No physical slipping is claimed.",
   "displayPackets": [
     {
       "name": "cannon1",
@@ -70,6 +70,55 @@
         -1,
         1620
       ]
+    },
+    {
+      "name": "motion3",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+      ],
+      "pivot": [
+        1.29742652452144e-15,
+        5.0,
+        -5.100000000000007
+      ],
+      "ratio": [
+        -1,
+        1620
+      ]
+    },
+    {
+      "name": "cannon2",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2"
+      ],
+      "pivot": [
+        -4.63553877842402e-15,
+        7.39999999999999,
+        -5.3600000000000065
+      ],
+      "ratio": [
+        1,
+        540
+      ]
+    },
+    {
+      "name": "hour2",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2"
+      ],
+      "pivot": [
+        -4.67706903509508e-15,
+        7.39999999999999,
+        -5.590000000000007
+      ],
+      "ratio": [
+        1,
+        6480
+      ]
     }
-  ]
+  ],
+  "displayTrainConnection": "For the requested prescribed rear-display animation, model shaft/pinion 214/217 as sticking with same-world-direction 1:1 rotation. Supported fitted-joint interpretation, not maker-confirmed joint state or manufacturing acceptance."
 }

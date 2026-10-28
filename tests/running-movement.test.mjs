@@ -99,6 +99,9 @@ test("nominal 3 Hz, two beats per oscillation and all shaft periods agree indepe
     motion1: 10800,
     hour1: 43200,
     motion2: 10800,
+    motion3: 10800,
+    cannon2: 3600,
+    hour2: 43200,
   };
   for (const packet of MOVEMENT.packets.slice(2)) {
     const period = periods[packet.name];
@@ -263,19 +266,11 @@ test("loader rejects missing and corrupt motion assets", async () => {
   }
 });
 
-// Rear packets remain outside the explicitly partial illustration.
-test("rear display packets and hand leaves stay static through long clocks and lifecycle changes", () => {
-  const study = read("../assets/source-manifest/motion-works-study.json");
-  const candidates = study.packets.flatMap((p) => p.members.map((m) => m.id));
-  assert.equal(candidates.length, 13);
-  const hands = manifest.instances
-    .filter(
-      (p) => !p.isAssembly && /Zeiger|Zeigerbuchse/.test(p.name) && !candidates.includes(p.id),
-    )
-    .map((p) => p.id);
-  const rear = study.packets.slice(4).flatMap((p) => p.members.map((m) => m.id));
-  const ids = [...rear, ...hands];
-  for (const id of ids) assert.ok(!MOVEMENT.packets.some((p) => p.members.includes(id)), id);
+// All leaves outside the explicit moving packets and deforming spring stay static.
+test("hands, winding, setting and all other excluded leaves stay static through lifecycle changes", () => {
+  const moving = new Set([...MOVEMENT.packets.flatMap(p => p.members), MOVEMENT.spring.id]);
+  const ids = manifest.instances.filter(p => !p.isAssembly && !moving.has(p.id)).map(p => p.id);
+  assert.ok(ids.length > 300);
   const { run, meshes } = fixture(ids);
   const bases = new Map(ids.map((id) => [id, meshes.get(id).matrix.clone()]));
   for (const [ms, active] of [
@@ -293,12 +288,12 @@ test("rear display packets and hand leaves stay static through long clocks and l
 });
 
 
-test("front display scope matches source occurrences, axes, signed ratios and independent rigid rotations", () => {
+test("complete display scope matches source occurrences, axes, signed ratios and independent rigid rotations", () => {
   const study = read("../assets/source-manifest/motion-works-study.json");
-  const expected = { cannon1: [-1, 540], motion1: [1, 1620], hour1: [-1, 6480], motion2: [-1, 1620] };
+  const expected = { cannon1: [-1, 540], motion1: [1, 1620], hour1: [-1, 6480], motion2: [-1, 1620], motion3: [-1, 1620], cannon2: [1, 540], hour2: [1, 6480] };
   const additions = MOVEMENT.packets.slice(8);
   assert.deepEqual(additions.map(p => p.name), Object.keys(expected));
-  assert.equal(new Set(MOVEMENT.packets.flatMap(p => p.members)).size, 35);
+  assert.equal(new Set(MOVEMENT.packets.flatMap(p => p.members)).size, 41);
   const {run, meshes} = fixture();
   const bases = new Map([...meshes].map(([id, mesh]) => [id, mesh.matrix.clone()]));
   for (const p of additions) {
@@ -339,4 +334,25 @@ test("front display scope matches source occurrences, axes, signed ratios and in
   }
   run.dispose();
   for (const [id,m] of meshes) assert.ok(m.matrix.equals(bases.get(id)));
+});
+
+
+test("rear phases preserve rigid packets and the 214/217 connection remains 1:1", () => {
+  const {run, meshes} = fixture();
+  const id = n => manifest.instances.find(p => p.definitionId === `d_0_1_1_${n}`).id;
+  const bases = new Map([...meshes].map(([id,m]) => [id,m.matrix.clone()]));
+  for (const [n,angle] of [[183,-0.9228515625],[184,-0.9228515625],[187,0.27165787111074224],[188,0.27165787111074224]]) {
+    const p = manifest.instances.find(p => p.id === id(n));
+    const source = new THREE.Matrix4().set(...p.worldTransform.flat());
+    const pivot = p.worldTransform.slice(0,3).map(row => row[3]);
+    const expected = shaftMatrix(new THREE.Matrix4(),pivot,angle).multiply(source);
+    expected.elements.forEach((v,i) => close(v,bases.get(id(n)).elements[i]));
+  }
+  const initial = bases.get(id(214)).clone().invert().multiply(bases.get(id(217)));
+  for (const seconds of [0,.017,123.456,10800,43200,1e9]) {
+    run.restore(); run.clock.seconds=seconds; run.clock.suspend(); run.update(0,true);
+    const actual = meshes.get(id(214)).matrix.clone().invert().multiply(meshes.get(id(217)).matrix);
+    actual.elements.forEach((v,i) => close(v,initial.elements[i]));
+  }
+  run.dispose();
 });

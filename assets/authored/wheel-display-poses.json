@@ -1,9 +1,39 @@
 {
   "schemaVersion": 1,
   "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
-  "scope": "Static presentation phase; original geometry and source matrices remain immutable. No running or mechanical certification.",
+  "scope": "Authored shaft phases applied before running increments; original geometry and source matrices remain immutable. Rear phases support prescribed kinematics, not mechanical certification.",
   "review": "docs/WHEEL_CONTACT_REVIEW.md",
   "wheels": [
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+      "definitionId": "d_0_1_1_183",
+      "name": "ml01 Viertelrohr2 z8 m0,15",
+      "pivotLocalMm": [
+        0,
+        0,
+        0
+      ],
+      "localZDegrees": 0.9228515625,
+      "rigidPacket": "cannon-pinion-2",
+      "axisEvidence": "Source occurrence axis at world (0,7.4) mm; local Z is reversed. Exact source matrices and packet membership are in motion-works-study.json.",
+      "reason": "Install the jointly reviewed rear running phase as prescribed kinematics; preserve teeth, shaft location and complete packet relative transform.",
+      "review": "docs/REAR_DISPLAY_ANIMATION.md"
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+      "definitionId": "d_0_1_1_184",
+      "name": "ml01 Welle Viertelrohr2",
+      "pivotLocalMm": [
+        0,
+        0,
+        0
+      ],
+      "localZDegrees": 0.9228515625,
+      "rigidPacket": "cannon-pinion-2",
+      "axisEvidence": "Source occurrence axis at world (0,7.4) mm; local Z is reversed. Exact source matrices and packet membership are in motion-works-study.json.",
+      "reason": "Install the jointly reviewed rear running phase as prescribed kinematics; preserve teeth, shaft location and complete packet relative transform.",
+      "review": "docs/REAR_DISPLAY_ANIMATION.md"
+    },
     {
       "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_4",
       "definitionId": "d_0_1_1_96",
@@ -117,22 +147,22 @@
       "definitionId": "d_0_1_1_187",
       "name": "ml01 Stundenrad2 z32 m0,12",
       "pivotLocalMm": [0, 0, 0],
-      "localZDegrees": -0.25,
+      "localZDegrees": -0.27165787111074224,
       "rigidPacket": "hour-wheel-2",
       "axisEvidence": "Original coaxial cylindrical face 195, radius 0.45 mm, establishes local Z through X=Y=0. Complete source and display matrices and analytic surface evidence are in remaining-wheel-contact.json.",
-      "reason": "Reviewed static phase in the hour-wheel-2 packet. Preserve original geometry, axes, axial seating and the complete relative transform of packet members.",
-      "review": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
+      "reason": "Reviewed running phase for the prescribed rear display; approximately 45 nm nominal source margin is not tolerance-qualified. Preserve original geometry, axes and rigid packet membership.",
+      "review": "docs/REAR_DISPLAY_ANIMATION.md"
     },
     {
       "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
       "definitionId": "d_0_1_1_188",
       "name": "ml01 Butzen Stundenrad2",
       "pivotLocalMm": [0, 0, 0],
-      "localZDegrees": -0.25,
+      "localZDegrees": -0.27165787111074224,
       "rigidPacket": "hour-wheel-2",
       "axisEvidence": "Original coaxial cylindrical face 7, radius 0.21 mm, establishes local Z through X=Y=0. Complete source and display matrices and analytic surface evidence are in remaining-wheel-contact.json.",
-      "reason": "Reviewed static phase in the hour-wheel-2 packet. Preserve original geometry, axes, axial seating and the complete relative transform of packet members.",
-      "review": "docs/REMAINING_WHEEL_CONTACT_REVIEW.md"
+      "reason": "Reviewed running phase for the prescribed rear display; approximately 45 nm nominal source margin is not tolerance-qualified. Preserve original geometry, axes and rigid packet membership.",
+      "review": "docs/REAR_DISPLAY_ANIMATION.md"
     },
     {
       "leafId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",

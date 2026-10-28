@@ -10,8 +10,10 @@ import {MeshoptDecoder} from '../../explorer/node_modules/three/examples/jsm/lib
 import {MeshBVH} from '../../explorer/node_modules/three-mesh-bvh/build/index.module.js';
 import {MOVEMENT,RunningMovement,movementPose} from '../../explorer/src/viewer/RunningMovement.ts';
 import {wheelDisplayMatrix} from '../../explorer/src/viewer/WheelDisplayPose.ts';
+const installed=process.argv.includes('--installed');
 const partial=process.argv.includes('--front');
-const out=partial?'artifacts/front-display':'artifacts/display-phase-review';fs.mkdirSync(out,{recursive:true});
+const actual=partial||installed;
+const out=installed?'artifacts/rear-display':partial?'artifacts/front-display':'artifacts/display-phase-review';fs.mkdirSync(out,{recursive:true});
 const read=p=>JSON.parse(fs.readFileSync(p));
 const records=read('explorer/public/models/assembly-manifest.json').instances;
 const source=read('artifacts/motion-works/source.json');
@@ -46,14 +48,14 @@ for(const file of [paths.overview,paths.catalog]){
  });
 }
 const ratios={cannon1:[-1,540],motion1:[1,1620],hour1:[-1,6480],motion2:[-1,1620],motion3:[-1,1620],cannon2:[1,540],hour2:[1,6480]};
-const additions=partial?MOVEMENT.packets.slice(8):Object.entries(ratios).map(([name,ratio])=>({name,ratio,members:source.packets[name].members,pivot:source.leaves[source.packets[name].definitions[0]].worldTransform.slice(0,3).map(r=>r[3])}));
+const additions=actual?MOVEMENT.packets.slice(8):Object.entries(ratios).map(([name,ratio])=>({name,ratio,members:source.packets[name].members,pivot:source.leaves[source.packets[name].definitions[0]].worldTransform.slice(0,3).map(r=>r[3])}));
 const originalPackets=MOVEMENT.packets.slice();
-if(!partial)MOVEMENT.packets.splice(8,MOVEMENT.packets.length-8,...additions);
+if(!actual)MOVEMENT.packets.splice(8,MOVEMENT.packets.length-8,...additions);
 for(const [id,m] of meshes){
  const r=byId.get(id),s=new THREE.Matrix4().set(...r.worldTransform.flat());
  m.matrix.copy(wheelDisplayMatrix(id,s)??s);
  const p=additions.find(p=>p.members.includes(id));
- if(!partial&&(p?.name==='cannon2'||p?.name==='hour2'))m.matrix.copy(s).multiply(new THREE.Matrix4().makeRotationZ(phases[p.name+'WorldDegrees']*r.worldTransform[2][2]*Math.PI/180));
+ if(!actual&&(p?.name==='cannon2'||p?.name==='hour2'))m.matrix.copy(s).multiply(new THREE.Matrix4().makeRotationZ(phases[p.name+'WorldDegrees']*r.worldTransform[2][2]*Math.PI/180));
 }
 const bases=new Map([...meshes].map(([id,m])=>[id,m.matrix.clone()]));
 const raw=fs.readFileSync('explorer/public'+MOVEMENT.file);
@@ -159,4 +161,4 @@ try{
  }
 }finally{run.dispose();MOVEMENT.packets.splice(0,MOVEMENT.packets.length,...originalPackets);}
 assert.ok(maxRigidError<1e-9);assert.ok(maxIndependentError<1e-7);
-if(process.argv[2]!=='neighbors')fs.writeFileSync(out+'/runtime.json',JSON.stringify({scope:partial?'Installed four-packet partial display with static rear packets, unchanged phases; sampled triangles, not continuous bounds':'All seven candidate packets together in isolated production controller; full-period sampled decoded triangle meshes, not continuous bounds',fittedHandOccurrences:fitted.length,maxRigidError,maxIndependentPointErrorMm:maxIndependentError,pairs:results},null,2)+'\n');
+if(process.argv[2]!=='neighbors')fs.writeFileSync(out+'/runtime.json',JSON.stringify({scope:installed?'Installed seven display packets with static hands; unchanged geometry and reviewed rear phases; sampled triangles, not continuous bounds':partial?'Installed four-packet partial display with static rear packets, unchanged phases; sampled triangles, not continuous bounds':'All seven candidate packets together in isolated production controller; full-period sampled decoded triangle meshes, not continuous bounds',fittedHandOccurrences:fitted.length,maxRigidError,maxIndependentPointErrorMm:maxIndependentError,pairs:results},null,2)+'\n');
