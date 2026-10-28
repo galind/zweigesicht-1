@@ -4,6 +4,9 @@ import settings from '../../../assets/authored/running-movement.json' with { typ
 
 export const MOVEMENT = {
   ...specification,
+  // Authored partial display scope; source membership and assumptions are recorded
+  // separately from generated escapement geometry. All packets share E and clock.
+  packets: [...specification.packets, ...settings.displayPackets],
   // Hz counts complete balance oscillations; each has two beats.
   secondsPerCycle: 1 / settings.frequencyHz,
 };

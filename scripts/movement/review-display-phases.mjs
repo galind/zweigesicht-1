@@ -1,4 +1,4 @@
-/** Offline review only. Hypothetical phases/packets never enter application assets. */
+/** Offline review. --front checks installed partial scope without injecting packets or phases. */
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -10,7 +10,8 @@ import {MeshoptDecoder} from '../../explorer/node_modules/three/examples/jsm/lib
 import {MeshBVH} from '../../explorer/node_modules/three-mesh-bvh/build/index.module.js';
 import {MOVEMENT,RunningMovement,movementPose} from '../../explorer/src/viewer/RunningMovement.ts';
 import {wheelDisplayMatrix} from '../../explorer/src/viewer/WheelDisplayPose.ts';
-const out='artifacts/display-phase-review';fs.mkdirSync(out,{recursive:true});
+const partial=process.argv.includes('--front');
+const out=partial?'artifacts/front-display':'artifacts/display-phase-review';fs.mkdirSync(out,{recursive:true});
 const read=p=>JSON.parse(fs.readFileSync(p));
 const records=read('explorer/public/models/assembly-manifest.json').instances;
 const source=read('artifacts/motion-works/source.json');
@@ -45,19 +46,19 @@ for(const file of [paths.overview,paths.catalog]){
  });
 }
 const ratios={cannon1:[-1,540],motion1:[1,1620],hour1:[-1,6480],motion2:[-1,1620],motion3:[-1,1620],cannon2:[1,540],hour2:[1,6480]};
-const additions=Object.entries(ratios).map(([name,ratio])=>({name,ratio,members:source.packets[name].members,pivot:source.leaves[source.packets[name].definitions[0]].worldTransform.slice(0,3).map(r=>r[3])}));
-const initialLength=MOVEMENT.packets.length;
-MOVEMENT.packets.push(...additions);
+const additions=partial?MOVEMENT.packets.slice(8):Object.entries(ratios).map(([name,ratio])=>({name,ratio,members:source.packets[name].members,pivot:source.leaves[source.packets[name].definitions[0]].worldTransform.slice(0,3).map(r=>r[3])}));
+const originalPackets=MOVEMENT.packets.slice();
+if(!partial)MOVEMENT.packets.splice(8,MOVEMENT.packets.length-8,...additions);
 for(const [id,m] of meshes){
  const r=byId.get(id),s=new THREE.Matrix4().set(...r.worldTransform.flat());
  m.matrix.copy(wheelDisplayMatrix(id,s)??s);
  const p=additions.find(p=>p.members.includes(id));
- if(p?.name==='cannon2'||p?.name==='hour2')m.matrix.copy(s).multiply(new THREE.Matrix4().makeRotationZ(phases[p.name+'WorldDegrees']*r.worldTransform[2][2]*Math.PI/180));
+ if(!partial&&(p?.name==='cannon2'||p?.name==='hour2'))m.matrix.copy(s).multiply(new THREE.Matrix4().makeRotationZ(phases[p.name+'WorldDegrees']*r.worldTransform[2][2]*Math.PI/180));
 }
 const bases=new Map([...meshes].map(([id,m])=>[id,m.matrix.clone()]));
 const raw=fs.readFileSync('explorer/public'+MOVEMENT.file);
 const run=new RunningMovement(raw.buffer.slice(raw.byteOffset,raw.byteOffset+raw.byteLength),meshes);
-const pairs=[[137,210,10800],[211,141,43200],[210,213,10800],[183,216,10800],[217,187,43200]];
+const pairs=[[137,210,10800],[211,141,43200],[210,213,10800],...partial?[]:[[183,216,10800],[217,187,43200]]];
 let maxRigidError=0,maxIndependentError=0;const results=[];
 function applyEscape(e){ // Find a time at this accumulated phase; update the actual controller once.
  const cycle=Math.floor((e+.1)/18);let lo=cycle/3,hi=(cycle+1)/3;
@@ -156,6 +157,6 @@ try{
   fs.writeFileSync(out+'/neighbor-runtime.json',JSON.stringify({scope:'Selected full decoded triangle witnesses for every candidate neighbor pair, production controller and fitted-hand matrices; surface intersection test, not swept-solid or containment certificate',pairs:rows},null,2)+'\n');
   console.log('neighbor runtime',rows.length,'pairs',rows.flatMap(r=>r.witnesses??[]).length,'poses');
  }
-}finally{run.dispose();MOVEMENT.packets.splice(initialLength);}
+}finally{run.dispose();MOVEMENT.packets.splice(0,MOVEMENT.packets.length,...originalPackets);}
 assert.ok(maxRigidError<1e-9);assert.ok(maxIndependentError<1e-7);
-if(process.argv[2]!=='neighbors')fs.writeFileSync(out+'/runtime.json',JSON.stringify({scope:'All seven candidate packets together in isolated production controller; full-period sampled decoded triangle meshes, not continuous bounds',fittedHandOccurrences:fitted.length,maxRigidError,maxIndependentPointErrorMm:maxIndependentError,pairs:results},null,2)+'\n');
+if(process.argv[2]!=='neighbors')fs.writeFileSync(out+'/runtime.json',JSON.stringify({scope:partial?'Installed four-packet partial display with static rear packets, unchanged phases; sampled triangles, not continuous bounds':'All seven candidate packets together in isolated production controller; full-period sampled decoded triangle meshes, not continuous bounds',fittedHandOccurrences:fitted.length,maxRigidError,maxIndependentPointErrorMm:maxIndependentError,pairs:results},null,2)+'\n');

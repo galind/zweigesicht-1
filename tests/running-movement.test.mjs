@@ -95,6 +95,10 @@ test("nominal 3 Hz, two beats per oscillation and all shaft periods agree indepe
     center: 3600,
     transfer: 7800,
     barrel: 24000,
+    cannon1: 3600,
+    motion1: 10800,
+    hour1: 43200,
+    motion2: 10800,
   };
   for (const packet of MOVEMENT.packets.slice(2)) {
     const period = periods[packet.name];
@@ -259,8 +263,8 @@ test("loader rejects missing and corrupt motion assets", async () => {
   }
 });
 
-// These source packets have no accepted driven path; clear static meshes are insufficient.
-test("unresolved display packets and hand leaves stay static through long clocks and lifecycle changes", () => {
+// Rear packets remain outside the explicitly partial illustration.
+test("rear display packets and hand leaves stay static through long clocks and lifecycle changes", () => {
   const study = read("../assets/source-manifest/motion-works-study.json");
   const candidates = study.packets.flatMap((p) => p.members.map((m) => m.id));
   assert.equal(candidates.length, 13);
@@ -269,7 +273,8 @@ test("unresolved display packets and hand leaves stay static through long clocks
       (p) => !p.isAssembly && /Zeiger|Zeigerbuchse/.test(p.name) && !candidates.includes(p.id),
     )
     .map((p) => p.id);
-  const ids = [...candidates, ...hands];
+  const rear = study.packets.slice(4).flatMap((p) => p.members.map((m) => m.id));
+  const ids = [...rear, ...hands];
   for (const id of ids) assert.ok(!MOVEMENT.packets.some((p) => p.members.includes(id)), id);
   const { run, meshes } = fixture(ids);
   const bases = new Map(ids.map((id) => [id, meshes.get(id).matrix.clone()]));
@@ -285,4 +290,53 @@ test("unresolved display packets and hand leaves stay static through long clocks
   }
   run.dispose();
   for (const id of ids) assert.ok(meshes.get(id).matrix.equals(bases.get(id)), id);
+});
+
+
+test("front display scope matches source occurrences, axes, signed ratios and independent rigid rotations", () => {
+  const study = read("../assets/source-manifest/motion-works-study.json");
+  const expected = { cannon1: [-1, 540], motion1: [1, 1620], hour1: [-1, 6480], motion2: [-1, 1620] };
+  const additions = MOVEMENT.packets.slice(8);
+  assert.deepEqual(additions.map(p => p.name), Object.keys(expected));
+  assert.equal(new Set(MOVEMENT.packets.flatMap(p => p.members)).size, 35);
+  const {run, meshes} = fixture();
+  const bases = new Map([...meshes].map(([id, mesh]) => [id, mesh.matrix.clone()]));
+  for (const p of additions) {
+    const evidence = study.packets.find(x => x.name === p.name);
+    assert.deepEqual(p.members, evidence.members.map(m => m.id));
+    assert.deepEqual(p.ratio, expected[p.name]);
+    for (const m of evidence.members) {
+      const source = manifest.instances.find(x => x.id === m.id);
+      assert.equal(source.definitionId, m.definitionId);
+      source.worldTransform.flat().forEach((v,i) => close(v, m.worldTransform.flat()[i]));
+      close(Math.abs(m.worldTransform[2][2]), 1);
+      close(p.pivot[0], m.worldTransform[0][3]);
+      close(p.pivot[1], m.worldTransform[1][3]);
+    }
+  }
+  for (const seconds of [0, .017, 1/3, 123.456, 10800, 43200, 1e9]) {
+    run.restore(); run.clock.seconds = seconds; run.clock.suspend(); run.update(0, true);
+    for (const p of additions) {
+      // Independent world point formula, including reversed local axes. A modulo
+      // applied to E before division would fail the multi-turn/long-time samples.
+      const a = (run.pose.escape * expected[p.name][0] / expected[p.name][1] % 360) * Math.PI / 180;
+      const c = Math.cos(a), s = Math.sin(a), [x,y] = p.pivot;
+      for (const id of p.members) for (const point of [[0,0,0],[.31,.17,.09],[-.5,.4,.7]]) {
+        const b = new THREE.Vector3(...point).applyMatrix4(bases.get(id));
+        const want = [x+c*(b.x-x)-s*(b.y-y),y+s*(b.x-x)+c*(b.y-y),b.z];
+        const actual = new THREE.Vector3(...point).applyMatrix4(meshes.get(id).matrix).toArray();
+        actual.forEach((v,i) => close(v,want[i],1e-8));
+        const diagnostic = run.presentationMatrix(id,bases.get(id),new THREE.Matrix4());
+        diagnostic.elements.forEach((v,i) => close(v,meshes.get(id).matrix.elements[i]));
+      }
+      const [first,second] = p.members;
+      if (second) {
+        const relative = meshes.get(first).matrix.clone().invert().multiply(meshes.get(second).matrix);
+        const initial = bases.get(first).clone().invert().multiply(bases.get(second));
+        relative.elements.forEach((v,i) => close(v,initial.elements[i]));
+      }
+    }
+  }
+  run.dispose();
+  for (const [id,m] of meshes) assert.ok(m.matrix.equals(bases.get(id)));
 });

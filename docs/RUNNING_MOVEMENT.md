@@ -1,7 +1,7 @@
 # Prescribed running movement
 
 Implemented locally on `codex/escapement-clearance-study`, from the verified
-research milestone `4785cc2`. Updated 27 October 2026. This is an automatically
+research milestone `4785cc2`. Updated 28 October 2026. This is an automatically
 running **kinematic illustration**, not a physical escapement simulation.
 Publication and mechanical acceptance remain subject to [release gates](RELEASE_GATES.md).
 
@@ -23,8 +23,8 @@ jewel or gear has been repositioned. A separate deforming hairspring retains the
 original raised terminal and source's small staff cylinder. The original overview
 and catalog files, source CAD, and display-phase overrides remain unchanged.
 
-The 13 drive-train leaves use world +Z increments from the **accumulated** escape
-angle E, after the existing display poses:
+The 13 drive-train leaves and seven front/transfer display leaves use world +Z
+increments from the **accumulated** escape angle E, after the existing display poses:
 
 | Packet | Definitions | Angle/E |
 | --- | --- | --- |
@@ -34,6 +34,10 @@ angle E, after the existing display poses:
 | Center | 93, 94, 95 | −1/540 |
 | Transfer | 96 | 1/1170 |
 | Barrel II drum/lid | 85, 86 | −1/3600 |
+| Cannon pinion 1 | 137 | −1/540 |
+| Motion works 1 | 210, 211 | +1/1620 |
+| Hour wheel 1 | 141, 142 | −1/6480 |
+| Motion works 2 | 213, 214 | −1/1620 |
 
 E is `18 * completedCycles + localEscape`. Only each final shaft angle is reduced
 modulo 360°, after its ratio is applied. The −0.1° local start is retained rather
@@ -41,14 +45,21 @@ than re-zeroing the source display. Left multiplication around each recorded
 world pivot handles reversed local axes. The third, seconds and transfer display
 phases remain +16.6°, +2.3° and +6.25° in world coordinates.
 
-Both mainsprings, arbors, ratchets, barrel I, motion works and hands remain in their
-existing static representations. The barrel-II drum/lid rotates around its frozen
+Both mainsprings, arbors, ratchets, barrel I, rear display packets and all hands
+remain in their existing static representations. The barrel-II drum/lid rotates around its frozen
 mainspring as the study's explicitly illustrative boundary. The studied source
 fit clears those rotating surfaces, but this does not depict spring attachment,
 unwinding, energy storage or load sharing. Static hands do not report elapsed
-time. No unsupported coupling has been introduced to disguise these limitations.
+time. The front/transfer extension uses the user-authorized sticking assumption
+at 93/137. Moving 214 against static 217 is an explicitly incomplete illustration;
+no physical slipping is modeled or claimed. See the
+[implemented scope and validation](FRONT_DISPLAY_ANIMATION.md).
 
-## Motion-work extension review — 27 October 2026
+## Historical motion-work extension review — 27 October 2026
+
+The following research preceded the [28 October partial implementation](FRONT_DISPLAY_ANIMATION.md).
+Its no-animation decision is superseded only for the four explicitly authorized
+front/transfer packets. Rear packets and all authored phases remain unchanged.
 
 The [seven-packet investigation](MOTION_WORKS_STUDY.md) confirms 13 exact source
 leaves and derives conditional ratios for both displays. **No additional packet
@@ -91,13 +102,18 @@ would depend on assuming a 60-second seconds-shaft revolution. The subsequent
 | Center | −0.1 | 3,600 s (1 h) |
 | Transfer | +3/65 | 7,800 s (2 h 10 min) |
 | Barrel II drum/lid | −0.015 | 24,000 s (6 h 40 min) |
+| Cannon pinion 1 | −0.1 | 3,600 s (1 h) |
+| Motion works 1 | +1/30 | 10,800 s (3 h) |
+| Hour wheel 1 | −1/120 | 43,200 s (12 h) |
+| Motion works 2 | −1/30 | 10,800 s (3 h) |
 
 These are accumulated net advances about world +Z, not constant instantaneous
 velocities: the existing lock, release and recoil remain. Balance and pallet
-repeat every 1/3 second; each half swing lasts 1/6 second. Hands and motion works
-remain excluded. Every existing packet and the hairspring still consume the same
+repeat every 1/3 second; each half swing lasts 1/6 second. All hands and rear
+display packets remain excluded. Every enabled packet and the hairspring still consume the same
 active-time clock. No amplitude, geometry, display phase, gear ratio or lifecycle
-code changed.
+code changed in the nominal-speed milestone. The later four-packet extension
+only adds authored membership/ratios to that same controller.
 
 ## State and lifetime policy
 

@@ -3,6 +3,73 @@
   "frequencyHz": 3,
   "speedBasis": "Maker-specified ML-01 nominal frequency, independently consistent with the recorded train ratios and 18-degree escape advance per complete oscillation; prescribed motion, not measured dynamics",
   "statePolicy": "Run only complete, seated mechanisms; retain active time across inspection, separation and visibility suspension",
-  "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I, motion works and hands remain static",
-  "evidence": "docs/RUNNING_MOVEMENT.md"
+  "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I, all hands and rear display packets remain static",
+  "evidence": "docs/RUNNING_MOVEMENT.md",
+  "displayTrainAssumption": "User-authorized normal-running sticking at center shaft/cannon pinion 93/137, same-world-direction 1:1. Modeling assumption, not maker-confirmed evidence.",
+  "displayTrainBoundary": "Moving shaft 214 / static pinion 217 is an explicitly incomplete illustration; no physical slipping is modeled or claimed.",
+  "displayPackets": [
+    {
+      "name": "cannon1",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20"
+      ],
+      "pivot": [
+        0.0,
+        -2.27682456221956e-15,
+        -1.070000000000007
+      ],
+      "ratio": [
+        -1,
+        540
+      ]
+    },
+    {
+      "name": "motion1",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2"
+      ],
+      "pivot": [
+        4.24287382474019,
+        0.246011600000001,
+        -1.2000000000000068
+      ],
+      "ratio": [
+        1,
+        1620
+      ]
+    },
+    {
+      "name": "hour1",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2"
+      ],
+      "pivot": [
+        0.0,
+        0.0,
+        -0.700000000000007
+      ],
+      "ratio": [
+        -1,
+        6480
+      ]
+    },
+    {
+      "name": "motion2",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2"
+      ],
+      "pivot": [
+        1.24009950124815e-15,
+        5.0,
+        -1.150000000000007
+      ],
+      "ratio": [
+        -1,
+        1620
+      ]
+    }
+  ]
 }

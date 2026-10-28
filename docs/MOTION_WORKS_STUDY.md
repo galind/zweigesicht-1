@@ -1,5 +1,12 @@
 # Motion-work running review — 27 October 2026
 
+**28 October implementation follow-up:** [four front/transfer packets now move](FRONT_DISPLAY_ANIMATION.md)
+under the user's explicit 93/137 sticking assumption. The 214/217 boundary is
+an incomplete illustration, with no physical slip claim. Rear packets and all
+phases remain unchanged. The research below is historical; its source-fit,
+sampled/continuous and physical-acceptance limitations remain.
+
+
 Follow-up: [the independent component/fit investigation](FRICTION_CONNECTIONS.md)
 confirms both mating geometries against separate maker STEP files and refines
 the friction evidence boundary. It supports an intended 1:1 normal-running

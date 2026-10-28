@@ -34,6 +34,34 @@ const check = (name, condition, details) => {
   report.checks.push({ name, pass: !!condition, details });
   assert.ok(condition, name);
 };
+// Inspect the actual route controller, not a hypothetical seven-packet fixture.
+async function displayScope(page, label) {
+  const result = await page.evaluate((packets) => {
+    const r = window.movementAudit.runningMovement;
+    const installed = r.entries.filter(e => packets.some(p => p.members.includes(e.mesh.name)));
+    // Mesh names can differ between owners; entry packet identity is authoritative.
+    const entries = r.entries.filter(e => packets.some(p => p.name === e.packet.name));
+    let maxError = 0;
+    for (const e of entries) {
+      const p = packets.find(p => p.name === e.packet.name);
+      const angle = (r.pose.escape * p.ratio[0] / p.ratio[1] % 360) * Math.PI / 180;
+      const c = Math.cos(angle), s = Math.sin(angle), [x,y] = p.pivot;
+      const b = e.base.elements, actual = e.mesh.matrix.elements;
+      for (let col = 0; col < 4; col++) {
+        const k = col * 4, w = b[k+3];
+        const want = [c*b[k]-s*b[k+1]+(x-c*x+s*y)*w,
+          s*b[k]+c*b[k+1]+(y-s*x-c*y)*w,b[k+2],w];
+        want.forEach((v,i) => maxError = Math.max(maxError,Math.abs(v-actual[k+i])));
+      }
+    }
+    return {active:r.active, entries:entries.length, names:[...new Set(entries.map(e=>e.packet.name))],
+      totalEntries:r.entries.length, rear:r.entries.filter(e=>['motion3','cannon2','hour2'].includes(e.packet.name)).length,
+      maxError, namedMembers:installed.length};
+  }, settings.displayPackets);
+  check(label + " uses the exact four display packets and shared escape phase",
+    result.active && result.entries === 7 && result.totalEntries === 35 && result.rear === 0 &&
+    result.names.length === 4 && result.maxError < 1e-9, result);
+}
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   page.on("pageerror", (e) => report.errors.push(String(e)));
@@ -53,6 +81,7 @@ try {
     render: window.movementAudit.renderCount,
   }));
   check("Explorer runs automatically", state.active, state);
+  await displayScope(page, "Explorer");
   await page.screenshot({ path: root + "/assembled.png" });
   const sample = await page.evaluate(async () => {
     const v = window.movementAudit,
@@ -162,6 +191,7 @@ try {
     !product[0].active && product[1].active && !product[2].active && product[3].active,
     product,
   );
+  await displayScope(page, "Reassembled Explorer");
   await page.screenshot({ path: root + "/returned-assembly.png" });
   await page.evaluate(async () => {
     const v = window.movementAudit;
@@ -267,11 +297,16 @@ try {
     v.update(new Set(v.manifest.finalLeafIds), null, true);
     await new Promise((r) => setTimeout(r, 300));
     const complete = v.runningMovement.active;
+    return { complete };
+  });
+  await displayScope(page, "Completed Workshop");
+  const undone = await page.evaluate(async () => {
+    const v = window.movementAudit;
     v.update(new Set(v.manifest.initialLeafIds), null, true);
     await new Promise((r) => setTimeout(r, 100));
-    return { complete, undone: v.runningMovement.active };
+    return v.runningMovement.active;
   });
-  check("Workshop completion runs and Undo stops", workshop.complete && !workshop.undone, workshop);
+  check("Workshop completion runs and Undo stops", workshop.complete && !undone, { ...workshop, undone });
   const playCleanup = await page.evaluate(() => {
     const v = window.movementAudit;
     v.dispose();
@@ -286,6 +321,7 @@ try {
     ready: window.movementAudit.status.ready,
   }));
   check("Bench assembled movement runs", state.active, state);
+  await displayScope(page, "Bench");
   await page.getByRole("button", { name: "Start exploring", exact: true }).click();
   await page.waitForTimeout(300);
   await page.keyboard.press("f");

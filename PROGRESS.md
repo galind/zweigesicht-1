@@ -4,6 +4,45 @@ Updated 28 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
+## Front/transfer display animation — current milestone
+
+Implemented from clean `58c7e27` on `codex/escapement-clearance-study`.
+[The scoped animation](docs/FRONT_DISPLAY_ANIMATION.md) enables exactly seven
+leaves in four rigid packets: cannon 1 (137), motion works 1 (210/211), hour
+wheel 1 (141/142), and motion works 2 (213/214). Signed world-Z ratios to shared
+accumulated E are −1/540, +1/1620, −1/6480 and −1/1620; mean periods are 1, 3,
+12 and 3 hours. Source occurrence membership, teeth and reversed axes are verified.
+
+93/137 sticking is an explicit **user-authorized modeling assumption**, not
+maker confirmation. Moving 214/static 217 is an incomplete illustration with no
+physical slip claim. All hands and rear display packets remain static. Geometry,
+authored phases, 3 Hz / 21,600 beats/hour, balance amplitude, escapement path/recoil,
+existing train ratios, barrel-II boundary and lifecycle behavior remain unchanged.
+The same controller integrates Explorer, completed Workshop and assembled Bench.
+
+Validation passes: **10 focused tests, typecheck, lint, production build and 22
+browser checks**. All **21,507** installed front-mesh triangle configurations
+clear; 405 neighbor poses retain only five pre-existing contact/overlap pairs.
+A rebuilt partial-scope inventory has 2,441 box exclusions and 136 candidates:
+133 inherit exactly matching kinematics/poses, while 214/187, 214/216 and 214/217
+receive **111 fresh original-solid poses**. No new/increased interference is
+found at those samples. The 214/217 overlap remains **0.007245609 mm³**; 70
+neighbor results remain sampled-only, and invalid-solid/contact/fit limits remain.
+Continuous polygon/enclosure/radial bounds are not whole-assembly certification.
+
+A 25.016-second Chrome interval delivered 1,342 frames, frame p50/p95 16.7/33.3 ms,
+movement-update p95 1.3 ms and stable 135 geometries / 8 textures. No application
+or shader errors; synthetic visibility/Workshop fixtures and one desktop run do
+not qualify all devices. The local production movement view is left open at
+`http://127.0.0.1:4178/`. [Provenance](assets/source-manifest/front-display-animation.json)
+records exact scope, evidence reuse, changed boundaries, hashes and limitations.
+
+This is prescribed kinematics, not physically self-sustaining motion. The older
+research decisions below are historical and superseded only for this authorized
+partial scope. Next: user review of the local illustration; physical acceptance
+still requires joint/fit and tolerance evidence. No push, PR, merge, deployment
+or publication; release gates remain uncleared.
+
 ## Dial washer visibility
 
 The thin brass dial washer (d121, movement occurrence 9) now follows the shared

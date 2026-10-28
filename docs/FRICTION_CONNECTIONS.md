@@ -1,5 +1,12 @@
 # Display-train friction connections — 27 October 2026
 
+**28 October implementation follow-up:** [four front/transfer packets now move](FRONT_DISPLAY_ANIMATION.md)
+under the user's explicit 93/137 sticking assumption. The 214/217 boundary is
+an incomplete illustration, with no physical slip claim. Rear packets and all
+phases remain unchanged. The research below is historical; its source-fit,
+sampled/continuous and physical-acceptance limitations remain.
+
+
 This source-only follow-up to [the motion-work study](MOTION_WORKS_STUDY.md)
 investigates the center-to-cannon interface and cross-face shaft interface.
 **The mating geometry is confirmed; a normal-running 1:1 drive at both interfaces

@@ -1,5 +1,12 @@
 # Connected display-train phase and clearance review
 
+**28 October implementation follow-up:** [four front/transfer packets now move](FRONT_DISPLAY_ANIMATION.md)
+under the user's explicit 93/137 sticking assumption. The 214/217 boundary is
+an incomplete illustration, with no physical slip claim. Rear packets and all
+phases remain unchanged. The research below is historical; its source-fit,
+sampled/continuous and physical-acceptance limitations remain.
+
+
 27 October 2026. Research baseline: `35c7835` on
 `codex/escapement-clearance-study`.
 
