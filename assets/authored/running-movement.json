@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "frequencyHz": 3,
   "speedBasis": "Maker-specified ML-01 nominal frequency, independently consistent with the recorded train ratios and 18-degree escape advance per complete oscillation; prescribed motion, not measured dynamics",
-  "statePolicy": "Explorer runs during focus, selection, isolation, flipping and disassembly; inventory and hidden tabs suspend active time. Workshop runs only complete seated mechanisms; Bench runs the assembled movement.",
+  "statePolicy": "Explorer runs during focus, selection, isolation and flipping; disassembly (whole or focused), inventory and hidden tabs suspend active time. Reassembly resumes when displayed separation reaches zero. Workshop runs only complete seated mechanisms; Bench runs the assembled movement.",
   "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I and all hands remain static; winding and setting are excluded",
   "evidence": "docs/RUNNING_MOVEMENT.md",
   "displayTrainAssumption": "User-authorized normal-running sticking at center shaft/cannon pinion 93/137, same-world-direction 1:1. Modeling assumption, not maker-confirmed evidence.",

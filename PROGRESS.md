@@ -4,7 +4,22 @@ Updated 28 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
-## Running inspection and disassembly — current milestone
+## Pause during disassembly — current milestone
+
+User-requested revision from clean `b5307a7`. Whole-movement disassembly and
+focused part separation now pause animation and active time. Gears resume only
+once displayed separation reaches zero. Focus/reveal, selection, isolation and
+flipping keep running when the movement is not disassembled. Hands stay unchanged.
+Inventory, hidden-tab, Workshop and Bench policies remain as before; no geometry,
+phase, ratio, frequency or clock changes. Earlier running-disassembly behavior
+below is historical and superseded.
+
+Validation: 19 focused movement/scheduling tests, typecheck, lint, production build
+and all 25 revised browser checks pass. See [current behavior](docs/RUNNING_MOVEMENT.md)
+and [provenance](assets/source-manifest/disassembly-pause.json). Local app refreshed
+at `http://127.0.0.1:4178/`. No push, PR, merge, deployment or publication.
+
+## Running inspection and disassembly — preceding milestone
 
 Implemented from clean `6d31677` on `codex/escapement-clearance-study`.
 Explorer now keeps the existing movement running during focus/reveal, selection,

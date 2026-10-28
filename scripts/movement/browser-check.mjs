@@ -166,16 +166,19 @@ try {
   // Presentation offsets/tilts are applied AFTER source-shaft rotation.
   await page.evaluate((handIds) => {
     const v = window.movementAudit;
-    window.inspectionSamples = {frames: 0, inactive: 0, maxError: 0, handError: 0, handSamples: 0, selectionFrames: 0, selectionError: 0};
+    window.inspectionSamples = {frames: 0, policyErrors: 0, pausedFrames: 0, maxError: 0, handError: 0, handSamples: 0, selectionFrames: 0, selectionError: 0};
     v.inspectionFrame = () => {
       if (v.state.layout !== 'assembly') return;
       const r = v.runningMovement, result = window.inspectionSamples;
       result.frames++;
-      if (!r.active) result.inactive++;
+      const separated = v.state.separation || v.state.partSpread ||
+        v.displayedExplosionState?.separation || v.displayedExplosionState?.partSpread;
+      if (r.active === !!separated) result.policyErrors++;
+      if (!r.active) result.pausedFrames++;
       for (const entry of r.entries) {
         const part = v.renderParts.get(entry.id), packet = entry.packet;
         const degrees = packet.name === 'balance' ? r.pose.balance : packet.name === 'pallet' ? r.pose.pallet : r.pose.escape * packet.ratio[0] / packet.ratio[1];
-        const a = (degrees % 360) * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+        const a = r.active ? (degrees % 360) * Math.PI / 180 : 0, c = Math.cos(a), s = Math.sin(a);
         for (const point of [[0,0,0],[.31,-.27,.19]]) {
           const local = part.center.clone().fromArray(point);
           const expected = local.clone().applyMatrix4(part.displayMatrix ?? part.assembled);
@@ -231,8 +234,8 @@ try {
     return rows;
   });
   check(
-    "Disassembly keeps running; inventory pauses and assembly resumes",
-    product[0].active && product[1].active && !product[2].active && product[3].active,
+    "Disassembly and inventory pause; assembly resumes",
+    !product[0].active && product[1].active && !product[2].active && product[3].active,
     product,
   );
   await displayScope(page, "Reassembled Explorer");
@@ -301,7 +304,7 @@ try {
     suspension.a === suspension.b && Math.abs(suspension.c - suspension.b) < 0.1,
     suspension,
   );
-  // Focus, focused disassembly, selection and isolation all retain active time.
+  // Focus runs; both disassembly modes pause the clock until reassembled.
   const inspection = await page.evaluate(async () => {
     const v = window.movementAudit, rows = [];
     for (const action of [() => v.group('regulation'), () => v.patch({partSpread: 1}),
@@ -314,7 +317,10 @@ try {
     }
     return rows;
   });
-  check("Focus and both disassembly modes keep advancing", inspection.every(r => r.active && r.delta > 1.4), inspection);
+  check("Focus runs; disassembly freezes time and reassembly resumes",
+    inspection[0].active && inspection[0].delta > 1.4 &&
+    [inspection[1], inspection[3]].every(r => !r.active && r.delta === 0) &&
+    [inspection[2], inspection[4]].every(r => r.active && r.delta > 0 && r.delta < 1.5), inspection);
   await page.evaluate(async () => {
     const v = window.movementAudit;
     await v.select(v.parts.find((p) => p.definitionId === "d_0_1_1_110").id);
@@ -331,8 +337,8 @@ try {
     v.inspectionFrame = undefined;
     return window.inspectionSamples;
   });
-  check("Every sampled inspection/flip/disassembly frame runs about its displaced shaft",
-    inspectionResult.frames > 100 && inspectionResult.inactive === 0 && inspectionResult.maxError < 1e-8, inspectionResult);
+  check("Every sampled frame obeys inspection/disassembly policy and displayed shaft transforms",
+    inspectionResult.frames > 100 && inspectionResult.policyErrors === 0 && inspectionResult.pausedFrames > 10 && inspectionResult.maxError < 1e-8, inspectionResult);
   check("Hands retain presentation poses and selection bounds follow animated parts",
     inspectionResult.handSamples > 100 && inspectionResult.selectionFrames > 10 && inspectionResult.handError < 1e-8 && inspectionResult.selectionError < 1e-8, inspectionResult);
   const explorerCleanup = await page.evaluate(async () => {

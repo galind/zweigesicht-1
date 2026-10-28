@@ -2427,7 +2427,13 @@ export class MovementViewer {
     const running =
       this.runningMovement?.update(
         now,
-        this.contentPrepared && this.state.layout === 'assembly',
+        this.contentPrepared &&
+          this.state.layout === 'assembly' &&
+          !this.state.separation &&
+          !this.state.partSpread &&
+          // Wait for the displayed pieces to finish reassembling as well.
+          !this.displayedExplosionState?.separation &&
+          !this.displayedExplosionState?.partSpread,
       ) ?? false;
     const rendered =
       running ||

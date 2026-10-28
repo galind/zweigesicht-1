@@ -134,18 +134,18 @@ continues from the last phase without catching up or resetting slower shafts.
 Navigation to a fresh viewer starts a fresh illustration.
 
 - Explorer keeps running during focus/reveal, selection, isolation, camera moves,
-  fitted watch flips, disassembly, focused part separation and their transitions.
-  The same active clock continues; reassembly does not reset or catch up.
-  Selection bounds update after the animated matrices.
+  fitted watch flips and their transitions. Selection bounds update after the
+  animated matrices. Whole-movement disassembly and focused part separation
+  suspend the mechanism and active clock, showing static display poses. Reassembly
+  resumes retained time only when displayed separation reaches zero, without
+  resetting or catching up.
 - All-parts inventory (`spread` layout) still suspends motion and shows static
   display poses. Returning to the movement resumes retained active time during
   the return transition. Hidden tabs and lost rendering contexts still suspend.
-- Exploded parts rotate about their displaced shafts. Separation is a visual
-  inspection transform, not a simulation of disconnected gears transmitting
-  force. Where the existing exploded layout separates members of a rigid source
-  packet, each leaf carries the same prescribed shaft phase at its displayed
-  position. The existing layout, geometry and assembled phases are preserved;
-  no physical running/disassembly or setting sequence is claimed.
+- Focus/reveal still carries shaft motion with each displayed part. Explicit
+  disassembly takes precedence over focus, selection, isolation and flipping.
+  Existing layouts, geometry and assembled phases remain unchanged; no physical
+  running/disassembly or setting sequence is claimed.
 - Workshop remains static until all final leaves are fitted, with no staged step,
   workspace, drag or placement animation. Completion runs automatically; Undo
   restores static source poses before pieces are removed. Thumbnail and ghost
@@ -178,6 +178,25 @@ This avoids shrinking the inner attachment along a chord between sampled poses.
 The ribbon keeps the original 0.035 mm width and 0.215 mm height. Interpolation
 is an approximation, with measured length/shape errors below; it is not an elastic
 material solution.
+
+## Disassembly pause revision — 28 October 2026
+
+At the user's revised request, whole and focused disassembly now suspend motion.
+Eligibility checks both requested and displayed separation, so setting the target
+back to zero does not restart the gears while parts are still returning. Focus,
+selection, isolation and flipping remain active when there is no disassembly.
+Hands, Workshop/Bench policies, geometry, phases, kinematics and clock are unchanged.
+[Revision provenance](../assets/source-manifest/disassembly-pause.json) records
+validation and baseline `b5307a7`. The earlier inspection milestone below is
+historical; its disassembly behavior is superseded by this revision.
+
+All 19 focused movement/scheduling tests, typecheck, lint, production build and
+25 browser checks pass. Whole and focused disassembly advance active time by
+zero in the checked intervals; reassembly resumes without counting that pause.
+Frame samples check static separated poses and running inspection poses, including
+return transitions. Hidden suspension, hands, Workshop Undo, Bench and cleanup
+retain their checks. Evidence is under `artifacts/disassembly-pause/`. These are
+runtime checks, not new CAD clearance bounds.
 
 ## Continuous inspection animation — 28 October 2026
 
