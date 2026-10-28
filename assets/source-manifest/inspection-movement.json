@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "baselineCommit": "6d3167745dd3f06627cd0b94a7d006c47fd00221",
+  "branch": "codex/escapement-clearance-study",
+  "purpose": "Prescribed motion remains active during Explorer focus, selection, isolation, flipping, disassembly and their transitions. Hands unchanged.",
+  "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "sourceEvidence": [
+    "assets/source-manifest/sources.json",
+    "assets/source-manifest/train-coupling-study.json",
+    "assets/source-manifest/front-display-animation.json",
+    "assets/source-manifest/rear-display-animation.json"
+  ],
+  "scope": {
+    "rigidLeaves": 41,
+    "displayLeaves": 13,
+    "displayPackets": 7,
+    "spring": "Existing deforming hairspring",
+    "membershipTeethRatiosPeriods": "Unchanged from the referenced train/front/rear provenance and runtime manifest; ratios still applied to accumulated E before final modulo.",
+    "connections": "93/137 user-authorized sticking assumption and 214/217 modeled 1:1 sticking retained, not maker-confirmed joint-state evidence.",
+    "boundaries": "Hands, winding/setting, ratchets, arbors, barrel I and mainspring deformation remain excluded. Existing barrel-II and static-hand incomplete illustration boundaries remain; no physical slipping claim."
+  },
+  "presentation": {
+    "formula": "B * inverse(A) * R * A",
+    "A": "Immutable reference leaf matrix at controller creation",
+    "B": "Current unanimated owner presentation",
+    "R": "World-Z increment about recorded source shaft",
+    "phaseOrder": "Authored shaft-phase rotations commute with R; both preinstalled and subsequently installed phases tested.",
+    "explosion": "Existing layout preserved, including separately displaced packet members. Each leaf carries its prescribed shaft phase. This is not physically self-sustaining motion or coupled disassembled mechanics.",
+    "selection": "Bounds computed after animation, before render.",
+    "cleanup": "Restore geometry and matrices; cancel and clear pending frame ID."
+  },
+  "suspension": {
+    "Explorer": "All-parts inventory layout; hidden document; lost context. Retain clock without catch-up.",
+    "Workshop": "Unchanged: only complete seated final mechanism runs; Undo stops.",
+    "Bench": "Unchanged assembled movement; holder flip carries child motion."
+  },
+  "unchanged": {
+    "protectedFileCount": 31,
+    "protectedFileScope": "Every tracked explorer/public and assets/authored file except running-movement.json, compared byte-for-byte with baseline.",
+    "protectedHashesSha256": "e842e85797867a721fd03ff24f7cecff4d568efbc93aa3c2b6f75e74d5c5dce7",
+    "runningSettingsChangedKeys": [
+      "statePolicy"
+    ],
+    "geometryPhasesFrequencyRatiosClock": "Unchanged; same 3 Hz / 21,600 beats/hour, amplitude, paths/recoil and active-time clock."
+  },
+  "validation": {
+    "focusedTests": {
+      "passed": 22,
+      "movement": 12,
+      "scheduling": 7,
+      "phase": 3
+    },
+    "typecheck": "pass",
+    "lint": "pass",
+    "productionBuild": "pass; existing vinext route-classification notice",
+    "browserChecks": 25,
+    "inspection": {
+      "frames": 1429,
+      "inactive": 0,
+      "maxError": 2.3272380764466517e-11,
+      "handError": 7.119291619286993e-15,
+      "handSamples": 18345,
+      "selectionFrames": 74,
+      "selectionError": 0
+    },
+    "performance": {
+      "start": {
+        "seconds": 2.266599999999998,
+        "escape": 125.90000000000052,
+        "render": 82,
+        "memory": {
+          "geometries": 135,
+          "textures": 8
+        }
+      },
+      "end": {
+        "seconds": 27.282300000000003,
+        "escape": 1475.9000000000005,
+        "render": 968,
+        "memory": {
+          "geometries": 135,
+          "textures": 8
+        }
+      },
+      "p50": 33.29999999999927,
+      "p95": 33.400000000001455,
+      "frames": 886,
+      "updateP50Ms": 0.5,
+      "updateP95Ms": 0.7000000476837158
+    },
+    "browserErrors": [],
+    "httpFailures": [
+      {
+        "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+        "status": 404
+      }
+    ]
+  },
+  "limits": [
+    "Browser sampling is not a continuous clearance bound. Synthetic visibility and Workshop fixtures do not qualify every OS/device lifecycle.",
+    "Assembled motion equivalence preserves the previous evidence and its sampled-only, retained fit/overlap and roughly 45 nm rear-hour precision limits.",
+    "No new CAD clearance sweep or collision-free disassembly claim. Presentation transitions are not mechanically assembled configurations.",
+    "Performance sample is local headless desktop Chrome with visible app also open, not a sustained device/thermal qualification."
+  ],
+  "filesSha256": {
+    "explorer/src/viewer/RunningMovement.ts": "79b6c7425fd931081aeb43c1794cda68533ee3bce429a6418b9c35ae8e18646b",
+    "explorer/src/viewer/MovementViewer.ts": "2dcc6a343c7a7f4ce013674d3062466eace9fecf3c9e11b845d9093e6e8ab645",
+    "assets/authored/running-movement.json": "9886f088f12a17a79c7223cbe3ee3193f572d1d91ce44c5af66f0eafe2106c87",
+    "tests/running-movement.test.mjs": "3b7c13e3d8bd584f1b8ffd4710f533d44274ea276581ce862b7ef6d01b648e41",
+    "tests/viewer-scheduling.test.mjs": "1a38f9b967d8e086c32e078b01d0eb6d6f20c233b2407fe2dafe42eb8b760b1b",
+    "tests/wheel-display-pose.test.mjs": "aa7223e5507f9d1a3368f5a17187ad9f2b5626c5e303f47e50d544a7f8d18e51",
+    "scripts/movement/browser-check.mjs": "4edb41e5f77fbd8c6ad491a72da14a42b47d7bb708edfa585bb71404191968f4",
+    "docs/RUNNING_MOVEMENT.md": "c73868b3c0e696d5345f64985d6210f738938e6812ac67443cad6ae10d490a43",
+    "PROGRESS.md": "5c2ac21fdcadae53aa3654c65829a805633a5db56a2a5f277174ac06b5da05f5"
+  },
+  "localEvidenceSha256": {
+    "artifacts/inspection-movement/focused-tests.txt": "140d8f87f21009a64353f9ebf336cd1a8087558572e200ddd027d564556c0bdf",
+    "artifacts/inspection-movement/typecheck.txt": "4e6bb3b91678b8c724495939039efa7de3416735163e4c73aad9a3d1d31042aa",
+    "artifacts/inspection-movement/lint.txt": "040dc829b5a9ba7d2ba7a2878408419c672332899b3026a63563226a316b99e9",
+    "artifacts/inspection-movement/build.txt": "c171c0421c3a1b022e1838c3966180cdb2e16659e6a321020259fe3e1872707f",
+    "artifacts/inspection-movement/browser-report.json": "05d20720eafbc0867dbe289b9a02bf73c4d7524d4e3f7f6874f49a69b7d761d0",
+    "artifacts/inspection-movement/browser-check.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/inspection-movement/review-disassembled.png": "6f864b35062d4204c9e4209c3575b499b849700a1d520a981f29f26f653cb0ac"
+  },
+  "delivery": "Local commit only; app refreshed on 127.0.0.1:4178 with exploded movement left open. No push, PR, merge, deployment or publication."
+}

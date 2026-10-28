@@ -2162,6 +2162,9 @@ export class MovementViewer {
     // Keep rendering a queued turn after the entry camera and poses arrive.
     moving = !!this.inventoryTravel || moving;
     if (!moving) this.displayedExplosionState = { ...this.state };
+    return moving;
+  }
+  updateSelectionBox() {
     if (this.state.part) {
       const b = new THREE.Box3();
       for (const p of this.renderParts.values())
@@ -2170,7 +2173,6 @@ export class MovementViewer {
       this.selectionBox.box.copy(b);
       this.selectionBox.visible = !b.isEmpty();
     } else this.selectionBox.visible = false;
-    return moving;
   }
   keyDown = (e: KeyboardEvent) => {
     if (!this.ready) return;
@@ -2425,14 +2427,7 @@ export class MovementViewer {
     const running =
       this.runningMovement?.update(
         now,
-        this.contentPrepared &&
-          this.state.layout === 'assembly' &&
-          !this.state.separation &&
-          !this.state.partSpread &&
-          !this.state.reveal &&
-          !this.state.isolated &&
-          !this.state.part &&
-          !this.presentationMoving,
+        this.contentPrepared && this.state.layout === 'assembly',
       ) ?? false;
     const rendered =
       running ||
@@ -2442,6 +2437,7 @@ export class MovementViewer {
       cameraWasMoving ||
       controlsChanged;
     if (rendered) {
+      this.updateSelectionBox();
       try {
         this.renderer.render(this.scene, this.camera);
         this.beautyTriangles = this.renderer.info.render.triangles;
@@ -2606,6 +2602,8 @@ export class MovementViewer {
     this.dead = true;
     this.loadGeneration++;
     cancelAnimationFrame(this.frame);
+    this.frame = 0;
+    this.lastFrame = 0;
     this.observer?.disconnect();
     document.removeEventListener('visibilitychange', this.onVisibility);
     this.motionPreference?.removeEventListener(

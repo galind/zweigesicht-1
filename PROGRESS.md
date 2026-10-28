@@ -4,7 +4,39 @@ Updated 28 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
-## Movement-side display animation — current milestone
+## Running inspection and disassembly — current milestone
+
+Implemented from clean `6d31677` on `codex/escapement-clearance-study`.
+Explorer now keeps the existing movement running during focus/reveal, selection,
+isolation, flipping, whole disassembly, focused part separation and transitions.
+Each displaced part rotates about its displayed shaft; the same active clock
+continues through reassembly. Selection bounds follow animated poses. Disposal
+clears the cancelled frame ID and restores resources before scene cleanup.
+
+Hands remain unanimated, and winding/setting and the existing power-source
+exclusions remain unchanged. All-parts inventory and hidden tabs still suspend;
+Workshop still requires completion and stops on Undo; Bench policy is unchanged.
+No new packet, phase, geometry, ratio, frequency, clock or playback control.
+Exploded motion is prescribed illustration, not separated gears transmitting
+force or a collision-qualified physical disassembly. Existing assembled clearance,
+fit/overlap and ~45 nm rear-hour limitations remain.
+
+**22 focused tests, typecheck, lint, production build and 25 browser checks pass.**
+All 1,429 sampled inspection/transition frames remain active; independent displaced
+point checks agree within 2.33×10⁻¹¹ mm. 18,345 hand checks retain presentation
+poses; 74 selected frames have matching selection bounds. Delayed-frame timing,
+synthetic hidden suspension, Workshop Undo, Bench flip and cleanup pass.
+A 25.016-second local interval has stable geometry/texture counts; no application
+or shader errors. These are sampled runtime checks, not new continuous CAD bounds.
+
+[Behavior and validation](docs/RUNNING_MOVEMENT.md#continuous-inspection-animation--28-october-2026)
+and [provenance](assets/source-manifest/inspection-movement.json) record scope,
+transform composition, unchanged assets and evidence hashes. The refreshed local
+app at `http://127.0.0.1:4178/` is left in the exploded movement view for review.
+Next: user review; current-time hands remain a separate, unimplemented request.
+No push, PR, merge, deployment or publication.
+
+## Movement-side display animation — preceding milestone
 
 Implemented from clean `5fd50f0` on `codex/escapement-clearance-study`.
 [The rear extension](docs/REAR_DISPLAY_ANIMATION.md) enables motion works 3

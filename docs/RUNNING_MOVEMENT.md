@@ -45,8 +45,9 @@ increments from the **accumulated** escape angle E, after the existing display p
 
 E is `18 * completedCycles + localEscape`. Only each final shaft angle is reduced
 modulo 360°, after its ratio is applied. The −0.1° local start is retained rather
-than re-zeroing the source display. Left multiplication around each recorded
-world pivot handles reversed local axes. The third, seconds and transfer display
+than re-zeroing the source display. Each recorded world pivot defines the shaft
+rotation, conjugated into the leaf's reference coordinates so inspection poses
+carry that shaft with the part, including reversed local axes. The third, seconds and transfer display
 phases remain +16.6°, +2.3° and +6.25° in world coordinates.
 
 Both mainsprings, arbors, ratchets, barrel I and all hands remain in their
@@ -132,13 +133,19 @@ without an FPS-dependent clamp. Hidden-tab time is excluded explicitly, so resum
 continues from the last phase without catching up or resetting slower shafts.
 Navigation to a fresh viewer starts a fresh illustration.
 
-- Explorer runs in settled assembly, including fitted watch configurations and
-  camera orbit/zoom. Selection for part inspection, isolation, reveal, separation,
-  inventory layout and presentation transitions suspend the whole mechanism.
-- Those suspended states show the original static geometry and display poses.
-  Reseating/reassembling resumes the retained active clock. This intentionally
-  switches between a source-pose inspection and the authored running pose; it is
-  not an animated winding, stopping or physical reassembly sequence.
+- Explorer keeps running during focus/reveal, selection, isolation, camera moves,
+  fitted watch flips, disassembly, focused part separation and their transitions.
+  The same active clock continues; reassembly does not reset or catch up.
+  Selection bounds update after the animated matrices.
+- All-parts inventory (`spread` layout) still suspends motion and shows static
+  display poses. Returning to the movement resumes retained active time during
+  the return transition. Hidden tabs and lost rendering contexts still suspend.
+- Exploded parts rotate about their displaced shafts. Separation is a visual
+  inspection transform, not a simulation of disconnected gears transmitting
+  force. Where the existing exploded layout separates members of a rigid source
+  packet, each leaf carries the same prescribed shaft phase at its displayed
+  position. The existing layout, geometry and assembled phases are preserved;
+  no physical running/disassembly or setting sequence is claimed.
 - Workshop remains static until all final leaves are fitted, with no staged step,
   workspace, drag or placement animation. Completion runs automatically; Undo
   restores static source poses before pieces are removed. Thumbnail and ghost
@@ -154,8 +161,13 @@ Navigation to a fresh viewer starts a fresh illustration.
   Workshop prepares the animation before atomically replacing a complete scene.
 
 `RunningMovement.ts` overlays matrices only after the owner's presentation update
-and restores them before another update. Original materials are reused. Its
-spring has fixed topology and reusable GPU position/normal buffers. There is no
+and restores them before another update. With reference matrix A, current
+unanimated presentation B and world-shaft increment R, the displayed leaf matrix
+is B A⁻¹ R A. For an assembled leaf this is R A; for a displaced/tilted leaf it
+carries the rotation with the presentation, instead of orbiting the old shaft.
+Authored phase rotations share the shaft and commute with R, whether installed
+before or after controller creation. Immutable references prevent accumulation.
+Original materials are reused. The spring has fixed topology and reusable GPU position/normal buffers. There is no
 per-frame solver, tessellation, new geometry, or shared mutation of source meshes.
 The small dynamic ribbon's conservative bounds include all studied poses.
 
@@ -166,6 +178,52 @@ This avoids shrinking the inner attachment along a chord between sampled poses.
 The ribbon keeps the original 0.035 mm width and 0.215 mm height. Interpolation
 is an approximation, with measured length/shape errors below; it is not an elastic
 material solution.
+
+## Continuous inspection animation — 28 October 2026
+
+Implemented from clean `6d31677`. The existing 41 rigid leaves and deforming
+hairspring continue through Explorer inspection and exploded presentation poses.
+The only eligibility exclusion in a loaded, visible Explorer is the All-parts
+inventory layout. Workshop and Bench eligibility remain unchanged. Disposal now
+also clears the cancelled frame ID while restoring the animation resources.
+[Provenance](../assets/source-manifest/inspection-movement.json) records the
+baseline, protected assets, verification results and local evidence hashes.
+
+Assembled transforms are algebraically equivalent to the previously reviewed
+motion. Packet membership, teeth, ratios, periods, authored phases, geometry,
+frequency, recoil, balance amplitude and source-shaft positions are unchanged.
+The explicit 93/137 and 214/217 sticking assumptions and static-hand/power-source
+boundaries still apply. There is no new clock, smoothing or playback control.
+
+The existing assembled clearance evidence therefore remains applicable with its
+sampled-versus-continuous distinctions, source overlaps and ~45 nm rear-hour
+precision limit. No CAD clearance sweep was rerun for presentation movement.
+Exploded layouts and their transitions are not mechanically assembled states;
+this change does **not** certify collision-free or physically driven disassembly.
+No geometry or phase was adjusted to conceal a presentation overlap.
+
+Local validation was explained before execution because this milestone remains
+local and the changed presentation needs actual browser verification. All **22
+focused tests** (12 movement, 7 scheduling, 3 phase), typecheck, lint and production
+build pass. The build retains the existing vinext route-classification notice.
+All **25 browser checks** pass across Explorer, completed Workshop and assembled
+Bench, including delayed frames, visibility suspension, completion/Undo and cleanup.
+
+The browser sampled **1,429** assembly-layout frames across inspection, flips,
+separation, inventory return and reassembly: no inactive frame, maximum independent
+point-transform discrepancy **2.33×10⁻¹¹ mm**. **18,345 hand samples** agree with
+unchanged presentation poses within **7.12×10⁻¹⁵ mm**, and selection bounds match
+on **74** selected frames. CPU fixtures additionally cover arbitrary tilted axes,
+rigid packet relationships, reversed axes, 10⁹ active seconds, repeated updates,
+restoration and phase installation before/after controller construction.
+
+A 25.016-second desktop interval delivered 886 frames (spacing p50/p95
+33.3/33.4 ms), update CPU p95 0.7 ms, and stable 135 geometries / 8 textures.
+A deliberate 250 ms visible stall advances the clock by 250 ms. These are local
+headless-browser samples with the visible app also open, not a device-performance
+qualification. Hidden visibility and completed/undone Workshop states use the
+existing synthetic fixtures. No application/shader errors; the existing local
+analytics 404 is excluded. Evidence stays ignored in `artifacts/inspection-movement/`.
 
 ## Nominal-speed validation — 27 October 2026
 

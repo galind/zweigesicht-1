@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import hands from "../../assets/authored/hand-display-poses.json" with { type: "json" };
 import settings from "../../assets/authored/running-movement.json" with { type: "json" };
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH });
@@ -161,6 +162,49 @@ try {
     delayed.activeDelta >= 0.24 && Math.abs(delayed.activeDelta - delayed.wallDelta) < 0.05,
     delayed,
   );
+  // Sample every rendered Explorer frame against independent point transforms.
+  // Presentation offsets/tilts are applied AFTER source-shaft rotation.
+  await page.evaluate((handIds) => {
+    const v = window.movementAudit;
+    window.inspectionSamples = {frames: 0, inactive: 0, maxError: 0, handError: 0, handSamples: 0, selectionFrames: 0, selectionError: 0};
+    v.inspectionFrame = () => {
+      if (v.state.layout !== 'assembly') return;
+      const r = v.runningMovement, result = window.inspectionSamples;
+      result.frames++;
+      if (!r.active) result.inactive++;
+      for (const entry of r.entries) {
+        const part = v.renderParts.get(entry.id), packet = entry.packet;
+        const degrees = packet.name === 'balance' ? r.pose.balance : packet.name === 'pallet' ? r.pose.pallet : r.pose.escape * packet.ratio[0] / packet.ratio[1];
+        const a = (degrees % 360) * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+        for (const point of [[0,0,0],[.31,-.27,.19]]) {
+          const local = part.center.clone().fromArray(point);
+          const expected = local.clone().applyMatrix4(part.displayMatrix ?? part.assembled);
+          const x = expected.x - packet.pivot[0], y = expected.y - packet.pivot[1];
+          expected.set(packet.pivot[0] + c*x - s*y, packet.pivot[1] + s*x + c*y, expected.z);
+          expected.sub(part.center).applyQuaternion(part.rotation).add(part.center).add(part.offset);
+          result.maxError = Math.max(result.maxError, expected.distanceTo(local.applyMatrix4(part.mesh.matrix)));
+        }
+      }
+      for (const id of handIds) {
+        const part = v.renderParts.get(id);
+        if (!part) continue;
+        result.handSamples++;
+        const local = part.center.clone().set(.31,-.27,.19);
+        const expected = local.clone().applyMatrix4(part.displayMatrix ?? part.assembled)
+          .sub(part.center).applyQuaternion(part.rotation).add(part.center).add(part.offset);
+        result.handError = Math.max(result.handError, expected.distanceTo(local.applyMatrix4(part.mesh.matrix)));
+      }
+      if (v.state.part && v.selectionBox.visible) {
+        result.selectionFrames++;
+        const bounds = v.selectionBox.box.clone().makeEmpty();
+        for (const [id, part] of v.renderParts)
+          if (part.mesh.visible && (id === v.state.part || id.startsWith(v.state.part + '__')))
+            bounds.expandByObject(part.mesh);
+        if (!bounds.isEmpty()) result.selectionError = Math.max(result.selectionError,
+          bounds.min.distanceTo(v.selectionBox.box.min), bounds.max.distanceTo(v.selectionBox.box.max));
+      }
+    };
+  }, hands.hands.map(h => h.leafId));
   // Snapshot then deterministic verification through the production controller.
   const product = await page.evaluate(async () => {
     const v = window.movementAudit;
@@ -187,8 +231,8 @@ try {
     return rows;
   });
   check(
-    "Separated and inventory views stay static; assembled views resume",
-    !product[0].active && product[1].active && !product[2].active && product[3].active,
+    "Disassembly keeps running; inventory pauses and assembly resumes",
+    product[0].active && product[1].active && !product[2].active && product[3].active,
     product,
   );
   await displayScope(page, "Reassembled Explorer");
@@ -208,7 +252,7 @@ try {
   await page.waitForTimeout(2200);
   await page.screenshot({ path: root + "/fitted-back.png" });
   check(
-    "Fitted case flip resumes motion",
+    "Fitted case flip keeps motion",
     await page.evaluate(() => window.movementAudit.runningMovement.active),
   );
   await page.evaluate(async () => {
@@ -257,7 +301,20 @@ try {
     suspension.a === suspension.b && Math.abs(suspension.c - suspension.b) < 0.1,
     suspension,
   );
-  // Isolated selected components stay at static poses.
+  // Focus, focused disassembly, selection and isolation all retain active time.
+  const inspection = await page.evaluate(async () => {
+    const v = window.movementAudit, rows = [];
+    for (const action of [() => v.group('regulation'), () => v.patch({partSpread: 1}),
+      () => v.group(null), () => v.patch({separation: 1}), () => v.patch({separation: 0})]) {
+      const before = v.runningMovement.clock.seconds;
+      action();
+      await new Promise(r => setTimeout(r, 1600));
+      rows.push({active: v.runningMovement.active, delta: v.runningMovement.clock.seconds - before,
+        group: v.state.group, separation: v.state.separation, partSpread: v.state.partSpread});
+    }
+    return rows;
+  });
+  check("Focus and both disassembly modes keep advancing", inspection.every(r => r.active && r.delta > 1.4), inspection);
   await page.evaluate(async () => {
     const v = window.movementAudit;
     await v.select(v.parts.find((p) => p.definitionId === "d_0_1_1_110").id);
@@ -265,18 +322,30 @@ try {
   });
   await page.waitForTimeout(1200);
   check(
-    "Isolated inspection stays static",
-    !(await page.evaluate(() => window.movementAudit.runningMovement.active)),
+    "Isolated inspection keeps running",
+    await page.evaluate(() => window.movementAudit.runningMovement.active),
   );
   await page.screenshot({ path: root + "/isolated.png" });
-  const explorerCleanup = await page.evaluate(() => {
+  const inspectionResult = await page.evaluate(() => {
+    const v = window.movementAudit;
+    v.inspectionFrame = undefined;
+    return window.inspectionSamples;
+  });
+  check("Every sampled inspection/flip/disassembly frame runs about its displaced shaft",
+    inspectionResult.frames > 100 && inspectionResult.inactive === 0 && inspectionResult.maxError < 1e-8, inspectionResult);
+  check("Hands retain presentation poses and selection bounds follow animated parts",
+    inspectionResult.handSamples > 100 && inspectionResult.selectionFrames > 10 && inspectionResult.handError < 1e-8 && inspectionResult.selectionError < 1e-8, inspectionResult);
+  const explorerCleanup = await page.evaluate(async () => {
     const v = window.movementAudit;
     v.dispose();
-    return { dead: v.dead, frame: v.frame, active: v.runningMovement.active };
+    const count = v.renderCount;
+    await new Promise(r => setTimeout(r, 100));
+    v.dispose();
+    return { dead: v.dead, frame: v.frame, active: v.runningMovement.active, stopped: v.renderCount === count };
   });
   check(
     "Explorer cleanup stops RAF and restores geometry",
-    explorerCleanup.dead && !explorerCleanup.frame && !explorerCleanup.active,
+    explorerCleanup.dead && !explorerCleanup.frame && !explorerCleanup.active && explorerCleanup.stopped,
     explorerCleanup,
   );
   // Route exit disposes the old animation resources and RAF owner.

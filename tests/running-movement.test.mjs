@@ -356,3 +356,69 @@ test("rear phases preserve rigid packets and the 214/217 connection remains 1:1"
   }
   run.dispose();
 });
+
+test("displaced shafts carry motion through inspection, flipped poses and reassembly without drift", () => {
+  // Explorer installs phases after controller creation; Workshop/Bench do so before.
+  for (const phasesAtConstruction of [false, true]) {
+    const {meshes, run: initial} = fixture();
+    initial.dispose();
+    const displayed = new Map();
+    for (const [id, mesh] of meshes) {
+      const record = manifest.instances.find(p => p.id === id);
+      const a = new THREE.Matrix4().set(...record.worldTransform.flat());
+      displayed.set(id, wheelDisplayMatrix(id, a) ?? a);
+      mesh.matrix.copy(phasesAtConstruction ? displayed.get(id) : a);
+    }
+    const run = new RunningMovement(buffer, meshes);
+    // Off-cycle and very long phases, arbitrary tilted axes, and return to assembly.
+    for (const [seconds, spread] of [[0, 0], [.017, .3], [123.456, 1], [1e9, .7], [1e9 + .25, 0]]) {
+      run.restore();
+      run.clock.seconds = seconds;
+      run.clock.suspend();
+      const presentations = new Map();
+      let i = 0;
+      for (const packet of MOVEMENT.packets) {
+        // Members of a packet share a rigid display transform here.
+        const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(.31 * spread, 2.8 * spread, -.4 * spread));
+        const translation = new THREE.Vector3((i + 2) * spread, -13 * spread, 9 * spread);
+        const presentation = new THREE.Matrix4().compose(translation, q, new THREE.Vector3(1, 1, 1));
+        presentations.set(packet.name, {presentation, q, translation});
+        for (const id of packet.members) meshes.get(id).matrix.copy(presentation).multiply(displayed.get(id));
+        i++;
+      }
+      const bases = new Map([...meshes].map(([id, mesh]) => [id, mesh.matrix.clone()]));
+      run.update(100, true);
+      const p = pose(seconds);
+      for (const packet of MOVEMENT.packets) {
+        const degrees = packet.name === 'balance' ? p.balance : packet.name === 'pallet' ? p.pallet : p.escape * packet.ratio[0] / packet.ratio[1];
+        const angle = (degrees % 360) * Math.PI / 180, c = Math.cos(angle), s = Math.sin(angle);
+        const {q, translation} = presentations.get(packet.name);
+        for (const id of packet.members) {
+          const mesh = meshes.get(id);
+          for (const local of [new THREE.Vector3(), new THREE.Vector3(.31, -.27, .19)]) {
+            const expected = local.clone().applyMatrix4(displayed.get(id));
+            const x = expected.x - packet.pivot[0], y = expected.y - packet.pivot[1];
+            expected.set(packet.pivot[0] + c*x - s*y, packet.pivot[1] + s*x + c*y, expected.z);
+            expected.applyQuaternion(q).add(translation);
+            assert.ok(expected.distanceTo(local.clone().applyMatrix4(mesh.matrix)) < 1e-9, id);
+          }
+          const diagnostic = run.presentationMatrix(id, bases.get(id), new THREE.Matrix4());
+          diagnostic.elements.forEach((v, k) => close(v, mesh.matrix.elements[k]));
+        }
+        // Full relative transforms, including reversed source axes, remain rigid.
+        const first = packet.members[0];
+        for (const id of packet.members.slice(1)) {
+          const actual = meshes.get(first).matrix.clone().invert().multiply(meshes.get(id).matrix);
+          const expected = displayed.get(first).clone().invert().multiply(displayed.get(id));
+          actual.elements.forEach((v,k) => close(v, expected.elements[k]));
+        }
+      }
+      const once = new Map([...meshes].map(([id, mesh]) => [id, mesh.matrix.clone()]));
+      run.update(100, true);
+      for (const [id, mesh] of meshes) mesh.matrix.elements.forEach((v,k) => close(v, once.get(id).elements[k]));
+      run.restore();
+      for (const [id, mesh] of meshes) assert.deepEqual(mesh.matrix.elements, bases.get(id).elements);
+    }
+    run.dispose();
+  }
+});

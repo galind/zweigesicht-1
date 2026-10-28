@@ -39,7 +39,7 @@ function fixture() {
     host: {clientWidth: 800, clientHeight: 800}, firstFrameSize: '', initialFraming: false,
     state: {quality: 'high', phase: 'whole'}, scene: new THREE.Scene(), camera, controls,
     presentationMoving: false, travel: null, benchmark: null,
-    applyPose() {return false;}, retargetVisibility() {}, ensureFramingRange() {}, adjustQuality() {},
+    applyPose() {return false;}, updateSelectionBox() {}, retargetVisibility() {}, ensureFramingRange() {}, adjustQuality() {},
     renderer: {getSize(out) {return out.set(800, 800);}, render() {draws++;}, info: {render: {triangles: 1, calls: 1}}},
     surfaceOcclusion: {render() {}}, emit() {snapshots++; this.snapshotPending = false;},
   };
@@ -197,7 +197,7 @@ test('first reveal waits for stable dimensions and refits before exposing a resi
   v.controls.dispose();
 });
 
-test('assembled animation sustains RAF, while inspection and hidden tabs release it', () => {
+test('inspection and disassembly sustain RAF; inventory and hidden tabs release it', () => {
   const f = fixture();
   Object.assign(f.v.state, {layout: 'assembly', separation: 0, partSpread: 0, reveal: 0, isolated: false, part: null});
   f.v.contentPrepared = true;
@@ -210,11 +210,22 @@ test('assembled animation sustains RAF, while inspection and hidden tabs release
   assert.equal(f.callbacks.size, 0); assert.equal(suspensions, 1);
   f.document.hidden = false; f.v.onVisibility(); f.frame();
   assert.equal(f.callbacks.size, 1);
-  f.v.state.part = 'inspected-part'; f.v.requestRender(); f.settle();
-  assert.equal(f.callbacks.size, 0); assert.ok(updates >= 12);
-  f.v.state.part = null; f.v.requestRender(); f.frame();
-  assert.equal(f.callbacks.size, 1);
-  f.v.state.separation = .5; f.v.requestRender(); f.settle();
+  for (const patch of [
+    {part: 'inspected-part'}, {isolated: true}, {reveal: 1},
+    {separation: .5}, {partSpread: 1}, {side: 'back'},
+  ]) {
+    Object.assign(f.v.state, patch);
+    f.v.presentationMoving = true;
+    f.v.requestRender();
+    const before = f.draws();
+    for (let i = 0; i < 3; i++) f.frame();
+    assert.equal(f.draws() - before, 3);
+    assert.equal(f.callbacks.size, 1, JSON.stringify(patch));
+  }
+  assert.ok(updates >= 29);
+  f.v.state.layout = 'spread'; f.v.requestRender(); f.settle();
   assert.equal(f.callbacks.size, 0);
+  f.v.state.layout = 'assembly'; f.v.requestRender(); f.frame();
+  assert.equal(f.callbacks.size, 1);
   f.v.controls.dispose();
 });

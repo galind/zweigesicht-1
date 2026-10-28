@@ -287,7 +287,10 @@ export class RunningMovement {
   private dead = false;
   private readonly delta = new THREE.Matrix4();
   private readonly entries: {
+    id: string;
     mesh: THREE.Mesh;
+    reference: THREE.Matrix4;
+    inverseReference: THREE.Matrix4;
     base: THREE.Matrix4;
     packet: (typeof MOVEMENT.packets)[number];
   }[] = [];
@@ -300,7 +303,15 @@ export class RunningMovement {
       for (const id of packet.members) {
         const mesh = meshes.get(id);
         if (!mesh) throw Error(`Running movement member missing: ${id}`);
-        this.entries.push({ mesh, base: mesh.matrix.clone(), packet });
+        const reference = mesh.matrix.clone();
+        this.entries.push({
+          id,
+          mesh,
+          reference,
+          inverseReference: reference.clone().invert(),
+          base: reference.clone(),
+          packet,
+        });
       }
     const spring = meshes.get(MOVEMENT.spring.id),
       fork = meshes.get(MOVEMENT.fork.id);
@@ -337,9 +348,12 @@ export class RunningMovement {
           : packet.name === 'pallet'
             ? this.pose.pallet
             : (this.pose.escape * packet.ratio[0]) / packet.ratio[1];
-      entry.mesh.matrix.premultiply(
-        shaftMatrix(this.delta, packet.pivot, degrees),
-      );
+      // B A⁻¹ R A: carry source-shaft motion with the owner's presentation B.
+      // R B would orbit an exploded part around its old assembled shaft.
+      entry.mesh.matrix
+        .multiply(entry.inverseReference)
+        .multiply(shaftMatrix(this.delta, packet.pivot, degrees))
+        .multiply(entry.reference);
       entry.mesh.matrixWorldNeedsUpdate = true;
     }
     this.spring.update(this.pose.balance);
@@ -352,15 +366,19 @@ export class RunningMovement {
   presentationMatrix(id: string, source: THREE.Matrix4, out: THREE.Matrix4) {
     out.copy(source);
     if (!this.active) return out;
-    const packet = MOVEMENT.packets.find((p) => p.members.includes(id));
-    if (!packet) return out;
+    const entry = this.entries.find((e) => e.id === id);
+    if (!entry) return out;
+    const packet = entry.packet;
     const degrees =
       packet.name === 'balance'
         ? this.pose.balance
         : packet.name === 'pallet'
           ? this.pose.pallet
           : (this.pose.escape * packet.ratio[0]) / packet.ratio[1];
-    return out.premultiply(shaftMatrix(this.delta, packet.pivot, degrees));
+    return out
+      .multiply(entry.inverseReference)
+      .multiply(shaftMatrix(this.delta, packet.pivot, degrees))
+      .multiply(entry.reference);
   }
   dispose() {
     if (this.dead) return;
