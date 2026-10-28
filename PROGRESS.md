@@ -1,6 +1,6 @@
 # Current project status
 
-Updated 27 October 2026. Setup: [README](README.md). Technical reference:
+Updated 28 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
@@ -14,6 +14,29 @@ now include the washer and the Bench's 218 rendered movement/crown leaves.
 
 Source and diff review only; no local tests, build or browser automation were run.
 Next: validate through GitHub CI when a push is authorized. No push or publication.
+
+## Rear-hour phase ceiling and precision
+
+From clean `09f5469`, the [phase-limit investigation](docs/REAR_HOUR_PHASE_LIMIT.md)
+covers the entire rear-hour relative phase range with 37 continuous polygon
+intervals and 129 queries. Every phase has a running witness below **45.654 nm**
+clearance in the retained section model. Finer sections converge to original-solid
+witness gaps of **45.145 nm**; 24 distance queries at three precision settings
+agree, and independent analytic circular-support distances reproduce the result.
+Phase tuning trades two opposing tight spots rather than opening a larger gap.
+
+This supports a limitation of the **nominal source geometry at fixed shaft
+positions**, not a missed phase or ordinary solver precision. The polygon ceiling
+is not a continuous whole-solid certificate, and source/export tolerances do not
+establish manufactured clearance. Both joint-state interpretations and all prior
+neighbor/source-fit limitations remain. All 126 app/authored files are unchanged;
+no new gear moves. [Provenance](assets/source-manifest/rear-hour-phase-limit.json)
+records the calculations. No app tests, build or browser automation were needed.
+
+Next without maker confirmation: strengthen the 101 sampled-only neighbor checks
+with continuous bounds. Rear-hour physical acceptance still needs source/design
+precision or manufacturing evidence; more nominal phase tuning is not a useful
+route to a materially larger margin. No push, PR, deployment or publication.
 
 ## Connected display-train phase and clearance review
 

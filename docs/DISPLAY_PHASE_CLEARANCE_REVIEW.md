@@ -3,6 +3,12 @@
 27 October 2026. Research baseline: `35c7835` on
 `codex/escapement-clearance-study`.
 
+28 October follow-up: the [rear-hour phase-limit study](REAR_HOUR_PHASE_LIMIT.md)
+covers every relative phase and finds a polygon running-gap ceiling below
+45.654 nm. Finer sections, original solids and analytic circular supports agree
+near 45.145 nm. Further phase tuning cannot provide a materially larger nominal
+gap; source/tolerance qualification remains unresolved. No app change.
+
 **The two diagnostic phase candidates coexist across the complete conditional
 display train without a newly demonstrated collision in this review. This is
 not authorization or mechanical acceptance to install them.** The rear hour
