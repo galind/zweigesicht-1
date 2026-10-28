@@ -193,8 +193,16 @@ try {
         if (!part) continue;
         result.handSamples++;
         const local = part.center.clone().set(.31,-.27,.19);
-        const expected = local.clone().applyMatrix4(part.displayMatrix ?? part.assembled)
-          .sub(part.center).applyQuaternion(part.rotation).add(part.center).add(part.offset);
+        const expected = local.clone().applyMatrix4(part.displayMatrix ?? part.assembled);
+        const fitted = r.hands.entries.find(e => e.id === id);
+        if (r.hands.applied && fitted) {
+          const h = fitted.hand, pivot = h.face === 'central' ? [0,0] : [0,7.4];
+          const rate = {hour:1/120,minute:.1,seconds:6}[h.role];
+          const a = (h.face === 'central' ? -1 : 1) * (r.hands.seconds * rate - {hour:305,minute:60,seconds:0}[h.role]) * Math.PI / 180;
+          const x = expected.x-pivot[0], y = expected.y-pivot[1];
+          expected.set(pivot[0]+Math.cos(a)*x-Math.sin(a)*y,pivot[1]+Math.sin(a)*x+Math.cos(a)*y,expected.z);
+        }
+        expected.sub(part.center).applyQuaternion(part.rotation).add(part.center).add(part.offset);
         result.handError = Math.max(result.handError, expected.distanceTo(local.applyMatrix4(part.mesh.matrix)));
       }
       if (v.state.part && v.selectionBox.visible) {
@@ -268,6 +276,78 @@ try {
     v.requestRender();
     window.savedAdvance = v.runningMovement.clock.advance;
   });
+  // Verify fitted actual tips, every style pair, and civil-clock resynchronization.
+  const timeChecks = await page.evaluate(async (spec) => {
+    const v=window.movementAudit, r=v.runningMovement, results=[];
+    const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+    const angleError=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
+    function inspect(seconds) {
+      let error=0, count=0;
+      for (const h of spec.hands) {
+        if (!v.fitted.has(h.leafId)) continue;
+        const p=v.renderParts.get(h.leafId), m=p.mesh.matrix.elements;
+        const point=a=>[m[0]*a[0]+m[4]*a[1]+m[8]*a[2]+m[12],m[1]*a[0]+m[5]*a[1]+m[9]*a[2]+m[13]];
+        const b=point(h.boreLocalMm),t=point(h.tipLandmarkLocalMm);
+        const angle=Math.atan2(t[0]-b[0],(h.face==='central'?1:-1)*(t[1]-b[1]));
+        const expected=seconds*{hour:1/120,minute:.1,seconds:6}[h.role]*Math.PI/180;
+        error=Math.max(error,angleError(angle,expected));count++;
+      }
+      return {error,count};
+    }
+    const update=r.hands.update;
+    let fixed=new Date(2026,9,28,12,0,0);
+    r.hands.update=function(active){return update.call(this,active,0,0,fixed);};
+    v.group(null);v.patch({separation:0,partSpread:0,isolated:false});
+    for(const centralStyle of ['fine','lance','open-lance']) for(const smallStyle of ['lance','broad-lance','pear']) {
+      await v.configureDials({dialsVisible:true,centralStyle,smallStyle});
+      await sleep(1000);
+      for(const time of [[12,0,0,0],[3,15,0,0],[6,30,0,0],[23,59,59,900],[0,0,0,0]]) {
+        fixed=new Date(2026,9,28,...time);await sleep(60);
+        const seconds=(time[0]%12)*3600+time[1]*60+time[2]+time[3]/1000;
+        results.push({centralStyle,smallStyle,time,...inspect(seconds)});
+      }
+    }
+    // Pause freezes the last civil time even when the device clock jumps.
+    fixed=new Date(2026,9,28,3,15);await sleep(60);v.patch({separation:1});await sleep(1200);
+    const paused=r.hands.seconds;fixed=new Date(2026,9,28,6,30);v.requestRender();await sleep(80);
+    const held=r.hands.seconds;v.patch({separation:0});await sleep(1200);
+    const resumed=inspect(23400);
+    Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});v.onVisibility();
+    fixed=new Date(2026,9,28,9,45);await sleep(80);
+    Object.defineProperty(document,'hidden',{configurable:true,get:()=>false});v.onVisibility();await sleep(100);
+    const visible=inspect(35100);
+    r.hands.update=update;await sleep(80);
+    const date=new Date(),civil=(date.getHours()%12)*3600+date.getMinutes()*60+date.getSeconds()+date.getMilliseconds()/1000;
+    const accuracy=Math.abs(r.hands.seconds-civil);
+    return {results,paused,held,resumed,visible,accuracy};
+  },hands);
+  check('All nine style pairs show known fractional times on both faces',timeChecks.results.length===45 && timeChecks.results.every(x=>x.count===5 && x.error<1e-8),timeChecks.results);
+  check('Hands freeze through separation and resynchronize after reassembly/hidden return',timeChecks.paused===timeChecks.held && timeChecks.resumed.error<1e-8 && timeChecks.visible.error<1e-8,timeChecks);
+  check('Live hands agree with local civil time within one beat and frame latency',timeChecks.accuracy<.4,{errorSeconds:timeChecks.accuracy});
+  const originalZone = await page.evaluate(() => Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const cdp = await page.context().newCDPSession(page);
+  const zones=[];
+  for (const timezoneId of ['UTC','Europe/Madrid','Asia/Kathmandu','America/New_York',originalZone]) {
+    await cdp.send('Emulation.setTimezoneOverride',{timezoneId});
+    await page.waitForTimeout(80);
+    zones.push(await page.evaluate(() => {
+      const d=new Date(),r=window.movementAudit.runningMovement;
+      const civil=(d.getHours()%12)*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000;
+      return {zone:Intl.DateTimeFormat().resolvedOptions().timeZone,errorSeconds:Math.abs(r.hands.seconds-civil)};
+    }));
+  }
+  await cdp.detach();
+  check('Live browser timezone changes are reflected on the next rendered frame',zones.every(z=>z.errorSeconds<.4),zones);
+  const handDelay=await page.evaluate(async()=>{
+    const r=window.movementAudit.runningMovement;
+    const before=r.hands.seconds,start=performance.now();
+    while(performance.now()-start<400) { /* deliberate dropped frame */ }
+    await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
+    return {delta:r.hands.seconds-before,elapsed:(performance.now()-start)/1000};
+  });
+  check('Delayed frames do not leave fitted hands behind wall time',Math.abs(handDelay.delta-handDelay.elapsed)<.34,handDelay);
+  await page.evaluate(async()=>{await window.movementAudit.configureDials({dialsVisible:false});});
+
   // Full-cycle consecutive frame samples for inspection of temporal aliasing.
   // Freeze only this audit's shared clock; no production playback controls.
   for (const seconds of Array.from({ length: 20 }, (_, i) => (i * secondsPerCycle) / 20)) {
@@ -339,7 +419,7 @@ try {
   });
   check("Every sampled frame obeys inspection/disassembly policy and displayed shaft transforms",
     inspectionResult.frames > 100 && inspectionResult.policyErrors === 0 && inspectionResult.pausedFrames > 10 && inspectionResult.maxError < 1e-8, inspectionResult);
-  check("Hands retain presentation poses and selection bounds follow animated parts",
+  check("Hands follow current/frozen angles and selection bounds follow animated parts",
     inspectionResult.handSamples > 100 && inspectionResult.selectionFrames > 10 && inspectionResult.handError < 1e-8 && inspectionResult.selectionError < 1e-8, inspectionResult);
   const explorerCleanup = await page.evaluate(async () => {
     const v = window.movementAudit;
@@ -371,17 +451,20 @@ try {
     const v = window.movementAudit;
     v.update(new Set(v.manifest.finalLeafIds), null, true);
     await new Promise((r) => setTimeout(r, 300));
-    const complete = v.runningMovement.active;
-    return { complete };
+    const r=v.runningMovement, complete = r.active;
+    const d=new Date(),civil=(d.getHours()%12)*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000;
+    return { complete, handEntries:r.hands.entries.length, handApplied:r.hands.applied,
+      accuracy:Math.abs(r.hands.seconds-civil), moved:r.hands.entries.every(e=>!e.mesh.matrix.equals(e.reference)) };
   });
   await displayScope(page, "Completed Workshop");
+  check('Completed Workshop shows current time with all five hands and bushings',workshop.handEntries===10 && workshop.handApplied && workshop.moved && workshop.accuracy<.4,workshop);
   const undone = await page.evaluate(async () => {
     const v = window.movementAudit;
     v.update(new Set(v.manifest.initialLeafIds), null, true);
     await new Promise((r) => setTimeout(r, 100));
-    return v.runningMovement.active;
+    return {active:v.runningMovement.active, handsApplied:v.runningMovement.hands.applied};
   });
-  check("Workshop completion runs and Undo stops", workshop.complete && !undone, { ...workshop, undone });
+  check("Workshop completion runs and Undo stops", workshop.complete && !undone.active && !undone.handsApplied, { ...workshop, undone });
   const playCleanup = await page.evaluate(() => {
     const v = window.movementAudit;
     v.dispose();

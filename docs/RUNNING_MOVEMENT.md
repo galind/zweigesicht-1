@@ -50,17 +50,19 @@ rotation, conjugated into the leaf's reference coordinates so inspection poses
 carry that shaft with the part, including reversed local axes. The third, seconds and transfer display
 phases remain +16.6°, +2.3° and +6.25° in world coordinates.
 
-Both mainsprings, arbors, ratchets, barrel I and all hands remain in their
-existing static representations. The barrel-II drum/lid rotates around its frozen
+Both mainsprings, arbors, ratchets and barrel I remain in their
+existing static representations. [Fitted hands now show current local time](CURRENT_TIME_HANDS.md),
+with fresh moving-hand clearance findings and illustrative setting offsets. The barrel-II drum/lid rotates around its frozen
 mainspring as the study's explicitly illustrative boundary. The studied source
 fit clears those rotating surfaces, but this does not depict spring attachment,
-unwinding, energy storage or load sharing. Static hands do not report elapsed
-time. The front/transfer extension uses the user-authorized sticking assumption
+unwinding, energy storage or load sharing. The front/transfer extension uses the user-authorized sticking assumption
 at 93/137. The [rear extension](REAR_DISPLAY_ANIMATION.md) models 214/217 as
 sticking 1:1 and installs the two jointly reviewed rear packet phases. Those
 phases resolve sampled nominal mesh conflicts but retain the ~45 nm rear-hour
-precision limit. Static hands are an incomplete display boundary; no physical
-slipping is modeled or claimed.
+precision limit. No physical slipping is modeled or claimed.
+
+The historical static-hand statements in earlier validation sections below are
+superseded by the [current-time hand milestone](CURRENT_TIME_HANDS.md).
 
 ## Historical motion-work extension review — 27 October 2026
 

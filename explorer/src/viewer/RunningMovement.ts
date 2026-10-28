@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import poses from '../../../assets/authored/hand-display-poses.json' with { type: 'json' };
+import dials from '../../../assets/authored/dial-configurations.json' with { type: 'json' };
 import specification from '../../public/models/movement-runtime.json' with { type: 'json' };
 import settings from '../../../assets/authored/running-movement.json' with { type: 'json' };
 
@@ -280,6 +282,7 @@ export class RunningSpring {
 /** One controller per loaded movement. Scene parents (including Bench flips) remain untouched. */
 export class RunningMovement {
   readonly clock = new MovementClock();
+  readonly hands = new RunningHands();
   readonly pose: MovementPose = { balance: 0, pallet: 0, escape: 0 };
   readonly spring: RunningSpring;
   readonly fork: THREE.BufferGeometry;
@@ -325,6 +328,7 @@ export class RunningMovement {
   }
   /** Call before the owning viewer writes presentation poses or reparents pieces. */
   restore() {
+    this.hands.restore();
     if (!this.active) return;
     for (const entry of this.entries) {
       entry.mesh.matrix.copy(entry.base);
@@ -338,6 +342,7 @@ export class RunningMovement {
     if (this.dead) return false;
     this.restore();
     movementPose(this.clock.advance(now, eligible), this.pose);
+    this.hands.update(eligible, this.clock.seconds, this.pose.escape);
     if (!eligible) return false;
     for (const entry of this.entries) {
       entry.base.copy(entry.mesh.matrix);
@@ -365,6 +370,7 @@ export class RunningMovement {
   /** Expected displayed matrix for diagnostics, including prescribed motion. */
   presentationMatrix(id: string, source: THREE.Matrix4, out: THREE.Matrix4) {
     out.copy(source);
+    this.hands.presentationMatrix(id, out);
     if (!this.active) return out;
     const entry = this.entries.find((e) => e.id === id);
     if (!entry) return out;
@@ -384,8 +390,114 @@ export class RunningMovement {
     if (this.dead) return;
     this.restore();
     this.clock.suspend();
+    this.hands.dispose();
     this.spring.geometry.dispose();
     this.fork.dispose();
     this.dead = true;
+  }
+}
+
+const rates = { hour: 1 / 120, minute: 1 / 10, seconds: 6 };
+const members = new Map(
+  poses.hands.flatMap((hand) =>
+    [hand.leafId, hand.supportLeafId].map((id) => [id, hand] as const),
+  ),
+);
+export type HandMember = {
+  id: string;
+  mesh: THREE.Mesh;
+  reference: THREE.Matrix4;
+};
+
+/** Local civil seconds plus the unchanged train's sub-beat advance/recoil.
+ * The residual is bounded: never feed a modulo escape angle into a slow ratio.
+ * Reading Date each frame also observes clock corrections and timezone changes.
+ */
+export function handClock(date: Date, activeSeconds: number, escape: number) {
+  const civil =
+    (date.getHours() % 12) * 3600 +
+    date.getMinutes() * 60 +
+    date.getSeconds() +
+    date.getMilliseconds() / 1000;
+  return civil + (escape - activeSeconds * 54) / 54;
+}
+
+/** Fitted blades and their bushings; owned by the existing movement scheduler. */
+export class RunningHands {
+  private entries: (HandMember & {
+    inverse: THREE.Matrix4;
+    base: THREE.Matrix4;
+    hand: (typeof poses.hands)[number];
+  })[] = [];
+  private applied = false;
+  private holdOnPause = false;
+  private seconds = handClock(new Date(), 0, 0);
+  private delta = new THREE.Matrix4();
+  private translation = new THREE.Matrix4();
+  configure(membersToFit: HandMember[], holdOnPause = false) {
+    this.restore();
+    this.holdOnPause = holdOnPause;
+    this.entries = membersToFit.flatMap((entry) => {
+      const hand = members.get(entry.id);
+      return hand
+        ? [
+            {
+              ...entry,
+              reference: entry.reference.clone(),
+              inverse: entry.reference.clone().invert(),
+              base: entry.reference.clone(),
+              hand,
+            },
+          ]
+        : [];
+    });
+  }
+  restore() {
+    if (!this.applied) return;
+    for (const e of this.entries) {
+      e.mesh.matrix.copy(e.base);
+      e.mesh.matrixWorldNeedsUpdate = true;
+    }
+    this.applied = false;
+  }
+  private transform(e: (typeof this.entries)[number], out: THREE.Matrix4) {
+    const face = e.hand.face as 'central' | 'small';
+    const role = e.hand.role as keyof typeof rates;
+    const degrees =
+      (face === 'central' ? -1 : 1) *
+      (this.seconds * rates[role] - poses.clockAnglesDegrees[role]);
+    const [x, y] = dials.faces[face].axleWorldXYMm;
+    this.delta
+      .makeTranslation(x, y, 0)
+      .multiply(
+        this.translation.makeRotationZ(((degrees % 360) * Math.PI) / 180),
+      )
+      .multiply(this.translation.makeTranslation(-x, -y, 0));
+    // Carry the fitted shaft with any reveal/separation presentation transform.
+    return out.multiply(e.inverse).multiply(this.delta).multiply(e.reference);
+  }
+  update(
+    active: boolean,
+    activeSeconds: number,
+    escape: number,
+    date = new Date(),
+  ) {
+    this.restore();
+    if (active) this.seconds = handClock(date, activeSeconds, escape);
+    if (!active && !this.holdOnPause) return;
+    for (const e of this.entries) {
+      e.base.copy(e.mesh.matrix);
+      this.transform(e, e.mesh.matrix);
+      e.mesh.matrixWorldNeedsUpdate = true;
+    }
+    this.applied = true;
+  }
+  presentationMatrix(id: string, out: THREE.Matrix4) {
+    const e = this.applied && this.entries.find((entry) => entry.id === id);
+    return e ? this.transform(e, out) : out;
+  }
+  dispose() {
+    this.restore();
+    this.entries = [];
   }
 }

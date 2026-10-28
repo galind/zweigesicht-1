@@ -1,5 +1,9 @@
 # Movement-side display animation
 
+The later [current-time hand milestone](CURRENT_TIME_HANDS.md) supersedes this
+record’s static-hand boundary. Rear gear phases and ratios below are unchanged;
+changed hand-neighbor pairs receive a fresh review with disclosed interferences.
+
 28 October 2026. Implemented from clean `5fd50f0` on
 `codex/escapement-clearance-study`. This extends the existing prescribed motion
 with the three requested movement-side packets. Hands, winding and setting remain

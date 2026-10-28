@@ -267,7 +267,7 @@ test("loader rejects missing and corrupt motion assets", async () => {
 });
 
 // All leaves outside the explicit moving packets and deforming spring stay static.
-test("hands, winding, setting and all other excluded leaves stay static through lifecycle changes", () => {
+test("unregistered catalog hands, winding, setting and excluded leaves stay static through lifecycle changes", () => {
   const moving = new Set([...MOVEMENT.packets.flatMap(p => p.members), MOVEMENT.spring.id]);
   const ids = manifest.instances.filter(p => !p.isAssembly && !moving.has(p.id)).map(p => p.id);
   assert.ok(ids.length > 300);

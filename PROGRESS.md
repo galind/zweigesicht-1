@@ -4,7 +4,48 @@ Updated 28 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
-## Pause during disassembly — current milestone
+## Current local-time hands — current milestone
+
+Implemented from clean `79c234f` on `codex/escapement-clearance-study`. Both fitted
+displays now show browser-local time through the existing movement scheduler:
+15 possible blades and seven bushings, with five hands/five bushings selected per
+configuration. The rear face has hour/minute hands only. Hours/minutes include
+fractional progress; the central seconds hand follows the existing 3 Hz train's
+advance/recoil. Fresh wall time plus the unchanged active train's bounded sub-beat
+residual prevents suspension drift and observes clock/timezone changes. Alignment
+and resynchronization are illustrative setting offsets, not physical slipping.
+
+Focus/reveal, selection, isolation and flipping keep running. Separation freezes
+hand angles relative to their presentation poses; reassembly reaches displayed
+zero before resynchronizing. Inventory, hidden tabs, Workshop completion/Undo and
+Bench retain their established policies. All authored assets, source/runtime
+geometry, gear ratios/phases, balance amplitude, escapement path and barrel-II
+boundary are unchanged; the recorder verifies exact prior gear code preservation
+apart from the hand lifecycle hooks.
+
+**19 focused tests, typecheck, lint, production build and 31 browser checks pass.**
+All nine style pairs pass five known-time fixtures on both faces. Actual browser
+timezone changes, delayed frames, hidden/separated resynchronization, selection
+bounds and cleanup pass. See [behavior, membership and validation](docs/CURRENT_TIME_HANDS.md)
+and [provenance](assets/source-manifest/current-time-hands.json).
+
+**Clearance is not qualified.** Fresh review finds 36 rear minute/marker overlaps
+(all three styles across all twelve markers), plus a broad-lance hour/minute
+overlap near effective 10:53:38.182. The marker overlap already exists at the
+2 o'clock marker in the authored 10:10 pose; rotation reaches the other markers.
+Central Lance minute/outer-ring overlap and blade/bushing/shaft fits are retained.
+No geometry or gear phase was changed to conceal these findings. The new review
+records 7,282 full-turn box exclusions, 107 further continuous enclosure/annular
+bounds, 54 sampled nonpenetrating pairs, 58 overlapping pairs and 111 invalid or
+non-solid exceptions; 3,507 sampled solid configurations and 242 runtime triangle
+witnesses. Existing ~45 nm rear-hour and connection-assumption limits remain.
+
+The local app at `http://127.0.0.1:4178/` is refreshed and left with fitted dials
+showing current time. Next: user review of the illustration and explicit mechanical
+review of the disclosed interferences before any physical acceptance. No push, PR,
+merge, deployment or publication.
+
+## Pause during disassembly — preceding milestone
 
 User-requested revision from clean `b5307a7`. Whole-movement disassembly and
 focused part separation now pause animation and active time. Gears resume only

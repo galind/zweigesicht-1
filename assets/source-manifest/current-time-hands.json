@@ -1,0 +1,4847 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "baselineCommit": "79c234f",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "frequencyEvidence": "assets/source-manifest/nominal-operating-speed.json",
+  "priorFitEvidence": "assets/source-manifest/watch-configuration.json",
+  "scope": "15 source blades and seven distinct fitted bushings; five blades/five bushings per selected fitted configuration, all nine style pairs. No small-face seconds hand. No raw catalog animation or Bench hand change.",
+  "hands": [
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+      "definitionId": "d_0_1_1_28",
+      "face": "central",
+      "style": "fine",
+      "role": "hour",
+      "boreLocalMm": [
+        4.1335207826009906e-16,
+        5.1698788481779456e-23,
+        0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -1.59377719355369e-14,
+        0.0599632742307175
+      ],
+      "boreAxisWorldOriginMm": [
+        1.0842021724855007e-15,
+        5.421010862427528e-16,
+        0.6499999999999926
+      ],
+      "sourceWorldPointingDirection": [
+        -0.8108795565389981,
+        0.5852130763979201,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 0.8180443078530385,
+      "assemblyWorldTranslationMm": [
+        -1.0842021724855007e-15,
+        -5.421010862427528e-16,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "boreRadiusMm": 0.9,
+      "supportSeatRadiusMm": 0.905,
+      "maximumAxialSeatOverlapMm": 0.18000000000000005,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:6",
+      "sourceMatrix": [
+        [
+          -0.8108795565389981,
+          -0.5852130763979201,
+          0.0,
+          1.41938095265433e-15
+        ],
+        [
+          0.5852130763979201,
+          -0.8108795565389981,
+          0.0,
+          3.0020208681017703e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.44999999999999263
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        0.6499999999999926
+      ],
+      "readerReferenceDegrees": 305,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 305
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+      "definitionId": "d_0_1_1_24",
+      "face": "central",
+      "style": "fine",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.800000000000125,
+        -3.545073320592567e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        13.9,
+        0.0,
+        -0.520207590811592
+      ],
+      "boreAxisWorldOriginMm": [
+        2.3314683517128287e-15,
+        9.992007221626409e-16,
+        1.049999999999993
+      ],
+      "sourceWorldPointingDirection": [
+        0.7697545607860456,
+        0.6383399690988196,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -9.668146259469173,
+      "assemblyWorldTranslationMm": [
+        -2.3314683517128287e-15,
+        -9.992007221626409e-16,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "boreRadiusMm": 0.7,
+      "supportSeatRadiusMm": 0.705,
+      "maximumAxialSeatOverlapMm": 0.15999999999999992,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:2",
+      "sourceMatrix": [
+        [
+          0.7697545607860456,
+          -0.6383399690988196,
+          0.0,
+          0.615803648628935
+        ],
+        [
+          0.6383399690988196,
+          0.7697545607860456,
+          0.0,
+          0.5106719752791364
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.249999999999993
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        1.049999999999993
+      ],
+      "readerReferenceDegrees": 60,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 60
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+      "definitionId": "d_0_1_1_30",
+      "face": "central",
+      "style": "fine",
+      "role": "seconds",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.092961170786472e-15,
+        15.6,
+        -0.6792930865007475
+      ],
+      "boreAxisWorldOriginMm": [
+        1.0842021724855e-15,
+        4.878909776184772e-16,
+        0.2699999999999929
+      ],
+      "sourceWorldPointingDirection": [
+        -0.9875698132398842,
+        -0.15718099114505002,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -99.04330855992968,
+      "assemblyWorldTranslationMm": [
+        -1.0842021724855e-15,
+        -4.878909776184772e-16,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "boreRadiusMm": 0.5,
+      "supportSeatRadiusMm": 0.505,
+      "maximumAxialSeatOverlapMm": 0.17999999999999994,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:10",
+      "sourceMatrix": [
+        [
+          -0.15718099114505002,
+          -0.9875698132398842,
+          0.0,
+          1.0842021724855e-15
+        ],
+        [
+          0.9875698132398842,
+          -0.15718099114505002,
+          0.0,
+          4.878909776184772e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.769999999999993
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        0.2699999999999929
+      ],
+      "readerReferenceDegrees": 0,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 0
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+      "definitionId": "d_0_1_1_31",
+      "face": "central",
+      "style": "lance",
+      "role": "hour",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -1.35525271560688e-17,
+        0.095
+      ],
+      "boreAxisWorldOriginMm": [
+        1.07742590890747e-15,
+        5.42101086242752e-16,
+        0.6499999999999926
+      ],
+      "sourceWorldPointingDirection": [
+        -0.7911199373519647,
+        0.6116610537905969,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 2.7097051165895047,
+      "assemblyWorldTranslationMm": [
+        -1.07742590890747e-15,
+        -5.42101086242752e-16,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "boreRadiusMm": 0.9,
+      "supportSeatRadiusMm": 0.905,
+      "maximumAxialSeatOverlapMm": 0.18000000000000005,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:14",
+      "sourceMatrix": [
+        [
+          -0.7911199373519647,
+          -0.6116610537905969,
+          0.0,
+          1.07742590890747e-15
+        ],
+        [
+          0.6116610537905969,
+          -0.7911199373519647,
+          0.0,
+          5.42101086242752e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.44999999999999263
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        0.6499999999999926
+      ],
+      "readerReferenceDegrees": 305,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 305
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+      "definitionId": "d_0_1_1_32",
+      "face": "central",
+      "style": "lance",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.799999999999629,
+        3.851472193143742e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        14.00000000000015,
+        -2.632457276166345e-13,
+        -0.755201390450395
+      ],
+      "boreAxisWorldOriginMm": [
+        8.43769498715119e-15,
+        5.10702591327572e-15,
+        1.049999999999993
+      ],
+      "sourceWorldPointingDirection": [
+        0.787097714064217,
+        0.616828329857574,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -8.084890442946083,
+      "assemblyWorldTranslationMm": [
+        -8.43769498715119e-15,
+        -5.10702591327572e-15,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "boreRadiusMm": 0.7,
+      "supportSeatRadiusMm": 0.705,
+      "maximumAxialSeatOverlapMm": 0.18000000000000016,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:18",
+      "sourceMatrix": [
+        [
+          0.787097714064217,
+          -0.616828329857574,
+          0.0,
+          0.62967817125109
+        ],
+        [
+          0.616828329857574,
+          0.787097714064217,
+          0.0,
+          0.49346266388583543
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.249999999999993
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        1.049999999999993
+      ],
+      "readerReferenceDegrees": 60,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 60
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+      "definitionId": "d_0_1_1_29",
+      "face": "central",
+      "style": "lance",
+      "role": "seconds",
+      "boreLocalMm": [
+        0.0,
+        0.0,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.09296117078647e-15,
+        15.59999999999995,
+        -0.6792930865007341
+      ],
+      "boreAxisWorldOriginMm": [
+        12.4254391598701,
+        7.08174217766239,
+        0.2699999999999929
+      ],
+      "sourceWorldPointingDirection": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 0.0,
+      "assemblyWorldTranslationMm": [
+        -12.4254391598701,
+        -7.08174217766239,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "boreRadiusMm": 0.5,
+      "supportSeatRadiusMm": 0.505,
+      "maximumAxialSeatOverlapMm": 0.17999999999999994,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:9",
+      "sourceMatrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          12.4254391598701
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          7.08174217766239
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.769999999999993
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        0.2699999999999929
+      ],
+      "readerReferenceDegrees": 0,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 0
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+      "definitionId": "d_0_1_1_35",
+      "face": "central",
+      "style": "open-lance",
+      "role": "hour",
+      "boreLocalMm": [
+        4.1335207826009857e-16,
+        5.169868731036836e-23,
+        0.20000000000000007
+      ],
+      "tipLandmarkLocalMm": [
+        8.8,
+        -2.71050543121376e-16,
+        0.0989100773929625
+      ],
+      "boreAxisWorldOriginMm": [
+        7.730150620944153e-13,
+        -1.4864812963657427e-12,
+        0.6499999999999921
+      ],
+      "sourceWorldPointingDirection": [
+        -0.8111921131015475,
+        0.5847797496851669,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 0.7874318612329593,
+      "assemblyWorldTranslationMm": [
+        -7.730150620944153e-13,
+        1.4864812963657427e-12,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "boreRadiusMm": 0.9,
+      "supportSeatRadiusMm": 0.905,
+      "maximumAxialSeatOverlapMm": 0.16000000000000003,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:22/0:1:1:33:2",
+      "sourceMatrix": [
+        [
+          -0.8111921131015475,
+          -0.5847797496851669,
+          0.0,
+          7.733503700704664e-13
+        ],
+        [
+          0.5847797496851669,
+          -0.8111921131015475,
+          0.0,
+          -1.4867230162486618e-12
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.4499999999999921
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        0.6499999999999921
+      ],
+      "readerReferenceDegrees": 305,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 305
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+      "definitionId": "d_0_1_1_39",
+      "face": "central",
+      "style": "open-lance",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.879999999999999,
+        -2.2929061773065002e-17,
+        -0.19999999999999996
+      ],
+      "tipLandmarkLocalMm": [
+        13.82,
+        2.71050543121376e-17,
+        -0.58258360731897
+      ],
+      "boreAxisWorldOriginMm": [
+        -8.253397965063414e-13,
+        -1.4954704141700859e-13,
+        1.049999999999992
+      ],
+      "sourceWorldPointingDirection": [
+        0.8003491006910127,
+        0.5995342500834189,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -6.836548042605893,
+      "assemblyWorldTranslationMm": [
+        8.253397965063414e-13,
+        1.4954704141700859e-13,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "boreRadiusMm": 0.7,
+      "supportSeatRadiusMm": 0.705,
+      "maximumAxialSeatOverlapMm": 0.15999999999999992,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:24/0:1:1:37:2",
+      "sourceMatrix": [
+        [
+          0.8003491006910127,
+          -0.5995342500834189,
+          0.0,
+          0.704307208607265
+        ],
+        [
+          0.5995342500834189,
+          0.8003491006910127,
+          0.0,
+          0.5275901400732584
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.249999999999992
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        1.049999999999992
+      ],
+      "readerReferenceDegrees": 60,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 60
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+      "definitionId": "d_0_1_1_42",
+      "face": "central",
+      "style": "open-lance",
+      "role": "seconds",
+      "boreLocalMm": [
+        -7.573064690121713e-29,
+        -1.0097419586828951e-28,
+        -1.5
+      ],
+      "tipLandmarkLocalMm": [
+        1.09296117078647e-15,
+        15.59999999999995,
+        -0.6792930865007341
+      ],
+      "boreAxisWorldOriginMm": [
+        7.989073914684103e-13,
+        -2.5174120424137024e-13,
+        0.26999999999999313
+      ],
+      "sourceWorldPointingDirection": [
+        -0.9877235636297348,
+        -0.1562119132799335,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -98.98709000739842,
+      "assemblyWorldTranslationMm": [
+        -7.989073914684103e-13,
+        2.5174120424137024e-13,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "boreRadiusMm": 0.5,
+      "supportSeatRadiusMm": 0.505,
+      "maximumAxialSeatOverlapMm": 0.18000000000000016,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:25/0:1:1:40:2",
+      "sourceMatrix": [
+        [
+          -0.1562119132799335,
+          -0.9877235636297348,
+          0.0,
+          7.989073914684103e-13
+        ],
+        [
+          0.9877235636297348,
+          -0.1562119132799335,
+          0.0,
+          -2.5174120424137024e-13
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.7699999999999931
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        0,
+        0.26999999999999313
+      ],
+      "readerReferenceDegrees": 0,
+      "worldClockwiseSign": -1,
+      "worldIncrementAtZeroTimeDegrees": 0
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+      "definitionId": "d_0_1_1_11",
+      "face": "small",
+      "style": "lance",
+      "role": "hour",
+      "boreLocalMm": [
+        7.803706661347034e-17,
+        7.926878801015953e-17,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.0,
+        -2.05320786414442e-14,
+        0.075
+      ],
+      "boreAxisWorldOriginMm": [
+        -4.427396323825064e-15,
+        7.399999999999987,
+        -6.3000000000000105
+      ],
+      "sourceWorldPointingDirection": [
+        0.7848126433788679,
+        -0.6197330996426398,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -106.7033533854508,
+      "assemblyWorldTranslationMm": [
+        4.427396323825064e-15,
+        1.3322676295501878e-14,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "boreRadiusMm": 0.495,
+      "supportSeatRadiusMm": 0.5,
+      "maximumAxialSeatOverlapMm": 0.1999999999999984,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:16/0:1:1:10:1",
+      "sourceMatrix": [
+        [
+          0.7848126433788679,
+          -0.6197330996426398,
+          0.0,
+          -4.751800261010521e-15
+        ],
+        [
+          -0.6197330996426398,
+          -0.7848126433788679,
+          0.0,
+          7.399999999999987
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.10000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        7.4,
+        -6.3000000000000105
+      ],
+      "readerReferenceDegrees": 305,
+      "worldClockwiseSign": 1,
+      "worldIncrementAtZeroTimeDegrees": -305
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+      "definitionId": "d_0_1_1_7",
+      "face": "small",
+      "style": "lance",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.5028571428571419,
+        3.7754066583194543e-16,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        8.000000000001325,
+        -1.898435873540726e-12,
+        -0.7454597403324354
+      ],
+      "boreAxisWorldOriginMm": [
+        -6.5503158452884236e-15,
+        7.39999999999999,
+        -6.46000000000001
+      ],
+      "sourceWorldPointingDirection": [
+        -0.7999925761257256,
+        -0.6000098983714562,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 113.12939343223103,
+      "assemblyWorldTranslationMm": [
+        6.5503158452884236e-15,
+        1.0658141036401503e-14,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "boreRadiusMm": 0.345,
+      "supportSeatRadiusMm": 0.35,
+      "maximumAxialSeatOverlapMm": 0.17999999999999972,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:5/0:1:1:6:1",
+      "sourceMatrix": [
+        [
+          -0.7999925761257256,
+          -0.6000098983714562,
+          0.0,
+          -0.4022819811375136
+        ],
+        [
+          -0.6000098983714562,
+          0.7999925761257256,
+          0.0,
+          7.098280736818915
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.66000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        7.4,
+        -6.46000000000001
+      ],
+      "readerReferenceDegrees": 60,
+      "worldClockwiseSign": 1,
+      "worldIncrementAtZeroTimeDegrees": -60
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+      "definitionId": "d_0_1_1_13",
+      "face": "small",
+      "style": "broad-lance",
+      "role": "hour",
+      "boreLocalMm": [
+        -5.613629608853484e-16,
+        1.424372481491419e-13,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.1,
+        -2.03287907341032e-14,
+        0.09
+      ],
+      "boreAxisWorldOriginMm": [
+        -3.875324930281553e-14,
+        7.399999999999849,
+        -6.3000000000000105
+      ],
+      "sourceWorldPointingDirection": [
+        0.9713459557733324,
+        -0.23767001115578595,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": -131.25093676805017,
+      "assemblyWorldTranslationMm": [
+        3.875324930281553e-14,
+        1.509903313490213e-13,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+      "boreRadiusMm": 0.495,
+      "supportSeatRadiusMm": 0.5,
+      "maximumAxialSeatOverlapMm": 0.1999999999999984,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:26/0:1:1:20:1",
+      "sourceMatrix": [
+        [
+          0.9713459557733324,
+          -0.23767001115578595,
+          0.0,
+          -4.02500414910387e-15
+        ],
+        [
+          -0.23767001115578595,
+          -0.9713459557733324,
+          0.0,
+          7.399999999999988
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.10000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        7.4,
+        -6.3000000000000105
+      ],
+      "readerReferenceDegrees": 305,
+      "worldClockwiseSign": 1,
+      "worldIncrementAtZeroTimeDegrees": -305
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+      "definitionId": "d_0_1_1_16",
+      "face": "small",
+      "style": "broad-lance",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.4900000000000007,
+        -2.9879002550229324e-17,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        8.000000000001496,
+        -2.13455092710204e-12,
+        -0.745459740332473
+      ],
+      "boreAxisWorldOriginMm": [
+        -6.6058269965196814e-15,
+        7.39999999999999,
+        -6.46000000000001
+      ],
+      "sourceWorldPointingDirection": [
+        -0.5970559978546115,
+        -0.8021995608486919,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 96.6593387216092,
+      "assemblyWorldTranslationMm": [
+        6.6058269965196814e-15,
+        1.0658141036401503e-14,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+      "boreRadiusMm": 0.345,
+      "supportSeatRadiusMm": 0.35,
+      "maximumAxialSeatOverlapMm": 0.17999999999999972,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:20/0:1:1:15:1",
+      "sourceMatrix": [
+        [
+          -0.5970559978546115,
+          -0.8021995608486919,
+          0.0,
+          -0.2925574389487656
+        ],
+        [
+          -0.8021995608486919,
+          0.5970559978546115,
+          0.0,
+          7.006922215184131
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.66000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        7.4,
+        -6.46000000000001
+      ],
+      "readerReferenceDegrees": 60,
+      "worldClockwiseSign": 1,
+      "worldIncrementAtZeroTimeDegrees": -60
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+      "definitionId": "d_0_1_1_18",
+      "face": "small",
+      "style": "pear",
+      "role": "hour",
+      "boreLocalMm": [
+        3.436830123220337e-16,
+        3.5251725047287415e-16,
+        0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        5.02858828879521,
+        -1.35525271560688e-17,
+        0.075
+      ],
+      "boreAxisWorldOriginMm": [
+        6.5250896325867e-14,
+        7.399999999999867,
+        -6.3000000000000105
+      ],
+      "sourceWorldPointingDirection": [
+        -0.8590785689546788,
+        -0.5118437382275779,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 4.213281560812057,
+      "assemblyWorldTranslationMm": [
+        -6.5250896325867e-14,
+        1.3322676295501878e-13,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "boreRadiusMm": 0.495,
+      "supportSeatRadiusMm": 0.5,
+      "maximumAxialSeatOverlapMm": 0.1999999999999984,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:23",
+      "sourceMatrix": [
+        [
+          -0.8590785689546788,
+          -0.5118437382275779,
+          0.0,
+          6.579530924582157e-14
+        ],
+        [
+          -0.5118437382275779,
+          0.8590785689546788,
+          0.0,
+          7.399999999999867
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.10000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        7.4,
+        -6.3000000000000105
+      ],
+      "readerReferenceDegrees": 305,
+      "worldClockwiseSign": 1,
+      "worldIncrementAtZeroTimeDegrees": -305
+    },
+    {
+      "leafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+      "definitionId": "d_0_1_1_19",
+      "face": "small",
+      "style": "pear",
+      "role": "minute",
+      "boreLocalMm": [
+        -0.4899999999999996,
+        1.4705716940123503e-16,
+        -0.20000000000000018
+      ],
+      "tipLandmarkLocalMm": [
+        7.98897646530028,
+        3.70351821982908e-12,
+        -0.7436705389678004
+      ],
+      "boreAxisWorldOriginMm": [
+        -5.995204332975845e-15,
+        7.39999999999999,
+        -6.46000000000001
+      ],
+      "sourceWorldPointingDirection": [
+        0.786867698397529,
+        -0.617121726419169,
+        0.0
+      ],
+      "worldZRotationDeltaDeg": 8.106250994296492,
+      "assemblyWorldTranslationMm": [
+        5.995204332975845e-15,
+        1.0658141036401503e-14,
+        0.0
+      ],
+      "supportLeafId": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "boreRadiusMm": 0.345,
+      "supportSeatRadiusMm": 0.35,
+      "maximumAxialSeatOverlapMm": 0.17999999999999972,
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:24",
+      "sourceMatrix": [
+        [
+          0.786867698397529,
+          -0.6171217264191688,
+          0.0,
+          0.3855651722147824
+        ],
+        [
+          -0.617121726419169,
+          -0.7868676983975288,
+          0.0,
+          7.097610354054598
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.66000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "fittedPivotMm": [
+        0,
+        7.4,
+        -6.46000000000001
+      ],
+      "readerReferenceDegrees": 60,
+      "worldClockwiseSign": 1,
+      "worldIncrementAtZeroTimeDegrees": -60
+    }
+  ],
+  "supports": [
+    {
+      "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+      "definitionId": "d_0_1_1_12",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:16/0:1:1:10:2",
+      "sourceMatrix": [
+        [
+          0.2704274965552046,
+          0.9627403435542135,
+          0.0,
+          -6.402348608069219e-15
+        ],
+        [
+          0.9627403435542135,
+          -0.2704274965552046,
+          0.0,
+          7.39999999999999
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.000000000000009
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "face": "small",
+      "role": "hour",
+      "pivotXYMm": [
+        0,
+        7.4
+      ],
+      "worldClockwiseSign": 1
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+      "definitionId": "d_0_1_1_8",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:20/0:1:1:15:2",
+      "sourceMatrix": [
+        [
+          0.9701822280404921,
+          -0.24237665810549258,
+          0.0,
+          -6.6058269965196814e-15
+        ],
+        [
+          -0.24237665810549258,
+          -0.9701822280404921,
+          0.0,
+          7.39999999999999
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.76000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "face": "small",
+      "role": "minute",
+      "pivotXYMm": [
+        0,
+        7.4
+      ],
+      "worldClockwiseSign": 1
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+      "definitionId": "d_0_1_1_12",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:26/0:1:1:20:2",
+      "sourceMatrix": [
+        [
+          -0.15398400123086714,
+          0.9880733410860412,
+          0.0,
+          -6.40234860806922e-15
+        ],
+        [
+          0.9880733410860412,
+          0.15398400123086714,
+          0.0,
+          7.39999999999999
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.000000000000009
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "face": "small",
+      "role": "hour",
+      "pivotXYMm": [
+        0,
+        7.4
+      ],
+      "worldClockwiseSign": 1
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+      "definitionId": "d_0_1_1_8",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:1/0:1:1:2:5/0:1:1:6:2",
+      "sourceMatrix": [
+        [
+          0.861656531774712,
+          -0.5074918927923625,
+          0.0,
+          -5.828670879282072e-15
+        ],
+        [
+          -0.5074918927923625,
+          -0.861656531774712,
+          0.0,
+          7.399999999999991
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -6.76000000000001
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "face": "small",
+      "role": "minute",
+      "pivotXYMm": [
+        0,
+        7.4
+      ],
+      "worldClockwiseSign": 1
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+      "definitionId": "d_0_1_1_34",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:22/0:1:1:33:1",
+      "sourceMatrix": [
+        [
+          -0.8088157958254453,
+          -0.5880620787155483,
+          0.0,
+          1.0842021724855e-15
+        ],
+        [
+          0.5880620787155483,
+          -0.8088157958254453,
+          0.0,
+          5.42101086242752e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.10000000000000797
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "face": "central",
+      "role": "hour",
+      "pivotXYMm": [
+        0,
+        0
+      ],
+      "worldClockwiseSign": -1
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+      "definitionId": "d_0_1_1_38",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:24/0:1:1:37:1",
+      "sourceMatrix": [
+        [
+          0.8007462801358841,
+          -0.5990036684767002,
+          0.0,
+          -4.440892098500626e-16
+        ],
+        [
+          0.5990036684767002,
+          0.8007462801358841,
+          0.0,
+          2.220446049250313e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.699999999999992
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "face": "central",
+      "role": "minute",
+      "pivotXYMm": [
+        0,
+        0
+      ],
+      "worldClockwiseSign": -1
+    },
+    {
+      "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+      "definitionId": "d_0_1_1_41",
+      "sourceOccurrencePath": "0:1:1:1/0:1:1:1:2/0:1:1:22:25/0:1:1:40:1",
+      "sourceMatrix": [
+        [
+          -0.7839793697404273,
+          -0.6207868779391221,
+          0.0,
+          1.09775469964157e-15
+        ],
+        [
+          0.6207868779391221,
+          -0.7839793697404273,
+          0.0,
+          4.878909776184772e-16
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.919999999999993
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "localZWorld": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "face": "central",
+      "role": "seconds",
+      "pivotXYMm": [
+        0,
+        0
+      ],
+      "worldClockwiseSign": -1
+    }
+  ],
+  "dialMarkerEvidence": {
+    "central": [
+      {
+        "readerHour": 12,
+        "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_3",
+        "worldXYMm": [
+          1.79755893298884e-15,
+          15.65
+        ]
+      },
+      {
+        "readerHour": 3,
+        "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_21",
+        "worldXYMm": [
+          15.65,
+          -4.117679984512928e-15
+        ]
+      },
+      {
+        "readerHour": 6,
+        "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_13",
+        "worldXYMm": [
+          -3.6888587271913e-15,
+          -15.65
+        ]
+      },
+      {
+        "readerHour": 9,
+        "id": "p_0_1_1_1__0_1_1_1_2__0_1_1_22_19",
+        "worldXYMm": [
+          -15.65,
+          -1.4089680419050897e-14
+        ]
+      }
+    ],
+    "small": [
+      {
+        "readerHour": 12,
+        "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_27",
+        "worldXYMm": [
+          -9.54097911787244e-15,
+          -0.7500000000000098
+        ]
+      },
+      {
+        "readerHour": 3,
+        "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_13",
+        "worldXYMm": [
+          8.149999999999991,
+          7.3999999999999835
+        ]
+      },
+      {
+        "readerHour": 6,
+        "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_3",
+        "worldXYMm": [
+          4.7478643122221595e-15,
+          15.54999999999999
+        ]
+      },
+      {
+        "readerHour": 9,
+        "id": "p_0_1_1_1__0_1_1_1_1__0_1_1_2_6",
+        "worldXYMm": [
+          -8.149999999999999,
+          7.400000000000001
+        ]
+      }
+    ]
+  },
+  "dialFrames": {
+    "central": {
+      "pivotXYMm": [
+        0,
+        0
+      ],
+      "outward": [
+        0,
+        0,
+        1
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "right": [
+        1,
+        0,
+        0
+      ]
+    },
+    "small": {
+      "pivotXYMm": [
+        0,
+        7.4
+      ],
+      "outward": [
+        0,
+        0,
+        -1
+      ],
+      "up": [
+        0,
+        -1,
+        0
+      ],
+      "right": [
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "timeMapping": {
+    "formula": "T=C+(E(a)-54*a)/54; reader degrees=T*{hour:1/120,minute:1/10,seconds:6}; world delta=faceSign*(reader-reference). C is fresh local civil seconds modulo 12h, a is existing active seconds, E is unchanged accumulated escape degrees.",
+    "clockwiseSigns": {
+      "central": -1,
+      "small": 1
+    },
+    "referenceClockDegrees": {
+      "hour": 305,
+      "minute": 60,
+      "seconds": 0
+    },
+    "secondsBehavior": "Existing six-beat-per-second prescribed advance, dwell and recoil, not uniform sweep or 1 Hz ticking.",
+    "phaseOffsetToGears": "faceSign*rate*(C-a)-faceSign*referenceAngle. Load/resume/system-clock/timezone adjustments are illustrative time setting; no physical slip or setting mechanism is asserted.",
+    "sampledResidual": {
+      "sampledOneCycle": 100001,
+      "minSeconds": -0.08355222222221757,
+      "maxSeconds": 0.08332407407408128
+    }
+  },
+  "lifecycle": "Same scheduler and gear clock. Explorer assembled focus/reveal/selection/isolation/flip run. Separation holds last hand angles in presentation coordinates until displayed separation zero, then current-time resync. Hidden return also resyncs. Inventory restores static reference; Workshop runs only at completion and Undo restores endpoints; Bench unchanged; dispose restores matrices and clears registrations.",
+  "clearance": {
+    "method": "Continuous full-turn boxes/enclosures/annuli only where recorded. Remaining <=10 degree relative-angle samples do not bound intersample interference. Independent hand/gear phases allow illustrative setting adjustments. Invalid originals are not qualified. Whole assembly separation paths not checked.",
+    "boxExclusions": 7282,
+    "incompatibleDialPairsExcluded": 55,
+    "statuses": {
+      "overlap": 58,
+      "sampled nonpenetration": 54,
+      "continuous enclosing cylinder": 70,
+      "invalid/non-solid exception": 111,
+      "continuous annular bound": 37
+    },
+    "sampleConfigurations": 3507,
+    "overlaps": [
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_3"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439966230857,
+          "anglesDegrees": [
+            120,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_4"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.001844643996552137,
+          "anglesDegrees": [
+            270,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2"
+        ],
+        "definitions": [
+          7,
+          8
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0019922933411512314,
+        "worst": {
+          "volumeMm3": 0.0019922933411512314,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_6"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439963284772,
+          "anglesDegrees": [
+            210,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_7"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439965308459,
+          "anglesDegrees": [
+            240,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_8"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439966389014,
+          "anglesDegrees": [
+            180,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_9"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439970790144,
+          "anglesDegrees": [
+            150,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_10"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439970388382,
+          "anglesDegrees": [
+            90,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_12"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439965242884,
+          "anglesDegrees": [
+            60,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_13"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.001844643996484785,
+          "anglesDegrees": [
+            30,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_14"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.001844643997046227,
+        "worst": {
+          "volumeMm3": 0.001844643997046227,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_15"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.001844643996592435,
+          "anglesDegrees": [
+            330,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_27"
+        ],
+        "definitions": [
+          7,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0018446439969936564,
+          "anglesDegrees": [
+            300,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24"
+        ],
+        "definitions": [
+          8,
+          19
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.001992293341145264,
+        "worst": {
+          "volumeMm3": 0.001992293341145264,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2"
+        ],
+        "definitions": [
+          8,
+          184
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0008574581393434311,
+        "worst": {
+          "volumeMm3": 0.0008574581393443106,
+          "anglesDegrees": [
+            50,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2"
+        ],
+        "definitions": [
+          11,
+          12
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0031258846903210145,
+        "worst": {
+          "volumeMm3": 0.0031258846903210145,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23"
+        ],
+        "definitions": [
+          12,
+          18
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0031258846903209764,
+        "worst": {
+          "volumeMm3": 0.0031258846903209764,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2"
+        ],
+        "definitions": [
+          12,
+          188
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.003737971658996481,
+        "worst": {
+          "volumeMm3": 0.003737971658999359,
+          "anglesDegrees": [
+            150,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_3"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002217363934238905,
+          "anglesDegrees": [
+            120,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_4"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173639345069353,
+          "anglesDegrees": [
+            270,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_6"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173639343781985,
+          "anglesDegrees": [
+            210,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_7"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002217363934426403,
+          "anglesDegrees": [
+            240,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_8"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173639344198865,
+          "anglesDegrees": [
+            180,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_9"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002217363934563024,
+          "anglesDegrees": [
+            150,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_10"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173639344802943,
+          "anglesDegrees": [
+            90,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_12"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.00221736393436633,
+          "anglesDegrees": [
+            60,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_13"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173638970012424,
+          "anglesDegrees": [
+            30,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_14"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.002217363933783568,
+        "worst": {
+          "volumeMm3": 0.002217363933783568,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_15"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173639343990477,
+          "anglesDegrees": [
+            330,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2"
+        ],
+        "definitions": [
+          16,
+          8
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.001992293341152314,
+        "worst": {
+          "volumeMm3": 0.001992293341152314,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1"
+        ],
+        "definitions": [
+          16,
+          13
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 7.773688596470697e-05,
+          "anglesDegrees": [
+            240,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_27"
+        ],
+        "definitions": [
+          16,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0022173639344973506,
+          "anglesDegrees": [
+            300,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2"
+        ],
+        "definitions": [
+          8,
+          184
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0008574581393434415,
+        "worst": {
+          "volumeMm3": 0.0008574581393443262,
+          "anglesDegrees": [
+            50,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_3"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002042951793568951,
+          "anglesDegrees": [
+            120,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_4"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0020429517935685185,
+          "anglesDegrees": [
+            270,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_6"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002042951793568266,
+          "anglesDegrees": [
+            210,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_7"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.00204295179357101,
+          "anglesDegrees": [
+            240,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_8"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0020429517935704002,
+          "anglesDegrees": [
+            180,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_9"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0020429517935732734,
+          "anglesDegrees": [
+            150,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_10"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.00204295179357023,
+          "anglesDegrees": [
+            90,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_12"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002042951793573408,
+          "anglesDegrees": [
+            60,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_13"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0020429517797360026,
+          "anglesDegrees": [
+            30,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_14"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0020429517935724797,
+        "worst": {
+          "volumeMm3": 0.0020429517935724797,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_15"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.002042951793567312,
+          "anglesDegrees": [
+            330,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_27"
+        ],
+        "definitions": [
+          19,
+          5
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0,
+        "worst": {
+          "volumeMm3": 0.0020429517935714203,
+          "anglesDegrees": [
+            300,
+            0
+          ]
+        },
+        "coaxial": false,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2"
+        ],
+        "definitions": [
+          13,
+          12
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.003125884690320952,
+        "worst": {
+          "volumeMm3": 0.003125884690320952,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2"
+        ],
+        "definitions": [
+          12,
+          188
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.003737971658996489,
+        "worst": {
+          "volumeMm3": 0.0037379716590006514,
+          "anglesDegrees": [
+            280,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1"
+        ],
+        "definitions": [
+          24,
+          38
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0036139769239489274,
+        "worst": {
+          "volumeMm3": 0.0036139769239489274,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1"
+        ],
+        "definitions": [
+          28,
+          34
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.005174334000156886,
+        "worst": {
+          "volumeMm3": 0.005174334000156886,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1"
+        ],
+        "definitions": [
+          29,
+          41
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0028838064924341556,
+        "worst": {
+          "volumeMm3": 0.0028838064924341556,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1"
+        ],
+        "definitions": [
+          30,
+          41
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.002883806492434239,
+        "worst": {
+          "volumeMm3": 0.002883806492434239,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1"
+        ],
+        "definitions": [
+          31,
+          34
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.005174334000156941,
+        "worst": {
+          "volumeMm3": 0.005174334000156941,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_4"
+        ],
+        "definitions": [
+          32,
+          26
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 9.714426752037857e-06,
+        "worst": {
+          "volumeMm3": 9.735168940829083e-06,
+          "anglesDegrees": [
+            110,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1"
+        ],
+        "definitions": [
+          32,
+          38
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.004027652681594995,
+        "worst": {
+          "volumeMm3": 0.004027652681594995,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2"
+        ],
+        "definitions": [
+          34,
+          35
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.004642848518001177,
+        "worst": {
+          "volumeMm3": 0.004642848518001177,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2"
+        ],
+        "definitions": [
+          38,
+          39
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0036139769239495302,
+        "worst": {
+          "volumeMm3": 0.0036139769239495302,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2"
+        ],
+        "definitions": [
+          41,
+          42
+        ],
+        "status": "overlap",
+        "samples": 1,
+        "baselineVolumeMm3": 0.0028838064924340684,
+        "worst": {
+          "volumeMm3": 0.0028838064924340684,
+          "anglesDegrees": [
+            0,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": true
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_65__0_1_1_241_1"
+        ],
+        "definitions": [
+          41,
+          242
+        ],
+        "status": "overlap",
+        "samples": 36,
+        "baselineVolumeMm3": 0.0003427180880268277,
+        "worst": {
+          "volumeMm3": 0.00034271808802714167,
+          "anglesDegrees": [
+            160,
+            0
+          ]
+        },
+        "coaxial": true,
+        "rigidHandPacket": false
+      }
+    ],
+    "runtimeWitnesses": 242,
+    "runtimePairs": 112,
+    "maxRuntimeMatrixError": 1.7763568394002505e-15,
+    "broadLanceWitnessCivilSeconds": 39218.18181818182,
+    "exceptions": [
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          7,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          7,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          7,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          7,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          7,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          8,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          11,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          11,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          11,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          11,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          11,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          12,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          16,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          16,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          16,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          16,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          16,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          8,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          8,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          18,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          18,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          18,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          18,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_23",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          18,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          19,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          19,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          19,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          19,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_24",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          19,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          13,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          13,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          13,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          13,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          13,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          12,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          12,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          24,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          24,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          24,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          24,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          24,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          28,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          28,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          28,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          28,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_6",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          28,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          29,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          29,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          29,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          29,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_9",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          29,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          30,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          30,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          30,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          30,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_10",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          30,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          31,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          31,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          31,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          31,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_14",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          31,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          32,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          32,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          32,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          32,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_18",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          32,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_5"
+        ],
+        "definitions": [
+          34,
+          27
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          34,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          34,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          34,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          34,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          34,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          35,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          35,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          35,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          35,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          35,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          38,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          38,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          38,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          38,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          38,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          39,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          39,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          39,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          39,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          39,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          41,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          41,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          41,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          41,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          41,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_2"
+        ],
+        "definitions": [
+          42,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_3"
+        ],
+        "definitions": [
+          42,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_4"
+        ],
+        "definitions": [
+          42,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_7__0_1_1_108_1__0_1_1_109_5"
+        ],
+        "definitions": [
+          42,
+          111
+        ],
+        "status": "invalid/non-solid exception"
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_25__0_1_1_40_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_59__0_1_1_221_3__0_1_1_223_2"
+        ],
+        "definitions": [
+          42,
+          225
+        ],
+        "status": "invalid/non-solid exception"
+      }
+    ]
+  },
+  "validation": {
+    "focusedTests": 19,
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed; existing route-classification notice",
+    "browserChecks": 31,
+    "browserErrors": [],
+    "observations": [
+      {
+        "name": "Sustained rendering spans multiple cycles without resource growth",
+        "details": {
+          "start": {
+            "seconds": 2.1331999999999973,
+            "escape": 117.40000000000039,
+            "render": 118,
+            "memory": {
+              "geometries": 135,
+              "textures": 8
+            }
+          },
+          "end": {
+            "seconds": 27.14889999999969,
+            "escape": 1467.4000000000003,
+            "render": 1619,
+            "memory": {
+              "geometries": 135,
+              "textures": 8
+            }
+          },
+          "p50": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "frames": 1501,
+          "updateP50Ms": 0.6999999284744263,
+          "updateP95Ms": 0.8000000715255737
+        }
+      },
+      {
+        "name": "All nine style pairs show known fractional times on both faces",
+        "details": [
+          {
+            "centralStyle": "fine",
+            "smallStyle": "lance",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 5.696619745932739e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "lance",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "lance",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "lance",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "lance",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 5.696619745932739e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "broad-lance",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 5.696619745932739e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "broad-lance",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "broad-lance",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "broad-lance",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "broad-lance",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 5.696619745932739e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "pear",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 5.696619745932739e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "pear",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "pear",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "pear",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "fine",
+            "smallStyle": "pear",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 5.696619745932739e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "lance",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 2.760156962521904e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "lance",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "lance",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "lance",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "lance",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 2.760156962521904e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 3.2716410829909586e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 3.2716410829909586e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "pear",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 2.760156962521904e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "pear",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "pear",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "pear",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "lance",
+            "smallStyle": "pear",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 2.760156962521904e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "lance",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 1.9124340096820592e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "lance",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "lance",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "lance",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "lance",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 1.9124340096820592e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 3.2716410829909586e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "broad-lance",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 3.2716410829909586e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "pear",
+            "time": [
+              12,
+              0,
+              0,
+              0
+            ],
+            "error": 1.9124340096820592e-16,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "pear",
+            "time": [
+              3,
+              15,
+              0,
+              0
+            ],
+            "error": 1.1566360405807626e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "pear",
+            "time": [
+              6,
+              30,
+              0,
+              0
+            ],
+            "error": 2.313272081161525e-13,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "pear",
+            "time": [
+              23,
+              59,
+              59,
+              900
+            ],
+            "error": 6.266230135560282e-14,
+            "count": 5
+          },
+          {
+            "centralStyle": "open-lance",
+            "smallStyle": "pear",
+            "time": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "error": 1.9124340096820592e-16,
+            "count": 5
+          }
+        ]
+      },
+      {
+        "name": "Live hands agree with local civil time within one beat and frame latency",
+        "details": {
+          "errorSeconds": 0.05571481480728835
+        }
+      },
+      {
+        "name": "Live browser timezone changes are reflected on the next rendered frame",
+        "details": [
+          {
+            "zone": "UTC",
+            "errorSeconds": 0.0442851851839805
+          },
+          {
+            "zone": "Europe/Madrid",
+            "errorSeconds": 0.04834074074460659
+          },
+          {
+            "zone": "Asia/Katmandu",
+            "errorSeconds": 0.03605925926058262
+          },
+          {
+            "zone": "America/New_York",
+            "errorSeconds": 0.03914814814925194
+          },
+          {
+            "zone": "Europe/Madrid",
+            "errorSeconds": 0.042251851853507105
+          }
+        ]
+      },
+      {
+        "name": "Delayed frames do not leave fitted hands behind wall time",
+        "details": {
+          "delta": 0.5095592592624598,
+          "elapsed": 0.41210000002384184
+        }
+      },
+      {
+        "name": "Every sampled frame obeys inspection/disassembly policy and displayed shaft transforms",
+        "details": {
+          "frames": 2641,
+          "policyErrors": 0,
+          "pausedFrames": 584,
+          "maxError": 2.629005929245907e-11,
+          "handError": 2.555995572121192e-13,
+          "handSamples": 34680,
+          "selectionFrames": 73,
+          "selectionError": 0
+        }
+      },
+      {
+        "name": "Completed Workshop shows current time with all five hands and bushings",
+        "details": {
+          "complete": true,
+          "handEntries": 10,
+          "handApplied": true,
+          "accuracy": 0.02348148148303153,
+          "moved": true
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "Marker overlaps at all 12 small-dial positions for all three minute styles; authored 10:10 already overlaps the 2 oclock marker.",
+    "New relative-angle broad-lance hour/minute interference near effective civil 10:53:38.182.",
+    "Central Lance minute/outer-ring overlap already present at reference, plus retained blade/bushing and bushing/shaft fits.",
+    "54 remaining nonpenetrating pairs sampled only; invalid originals and full separation paths unqualified.",
+    "Unchanged rear-hour margin about 45 nm; 93/137 and 214/217 assumptions and barrel-II boundary unchanged.",
+    "Synthetic visibility/Workshop completion; desktop performance only. Device-clock accuracy, not external time calibration.",
+    "No push, PR, merge, deployment or publication; release gates remain."
+  ],
+  "priorGearImplementationPreservedExceptHandHooks": true,
+  "unchangedSha256": {
+    "assets/authored/assembly-fittings.json": "524f691e5072055f97e9f35f843f696abe122d6d3129b2038d5bc2213905dde2",
+    "assets/authored/atelier-layout.json": "855c540c9839a18ebcd226f66e4967e99815746da2d7345e86c95510344338d0",
+    "assets/authored/bench-parts-layout.json": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9",
+    "assets/authored/component-labels.json": "80322374f90e92a936b1d39e662055b365b07c4da0ca9ff207b008590ed13a7e",
+    "assets/authored/dial-configurations.json": "383b3a3180f668551a68e5da01329e087d577c1914c398088c2f093f7f51def1",
+    "assets/authored/explore-scope.json": "de4f58c4320d12adf994dd736a6382e01736e5169343db7f9d9e9add3cea1534",
+    "assets/authored/explosion.json": "465204f1bf9414402730f4fc174db679d6251cd0328fecc7837391d213e59c44",
+    "assets/authored/hand-display-poses.json": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+    "assets/authored/material-review.json": "6c532f6671a710d64a6b55c937212c71c0dcc65f98b7f4bed7ca4ce5433b11ce",
+    "assets/authored/mechanisms.json": "f9b2e9d9df412dab5df98b53d1beb1fe8fb7250458606f2675c7efb17038f6de",
+    "assets/authored/motion-evidence.json": "a21544ee765e2b67cc005d6fb6be0ed981cc1f41b9f81adbfe148560e0346651",
+    "assets/authored/play-manifest.json": "99dd650eded1b1539dae9ed91982d481a0d66f6a1bce1f76e4c77e99cc848578",
+    "assets/authored/running-movement.json": "06f42143bbfa0710d95e0ea3c7403a3035d49b93496c11cefc7189f657c971b1",
+    "assets/authored/watch-configurations.json": "7c986558a2d82165bef846eb3c42183ea2d20b07491c302fd61ca040d804d8d4",
+    "assets/authored/wheel-display-poses.json": "661fc19f8dcbcc58a1d2d36e656e3c7ebaaef7863bcf80f5f8bde6ff93a61410",
+    "assets/authored/workshop-environment.json": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585",
+    "explorer/public/models/assembly-manifest.json": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+    "explorer/public/models/asset-paths.json": "d1d9240fb40c5a475f5cdafb3c679b918aa7f85e20e7be4bb172a6666957fd65",
+    "explorer/public/models/case-lug-recovery.json": "c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2",
+    "explorer/public/models/catalog-0d8f8da54d0b.glb": "0d8f8da54d0bac5787e8f4c0f5202b8921c027e1cc0cb5ffd965d6f8ad265f6a",
+    "explorer/public/models/catalog-0d8f8da54d0b.glb.gz": "528004e61c970406df1d31cecc77881afd99ee3f9fa92c336a430f3ac34ba5f2",
+    "explorer/public/models/diamond-c74ee2731a1f.stl": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+    "explorer/public/models/finish-surfaces-bd9958b41c29.bin": "bd9958b41c2916f67c4689e5285cb94a7079e89b813e1b9afee05956faa0ab70",
+    "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz": "44e721acbbef9b055c3ee3746162595a16c29ae663737da557c3a62b1a5f5644",
+    "explorer/public/models/finish-surfaces.json": "ea694b0a3dc5b9e11ccf61ea7c8fa4a39600d609e4f228c3529dffc1929518ac",
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9",
+    "explorer/public/models/overview-2337df2dca58.glb": "2337df2dca58a8d07d7f3ed5173cdfa67613951ba1b88d88480eb5c06db7aca5",
+    "explorer/public/models/overview-2337df2dca58.glb.gz": "7c64dd12b5b8655e3b7be874c1c2173f39c7c81e0664ba746ebb82b168287a72",
+    "explorer/src/bench/Bench.tsx": "fab6a3792e07b59e28a60b187bbd32b32aa02b6fe3e314fc085b86910fc11bd7",
+    "explorer/src/bench/BenchControls.tsx": "e82e7f067268472d4d2c3316b460a93746d569fff8399a1d9d33067dd139c469",
+    "explorer/src/bench/BenchViewer.ts": "43c57faa5bbb7b65a3f57d652c0268b8be374f685b657a55262d1290b2afe6f8",
+    "explorer/src/bench/DetachedParts.ts": "207bd7245d8bdc5c1174f99aa9177ced0c82bddb5028a4b5f24d916125ad1491",
+    "explorer/src/bench/SurfaceFinish.ts": "a10a7f94f8e41c9a954614366da0b3b527a16324ba9127d33e42e785a136f131",
+    "explorer/src/bench/bench.css": "d6da1490f8ab4a15d9a75795c176b7045fe370458e3c8056521c3c78a6d902c6",
+    "explorer/src/bench/bindings.ts": "0e19ac164716961e91fbb253deef62562f649d00ef4bb4b4711340db81782fd3",
+    "explorer/src/bench/flip.ts": "364cd7a69e218273b38c7460983cf500f6f4507311cc49d6ad3b7e814edc18e7",
+    "explorer/src/bench/performance.ts": "429a007ccffd252bc254a01ae84fbd5e5f7bfc2715d829f8c8131cb5c89d97e8",
+    "explorer/src/bench/physics.ts": "d52c31866a304e6ca69f35cb1d037ed30fad068d434220079c5cd76444a8589f",
+    "explorer/src/bench/useBenchAccess.ts": "4ce82bcd0bf44d26a8f0906b3d23b8e696b478c0b0a80feeacca91e626b14596"
+  },
+  "implementationSha256": {
+    "explorer/src/viewer/RunningMovement.ts": "f56f5086ee24b55b503e16bff10445fe34e4068888591d240408967b9723a905",
+    "explorer/src/viewer/MovementViewer.ts": "5e6e6a68ce651a58c414d4fbfdd0720f134271256f320cffb8ccf2a335630ad2",
+    "explorer/src/play/PlayViewer.ts": "acde45030407035980e4c3eb197b550fbaa25c713eb6feb93853a6fdcb138c0f",
+    "tests/current-time-hands.test.mjs": "9864e43c1631d2f7cd3b2a68f1a9b0bdcfce97f8bbcd0e218c6f46e48e61f21a",
+    "tests/running-movement.test.mjs": "e3478d3a9a49104d7800e029e2352a9627949751629060d3c822bf55c11ee309",
+    "scripts/movement/browser-check.mjs": "e3950db79f562ba7ed7af9e4c7f3f1c8988dab89498f16be6f591d4536a4fa77",
+    "scripts/movement/review-current-hands.mjs": "411baeefa7b13379e225e4cfa4367a2f9049cf84af3ebd8fb8491010836e8ca9",
+    "scripts/cad/escapement-clearance/current_time_hands.py": "f067fe7dc233cd2894fc9e5f8ad84b6bb65b82b444eb52c729f3b55989a1c1e1"
+  },
+  "localEvidenceSha256": {
+    "artifacts/dial-cad/source-fit.json": "68733f0e64606d6b41166d647c20b2f481f7550e8d58e448d022fcc5f4c6fa04",
+    "artifacts/dial-time/hand-pose-source-review.json": "69c83d987699866a6b73b64421c7bb67d8f1384ec2b5b4252e83312ae7620472",
+    "artifacts/current-time/clearance.json": "c709de0e2c27919efceacafea9b9873e92342b49b38ce47a910a5101d8f58361",
+    "artifacts/current-time/runtime-witnesses.json": "b4a584ecf984cb93010ef29958edc04a22928011046c0f400358b44b4b046a6a",
+    "artifacts/current-time/beat-residual.json": "05d0751c585c8826492239f8ae45eb98f6ac88a1184f6653d57e0eea0962067e",
+    "artifacts/current-time/browser/browser-report.json": "0ee68c384bd2f0e136d6bcb8584acb3284fe50e4c73f12274e691e816139fce9",
+    "artifacts/current-time/tests.txt": "ba41837b33a0c01d2dd9a5de7847906cd5d775db991064679e478306c1a2be15",
+    "artifacts/current-time/typecheck.txt": "4e6bb3b91678b8c724495939039efa7de3416735163e4c73aad9a3d1d31042aa",
+    "artifacts/current-time/lint.txt": "040dc829b5a9ba7d2ba7a2878408419c672332899b3026a63563226a316b99e9",
+    "artifacts/current-time/build.txt": "0a913bd64223a867282df78c3a5cff16c775d54cef9e722b39e9578a85b1e5a9"
+  }
+}

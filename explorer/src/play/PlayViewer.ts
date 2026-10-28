@@ -317,6 +317,13 @@ export class PlayViewer {
         movementBuffer,
         new Map([...prepared].map(([id, part]) => [id, part.mesh])),
       );
+      preparedMovement.hands.configure(
+        [...prepared].map(([id, part]) => ({
+          id,
+          mesh: part.mesh,
+          reference: part.mesh.matrix,
+        })),
+      );
       // Only replace the last complete scene once every required leaf is prepared.
       this.clearPieces();
       this.pieces = prepared;

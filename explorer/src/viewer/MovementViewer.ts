@@ -30,7 +30,7 @@ import {
   type DialPreferences,
 } from '../experience/dials';
 import type { Benchmark } from './benchmark';
-import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
+import { handDisplayMatrix } from './HandDisplayPose';
 import { wheelDisplayMatrix } from './WheelDisplayPose';
 import { RunningMovement, loadMovementBuffer } from './RunningMovement';
 import * as THREE from 'three';
@@ -400,7 +400,8 @@ export class MovementViewer {
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
       maxDisplayPoseError: this.assemblyError('presentation'),
-      handTime: this.state.presentation === 'dials' ? HAND_TIME : null,
+      handTime:
+        this.state.presentation === 'dials' ? 'Device local time' : null,
       spreadMembers: this.spread?.size ?? 0,
       assetTransfers: performance
         .getEntriesByType('resource')
@@ -1993,6 +1994,18 @@ export class MovementViewer {
         p.motion = undefined;
       }
     }
+    this.runningMovement?.hands.configure(
+      this.state.layout === 'assembly'
+        ? [...this.renderParts.values()]
+            .filter((p) => this.fitted.has(p.source.id))
+            .map((p) => ({
+              id: p.source.id,
+              mesh: p.mesh,
+              reference: p.displayMatrix ?? p.assembled,
+            }))
+        : [],
+      true,
+    );
     this.requestRender();
   }
   applyPose(dt: number) {
