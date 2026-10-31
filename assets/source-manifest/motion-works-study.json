@@ -1,0 +1,2238 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "baselineCommit": "073a870",
+  "decision": "No candidate packets enabled. Retain the existing prescribed movement and static motion works; no verified independently driven portion is established.",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "packets": [
+    {
+      "name": "cannon1",
+      "runtimeEnabled": false,
+      "sourceParent": "single leaf, no cannon assembly",
+      "sourceChildDefinitionTags": [
+        137
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:20",
+          "definitionId": "d_0_1_1_137",
+          "name": "ml01 Viertelrohr1 z12 m0,177",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -2.27682456221956e-15
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.070000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "-1/540",
+      "conditionalRatioToCenter": "1",
+      "conditionalMeanPeriodSeconds": 3600.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    },
+    {
+      "name": "motion1",
+      "runtimeEnabled": false,
+      "sourceParent": "ml01 Wechselrad1 vernietet",
+      "sourceChildDefinitionTags": [
+        210,
+        211
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:1",
+          "definitionId": "d_0_1_1_210",
+          "name": "ml01 Wechselrad1 z36 m0,177",
+          "worldTransform": [
+            [
+              -0.21957769440021088,
+              0.9755950164499035,
+              0.0,
+              4.24287382474019
+            ],
+            [
+              -0.9755950164499035,
+              -0.21957769440021088,
+              0.0,
+              0.246011600000001
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.2000000000000068
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:2",
+          "definitionId": "d_0_1_1_211",
+          "name": "ml01 Wechseltrieb1 z10 m0,17",
+          "worldTransform": [
+            [
+              -0.17087063414231593,
+              0.9852934722141433,
+              0.0,
+              4.24287382474019
+            ],
+            [
+              0.9852934722141433,
+              0.17087063414231593,
+              0.0,
+              0.2460116000000001
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -1.4500000000000068
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "1/1620",
+      "conditionalRatioToCenter": "-1/3",
+      "conditionalMeanPeriodSeconds": 10800.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    },
+    {
+      "name": "hour1",
+      "runtimeEnabled": false,
+      "sourceParent": "ml01 Stundenrad1 vernietet",
+      "sourceChildDefinitionTags": [
+        141,
+        142
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:1",
+          "definitionId": "d_0_1_1_141",
+          "name": "ml01 Stundenrad1 z40 m0,17",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.700000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:2",
+          "definitionId": "d_0_1_1_142",
+          "name": "ml01 Butzen Stundenrad1",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              2.27682456221956e-15
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.700000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "-1/6480",
+      "conditionalRatioToCenter": "1/12",
+      "conditionalMeanPeriodSeconds": 43200.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    },
+    {
+      "name": "motion2",
+      "runtimeEnabled": false,
+      "sourceParent": "ml01 Wechselrad2 vernietet",
+      "sourceChildDefinitionTags": [
+        213,
+        214
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:56/0:1:1:212:1",
+          "definitionId": "d_0_1_1_213",
+          "name": "ml01 Wechselrad2 z36 m0,177",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              1.24009950124815e-15
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              5.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.150000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:56/0:1:1:212:2",
+          "definitionId": "d_0_1_1_214",
+          "name": "ml01 Zeigerwerkswelle2",
+          "worldTransform": [
+            [
+              0.9702922441632518,
+              0.24193586116291393,
+              0.0,
+              1.213244030842087e-15
+            ],
+            [
+              0.24193586116291393,
+              -0.9702922441632518,
+              0.0,
+              5.000000000000003
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -3.450000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "-1/1620",
+      "conditionalRatioToCenter": "1/3",
+      "conditionalMeanPeriodSeconds": 10800.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    },
+    {
+      "name": "motion3",
+      "runtimeEnabled": false,
+      "sourceParent": "ml01 Wechselrad3 vernietet",
+      "sourceChildDefinitionTags": [
+        216,
+        217
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:1",
+          "definitionId": "d_0_1_1_216",
+          "name": "ml01 Wechselrad3 z 24 m0,15",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              1.29742652452144e-15
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              5.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -5.100000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:2",
+          "definitionId": "d_0_1_1_217",
+          "name": "ml01 Wechseltrieb3 z8 m0,12",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              1.2705710541153772e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              5.000000000000003
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.680000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "-1/1620",
+      "conditionalRatioToCenter": "1/3",
+      "conditionalMeanPeriodSeconds": 10800.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    },
+    {
+      "name": "cannon2",
+      "runtimeEnabled": false,
+      "sourceParent": "ml01 Viertelrohr2 vernietet",
+      "sourceChildDefinitionTags": [
+        183,
+        184
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:37/0:1:1:182:1",
+          "definitionId": "d_0_1_1_183",
+          "name": "ml01 Viertelrohr2 z8 m0,15",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -4.63553877842402e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.39999999999999
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.3600000000000065
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:37/0:1:1:182:2",
+          "definitionId": "d_0_1_1_184",
+          "name": "ml01 Welle Viertelrohr2",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -5.5076741685162385e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.3999999999999915
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.3600000000000065
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "1/540",
+      "conditionalRatioToCenter": "-1",
+      "conditionalMeanPeriodSeconds": 3600.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    },
+    {
+      "name": "hour2",
+      "runtimeEnabled": false,
+      "sourceParent": "ml01 Stundenrad2 vernietet",
+      "sourceChildDefinitionTags": [
+        187,
+        188
+      ],
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:1",
+          "definitionId": "d_0_1_1_187",
+          "name": "ml01 Stundenrad2 z32 m0,12",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -4.67706903509508e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.39999999999999
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.590000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:2",
+          "definitionId": "d_0_1_1_188",
+          "name": "ml01 Butzen Stundenrad2",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -5.507674168516241e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.3999999999999915
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.590000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0
+        }
+      ],
+      "conditionalRatioToEscape": "1/6480",
+      "conditionalRatioToCenter": "-1/12",
+      "conditionalMeanPeriodSeconds": 43200.0,
+      "blocker": "No source-confirmed sticking center/cannon interface; both reverse meshes fail prescribed rotation. A disconnected front train or slipping motion2/motion3 interface is not established."
+    }
+  ],
+  "interfaces": {
+    "centerToCannon1": {
+      "definitions": [
+        93,
+        137
+      ],
+      "classification": "nominal cylindrical contact, inferred friction interface; no key or source torque/sticking constraint established",
+      "radiusMm": 0.375,
+      "sourceGapMm": 4.440892098500626e-16,
+      "sourceCommonMm3": 0,
+      "conditionalWorldRatio": 1
+    },
+    "motion2ToMotion3": {
+      "definitions": [
+        214,
+        217
+      ],
+      "classification": "tapered shaft overlaps round bore; inferred interference/friction fit between distinct source assemblies, not a source-declared rigid assembly or key",
+      "boreRadiusMm": 0.13,
+      "sampledShaftRadiiMm": [
+        0.141474277,
+        0.144358891
+      ],
+      "sourceCommonMm3": 0.00724560884708635,
+      "conditionalWorldRatio": 1
+    }
+  },
+  "meshPeriodReview": {
+    "sectionSha256": "95cfd559ec224025da968e85b5560e03520439636c7dd85ae55138d3d2656dce",
+    "scope": "Complete material orientation period of each actual source section pair; 192 phase subdivisions per tooth event; conservative clipping and rigid-motion distance bounds apply to polygon sections only, not a whole-solid/contact certificate",
+    "pairs": [
+      {
+        "pair": [
+          137,
+          210
+        ],
+        "teeth": [
+          12,
+          36
+        ],
+        "sectionZMm": -1.3,
+        "fastPacket": "cannon1",
+        "slowPacket": "motion1",
+        "toothEngagementEvents": 36,
+        "subdivisionsPerEvent": 192,
+        "configurations": 6913,
+        "fastPeriodDegrees": 1080.0,
+        "slowPeriodDegrees": -360.0,
+        "minimumClippedGapBoundMm": 0.012210352472395247,
+        "maximumOverlapAreaMm2": 0.0,
+        "overlapConfigurations": 0,
+        "worstGapFastDegrees": 155.46875,
+        "worstOverlapFastDegrees": 0.0,
+        "betweenSampleMotionBoundMm": 0.003289550066668882,
+        "continuousPolygonGapLowerBoundMm": 0.008920802405726364,
+        "radialBoundsMm": [
+          1.2744000003889062,
+          3.4143300005757267
+        ],
+        "windowMm": [
+          0.7856699994242751,
+          -1.3244000003889063,
+          1.3244000003889063,
+          1.3244000003889063
+        ],
+        "clippingMarginMm": 0.05,
+        "elapsedSeconds": 3.027103125001304
+      },
+      {
+        "pair": [
+          211,
+          141
+        ],
+        "teeth": [
+          10,
+          40
+        ],
+        "sectionZMm": -0.82,
+        "fastPacket": "motion1",
+        "slowPacket": "hour1",
+        "toothEngagementEvents": 40,
+        "subdivisionsPerEvent": 192,
+        "configurations": 7681,
+        "fastPeriodDegrees": 1440.0,
+        "slowPeriodDegrees": -360.0,
+        "minimumClippedGapBoundMm": 0.015039221217035569,
+        "maximumOverlapAreaMm2": 0.0,
+        "overlapConfigurations": 0,
+        "worstGapFastDegrees": 991.875,
+        "worstOverlapFastDegrees": 0.0,
+        "betweenSampleMotionBoundMm": 0.0032023380910978687,
+        "continuousPolygonGapLowerBoundMm": 0.0118368831259377,
+        "radialBoundsMm": [
+          1.0523000003890062,
+          3.6193000001715308
+        ],
+        "windowMm": [
+          0.580699999828471,
+          -1.1023000003890062,
+          1.1023000003890062,
+          1.1023000003890062
+        ],
+        "clippingMarginMm": 0.05,
+        "elapsedSeconds": 3.1664454170968384
+      },
+      {
+        "pair": [
+          210,
+          213
+        ],
+        "teeth": [
+          36,
+          36
+        ],
+        "sectionZMm": -1.3,
+        "fastPacket": "motion1",
+        "slowPacket": "motion2",
+        "toothEngagementEvents": 36,
+        "subdivisionsPerEvent": 192,
+        "configurations": 6913,
+        "fastPeriodDegrees": 360.0,
+        "slowPeriodDegrees": -360.0,
+        "minimumClippedGapBoundMm": 0.005045698285311333,
+        "maximumOverlapAreaMm2": 0.0,
+        "overlapConfigurations": 0,
+        "worstGapFastDegrees": 335.8854166666667,
+        "worstOverlapFastDegrees": 0.0,
+        "betweenSampleMotionBoundMm": 0.003103713528489573,
+        "continuousPolygonGapLowerBoundMm": 0.00194198475682176,
+        "radialBoundsMm": [
+          3.414330000575727,
+          3.4143300006067054
+        ],
+        "windowMm": [
+          2.9076699993932946,
+          -3.464330000575727,
+          3.464330000575727,
+          3.464330000575727
+        ],
+        "clippingMarginMm": 0.05,
+        "elapsedSeconds": 4.4584377920255065
+      },
+      {
+        "pair": [
+          183,
+          216
+        ],
+        "teeth": [
+          8,
+          24
+        ],
+        "sectionZMm": -5.2,
+        "fastPacket": "cannon2",
+        "slowPacket": "motion3",
+        "toothEngagementEvents": 24,
+        "subdivisionsPerEvent": 192,
+        "configurations": 4609,
+        "fastPeriodDegrees": 1080.0,
+        "slowPeriodDegrees": -360.0,
+        "minimumClippedGapBoundMm": 0.0,
+        "maximumOverlapAreaMm2": 0.00031303413008725153,
+        "overlapConfigurations": 2736,
+        "worstGapFastDegrees": 1.171875,
+        "worstOverlapFastDegrees": 596.71875,
+        "betweenSampleMotionBoundMm": 0.002939106886909592,
+        "continuousPolygonGapLowerBoundMm": -0.002939106886909592,
+        "radialBoundsMm": [
+          0.7739999996046729,
+          1.989000000478221
+        ],
+        "windowMm": [
+          0.3609999995217688,
+          -0.823999999604673,
+          0.823999999604673,
+          0.823999999604673
+        ],
+        "clippingMarginMm": 0.05,
+        "elapsedSeconds": 1.5130266660125926
+      },
+      {
+        "pair": [
+          217,
+          187
+        ],
+        "teeth": [
+          8,
+          32
+        ],
+        "sectionZMm": -5.48,
+        "fastPacket": "motion3",
+        "slowPacket": "hour2",
+        "toothEngagementEvents": 32,
+        "subdivisionsPerEvent": 192,
+        "configurations": 6145,
+        "fastPeriodDegrees": 1440.0,
+        "slowPeriodDegrees": -360.0,
+        "minimumClippedGapBoundMm": 0.0,
+        "maximumOverlapAreaMm2": 9.177566187897568e-06,
+        "overlapConfigurations": 1216,
+        "worstGapFastDegrees": 29.0625,
+        "worstOverlapFastDegrees": 843.75,
+        "betweenSampleMotionBoundMm": 0.002326128235780711,
+        "continuousPolygonGapLowerBoundMm": -0.002326128235780711,
+        "radialBoundsMm": [
+          0.6192000005267159,
+          2.0724000004793646
+        ],
+        "windowMm": [
+          0.27759999952062514,
+          -0.6692000005267159,
+          0.6692000005267159,
+          0.6692000005267159
+        ],
+        "clippingMarginMm": 0.05,
+        "elapsedSeconds": 2.356490666978061
+      }
+    ]
+  },
+  "selectedWholeSolidReview": {
+    "periodsSha256": "63fddc4271b067e1de533448640632466123e9f332defe906a4a3ca3ba8475f1",
+    "scope": "Original whole-solid common and distance at first-pitch fractions, worst sampled section phase, fractional pair periods and loop closure; selected poses, not dense whole-solid sweep",
+    "pairs": [
+      {
+        "pair": [
+          137,
+          210
+        ],
+        "samples": [
+          {
+            "fastDegrees": 0.0,
+            "slowDegrees": -0.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.013120182234825872
+          },
+          {
+            "fastDegrees": 3.75,
+            "slowDegrees": -1.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.012303319225508433
+          },
+          {
+            "fastDegrees": 7.5,
+            "slowDegrees": -2.5,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.012401334028236628
+          },
+          {
+            "fastDegrees": 11.25,
+            "slowDegrees": -3.75,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.014011925665637798
+          },
+          {
+            "fastDegrees": 15.0,
+            "slowDegrees": -5.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.017842617934503185
+          },
+          {
+            "fastDegrees": 18.75,
+            "slowDegrees": -6.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.014922143068182082
+          },
+          {
+            "fastDegrees": 22.5,
+            "slowDegrees": -7.5,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01332126425345837
+          },
+          {
+            "fastDegrees": 26.25,
+            "slowDegrees": -8.75,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.013231769892139034
+          },
+          {
+            "fastDegrees": 30.0,
+            "slowDegrees": -10.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01312018223481562
+          },
+          {
+            "fastDegrees": 135.0,
+            "slowDegrees": -45.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.017842617934496808
+          },
+          {
+            "fastDegrees": 155.46875,
+            "slowDegrees": -51.822916666666664,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.012201424362360038
+          },
+          {
+            "fastDegrees": 359.64000000000004,
+            "slowDegrees": -119.88000000000001,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.013228340007740738
+          },
+          {
+            "fastDegrees": 540.0,
+            "slowDegrees": -180.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01312018223483534
+          },
+          {
+            "fastDegrees": 839.1600000000001,
+            "slowDegrees": -279.72,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.013378164351882861
+          },
+          {
+            "fastDegrees": 1080.0,
+            "slowDegrees": -360.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.013120182234825872
+          }
+        ]
+      },
+      {
+        "pair": [
+          211,
+          141
+        ],
+        "samples": [
+          {
+            "fastDegrees": 0.0,
+            "slowDegrees": -0.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.020681566970047586
+          },
+          {
+            "fastDegrees": 4.5,
+            "slowDegrees": -1.125,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.022057087764730466
+          },
+          {
+            "fastDegrees": 9.0,
+            "slowDegrees": -2.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.02213958444693753
+          },
+          {
+            "fastDegrees": 13.5,
+            "slowDegrees": -3.375,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01719751852256498
+          },
+          {
+            "fastDegrees": 18.0,
+            "slowDegrees": -4.5,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.015204210032300013
+          },
+          {
+            "fastDegrees": 22.5,
+            "slowDegrees": -5.625,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.015267217426266558
+          },
+          {
+            "fastDegrees": 27.0,
+            "slowDegrees": -6.75,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.016602824681004057
+          },
+          {
+            "fastDegrees": 31.5,
+            "slowDegrees": -7.875,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01856841608888412
+          },
+          {
+            "fastDegrees": 36.0,
+            "slowDegrees": -9.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.02068156697004805
+          },
+          {
+            "fastDegrees": 180.0,
+            "slowDegrees": -45.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.020681566970053886
+          },
+          {
+            "fastDegrees": 479.52000000000004,
+            "slowDegrees": -119.88000000000002,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01895313772133639
+          },
+          {
+            "fastDegrees": 720.0,
+            "slowDegrees": -180.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.02068156697004661
+          },
+          {
+            "fastDegrees": 991.875,
+            "slowDegrees": -247.96875,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.01502843676767529
+          },
+          {
+            "fastDegrees": 1118.88,
+            "slowDegrees": -279.72,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.021794409449355723
+          },
+          {
+            "fastDegrees": 1440.0,
+            "slowDegrees": -360.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.020681566970047586
+          }
+        ]
+      },
+      {
+        "pair": [
+          210,
+          213
+        ],
+        "samples": [
+          {
+            "fastDegrees": 0.0,
+            "slowDegrees": -0.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.006023094358445867
+          },
+          {
+            "fastDegrees": 1.25,
+            "slowDegrees": -1.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.006429978809065579
+          },
+          {
+            "fastDegrees": 2.5,
+            "slowDegrees": -2.5,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005713460665482143
+          },
+          {
+            "fastDegrees": 3.75,
+            "slowDegrees": -3.75,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005292070817775692
+          },
+          {
+            "fastDegrees": 5.0,
+            "slowDegrees": -5.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005084273145457275
+          },
+          {
+            "fastDegrees": 6.25,
+            "slowDegrees": -6.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005044542073694733
+          },
+          {
+            "fastDegrees": 7.5,
+            "slowDegrees": -7.5,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005163651560900652
+          },
+          {
+            "fastDegrees": 8.75,
+            "slowDegrees": -8.75,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005468729700715955
+          },
+          {
+            "fastDegrees": 10.0,
+            "slowDegrees": -10.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.006023094358440741
+          },
+          {
+            "fastDegrees": 45.0,
+            "slowDegrees": -45.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005084273145461881
+          },
+          {
+            "fastDegrees": 119.88000000000001,
+            "slowDegrees": -119.88000000000001,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005956596764149364
+          },
+          {
+            "fastDegrees": 180.0,
+            "slowDegrees": -180.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.006023094358438072
+          },
+          {
+            "fastDegrees": 279.72,
+            "slowDegrees": -279.72,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005872710381540536
+          },
+          {
+            "fastDegrees": 335.8854166666667,
+            "slowDegrees": -335.8854166666667,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.005040002861821573
+          },
+          {
+            "fastDegrees": 360.0,
+            "slowDegrees": -360.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.006023094358445867
+          }
+        ]
+      },
+      {
+        "pair": [
+          183,
+          216
+        ],
+        "samples": [
+          {
+            "fastDegrees": 0.0,
+            "slowDegrees": -0.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.001481550500730515
+          },
+          {
+            "fastDegrees": 1.171875,
+            "slowDegrees": -0.390625,
+            "commonVolumeMm3": 6.059141059637461e-08,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 5.625,
+            "slowDegrees": -1.875,
+            "commonVolumeMm3": 3.718081505755501e-05,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 11.25,
+            "slowDegrees": -3.75,
+            "commonVolumeMm3": 6.269266865588883e-05,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 16.875,
+            "slowDegrees": -5.625,
+            "commonVolumeMm3": 4.8655066060055566e-05,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 22.5,
+            "slowDegrees": -7.5,
+            "commonVolumeMm3": 1.8704541614098903e-05,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 28.125,
+            "slowDegrees": -9.375,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.00021867750286939472
+          },
+          {
+            "fastDegrees": 33.75,
+            "slowDegrees": -11.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0028456521851991574
+          },
+          {
+            "fastDegrees": 39.375,
+            "slowDegrees": -13.125,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0049298459532391295
+          },
+          {
+            "fastDegrees": 45.0,
+            "slowDegrees": -15.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0014815505007292667
+          },
+          {
+            "fastDegrees": 135.0,
+            "slowDegrees": -45.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0014815505007274969
+          },
+          {
+            "fastDegrees": 359.64000000000004,
+            "slowDegrees": -119.88000000000001,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0019987098577774476
+          },
+          {
+            "fastDegrees": 540.0,
+            "slowDegrees": -180.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0014815505007303986
+          },
+          {
+            "fastDegrees": 596.71875,
+            "slowDegrees": -198.90625,
+            "commonVolumeMm3": 6.279195040099024e-05,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 839.1600000000001,
+            "slowDegrees": -279.72,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0007293285744856548
+          },
+          {
+            "fastDegrees": 1080.0,
+            "slowDegrees": -360.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.001481550500730515
+          }
+        ]
+      },
+      {
+        "pair": [
+          217,
+          187
+        ],
+        "samples": [
+          {
+            "fastDegrees": 0.0,
+            "slowDegrees": -0.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.004478894179656524
+          },
+          {
+            "fastDegrees": 5.625,
+            "slowDegrees": -1.40625,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0017213573303022681
+          },
+          {
+            "fastDegrees": 11.25,
+            "slowDegrees": -2.8125,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0006890805885579284
+          },
+          {
+            "fastDegrees": 16.875,
+            "slowDegrees": -4.21875,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0015220520480545264
+          },
+          {
+            "fastDegrees": 22.5,
+            "slowDegrees": -5.625,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.00200752618124617
+          },
+          {
+            "fastDegrees": 28.125,
+            "slowDegrees": -7.03125,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.00016674298542073391
+          },
+          {
+            "fastDegrees": 29.0625,
+            "slowDegrees": -7.265625,
+            "commonVolumeMm3": 5.3657803407679356e-08,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 33.75,
+            "slowDegrees": -8.4375,
+            "commonVolumeMm3": 1.8819142720077502e-06,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 39.375,
+            "slowDegrees": -9.84375,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.00053068654964762
+          },
+          {
+            "fastDegrees": 45.0,
+            "slowDegrees": -11.25,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.004478894179658142
+          },
+          {
+            "fastDegrees": 180.0,
+            "slowDegrees": -45.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.0044788941796581605
+          },
+          {
+            "fastDegrees": 479.52000000000004,
+            "slowDegrees": -119.88000000000001,
+            "commonVolumeMm3": 2.4265295625172405e-07,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 720.0,
+            "slowDegrees": -180.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.004478894179658887
+          },
+          {
+            "fastDegrees": 843.75,
+            "slowDegrees": -210.9375,
+            "commonVolumeMm3": 1.8819142719979754e-06,
+            "gapMm": 0.0
+          },
+          {
+            "fastDegrees": 1118.88,
+            "slowDegrees": -279.72,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.00033217876333688044
+          },
+          {
+            "fastDegrees": 1440.0,
+            "slowDegrees": -360.0,
+            "commonVolumeMm3": 0,
+            "gapMm": 0.004478894179656524
+          }
+        ]
+      }
+    ]
+  },
+  "teethAndBoundaryReview": {
+    "teeth": [
+      {
+        "definition": 137,
+        "sourceDeclaredTeeth": 12,
+        "measuredLobesBeyondPitchCircle": 12,
+        "pitchRadiusMm": 1.0619999999999998,
+        "sectionZMm": -1.3
+      },
+      {
+        "definition": 210,
+        "sourceDeclaredTeeth": 36,
+        "measuredLobesBeyondPitchCircle": 36,
+        "pitchRadiusMm": 3.186,
+        "sectionZMm": -1.3
+      },
+      {
+        "definition": 211,
+        "sourceDeclaredTeeth": 10,
+        "measuredLobesBeyondPitchCircle": 10,
+        "pitchRadiusMm": 0.8500000000000001,
+        "sectionZMm": -0.82
+      },
+      {
+        "definition": 141,
+        "sourceDeclaredTeeth": 40,
+        "measuredLobesBeyondPitchCircle": 40,
+        "pitchRadiusMm": 3.4000000000000004,
+        "sectionZMm": -0.82
+      },
+      {
+        "definition": 210,
+        "sourceDeclaredTeeth": 36,
+        "measuredLobesBeyondPitchCircle": 36,
+        "pitchRadiusMm": 3.186,
+        "sectionZMm": -1.3
+      },
+      {
+        "definition": 213,
+        "sourceDeclaredTeeth": 36,
+        "measuredLobesBeyondPitchCircle": 36,
+        "pitchRadiusMm": 3.186,
+        "sectionZMm": -1.3
+      },
+      {
+        "definition": 183,
+        "sourceDeclaredTeeth": 8,
+        "measuredLobesBeyondPitchCircle": 8,
+        "pitchRadiusMm": 0.6,
+        "sectionZMm": -5.2
+      },
+      {
+        "definition": 216,
+        "sourceDeclaredTeeth": 24,
+        "measuredLobesBeyondPitchCircle": 24,
+        "pitchRadiusMm": 1.7999999999999998,
+        "sectionZMm": -5.2
+      },
+      {
+        "definition": 217,
+        "sourceDeclaredTeeth": 8,
+        "measuredLobesBeyondPitchCircle": 8,
+        "pitchRadiusMm": 0.48,
+        "sectionZMm": -5.48
+      },
+      {
+        "definition": 187,
+        "sourceDeclaredTeeth": 32,
+        "measuredLobesBeyondPitchCircle": 32,
+        "pitchRadiusMm": 1.92,
+        "sectionZMm": -5.48
+      }
+    ],
+    "staticFollowerRejections": [
+      {
+        "moving": 137,
+        "heldStatic": 210,
+        "sampledPitchConfigurations": 193,
+        "maximumSectionCommonMm2": 0.1322363666868863,
+        "worstAngleDegrees": 15.0,
+        "selectedWholeSolidCommonMm3": 0.033062981504280664
+      },
+      {
+        "moving": 211,
+        "heldStatic": 141,
+        "sampledPitchConfigurations": 193,
+        "maximumSectionCommonMm2": 0.10237827687540912,
+        "worstAngleDegrees": 17.625,
+        "selectedWholeSolidCommonMm3": 0.025597835038265328
+      },
+      {
+        "moving": 210,
+        "heldStatic": 213,
+        "sampledPitchConfigurations": 193,
+        "maximumSectionCommonMm2": 0.21339758285577248,
+        "worstAngleDegrees": 4.947916666666667,
+        "selectedWholeSolidCommonMm3": 0.04268354440265513
+      },
+      {
+        "moving": 183,
+        "heldStatic": 216,
+        "sampledPitchConfigurations": 193,
+        "maximumSectionCommonMm2": 0.0786343496289303,
+        "worstAngleDegrees": 21.5625,
+        "selectedWholeSolidCommonMm3": 0.01572876778733883
+      },
+      {
+        "moving": 217,
+        "heldStatic": 187,
+        "sampledPitchConfigurations": 193,
+        "maximumSectionCommonMm2": 0.05272503526206877,
+        "worstAngleDegrees": 22.5,
+        "selectedWholeSolidCommonMm3": 0.01054624977581818
+      }
+    ],
+    "scope": "Full-turn conservative BRep boxes versus fixed displayed source neighbors, plus selected exact static-follower collisions. Candidate neighbors and moving pairs are not certified; exhaustive sweeps stop at confirmed mesh blockers.",
+    "neighborInventorySummary": [
+      {
+        "definition": 137,
+        "boundedDisjointNeighbors": 329,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 28
+      },
+      {
+        "definition": 210,
+        "boundedDisjointNeighbors": 337,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 20
+      },
+      {
+        "definition": 211,
+        "boundedDisjointNeighbors": 347,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 10
+      },
+      {
+        "definition": 141,
+        "boundedDisjointNeighbors": 337,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 20
+      },
+      {
+        "definition": 142,
+        "boundedDisjointNeighbors": 340,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 17
+      },
+      {
+        "definition": 213,
+        "boundedDisjointNeighbors": 340,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 17
+      },
+      {
+        "definition": 214,
+        "boundedDisjointNeighbors": 331,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 26
+      },
+      {
+        "definition": 216,
+        "boundedDisjointNeighbors": 344,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 13
+      },
+      {
+        "definition": 217,
+        "boundedDisjointNeighbors": 345,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 12
+      },
+      {
+        "definition": 183,
+        "boundedDisjointNeighbors": 348,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 9
+      },
+      {
+        "definition": 184,
+        "boundedDisjointNeighbors": 327,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 30
+      },
+      {
+        "definition": 187,
+        "boundedDisjointNeighbors": 342,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 15
+      },
+      {
+        "definition": 188,
+        "boundedDisjointNeighbors": 337,
+        "unqualifiedSourceNeighbors": 7,
+        "candidateNeighborsNotQualified": 20
+      }
+    ]
+  },
+  "runtimeReview": {
+    "scope": "Conditional diagnostic packets only; actual production movementPose/shaftMatrix and selected RunningMovement matrices. No packets enabled in the app.",
+    "asset": "/models/overview-2337df2dca58.glb",
+    "sha256": "2337df2dca58a8d07d7f3ed5173cdfa67613951ba1b88d88480eb5c06db7aca5",
+    "maxControllerError": 0,
+    "pairs": [
+      {
+        "pair": [
+          137,
+          210
+        ],
+        "z": -1.3,
+        "solidSamples": [
+          {
+            "t": 10800.078726504413,
+            "e": 583199.9999999984,
+            "fastDegrees": 0,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.01332335756038473
+          },
+          {
+            "t": 10762.423617943099,
+            "e": 581174.9999999988,
+            "fastDegrees": 3.75,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.012842330397351035
+          },
+          {
+            "t": 10725.078726504413,
+            "e": 579149.9999999984,
+            "fastDegrees": 7.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.012663819899935537
+          },
+          {
+            "t": 10687.423617943099,
+            "e": 577124.9999999988,
+            "fastDegrees": 11.25,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.014767050801908184
+          },
+          {
+            "t": 10650.078726504413,
+            "e": 575099.9999999984,
+            "fastDegrees": 15,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0184749097056475
+          },
+          {
+            "t": 10612.423617943099,
+            "e": 573074.9999999988,
+            "fastDegrees": 18.75,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.015685793253470862
+          },
+          {
+            "t": 10575.078726504413,
+            "e": 571049.9999999984,
+            "fastDegrees": 22.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.01359091361580748
+          },
+          {
+            "t": 10537.423617943099,
+            "e": 569024.9999999988,
+            "fastDegrees": 26.25,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.013767498030207787
+          },
+          {
+            "t": 10500.078726504413,
+            "e": 566999.9999999984,
+            "fastDegrees": 30,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.013323421926319058
+          },
+          {
+            "t": 9450.078726504413,
+            "e": 510299.99999999837,
+            "fastDegrees": 135,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.018474925845758196
+          },
+          {
+            "t": 9245.257205308662,
+            "e": 499246.8749999958,
+            "fastDegrees": 155.46875,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0127862893367195
+          },
+          {
+            "t": 7203.088895621071,
+            "e": 388968.75000000064,
+            "fastDegrees": 359.6875,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.01350104962573061
+          },
+          {
+            "t": 5400.078726504415,
+            "e": 291600,
+            "fastDegrees": 540,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.013323357560388287
+          },
+          {
+            "t": 2407.756610240661,
+            "e": 130021.87499999836,
+            "fastDegrees": 839.21875,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.013792720886269571
+          },
+          {
+            "t": 0.07872650441457019,
+            "e": 2.5579538487363607e-13,
+            "fastDegrees": 1080,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.013323357560388492
+          }
+        ],
+        "configurations": 6913
+      },
+      {
+        "pair": [
+          211,
+          141
+        ],
+        "z": -0.82,
+        "solidSamples": [
+          {
+            "t": 0.07872650441457019,
+            "e": 2.5579538487363607e-13,
+            "fastDegrees": 0,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0210641509402209
+          },
+          {
+            "t": 135.07872650441453,
+            "e": 7289.999999999966,
+            "fastDegrees": 4.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.02299101751650208
+          },
+          {
+            "t": 270.0787265044146,
+            "e": 14580,
+            "fastDegrees": 9,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.022575776196640966
+          },
+          {
+            "t": 405.0787265044145,
+            "e": 21869.99999999995,
+            "fastDegrees": 13.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.01776906794517494
+          },
+          {
+            "t": 540.0787265044146,
+            "e": 29160,
+            "fastDegrees": 18,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.01599234109963333
+          },
+          {
+            "t": 675.0787265044146,
+            "e": 36450,
+            "fastDegrees": 22.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.015839085081366434
+          },
+          {
+            "t": 810.0787265044144,
+            "e": 43739.99999999988,
+            "fastDegrees": 27,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.016987314427925403
+          },
+          {
+            "t": 945.0787265044144,
+            "e": 51029.99999999988,
+            "fastDegrees": 31.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.019240331676917705
+          },
+          {
+            "t": 1080.0787265044146,
+            "e": 58320,
+            "fastDegrees": 36,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.02106416150833024
+          },
+          {
+            "t": 5400.078726504415,
+            "e": 291600,
+            "fastDegrees": 180,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.021064124553925367
+          },
+          {
+            "t": 14383.08889562107,
+            "e": 776688.7499999985,
+            "fastDegrees": 479.4375,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.019844931299386633
+          },
+          {
+            "t": 21600.078726504413,
+            "e": 1166399.9999999984,
+            "fastDegrees": 720,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.021064150940220114
+          },
+          {
+            "t": 29756.253897297567,
+            "e": 1606837.5000000023,
+            "fastDegrees": 991.875,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.01528281410833433
+          },
+          {
+            "t": 33564.416207591945,
+            "e": 1812476.2499999949,
+            "fastDegrees": 1118.8125,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.022264488545341105
+          },
+          {
+            "t": 43200.078726504405,
+            "e": 2332799.9999999916,
+            "fastDegrees": 1440,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.021064150940217227
+          }
+        ],
+        "configurations": 7681
+      },
+      {
+        "pair": [
+          210,
+          213
+        ],
+        "z": -1.3,
+        "solidSamples": [
+          {
+            "t": 0.07872650441457019,
+            "e": 2.5579538487363607e-13,
+            "fastDegrees": 0,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.006566479235615796
+          },
+          {
+            "t": 37.423617943099444,
+            "e": 2024.9999999999784,
+            "fastDegrees": 1.25,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0070130666189113155
+          },
+          {
+            "t": 75.07872650441456,
+            "e": 4049.9999999999927,
+            "fastDegrees": 2.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0061837873739714585
+          },
+          {
+            "t": 112.42361794309946,
+            "e": 6075.0000000000555,
+            "fastDegrees": 3.75,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.005538012976612484
+          },
+          {
+            "t": 150.07872650441453,
+            "e": 8099.999999999966,
+            "fastDegrees": 5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.005671967591984128
+          },
+          {
+            "t": 187.42361794309943,
+            "e": 10124.999999999933,
+            "fastDegrees": 6.25,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.006003137241526862
+          },
+          {
+            "t": 225.07872650441453,
+            "e": 12149.999999999984,
+            "fastDegrees": 7.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00550971832320105
+          },
+          {
+            "t": 262.42361794309943,
+            "e": 14174.999999999933,
+            "fastDegrees": 8.75,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00577368865572807
+          },
+          {
+            "t": 300.0787265044146,
+            "e": 16200,
+            "fastDegrees": 10,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.006566584896615971
+          },
+          {
+            "t": 1350.0787265044146,
+            "e": 72900,
+            "fastDegrees": 45,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.005671854899411943
+          },
+          {
+            "t": 3596.91590118391,
+            "e": 194231.25,
+            "fastDegrees": 119.89583333333333,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00649755164210049
+          },
+          {
+            "t": 5400.078726504415,
+            "e": 291600,
+            "fastDegrees": 180,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.006566479235616423
+          },
+          {
+            "t": 8392.247088260905,
+            "e": 453178.1250000003,
+            "fastDegrees": 279.7395833333333,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0063972189044558606
+          },
+          {
+            "t": 10076.58494488088,
+            "e": 544134.3749999991,
+            "fastDegrees": 335.8854166666667,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.006165170739371118
+          },
+          {
+            "t": 10800.078726504413,
+            "e": 583199.9999999984,
+            "fastDegrees": 360,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.006566479235615464
+          }
+        ],
+        "configurations": 6913
+      },
+      {
+        "pair": [
+          183,
+          216
+        ],
+        "z": -5.2,
+        "solidSamples": [
+          {
+            "t": 0.07872650441457019,
+            "e": 2.5579538487363607e-13,
+            "fastDegrees": 0,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.002132753072731
+          },
+          {
+            "t": 11.750471833784509,
+            "e": 632.8124999999991,
+            "fastDegrees": 1.171875,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00028752336027615394
+          },
+          {
+            "t": 56.25389729756698,
+            "e": 3037.5000000000014,
+            "fastDegrees": 5.625,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 112.42361794309946,
+            "e": 6075.0000000000555,
+            "fastDegrees": 11.25,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 168.75288542634343,
+            "e": 9112.500000000018,
+            "fastDegrees": 16.875,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 225.07872650441453,
+            "e": 12149.999999999984,
+            "fastDegrees": 22.5,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 281.25389729756694,
+            "e": 15187.499999999958,
+            "fastDegrees": 28.125,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0008688191631817916
+          },
+          {
+            "t": 337.42361794309943,
+            "e": 18224.999999999935,
+            "fastDegrees": 33.75,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0033397205079636143
+          },
+          {
+            "t": 393.75288542634337,
+            "e": 21262.5,
+            "fastDegrees": 39.375,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.005767654129910856
+          },
+          {
+            "t": 450.0787265044145,
+            "e": 24299.99999999995,
+            "fastDegrees": 45,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0021327518895306523
+          },
+          {
+            "t": 1350.0787265044146,
+            "e": 72900,
+            "fastDegrees": 135,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0021327674995230213
+          },
+          {
+            "t": 3595.2572053086633,
+            "e": 194146.8749999997,
+            "fastDegrees": 359.53125,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0029110538670596743
+          },
+          {
+            "t": 5400.078726504415,
+            "e": 291600,
+            "fastDegrees": 540,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.002132753072731452
+          },
+          {
+            "t": 5967.247088260903,
+            "e": 322228.1249999992,
+            "fastDegrees": 596.71875,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 8390.590193078471,
+            "e": 453093.74999999866,
+            "fastDegrees": 839.0625,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.001528273111004397
+          },
+          {
+            "t": 10800.078726504413,
+            "e": 583199.9999999984,
+            "fastDegrees": 1080,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0021327530727350053
+          }
+        ],
+        "configurations": 4609
+      },
+      {
+        "pair": [
+          217,
+          187
+        ],
+        "z": -5.48,
+        "solidSamples": [
+          {
+            "t": 43200.078726504405,
+            "e": 2332799.9999999916,
+            "fastDegrees": 0,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0048022783955284564
+          },
+          {
+            "t": 43031.25389729756,
+            "e": 2323687.4999999935,
+            "fastDegrees": 5.625,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00208311952751969
+          },
+          {
+            "t": 42862.4236179431,
+            "e": 2314575.0000000107,
+            "fastDegrees": 11.25,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0009572652966281093
+          },
+          {
+            "t": 42693.75288542634,
+            "e": 2305462.4999999935,
+            "fastDegrees": 16.875,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0016952704663949726
+          },
+          {
+            "t": 42525.078726504405,
+            "e": 2296349.9999999916,
+            "fastDegrees": 22.5,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0025260014906897175
+          },
+          {
+            "t": 42356.25389729756,
+            "e": 2287237.4999999935,
+            "fastDegrees": 28.125,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0003729040263095552
+          },
+          {
+            "t": 42328.08889562107,
+            "e": 2285718.7499999986,
+            "fastDegrees": 29.0625,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00027086988143851
+          },
+          {
+            "t": 42187.4236179431,
+            "e": 2278125.0000000107,
+            "fastDegrees": 33.75,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 42018.75288542634,
+            "e": 2269012.4999999935,
+            "fastDegrees": 39.375,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0008694869751885778
+          },
+          {
+            "t": 41850.078726504405,
+            "e": 2259899.9999999916,
+            "fastDegrees": 45,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.004802202042231739
+          },
+          {
+            "t": 37800.078726504405,
+            "e": 2041199.9999999919,
+            "fastDegrees": 180,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.004802249748939974
+          },
+          {
+            "t": 28814.08463645957,
+            "e": 1555959.3750000033,
+            "fastDegrees": 479.53125,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.00022232103823693227
+          },
+          {
+            "t": 21600.078726504413,
+            "e": 1166399.9999999984,
+            "fastDegrees": 720,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.004802278395525158
+          },
+          {
+            "t": 17887.423617943095,
+            "e": 965924.9999999868,
+            "fastDegrees": 843.75,
+            "triangleIntersection": true,
+            "minimumTriangleDistanceMm": 0
+          },
+          {
+            "t": 9632.75661024066,
+            "e": 520171.87499999534,
+            "fastDegrees": 1118.90625,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.0007276494958472508
+          },
+          {
+            "t": 0.07872650441457019,
+            "e": 2.5579538487363607e-13,
+            "fastDegrees": 1440,
+            "triangleIntersection": false,
+            "minimumTriangleDistanceMm": 0.004802278395523461
+          }
+        ],
+        "configurations": 6145
+      }
+    ]
+  },
+  "runtimeSectionReview": {
+    "scope": "Complete relative orientation periods, actual runtime mesh sections and production shaft/time transforms; sampled evidence only, no continuous solid bound",
+    "transformSha256": "f01aaf80a122306c6b4f30f54bf953462a030f1d94d7debafd440c0298d46ddb",
+    "pairs": [
+      {
+        "pair": [
+          137,
+          210
+        ],
+        "configurations": 6913,
+        "minimumSampledGapMm": 0.012654372145983249,
+        "maximumOverlapMm2": 0.0,
+        "overlapConfigurations": 0,
+        "worstOverlapTimeSeconds": 10800.078726504413,
+        "sourceVersusRuntimeSectionAreasMm2": [
+          [
+            2.6652675469068168,
+            2.6637604282544975
+          ],
+          [
+            21.34831517994704,
+            21.365167187213242
+          ]
+        ]
+      },
+      {
+        "pair": [
+          211,
+          141
+        ],
+        "configurations": 7681,
+        "minimumSampledGapMm": 0.015251254126395893,
+        "maximumOverlapMm2": 0.0,
+        "overlapConfigurations": 0,
+        "worstOverlapTimeSeconds": 0.07872650441457019,
+        "sourceVersusRuntimeSectionAreasMm2": [
+          [
+            1.1726336474426473,
+            1.1720220064799818
+          ],
+          [
+            24.997915510331396,
+            25.015771187880727
+          ]
+        ]
+      },
+      {
+        "pair": [
+          210,
+          213
+        ],
+        "configurations": 6913,
+        "minimumSampledGapMm": 0.005496199797664166,
+        "maximumOverlapMm2": 0.0,
+        "overlapConfigurations": 0,
+        "worstOverlapTimeSeconds": 0.07872650441457019,
+        "sourceVersusRuntimeSectionAreasMm2": [
+          [
+            21.34831517994704,
+            21.365167187213242
+          ],
+          [
+            22.480909443163128,
+            22.49492685395502
+          ]
+        ]
+      },
+      {
+        "pair": [
+          183,
+          216
+        ],
+        "configurations": 4609,
+        "minimumSampledGapMm": 0.0,
+        "maximumOverlapMm2": 0.00026126558070735004,
+        "overlapConfigurations": 2568,
+        "worstOverlapTimeSeconds": 9569.581476812731,
+        "sourceVersusRuntimeSectionAreasMm2": [
+          [
+            0.8321117507079925,
+            0.830820746343874
+          ],
+          [
+            6.887888009648159,
+            6.8912124371826025
+          ]
+        ]
+      },
+      {
+        "pair": [
+          217,
+          187
+        ],
+        "configurations": 6145,
+        "minimumSampledGapMm": 0.0,
+        "maximumOverlapMm2": 2.1351166439601995e-06,
+        "overlapConfigurations": 544,
+        "worstOverlapTimeSeconds": 20587.423617943095,
+        "sourceVersusRuntimeSectionAreasMm2": [
+          [
+            0.5598806324511213,
+            0.5589880485117316
+          ],
+          [
+            7.55706374363611,
+            7.563277315149863
+          ]
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "focusedTests": 9,
+    "focusedTestsPassed": true,
+    "browserChecks": 18,
+    "browserPassed": true,
+    "browserTarget": "http://127.0.0.1:4173 (existing current-source development server)",
+    "build": "Not run; application runtime and asset inputs unchanged",
+    "referenceOnly": {
+      "url": "https://www.joray-wyss.ch/en/assemblage",
+      "accessed": "2026-10-27",
+      "role": "General manufacturer description of cannon friction; not ML-01 constraint evidence"
+    }
+  },
+  "localEvidenceRoot": "artifacts/motion-works",
+  "localEvidenceSha256": {
+    "source.json": "6b1b7b3bf31d560cb3a21568719b39d54ddbad614745bfa64e734421545159c6",
+    "interfaces.json": "55723625514ece8f4d496297f4728078cb5130f331dae0fb3aa01b1eb8fbfa4f",
+    "interfaces.png": "dce4c3dad99cff8d6e2359c546d37f651287e3bb1f7ac943b8a8a06cf04bb6f7",
+    "sections.json": "95cfd559ec224025da968e85b5560e03520439636c7dd85ae55138d3d2656dce",
+    "periods.json": "63fddc4271b067e1de533448640632466123e9f332defe906a4a3ca3ba8475f1",
+    "solids.json": "8e8a8f2748f9ce7e14ba461c486d80a3ee5a97cc2f9e546db9466baa961ac961",
+    "boundaries.json": "285c9e0e68e90a97ac038fc6acbe8eb0c6aaf84686c78158d6c66fd4c5ab4203",
+    "runtime-meshes.json": "41f8bad85c25fa59b31c7bb68ebffce8d7780214cb957a120b252d034d2f3019",
+    "runtime-transforms.json": "f01aaf80a122306c6b4f30f54bf953462a030f1d94d7debafd440c0298d46ddb",
+    "runtime.json": "b45eccff6d67784e3b45f22cbfacf0a7e419daa09960dc8edade4462367ff340",
+    "runtime-sections.json": "2ba745c7aa550bf92470983bf2d1832fd222934b4d03289f3ed114f652fdcfe7",
+    "browser/browser-report.json": "7146b5e84106ac148829d379e17511dd8c98bdd6b1584de23d27d67044caf041",
+    "focused-tests.txt": "c6cd9a08262680088b77b05235567cb2821804a25f0766d21aa746f306c9bb8a"
+  },
+  "toolSha256": {
+    "scripts/cad/escapement-clearance/record_motion_works.py": "06135512bfcb3b80cf95bbc1585c75ec422b91f1c6f29cbd6cc9e03cec043c02",
+    "scripts/cad/escapement-clearance/motion_works_interfaces.py": "ab4e3f8b1f16921b5de2928e15fee4f712aea9061dbb512124cdac801729974c",
+    "scripts/cad/escapement-clearance/motion_works_boundaries.py": "0e85b0a975dae926dcd0486a08dd4b600a05bc8ac71bc85fc0e15e150e9575b2",
+    "scripts/cad/escapement-clearance/motion_works.py": "41edd2f45dfcb59286de14ccd0dad018c73d96f1a7dfc798979b6a68f2252b74",
+    "scripts/cad/escapement-clearance/motion_works_runtime.py": "62e69d9c0c86f4e51c854fc2e6fae96d9e1fb5a84f4ef98f15885fa5e3287816",
+    "scripts/cad/escapement-clearance/motion_works_sweep.py": "391dfade60d6cf22b987798007e8a4cb23fa1f1d417c002b2f95fdccd0b73a79",
+    "scripts/cad/escapement-clearance/train_periods.py": "306cc568d3b98e28b7b4f3489ce2a1685f5a12f61d9c04e7afd8d7a663c5221b",
+    "scripts/cad/escapement-clearance/train_solids.py": "163344e3ec53ed7b716867d91f4546025b9b21785cca8ff9d2ba7e23dc01bb16",
+    "scripts/movement/review-motion-works.mjs": "e76d726ab2ba32b21d8a4285f37f8ab7cba98b405bacf99a7bd4696f4bb85d11",
+    "tests/running-movement.test.mjs": "250634b0ea1f3a21b2f13cb1c2ba34a629623889ee9416d8588bfa40b19655be"
+  },
+  "unchangedRuntimeAndDisplaySha256": {
+    "assets/authored/wheel-display-poses.json": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "assets/authored/hand-display-poses.json": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+    "assets/authored/running-movement.json": "d3e3fb68189de4f1c983953d005f97b5658a513a58bdcebc9bbd56530a0871aa",
+    "explorer/src/viewer/RunningMovement.ts": "c54575aa864f1552a4e174933af8d2fdd6936e0a49d487fd3d0a0af93ae8488f",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9",
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b"
+  },
+  "limitations": [
+    "Conditional ratios are diagnostic, not installed or source-confirmed constraints.",
+    "Section distance bounds apply only to chord-sampled planar polygons; selected whole-solid and runtime-triangle checks are sampled.",
+    "Neighbor inventory provides full-turn box exclusions against frozen displayed neighbors; remaining candidates are not qualified after mesh failure.",
+    "Source-fit overlaps, invalid d27/d111, open d144, missing source diamond and all existing limits remain; no geometry, phase, tolerance or mechanical acceptance changes.",
+    "No new packet, clock, control, force, torque, setting interaction or self-sustaining simulation. Hands and the existing barrel-II boundary remain unchanged.",
+    "No push, PR, merge, deployment, publication or source redistribution."
+  ]
+}

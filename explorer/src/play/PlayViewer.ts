@@ -22,6 +22,7 @@ import {
 } from '../viewer/SourceSurfaces';
 import { loadRecoveredDiamond } from '../viewer/RecoveredDiamond';
 import { wheelDisplayMatrix } from '../viewer/WheelDisplayPose';
+import { RunningMovement, loadMovementBuffer } from '../viewer/RunningMovement';
 import {
   createMaterial,
   applyDialEnamel,
@@ -48,6 +49,7 @@ export type PlayViewStatus = {
 
 /** A route-local controller. Source matrices and shared geometry are never mutated. */
 export class PlayViewer {
+  runningMovement?: RunningMovement;
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(33, 1, 0.01, 2000);
@@ -162,6 +164,7 @@ export class PlayViewer {
       this.scene.add(this.staged, this.ghost);
       this.surfaceOcclusion = new SurfaceOcclusion(this.scene, this.camera);
       window.addEventListener('keydown', this.escapeDrag);
+      document.addEventListener('visibilitychange', this.onVisibility);
       this.renderer.domElement.addEventListener(
         'webglcontextlost',
         this.contextLost,
@@ -206,6 +209,7 @@ export class PlayViewer {
     const loaded: THREE.Object3D[] = [];
     const prepared = new Map<string, Piece>();
     let committed = false;
+    let preparedMovement: RunningMovement | undefined;
     try {
       const get = async (url: string) => {
         const r = await fetch(url);
@@ -307,9 +311,23 @@ export class PlayViewer {
         piece.pose = pose;
         piece.bounds = bounds;
       }
+      const movementBuffer = await loadMovementBuffer();
+      if (this.dead || generation !== this.generation) return;
+      preparedMovement = new RunningMovement(
+        movementBuffer,
+        new Map([...prepared].map(([id, part]) => [id, part.mesh])),
+      );
+      preparedMovement.hands.configure(
+        [...prepared].map(([id, part]) => ({
+          id,
+          mesh: part.mesh,
+          reference: part.mesh.matrix,
+        })),
+      );
       // Only replace the last complete scene once every required leaf is prepared.
       this.clearPieces();
       this.pieces = prepared;
+      this.runningMovement = preparedMovement;
       for (const { mesh } of prepared.values()) this.scene.add(mesh);
       this.loadedObjects = loaded;
       committed = true;
@@ -327,6 +345,7 @@ export class PlayViewer {
       }
     } finally {
       if (!committed) {
+        preparedMovement?.dispose();
         for (const { mesh } of prepared.values())
           (mesh.material as THREE.Material).dispose();
         loaded.forEach((object) => this.disposeObject(object));
@@ -334,6 +353,8 @@ export class PlayViewer {
     }
   }
   clearPieces() {
+    this.runningMovement?.dispose();
+    this.runningMovement = undefined;
     this.staged.clear();
     this.ghost.clear();
     this.thumbnails.clear();
@@ -349,6 +370,7 @@ export class PlayViewer {
     disposeObjectResources(object);
   }
   update(fitted: Set<string>, step: PlayStep | null, active: boolean) {
+    this.runningMovement?.restore();
     this.cancel();
     this.animation = undefined;
     // A discrete selection never resumes an earlier guided transition.
@@ -1110,6 +1132,7 @@ export class PlayViewer {
   };
   motionChanged = () => this.invalidate();
   contextLost = (event: Event) => {
+    this.runningMovement?.clock.suspend();
     event.preventDefault();
     this.contextUnavailable = true;
     this.cameraMotion = undefined;
@@ -1146,13 +1169,23 @@ export class PlayViewer {
       this.emit();
     }
   };
+  onVisibility = () => {
+    this.runningMovement?.clock.suspend();
+    if (document.hidden && this.frame) {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+    }
+    if (!document.hidden) this.invalidate();
+  };
   invalidate = () => {
-    if (!this.dead && !this.frame)
+    if (!this.dead && !document.hidden && !this.frame)
       this.frame = requestAnimationFrame(this.render);
   };
   render = (now: number) => {
     this.frame = 0;
-    if (this.dead || this.contextUnavailable || this.error) return;
+    if (this.dead || this.contextUnavailable || this.error || document.hidden)
+      return;
+    this.runningMovement?.restore();
     if (this.animation) {
       const a = this.animation,
         t = this.media.matches ? 1 : Math.min(1, (now - a.start) / 220),
@@ -1228,6 +1261,17 @@ export class PlayViewer {
     if (!this.drag && !this.busy && this.controls.update()) this.invalidate();
     // React may have revealed/reflowed staging after the discrete update.
     if (!this.drag && !this.animation && !this.busy) this.positionStage();
+    const running =
+      this.runningMovement?.update(
+        now,
+        this.ready &&
+          !this.current &&
+          !this.workspace &&
+          !this.busy &&
+          !this.drag &&
+          this.manifest.finalLeafIds.every((id) => this.fitted.has(id)),
+      ) ?? false;
+    if (running) this.invalidate();
     try {
       this.renderer.render(this.scene, this.camera);
       this.surfaceOcclusion?.render(this.renderer);
@@ -1396,6 +1440,7 @@ export class PlayViewer {
     };
   }
   dispose() {
+    document.removeEventListener('visibilitychange', this.onVisibility);
     if (this.dead) return;
     this.dead = true;
     ++this.generation;

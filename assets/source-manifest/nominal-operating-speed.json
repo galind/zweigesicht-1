@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "baselineCommit": "bdf8259",
+  "previousEvidence": "assets/source-manifest/running-movement.json",
+  "frequencyEvidence": {
+    "status": "Manufacturer nominal specification, independently corroborated by ratio derivation",
+    "url": "https://www.marcolangwatches.com/en/watches/",
+    "section": "Caliber ml-01",
+    "quote": "frequency 3 Hertz (21.600 osz./ hour)",
+    "consulted": "2026-10-27",
+    "localSnapshot": "artifacts/nominal-movement/maker-watches.html",
+    "sha256": "fc375a24548812ce41521661886d1d446ebb7aeb5174a537e08b4a1ee9f3de3c",
+    "cadPage": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "cadPageScope": "Assembly provenance; no independent timing specification on the download page",
+    "frequencyHz": 3,
+    "beatsPerCycle": 2,
+    "beatsPerHour": 21600,
+    "derivation": "20 escape teeth: 18 degrees/cycle. Escape pinion 9 / seconds wheel 81: -2 degrees/cycle. Assuming one seconds-shaft revolution per 60 seconds: 360/2/60 = 3 Hz.",
+    "limitation": "Manufacturer nominal rate is not a measurement or dynamic solution of this CAD assembly"
+  },
+  "shaftMeanPeriodsSeconds": {
+    "escape": 6.666666666666667,
+    "seconds": 60,
+    "third": 562.5,
+    "center": 3600,
+    "transfer": 7800,
+    "barrelII": 24000
+  },
+  "validation": {
+    "localNecessity": "No push authorized, so new CI unavailable; focused CPU checks and production-browser sampling/performance review were explained before local execution",
+    "cpuTests": 8,
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed; existing vinext route-classification notice",
+    "browserChecks": 18,
+    "sustainedRendering": {
+      "start": {
+        "seconds": 2.116599999999998,
+        "escape": 117.40000000000039,
+        "render": 118,
+        "memory": {
+          "geometries": 136,
+          "textures": 8
+        }
+      },
+      "end": {
+        "seconds": 27.13229999999962,
+        "escape": 1467.4000000000003,
+        "render": 1619,
+        "memory": {
+          "geometries": 136,
+          "textures": 8
+        }
+      },
+      "p50": 16.699999999999818,
+      "p95": 16.700000000000728,
+      "frames": 1501,
+      "updateP50Ms": 0.5,
+      "updateP95Ms": 0.8000000715255737
+    },
+    "delayedFrame": {
+      "activeDelta": 0.24989999999999668,
+      "wallDelta": 0.2548000000715256
+    },
+    "normalizedPoseCount": 8557,
+    "maximumDifference": {
+      "normalizedTime": 2.220446049250313e-16,
+      "balance": 3.197442310920451e-13,
+      "pallet": 9.237055564881302e-14,
+      "escape": 3.126388037344441e-13
+    },
+    "gpuSpringExportIdentical": true,
+    "sampling": [
+      {
+        "fps": 15,
+        "samplesPerCycle": 5,
+        "maxBalanceStepDegrees": 201.2461179749813,
+        "maxEscapeStepDegrees": 9.500000000000135
+      },
+      {
+        "fps": 30,
+        "samplesPerCycle": 10,
+        "maxBalanceStepDegrees": 111.24611797498122,
+        "maxEscapeStepDegrees": 9.500000000000135
+      },
+      {
+        "fps": 60,
+        "samplesPerCycle": 20,
+        "maxBalanceStepDegrees": 55.62305898749085,
+        "maxEscapeStepDegrees": 6.900000000000098
+      },
+      {
+        "fps": 120,
+        "samplesPerCycle": 40,
+        "maxBalanceStepDegrees": 28.15820370724203,
+        "maxEscapeStepDegrees": 6.900000000000098
+      }
+    ],
+    "visualReview": "Inspected 20 consecutive nominal 60 FPS macro poses. Spring stays attached; no new pose/geometry discontinuity. Sparse sampling leaves fast balance spokes susceptible to apparent reversal and misses brief release/recoil motion, particularly at 15/30 FPS. No temporal blur or geometry/amplitude changes introduced.",
+    "scope": "One local headless Chrome desktop run; visibility handler exercised through a synthetic hidden-document fixture. Not OS lifecycle, physical-device, thermal or continuous whole-solid qualification. Earlier 171-test/32-flip results remain historical, not rerun here."
+  },
+  "limitations": [
+    "Prescribed kinematics at source-confirmed nominal speed, not physically self-sustaining motion",
+    "No new contact-force, elastic dynamics, torque, backlash or mechanical acceptance claim",
+    "Mainsprings, arbors, ratchets, barrel I, motion works and hands remain static",
+    "Hidden and disassembled time excluded; active-time shaft periods do not represent wall-clock timekeeping",
+    "Instantaneous rendering can strobe; low frame rates and delayed frames skip intermediate release/recoil poses without slowing elapsed time",
+    "Publication and CAD redistribution gates remain uncleared"
+  ],
+  "implementationSha256": {
+    "assets/authored/running-movement.json": "d3e3fb68189de4f1c983953d005f97b5658a513a58bdcebc9bbd56530a0871aa",
+    "explorer/src/viewer/RunningMovement.ts": "c54575aa864f1552a4e174933af8d2fdd6936e0a49d487fd3d0a0af93ae8488f",
+    "tests/running-movement.test.mjs": "6fba00fa0d60d4b630c596d59943c1899dc29979033cbf1f920a5a3fb3ae1ebc",
+    "scripts/movement/browser-check.mjs": "5aed4850f117f5f9be13c1debf25b3c026116b73b47a8355b50df19d81fae0db",
+    "scripts/movement/sample-runtime.mjs": "dcc9395d8760564e29b49246d33560cd02c3cec9e50df0945fde1ac2bd9cf3c2",
+    "scripts/movement/record-validation.mjs": "bb5d56aafb4ed53db94dc354b4596173a15b19f23ffe5c4c0aece4da2d9bc511",
+    "scripts/movement/record-nominal-validation.mjs": "3c53a5b857a10b120e13a4c9fcc3b01cd82fe8589c367f17a7b6e1fad4a6d90e"
+  },
+  "unchangedGeneratedSha256": {
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9"
+  },
+  "inputsSha256": {
+    "assets/source-manifest/running-movement.json": "5a710ac8b1bddaac60aec2618c2c8ce79a0ebc0e21d1f7c0662907e14867e50c",
+    "assets/source-manifest/train-coupling-study.json": "f039d63fbd4b5f3c56b11144b975e3d217ff61f5d543f5d9f43a94a8c88056f6",
+    "artifacts/running-movement/runtime-samples.json": "b3ea12cd292c6c27ac834da0079b0c78868163c9fe1c889a4ee3ca4777171e2a",
+    "artifacts/running-movement/runtime-spring.bin": "49b911daf8e19d73697249aedaab74d0da366553d5a605eea3db17f99cb81d6e"
+  },
+  "localEvidenceSha256": {
+    "artifacts/nominal-movement/maker-watches.html": "fc375a24548812ce41521661886d1d446ebb7aeb5174a537e08b4a1ee9f3de3c",
+    "artifacts/nominal-movement/focused-tests.txt": "ae42002c9af267443cf0edd27b188cf02cb7c182cb876d789b17c42637c7ca52",
+    "artifacts/nominal-movement/typecheck.txt": "4e6bb3b91678b8c724495939039efa7de3416735163e4c73aad9a3d1d31042aa",
+    "artifacts/nominal-movement/lint.txt": "040dc829b5a9ba7d2ba7a2878408419c672332899b3026a63563226a316b99e9",
+    "artifacts/nominal-movement/build.txt": "8d343f0db95d397fd67769aa65f98bbb7df4b2c8081f4e61dd25b40f89a2cd24",
+    "artifacts/nominal-movement/browser-report.json": "5f8ab2a89bfd78e4064ba5b07e9bce37f7acb355f942ef65e3c8e0b9874ba3c6",
+    "artifacts/nominal-movement/runtime-samples.json": "1e87ab2b8ff8e1be96897d424aef91ab3c992651e6807f5e893e82cde16b105e",
+    "artifacts/nominal-movement/runtime-spring.bin": "49b911daf8e19d73697249aedaab74d0da366553d5a605eea3db17f99cb81d6e",
+    "artifacts/nominal-movement/sampling-60fps.png": "787bcba66a022ea009c7cb601fbb6d44c16f50d0871b636155060cfd6f6065bc",
+    "artifacts/nominal-movement/assembled.png": "ac740370884fa234a7747c46c5edbb0522afbe516eb71ba1a5d5b6545d8c1ff8",
+    "artifacts/nominal-movement/fitted-front.png": "77035b00693b4a2ac848093aa9e251b1475c83429399fc65ebb136e4dfb92d80",
+    "artifacts/nominal-movement/fitted-back.png": "a2566fd5389b4ccdff321b483e44dcde10f12d83be9b215d8593b9a615b30daa",
+    "artifacts/nominal-movement/bench.png": "3340559bda1fe5cae5757de14018106f33af066416c7989ecbd6cf4d5c0b5aa3",
+    "artifacts/nominal-movement/escapement-frame-0.png": "af7c5fd017cb553edfabc1db4193852bafab88d078930813eab3d974cdd50d3b",
+    "artifacts/nominal-movement/escapement-frame-1.png": "7af192d72b1cfa1e80a5c15bb693c97a337837bf1da7a72873fc37a0e3ace168",
+    "artifacts/nominal-movement/escapement-frame-2.png": "b4f0f7bee2b86483cfa3eb58d45273946a48f624d4563a54b0dfd70d85cfd6f9",
+    "artifacts/nominal-movement/escapement-frame-3.png": "ac36a55e9a2f14117e099550ce0c7d458b103820998cac29524aca2225903d29",
+    "artifacts/nominal-movement/escapement-frame-4.png": "dd47ed712e1226f947ec4e211d620adf5bf36acd10d24ef54884d4b488e011a4",
+    "artifacts/nominal-movement/escapement-frame-5.png": "1db090c06735e6b12c01fbc733cc2de23cdbe4ddd1333615a7fd5755bc04c1b0",
+    "artifacts/nominal-movement/escapement-frame-6.png": "c76567c70d94fe5565cd0739c49374d2de1e3da21aa2bf79cafaaa7c64b65fe2",
+    "artifacts/nominal-movement/escapement-frame-7.png": "b766a8d941e7b59d7995dc40d3dfdf63bec72f05af89b13dfad87302d31d5346",
+    "artifacts/nominal-movement/escapement-frame-8.png": "5f4e3e383a979f7ebfde26b11424f1cf60416d01c742707f29e3e70b4b7b27a0",
+    "artifacts/nominal-movement/escapement-frame-9.png": "2c467aefdce5b0279f49bae3f15956b23b2d3109f4aea9874b9bdb3057470aff",
+    "artifacts/nominal-movement/escapement-frame-10.png": "a9710820d587022b3d980fe24406b5ccd3f46bb50cd9af6161b2eacb75673868",
+    "artifacts/nominal-movement/escapement-frame-11.png": "2c467aefdce5b0279f49bae3f15956b23b2d3109f4aea9874b9bdb3057470aff",
+    "artifacts/nominal-movement/escapement-frame-12.png": "5f4e3e383a979f7ebfde26b11424f1cf60416d01c742707f29e3e70b4b7b27a0",
+    "artifacts/nominal-movement/escapement-frame-13.png": "b766a8d941e7b59d7995dc40d3dfdf63bec72f05af89b13dfad87302d31d5346",
+    "artifacts/nominal-movement/escapement-frame-14.png": "c76567c70d94fe5565cd0739c49374d2de1e3da21aa2bf79cafaaa7c64b65fe2",
+    "artifacts/nominal-movement/escapement-frame-15.png": "7a9c430a3aabbb9091dea551a336c0893d7562f9b32af4320177ebf6151276ea",
+    "artifacts/nominal-movement/escapement-frame-16.png": "d95a0281e5576c08fcaaa8c75c942903e53767d1cc46c37f8b9ca8b5be45c1cb",
+    "artifacts/nominal-movement/escapement-frame-17.png": "017f15797b10b599961a0f7853af921436f282d89ab264cc26ae454ea7e61ff2",
+    "artifacts/nominal-movement/escapement-frame-18.png": "d3a54d44e3995f25e593d6a6f47946641fb1fde916c9f020edd34f1049fa940e",
+    "artifacts/nominal-movement/escapement-frame-19.png": "ded57e6c03e86c8038c1c89afb7625f81966e6a44ac2366b918e7e0980d317ff"
+  }
+}

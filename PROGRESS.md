@@ -1,104 +1,95 @@
 # Current project status
 
-Updated 25 October 2026. Setup: [README](README.md). Technical reference:
-[architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
-[repository review](docs/REPOSITORY_REVIEW.md).
+Updated 31 October 2026. Setup: [README](README.md). Technical reference:
+[architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
+[PR #35 findings and evidence boundaries](docs/MOVEMENT_PR_REVIEW.md).
 
-## Integration state
+## Integration and next action
 
-`develop` includes the Bench feature in [PR #31](https://github.com/galind/zweigesicht-1/pull/31)
-and the homepage/Bench onboarding in [PR #33](https://github.com/galind/zweigesicht-1/pull/33).
-This review starts at `48ef8b3`. UAT now manually serves PR #34's application
-commit `c127cc8`; Vercel reports deployment `dpl_FaFSZZJQdMex7PcVXAfz7P4ScKah`
-ready and promoted to `zweigesicht-uat.vercel.app`. The PR remains open toward
-`develop`; the separate production project and `main` were not changed.
-Repository visibility is public, confirmed through the connected GitHub app.
+Fetched `develop` is `8c0a367`, which includes PR #34's staging cleanup and
+optimized hosted Bench holders, following PRs #31 and #33.
+[PR #35](https://github.com/galind/zweigesicht-1/pull/35) targets `develop` from
+`codex/escapement-clearance-study`; review began at clean `0f7d1ea`.
+The owner authorized review fixes and SSH pushes to this existing PR branch.
+Its Vercel Git deployment remains disabled. Do not merge, deploy or publish.
 
-## Current application
+Application/research-tool head `a39baec8c197e5420034f8cf38a4af00cfefb78b` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41200069583): all
+**187 CPU tests**, Workshop inventory, typecheck, lint, production build and
+Vercel packaging. [Holder-assets CI](https://github.com/galind/zweigesicht-1/actions/runs/41200069590)
+also passed. The following documentation-only commit records that verified state;
+its exact-head check result will be linked in the PR description after CI.
 
-- Explorer: 426 source instances, six mechanism groups, component inspection,
-  separation, and fitted case/dial/hand configurations.
-- Workshop: 83 Easy placements, or 243 Hard placements and 35 transfers; 16
-  foundation leaves, 259 fitted leaves at completion. Undo and local saves remain.
-  Direct `/workshop` visits choose a difficulty or resume a validated save.
-  Its homepage entry appears only in development and Vercel Preview builds.
-- Bench: one movement and two exchanged original holders, a compact oak desk,
-  green mat, steel case and fitted dial/hand stand. Explicit Start captures the
-  mouse; Esc releases it. WASD, Shift, Space, F and R control exploration.
-  Touch-only devices get a desktop explanation without loading the scene.
-  [Bench reference](docs/BENCH_EXPERIENCE.md) owns dimensions, reproduction and controls;
-  [performance review](docs/BENCH_PERFORMANCE.md) owns measurements and their limits.
-- Original holder files remain outside Git. The three prepared Bench payloads
-  are served as owner-approved optimized GLBs through UAT's verified build asset source.
+Next: human review of PR #35 before any separately authorized merge or release.
+No local tests, builds, CAD calculations or browser automation were run for this
+review. The prior browser/CAD evidence below remains historical. Baseline CI
+failures and their fixes are recorded in the review report.
 
-## Cleanup under review
+## Review changes
 
-Branch `codex/staging-code-cleanup` targets `develop`; its Vercel Git deployment
-is disabled. Removed superseded design briefs, unused workshop artwork tooling
-and redundant browser-runner aliases. Current guidance replaces the chronological
-progress log; original records remain recoverable at the revisions linked in the
-review. CAD evidence, source manifests and runtime assets are retained.
+- Bench settles the motion sidecar with its other required assets before moving
+  meshes into scene ownership. Route exit, failure and supersession regressions
+  count disposal of every fixture resource and forbid late controller installation.
+- Repair the Workshop movement fixture and independently check all 20 current
+  phase overrides from recorded reviews, without weakening load/retry assertions.
+- Guard historical diagnostic runners against duplicate installed packets and
+  mislabeled partial scope; report the historical revisions and current alternative.
+- Add an integrated paused-train/hand-resynchronization regression, including
+  repeated fitting and a wall-clock jump.
+- Correct current documentation and condense this status. No mechanical data,
+  generated geometry, phase, motion law or render scheduler is changed. No
+  speculative performance optimization or new speed claim is made.
 
-Bench loading now names and type-checks settled assets instead of asserting
-numeric result types. Disposal is idempotent and cannot rebind graphics targets
-when shader preparation completes after navigation. Profilers use explicit quality
-modes and the current single station. Interaction checks use the current Detail
-select and handle both reversed-depth and fallback Auto settings.
+## Current illustration and retained limits
 
-A deeper pass shares dial-enamel setup across all three routes and records the
-fitted transmission for finish restoration in Workshop. Detached Bench materials
-enter the cleanup tree before finish/pose preparation. All four hashed asset
-loaders share one SHA-256 encoder while retaining their existing integrity gates.
-New CPU regressions cover finish transitions, failure cleanup and corrupt assets.
-[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/40231829429)
-passed on `b29c081`: all 157 CPU tests, Workshop inventory, typecheck, lint and
-production build. No local tests, builds or browser automation were run for this
-follow-up. This preference is recorded in [AGENTS.md](AGENTS.md).
+Explorer, completed Workshop and assembled Bench share prescribed **3 Hz /
+21,600 beats per hour** escapement/train motion, all seven display packets and
+[current-local-time fitted hands](docs/CURRENT_TIME_HANDS.md) on both displays.
+The 93/137 and 214/217 sticking assumptions, balance amplitude, recoil, existing
+hairspring path, authored phases, fittings and materials are retained.
 
-The preceding cleanup milestone verified: 149 CPU tests, Workshop inventory,
-typecheck with unused-code checks, lint, production build, HTTP/SEO checks,
-159 Bench UI checks, 22 entry/device
-journeys, nine lifecycle checks, 32 flip checks and 11 interaction checks in each
-of normal and forced fallback depth modes. The independent geometry audit retains
-219 movement/crown leaves in each rest, source/collision agreement and 16 drops.
-The new disposal regression fails against the previous build and passes here.
-Both npm audits report zero findings; 85 local Markdown links and 47 tracked JSON
-files validate. Runtime assets, source manifests and active layouts are unchanged.
-The Vercel production build also passes and excludes `bench-local`. Both first-use
-High fixtures and all 18 Auto/High/Low profiling scenarios complete; these are
-harness checks, not a new device-performance qualification. Evidence is local in
-`artifacts/staging-cleanup/` and `artifacts/bench/staging-cleanup-first-use.json`.
+Explorer separation holds the last train/barrel/hairspring and hand pose relative
+to presentation, resuming only at displayed zero separation. Inventory and
+Workshop Undo restore static endpoints. Hidden time is excluded; hand wall-clock
+resynchronization never advances paused train time. Bench flips the whole parent
+and retains reference internal geometry for visitor collisions.
 
-## Hosted delivery and remaining review
+The [power-source investigation](docs/POWER_SOURCE_STUDY.md) confirms the nominal
+series connection. Barrel I's drum is held; barrel II retains `−E/3600` and its
+24,000-active-second mean period. **Mainspring deformation, faithful attachments
+and intermediate arbor motion remain incomplete.** No equal-unwinding law,
+energy, torque, power reserve, reset or self-sustaining behavior is invented.
 
-The missing Bench payloads are fixed. UAT serves `movement.glb`, `dial.glb` and
-`environment.glb` from the verified asset source. Original holder STLs stay outside
-Git and public output. Their Blob copies and the previous STL-serving deployment
-have been deleted. [Live delivery CI passed](https://github.com/galind/zweigesicht-1/actions/runs/40237774201):
-entry pages and GLBs return HTTP 200 with matching hashes; the six old holder STL
-URLs across UAT, Blob and the retired deployment return HTTP 404/410.
-[Integration CI on `c127cc8`](https://github.com/galind/zweigesicht-1/actions/runs/40237774186)
-passed all 162 tests, inventory, typecheck, lint and both builds.
+Hand/marker, broad-lance, central Lance/ring and source-fit overlaps remain
+explicit, as do invalid/non-solid source exceptions and the approximately 45 nm
+rear-hour margin. Sampled and planar clearance evidence is not continuous
+whole-assembly or manufacturing certification. Source geometry is unchanged.
 
-[Holder conversion CI](https://github.com/galind/zweigesicht-1/actions/runs/40237774203)
-checks recorded source hashes and exact triangle positions, winding and bounds.
-Combined raw size drops from 2,684,768 to 1,407,336 bytes (47.6%); gzip level-9 drops
-from 1,080,745 to 1,045,456 bytes (3.3%). SNORM16 lighting normals have component
-error below 0.000016. Three.js and an independent decoder pass. Runtime hashes and
-measurements are in `assets/source-manifest/holder-runtime.json`; workflow artifacts
-contain only GLBs and the report. Original source URLs/hashes remain unchanged.
-No local conversion, benchmark, build, test or browser automation was run for this
-follow-up. These are size/geometry checks, not live WebGL or FPS measurements.
+## Prior runtime and hosted evidence
 
-Review and merge PR #34 into `develop`; UAT serves its checked application snapshot
-without a merge. Actual browser scene-entry review remains separate.
-Keep current status concise: replace superseded next actions rather than adding
-another chronological entry.
+At application milestone `5b8f26a`, 27 focused tests, typecheck, lint, production
+build and 31 browser checks passed locally. Across 2,663 inspected frames,
+including 595 paused frames, independent point transforms agreed within
+2.85e-14 mm. A 25-second Chrome interval retained 135 geometries / 8 textures;
+frame p95 was 16.7 ms and movement-update p95 0.6 ms. These are **historical**
+results, not a rerun of this review or physical-device qualification.
 
-Maker permission for current/historical CAD derivatives, hosted/history remediation,
-physical-device and representative accessibility/usability review, mechanical
-review, and clean-machine CAD reproduction remain outstanding. Source URLs/hashes
-and authored placement evidence remain in their existing manifests. The
-[release gates](docs/RELEASE_GATES.md) contain the decisions and remediation paths;
-the [permission request](docs/ASSET_PERMISSION_REQUEST.md) remains unsent.
-Original code/documentation use MIT; maker design/CAD and derivatives do not.
+PR #34's integration CI on `c127cc8` passed 162 tests, inventory, typecheck, lint
+and both builds. Its hosted delivery checks verified the three approved optimized
+Bench GLBs and removal of old public holder STL URLs. This review does not change
+or re-verify UAT. Original holder files, downloads, caches and detailed local
+CAD/browser evidence remain outside Git.
+
+The full preceding progress record, exact run links and milestone measurements
+are preserved at [the review baseline](https://github.com/galind/zweigesicht-1/blob/0f7d1ea7f23d6bec34bf501675a83f38c099f9c3/PROGRESS.md).
+Mechanical reports and provenance remain in `docs/` and `assets/source-manifest/`;
+use their recorded revisions when reproducing historical investigations.
+
+## Outstanding release gates
+
+Maker redistribution permission, mechanical/expert acceptance, representative
+accessibility/usability review, physical-device qualification and clean-machine
+CAD reproduction remain outstanding. Repository visibility is public; that does
+not clear redistribution rights. The [release gates](docs/RELEASE_GATES.md) retain
+history remediation decisions and the [permission request](docs/ASSET_PERMISSION_REQUEST.md)
+remains unsent. Original code/documentation use MIT; maker design/CAD and derivatives do not.

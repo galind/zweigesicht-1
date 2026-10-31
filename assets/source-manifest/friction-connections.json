@@ -1,0 +1,452 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "baselineCommit": "a62c82001c7f8a6b814b489e41cff6249c5299f2",
+  "scope": "Source-only investigation; application unchanged; no new motion or setting behavior",
+  "decision": {
+    "directlyConfirmed": "Exact mating geometry and independent maker component agreement",
+    "interpretation": "Same-world-direction 1:1 during normal running is supported for both fits, but no explicit maker joint constraint was found",
+    "unresolved": [
+      "93/137 normal-running sticking and setting-slip specification",
+      "214/217 permanent interference fit versus adjustable or slipping fit",
+      "Prior reverse running mesh conflicts remain; no clearance qualification added"
+    ],
+    "runtimeChanged": false
+  },
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "retrievedPages": [
+    {
+      "url": "https://www.marcolangwatches.com/cad/ml01-minutentrieb-z12-m015/",
+      "localPath": "artifacts/friction-connections/ml01-minutentrieb-z12-m015.html",
+      "sha256": "778f6f642e16338096ac69a73423bb7dce1c0cb5eec1d7f64572b52952c2897a",
+      "bytes": 95280
+    },
+    {
+      "url": "https://www.marcolangwatches.com/cad/ml01-viertelrohr1-z12-m0177/",
+      "localPath": "artifacts/friction-connections/ml01-viertelrohr1-z12-m0177.html",
+      "sha256": "aab0386ef95c61f4f83957a5ae71c0c8038fc2c126f2a548e2232e4fd050cfcc",
+      "bytes": 95346
+    },
+    {
+      "url": "https://www.marcolangwatches.com/cad/ml01-zeigerwerkswelle2/",
+      "localPath": "artifacts/friction-connections/ml01-zeigerwerkswelle2.html",
+      "sha256": "bec30e937e6cc76d07bda072b04ea19efcb9d0cc5b327bccd537c2da0ca670a1",
+      "bytes": 94993
+    },
+    {
+      "url": "https://www.marcolangwatches.com/cad/ml01-wechseltrieb3-z8-m012/",
+      "localPath": "artifacts/friction-connections/ml01-wechseltrieb3-z8-m012.html",
+      "sha256": "4929bcc6ae6fe7d9ed345681a587e2c4cf8814293675812b613949349d0add7c",
+      "bytes": 95288
+    },
+    {
+      "url": "https://www.marcolangwatches.com/cad/alt-ml01-viertelrohr1/",
+      "localPath": "artifacts/friction-connections/alt-ml01-viertelrohr1.html",
+      "sha256": "bfd7ed5fe5e56a7c901ea1422db146abb46be537c67e5e86e9f62a723c28ac91",
+      "bytes": 94891
+    },
+    {
+      "url": "https://www.marcolangwatches.com/de/uhren/",
+      "localPath": "artifacts/friction-connections/watches-de.html",
+      "sha256": "d7d4ad46d2d38cf73f95d5b96dfc1585386e91a6dd5cfbd23dc38873c4851356",
+      "bytes": 112341
+    },
+    {
+      "url": "https://www.marcolangwatches.com/en/downloads-2/",
+      "localPath": "artifacts/friction-connections/downloads.html",
+      "sha256": "d088846c164a44cf04336caaaf7d68fc860a85ad20988802339dd158b74b5eb9",
+      "bytes": 189324
+    }
+  ],
+  "retrievedFiles": [
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-zeigerwerkswelle2/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-zeigerwerkswelle2/?wpdmdl=2262&ind=1690896977036",
+      "path": "artifacts/friction-connections/originals/ml01-zeigerwerkswelle2.jpg",
+      "bytes": 477445,
+      "sha256": "9b22fa6f673a0b656c9e95afee073232e19d3f27d77a47546e0b6e3a5e8c75cc"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-zeigerwerkswelle2/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-zeigerwerkswelle2/?wpdmdl=2262&ind=1690896979120",
+      "path": "artifacts/friction-connections/originals/ml01-zeigerwerkswelle2.stp",
+      "bytes": 12119,
+      "sha256": "de339a1f25df97929d8dba0e89e7f1bd2e4478a424057c3fa8f2026bc0724cb3"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-viertelrohr1-z12-m0177/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-viertelrohr1-z12-m0177/?wpdmdl=2230&ind=1690896345525",
+      "path": "artifacts/friction-connections/originals/ml01-viertelrohr1-z12-m0177.jpg",
+      "bytes": 489121,
+      "sha256": "f089f93865e77d2589c6c040b420084c51934517f52551e005fd8c4290433551"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-viertelrohr1-z12-m0177/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-viertelrohr1-z12-m0177/?wpdmdl=2230&ind=1690896347895",
+      "path": "artifacts/friction-connections/originals/ml01-viertelrohr1-z12-m0177.stp",
+      "bytes": 115044,
+      "sha256": "6c345880b4a748f9e383622d42c5e6edc9d3be14a08ca429b5b4d4d636a7840b"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/alt-ml01-viertelrohr1/",
+      "url": "https://www.marcolangwatches.com/cad/alt-ml01-viertelrohr1/?wpdmdl=2049&ind=1690630914820",
+      "path": "artifacts/friction-connections/originals/alt-ml01-viertelrohr1.jpg",
+      "bytes": 518553,
+      "sha256": "9ac46a2fc47a0cba9389426406b40f3310a87bd60c9a1636e8215ab0c19f5b8d"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/alt-ml01-viertelrohr1/",
+      "url": "https://www.marcolangwatches.com/cad/alt-ml01-viertelrohr1/?wpdmdl=2049&ind=1690630917432",
+      "path": "artifacts/friction-connections/originals/alt-ml01-viertelrohr1.stp",
+      "bytes": 20629,
+      "sha256": "3c0f4c814a858f49b5505af9729ee1e155f85bbdf22576395d30f668353c4501"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-wechseltrieb3-z8-m012/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-wechseltrieb3-z8-m012/?wpdmdl=2242&ind=1690896593213",
+      "path": "artifacts/friction-connections/originals/ml01-wechseltrieb3-z8-m012.jpg",
+      "bytes": 539098,
+      "sha256": "6af47f3a89370d6f791636ada04e7795920d9ef089f0edf0073caab0438c9aae"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-wechseltrieb3-z8-m012/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-wechseltrieb3-z8-m012/?wpdmdl=2242&ind=1690896595446",
+      "path": "artifacts/friction-connections/originals/ml01-wechseltrieb3-z8-m012.stp",
+      "bytes": 91825,
+      "sha256": "11919aa1731243bbe7ad97c5601d60c036b580d8bd867e6f274a167550a2dc07"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-minutentrieb-z12-m015/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-minutentrieb-z12-m015/?wpdmdl=2165&ind=1690647500762",
+      "path": "artifacts/friction-connections/originals/ml01-minutentrieb-z12-m015.jpg",
+      "bytes": 521240,
+      "sha256": "9ef3be0fd8b9081c16bd41bf818e5a9f04815157adac3e45b7b3575032cf4d09"
+    },
+    {
+      "page": "https://www.marcolangwatches.com/cad/ml01-minutentrieb-z12-m015/",
+      "url": "https://www.marcolangwatches.com/cad/ml01-minutentrieb-z12-m015/?wpdmdl=2165&ind=1690647503289",
+      "path": "artifacts/friction-connections/originals/ml01-minutentrieb-z12-m015.stp",
+      "bytes": 174158,
+      "sha256": "9262d9d2e38193a18385fb511b75a71ba10431036a4c0dc3d1c3076fecf97888"
+    }
+  ],
+  "comparison": {
+    "ocpVersion": "7.9.3.1",
+    "method": "Two-way original BRep Boolean difference in definition-local frame; no repair or placement change",
+    "inputValidityChecks": 8,
+    "differenceValidityChecks": 8,
+    "parts": [
+      {
+        "definition": 93,
+        "file": "artifacts/friction-connections/originals/ml01-minutentrieb-z12-m015.stp",
+        "sha256": "9262d9d2e38193a18385fb511b75a71ba10431036a4c0dc3d1c3076fecf97888",
+        "sourceCacheSha256": "edac3519fc402333013d0b610ca5091bbfa0df11c4afba913238953f3d229d24",
+        "sourceVolumeMm3": 2.4544429132532017,
+        "independentVolumeMm3": 2.4544429132532,
+        "sourceMinusIndependentMm3": 0,
+        "independentMinusSourceMm3": 0,
+        "sourceFaceCount": 120,
+        "independentFaceCount": 120,
+        "occurrence": {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:3/0:1:1:92:1",
+          "definitionId": "d_0_1_1_93",
+          "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3",
+          "name": "ml01 Minutentrieb z12 m0,15",
+          "worldTransform": [
+            [
+              0.9595174798911958,
+              0.281649082695557,
+              0.0,
+              0.0
+            ],
+            [
+              0.281649082695557,
+              -0.9595174798911958,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -2.9800000000000066
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "pmiCountItems": [
+          "VALUE_REPRESENTATION_ITEM('number of annotations',COUNT_MEASURE(0.));",
+          "VALUE_REPRESENTATION_ITEM('number of views',COUNT_MEASURE(0.));"
+        ],
+        "semanticEntityTypeMatches": {}
+      },
+      {
+        "definition": 137,
+        "file": "artifacts/friction-connections/originals/ml01-viertelrohr1-z12-m0177.stp",
+        "sha256": "6c345880b4a748f9e383622d42c5e6edc9d3be14a08ca429b5b4d4d636a7840b",
+        "sourceCacheSha256": "c50155bc88619bcd2a2345722b0c7b268cadc505a95bce5383b7eaa2f85ae15a",
+        "sourceVolumeMm3": 1.8187183503515745,
+        "independentVolumeMm3": 1.8187183503515734,
+        "sourceMinusIndependentMm3": 0,
+        "independentMinusSourceMm3": 0,
+        "sourceFaceCount": 83,
+        "independentFaceCount": 83,
+        "occurrence": {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:20",
+          "definitionId": "d_0_1_1_137",
+          "parentId": "p_0_1_1_1__0_1_1_1_4",
+          "name": "ml01 Viertelrohr1 z12 m0,177",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -2.27682456221956e-15
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.070000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "pmiCountItems": [
+          "VALUE_REPRESENTATION_ITEM('number of annotations',COUNT_MEASURE(0.));",
+          "VALUE_REPRESENTATION_ITEM('number of views',COUNT_MEASURE(0.));"
+        ],
+        "semanticEntityTypeMatches": {}
+      },
+      {
+        "definition": 214,
+        "file": "artifacts/friction-connections/originals/ml01-zeigerwerkswelle2.stp",
+        "sha256": "de339a1f25df97929d8dba0e89e7f1bd2e4478a424057c3fa8f2026bc0724cb3",
+        "sourceCacheSha256": "4b18674a0b4aea32a08d80505c85c12a2be3b107f8d5432b0739d2a701143acb",
+        "sourceVolumeMm3": 1.4733853560841181,
+        "independentVolumeMm3": 1.4733853560841186,
+        "sourceMinusIndependentMm3": 0,
+        "independentMinusSourceMm3": 0,
+        "sourceFaceCount": 13,
+        "independentFaceCount": 13,
+        "occurrence": {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:56/0:1:1:212:2",
+          "definitionId": "d_0_1_1_214",
+          "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56",
+          "name": "ml01 Zeigerwerkswelle2",
+          "worldTransform": [
+            [
+              0.9702922441632518,
+              0.24193586116291393,
+              0.0,
+              1.213244030842087e-15
+            ],
+            [
+              0.24193586116291393,
+              -0.9702922441632518,
+              0.0,
+              5.000000000000003
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -3.450000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "pmiCountItems": [
+          "VALUE_REPRESENTATION_ITEM('number of annotations',COUNT_MEASURE(0.));",
+          "VALUE_REPRESENTATION_ITEM('number of views',COUNT_MEASURE(0.));"
+        ],
+        "semanticEntityTypeMatches": {}
+      },
+      {
+        "definition": 217,
+        "file": "artifacts/friction-connections/originals/ml01-wechseltrieb3-z8-m012.stp",
+        "sha256": "11919aa1731243bbe7ad97c5601d60c036b580d8bd867e6f274a167550a2dc07",
+        "sourceCacheSha256": "8527557f119b622a596afeb83e80a4372de9d4369865e8d2d1331efbeb2985c8",
+        "sourceVolumeMm3": 0.3171693610526712,
+        "independentVolumeMm3": 0.31716936105267135,
+        "sourceMinusIndependentMm3": 0,
+        "independentMinusSourceMm3": 0,
+        "sourceFaceCount": 61,
+        "independentFaceCount": 61,
+        "occurrence": {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:2",
+          "definitionId": "d_0_1_1_217",
+          "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57",
+          "name": "ml01 Wechseltrieb3 z8 m0,12",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              1.2705710541153772e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              5.000000000000003
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.680000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "pmiCountItems": [
+          "VALUE_REPRESENTATION_ITEM('number of annotations',COUNT_MEASURE(0.));",
+          "VALUE_REPRESENTATION_ITEM('number of views',COUNT_MEASURE(0.));"
+        ],
+        "semanticEntityTypeMatches": {}
+      }
+    ],
+    "assemblySemanticEntityTypeMatches": {
+      "DRAUGHTING_PRE_DEFINED_COLOUR": 2
+    },
+    "metadataLimit": "DRAUGHTING_PRE_DEFINED_COLOUR is presentation only; entity scan is not native CAD joint semantics"
+  },
+  "interfaces": [
+    {
+      "definitions": [
+        93,
+        137
+      ],
+      "axisWorldXYMm": [
+        0,
+        0
+      ],
+      "shaftAndBoreRadiusMm": 0.375,
+      "boreWorldZMm": [
+        -1.44,
+        0.33
+      ],
+      "sharedCylindricalWorldZMm": [
+        [
+          -1.44,
+          -0.3473621504535567
+        ],
+        [
+          -0.003280405276436582,
+          0.14671959472356289
+        ]
+      ],
+      "sharedCylindricalLengthMm": 1.2426378495464427,
+      "conditionalWorldRatio": 1,
+      "conditionalLocalIncrementRatio": -1,
+      "conditionalOutputRevolutionSeconds": 3600,
+      "evidenceLevel": "Confirmed nominal contact; inferred friction drive; sticking state not explicitly specified"
+    },
+    {
+      "definitions": [
+        214,
+        217
+      ],
+      "axisWorldXYMm": [
+        0,
+        5
+      ],
+      "shaftConeWorldZMm": [
+        -5.73,
+        -4.95
+      ],
+      "shaftConeEndpointRadiiMm": [
+        0.14,
+        0.145
+      ],
+      "shaftConeSemiAngleRadians": 0.00641016861031161,
+      "boreWorldZMm": [
+        -5.66,
+        -5.0
+      ],
+      "boreRadiusMm": 0.13,
+      "shaftRadiiAtBoreEndsMm": [
+        0.14044871794871797,
+        0.1446794871794872
+      ],
+      "radialInterferenceAtBoreEndsMm": [
+        0.01044871794871795,
+        0.01467948717948718
+      ],
+      "priorSourceCommonVolumeMm3": 0.00724560884708635,
+      "conditionalWorldRatio": 1,
+      "conditionalLocalIncrementRatio": 1,
+      "conditionalOutputRevolutionSeconds": 10800,
+      "evidenceLevel": "Confirmed taper interference; inferred fitted drive; permanent versus slipping behavior unspecified"
+    }
+  ],
+  "validation": {
+    "cadComparison": "passed",
+    "appBuildsTestsBrowserAutomationRun": false,
+    "reason": "Research only; exact original comparisons necessary and explained before execution",
+    "trackedApplicationAndAuthoredFilesByteCompared": 126,
+    "appComparisonBaseline": "a62c820",
+    "newRunningClearanceEvidence": false
+  },
+  "unchangedRuntimeAndDisplaySha256": {
+    "assets/authored/wheel-display-poses.json": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "assets/authored/hand-display-poses.json": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+    "assets/authored/running-movement.json": "d3e3fb68189de4f1c983953d005f97b5658a513a58bdcebc9bbd56530a0871aa",
+    "explorer/src/viewer/RunningMovement.ts": "c54575aa864f1552a4e174933af8d2fdd6936e0a49d487fd3d0a0af93ae8488f",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9",
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b"
+  },
+  "localEvidenceSha256": {
+    "artifacts/friction-connections/comparison.json": "9b7ba163a787bf45e352f4a9d937a24606d0e7153e42b585f8899c9286f8d0fe",
+    "artifacts/motion-works/source.json": "6b1b7b3bf31d560cb3a21568719b39d54ddbad614745bfa64e734421545159c6"
+  },
+  "toolSha256": {
+    "scripts/cad/escapement-clearance/friction_connections.py": "301da1446a56469fceffae16cda5388624653c2a7587e35b6237207822b6c703"
+  },
+  "limitations": [
+    "No maker communication sent",
+    "No published source inspected explicitly specifies the joint sticking/setting states",
+    "Nominal fits do not establish preload, slip torque, manufacturing tolerances or loaded operation",
+    "No modification or redistribution of original CAD; retained locally under ignored directories",
+    "Earlier source-fit and running-mesh limitations remain applicable"
+  ]
+}

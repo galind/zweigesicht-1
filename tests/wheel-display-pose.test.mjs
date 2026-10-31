@@ -13,12 +13,17 @@ const base = () => new THREE.Matrix4().set(...part.worldTransform.flat());
 
 const reviewed = read("../assets/source-manifest/remaining-wheel-contact.json");
 const phases = new Map(Object.entries(reviewed.expectedLocalPhases));
+const rear = read("../assets/source-manifest/reverse-mesh-diagnosis.json").equivalentSimultaneousDiagnosticPacketPhases;
+for (const [definitions, world] of [[[183,184], rear.cannon2WorldDegrees], [[187,188], rear.hour2WorldDegrees]])
+  for (const n of definitions) {
+    const p = manifest.instances.find(p => p.definitionId === `d_0_1_1_${n}`);
+    phases.set(p.id, world * p.worldTransform[2][2]);
+  }
 
-test("only the reviewed occurrences receive rigid static phases", () => {
+test("only the reviewed occurrences receive rigid shaft phases", () => {
   assert.equal(override.sourceSha256, manifest.source.sha256);
   assert.equal(override.wheels.length, phases.size);
   assert.deepEqual(new Map(override.wheels.map((w) => [w.leafId, w.localZDegrees])), phases);
-  assert.equal(override.wheels[0].leafId, id);
   assert.equal(part.definitionId, "d_0_1_1_96");
   for (const p of manifest.instances) {
     const source = new THREE.Matrix4().set(...p.worldTransform.flat());

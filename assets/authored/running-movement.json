@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "frequencyHz": 3,
+  "speedBasis": "Maker-specified ML-01 nominal frequency, independently consistent with the recorded train ratios and 18-degree escape advance per complete oscillation; prescribed motion, not measured dynamics",
+  "statePolicy": "Explorer runs during focus, selection, isolation and flipping; whole/focused disassembly suspends active time and holds the last motion pose relative to presentation. Reassembly resumes when displayed separation reaches zero. Inventory and hidden tabs suspend; Workshop runs only complete seated mechanisms and restores endpoints on Undo; Bench runs the assembled movement.",
+  "powerSourcePolicy": "Barrel II drum/lid retains -E/3600. Barrel I drum/lid and winding train are held during normal running. Both mainsprings retain supplied static shapes; coupled arbors, 62-tooth wheels and arbor screws are unresolved, not established as physically stationary. No unwinding, stored-energy or reserve state is modeled. See docs/POWER_SOURCE_STUDY.md.",
+  "evidence": "docs/RUNNING_MOVEMENT.md",
+  "displayTrainAssumption": "User-authorized normal-running sticking at center shaft/cannon pinion 93/137, same-world-direction 1:1. Modeling assumption, not maker-confirmed evidence.",
+  "displayTrainBoundary": "All seven display packets share E. Fitted hands show current local time with the documented illustrative setting offsets. The power-source boundary remains incomplete; no physical slipping is claimed.",
+  "displayPackets": [
+    {
+      "name": "cannon1",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20"
+      ],
+      "pivot": [
+        0.0,
+        -2.27682456221956e-15,
+        -1.070000000000007
+      ],
+      "ratio": [
+        -1,
+        540
+      ]
+    },
+    {
+      "name": "motion1",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2"
+      ],
+      "pivot": [
+        4.24287382474019,
+        0.246011600000001,
+        -1.2000000000000068
+      ],
+      "ratio": [
+        1,
+        1620
+      ]
+    },
+    {
+      "name": "hour1",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2"
+      ],
+      "pivot": [
+        0.0,
+        0.0,
+        -0.700000000000007
+      ],
+      "ratio": [
+        -1,
+        6480
+      ]
+    },
+    {
+      "name": "motion2",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2"
+      ],
+      "pivot": [
+        1.24009950124815e-15,
+        5.0,
+        -1.150000000000007
+      ],
+      "ratio": [
+        -1,
+        1620
+      ]
+    },
+    {
+      "name": "motion3",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+      ],
+      "pivot": [
+        1.29742652452144e-15,
+        5.0,
+        -5.100000000000007
+      ],
+      "ratio": [
+        -1,
+        1620
+      ]
+    },
+    {
+      "name": "cannon2",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2"
+      ],
+      "pivot": [
+        -4.63553877842402e-15,
+        7.39999999999999,
+        -5.3600000000000065
+      ],
+      "ratio": [
+        1,
+        540
+      ]
+    },
+    {
+      "name": "hour2",
+      "members": [
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2"
+      ],
+      "pivot": [
+        -4.67706903509508e-15,
+        7.39999999999999,
+        -5.590000000000007
+      ],
+      "ratio": [
+        1,
+        6480
+      ]
+    }
+  ],
+  "displayTrainConnection": "For the requested prescribed rear-display animation, model shaft/pinion 214/217 as sticking with same-world-direction 1:1 rotation. Supported fitted-joint interpretation, not maker-confirmed joint state or manufacturing acceptance."
+}

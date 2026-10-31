@@ -5,7 +5,7 @@
     "assets/authored/explosion.json",
     "assets/authored/play-manifest.json"
   ],
-  "decision": "Owner-directed assembly configuration: case-mounting clamps and their fastening screws require a case; the two radial central-dial retaining screws require the central dial. Preserve original source geometry and poses.",
+  "decision": "Owner-directed assembly configuration: case-mounting clamps and their fastening screws require a case; the two radial central-dial retaining screws and thin brass dial washer require the central dial. Washer visibility requested 2026-10-27. Preserve original source geometry and poses.",
   "caseMounts": [
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_38",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_39",
@@ -15,6 +15,7 @@
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_45"
   ],
   "dialRetainers": [
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_9",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_11",
     "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_12"
   ]

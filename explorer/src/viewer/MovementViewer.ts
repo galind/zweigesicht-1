@@ -30,8 +30,9 @@ import {
   type DialPreferences,
 } from '../experience/dials';
 import type { Benchmark } from './benchmark';
-import { handDisplayMatrix, HAND_TIME } from './HandDisplayPose';
+import { handDisplayMatrix } from './HandDisplayPose';
 import { wheelDisplayMatrix } from './WheelDisplayPose';
+import { RunningMovement, loadMovementBuffer } from './RunningMovement';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
@@ -194,6 +195,7 @@ export class MovementViewer {
   };
   manifest: Manifest | null = null;
   parts: Part[] = [];
+  runningMovement?: RunningMovement;
   renderParts = new Map<string, RenderPart>();
   history: Saved[] = [];
   restoringCamera: Saved | null = null;
@@ -398,7 +400,8 @@ export class MovementViewer {
       target: this.controls.target.toArray(),
       maxAssemblyError: this.assemblyError(),
       maxDisplayPoseError: this.assemblyError('presentation'),
-      handTime: this.state.presentation === 'dials' ? HAND_TIME : null,
+      handTime:
+        this.state.presentation === 'dials' ? 'Device local time' : null,
       spreadMembers: this.spread?.size ?? 0,
       assetTransfers: performance
         .getEntriesByType('resource')
@@ -497,11 +500,18 @@ export class MovementViewer {
     )
       return null;
     let error = 0;
+    const animated = new THREE.Matrix4();
     for (const p of this.renderParts.values()) {
-      const expected =
+      let expected =
         reference === 'presentation'
           ? (p.displayMatrix ?? p.assembled)
           : p.assembled;
+      if (reference === 'presentation' && this.runningMovement)
+        expected = this.runningMovement.presentationMatrix(
+          p.source.id,
+          expected,
+          animated,
+        );
       for (let i = 0; i < 16; i++)
         error = Math.max(
           error,
@@ -535,6 +545,7 @@ export class MovementViewer {
     this.requestRender();
   };
   onVisibility = () => {
+    this.runningMovement?.clock.suspend();
     this.lastFrame = 0;
     if (document.hidden && this.frame) {
       cancelAnimationFrame(this.frame);
@@ -543,6 +554,7 @@ export class MovementViewer {
     this.invalidate();
   };
   onContextLost = (e: Event) => {
+    this.runningMovement?.clock.suspend();
     e.preventDefault();
     this.contextLost = true;
     if (this.frame) cancelAnimationFrame(this.frame);
@@ -663,10 +675,17 @@ export class MovementViewer {
         throw error;
       }
       if (this.dead || generation !== this.loadGeneration) return;
+      const movementBuffer = await loadMovementBuffer();
+      if (this.dead || generation !== this.loadGeneration) return;
+      this.runningMovement?.dispose();
       this.ingest(preparedScene);
       preparedScene = undefined;
       this.ingest(recoveredScene);
       recoveredScene = undefined;
+      this.runningMovement = new RunningMovement(
+        movementBuffer,
+        new Map([...this.renderParts].map(([id, part]) => [id, part.mesh])),
+      );
       this.rebuildSpread();
       this.contentPrepared = true;
       this.awaitingFirstFrame = true;
@@ -1719,6 +1738,7 @@ export class MovementViewer {
       await this.select(retry.id);
   }
   retarget() {
+    this.runningMovement?.restore();
     // Fold the actually displayed inventory turn into each departing pose before
     // starting the ordinary assembly transition; interruption cannot snap back.
     if (this.inventoryApplied && this.state.layout !== 'spread') {
@@ -1974,6 +1994,18 @@ export class MovementViewer {
         p.motion = undefined;
       }
     }
+    this.runningMovement?.hands.configure(
+      this.state.layout === 'assembly'
+        ? [...this.renderParts.values()]
+            .filter((p) => this.fitted.has(p.source.id))
+            .map((p) => ({
+              id: p.source.id,
+              mesh: p.mesh,
+              reference: p.displayMatrix ?? p.assembled,
+            }))
+        : [],
+      true,
+    );
     this.requestRender();
   }
   applyPose(dt: number) {
@@ -2143,6 +2175,9 @@ export class MovementViewer {
     // Keep rendering a queued turn after the entry camera and poses arrive.
     moving = !!this.inventoryTravel || moving;
     if (!moving) this.displayedExplosionState = { ...this.state };
+    return moving;
+  }
+  updateSelectionBox() {
     if (this.state.part) {
       const b = new THREE.Box3();
       for (const p of this.renderParts.values())
@@ -2151,7 +2186,6 @@ export class MovementViewer {
       this.selectionBox.box.copy(b);
       this.selectionBox.visible = !b.isEmpty();
     } else this.selectionBox.visible = false;
-    return moving;
   }
   keyDown = (e: KeyboardEvent) => {
     if (!this.ready) return;
@@ -2339,6 +2373,7 @@ export class MovementViewer {
       const size = this.renderer.getSize(new THREE.Vector2());
       if (size.x !== width || size.y !== height) this.resize();
     }
+    this.runningMovement?.restore();
     const interval = this.lastFrame ? now - this.lastFrame : 0;
     const dt = Math.min(interval / 1000, 0.1);
     this.lastFrame = now;
@@ -2402,13 +2437,27 @@ export class MovementViewer {
     }
     this.ensureFramingRange();
     const controlsChanged = this.controls.update();
+    const running =
+      this.runningMovement?.update(
+        now,
+        this.contentPrepared &&
+          this.state.layout === 'assembly' &&
+          !this.state.separation &&
+          !this.state.partSpread &&
+          // Wait for the displayed pieces to finish reassembling as well.
+          !this.displayedExplosionState?.separation &&
+          !this.displayedExplosionState?.partSpread,
+        this.contentPrepared && this.state.layout === 'assembly',
+      ) ?? false;
     const rendered =
+      running ||
       this.needsRender ||
       moving ||
       poseWasMoving ||
       cameraWasMoving ||
       controlsChanged;
     if (rendered) {
+      this.updateSelectionBox();
       try {
         this.renderer.render(this.scene, this.camera);
         this.beautyTriangles = this.renderer.info.render.triangles;
@@ -2467,6 +2516,7 @@ export class MovementViewer {
       this.emit();
     }
     const continuing =
+      running ||
       moving ||
       controlsChanged ||
       !!this.travel ||
@@ -2572,6 +2622,8 @@ export class MovementViewer {
     this.dead = true;
     this.loadGeneration++;
     cancelAnimationFrame(this.frame);
+    this.frame = 0;
+    this.lastFrame = 0;
     this.observer?.disconnect();
     document.removeEventListener('visibilitychange', this.onVisibility);
     this.motionPreference?.removeEventListener(
@@ -2591,6 +2643,7 @@ export class MovementViewer {
     this.controls?.removeEventListener('start', this.manual);
     this.controls?.removeEventListener('change', this.invalidate);
     this.controls?.dispose();
+    this.runningMovement?.dispose();
     this.disposeObject(this.root);
     this.selectionBox.geometry.dispose();
     (this.selectionBox.material as THREE.Material).dispose();

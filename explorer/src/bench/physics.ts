@@ -19,12 +19,14 @@ type Solid = {
   tree: MeshBVH;
   inverse: THREE.Matrix4;
   bounds: THREE.Box3;
+  referencePose?: THREE.Matrix4;
+  referenceBounds?: THREE.Box3;
 };
 /** BVHs are per reusable CAD definition. No proxy floors cover source openings. */
 export class CollisionWorld {
   solids: Solid[] = [];
   trees = new Map<THREE.BufferGeometry, MeshBVH>();
-  add(mesh: THREE.Mesh) {
+  add(mesh: THREE.Mesh, referencePose?: THREE.Matrix4) {
     let tree = this.trees.get(mesh.geometry);
     if (!tree) {
       tree = new MeshBVH(mesh.geometry, { indirect: true, maxLeafSize: 12 });
@@ -36,6 +38,10 @@ export class CollisionWorld {
       tree,
       inverse: mesh.matrixWorld.clone().invert(),
       bounds: new THREE.Box3().setFromObject(mesh),
+      referencePose: referencePose?.clone(),
+      referenceBounds: referencePose
+        ? mesh.geometry.boundingBox!.clone()
+        : undefined,
     });
   }
   sync() {
@@ -44,6 +50,16 @@ export class CollisionWorld {
       // those leaves in Three r186; force them before copying collision matrices.
       s.mesh.matrixWorldNeedsUpdate = true;
       s.mesh.updateWorldMatrix(true, false);
+      if (s.referencePose && s.referenceBounds) {
+        // Prescribed internals are visual only. Keep the existing collision pose
+        // in the moving station frame; never pair a deformed mesh with a rest BVH.
+        if (s.mesh.parent)
+          s.inverse.copy(s.mesh.parent.matrixWorld).multiply(s.referencePose);
+        else s.inverse.copy(s.referencePose);
+        s.bounds.copy(s.referenceBounds).applyMatrix4(s.inverse);
+        s.inverse.invert();
+        continue;
+      }
       s.inverse.copy(s.mesh.matrixWorld).invert();
       s.bounds
         .copy(s.mesh.geometry.boundingBox!)

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "baselineCommit": "b5307a7b13d5100340d91825ce77fcd8868991c3",
+  "reason": "User revised preference: disassembly must not run.",
+  "policy": "Pause whole and focused disassembly when either requested or displayed separation is nonzero. Resume retained clock after reassembly, with no catch-up. Focus/reveal, selection, isolation and flips remain active without disassembly.",
+  "unchanged": "Hands, winding/setting, other exclusions, geometry, phases, ratios, frequency, RunningMovement clock and transformations, Workshop and Bench.",
+  "priorEvidence": "assets/source-manifest/inspection-movement.json; its running-disassembly policy is superseded.",
+  "validation": {
+    "focusedTests": 19,
+    "browserChecks": 25,
+    "typecheck": "pass",
+    "lint": "pass",
+    "productionBuild": "pass; existing vinext classification notice",
+    "disassemblyIntervals": [
+      {
+        "active": true,
+        "delta": 1.6000000000000938,
+        "group": "regulation",
+        "separation": 0,
+        "partSpread": 0
+      },
+      {
+        "active": false,
+        "delta": 0,
+        "group": "regulation",
+        "separation": 0,
+        "partSpread": 1
+      },
+      {
+        "active": true,
+        "delta": 1.1166000000000338,
+        "group": null,
+        "separation": 0,
+        "partSpread": 0
+      },
+      {
+        "active": false,
+        "delta": 0,
+        "group": null,
+        "separation": 1,
+        "partSpread": 0
+      },
+      {
+        "active": true,
+        "delta": 0.5499000000000152,
+        "group": null,
+        "separation": 0,
+        "partSpread": 0
+      }
+    ],
+    "frameSamples": {
+      "frames": 1576,
+      "policyErrors": 0,
+      "pausedFrames": 416,
+      "maxError": 2.93067336376987e-14,
+      "handError": 7.119291619286993e-15,
+      "handSamples": 19065,
+      "selectionFrames": 73,
+      "selectionError": 0
+    }
+  },
+  "limitations": "Prescribed kinematics. Existing fit/overlap, sampled clearance and rear-hour precision limitations remain; no new CAD claims. Browser visibility and Workshop completion use synthetic fixtures.",
+  "filesSha256": {
+    "PROGRESS.md": "3e2270295b4b18dd8020025fcdd422456cfac47b90b6e4ad1b3c5989aeebcc85",
+    "docs/RUNNING_MOVEMENT.md": "3fdd00120de5660457b1235e8b3bfc3a3f899ecc2df0a626b5f8f4c8c0e1f1d3",
+    "assets/authored/running-movement.json": "06f42143bbfa0710d95e0ea3c7403a3035d49b93496c11cefc7189f657c971b1",
+    "explorer/src/viewer/MovementViewer.ts": "90f62e54b40038ac4ec8a18b9644c0e29e316d31c96b0694f5f0e9cf9abdb152",
+    "scripts/movement/browser-check.mjs": "07ce8ef96ee85fc45a0fac558ee1158fcce4ea401d6d8adaf81732593a9995b3",
+    "tests/viewer-scheduling.test.mjs": "310bfc0c2be3406eaa1badc20227012c3715f57e04918191a7544b7b3440767c"
+  },
+  "evidenceSha256": {
+    "tests.txt": "0128de325f482d62819a5d5d49514a37081c990130aef5578493503a70377af3",
+    "typecheck.txt": "4e6bb3b91678b8c724495939039efa7de3416735163e4c73aad9a3d1d31042aa",
+    "lint.txt": "040dc829b5a9ba7d2ba7a2878408419c672332899b3026a63563226a316b99e9",
+    "build.txt": "6bea7cdb0f080e4b09e5e08ff9fe4033985febf4bc2fd4bd4b40b98fc50706d8",
+    "browser-report.json": "e96e97b8d17a3d25a5e33260b2e102a58fb81599ab264d67e5e9d5eb373d7c2a"
+  }
+}

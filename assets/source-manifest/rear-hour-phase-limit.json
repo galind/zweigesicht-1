@@ -1,0 +1,1666 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "baselineCommit": "09f5469f7e9e32eb97fdb4d21ed03a9898a59f30",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "appChanged": false,
+  "installedCandidatePhases": false,
+  "decision": "Phase tuning cannot produce a materially larger running gap in the reviewed nominal rear-hour section geometry. Original-solid witnesses and analytic circular supports corroborate about 45.145 nm; this does not qualify manufacturing clearance.",
+  "sourceOccurrences": {
+    "217": {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:2",
+      "definitionId": "d_0_1_1_217",
+      "name": "ml01 Wechseltrieb3 z8 m0,12",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57",
+      "localTransform": [
+        [
+          -0.9237280213470681,
+          -0.38304900806323805,
+          0.0,
+          -2.68554704060629e-17
+        ],
+        [
+          -0.38304900806323805,
+          0.9237280213470681,
+          0.0,
+          2.3039296165317e-15
+        ],
+        [
+          -0.0,
+          0.0,
+          -1.0,
+          -0.58
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "worldTransform": [
+        [
+          -0.9237280213470681,
+          -0.38304900806323805,
+          0.0,
+          1.2705710541153772e-15
+        ],
+        [
+          -0.38304900806323805,
+          0.9237280213470681,
+          0.0,
+          5.000000000000003
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -5.680000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    },
+    "187": {
+      "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+      "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:1",
+      "definitionId": "d_0_1_1_187",
+      "name": "ml01 Stundenrad2 z32 m0,12",
+      "parentId": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40",
+      "localTransform": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "worldTransform": [
+        [
+          -0.9237280213470681,
+          -0.38304900806323805,
+          0.0,
+          -4.67706903509508e-15
+        ],
+        [
+          -0.38304900806323805,
+          0.9237280213470681,
+          0.0,
+          7.39999999999999
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -5.590000000000007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "freshSourceMatrixMaxError": 0.0
+    }
+  },
+  "phaseCover": {
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "pair": [
+      217,
+      187
+    ],
+    "teeth": [
+      8,
+      32
+    ],
+    "sectionZMm": -5.48,
+    "phaseInvariant": "phase187 + phase217/4",
+    "candidatePhaseDegrees": 0.2716580184397788,
+    "criticalWitnesses": [
+      {
+        "fastDegrees": 11.194225383509076,
+        "polygonGapMm": 4.5257854594554936e-05
+      },
+      {
+        "fastDegrees": 33.76044696062578,
+        "polygonGapMm": 4.525785459456752e-05
+      }
+    ],
+    "phaseRangeDegrees": [
+      -5.625,
+      5.625
+    ],
+    "pitchDegrees": 11.25,
+    "allHourPitchCopiesEdgeErrorMm": 1.3505786488867994e-09,
+    "hourHoleRadiusMm": 1.4999999999446427,
+    "pinionMinimumReachMm": 1.7807999994732693,
+    "radiiMm": [
+      0.6192000005267178,
+      2.07240000059925
+    ],
+    "numericGuardMm": 1e-09,
+    "phaseQueryCount": 129,
+    "globalPolygonRunningGapUpperBoundMm": 4.565326603111185e-05,
+    "cells": [
+      {
+        "lo": -5.625,
+        "hi": -2.8125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": -4.21875,
+          "pointXYMm": [
+            0.45415479723492047,
+            0.07428273264656095
+          ],
+          "interiorRadiusMm": 0.06831283323103331,
+          "maximumFollowerDisplacementMm": 0.050863071901359386
+        }
+      },
+      {
+        "lo": -2.8125,
+        "hi": -1.40625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": -2.109375,
+          "pointXYMm": [
+            0.4578379287618629,
+            0.03953101208502539
+          ],
+          "interiorRadiusMm": 0.034789604543120536,
+          "maximumFollowerDisplacementMm": 0.025432014701169327
+        }
+      },
+      {
+        "lo": -1.40625,
+        "hi": -0.703125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": -1.0546875,
+          "pointXYMm": [
+            0.4602787798505576,
+            0.022186954884100905
+          ],
+          "interiorRadiusMm": 0.01783820171093982,
+          "maximumFollowerDisplacementMm": 0.012716067194818324
+        }
+      },
+      {
+        "lo": -0.703125,
+        "hi": -0.3515625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": -0.52734375,
+          "pointXYMm": [
+            0.46170411515637244,
+            0.013531221479629027
+          ],
+          "interiorRadiusMm": 0.009339472389767338,
+          "maximumFollowerDisplacementMm": 0.0063580410779515715
+        }
+      },
+      {
+        "lo": -0.3515625,
+        "hi": 0.0,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": -0.17578125,
+          "pointXYMm": [
+            0.3920087295689211,
+            0.16739970975755636
+          ],
+          "interiorRadiusMm": 0.00672893859719774,
+          "maximumFollowerDisplacementMm": 0.0063580410779515715
+        }
+      },
+      {
+        "lo": 0.0,
+        "hi": 0.087890625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.0439453125,
+          "pointXYMm": [
+            0.3942891854218007,
+            0.16513103963344425
+          ],
+          "interiorRadiusMm": 0.003375352511639692,
+          "maximumFollowerDisplacementMm": 0.0015895108539055393
+        }
+      },
+      {
+        "lo": 0.087890625,
+        "hi": 0.17578125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.1318359375,
+          "pointXYMm": [
+            0.39500650154524797,
+            0.16406760392566608
+          ],
+          "interiorRadiusMm": 0.0020561808903219563,
+          "maximumFollowerDisplacementMm": 0.0015895108539055393
+        }
+      },
+      {
+        "lo": 0.17578125,
+        "hi": 0.2197265625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.19775390625,
+          "pointXYMm": [
+            0.39542165791795414,
+            0.1631898447027928
+          ],
+          "interiorRadiusMm": 0.001073969398923665,
+          "maximumFollowerDisplacementMm": 0.0007947554415632125
+        }
+      },
+      {
+        "lo": 0.2197265625,
+        "hi": 0.24169921875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.230712890625,
+          "pointXYMm": [
+            0.3955039097350953,
+            0.1626811132951658
+          ],
+          "interiorRadiusMm": 0.0005849324603593671,
+          "maximumFollowerDisplacementMm": 0.00039737772260791163
+        }
+      },
+      {
+        "lo": 0.24169921875,
+        "hi": 0.252685546875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.2471923828125,
+          "pointXYMm": [
+            0.39565188867417966,
+            0.16248273759056822
+          ],
+          "interiorRadiusMm": 0.0003400496098873525,
+          "maximumFollowerDisplacementMm": 0.000198688861532244
+        }
+      },
+      {
+        "lo": 0.252685546875,
+        "hi": 0.2581787109375,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.25543212890625,
+          "pointXYMm": [
+            0.3954257733876052,
+            0.16222571329969396
+          ],
+          "interiorRadiusMm": 0.00021838778835569424,
+          "maximumFollowerDisplacementMm": 9.934443079465802e-05
+        }
+      },
+      {
+        "lo": 0.2581787109375,
+        "hi": 0.263671875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.26092529296875,
+          "pointXYMm": [
+            0.39561114077915915,
+            0.16223082377984638
+          ],
+          "interiorRadiusMm": 0.00013654864711267614,
+          "maximumFollowerDisplacementMm": 9.934443079465802e-05
+        }
+      },
+      {
+        "lo": 0.263671875,
+        "hi": 0.26641845703125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.265045166015625,
+          "pointXYMm": [
+            0.39541192365486777,
+            0.16205752089421713
+          ],
+          "interiorRadiusMm": 7.560735439720253e-05,
+          "maximumFollowerDisplacementMm": 4.967221540089601e-05
+        }
+      },
+      {
+        "lo": 0.26641845703125,
+        "hi": 0.267791748046875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.2671051025390625,
+          "pointXYMm": [
+            0.3953876007485348,
+            0.1620103280230949
+          ],
+          "interiorRadiusMm": 4.4988411408530775e-05,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.267791748046875,
+        "hi": 0.2691650390625,
+        "kind": "distance-upper-bound",
+        "upperMm": 2.4838458279542768e-05,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.2684783935546875,
+          "midpointGapMm": 0.0,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.2691650390625,
+        "hi": 0.270538330078125,
+        "kind": "distance-upper-bound",
+        "upperMm": 2.4838458279542768e-05,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.2698516845703125,
+          "midpointGapMm": 0.0,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.270538330078125,
+        "hi": 0.2712249755859375,
+        "kind": "distance-upper-bound",
+        "upperMm": 3.4617787426527334e-05,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.27088165283203125,
+          "midpointGapMm": 2.2197382997375772e-05,
+          "maximumFollowerDisplacementMm": 1.2418053850502676e-05
+        }
+      },
+      {
+        "lo": 0.2712249755859375,
+        "hi": 0.27156829833984375,
+        "kind": "distance-upper-bound",
+        "upperMm": 4.370536785835402e-05,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.2713966369628906,
+          "midpointGapMm": 3.749399035444683e-05,
+          "maximumFollowerDisplacementMm": 6.209026925258304e-06
+        }
+      },
+      {
+        "lo": 0.27156829833984375,
+        "hi": 0.2716541290283203,
+        "kind": "distance-upper-bound",
+        "upperMm": 4.5422209612216845e-05,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 0.27161121368408203,
+          "midpointGapMm": 4.386760230225284e-05,
+          "maximumFollowerDisplacementMm": 1.5522567313151204e-06
+        }
+      },
+      {
+        "lo": 0.2716541290283203,
+        "hi": 0.2717399597167969,
+        "kind": "distance-upper-bound",
+        "upperMm": 4.565326603111185e-05,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.2716970443725586,
+          "midpointGapMm": 4.409865872114784e-05,
+          "maximumFollowerDisplacementMm": 1.5522567313151204e-06
+        }
+      },
+      {
+        "lo": 0.2717399597167969,
+        "hi": 0.27191162109375,
+        "kind": "distance-upper-bound",
+        "upperMm": 4.338135453264819e-05,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.27182579040527344,
+          "midpointGapMm": 4.027449049136928e-05,
+          "maximumFollowerDisplacementMm": 3.104513462630023e-06
+        }
+      },
+      {
+        "lo": 0.27191162109375,
+        "hi": 0.273284912109375,
+        "kind": "distance-upper-bound",
+        "upperMm": 4.216805301035733e-05,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.2725982666015625,
+          "midpointGapMm": 1.732959473081456e-05,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.273284912109375,
+        "hi": 0.274658203125,
+        "kind": "distance-upper-bound",
+        "upperMm": 2.4838458279542768e-05,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.2739715576171875,
+          "midpointGapMm": 0.0,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.274658203125,
+        "hi": 0.276031494140625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.2753448486328125,
+          "pointXYMm": [
+            0.3953863671656901,
+            -0.1619950245780373
+          ],
+          "interiorRadiusMm": 3.211865419014471e-05,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.276031494140625,
+        "hi": 0.27740478515625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.2767181396484375,
+          "pointXYMm": [
+            0.3953883560898317,
+            -0.16201904766747258
+          ],
+          "interiorRadiusMm": 5.25251459253481e-05,
+          "maximumFollowerDisplacementMm": 2.4836107700893882e-05
+        }
+      },
+      {
+        "lo": 0.27740478515625,
+        "hi": 0.2801513671875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.278778076171875,
+          "pointXYMm": [
+            0.39541268114489353,
+            -0.16206624212235804
+          ],
+          "interiorRadiusMm": 8.314347517755659e-05,
+          "maximumFollowerDisplacementMm": 4.967221540089601e-05
+        }
+      },
+      {
+        "lo": 0.2801513671875,
+        "hi": 0.28564453125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.28289794921875,
+          "pointXYMm": [
+            0.3956118506244283,
+            -0.16223954360810178
+          ],
+          "interiorRadiusMm": 0.00014407073654290573,
+          "maximumFollowerDisplacementMm": 9.934443079465802e-05
+        }
+      },
+      {
+        "lo": 0.28564453125,
+        "hi": 0.296630859375,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.2911376953125,
+          "pointXYMm": [
+            0.3954519891362405,
+            -0.1622938128854328
+          ],
+          "interiorRadiusMm": 0.00026665058685089086,
+          "maximumFollowerDisplacementMm": 0.000198688861532244
+        }
+      },
+      {
+        "lo": 0.296630859375,
+        "hi": 0.3076171875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.3021240234375,
+          "pointXYMm": [
+            0.3954720182832304,
+            -0.16248843360778362
+          ],
+          "interiorRadiusMm": 0.0004296421946584433,
+          "maximumFollowerDisplacementMm": 0.000198688861532244
+        }
+      },
+      {
+        "lo": 0.3076171875,
+        "hi": 0.3515625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.32958984375,
+          "pointXYMm": [
+            0.39557138737931274,
+            -0.16300178185244352
+          ],
+          "interiorRadiusMm": 0.0008361349022092001,
+          "maximumFollowerDisplacementMm": 0.0007947554415632125
+        }
+      },
+      {
+        "lo": 0.3515625,
+        "hi": 0.439453125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.3955078125,
+          "pointXYMm": [
+            0.39517450087039685,
+            -0.16389237454634697
+          ],
+          "interiorRadiusMm": 0.0018168525428225394,
+          "maximumFollowerDisplacementMm": 0.0015895108539055393
+        }
+      },
+      {
+        "lo": 0.439453125,
+        "hi": 0.52734375,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.4833984375,
+          "pointXYMm": [
+            0.3944346827994105,
+            -0.16494774327996276
+          ],
+          "interiorRadiusMm": 0.003134698404656995,
+          "maximumFollowerDisplacementMm": 0.0015895108539055393
+        }
+      },
+      {
+        "lo": 0.52734375,
+        "hi": 0.703125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.615234375,
+          "pointXYMm": [
+            0.39306227094980173,
+            -0.1663345723284233
+          ],
+          "interiorRadiusMm": 0.00513652400220442,
+          "maximumFollowerDisplacementMm": 0.0031790214740439996
+        }
+      },
+      {
+        "lo": 0.703125,
+        "hi": 1.0546875,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 0.87890625,
+          "pointXYMm": [
+            0.3907778474932907,
+            -0.1692116275469146
+          ],
+          "interiorRadiusMm": 0.009184531225276517,
+          "maximumFollowerDisplacementMm": 0.0063580410779515715
+        }
+      },
+      {
+        "lo": 1.0546875,
+        "hi": 1.40625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 1.23046875,
+          "pointXYMm": [
+            0.5068343141677807,
+            0.15994252393946393
+          ],
+          "interiorRadiusMm": 0.00879530952615012,
+          "maximumFollowerDisplacementMm": 0.0063580410779515715
+        }
+      },
+      {
+        "lo": 1.40625,
+        "hi": 2.8125,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 33.76044696062578,
+          "midpointPhaseDegrees": 2.109375,
+          "pointXYMm": [
+            0.45913184914128924,
+            -0.030649309638591207
+          ],
+          "interiorRadiusMm": 0.026036999810008236,
+          "maximumFollowerDisplacementMm": 0.025432014701169327
+        }
+      },
+      {
+        "lo": 2.8125,
+        "hi": 5.625,
+        "kind": "persistent-intersection",
+        "upperMm": 0.0,
+        "witness": {
+          "fastDegrees": 11.194225383509076,
+          "midpointPhaseDegrees": 4.21875,
+          "pointXYMm": [
+            0.48560055440314076,
+            0.1124694252474271
+          ],
+          "interiorRadiusMm": 0.05661208643582955,
+          "maximumFollowerDisplacementMm": 0.050863071901359386
+        }
+      }
+    ],
+    "seconds": 1.3341002089437097,
+    "scope": "Upper bound on minimum running POLYGON clearance for every invariant phase. Fixed witness orientations suffice for an upper bound; no continuous analytic-solid clearance or numerical interval-arithmetic claim."
+  },
+  "precision": {
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "ocpVersion": "7.9.3.1",
+    "candidatePhaseDegrees": 0.2716580184397788,
+    "sections": [
+      {
+        "sectionSamplingParameterMm": 2e-07,
+        "coordinateRoundingMm": 1e-09,
+        "vertices": [
+          16401,
+          66113
+        ],
+        "witnesses": [
+          {
+            "fastDegrees": 11.194225383509076,
+            "gapMm": 4.525785459404387e-05,
+            "overlapAreaMm2": 0.0
+          },
+          {
+            "fastDegrees": 33.76044696062578,
+            "gapMm": 4.525785459489175e-05,
+            "overlapAreaMm2": 0.0
+          }
+        ]
+      },
+      {
+        "sectionSamplingParameterMm": 2e-08,
+        "coordinateRoundingMm": 1e-09,
+        "vertices": [
+          49169,
+          264257
+        ],
+        "witnesses": [
+          {
+            "fastDegrees": 11.194225383509076,
+            "gapMm": 4.515479709612183e-05,
+            "overlapAreaMm2": 0.0
+          },
+          {
+            "fastDegrees": 33.76044696062578,
+            "gapMm": 4.515423398706179e-05,
+            "overlapAreaMm2": 0.0
+          }
+        ]
+      },
+      {
+        "sectionSamplingParameterMm": 2e-09,
+        "coordinateRoundingMm": 1e-09,
+        "vertices": [
+          196625,
+          528449
+        ],
+        "witnesses": [
+          {
+            "fastDegrees": 11.194225383509076,
+            "gapMm": 4.514660628502158e-05,
+            "overlapAreaMm2": 0.0
+          },
+          {
+            "fastDegrees": 33.76044696062578,
+            "gapMm": 4.514589531287273e-05,
+            "overlapAreaMm2": 0.0
+          }
+        ]
+      }
+    ],
+    "wholeSolids": [
+      {
+        "label": "refined",
+        "phaseDegrees": 0.2716580184397788,
+        "fastDegrees": 11.194225383509076,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 4.514515963785835e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.1620130071486887,
+              5.39549032145444,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16197298470672924,
+              5.395511209000451,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 4.514515963785835e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.1620130071486887,
+              5.39549032145444,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16197298470672924,
+              5.395511209000451,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 4.514515963785835e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.1620130071486887,
+              5.39549032145444,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16197298470672924,
+              5.395511209000451,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "refined",
+        "phaseDegrees": 0.2716580184397788,
+        "fastDegrees": 33.76044696062578,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 4.5145227327112994e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16201313610411275,
+              5.395490255240968,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.1619731136080928,
+              5.395511142829694,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 4.5145227327112994e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16201313610411275,
+              5.395490255240968,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.1619731136080928,
+              5.395511142829694,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 4.5145227327112994e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16201313610411275,
+              5.395490255240968,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.1619731136080928,
+              5.395511142829694,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "previous",
+        "phaseDegrees": 0.27165787111074224,
+        "fastDegrees": 11.194225383509076,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 4.5149536363733515e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.16201300667895466,
+              5.395490320554386,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16197298035681043,
+              5.395511210125218,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 4.5149536363733515e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.16201300667895466,
+              5.395490320554386,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16197298035681043,
+              5.395511210125218,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 4.5149536363733515e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.16201300667895466,
+              5.395490320554386,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16197298035681043,
+              5.395511210125218,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "previous",
+        "phaseDegrees": 0.27165787111074224,
+        "fastDegrees": 33.76044696062578,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 4.514085060261519e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16201313657384742,
+              5.395490256141022,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16197311795801064,
+              5.395511141704927,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 4.514085060261519e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16201313657384742,
+              5.395490256141022,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16197311795801064,
+              5.395511141704927,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 4.514085060261519e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16201313657384742,
+              5.395490256141022,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16197311795801064,
+              5.395511141704927,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "minus-0.001-degree",
+        "phaseDegrees": 0.2706580184397788,
+        "fastDegrees": 11.194225383509076,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 7.485265836329568e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.1620098191698678,
+              5.395484212766073,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16194345913107908,
+              5.395518843182127,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 7.485265836329568e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.1620098191698678,
+              5.395484212766073,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16194345913107908,
+              5.395518843182127,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 7.485265836329568e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.1620098191698678,
+              5.395484212766073,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16194345913107908,
+              5.395518843182127,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "minus-0.001-degree",
+        "phaseDegrees": 0.2706580184397788,
+        "fastDegrees": 33.76044696062578,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 1.5438432605075596e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.1620163247966054,
+              5.3954963648317245,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16200263841898557,
+              5.395503508239102,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 1.5438432605075596e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.1620163247966054,
+              5.3954963648317245,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16200263841898557,
+              5.395503508239102,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 1.5438432605075596e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.1620163247966054,
+              5.3954963648317245,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16200263841898557,
+              5.395503508239102,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "plus-0.001-degree",
+        "phaseDegrees": 0.2726580184397788,
+        "fastDegrees": 11.194225383509076,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 1.5438359575385164e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.16201619583701501,
+              5.3954964310414555,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16200250952210266,
+              5.395503574411144,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 1.5438359575385164e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.16201619583701501,
+              5.3954964310414555,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16200250952210266,
+              5.395503574411144,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 1.5438359575385164e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              0.16201619583701501,
+              5.3954964310414555,
+              -5.390000000000007
+            ],
+            "point2": [
+              0.16200250952210266,
+              5.395503574411144,
+              -5.390000000000007
+            ]
+          }
+        ]
+      },
+      {
+        "label": "plus-0.001-degree",
+        "phaseDegrees": 0.2726580184397788,
+        "fastDegrees": 33.76044696062578,
+        "commonMm3": 0,
+        "distances": [
+          {
+            "deflectionMm": 1e-07,
+            "gapMm": 7.485272071352425e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16200994812112668,
+              5.395484146548861,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16194358803692244,
+              5.395518777012656,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-09,
+            "gapMm": 7.485272071352425e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16200994812112668,
+              5.395484146548861,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16194358803692244,
+              5.395518777012656,
+              -5.390000000000007
+            ]
+          },
+          {
+            "deflectionMm": 1e-11,
+            "gapMm": 7.485272071352425e-05,
+            "solutions": 3,
+            "support1": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_FACE",
+              "geometry": "GeomAbs_SurfaceType.GeomAbs_Cylinder"
+            },
+            "support2": {
+              "topology": "TopAbs_ShapeEnum.TopAbs_EDGE",
+              "geometry": "GeomAbs_CurveType.GeomAbs_Circle"
+            },
+            "point1": [
+              -0.16200994812112668,
+              5.395484146548861,
+              -5.390000000000007
+            ],
+            "point2": [
+              -0.16194358803692244,
+              5.395518777012656,
+              -5.390000000000007
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Convergence/sensitivity at selected witnesses only; no continuous solid certificate. Deflection and section sampling parameters are not manufacturing tolerances."
+  },
+  "analyticWitnesses": {
+    "sourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "candidatePhaseDegrees": 0.2716580184397788,
+    "scope": "Independent analytic support distance at two selected witnesses; trimmed-domain applicability corroborated by original-solid distance, not a continuous running certificate.",
+    "witnesses": [
+      {
+        "fastDegrees": 11.194225383509076,
+        "gapMm": 4.514515963785835e-05,
+        "pinionCylinder": {
+          "center": [
+            0.359460493095193,
+            5.292443299695415,
+            -3.917025820598037
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "radiusMm": 0.22272
+        },
+        "hourCircle": {
+          "center": [
+            -0.05419796973470237,
+            5.508329931098693,
+            -5.390000000000007
+          ],
+          "axis": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "radiusMm": 0.24384
+        },
+        "supportCenterDistanceMm": 0.4666051451596381,
+        "untrimmedSupportGapMm": 4.514515963807697e-05,
+        "distanceAgreementMm": 2.1862259181812393e-16
+      },
+      {
+        "fastDegrees": 33.76044696062578,
+        "gapMm": 4.5145227327112994e-05,
+        "pinionCylinder": {
+          "center": [
+            -0.3594605927067773,
+            5.292443177256491,
+            -3.917025820598037
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "radiusMm": 0.22272
+        },
+        "hourCircle": {
+          "center": [
+            0.0541978087068935,
+            5.508329926485112,
+            -5.390000000000007
+          ],
+          "axis": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "radiusMm": 0.24384
+        },
+        "supportCenterDistanceMm": 0.4666051452273275,
+        "untrimmedSupportGapMm": 4.51452273274866e-05,
+        "distanceAgreementMm": 3.736092923749268e-16
+      }
+    ]
+  },
+  "limitations": [
+    "Continuous phase ceiling applies to retained planar polygons. It is not a continuous analytic-solid or manufactured-gear certificate.",
+    "Section quarter-point subdivision parameters and convergence do not certify analytic-curve Hausdorff error. Coordinates round to 1e-9 mm.",
+    "Floating-point queries include a numerical guard, not interval-arithmetic certification.",
+    "Fixed critical orientations suffice for an upper bound; the refined candidate has no new continuous full-running lower bound. Prior lower-bound evidence belongs to the prior candidate.",
+    "10 nm imported edge/vertex tolerances and 5 micrometre STEP length uncertainty are not manufacturing clearances or a statistical error distribution.",
+    "Existing conditional friction/fit states, 101 sampled-only neighbor pairs, original contacts/overlaps and invalid source solids remain unresolved.",
+    "No new runtime or lifecycle tests needed or claimed; application and authored poses unchanged."
+  ],
+  "inputSha256": {
+    "assets/source-manifest/reverse-mesh-diagnosis.json": "7984cbb0814b4644d8f3b56035d601a0318533f4dda64a15b24044a9c45e08b6",
+    "assets/source-manifest/display-phase-review.json": "5828d1856e14c3a4203adab870cbbdb8b70a564f5bbead6ee55709891f017bb7",
+    "assets/source-manifest/motion-works-study.json": "57b4fa64caa4190d8ba5d115386f5fbce4b65af64a692dd26d90c3e53fc822ae",
+    "artifacts/motion-works/source.json": "6b1b7b3bf31d560cb3a21568719b39d54ddbad614745bfa64e734421545159c6",
+    "artifacts/escapement-interfaces-20261026/source-cache.json": "4145d8fd580bac139c09f227e9467c35ddd7656cf108130e28090526b97c2596",
+    "artifacts/escapement-interfaces-20261026/brep/d_0_1_1_217.brep": "8527557f119b622a596afeb83e80a4372de9d4369865e8d2d1331efbeb2985c8",
+    "artifacts/escapement-interfaces-20261026/brep/d_0_1_1_187.brep": "ceff30af288e93e1db664362013db2b9b0282db2ee674b2fc6d7fd0c1fa02b7d"
+  },
+  "inheritedLocalEvidenceSha256": {
+    "artifacts/reverse-mesh-diagnosis/scan.json": "de46d2b4081a9fe29fccbda7f4509fe76e45ccfe10fd81d46bab41149936914e",
+    "artifacts/reverse-mesh-diagnosis/comparison.json": "bebdb535772576bd8b178e6865211f116aeefcd8212b620cf71dd6e18aeedd9e",
+    "artifacts/reverse-mesh-diagnosis/fine-sections.json": "1fcf02806bc6c26bc72232de90b4ace92b2346dcf0133c1757999d9664b30d31",
+    "artifacts/reverse-mesh-diagnosis/fine-search.json": "17d2024c8acaa17bb62cd8ded345fc34e21e394361e8e5f2766b0eda517b1de7",
+    "artifacts/reverse-mesh-diagnosis/fine-bound.json": "86874c92f61bcb7e45faa716b03da0ccc0f9e6b1beb2c3f4436129ca7b251290",
+    "artifacts/reverse-mesh-diagnosis/runtime.json": "0d5719c94403512eba8d74ec022b00c3e3abf9d9a9f0a2a60ad4c2531963cf07"
+  },
+  "localEvidenceSha256": {
+    "artifacts/rear-hour-phase-limit/phase-cover.json": "053d07261f42c5c42f86216a9ae41856e8a113b750f4ce73775c95dd60348a3f",
+    "artifacts/rear-hour-phase-limit/precision.json": "7d4e31e0aca3389b183996922a61239c847b5ea21e6d38077fab7e67ffa65dbb",
+    "artifacts/rear-hour-phase-limit/analytic-witnesses.json": "8f0cc3655f6b9a3fcf2db0bbee4e5831e1bb9d990794398940ebb11c68e01650"
+  },
+  "toolSha256": {
+    "scripts/cad/escapement-clearance/rear_hour_phase_limit.py": "603747f834e3648c596341e4dc3bead94c19a8005d3c32e22d2e083e329107fb",
+    "scripts/cad/escapement-clearance/record_rear_hour_phase_limit.py": "4afac89421a818e35e1082a7a4017a7491fe36a9a73bc21773a117267cbf02a7",
+    "scripts/cad/escapement-clearance/reverse_mesh_diagnosis.py": "4100ba06131f69442630998b70bd7b3c410a52b9af7be6ed1793c815c94f0eb3",
+    "scripts/cad/escapement-clearance/motion_works_sweep.py": "391dfade60d6cf22b987798007e8a4cb23fa1f1d417c002b2f95fdccd0b73a79",
+    "scripts/cad/escapement-clearance/motion_works.py": "41edd2f45dfcb59286de14ccd0dad018c73d96f1a7dfc798979b6a68f2252b74",
+    "scripts/cad/escapement-clearance/train_periods.py": "306cc568d3b98e28b7b4f3489ce2a1685f5a12f61d9c04e7afd8d7a663c5221b",
+    "scripts/cad/escapement-clearance/train_coupling.py": "af24f48cf5f0843665d15cc18d345255225339f40c9476c36660afe5d9e7a7ce",
+    "scripts/cad/escapement-clearance/study.py": "6e8ae6ce362dae5febd5f66f95f5870998d4cd3e6025e19b58a008a1fc0250f8"
+  },
+  "unchangedApplicationSha256": {
+    "assets/authored/assembly-fittings.json": "524f691e5072055f97e9f35f843f696abe122d6d3129b2038d5bc2213905dde2",
+    "assets/authored/atelier-layout.json": "855c540c9839a18ebcd226f66e4967e99815746da2d7345e86c95510344338d0",
+    "assets/authored/bench-parts-layout.json": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9",
+    "assets/authored/component-labels.json": "80322374f90e92a936b1d39e662055b365b07c4da0ca9ff207b008590ed13a7e",
+    "assets/authored/dial-configurations.json": "383b3a3180f668551a68e5da01329e087d577c1914c398088c2f093f7f51def1",
+    "assets/authored/explore-scope.json": "de4f58c4320d12adf994dd736a6382e01736e5169343db7f9d9e9add3cea1534",
+    "assets/authored/explosion.json": "465204f1bf9414402730f4fc174db679d6251cd0328fecc7837391d213e59c44",
+    "assets/authored/hand-display-poses.json": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+    "assets/authored/material-review.json": "6c532f6671a710d64a6b55c937212c71c0dcc65f98b7f4bed7ca4ce5433b11ce",
+    "assets/authored/mechanisms.json": "f9b2e9d9df412dab5df98b53d1beb1fe8fb7250458606f2675c7efb17038f6de",
+    "assets/authored/motion-evidence.json": "a21544ee765e2b67cc005d6fb6be0ed981cc1f41b9f81adbfe148560e0346651",
+    "assets/authored/play-manifest.json": "99dd650eded1b1539dae9ed91982d481a0d66f6a1bce1f76e4c77e99cc848578",
+    "assets/authored/running-movement.json": "d3e3fb68189de4f1c983953d005f97b5658a513a58bdcebc9bbd56530a0871aa",
+    "assets/authored/watch-configurations.json": "7c986558a2d82165bef846eb3c42183ea2d20b07491c302fd61ca040d804d8d4",
+    "assets/authored/wheel-display-poses.json": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "assets/authored/workshop-environment.json": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585",
+    "explorer/.gitignore": "8d79281ba4ab8301d5b83e299c65b6af912acf88443f8ca5c2e203a096e9be81",
+    "explorer/.oxfmtrc.json": "0962fdddb1840a06b5afb918ff3f2ff56bce346082651ec5c3567c01dd809f17",
+    "explorer/.oxlintrc.json": "1a7aa1c7d83b05939e4e697eed9316224caea8958c4ad12837f8be740c13a47d",
+    "explorer/app/bench/page.tsx": "5a70067321affb10ee34d68f93cfd3865644ef76ef73a09a23706e97e2e6df38",
+    "explorer/app/globals.css": "4e80ef35f4a5ff0c05cca0420ee023276bb5895d742db00280c744cdaa371d24",
+    "explorer/app/layout.tsx": "66262475b1666314f5d89308cb9e77b83c6a81fc4f07cb6e208b1f222889308a",
+    "explorer/app/page.tsx": "25d05ebcb29aa6fb5cb77d0862123dd159f051b8f3997325ffab90330c4cb590",
+    "explorer/app/robots.ts": "b4ba23abea05bd848679e5bc22d0715bae9c0ffe0f843b95a0a8550a9a8cf900",
+    "explorer/app/sitemap.ts": "dcfeebc7f135ff3b2a34b8cb259bf0a92bfa32c5be39d68fa2c6504df839e2ed",
+    "explorer/app/workshop/page.tsx": "44fa88fb4e8593e7fb153119120f45a2e63c4174f4eaef970c89c96ffd297a5e",
+    "explorer/components/BenchInvitation.tsx": "39f495e2cbeebafc564f7565b5d2c16df939d7053cfc414755139644beb7d125",
+    "explorer/components/ConfigurationControls.tsx": "c97adfb183237f83d9215639ae19980de03432652413ba884ea7b3b590703cae",
+    "explorer/components/InformationPanel.tsx": "b92cd82ae9b69f115f0dc9762d81b929da08db076ce011ed33ffd8e0ad9dbeb8",
+    "explorer/components/InspectionPanel.tsx": "c00dbb4704b830e891d4023d4f9f94542ca23dd2019ea29fd29d2bbd36148e8d",
+    "explorer/components/MovementLoadingMark.tsx": "19888a4f22689b563be8e928031fe9f39c47e217ac05a44b13fec34ff2044491",
+    "explorer/components/WorkshopChooser.tsx": "6340a368466a2b1ebb5957828aa5b94a6b3d310eff5cb96503bd10a949bfe5f6",
+    "explorer/components/site-chrome.tsx": "6fcfa2dc3f5738d515529902dc7cf07dd147c7bea4e01e19726085696eadbbc5",
+    "explorer/components/ui/select.tsx": "3eb7edd9247c3befeb5d9a1d969b4f8c97ad64ab529e6f7ee7c605f79ca640b6",
+    "explorer/components/ui/sheet.tsx": "7f84304a65bc8c23e309acd0324bb539ef4ada37e9481ee42d54760da8977263",
+    "explorer/components/ui/slider.tsx": "02712ef7978bcf147c9780eeafd902beb97b21d8245603303e9c996621ce8cd2",
+    "explorer/components/viewer-controls.tsx": "e92075d0be1969c07f650fa67467201ebc2cd15332c9b500863ad8a888f31d65",
+    "explorer/feature-flags.d.ts": "bb225e6e31435e765db12edaa5ba7c3c7079e6cdf947f0770adde5a899997e9f",
+    "explorer/lib/utils.ts": "9304a861c8673bee09e0f12de31773abbde503b02e59dfd74763ddec2e37cf05",
+    "explorer/package-lock.json": "0bcc49aeacb79c7aa75f8174d6f4afd17aaf73799efc1ec58619afd280d286ae",
+    "explorer/package.json": "0ae16a84a75572be182a8d45d5241f3ffdf12035aabd9d3221973b307419e0b4",
+    "explorer/public/images/marco-lang-ml01-movement.webp": "bd10451480c5896958285a6087aa0258af775394f672eb2a010e617d6b92ef30",
+    "explorer/public/images/zweigesicht-1-separated-71ba2d171225.jpg": "71ba2d17122578edad6cbecdac4685158cec38a40c837ecf1cdfa211dddff970",
+    "explorer/public/models/assembly-manifest.json": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+    "explorer/public/models/asset-paths.json": "d1d9240fb40c5a475f5cdafb3c679b918aa7f85e20e7be4bb172a6666957fd65",
+    "explorer/public/models/case-lug-recovery.json": "c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2",
+    "explorer/public/models/catalog-0d8f8da54d0b.glb": "0d8f8da54d0bac5787e8f4c0f5202b8921c027e1cc0cb5ffd965d6f8ad265f6a",
+    "explorer/public/models/catalog-0d8f8da54d0b.glb.gz": "528004e61c970406df1d31cecc77881afd99ee3f9fa92c336a430f3ac34ba5f2",
+    "explorer/public/models/diamond-c74ee2731a1f.stl": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+    "explorer/public/models/finish-surfaces-bd9958b41c29.bin": "bd9958b41c2916f67c4689e5285cb94a7079e89b813e1b9afee05956faa0ab70",
+    "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz": "44e721acbbef9b055c3ee3746162595a16c29ae663737da557c3a62b1a5f5644",
+    "explorer/public/models/finish-surfaces.json": "ea694b0a3dc5b9e11ccf61ea7c8fa4a39600d609e4f228c3529dffc1929518ac",
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9",
+    "explorer/public/models/overview-2337df2dca58.glb": "2337df2dca58a8d07d7f3ed5173cdfa67613951ba1b88d88480eb5c06db7aca5",
+    "explorer/public/models/overview-2337df2dca58.glb.gz": "7c64dd12b5b8655e3b7be874c1c2173f39c7c81e0664ba746ebb82b168287a72",
+    "explorer/public/third-party-notices.txt": "1049b86133a5b42097e3ca4b95601decafb03a648d530fa08b1040fc3078de3b",
+    "explorer/scripts/bench-assets.mjs": "4a0611dfc8cb3ef6dd28e3b09f25ac56338a668cd38cc1e5b91151adeef733dd",
+    "explorer/scripts/check-seo.mjs": "5b0677e1bd96c4ea993e62f4dd1aa784780af0fd5a47c7eed26391ed505b921c",
+    "explorer/scripts/measure-build.mjs": "7fc6aa500b710bbd9a9fc7868c75045e5b69367d01a3915d75756bfc5b9db1de",
+    "explorer/scripts/package-vercel.mjs": "f9222f75277b2e2670bebffcf47626dbee723be32d01b4aa7ff4e2ce0e732c90",
+    "explorer/scripts/prune-build-output.mjs": "6e29a0499e0c3a30e3191a440bf44abb965386d5b1649e72094e7400634ef75e",
+    "explorer/src/bench/Bench.tsx": "fab6a3792e07b59e28a60b187bbd32b32aa02b6fe3e314fc085b86910fc11bd7",
+    "explorer/src/bench/BenchControls.tsx": "e82e7f067268472d4d2c3316b460a93746d569fff8399a1d9d33067dd139c469",
+    "explorer/src/bench/BenchViewer.ts": "43c57faa5bbb7b65a3f57d652c0268b8be374f685b657a55262d1290b2afe6f8",
+    "explorer/src/bench/DetachedParts.ts": "207bd7245d8bdc5c1174f99aa9177ced0c82bddb5028a4b5f24d916125ad1491",
+    "explorer/src/bench/SurfaceFinish.ts": "a10a7f94f8e41c9a954614366da0b3b527a16324ba9127d33e42e785a136f131",
+    "explorer/src/bench/bench.css": "d6da1490f8ab4a15d9a75795c176b7045fe370458e3c8056521c3c78a6d902c6",
+    "explorer/src/bench/bindings.ts": "0e19ac164716961e91fbb253deef62562f649d00ef4bb4b4711340db81782fd3",
+    "explorer/src/bench/flip.ts": "364cd7a69e218273b38c7460983cf500f6f4507311cc49d6ad3b7e814edc18e7",
+    "explorer/src/bench/performance.ts": "429a007ccffd252bc254a01ae84fbd5e5f7bfc2715d829f8c8131cb5c89d97e8",
+    "explorer/src/bench/physics.ts": "d52c31866a304e6ca69f35cb1d037ed30fad068d434220079c5cd76444a8589f",
+    "explorer/src/bench/useBenchAccess.ts": "4ce82bcd0bf44d26a8f0906b3d23b8e696b478c0b0a80feeacca91e626b14596",
+    "explorer/src/content/about.ts": "4522d2e41fe1f4ee8d961f57e35c1624570455a686e56de19c20d1432360ae03",
+    "explorer/src/content/seo.ts": "36643b17ee00172f97b0f81e57f96586ca4e8ba418a4392b477b9b6f50b2a7e0",
+    "explorer/src/experience/assemblyFittings.ts": "eb3cc1e12461366165291ea2fd79ce639fce7c52d4a0e4e92c8443d576b77e72",
+    "explorer/src/experience/catalog.ts": "86d1135dd81bba121c23384088c67928bdba0a27f560b8c98a5c11553e23333f",
+    "explorer/src/experience/copy.ts": "08f983e940d35a42dbe6403bba03a7dcef64d2f7139e5242c72c3d7bc55a0b52",
+    "explorer/src/experience/dials.ts": "8b1eaf36d696ed7e38d8e97016d3d1fe267ab822540a94c0d8a1d7f54b42cb68",
+    "explorer/src/experience/emphasis.ts": "77ac6a1eab3eb68d732c3ba29c48d0537283ebad84a3c9e09f22dab1ff533bcf",
+    "explorer/src/experience/explosion.ts": "7c4a9b02716226113702cb601ad1170782f172561b350705bc19ff3326615a1d",
+    "explorer/src/experience/loading.ts": "6c8eca45ca6483462196645481c7ab1516205d1771a0623029f8c23a41745c82",
+    "explorer/src/experience/motion.ts": "4703716b15fdca3c352eb919a64c190b791a27c9ef15dbeb35b029da29d66e56",
+    "explorer/src/experience/observeElementResize.ts": "f0477f5ea479bbd2e694e53d2a59c9dbd18680f4e9bf43b0656c919f04a85fd1",
+    "explorer/src/experience/spread.ts": "e883b25f34e0f808f65b5bd391a8d9861e5c7e609b36b979839ec8396d188afb",
+    "explorer/src/experience/state.ts": "1dc3043ab1e1f6d6006ae4307b05bf947c44788bb219369b43249f4ad9729105",
+    "explorer/src/experience/useTextScalePreview.ts": "37eb33139ee078c214b44b700fbdcd080ed0c637bf133afd0c03dbccc110a3e3",
+    "explorer/src/experience/watch.ts": "0372a8420274cd60226971212ef1239671116752f32acd2b2bbf84cb78f6f254",
+    "explorer/src/experience/webmcp.ts": "57ef4486f87da8a9f13e6a83a0123fb42d6705565eaf468d17be49fa78ae0d1c",
+    "explorer/src/play/Play.tsx": "e83da89149aa067f3de2c13345843cb313c4c4b1c5002e288bd1b493856fb1f2",
+    "explorer/src/play/PlayViewer.ts": "1b5cb8984f4a9da842440379f65152901257e5395caff6d1cb01434517359c6b",
+    "explorer/src/play/accessAudit.ts": "40dff456b1e83573d678a689190637460232277b2ad1f90fb2c4a2d12491c83c",
+    "explorer/src/play/fixedViews.ts": "9f7db6eec347fa6b36ae3af0f3c3486fe4740758e3b4876c8762beaa9beb8ed0",
+    "explorer/src/play/play.css": "0b801507e5b26dec96f3a2ee603a2daf59e1afd40a57e9f6b3eabae4884ed7b1",
+    "explorer/src/play/state.ts": "58abd9e76f24f5be5b013b5a172703bc8fcdf2e964ab31e63102e6881f22f94f",
+    "explorer/src/play/thumbnailColor.ts": "d95eb4d1457aa48cc52d20aedf1f0c7a5b5942e89b1ff9c652b8db9d30442434",
+    "explorer/src/play/types.ts": "212586a2bc4380d85654d756fa1a5618eede92c9ea8d0e87dc3cde1b71b3eb3c",
+    "explorer/src/viewer/CameraFrame.ts": "f3b183c00dfca1f35861bd6582cd056c4f5de0c0686fbf530d562e7bb590b1af",
+    "explorer/src/viewer/CasePose.ts": "79c03c596ef911b35e8f0fce8ad9a140f45e72cad325d926b1083e0843d1b17d",
+    "explorer/src/viewer/CaseRecovery.ts": "8d5db2ef3f0e7232d6de279bfd09bb84e5d447e8ed662bee230ce7a6399e5078",
+    "explorer/src/viewer/DiamondOptics.ts": "3de352eb6f48dd5ff0d2f6ba419a3abe54f729b0e772a70b84cfe182618f9762",
+    "explorer/src/viewer/FrostedSurface.ts": "ecb49099bc54c423b7bef3846cf20d641b5884c7104502c00aa63a5d5228520e",
+    "explorer/src/viewer/GraphicsResources.ts": "6bf3b25c009afd370928e9ffe68effa0351830ba9a53b08db98ee988647948a0",
+    "explorer/src/viewer/HandDisplayPose.ts": "caf41b8983fa4708ef8d7bd6f5ea569f0b253d7f20e3dbc3ab4281292f9cfab6",
+    "explorer/src/viewer/MovementViewer.ts": "242db020770238576060a83fb874bc8a60f0ebea428dd31128e3d81587e96529",
+    "explorer/src/viewer/RecoveredDiamond.ts": "da623bf638d1a93f53e3305285232bda5d48a7df430f4573c61d849d7c5c0c54",
+    "explorer/src/viewer/RunningMovement.ts": "c54575aa864f1552a4e174933af8d2fdd6936e0a49d487fd3d0a0af93ae8488f",
+    "explorer/src/viewer/SourceSurfaces.ts": "fb0610c938f40e12a216f844d05f2e9e484163644d65a4fe68218954fdd3e7d8",
+    "explorer/src/viewer/StudioEnvironment.ts": "3172b470ad7dc4e9319887132b11670bc9a3b4a1f0c051a518f67935f996e9d1",
+    "explorer/src/viewer/SurfaceOcclusion.ts": "c09132c4df8dee3fca022ec05acd655f0af98a6cfc2dbe95d2808d6b72333b59",
+    "explorer/src/viewer/WheelDisplayPose.ts": "5ae84a3356084830cc5a87ff5b46f1144acd9ee0a32c582d5a16ca122c5cb4af",
+    "explorer/src/viewer/benchmark.ts": "55ac815db726a398b1c372653fd5ca3b856b21870018e814be29b7d4f4877d86",
+    "explorer/src/viewer/cameraValidation.ts": "a36f54ea3451d58e5ce9f97e868245b8b92c14192152be461ba8bfa26686b689",
+    "explorer/src/viewer/capture.ts": "c00c3e581864eeabf006091c1d54154750123dbcbecc6f43088e9220ea53ff0d",
+    "explorer/src/viewer/dialValidation.ts": "4cb913ae8f0f8c382f3e717a13f4e513271dbf54d385d483ae1338b9e76774c3",
+    "explorer/src/viewer/disassemblyValidation.ts": "185b1a973aea348359111926bdeda5bbd53ff4f9c876c7697bc7f946d4076da1",
+    "explorer/src/viewer/explosionValidation.ts": "53a77572f4ca2b5bc388303e11f56e04b8dacfafff4ec0c22c16b34666785383",
+    "explorer/src/viewer/frostReview.ts": "179f1f8aeb30a0a74f0cd5120668c2d040cefac3e9aaab3787b4ba8b67df90a3",
+    "explorer/src/viewer/frostValidation.ts": "4f708b674a5856d9986e47eacf4074bfe7b86b123cf1832ce6807a2a93e435bb",
+    "explorer/src/viewer/inventoryValidation.ts": "e90c7f8892d001f41e50d154fbf43f7bd2dd0b1126381cd3c939e58c684db5f4",
+    "explorer/src/viewer/materials.ts": "1a08b0e17a5981b133647d8bba4f5609a183b1efbb0ba3fbb2b6b6d6c888b87d",
+    "explorer/src/viewer/uxValidation.ts": "8444ddfe1ea2a6d81346c9a163c37dd88e044ba0d637714af12a718e28385768",
+    "explorer/src/viewer/validation.ts": "bc00cece4515d9af4ffd02a2c0e6820ddbc1b6349166129a36c677a48dfb3ace",
+    "explorer/src/viewer/watchValidation.ts": "096a05eedf7da9160b358f3e06a978a0b0831917794acbc6d39faf9d00ac6f7d",
+    "explorer/tsconfig.json": "2c0fc914d2f80982628e3e0c2b4790fa229eaa677a182ca352fc9cd7b56c97c1",
+    "explorer/vite.config.ts": "5df43ce3b2b31cffceb565df7a87ffdf5a9ac41d64ad3deb3b45805cdde85794"
+  }
+}

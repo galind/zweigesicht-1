@@ -39,7 +39,7 @@ function fixture() {
     host: {clientWidth: 800, clientHeight: 800}, firstFrameSize: '', initialFraming: false,
     state: {quality: 'high', phase: 'whole'}, scene: new THREE.Scene(), camera, controls,
     presentationMoving: false, travel: null, benchmark: null,
-    applyPose() {return false;}, retargetVisibility() {}, ensureFramingRange() {}, adjustQuality() {},
+    applyPose() {return false;}, updateSelectionBox() {}, retargetVisibility() {}, ensureFramingRange() {}, adjustQuality() {},
     renderer: {getSize(out) {return out.set(800, 800);}, render() {draws++;}, info: {render: {triangles: 1, calls: 1}}},
     surfaceOcclusion: {render() {}}, emit() {snapshots++; this.snapshotPending = false;},
   };
@@ -195,4 +195,48 @@ test('first reveal waits for stable dimensions and refits before exposing a resi
   assert.ok(v.camera.position.distanceTo(prepared) < 1e-8);
   assert.equal(v.frame, 0, 'The extra preparation draw must return to idle');
   v.controls.dispose();
+});
+
+test('inspection sustains RAF; disassembly, inventory and hidden tabs release it', () => {
+  const f = fixture();
+  Object.assign(f.v.state, {layout: 'assembly', separation: 0, partSpread: 0, reveal: 0, isolated: false, part: null});
+  f.v.contentPrepared = true;
+  let updates = 0, suspensions = 0;
+  f.v.runningMovement = {restore() {}, update(now, eligible) {updates++; return eligible;}, clock: {suspend() {suspensions++;}}};
+  f.v.requestRender();
+  for (let i = 0; i < 10; i++) f.frame();
+  assert.equal(f.draws(), 10); assert.equal(f.callbacks.size, 1);
+  f.document.hidden = true; f.v.onVisibility();
+  assert.equal(f.callbacks.size, 0); assert.equal(suspensions, 1);
+  f.document.hidden = false; f.v.onVisibility(); f.frame();
+  assert.equal(f.callbacks.size, 1);
+  for (const patch of [
+    {part: 'inspected-part'}, {isolated: true}, {reveal: 1},
+    {side: 'back'},
+  ]) {
+    Object.assign(f.v.state, patch);
+    f.v.presentationMoving = true;
+    f.v.requestRender();
+    const before = f.draws();
+    for (let i = 0; i < 3; i++) f.frame();
+    assert.equal(f.draws() - before, 3);
+    assert.equal(f.callbacks.size, 1, JSON.stringify(patch));
+  }
+  assert.ok(updates >= 23);
+  for (const key of ['separation', 'partSpread']) {
+    f.v.state[key] = .5; f.v.requestRender(); f.settle();
+    assert.equal(f.callbacks.size, 0, `${key} suspends motion`);
+    f.v.state[key] = 0;
+    f.v.displayedExplosionState = {[key]: .25};
+    f.v.requestRender(); f.settle();
+    assert.equal(f.callbacks.size, 0, 'Reassembly target alone must not resume motion');
+    f.v.displayedExplosionState[key] = 0;
+    f.v.requestRender(); f.frame();
+    assert.equal(f.callbacks.size, 1, 'Resumes after displayed separation reaches zero');
+  }
+  f.v.state.layout = 'spread'; f.v.requestRender(); f.settle();
+  assert.equal(f.callbacks.size, 0);
+  f.v.state.layout = 'assembly'; f.v.requestRender(); f.frame();
+  assert.equal(f.callbacks.size, 1);
+  f.v.controls.dispose();
 });

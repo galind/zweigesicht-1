@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "status": "Support and illustrative spring feasibility established within recorded scope; integration blocked by frozen train boundary",
+  "branch": "codex/escapement-clearance-study",
+  "applicationBaselineCommit": "8c0a36779dc1818bc9b3c9c5c5568fbcbf489ad1",
+  "precedingStudyCommit": "2e7dbbe",
+  "source": {
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b"
+  },
+  "historicalEvidenceCommit": "e5726231760cbc734d77e571bae215b528242acc",
+  "runtimeInstalled": false,
+  "sourceOriginalsModified": false,
+  "mechanicalCycleAccepted": false,
+  "report": "docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md",
+  "inputSha256": {
+    "assets/source-manifest/escapement-clearance-study.json": "289194e24b3464dfd35276a7bce17ae48b070ffdb4e71898e0725f0dc516e262",
+    "explorer/public/models/assembly-manifest.json": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+    "assets/authored/wheel-display-poses.json": "19c321713a8ba7c762c2ed6e839fd8d2a9f5df341807d112bc378e554af7454d",
+    "artifacts/escapement-clearance-20261026/cycle.json": "a115faf11562d732e763523245875f9ef084be9ccf4ac63154342af743b55e99",
+    "artifacts/escapement-clearance-20261026/candidate-fork.brep": "75d85945c20cd0d69b33d34a8b9c641e84ba70840c57b9620d336cbf59a7057b"
+  },
+  "supportAudit": {
+    "sourceLeaves": 365,
+    "validMovingLeaves": 14,
+    "cycleConfigurations": 39,
+    "uniqueSolidCommonChecks": 1937,
+    "boundingExclusions": 185486,
+    "overlappingPairTypes": [
+      {
+        "moving": 113,
+        "other": 116,
+        "maximumCommonMm3": 0.0007853981633974518
+      },
+      {
+        "moving": 115,
+        "other": 116,
+        "maximumCommonMm3": 0.0017256975184580213
+      },
+      {
+        "moving": 234,
+        "other": 243,
+        "maximumCommonMm3": 0.005238983723743885
+      }
+    ],
+    "minimumBearingGapMm": 0.00483323922386708
+  },
+  "hairspring": {
+    "sourceSolidCount": 2,
+    "coilTurns": 14.383854600098068,
+    "stripWidthMm": 0.035,
+    "stripHeightMm": 0.215,
+    "coilLengthMm": 171.01733933516817,
+    "configurations": 38,
+    "minimumNonlocalStripGapMm": 0.09405145300856707,
+    "maximumCoilCenterlineRadiusMm": 3.558188638007798,
+    "maximumEndpointResidualMm": 7.413390691507999e-13,
+    "terminalExactDistanceChecks": 284,
+    "coilEnvelopeSolidChecks": 5,
+    "terminalConservativeGapLowerBoundMm": 0.05021925046666054,
+    "refinedCenterlineMaximumDifferenceMm": 5.587649050115711e-06,
+    "representation": "offline constrained planar centerline; original dimensions and both attachment neighborhoods preserved; original raised terminal fixed"
+  },
+  "trainBoundary": {
+    "sectionConfigurations": 745,
+    "solidConfigurations": 14,
+    "coupling": "world +Z seconds delta = -escape delta / 9, referenced to current displayed E=0 and seconds phase",
+    "minimumCoupledSolidGapMm": 0.022510940097248754,
+    "frozenThirdMaximumCommonMm3": 0.00667837675655028,
+    "upstreamTrainQualified": false
+  },
+  "renderedRecovery": {
+    "invalidOriginalEccentricLeaves": 4,
+    "eccentricEnvelopeSolidChecks": 43,
+    "springEnvelopeRadialGapMm": 0.5737506962522616,
+    "diamondMinimumRotationBoxGapMm": 0.25130975717222537
+  },
+  "limits": [
+    "No force, material, operating frequency or self-sustained dynamics claim",
+    "Sampling and selected sections are not continuous whole-solid clearance certification",
+    "Rendered mesh envelopes do not qualify invalid original eccentric solids",
+    "Source case/hand placements only, not every product preset",
+    "Coupled upstream train, runtime interpolation, product-state behavior and sustained rendering remain open"
+  ],
+  "localEvidenceRoot": "artifacts/escapement-interfaces-20261026",
+  "localEvidenceSha256": {
+    "source-cache.json": "4145d8fd580bac139c09f227e9467c35ddd7656cf108130e28090526b97c2596",
+    "interfaces.json": "1e4c9178f49066fd26d1d4eed07ea980388e614cb461531b10138fd6ea4a052a",
+    "spring.json": "56fd7efa71386eaa6b69925139aeaf25312b4d3e3007e7916ae838551693b0de",
+    "spring-curves.npz": "1991d04a745118320186bcc44bcc2b60e1d49b8edff40017f4abd683b6817847",
+    "spring-interfaces.json": "1e09b9067cf28b508db2ed56d3bd48dee61d7b6d80a4c58505cebf4be69bb7cc",
+    "spring-terminal.json": "a4865ea0e4638ce88ce4aced022a6de4963addbf85732c816ab6d3604afde8ca",
+    "spring-attachments.json": "7cb3b4590823ea8847c4e12fe79bf8bb97c8498b0d18e84a84baf09aabd3d3a1",
+    "train-boundary.json": "bdf9dc3bee6396706bb1763008a3016c2d8cc42a8641ac8deb92401d1f2fd937",
+    "render-envelopes.json": "4230cd7ae0097ff7e01a3fe1bb3a8f2b471d14206f8970ebf82a8598f2387f95",
+    "spring-preview.gif": "fcc3b6075ca7a4d32dfe90cffdfd7c1ef335c60c0ddaed2fa7c93131cbbe127a",
+    "spring-preview.png": "100aab5dc4a61cbbb7db5f7d8ab5436a0a58516dff8d94fd6d5792d6c1da7b81",
+    "spring-preview-checks.json": "18b9fc7460d3e7a6e9cfa4fa26b686694ae5e65e3b10ad0cbdfbc92142465f39"
+  },
+  "scriptSha256": {
+    "scripts/cad/escapement-clearance/interfaces.py": "cc874992b21ba0fdcc70b42c6743475d743d8ab3076a11cbb1f4bf46605231b2",
+    "scripts/cad/escapement-clearance/spring.py": "e9bdf678c0ee90f523f4da2bea703f445d200c9ef503a17caf4470be5cc61220",
+    "scripts/cad/escapement-clearance/spring_interfaces.py": "7ecaded54cad611445604fa1e59b76124dcdf24218d37dffca6cf96d8bec5e72",
+    "scripts/cad/escapement-clearance/spring_terminal.py": "697f8ffb44948f0345eb583f9f7cd5c9f4ab82fc68507500bdab83a8ad2b9bb2",
+    "scripts/cad/escapement-clearance/spring_attachments.py": "218096029c6bcf16151fb9d956eb231d184d167570b2277c8776af01abdc61df",
+    "scripts/cad/escapement-clearance/train_boundary.py": "843faa9fc7b2b9494476df6514d144f45d54567c3101e5f46659b5f036672425",
+    "scripts/cad/escapement-clearance/render_envelopes.py": "c1bfaa8efa914dcfd1310211346669fdedb9691f26b188f15833be10dbb63541",
+    "scripts/cad/escapement-clearance/spring_preview.py": "2b6613b128e4704f49509bcae04c7758ab3772e9724a954f9c0fbf34db82d4f7",
+    "scripts/cad/escapement-clearance/record_interfaces.py": "9a135628544242b2dd8dabcd2534aad9955e5e3221bc6b3a1bce01cf9e15dc33"
+  }
+}

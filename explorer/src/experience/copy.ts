@@ -1,6 +1,10 @@
 import { partLabel, type Part } from './catalog';
 const maker = 'https://www.marcolangwatches.com/en/watches/';
 const cad = 'https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/';
+export const powerSourceNote =
+  'Barrel II turns with the train. Barrel I’s drum is held by the winding mechanism. Spring unwinding and the coupled arbors are not animated.';
+export const powerSourceDetail =
+  'This is a prescribed motion illustration. The mainsprings retain their supplied shapes; their attachments and the motion shared between them are unresolved. The illustration does not track stored energy or reproduce the maker’s 70-hour power reserve.';
 const facts: Record<string, string[]> = {
   regulation: [
     '3 Hz balance frequency',

@@ -6,8 +6,13 @@ built with React, TypeScript and Three.js from the maker's CAD assembly.
 Inspect and isolate components, explore six mechanism groups, separate the
 assembly, and choose case, dial and hand appearances. A separate Workshop at
 `/workshop` offers Easy and Hard assembly puzzles with optional placement help,
-Undo and local saves. This is static construction exploration; movement timing,
-assembly paths and finishes are interpretations, not a servicing guide.
+Undo and local saves. The assembled movement includes a continuously running prescribed escapement and
+train illustration, including both display trains and
+[current-local-time hands](docs/CURRENT_TIME_HANDS.md). The [power-source study](docs/POWER_SOURCE_STUDY.md)
+identifies the series connection; spring unwinding and intermediate arbor motion
+remain explicitly incomplete. Separation holds the last motion pose. Timing, assembly paths
+and finishes are interpretations, not a servicing guide or physical simulation.
+See [running movement](docs/RUNNING_MOVEMENT.md) for scope, state policy and validation.
 
 ## Run locally
 
@@ -36,7 +41,7 @@ Workshop is excluded from indexing and the sitemap.
 ## Explore the workbench
 
 The homepage’s **Explore it in first person** invitation introduces `/bench`: a
-first-person, miniature-scale view of the static movement, its holders and detached
+first-person, miniature-scale view of the illustrated movement, its holders and detached
 watch parts. It opens `/bench` directly, where the controls appear while the scene
 loads. **Start exploring** captures the mouse only after an explicit action.
 This experience requires a keyboard and mouse. Touch-only devices show

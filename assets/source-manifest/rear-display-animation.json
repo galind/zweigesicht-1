@@ -1,0 +1,2067 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "baselineCommit": "5fd50f0",
+  "source": {
+    "role": "complete_assembly",
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "bytes": 43720596,
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+    "format": "STEP ISO-10303-21"
+  },
+  "decision": "Enable three rear packets, extending the existing four front/transfer packets. Prescribed kinematics only; no physical or manufacturing acceptance.",
+  "centerConnectionAssumption": "User-authorized normal-running sticking at center shaft/cannon pinion 93/137, same-world-direction 1:1. Modeling assumption, not maker-confirmed evidence.",
+  "rearConnectionAssumption": "For the requested prescribed rear-display animation, model shaft/pinion 214/217 as sticking with same-world-direction 1:1 rotation. Supported fitted-joint interpretation, not maker-confirmed joint state or manufacturing acceptance.",
+  "remainingBoundary": "All seven display packets share E; the remaining incomplete illustration boundaries are their static hands and the existing power-source boundary. No physical slipping is claimed.",
+  "packets": [
+    {
+      "name": "cannon1",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:20",
+          "definitionId": "d_0_1_1_137",
+          "name": "ml01 Viertelrohr1 z12 m0,177",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -2.27682456221956e-15
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.070000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 12,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "pivot": [
+        0.0,
+        -2.27682456221956e-15,
+        -1.070000000000007
+      ],
+      "ratio": [
+        -1,
+        540
+      ],
+      "meanPeriodSeconds": 3600
+    },
+    {
+      "name": "motion1",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:1",
+          "definitionId": "d_0_1_1_210",
+          "name": "ml01 Wechselrad1 z36 m0,177",
+          "worldTransform": [
+            [
+              -0.21957769440021088,
+              0.9755950164499035,
+              0.0,
+              4.24287382474019
+            ],
+            [
+              -0.9755950164499035,
+              -0.21957769440021088,
+              0.0,
+              0.246011600000001
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.2000000000000068
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 36,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:55/0:1:1:209:2",
+          "definitionId": "d_0_1_1_211",
+          "name": "ml01 Wechseltrieb1 z10 m0,17",
+          "worldTransform": [
+            [
+              -0.17087063414231593,
+              0.9852934722141433,
+              0.0,
+              4.24287382474019
+            ],
+            [
+              0.9852934722141433,
+              0.17087063414231593,
+              0.0,
+              0.2460116000000001
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -1.4500000000000068
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 10,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "pivot": [
+        4.24287382474019,
+        0.246011600000001,
+        -1.2000000000000068
+      ],
+      "ratio": [
+        1,
+        1620
+      ],
+      "meanPeriodSeconds": 10800
+    },
+    {
+      "name": "hour1",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:1",
+          "definitionId": "d_0_1_1_141",
+          "name": "ml01 Stundenrad1 z40 m0,17",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.700000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 40,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:26/0:1:1:140:2",
+          "definitionId": "d_0_1_1_142",
+          "name": "ml01 Butzen Stundenrad1",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              2.27682456221956e-15
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -0.700000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": null,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "pivot": [
+        0.0,
+        0.0,
+        -0.700000000000007
+      ],
+      "ratio": [
+        -1,
+        6480
+      ],
+      "meanPeriodSeconds": 43200
+    },
+    {
+      "name": "motion2",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:56/0:1:1:212:1",
+          "definitionId": "d_0_1_1_213",
+          "name": "ml01 Wechselrad2 z36 m0,177",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              1.24009950124815e-15
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              5.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -1.150000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 36,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:56/0:1:1:212:2",
+          "definitionId": "d_0_1_1_214",
+          "name": "ml01 Zeigerwerkswelle2",
+          "worldTransform": [
+            [
+              0.9702922441632518,
+              0.24193586116291393,
+              0.0,
+              1.213244030842087e-15
+            ],
+            [
+              0.24193586116291393,
+              -0.9702922441632518,
+              0.0,
+              5.000000000000003
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -3.450000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": null,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "pivot": [
+        1.24009950124815e-15,
+        5.0,
+        -1.150000000000007
+      ],
+      "ratio": [
+        -1,
+        1620
+      ],
+      "meanPeriodSeconds": 10800
+    },
+    {
+      "name": "motion3",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:1",
+          "definitionId": "d_0_1_1_216",
+          "name": "ml01 Wechselrad3 z 24 m0,15",
+          "worldTransform": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              1.29742652452144e-15
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              5.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              -5.100000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 24,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:57/0:1:1:215:2",
+          "definitionId": "d_0_1_1_217",
+          "name": "ml01 Wechseltrieb3 z8 m0,12",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              1.2705710541153772e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              5.000000000000003
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.680000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 8,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "pivot": [
+        1.29742652452144e-15,
+        5.0,
+        -5.100000000000007
+      ],
+      "ratio": [
+        -1,
+        1620
+      ],
+      "meanPeriodSeconds": 10800
+    },
+    {
+      "name": "cannon2",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:37/0:1:1:182:1",
+          "definitionId": "d_0_1_1_183",
+          "name": "ml01 Viertelrohr2 z8 m0,15",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -4.63553877842402e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.39999999999999
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.3600000000000065
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 8,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:37/0:1:1:182:2",
+          "definitionId": "d_0_1_1_184",
+          "name": "ml01 Welle Viertelrohr2",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -5.5076741685162385e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.3999999999999915
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.3600000000000065
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": null,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "pivot": [
+        -4.63553877842402e-15,
+        7.39999999999999,
+        -5.3600000000000065
+      ],
+      "ratio": [
+        1,
+        540
+      ],
+      "meanPeriodSeconds": 3600
+    },
+    {
+      "name": "hour2",
+      "members": [
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:1",
+          "definitionId": "d_0_1_1_187",
+          "name": "ml01 Stundenrad2 z32 m0,12",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -4.67706903509508e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.39999999999999
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.590000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": 32,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+          "sourceInstanceId": "0:1:1:1/0:1:1:1:4/0:1:1:83:40/0:1:1:186:2",
+          "definitionId": "d_0_1_1_188",
+          "name": "ml01 Butzen Stundenrad2",
+          "worldTransform": [
+            [
+              -0.9237280213470681,
+              -0.38304900806323805,
+              0.0,
+              -5.507674168516241e-15
+            ],
+            [
+              -0.38304900806323805,
+              0.9237280213470681,
+              0.0,
+              7.3999999999999915
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              -5.590000000000007
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "freshSourceMatrixMaxError": 0.0,
+          "teeth": null,
+          "localZInWorld": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      ],
+      "pivot": [
+        -4.67706903509508e-15,
+        7.39999999999999,
+        -5.590000000000007
+      ],
+      "ratio": [
+        1,
+        6480
+      ],
+      "meanPeriodSeconds": 43200
+    }
+  ],
+  "installedPhaseChanges": {
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1": {
+      "definitionId": "d_0_1_1_183",
+      "previousLocalDegrees": 0,
+      "installedLocalDegrees": 0.9228515625
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2": {
+      "definitionId": "d_0_1_1_184",
+      "previousLocalDegrees": 0,
+      "installedLocalDegrees": 0.9228515625
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1": {
+      "definitionId": "d_0_1_1_187",
+      "previousLocalDegrees": -0.25,
+      "installedLocalDegrees": -0.27165787111074224
+    },
+    "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2": {
+      "definitionId": "d_0_1_1_188",
+      "previousLocalDegrees": -0.25,
+      "installedLocalDegrees": -0.27165787111074224
+    }
+  },
+  "frequencyHz": 3,
+  "beatsPerHour": 21600,
+  "meanEscapeDegreesPerSecond": 54,
+  "allHandsStatic": true,
+  "windingAndSettingExcluded": true,
+  "validation": {
+    "movementTests": 11,
+    "phaseTests": 3,
+    "typecheck": "pass",
+    "lint": "pass",
+    "productionBuild": "pass; existing build notices",
+    "browser": {
+      "checks": [
+        {
+          "name": "Explorer runs automatically",
+          "pass": true,
+          "details": {
+            "active": true,
+            "pose": {
+              "balance": -168.7693833582945,
+              "pallet": -0.15574000945099975,
+              "escape": 107.90000000000052
+            },
+            "render": 104
+          }
+        },
+        {
+          "name": "Explorer uses the exact seven display packets and shared escape phase",
+          "pass": true,
+          "details": {
+            "active": true,
+            "entries": 13,
+            "names": [
+              "cannon1",
+              "motion1",
+              "hour1",
+              "motion2",
+              "motion3",
+              "cannon2",
+              "hour2"
+            ],
+            "totalEntries": 41,
+            "rear": 6,
+            "maxError": 0,
+            "namedMembers": 13
+          }
+        },
+        {
+          "name": "Sustained rendering spans multiple cycles without resource growth",
+          "pass": true,
+          "details": {
+            "start": {
+              "seconds": 2.1999999999999975,
+              "escape": 117.40000000000039,
+              "render": 115,
+              "memory": {
+                "geometries": 135,
+                "textures": 8
+              }
+            },
+            "end": {
+              "seconds": 27.232199999999793,
+              "escape": 1467.4000000000003,
+              "render": 1411,
+              "memory": {
+                "geometries": 135,
+                "textures": 8
+              }
+            },
+            "p50": 16.699999999999818,
+            "p95": 33.39999999999782,
+            "frames": 1296,
+            "updateP50Ms": 0.5,
+            "updateP95Ms": 0.6000000238418579
+          }
+        },
+        {
+          "name": "Nominal escape rate agrees with elapsed active time",
+          "pass": true,
+          "details": {
+            "elapsed": 25.032199999999797,
+            "escapeAdvance": 1350
+          }
+        },
+        {
+          "name": "Visible delayed frame advances elapsed time without a clamp",
+          "pass": true,
+          "details": {
+            "activeDelta": 0.25,
+            "wallDelta": 0.2557999999523163
+          }
+        },
+        {
+          "name": "Separated and inventory views stay static; assembled views resume",
+          "pass": true,
+          "details": [
+            {
+              "patch": {
+                "separation": 1
+              },
+              "active": false,
+              "state": "assembly",
+              "separation": 1,
+              "error": ""
+            },
+            {
+              "patch": {
+                "separation": 0
+              },
+              "active": true,
+              "state": "assembly",
+              "separation": 0,
+              "error": ""
+            },
+            {
+              "patch": {
+                "layout": "spread"
+              },
+              "active": false,
+              "state": "spread",
+              "separation": 0,
+              "error": ""
+            },
+            {
+              "patch": {
+                "layout": "assembly"
+              },
+              "active": true,
+              "state": "assembly",
+              "separation": 0,
+              "error": ""
+            },
+            {
+              "patch": {
+                "dialsVisible": true,
+                "caseVisible": true
+              },
+              "active": true,
+              "state": "assembly",
+              "separation": 0,
+              "error": ""
+            },
+            {
+              "patch": {
+                "dialsVisible": false,
+                "caseVisible": false
+              },
+              "active": true,
+              "state": "assembly",
+              "separation": 0,
+              "error": ""
+            }
+          ]
+        },
+        {
+          "name": "Reassembled Explorer uses the exact seven display packets and shared escape phase",
+          "pass": true,
+          "details": {
+            "active": true,
+            "entries": 13,
+            "names": [
+              "cannon1",
+              "motion1",
+              "hour1",
+              "motion2",
+              "motion3",
+              "cannon2",
+              "hour2"
+            ],
+            "totalEntries": 41,
+            "rear": 6,
+            "maxError": 0,
+            "namedMembers": 13
+          }
+        },
+        {
+          "name": "Fitted front remains running",
+          "pass": true
+        },
+        {
+          "name": "Fitted case flip resumes motion",
+          "pass": true
+        },
+        {
+          "name": "Visibility lifecycle stops time and resumes without catch-up",
+          "pass": true,
+          "details": {
+            "a": 34.165199999999786,
+            "b": 34.165199999999786,
+            "c": 34.165199999999786,
+            "active": true
+          }
+        },
+        {
+          "name": "Isolated inspection stays static",
+          "pass": true
+        },
+        {
+          "name": "Explorer cleanup stops RAF and restores geometry",
+          "pass": true,
+          "details": {
+            "dead": true,
+            "frame": 0,
+            "active": false
+          }
+        },
+        {
+          "name": "Incomplete Workshop is static",
+          "pass": true,
+          "details": {
+            "active": false,
+            "pieces": 259
+          }
+        },
+        {
+          "name": "Completed Workshop uses the exact seven display packets and shared escape phase",
+          "pass": true,
+          "details": {
+            "active": true,
+            "entries": 13,
+            "names": [
+              "cannon1",
+              "motion1",
+              "hour1",
+              "motion2",
+              "motion3",
+              "cannon2",
+              "hour2"
+            ],
+            "totalEntries": 41,
+            "rear": 6,
+            "maxError": 2.710505431213761e-20,
+            "namedMembers": 0
+          }
+        },
+        {
+          "name": "Workshop completion runs and Undo stops",
+          "pass": true,
+          "details": {
+            "complete": true,
+            "undone": false
+          }
+        },
+        {
+          "name": "Workshop cleanup stops RAF",
+          "pass": true,
+          "details": {
+            "dead": true,
+            "frame": 0
+          }
+        },
+        {
+          "name": "Bench assembled movement runs",
+          "pass": true,
+          "details": {
+            "active": true,
+            "ready": true
+          }
+        },
+        {
+          "name": "Bench uses the exact seven display packets and shared escape phase",
+          "pass": true,
+          "details": {
+            "active": true,
+            "entries": 13,
+            "names": [
+              "cannon1",
+              "motion1",
+              "hour1",
+              "motion2",
+              "motion3",
+              "cannon2",
+              "hour2"
+            ],
+            "totalEntries": 41,
+            "rear": 6,
+            "maxError": 0,
+            "namedMembers": 0
+          }
+        },
+        {
+          "name": "Bench flip preserves running child motion",
+          "pass": true
+        },
+        {
+          "name": "Disposal stops animation and restores geometry",
+          "pass": true,
+          "details": {
+            "frame": 0,
+            "active": false,
+            "dead": true
+          }
+        },
+        {
+          "name": "No browser runtime or shader errors",
+          "pass": true,
+          "details": []
+        },
+        {
+          "name": "All application assets load",
+          "pass": true,
+          "details": [
+            {
+              "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+              "status": 404
+            },
+            {
+              "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+              "status": 404
+            },
+            {
+              "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+              "status": 404
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "httpFailures": [
+        {
+          "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+          "status": 404
+        },
+        {
+          "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+          "status": 404
+        },
+        {
+          "url": "http://127.0.0.1:4178/_vercel/insights/script.js",
+          "status": 404
+        }
+      ]
+    }
+  },
+  "clearance": {
+    "transformEquivalence": {
+      "sourceOccurrences": 427,
+      "leafOccurrences": 365,
+      "fittedHandOccurrences": 15,
+      "maximumInstalledVsReviewedMatrixError": 5.551115123125783e-17,
+      "scope": "All source/display transforms match the jointly reviewed candidate; no tooth/axis changes, all fitted hands unchanged."
+    },
+    "fullTurnBoxExclusions": 4516,
+    "inheritedIdenticalNeighborPairs": 231,
+    "statusCounts": {
+      "continuous-swept-envelope": 113,
+      "sampled-clear": 101,
+      "invariant-relative-nonpenetration": 3,
+      "continuous-radial-bound": 8,
+      "retained-fit-overlap": 6
+    },
+    "unqualifiedSourcePairs": 91,
+    "springCoilEnvelope": [
+      {
+        "definition": 137,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 5.113720160863569
+      },
+      {
+        "definition": 141,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 2.642138347139083
+      },
+      {
+        "definition": 142,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 5.743537273995061
+      },
+      {
+        "definition": 183,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_1",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 13.013742331230349
+      },
+      {
+        "definition": 184,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 13.593135485595461
+      },
+      {
+        "definition": 187,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_1",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 11.261899761694588
+      },
+      {
+        "definition": 188,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 13.372623963381455
+      },
+      {
+        "definition": 210,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_1",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 2.6331558162860285
+      },
+      {
+        "definition": 211,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_55__0_1_1_209_2",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 5.630627666539384
+      },
+      {
+        "definition": 213,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_1",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 7.001331353637622
+      },
+      {
+        "definition": 214,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 10.816878881411608
+      },
+      {
+        "definition": 216,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 8.973512700772266
+      },
+      {
+        "definition": 217,
+        "id": "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2",
+        "fullTurnBoxToPriorCoilEnvelopeGapMm": 10.841502810112269
+      }
+    ],
+    "runtime": {
+      "scope": "Installed seven display packets with static hands; unchanged geometry and reviewed rear phases; sampled triangles, not continuous bounds",
+      "fittedHandOccurrences": 15,
+      "maxRigidError": 1.3322676295501878e-15,
+      "maxIndependentPointErrorMm": 1.2992362741215402e-10,
+      "pairs": [
+        {
+          "pair": [
+            137,
+            210
+          ],
+          "periodSeconds": 10800,
+          "intersectionConfigurations": 6913,
+          "intersections": 0,
+          "distanceSamples": 9,
+          "minimumSampledTriangleGapMm": 0.01332335756038473,
+          "worstDistanceSampleEscapeDegrees": 583200,
+          "sourceCriticalWitnesses": []
+        },
+        {
+          "pair": [
+            211,
+            141
+          ],
+          "periodSeconds": 43200,
+          "intersectionConfigurations": 7681,
+          "intersections": 0,
+          "distanceSamples": 9,
+          "minimumSampledTriangleGapMm": 0.02106412455392458,
+          "worstDistanceSampleEscapeDegrees": 2041200,
+          "sourceCriticalWitnesses": []
+        },
+        {
+          "pair": [
+            210,
+            213
+          ],
+          "periodSeconds": 10800,
+          "intersectionConfigurations": 6913,
+          "intersections": 0,
+          "distanceSamples": 9,
+          "minimumSampledTriangleGapMm": 0.005671854899410832,
+          "worstDistanceSampleEscapeDegrees": 510300,
+          "sourceCriticalWitnesses": []
+        },
+        {
+          "pair": [
+            183,
+            216
+          ],
+          "periodSeconds": 10800,
+          "intersectionConfigurations": 4609,
+          "intersections": 0,
+          "distanceSamples": 9,
+          "minimumSampledTriangleGapMm": 0.008191154374336962,
+          "worstDistanceSampleEscapeDegrees": 510300,
+          "sourceCriticalWitnesses": [
+            {
+              "sourceFastDegrees": 0,
+              "escapeDegrees": 498.33984375,
+              "sourceSolidGapMm": 0.00877741004807328,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.009312679710211083
+            },
+            {
+              "sourceFastDegrees": 5.625,
+              "escapeDegrees": 3535.83984375,
+              "sourceSolidGapMm": 0.003968056701531435,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.004427344186311398
+            },
+            {
+              "sourceFastDegrees": 22.5,
+              "escapeDegrees": 12648.33984375,
+              "sourceSolidGapMm": 0.006623545478007571,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.007250522665025062
+            },
+            {
+              "sourceFastDegrees": 39.375,
+              "escapeDegrees": 21760.83984375,
+              "sourceSolidGapMm": 0.003987243953907212,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.004449954807172294
+            },
+            {
+              "sourceFastDegrees": 529.62890625,
+              "escapeDegrees": 286497.94921875,
+              "sourceSolidGapMm": 0.0028195658240974435,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.0033185998396407694
+            }
+          ]
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "periodSeconds": 43200,
+          "intersectionConfigurations": 6145,
+          "intersections": 0,
+          "distanceSamples": 9,
+          "minimumSampledTriangleGapMm": 0.005322839141589101,
+          "worstDistanceSampleEscapeDegrees": 2041200,
+          "sourceCriticalWitnesses": [
+            {
+              "sourceFastDegrees": 0,
+              "escapeDegrees": 0,
+              "sourceSolidGapMm": 0.004986975300593154,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.005322894573877604
+            },
+            {
+              "sourceFastDegrees": 5.625,
+              "escapeDegrees": 2323687.5,
+              "sourceSolidGapMm": 0.0011162564973559096,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.001468395273323719
+            },
+            {
+              "sourceFastDegrees": 22.5,
+              "escapeDegrees": 2296350,
+              "sourceSolidGapMm": 0.002698440957219362,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.0032163235618951503
+            },
+            {
+              "sourceFastDegrees": 39.375,
+              "escapeDegrees": 2269012.5,
+              "sourceSolidGapMm": 0.0011349699422268434,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.0014835807957596352
+            },
+            {
+              "sourceFastDegrees": 708.896484375,
+              "escapeDegrees": 1184387.6953125,
+              "sourceSolidGapMm": 4.580792731506884e-05,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.0002866332406518719
+            },
+            {
+              "sourceFastDegrees": 33.760986328125,
+              "escapeDegrees": 2278107.2021484375,
+              "sourceSolidGapMm": 4.514132133764976e-05,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.0002963616068971545
+            },
+            {
+              "sourceFastDegrees": 11.19140625,
+              "escapeDegrees": 2314669.921875,
+              "sourceSolidGapMm": 4.515218376666687e-05,
+              "triangleIntersection": false,
+              "triangleGapMm": 0.00029616458127195686
+            }
+          ]
+        }
+      ]
+    },
+    "runtimeNeighborConfigurations": 690,
+    "retainedRuntimeContacts": [
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_24__0_1_1_37_1"
+        ],
+        "definitions": [
+          137,
+          38
+        ],
+        "variant": "source-display",
+        "sourceStatus": "sampled-clear",
+        "maximumSourceCommonMm3": 0,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 64800,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 129600,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_20",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_3__0_1_1_92_1"
+        ],
+        "definitions": [
+          137,
+          93
+        ],
+        "variant": "source-display",
+        "sourceStatus": "invariant-relative-nonpenetration",
+        "maximumSourceCommonMm3": 0,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_1",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_54__0_1_1_194_1"
+        ],
+        "definitions": [
+          141,
+          195
+        ],
+        "variant": "source-display",
+        "sourceStatus": "sampled-clear",
+        "maximumSourceCommonMm3": 0,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 777599.9999999984,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 1555200,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_26__0_1_1_140_2",
+          "p_0_1_1_1__0_1_1_1_2__0_1_1_22_22__0_1_1_33_1"
+        ],
+        "definitions": [
+          142,
+          34
+        ],
+        "variant": "source-display",
+        "sourceStatus": "sampled-clear",
+        "maximumSourceCommonMm3": 0,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 777599.9999999984,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 1555200,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2"
+        ],
+        "definitions": [
+          184,
+          8
+        ],
+        "variant": "source-display",
+        "sourceStatus": "retained-fit-overlap",
+        "maximumSourceCommonMm3": 0.0008574581393438213,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 64800,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 129600,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 140,
+            "escapeDegrees": 75599.99999999974,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2"
+        ],
+        "definitions": [
+          184,
+          8
+        ],
+        "variant": "source-display",
+        "sourceStatus": "retained-fit-overlap",
+        "maximumSourceCommonMm3": 0.0008574581393438659,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 64800,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 129600,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 220,
+            "escapeDegrees": 118800,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2"
+        ],
+        "definitions": [
+          184,
+          188
+        ],
+        "variant": "source-display",
+        "sourceStatus": "sampled-clear",
+        "maximumSourceCommonMm3": 0,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 1440,
+            "escapeDegrees": 777599.9999999984,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 2880,
+            "escapeDegrees": 1555200,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2"
+        ],
+        "definitions": [
+          188,
+          12
+        ],
+        "variant": "source-display",
+        "sourceStatus": "retained-fit-overlap",
+        "maximumSourceCommonMm3": 0.0037379716589967457,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 777599.9999999984,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 1555200,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 190,
+            "escapeDegrees": 1231200,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2"
+        ],
+        "definitions": [
+          188,
+          12
+        ],
+        "variant": "source-display",
+        "sourceStatus": "retained-fit-overlap",
+        "maximumSourceCommonMm3": 0.0037379716589969886,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 777599.9999999984,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 1555200,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 190,
+            "escapeDegrees": 1231200,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+        ],
+        "definitions": [
+          214,
+          217
+        ],
+        "variant": "source-display",
+        "sourceStatus": "retained-fit-overlap",
+        "maximumSourceCommonMm3": 0.007245608847086339,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          }
+        ]
+      },
+      {
+        "ids": [
+          "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+          "p_0_1_1_1__0_1_1_1_1__0_1_1_2_1"
+        ],
+        "definitions": [
+          216,
+          3
+        ],
+        "variant": "source-display",
+        "sourceStatus": "retained-fit-overlap",
+        "maximumSourceCommonMm3": 0.0006275092036802971,
+        "baselineSourceTriangleIntersection": true,
+        "baselineAuthoredTriangleIntersection": true,
+        "witnesses": [
+          {
+            "fastDegrees": 0,
+            "escapeDegrees": 2.5579538487363607e-13,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 120,
+            "escapeDegrees": 194399.99999999948,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 240,
+            "escapeDegrees": 388800,
+            "triangleIntersection": true
+          },
+          {
+            "fastDegrees": 300,
+            "escapeDegrees": 485999.99999999837,
+            "triangleIntersection": true
+          }
+        ]
+      }
+    ],
+    "freshOriginalSolidWitnesses": {
+      "scope": "Selected original whole-solid queries at installed runtime critical poses and retained overlap witnesses; not continuous swept-solid or manufacturing certification.",
+      "meshes": [
+        {
+          "pair": [
+            183,
+            216
+          ],
+          "escapeDegrees": 498.33984375,
+          "commonMm3": 0.0,
+          "gapMm": 0.008777410048073192,
+          "priorWitnessGapMm": 0.00877741004807328
+        },
+        {
+          "pair": [
+            183,
+            216
+          ],
+          "escapeDegrees": 3535.83984375,
+          "commonMm3": 0.0,
+          "gapMm": 0.003968056701531346,
+          "priorWitnessGapMm": 0.003968056701531435
+        },
+        {
+          "pair": [
+            183,
+            216
+          ],
+          "escapeDegrees": 12648.33984375,
+          "commonMm3": 0.0,
+          "gapMm": 0.006623545478007253,
+          "priorWitnessGapMm": 0.006623545478007571
+        },
+        {
+          "pair": [
+            183,
+            216
+          ],
+          "escapeDegrees": 21760.83984375,
+          "commonMm3": 0.0,
+          "gapMm": 0.003987243953907435,
+          "priorWitnessGapMm": 0.003987243953907212
+        },
+        {
+          "pair": [
+            183,
+            216
+          ],
+          "escapeDegrees": 286497.94921875,
+          "commonMm3": 0.0,
+          "gapMm": 0.0028195658240969166,
+          "priorWitnessGapMm": 0.0028195658240974435
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 0,
+          "commonMm3": 0.0,
+          "gapMm": 0.0049869753005932285,
+          "priorWitnessGapMm": 0.004986975300593154
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 2323687.5,
+          "commonMm3": 0.0,
+          "gapMm": 0.001116256497355405,
+          "priorWitnessGapMm": 0.0011162564973559096
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 2296350,
+          "commonMm3": 0.0,
+          "gapMm": 0.00269844095722022,
+          "priorWitnessGapMm": 0.002698440957219362
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 2269012.5,
+          "commonMm3": 0.0,
+          "gapMm": 0.0011349699422296307,
+          "priorWitnessGapMm": 0.0011349699422268434
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 1184387.6953125,
+          "commonMm3": 0.0,
+          "gapMm": 4.580792731496539e-05,
+          "priorWitnessGapMm": 4.580792731506884e-05
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 2278107.2021484375,
+          "commonMm3": 0.0,
+          "gapMm": 4.514132134025163e-05,
+          "priorWitnessGapMm": 4.514132133764976e-05
+        },
+        {
+          "pair": [
+            217,
+            187
+          ],
+          "escapeDegrees": 2314669.921875,
+          "commonMm3": 0.0,
+          "gapMm": 4.515218376670747e-05,
+          "priorWitnessGapMm": 4.515218376666687e-05
+        }
+      ],
+      "retainedFitWitnesses": [
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2"
+          ],
+          "definitions": [
+            184,
+            8
+          ],
+          "escapeDegrees": 0.0,
+          "commonMm3": 0.0008574581393434364,
+          "priorMaximumCommonMm3": 0.0008574581393438213
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_5__0_1_1_6_2"
+          ],
+          "definitions": [
+            184,
+            8
+          ],
+          "escapeDegrees": 75600.0,
+          "commonMm3": 0.0008574581393437779,
+          "priorMaximumCommonMm3": 0.0008574581393438213
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2"
+          ],
+          "definitions": [
+            184,
+            8
+          ],
+          "escapeDegrees": 0.0,
+          "commonMm3": 0.0008574581393434412,
+          "priorMaximumCommonMm3": 0.0008574581393438659
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_37__0_1_1_182_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_20__0_1_1_15_2"
+          ],
+          "definitions": [
+            184,
+            8
+          ],
+          "escapeDegrees": 118800.0,
+          "commonMm3": 0.0008574581393437584,
+          "priorMaximumCommonMm3": 0.0008574581393438659
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2"
+          ],
+          "definitions": [
+            188,
+            12
+          ],
+          "escapeDegrees": 0.0,
+          "commonMm3": 0.003737971658996475,
+          "priorMaximumCommonMm3": 0.0037379716589967457
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_16__0_1_1_10_2"
+          ],
+          "definitions": [
+            188,
+            12
+          ],
+          "escapeDegrees": 1231200.0,
+          "commonMm3": 0.0037379716589966624,
+          "priorMaximumCommonMm3": 0.0037379716589967457
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2"
+          ],
+          "definitions": [
+            188,
+            12
+          ],
+          "escapeDegrees": 0.0,
+          "commonMm3": 0.003737971658996482,
+          "priorMaximumCommonMm3": 0.0037379716589969886
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_40__0_1_1_186_2",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_26__0_1_1_20_2"
+          ],
+          "definitions": [
+            188,
+            12
+          ],
+          "escapeDegrees": 1231200.0,
+          "commonMm3": 0.0037379716589968637,
+          "priorMaximumCommonMm3": 0.0037379716589969886
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_56__0_1_1_212_2",
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_2"
+          ],
+          "definitions": [
+            214,
+            217
+          ],
+          "escapeDegrees": 0.0,
+          "commonMm3": 0.007245608847086339,
+          "priorMaximumCommonMm3": 0.007245608847086339
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_1"
+          ],
+          "definitions": [
+            216,
+            3
+          ],
+          "escapeDegrees": 0.0,
+          "commonMm3": 0.0006275092036801826,
+          "priorMaximumCommonMm3": 0.0006275092036802971
+        },
+        {
+          "ids": [
+            "p_0_1_1_1__0_1_1_1_4__0_1_1_83_57__0_1_1_215_1",
+            "p_0_1_1_1__0_1_1_1_1__0_1_1_2_1"
+          ],
+          "definitions": [
+            216,
+            3
+          ],
+          "escapeDegrees": 486000.0,
+          "commonMm3": 0.0006275092036802971,
+          "priorMaximumCommonMm3": 0.0006275092036802971
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "214/217 sticking is a supported modeling interpretation for the requested animation, not maker-confirmed evidence",
+    "Rear-hour nominal source witness gap remains approximately 45 nm, not tolerance-qualified",
+    "101 neighbor pairs remain sampled-only; planar bounds are not continuous whole-solid certification",
+    "Source overlap/contact fits and invalid/non-solid occurrences remain unqualified; 214/217 interference is retained",
+    "Hands remain fixed at rotating shafts/hubs; no physical slip is claimed",
+    "No force, torque, winding, setting, mainspring unwinding or self-sustaining simulation",
+    "One desktop Chrome run with synthetic visibility/completion fixtures, not full OS/device qualification",
+    "Publication and redistribution gates remain uncleared"
+  ],
+  "inputSha256": {
+    "assets/source-manifest/motion-works-study.json": "57b4fa64caa4190d8ba5d115386f5fbce4b65af64a692dd26d90c3e53fc822ae",
+    "assets/source-manifest/friction-connections.json": "8b01216a6d23f8002819468a2e83cfa887d03161bd6087d0319a28ec5fe312a1",
+    "assets/source-manifest/reverse-mesh-diagnosis.json": "7984cbb0814b4644d8f3b56035d601a0318533f4dda64a15b24044a9c45e08b6",
+    "assets/source-manifest/display-phase-review.json": "5828d1856e14c3a4203adab870cbbdb8b70a564f5bbead6ee55709891f017bb7",
+    "assets/source-manifest/rear-hour-phase-limit.json": "194237dd69abe7688c847b122db12b5516885a38a4d11caa89bf80b2b3d00ba9",
+    "assets/source-manifest/front-display-animation.json": "2f44690d6c8f2bd500e1f087218457d96e3a0ae80b1ecba209b4b6b405a91d0d"
+  },
+  "implementationSha256": {
+    "assets/authored/running-movement.json": "27d5f72f3cb140bb8b8cfc7283a178d99b024e4512f821278db8a4fd59dc4e38",
+    "assets/authored/wheel-display-poses.json": "661fc19f8dcbcc58a1d2d36e656e3c7ebaaef7863bcf80f5f8bde6ff93a61410"
+  },
+  "unchangedApplicationSha256": {
+    "assets/authored/assembly-fittings.json": "524f691e5072055f97e9f35f843f696abe122d6d3129b2038d5bc2213905dde2",
+    "assets/authored/atelier-layout.json": "855c540c9839a18ebcd226f66e4967e99815746da2d7345e86c95510344338d0",
+    "assets/authored/bench-parts-layout.json": "743c0c41882897dff63f1b47a4e1721eaa753000692a406bc38c31f5280691e9",
+    "assets/authored/component-labels.json": "80322374f90e92a936b1d39e662055b365b07c4da0ca9ff207b008590ed13a7e",
+    "assets/authored/dial-configurations.json": "383b3a3180f668551a68e5da01329e087d577c1914c398088c2f093f7f51def1",
+    "assets/authored/explore-scope.json": "de4f58c4320d12adf994dd736a6382e01736e5169343db7f9d9e9add3cea1534",
+    "assets/authored/explosion.json": "465204f1bf9414402730f4fc174db679d6251cd0328fecc7837391d213e59c44",
+    "assets/authored/hand-display-poses.json": "54e6f20eb308ec240c4ea47b15638d5dd5c738d3107eaf1055b0c05e4d7fa71c",
+    "assets/authored/material-review.json": "6c532f6671a710d64a6b55c937212c71c0dcc65f98b7f4bed7ca4ce5433b11ce",
+    "assets/authored/mechanisms.json": "f9b2e9d9df412dab5df98b53d1beb1fe8fb7250458606f2675c7efb17038f6de",
+    "assets/authored/motion-evidence.json": "a21544ee765e2b67cc005d6fb6be0ed981cc1f41b9f81adbfe148560e0346651",
+    "assets/authored/play-manifest.json": "99dd650eded1b1539dae9ed91982d481a0d66f6a1bce1f76e4c77e99cc848578",
+    "assets/authored/watch-configurations.json": "7c986558a2d82165bef846eb3c42183ea2d20b07491c302fd61ca040d804d8d4",
+    "assets/authored/workshop-environment.json": "0e30a9f02fa39db7c31672c586173e78e332d80cfa21e414e5056e208b4ab585",
+    "explorer/.gitignore": "8d79281ba4ab8301d5b83e299c65b6af912acf88443f8ca5c2e203a096e9be81",
+    "explorer/.oxfmtrc.json": "0962fdddb1840a06b5afb918ff3f2ff56bce346082651ec5c3567c01dd809f17",
+    "explorer/.oxlintrc.json": "1a7aa1c7d83b05939e4e697eed9316224caea8958c4ad12837f8be740c13a47d",
+    "explorer/app/bench/page.tsx": "5a70067321affb10ee34d68f93cfd3865644ef76ef73a09a23706e97e2e6df38",
+    "explorer/app/globals.css": "4e80ef35f4a5ff0c05cca0420ee023276bb5895d742db00280c744cdaa371d24",
+    "explorer/app/layout.tsx": "66262475b1666314f5d89308cb9e77b83c6a81fc4f07cb6e208b1f222889308a",
+    "explorer/app/page.tsx": "25d05ebcb29aa6fb5cb77d0862123dd159f051b8f3997325ffab90330c4cb590",
+    "explorer/app/robots.ts": "b4ba23abea05bd848679e5bc22d0715bae9c0ffe0f843b95a0a8550a9a8cf900",
+    "explorer/app/sitemap.ts": "dcfeebc7f135ff3b2a34b8cb259bf0a92bfa32c5be39d68fa2c6504df839e2ed",
+    "explorer/app/workshop/page.tsx": "44fa88fb4e8593e7fb153119120f45a2e63c4174f4eaef970c89c96ffd297a5e",
+    "explorer/components/BenchInvitation.tsx": "39f495e2cbeebafc564f7565b5d2c16df939d7053cfc414755139644beb7d125",
+    "explorer/components/ConfigurationControls.tsx": "c97adfb183237f83d9215639ae19980de03432652413ba884ea7b3b590703cae",
+    "explorer/components/InformationPanel.tsx": "b92cd82ae9b69f115f0dc9762d81b929da08db076ce011ed33ffd8e0ad9dbeb8",
+    "explorer/components/InspectionPanel.tsx": "c00dbb4704b830e891d4023d4f9f94542ca23dd2019ea29fd29d2bbd36148e8d",
+    "explorer/components/MovementLoadingMark.tsx": "19888a4f22689b563be8e928031fe9f39c47e217ac05a44b13fec34ff2044491",
+    "explorer/components/WorkshopChooser.tsx": "6340a368466a2b1ebb5957828aa5b94a6b3d310eff5cb96503bd10a949bfe5f6",
+    "explorer/components/site-chrome.tsx": "6fcfa2dc3f5738d515529902dc7cf07dd147c7bea4e01e19726085696eadbbc5",
+    "explorer/components/ui/select.tsx": "3eb7edd9247c3befeb5d9a1d969b4f8c97ad64ab529e6f7ee7c605f79ca640b6",
+    "explorer/components/ui/sheet.tsx": "7f84304a65bc8c23e309acd0324bb539ef4ada37e9481ee42d54760da8977263",
+    "explorer/components/ui/slider.tsx": "02712ef7978bcf147c9780eeafd902beb97b21d8245603303e9c996621ce8cd2",
+    "explorer/components/viewer-controls.tsx": "e92075d0be1969c07f650fa67467201ebc2cd15332c9b500863ad8a888f31d65",
+    "explorer/feature-flags.d.ts": "bb225e6e31435e765db12edaa5ba7c3c7079e6cdf947f0770adde5a899997e9f",
+    "explorer/lib/utils.ts": "9304a861c8673bee09e0f12de31773abbde503b02e59dfd74763ddec2e37cf05",
+    "explorer/package-lock.json": "0bcc49aeacb79c7aa75f8174d6f4afd17aaf73799efc1ec58619afd280d286ae",
+    "explorer/package.json": "0ae16a84a75572be182a8d45d5241f3ffdf12035aabd9d3221973b307419e0b4",
+    "explorer/public/images/marco-lang-ml01-movement.webp": "bd10451480c5896958285a6087aa0258af775394f672eb2a010e617d6b92ef30",
+    "explorer/public/images/zweigesicht-1-separated-71ba2d171225.jpg": "71ba2d17122578edad6cbecdac4685158cec38a40c837ecf1cdfa211dddff970",
+    "explorer/public/models/assembly-manifest.json": "7c7ae03fa7bf4e2c108d66378fbf32859a0706068af5a3d5b50beb6aadf39184",
+    "explorer/public/models/asset-paths.json": "d1d9240fb40c5a475f5cdafb3c679b918aa7f85e20e7be4bb172a6666957fd65",
+    "explorer/public/models/case-lug-recovery.json": "c45e91a76b2182d2dfb184d797be44c21dc63466a3b042d59a8cf2625959a9d2",
+    "explorer/public/models/catalog-0d8f8da54d0b.glb": "0d8f8da54d0bac5787e8f4c0f5202b8921c027e1cc0cb5ffd965d6f8ad265f6a",
+    "explorer/public/models/catalog-0d8f8da54d0b.glb.gz": "528004e61c970406df1d31cecc77881afd99ee3f9fa92c336a430f3ac34ba5f2",
+    "explorer/public/models/diamond-c74ee2731a1f.stl": "c74ee2731a1f6d6d5dfdcbab42bb90b4d9e0ed6d578d5f8f916f8c9ebccc8c2a",
+    "explorer/public/models/finish-surfaces-bd9958b41c29.bin": "bd9958b41c2916f67c4689e5285cb94a7079e89b813e1b9afee05956faa0ab70",
+    "explorer/public/models/finish-surfaces-bd9958b41c29.bin.gz": "44e721acbbef9b055c3ee3746162595a16c29ae663737da557c3a62b1a5f5644",
+    "explorer/public/models/finish-surfaces.json": "ea694b0a3dc5b9e11ccf61ea7c8fa4a39600d609e4f228c3529dffc1929518ac",
+    "explorer/public/models/movement-11e388509c0a.bin": "11e388509c0a378b6d11835a63fecc810843f8f50c12a9974c3b9f831f393f0b",
+    "explorer/public/models/movement-runtime.json": "c53a0ccff44d66f2b698c5e13cfad84bf77151e414916ef99c1a4a5007b4a3c9",
+    "explorer/public/models/overview-2337df2dca58.glb": "2337df2dca58a8d07d7f3ed5173cdfa67613951ba1b88d88480eb5c06db7aca5",
+    "explorer/public/models/overview-2337df2dca58.glb.gz": "7c64dd12b5b8655e3b7be874c1c2173f39c7c81e0664ba746ebb82b168287a72",
+    "explorer/public/third-party-notices.txt": "1049b86133a5b42097e3ca4b95601decafb03a648d530fa08b1040fc3078de3b",
+    "explorer/scripts/bench-assets.mjs": "4a0611dfc8cb3ef6dd28e3b09f25ac56338a668cd38cc1e5b91151adeef733dd",
+    "explorer/scripts/check-seo.mjs": "5b0677e1bd96c4ea993e62f4dd1aa784780af0fd5a47c7eed26391ed505b921c",
+    "explorer/scripts/measure-build.mjs": "7fc6aa500b710bbd9a9fc7868c75045e5b69367d01a3915d75756bfc5b9db1de",
+    "explorer/scripts/package-vercel.mjs": "f9222f75277b2e2670bebffcf47626dbee723be32d01b4aa7ff4e2ce0e732c90",
+    "explorer/scripts/prune-build-output.mjs": "6e29a0499e0c3a30e3191a440bf44abb965386d5b1649e72094e7400634ef75e",
+    "explorer/src/bench/Bench.tsx": "fab6a3792e07b59e28a60b187bbd32b32aa02b6fe3e314fc085b86910fc11bd7",
+    "explorer/src/bench/BenchControls.tsx": "e82e7f067268472d4d2c3316b460a93746d569fff8399a1d9d33067dd139c469",
+    "explorer/src/bench/BenchViewer.ts": "43c57faa5bbb7b65a3f57d652c0268b8be374f685b657a55262d1290b2afe6f8",
+    "explorer/src/bench/DetachedParts.ts": "207bd7245d8bdc5c1174f99aa9177ced0c82bddb5028a4b5f24d916125ad1491",
+    "explorer/src/bench/SurfaceFinish.ts": "a10a7f94f8e41c9a954614366da0b3b527a16324ba9127d33e42e785a136f131",
+    "explorer/src/bench/bench.css": "d6da1490f8ab4a15d9a75795c176b7045fe370458e3c8056521c3c78a6d902c6",
+    "explorer/src/bench/bindings.ts": "0e19ac164716961e91fbb253deef62562f649d00ef4bb4b4711340db81782fd3",
+    "explorer/src/bench/flip.ts": "364cd7a69e218273b38c7460983cf500f6f4507311cc49d6ad3b7e814edc18e7",
+    "explorer/src/bench/performance.ts": "429a007ccffd252bc254a01ae84fbd5e5f7bfc2715d829f8c8131cb5c89d97e8",
+    "explorer/src/bench/physics.ts": "d52c31866a304e6ca69f35cb1d037ed30fad068d434220079c5cd76444a8589f",
+    "explorer/src/bench/useBenchAccess.ts": "4ce82bcd0bf44d26a8f0906b3d23b8e696b478c0b0a80feeacca91e626b14596",
+    "explorer/src/content/about.ts": "4522d2e41fe1f4ee8d961f57e35c1624570455a686e56de19c20d1432360ae03",
+    "explorer/src/content/seo.ts": "36643b17ee00172f97b0f81e57f96586ca4e8ba418a4392b477b9b6f50b2a7e0",
+    "explorer/src/experience/assemblyFittings.ts": "eb3cc1e12461366165291ea2fd79ce639fce7c52d4a0e4e92c8443d576b77e72",
+    "explorer/src/experience/catalog.ts": "86d1135dd81bba121c23384088c67928bdba0a27f560b8c98a5c11553e23333f",
+    "explorer/src/experience/copy.ts": "08f983e940d35a42dbe6403bba03a7dcef64d2f7139e5242c72c3d7bc55a0b52",
+    "explorer/src/experience/dials.ts": "8b1eaf36d696ed7e38d8e97016d3d1fe267ab822540a94c0d8a1d7f54b42cb68",
+    "explorer/src/experience/emphasis.ts": "77ac6a1eab3eb68d732c3ba29c48d0537283ebad84a3c9e09f22dab1ff533bcf",
+    "explorer/src/experience/explosion.ts": "7c4a9b02716226113702cb601ad1170782f172561b350705bc19ff3326615a1d",
+    "explorer/src/experience/loading.ts": "6c8eca45ca6483462196645481c7ab1516205d1771a0623029f8c23a41745c82",
+    "explorer/src/experience/motion.ts": "4703716b15fdca3c352eb919a64c190b791a27c9ef15dbeb35b029da29d66e56",
+    "explorer/src/experience/observeElementResize.ts": "f0477f5ea479bbd2e694e53d2a59c9dbd18680f4e9bf43b0656c919f04a85fd1",
+    "explorer/src/experience/spread.ts": "e883b25f34e0f808f65b5bd391a8d9861e5c7e609b36b979839ec8396d188afb",
+    "explorer/src/experience/state.ts": "1dc3043ab1e1f6d6006ae4307b05bf947c44788bb219369b43249f4ad9729105",
+    "explorer/src/experience/useTextScalePreview.ts": "37eb33139ee078c214b44b700fbdcd080ed0c637bf133afd0c03dbccc110a3e3",
+    "explorer/src/experience/watch.ts": "0372a8420274cd60226971212ef1239671116752f32acd2b2bbf84cb78f6f254",
+    "explorer/src/experience/webmcp.ts": "57ef4486f87da8a9f13e6a83a0123fb42d6705565eaf468d17be49fa78ae0d1c",
+    "explorer/src/play/Play.tsx": "e83da89149aa067f3de2c13345843cb313c4c4b1c5002e288bd1b493856fb1f2",
+    "explorer/src/play/PlayViewer.ts": "1b5cb8984f4a9da842440379f65152901257e5395caff6d1cb01434517359c6b",
+    "explorer/src/play/accessAudit.ts": "40dff456b1e83573d678a689190637460232277b2ad1f90fb2c4a2d12491c83c",
+    "explorer/src/play/fixedViews.ts": "9f7db6eec347fa6b36ae3af0f3c3486fe4740758e3b4876c8762beaa9beb8ed0",
+    "explorer/src/play/play.css": "0b801507e5b26dec96f3a2ee603a2daf59e1afd40a57e9f6b3eabae4884ed7b1",
+    "explorer/src/play/state.ts": "58abd9e76f24f5be5b013b5a172703bc8fcdf2e964ab31e63102e6881f22f94f",
+    "explorer/src/play/thumbnailColor.ts": "d95eb4d1457aa48cc52d20aedf1f0c7a5b5942e89b1ff9c652b8db9d30442434",
+    "explorer/src/play/types.ts": "212586a2bc4380d85654d756fa1a5618eede92c9ea8d0e87dc3cde1b71b3eb3c",
+    "explorer/src/viewer/CameraFrame.ts": "f3b183c00dfca1f35861bd6582cd056c4f5de0c0686fbf530d562e7bb590b1af",
+    "explorer/src/viewer/CasePose.ts": "79c03c596ef911b35e8f0fce8ad9a140f45e72cad325d926b1083e0843d1b17d",
+    "explorer/src/viewer/CaseRecovery.ts": "8d5db2ef3f0e7232d6de279bfd09bb84e5d447e8ed662bee230ce7a6399e5078",
+    "explorer/src/viewer/DiamondOptics.ts": "3de352eb6f48dd5ff0d2f6ba419a3abe54f729b0e772a70b84cfe182618f9762",
+    "explorer/src/viewer/FrostedSurface.ts": "ecb49099bc54c423b7bef3846cf20d641b5884c7104502c00aa63a5d5228520e",
+    "explorer/src/viewer/GraphicsResources.ts": "6bf3b25c009afd370928e9ffe68effa0351830ba9a53b08db98ee988647948a0",
+    "explorer/src/viewer/HandDisplayPose.ts": "caf41b8983fa4708ef8d7bd6f5ea569f0b253d7f20e3dbc3ab4281292f9cfab6",
+    "explorer/src/viewer/MovementViewer.ts": "242db020770238576060a83fb874bc8a60f0ebea428dd31128e3d81587e96529",
+    "explorer/src/viewer/RecoveredDiamond.ts": "da623bf638d1a93f53e3305285232bda5d48a7df430f4573c61d849d7c5c0c54",
+    "explorer/src/viewer/RunningMovement.ts": "de75189f027518018fed17e4b9b308f67c232da98c4ce13cfa07c46fbb79c33e",
+    "explorer/src/viewer/SourceSurfaces.ts": "fb0610c938f40e12a216f844d05f2e9e484163644d65a4fe68218954fdd3e7d8",
+    "explorer/src/viewer/StudioEnvironment.ts": "3172b470ad7dc4e9319887132b11670bc9a3b4a1f0c051a518f67935f996e9d1",
+    "explorer/src/viewer/SurfaceOcclusion.ts": "c09132c4df8dee3fca022ec05acd655f0af98a6cfc2dbe95d2808d6b72333b59",
+    "explorer/src/viewer/WheelDisplayPose.ts": "5ae84a3356084830cc5a87ff5b46f1144acd9ee0a32c582d5a16ca122c5cb4af",
+    "explorer/src/viewer/benchmark.ts": "55ac815db726a398b1c372653fd5ca3b856b21870018e814be29b7d4f4877d86",
+    "explorer/src/viewer/cameraValidation.ts": "a36f54ea3451d58e5ce9f97e868245b8b92c14192152be461ba8bfa26686b689",
+    "explorer/src/viewer/capture.ts": "c00c3e581864eeabf006091c1d54154750123dbcbecc6f43088e9220ea53ff0d",
+    "explorer/src/viewer/dialValidation.ts": "4cb913ae8f0f8c382f3e717a13f4e513271dbf54d385d483ae1338b9e76774c3",
+    "explorer/src/viewer/disassemblyValidation.ts": "185b1a973aea348359111926bdeda5bbd53ff4f9c876c7697bc7f946d4076da1",
+    "explorer/src/viewer/explosionValidation.ts": "53a77572f4ca2b5bc388303e11f56e04b8dacfafff4ec0c22c16b34666785383",
+    "explorer/src/viewer/frostReview.ts": "179f1f8aeb30a0a74f0cd5120668c2d040cefac3e9aaab3787b4ba8b67df90a3",
+    "explorer/src/viewer/frostValidation.ts": "4f708b674a5856d9986e47eacf4074bfe7b86b123cf1832ce6807a2a93e435bb",
+    "explorer/src/viewer/inventoryValidation.ts": "e90c7f8892d001f41e50d154fbf43f7bd2dd0b1126381cd3c939e58c684db5f4",
+    "explorer/src/viewer/materials.ts": "1a08b0e17a5981b133647d8bba4f5609a183b1efbb0ba3fbb2b6b6d6c888b87d",
+    "explorer/src/viewer/uxValidation.ts": "8444ddfe1ea2a6d81346c9a163c37dd88e044ba0d637714af12a718e28385768",
+    "explorer/src/viewer/validation.ts": "bc00cece4515d9af4ffd02a2c0e6820ddbc1b6349166129a36c677a48dfb3ace",
+    "explorer/src/viewer/watchValidation.ts": "096a05eedf7da9160b358f3e06a978a0b0831917794acbc6d39faf9d00ac6f7d",
+    "explorer/tsconfig.json": "2c0fc914d2f80982628e3e0c2b4790fa229eaa677a182ca352fc9cd7b56c97c1",
+    "explorer/vite.config.ts": "5df43ce3b2b31cffceb565df7a87ffdf5a9ac41d64ad3deb3b45805cdde85794"
+  },
+  "toolSha256": {
+    "scripts/cad/escapement-clearance/rear_display_review.py": "f50c1e88d11b0467aaa114008d2acfd5fc252eaa37aeae2a0d2ad9b7d458e002",
+    "scripts/cad/escapement-clearance/record_rear_display.py": "1072b63c22cc94892bd7f5117bf743d13a3ae93314c56f3ce2c80a178b540bab",
+    "scripts/movement/review-display-phases.mjs": "b227b1742a8175ce59796902436a2092b811b2ba32ea8f6b59918615383443b9",
+    "scripts/movement/browser-check.mjs": "78651ed4ef3a6a5e224c38802a7fa0300cf9b7bb1fd889b83c05634be6d9e644",
+    "tests/running-movement.test.mjs": "3af07e09c282226569b9ffc11afc1ecd5b625ce3ca5cfec59d2faa872c6eae55",
+    "tests/wheel-display-pose.test.mjs": "aa7223e5507f9d1a3368f5a17187ad9f2b5626c5e303f47e50d544a7f8d18e51"
+  },
+  "localEvidenceRoot": "artifacts/rear-display",
+  "localEvidenceSha256": {
+    "artifacts/rear-display/browser/assembled.png": "6e1734907f8ddb77451d49c0b89e88ad67a91bce5b149df8c890361e2f1b2a3d",
+    "artifacts/rear-display/browser/bench.png": "e171dcda999d1a0575bf537f6eb2c58c803d5c6eafa4cc28f7d5c7083309b168",
+    "artifacts/rear-display/browser/browser-report.json": "7664b080b1714d614894dedb1bd4fc9f203426af1a2c923247b1fb240e84985c",
+    "artifacts/rear-display/browser/escapement-frame-0.png": "5d89e0ab95b3bb7e6a1700fd2e620eee2e74990f1cbd3f73ae922a08deb2d258",
+    "artifacts/rear-display/browser/escapement-frame-1.png": "3dcff1464170983fbd10239ef8e2d785574c2a85fc0592055e45bf750435cef7",
+    "artifacts/rear-display/browser/escapement-frame-10.png": "d70cb1f82d284849bfd5d2d0badfe96107a630f1913fe5b1c909a153fd3fb84e",
+    "artifacts/rear-display/browser/escapement-frame-11.png": "9f2e9a68171d4d302eecdcb9c9313f30b701acd28cf225c3c25fcaf60175976b",
+    "artifacts/rear-display/browser/escapement-frame-12.png": "7915bcc473845b69d73b566a19c7653887c89ed81c46d03d831355942eb67cf6",
+    "artifacts/rear-display/browser/escapement-frame-13.png": "8472f9b51e6fc4588f8c33cc47b6128a4686ad0888b83433eab2d4e160b8d0c5",
+    "artifacts/rear-display/browser/escapement-frame-14.png": "c6a2ea4dd365befb90fbcbc659cdd8c7673fe960d971c82e5a6ce73032f8fd9d",
+    "artifacts/rear-display/browser/escapement-frame-15.png": "79939c54214cec3ceb4b2272a70b8e51a0cb32c0f30c58c2511e56c4286c2049",
+    "artifacts/rear-display/browser/escapement-frame-16.png": "44cf9e603234ab192051fa95e90d2f54be65900dcaa30a53b20c29709a710e52",
+    "artifacts/rear-display/browser/escapement-frame-17.png": "a86dd11de25d3aad33627922a42946e6bafb0e7bd0e507c21367cf82519aa18b",
+    "artifacts/rear-display/browser/escapement-frame-18.png": "3231e3017b5d99c17d5efeda973c120d996990673c96aa84b859eaf4531e44dd",
+    "artifacts/rear-display/browser/escapement-frame-19.png": "f3e6eb27cda987e6308097b1f123207aca83d8ea92ffb126edee6704d72235ca",
+    "artifacts/rear-display/browser/escapement-frame-2.png": "4bea1720833810b167bdff052fd642bedb47e98ceae2ff863d6527a3eabe9158",
+    "artifacts/rear-display/browser/escapement-frame-3.png": "d84409c9c5560386452f0d1d17261c9d727cf6c6c53af311315f986b91f83d30",
+    "artifacts/rear-display/browser/escapement-frame-4.png": "7a4c97e9c9af69b81f49e0b6ad5e9a81f9fef53f6e9e5005ef8b2e5304d374fd",
+    "artifacts/rear-display/browser/escapement-frame-5.png": "87c673fd0713bd7a83d2b7b73a7dde56c2ff53fc43ee5b837846f1e3fcb3094c",
+    "artifacts/rear-display/browser/escapement-frame-6.png": "c6a2ea4dd365befb90fbcbc659cdd8c7673fe960d971c82e5a6ce73032f8fd9d",
+    "artifacts/rear-display/browser/escapement-frame-7.png": "8472f9b51e6fc4588f8c33cc47b6128a4686ad0888b83433eab2d4e160b8d0c5",
+    "artifacts/rear-display/browser/escapement-frame-8.png": "7915bcc473845b69d73b566a19c7653887c89ed81c46d03d831355942eb67cf6",
+    "artifacts/rear-display/browser/escapement-frame-9.png": "9f2e9a68171d4d302eecdcb9c9313f30b701acd28cf225c3c25fcaf60175976b",
+    "artifacts/rear-display/browser/fitted-back.png": "fa3cb8c0d0de6384473c9b6701e28f1a4dfaa5bab3fad0b952b59d00f11f19ac",
+    "artifacts/rear-display/browser/fitted-front.png": "bef902f3e46ad36c2fa980a4f3a7091124d14fcc425ab637bd88778da472b9b0",
+    "artifacts/rear-display/browser/isolated.png": "d84235dd521069fdec4eab68fa7ba408d224c7023a719b260c0bd331d9d637a0",
+    "artifacts/rear-display/browser/returned-assembly.png": "cdebbf72050c11ed43b834b6900fb1d2cda981e4f0b4d16032b5a95cb21260cb",
+    "artifacts/rear-display/browser/workshop-partial.png": "0269cec369097a661017742a6f2ad041a31239030572a94408f18106e8727997",
+    "artifacts/rear-display/browser-log.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "artifacts/rear-display/build.txt": "a3a9c531e9bc594d3750941f0ba2a7a4333fd75a62de6e2f41248220ed70074e",
+    "artifacts/rear-display/cad-log.txt": "940b476c1824d1fb17bb9c3694d22ec57da7c4463f8f15198ceffc9e16bdf9bd",
+    "artifacts/rear-display/fitted-hands.json": "32e3ea69598e95fb655edde4367192639eda626ccd72481dcf4bb081bb5947df",
+    "artifacts/rear-display/focused-tests.txt": "fc752d44814799d9cd5c86109f68ac2c98fadd4f68e23188af58afda712f144d",
+    "artifacts/rear-display/inventory.json": "8f9bf328e7ab19164b23f137960d147d421618fd2773e84a741d29043ee53a3b",
+    "artifacts/rear-display/lint.txt": "040dc829b5a9ba7d2ba7a2878408419c672332899b3026a63563226a316b99e9",
+    "artifacts/rear-display/neighbor-runtime-log.txt": "c43ee8597b422406640203725927c069e1f824c87dbbd5b9eb81a32e376adcaa",
+    "artifacts/rear-display/neighbor-runtime.json": "8eb5b3fa3cce0e96e1a969c29e0d4d09b157c2e8d3cfa7dde57f48f64c18d5f0",
+    "artifacts/rear-display/neighbors.json": "b71188d95880c869b80dbd46a9a7d5bcd1dd5820b0f6184c48163a622a0ecccc",
+    "artifacts/rear-display/phase-tests.txt": "63994d0514fbe545883221ea0da391ea39bc7f6d1a45aa32640584da8d7a4520",
+    "artifacts/rear-display/runtime-log.txt": "5f76a5de0df8b4c2553c0bbe7791ef8f470d8f75a90efe38d7bee2b06d0ca2f0",
+    "artifacts/rear-display/runtime.json": "0fd792ef805f526e3f90c59bc77a012af9bd5df450118a218945a61971e55869",
+    "artifacts/rear-display/solid-log.txt": "807b36e77a74aad2bc5c8b2a8b88910741c4c18de8fbce98327d09e09ed509cc",
+    "artifacts/rear-display/solid-witnesses.json": "0da6166689362b40b9881da59f9651df26cb65ddf38d47db7838ce51328f62cb",
+    "artifacts/rear-display/transform-equivalence.json": "ae18667666cd9b2c1ca3d67a7df35ff040af3d56eeccafd9555a7cfb799fd064",
+    "artifacts/rear-display/typecheck.txt": "4e6bb3b91678b8c724495939039efa7de3416735163e4c73aad9a3d1d31042aa"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "status": "Illustrative rigid-cycle feasibility candidate; not mechanically accepted",
+  "applicationBaselineCommit": "8c0a36779dc1818bc9b3c9c5c5568fbcbf489ad1",
+  "historicalEvidenceCommit": "e5726231760cbc734d77e571bae215b528242acc",
+  "source": {
+    "page_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/",
+    "download_url": "https://www.marcolangwatches.com/cad/ml01-zweigesicht-2/?wpdmdl=1992&ind=1690459081421",
+    "path": "assets/source-originals/ml01-zweigesicht.stp",
+    "sha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b"
+  },
+  "runtimeInstalled": false,
+  "sourceOriginalsModified": false,
+  "mechanicalCycleAccepted": false,
+  "report": "docs/ESCAPEMENT_CLEARANCE_STUDY.md",
+  "modification": {
+    "definitionId": "d_0_1_1_126",
+    "regions": [
+      "fork slot floor",
+      "two inner entrance edges"
+    ],
+    "kind": "separate subtractive experimental BRep; no shaft relocation or jewel modification",
+    "floorRecessionSectionMm": 0.024782973746545256,
+    "maximumSampledSectionRemovalDepthMm": 0.030653085568111454,
+    "removedVolumeMm3": 0.0008175487465101883,
+    "removedVolumePercent": 0.18230657141816162,
+    "candidateSha256": "75d85945c20cd0d69b33d34a8b9c641e84ba70840c57b9620d336cbf59a7057b"
+  },
+  "kinematics": {
+    "escapeAdvancePerBalanceCycleDegrees": 18.000000000000256,
+    "balanceAmplitudeDegrees": 180,
+    "palletHalfThrowRelativeDegrees": 6.95,
+    "basis": "authored position-driven illustration; positive nominal gaps, not contact-force simulation"
+  },
+  "validation": {
+    "coreSolidConfigurations": 308,
+    "corePairs": 10,
+    "coreMinimumGapsMm": {
+      "impulse-corrected-fork": 0.0020806169649103534,
+      "roller-fork": 0.11999999999999988,
+      "roller-safety": 0.00846153846434707,
+      "impulse-safety": 0.08999999999996988,
+      "roller-horn": 1.8436105879496314,
+      "impulse-horn": 1.9963084231331605,
+      "wheel-jewel3": 0.0031654990940127997,
+      "wheel-jewel4": 0.0029614954684086593,
+      "fork-pin8": 0.0010830103689754473,
+      "fork-pin9": 0.0010830103689596325
+    },
+    "remainingCrossShaftPairs": 55,
+    "crossConfigurations": 38,
+    "crossExactChecks": 181,
+    "crossBroadPhaseExclusions": 1909,
+    "invalidEccentricLeavesExcludedFromSolidQualification": 4,
+    "refinedSectionConfigurations": {
+      "fork": 5762,
+      "wheel": 962
+    },
+    "toothOffsets": 20,
+    "toothConfigurations": 6,
+    "materialChangeCheck": {
+      "candidateMinusSourceVolumeMm3": 0.0,
+      "candidateMinusSourceSolidCount": 0,
+      "candidateIsValid": true,
+      "candidateSolidCount": 1
+    }
+  },
+  "limits": [
+    "Sampled nominal geometry, not a continuous swept-solid proof",
+    "No global minimum-change claim or manufacturing clearance interpretation",
+    "Four invalid eccentric BReps and remaining static/full-movement interfaces unqualified",
+    "Hairspring attachment/deformation, force transfer and real operating timing unresolved",
+    "No application integration, browser/device/performance acceptance or publication"
+  ],
+  "localEvidenceRoot": "artifacts/escapement-clearance-20261026",
+  "localEvidenceSha256": {
+    "sections.json": "fd017f3f9b8d40be9ad2e8ecee4a5e4dd73674c26f796b752e4163e75e9721fe",
+    "fork-map.npz": "8bfb5b2b497b7a2896196fec17134e9ca388c5390c69ff106363bb1f578b6a26",
+    "fork-path.json": "1755aaeed3f10266256808d058f9ae98d8d0017f85b7b34dbeab56aad8712707",
+    "passage.json": "2d5282a5d53167226eae33b525b685c50895c56a41c256fea1136f4992cc0f67",
+    "candidate-fork.brep": "75d85945c20cd0d69b33d34a8b9c641e84ba70840c57b9620d336cbf59a7057b",
+    "candidate-solid.json": "9179f108057de7913b1d09b2797e10c3fd7ec074e9ff73ebbf612a83a2053223",
+    "cycle.json": "a115faf11562d732e763523245875f9ef084be9ccf4ac63154342af743b55e99",
+    "solid-samples.json": "f948d90f5de807dd3d4c3f44b57cefcf1d0ef647870fab00337ccdf21970b510",
+    "solid-summary.json": "8ba1c942467f0fdd8c6355b5380f08500345c32f662efa1bb0300347f11edbed",
+    "cross-summary.json": "35047190ee67c3afae6134bc8bdd283baa5e4be29787a5bc40f2fc828b833427",
+    "refined-sections.json": "e23e0d191c082493d64940f5ed993e300b9545fd9c00400414fc00154ae3de75",
+    "tooth-repetition.json": "f4a1a0af9917d70c4cc58e53be5eb716bfe75547fc15575eae937bfa50c370ad",
+    "material-change-check.json": "3aed7dbd00db3299ebefba6cad57b3bc37d993d269f260e8f8cb6c2453a99a18",
+    "cycle-preview.gif": "0ceff7ce219d16615f8cdbeeea4a9b668ed07fb67027b3fec12b45a04369e19a",
+    "cycle-preview.png": "cee3107b9285bb29ae6e5ebba890d25b3503fd9bf7c754d2873f9c6532301861",
+    "passage-correction.png": "fa62ef89ee4f61d01a550b72a7eaf21bed93391ddd4d9f15c5911bbe8300f189",
+    "cycle-path.png": "dc38fe09adae146d10ab2869dd2a9e652a9b845d7f73433325ceaaa60de06266"
+  },
+  "scriptSha256": {
+    "scripts/cad/escapement-clearance/cross_check.py": "841ac7c55588e71de6ca3a94c71b40f63ccd896dbc233cb604a0bd90b9583c7d",
+    "scripts/cad/escapement-clearance/cycle.py": "abb33e49cd4f1f171a9f1bac21c21279d1f93cbed2054f7cfaac42540d0f82c8",
+    "scripts/cad/escapement-clearance/passage.py": "1312f0db67c45edb2ce182cddad9d5620964f2ad425ef8d38d54fb1a3101a2cd",
+    "scripts/cad/escapement-clearance/preview.py": "05d47eb16535e4250890aa756eee56bf72faaf69a2fd899e6a1b4d200f824bd3",
+    "scripts/cad/escapement-clearance/record.py": "194ca0596416880b1413120cda05051ef78b844e0ab13e24f1f0f7a093aa9119",
+    "scripts/cad/escapement-clearance/refine.py": "5189bb4eaa49e508d93e4025e1fd0934faed2181321b46ee85576d82b1de1e00",
+    "scripts/cad/escapement-clearance/requirements.txt": "a9da53f34af90c2cc5b9ee96f0ef865935582d869aba11fb0eeb105cb01d6e63",
+    "scripts/cad/escapement-clearance/search_cycle.py": "b7b2a0e6447b099aafce1e92186e2a014c2d125f6fd9746dbb98d1b3406b85ca",
+    "scripts/cad/escapement-clearance/solid_check.py": "951076d55ada6391caa8853d5fca59bb286f83dad6fc34ba1d129db8b44ae4b2",
+    "scripts/cad/escapement-clearance/study.py": "6e8ae6ce362dae5febd5f66f95f5870998d4cd3e6025e19b58a008a1fc0250f8"
+  }
+}

@@ -26,7 +26,7 @@ The pipeline uses XCAF instance paths, immutable source placements and millimetr
 | Skeleton enamel       | Carrier d14 and enamel d21 overlap by 3.477922 mm³ and share an outward plane. Scoped depth bias handles presentation; geometry remains unchanged. Alternative rings and loose duplicate blades are excluded from fitted presets.       |
 | Small minute-hand fit | Source shaft/bushing cylindrical intervals retain a nominal 0.02 mm axial gap; appearance does not certify tolerances.                                                                                                                  |
 
-Fitted hands show static 10:10:00 around measured bore axes. Source transforms, fitted poses, inventory transforms and authored finishes are separate. Both displays retain independent preferences. Exact IDs, exclusions and corrections are in `assets/authored/dial-configurations.json` and `hand-display-poses.json`; probes are `scripts/cad/dial_fit_probe.py` and `hand_pose_probe.py`.
+Fitted hands use 10:10:00 reference poses around measured bore axes and now show [current local time](CURRENT_TIME_HANDS.md) when assembled. The new moving-hand review records marker and blade interferences; the earlier static-fit evidence does not certify rotating clearance. Source transforms, fitted poses, inventory transforms and authored finishes are separate. Both displays retain independent preferences. Exact IDs, exclusions and corrections are in `assets/authored/dial-configurations.json` and `hand-display-poses.json`; probes are `scripts/cad/dial_fit_probe.py` and `hand_pose_probe.py`.
 
 ## Separation and mechanics
 
@@ -97,12 +97,14 @@ exact source occurrences, independently of shared definition names:
   associate these screw axes with their clamp seats.
 - The two radial dial-retaining screws (d201, mainplate occurrences 11/12) require
   the central dial. Other occurrences of d189 or d201 are unaffected.
+- The thin brass dial washer (d121, movement occurrence 9) also requires the
+  central dial, as requested by the owner on 27 October 2026.
 
 The explorer follows actual loaded case/dial availability, including toggles,
-partial load failure and whole-movement selection. Inventory retains dial screws
+partial load failure and whole-movement selection. Inventory retains dial screws and the washer
 only with the fitted dials; the original catalog still supports explicit
 individual-part inspection. The walking movement remains uncased and undialed,
-so its two resting poses omit all eight leaves from rendering and collision.
+so its two resting poses omit all nine leaves from rendering and collision.
 The separately stored case and dials on the mat do not enable fittings on the
 working movement. Workshop has no case and therefore omits the six clamps/fasteners; its two dial screws remain explicit
 placements after the central dial. This is a presentation/configuration decision,
@@ -111,7 +113,7 @@ All source poses, geometry, reviewed phases and finishes remain unchanged.
 
 ## Workshop membership and dependencies
 
-[play-manifest.json](../assets/authored/play-manifest.json), version `play-5`, is the sole membership/dependency representation. The 259-leaf finish contains 216 selected movement and 43 dial/hand leaves; 106 source leaves are explicitly excluded. It uses Fine central and Lance small hands at static 10:10:00, without the case. Its stored base targets contain five corrected blade endpoints and 254 exact source endpoints. The separate 18 reviewed occurrence phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades and 18 wheel-packet components. The save shape is unchanged. Existing `play-4` histories migrate by removing the six retired case-fitting actions and replay-validating the remaining progress; invalid histories still fail validation.
+[play-manifest.json](../assets/authored/play-manifest.json), version `play-5`, is the sole membership/dependency representation. The 259-leaf finish contains 216 selected movement and 43 dial/hand leaves; 106 source leaves are explicitly excluded. It uses Fine central and Lance small hands with static 10:10:00 assembly endpoints, without the case. Completed Workshop hands show current local time; Undo restores the static endpoints. Its stored base targets contain five corrected blade endpoints and 254 exact source endpoints. The separate 18 reviewed occurrence phases are applied at load to their seats, meshes and bounds; final rendered poses therefore differ from source for those five blades and 18 wheel-packet components. The save shape is unchanged. Existing `play-4` histories migrate by removing the six retired case-fitting actions and replay-validating the remaining progress; invalid histories still fail validation.
 
 The shared mainplate subtree has 18 leaves: 16 remain fitted (plate, eight direct jewels, two pins and five Incabloc leaves), while radial d201 screws `194_11`/`194_12` are player placements. They wait for the complete central dial and precede its hands. Their source-local +Z withdrawal axes transform into radial XY directions; the original head/shank and mainplate seat faces are recorded in `explosion.json`. Guided edge cameras are presentation choices, not screw-turn simulation.
 
