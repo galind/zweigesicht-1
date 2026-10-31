@@ -10,7 +10,7 @@
 - `asset-paths.json` and `finish-surfaces.json` in the runtime models directory: active content-hashed GLBs and source-face buffer. The diamond STL and case recovery have explicit hashes in their loaders.
 - `assets/source-manifest/`: URLs, hashes and reference provenance. Original sources, conversion caches and analysis evidence are ignored.
 
-`MovementViewer` and `PlayViewer` own geometry, immutable source matrices, presentation transforms, camera state and resource lifetime. React sends discrete intent and receives snapshots on changes and after the final frame; neither controller polls React at rest. Both schedule rendering on demand, with bounded damping and transition tails. Visibility, resize, interaction and recovery wake them.
+`MovementViewer` and `PlayViewer` own geometry, immutable source matrices, presentation transforms, camera state and resource lifetime. React sends discrete intent and receives snapshots on changes and after the final frame; neither controller polls React at rest. Both use one render scheduler with bounded damping and transition tails; an eligible assembled movement keeps that scheduler active. Separation, inventory and incomplete Workshop return to on-demand rendering. Visibility, resize, interaction and recovery wake them.
 
 `GraphicsResources.ts` shares renderer settings, studio lighting, PMREM allocation and deduplicated disposal. `CameraFrame.ts`, native viewer buttons, Sheet and `useTextScalePreview` share interaction primitives. The controllers keep their own loading and state policies.
 
@@ -26,12 +26,13 @@ The catalog promise coalesces optional requests, including the hash-checked orig
 
 The fitted case has 41 leaves. Focus, All parts, raw external inspection and isolation can hide it without clearing its preference. Selecting a fitted case part retains configured context. Crystals permit pointer selection through them while remaining catalog-selectable. Exterior alloy presets and Fine hand overrides are scoped to the reviewed occurrences; raw inspection retains its own finishes.
 
-`WheelDisplayPose.ts` applies the 18 separately reviewed wheel-packet occurrence phases to all
+`WheelDisplayPose.ts` applies the 20 separately reviewed wheel-packet occurrence phases to all
 three experiences. Explorer retains its raw assembled matrix and applies the
 phase as a display matrix, including spread layout. Workshop retains base target
 poses and derives corrected seat bounds at load. Bench builds collision from the
-same corrected mesh. See the [latest contact review](REMAINING_WHEEL_CONTACT_REVIEW.md); this is
-a set of static placement exceptions. `RunningMovement.ts` applies the separate
+same corrected mesh. The [earlier contact review](REMAINING_WHEEL_CONTACT_REVIEW.md)
+and [rear-display review](REAR_DISPLAY_ANIMATION.md) record these authored
+placement phases and their evidence limits. `RunningMovement.ts` applies the separate
 prescribed-motion overlay after those poses; see [running movement](RUNNING_MOVEMENT.md)
 for the clock, geometry ownership, product-state policy and validation.
 

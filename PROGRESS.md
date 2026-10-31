@@ -1,522 +1,90 @@
 # Current project status
 
 Updated 31 October 2026. Setup: [README](README.md). Technical reference:
-[architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
-[repository review](docs/REPOSITORY_REVIEW.md).
-
-## Review delivery — 31 October 2026
-
-The owner authorized publishing the current branch for a PR targeting `develop`.
-`codex/escapement-clearance-study` includes the running escapement/train, both
-display trains, current-time hands, inspection/pause behavior and mechanical
-evidence through `5b8f26a`. Its Vercel Git deployment is disabled before the SSH
-push. The local verification below remains the latest runtime evidence; GitHub
-CI will validate the complete PR. Next: CI and code/mechanical review before any
-merge. This review delivery does not clear maker redistribution or physical
-acceptance gates and does not authorize a site deployment.
-
-## Power-source investigation and held separation poses — current milestone
-
-Investigated from clean `d29820e` on `codex/escapement-clearance-study`.
-The maker confirms series-connected barrels; original solids establish the
-nominal crown wheel → barrel I spring → coupled arbors → barrel II spring →
-output path. Barrel I's drum/lid and winding train remain held during normal
-running. Barrel II retains `−E/3600` and its 24,000-active-second mean period.
-
-**The remaining power-source animation is not completed.** The intermediate
-arbor rate is an undetermined degree of freedom; a 62:62 connection does not
-establish equal unwinding. Both spring occurrences and an independently
-downloaded maker spring are the same simplified solid. Its nominal dimensions
-do not match its represented strip, and inner/outer hook connections are not
-closed by the supplied geometry. Springs, coupled arbors/wheels and arbor
-screws remain explicitly unresolved. No spring state, reset, torque, stored
-energy or power reserve is invented. The barrel inspection view explains this.
-
-The requested separation-state check found a baseline mismatch: stopping the
-clock restored gear reference angles. Explorer now holds the last active
-barrel/train/hairspring pose relative to separated presentation poses, resuming
-only at displayed zero separation. Inventory and Workshop Undo keep their
-reference-endpoint policies. All gear laws, phases, geometry, seven display
-packets, current-time hands, 3 Hz frequency, balance amplitude and recoil remain.
-
-**27 focused tests, typecheck, lint, production build and 31 browser checks pass.**
-Across 2,663 inspected frames, including 595 paused frames, independent point
-transforms agree within 2.85×10⁻¹⁴ mm; 77 selection frames match bounds exactly.
-A 25.032-second Chrome interval has 1,502 frames, p95 16.7 ms, movement update
-p95 0.6 ms, and stable 135 geometries / 8 textures. These are desktop/synthetic
-lifecycle checks, not physical-device qualification.
-
-Fresh CAD evidence comprises 24 source-solid interfaces, two spring sections and
-the standalone spring comparison. No new assembled moving/deforming interface
-is introduced. Retained overlaps include arbor/screw fits, crown wheel/click,
-and freshly recorded click/click-spring overlap of 0.000917627 mm³. The existing
-hand/marker, broad-lance, Lance/ring, invalid-solid and ~45 nm rear-hour findings
-remain. Neither prior sampling nor static-spring clearance certifies deformation.
-
-See [study and exact missing evidence](docs/POWER_SOURCE_STUDY.md) and
-[provenance](assets/source-manifest/power-source.json). Next: obtain supported
-spring attachments/configurations and an intermediate-arbor motion law before
-implementing the missing motion, then qualify its finite operating range.
-The rebuilt local app at `http://127.0.0.1:4178/` is left in the revealed twin-barrel
-view. No push, PR, merge, deployment or publication.
-
-## Current local-time hands — preceding milestone
-
-Implemented from clean `79c234f` on `codex/escapement-clearance-study`. Both fitted
-displays now show browser-local time through the existing movement scheduler:
-15 possible blades and seven bushings, with five hands/five bushings selected per
-configuration. The rear face has hour/minute hands only. Hours/minutes include
-fractional progress; the central seconds hand follows the existing 3 Hz train's
-advance/recoil. Fresh wall time plus the unchanged active train's bounded sub-beat
-residual prevents suspension drift and observes clock/timezone changes. Alignment
-and resynchronization are illustrative setting offsets, not physical slipping.
-
-Focus/reveal, selection, isolation and flipping keep running. Separation freezes
-hand angles relative to their presentation poses; reassembly reaches displayed
-zero before resynchronizing. Inventory, hidden tabs, Workshop completion/Undo and
-Bench retain their established policies. All authored assets, source/runtime
-geometry, gear ratios/phases, balance amplitude, escapement path and barrel-II
-boundary are unchanged; the recorder verifies exact prior gear code preservation
-apart from the hand lifecycle hooks.
-
-**19 focused tests, typecheck, lint, production build and 31 browser checks pass.**
-All nine style pairs pass five known-time fixtures on both faces. Actual browser
-timezone changes, delayed frames, hidden/separated resynchronization, selection
-bounds and cleanup pass. See [behavior, membership and validation](docs/CURRENT_TIME_HANDS.md)
-and [provenance](assets/source-manifest/current-time-hands.json).
-
-**Clearance is not qualified.** Fresh review finds 36 rear minute/marker overlaps
-(all three styles across all twelve markers), plus a broad-lance hour/minute
-overlap near effective 10:53:38.182. The marker overlap already exists at the
-2 o'clock marker in the authored 10:10 pose; rotation reaches the other markers.
-Central Lance minute/outer-ring overlap and blade/bushing/shaft fits are retained.
-No geometry or gear phase was changed to conceal these findings. The new review
-records 7,282 full-turn box exclusions, 107 further continuous enclosure/annular
-bounds, 54 sampled nonpenetrating pairs, 58 overlapping pairs and 111 invalid or
-non-solid exceptions; 3,507 sampled solid configurations and 242 runtime triangle
-witnesses. Existing ~45 nm rear-hour and connection-assumption limits remain.
-
-The local app at `http://127.0.0.1:4178/` is refreshed and left with fitted dials
-showing current time. Next: user review of the illustration and explicit mechanical
-review of the disclosed interferences before any physical acceptance. No push, PR,
-merge, deployment or publication.
-
-## Pause during disassembly — preceding milestone
-
-User-requested revision from clean `b5307a7`. Whole-movement disassembly and
-focused part separation now pause animation and active time. Gears resume only
-once displayed separation reaches zero. Focus/reveal, selection, isolation and
-flipping keep running when the movement is not disassembled. Hands stay unchanged.
-Inventory, hidden-tab, Workshop and Bench policies remain as before; no geometry,
-phase, ratio, frequency or clock changes. Earlier running-disassembly behavior
-below is historical and superseded.
-
-Validation: 19 focused movement/scheduling tests, typecheck, lint, production build
-and all 25 revised browser checks pass. See [current behavior](docs/RUNNING_MOVEMENT.md)
-and [provenance](assets/source-manifest/disassembly-pause.json). Local app refreshed
-at `http://127.0.0.1:4178/`. No push, PR, merge, deployment or publication.
-
-## Running inspection and disassembly — preceding milestone
-
-Implemented from clean `6d31677` on `codex/escapement-clearance-study`.
-Explorer now keeps the existing movement running during focus/reveal, selection,
-isolation, flipping, whole disassembly, focused part separation and transitions.
-Each displaced part rotates about its displayed shaft; the same active clock
-continues through reassembly. Selection bounds follow animated poses. Disposal
-clears the cancelled frame ID and restores resources before scene cleanup.
-
-Hands remain unanimated, and winding/setting and the existing power-source
-exclusions remain unchanged. All-parts inventory and hidden tabs still suspend;
-Workshop still requires completion and stops on Undo; Bench policy is unchanged.
-No new packet, phase, geometry, ratio, frequency, clock or playback control.
-Exploded motion is prescribed illustration, not separated gears transmitting
-force or a collision-qualified physical disassembly. Existing assembled clearance,
-fit/overlap and ~45 nm rear-hour limitations remain.
-
-**22 focused tests, typecheck, lint, production build and 25 browser checks pass.**
-All 1,429 sampled inspection/transition frames remain active; independent displaced
-point checks agree within 2.33×10⁻¹¹ mm. 18,345 hand checks retain presentation
-poses; 74 selected frames have matching selection bounds. Delayed-frame timing,
-synthetic hidden suspension, Workshop Undo, Bench flip and cleanup pass.
-A 25.016-second local interval has stable geometry/texture counts; no application
-or shader errors. These are sampled runtime checks, not new continuous CAD bounds.
-
-[Behavior and validation](docs/RUNNING_MOVEMENT.md#continuous-inspection-animation--28-october-2026)
-and [provenance](assets/source-manifest/inspection-movement.json) record scope,
-transform composition, unchanged assets and evidence hashes. The refreshed local
-app at `http://127.0.0.1:4178/` is left in the exploded movement view for review.
-Next: user review; current-time hands remain a separate, unimplemented request.
-No push, PR, merge, deployment or publication.
-
-## Movement-side display animation — preceding milestone
-
-Implemented from clean `5fd50f0` on `codex/escapement-clearance-study`.
-[The rear extension](docs/REAR_DISPLAY_ANIMATION.md) enables motion works 3
-(216/217), cannon pinion 2 (183/184) and hour wheel 2 (187/188), rigidly driven
-from the existing accumulated E at −1/1620, +1/540 and +1/6480: mean periods
-3 h, 1 h and 12 h. All hands, winding and setting remain static.
-
-214/217 is modeled as sticking 1:1 for the requested prescribed animation;
-this is a supported fitted-joint interpretation, not maker-confirmed evidence.
-The two jointly reviewed rear packet phases are installed: −0.9228515625° world
-for 183/184 and +0.27165787111074224° for 187/188. All other phases, geometry,
-teeth, shaft locations, 3 Hz / 21,600 beats/hour, balance amplitude, escapement
-path/recoil, earlier train ratios, clock and lifecycle policies remain unchanged.
-The rear-hour source witness margin is still only **~45 nm**, not tolerance-qualified.
-
-Validation passes: **11 movement tests, 3 phase tests, typecheck, lint, production
-build and 22 browser checks** across Explorer, completed Workshop and assembled
-Bench. Actual installed transforms agree with the complete reviewed train within
-5.56×10⁻¹⁷ per matrix entry. All **32,261** full-period runtime mesh configurations
-and 12 critical rear runtime witnesses clear. **23 fresh original-solid configurations**
-recheck the 12 rear mesh witnesses and 11 witnesses covering six retained-fit pairs.
-No new/increased interference was detected in checked configurations.
-
-The rebuilt inventory transfers 231 neighbor results only after exact kinematic
-and transform-equivalence checks: 113 enclosing-cylinder and 8 radial continuous
-bounds, 3 invariant nonpenetrating poses, **101 sampled-only pairs**, and 6 retained
-source overlaps. There are 4,516 box exclusions and 91 invalid/non-solid exceptions.
-The 690-pose runtime neighbor replay retains the same 11 contact/overlap pairs.
-214/217's ~0.007245609 mm³ overlap and the shaft/hand and wheel/dial-ring overlaps
-remain disclosed. Static hands are the remaining incomplete display boundary;
-no physical slip or self-sustaining motion is claimed.
-
-A 25.032-second desktop Chrome interval delivered 1,296 frames, frame p50/p95
-16.7/33.4 ms, movement-update p95 0.6 ms and stable 135 geometries / 8 textures.
-No application/shader errors. Synthetic visibility/completion fixtures and one
-desktop run do not qualify all devices or OS lifecycle behavior. The local
-production movement view is refreshed at `http://127.0.0.1:4178/`.
-[Provenance](assets/source-manifest/rear-display-animation.json) records exact
-membership, phases, assumptions, inherited/fresh evidence and hashes. 124 other
-app/authored files remain byte-identical, including the controller and geometry.
-
-Next: user review of the local illustration. Joint-state/manufacturing evidence,
-source-fit qualification and continuous whole-solid clearance remain physical
-acceptance work. No push, PR, merge, deployment or publication; gates remain.
-
-## Front/transfer display animation — preceding milestone
-
-Implemented from clean `58c7e27` on `codex/escapement-clearance-study`.
-[The scoped animation](docs/FRONT_DISPLAY_ANIMATION.md) enables exactly seven
-leaves in four rigid packets: cannon 1 (137), motion works 1 (210/211), hour
-wheel 1 (141/142), and motion works 2 (213/214). Signed world-Z ratios to shared
-accumulated E are −1/540, +1/1620, −1/6480 and −1/1620; mean periods are 1, 3,
-12 and 3 hours. Source occurrence membership, teeth and reversed axes are verified.
-
-93/137 sticking is an explicit **user-authorized modeling assumption**, not
-maker confirmation. Moving 214/static 217 is an incomplete illustration with no
-physical slip claim. All hands and rear display packets remain static. Geometry,
-authored phases, 3 Hz / 21,600 beats/hour, balance amplitude, escapement path/recoil,
-existing train ratios, barrel-II boundary and lifecycle behavior remain unchanged.
-The same controller integrates Explorer, completed Workshop and assembled Bench.
-
-Validation passes: **10 focused tests, typecheck, lint, production build and 22
-browser checks**. All **21,507** installed front-mesh triangle configurations
-clear; 405 neighbor poses retain only five pre-existing contact/overlap pairs.
-A rebuilt partial-scope inventory has 2,441 box exclusions and 136 candidates:
-133 inherit exactly matching kinematics/poses, while 214/187, 214/216 and 214/217
-receive **111 fresh original-solid poses**. No new/increased interference is
-found at those samples. The 214/217 overlap remains **0.007245609 mm³**; 70
-neighbor results remain sampled-only, and invalid-solid/contact/fit limits remain.
-Continuous polygon/enclosure/radial bounds are not whole-assembly certification.
-
-A 25.016-second Chrome interval delivered 1,342 frames, frame p50/p95 16.7/33.3 ms,
-movement-update p95 1.3 ms and stable 135 geometries / 8 textures. No application
-or shader errors; synthetic visibility/Workshop fixtures and one desktop run do
-not qualify all devices. The local production movement view is left open at
-`http://127.0.0.1:4178/`. [Provenance](assets/source-manifest/front-display-animation.json)
-records exact scope, evidence reuse, changed boundaries, hashes and limitations.
-
-This is prescribed kinematics, not physically self-sustaining motion. The older
-research decisions below are historical and superseded only for this authorized
-partial scope. Next: user review of the local illustration; physical acceptance
-still requires joint/fit and tolerance evidence. No push, PR, merge, deployment
-or publication; release gates remain uncleared.
-
-## Dial washer visibility
-
-The thin brass dial washer (d121, movement occurrence 9) now follows the shared
-dial-fitting visibility rule: hidden on the bare movement and shown with loaded
-dials. Inventory and the undialed Bench use the same membership; direct source
-inspection and Workshop placement remain available. Existing review expectations
-now include the washer and the Bench's 218 rendered movement/crown leaves.
-
-Source and diff review only; no local tests, build or browser automation were run.
-Next: validate through GitHub CI when a push is authorized. No push or publication.
-
-## Rear-hour phase ceiling and precision
-
-From clean `09f5469`, the [phase-limit investigation](docs/REAR_HOUR_PHASE_LIMIT.md)
-covers the entire rear-hour relative phase range with 37 continuous polygon
-intervals and 129 queries. Every phase has a running witness below **45.654 nm**
-clearance in the retained section model. Finer sections converge to original-solid
-witness gaps of **45.145 nm**; 24 distance queries at three precision settings
-agree, and independent analytic circular-support distances reproduce the result.
-Phase tuning trades two opposing tight spots rather than opening a larger gap.
-
-This supports a limitation of the **nominal source geometry at fixed shaft
-positions**, not a missed phase or ordinary solver precision. The polygon ceiling
-is not a continuous whole-solid certificate, and source/export tolerances do not
-establish manufactured clearance. Both joint-state interpretations and all prior
-neighbor/source-fit limitations remain. All 126 app/authored files are unchanged;
-no new gear moves. [Provenance](assets/source-manifest/rear-hour-phase-limit.json)
-records the calculations. No app tests, build or browser automation were needed.
-
-Next without maker confirmation: strengthen the 101 sampled-only neighbor checks
-with continuous bounds. Rear-hour physical acceptance still needs source/design
-precision or manufacturing evidence; more nominal phase tuning is not a useful
-route to a materially larger margin. No push, PR, deployment or publication.
-
-## Connected display-train phase and clearance review
-
-From clean `35c7835`, the [complete conditional review](docs/DISPLAY_PHASE_CLEARANCE_REVIEW.md)
-applies both rear phase candidates together in isolated diagnostics. All five
-meshes pass **32,261 actual-runtime triangle configurations**, with 12 additional
-source-critical rear witnesses clear. Exact ratios preserve all seven rigid
-packets; the front phases and the existing clock remain unchanged.
-
-The 13 leaves are screened against every source occurrence and all 15 authored
-fitted-hand poses: 4,516 full-turn box exclusions and 231 candidate neighbor
-pairs. Of those, 121 clear by continuous enclosing/radial bounds, 3 have an
-invariant nonpenetrating relative pose, 101 pass sampled full-period checks, and
-6 retain original overlaps. There are 9,578 neighbor configurations and 9,434
-sampled solid-common queries. No new/increased overlap was found. A 690-pose
-runtime neighbor replay retains 11 pre-existing triangle-contact pairs; fresh
-source queries identify five as zero-common-volume contact interfaces. These
-are not described as positive clearances. Invalid/non-solid source exceptions
-and prior spring-envelope limitations remain explicit.
-
-**No app change or new animation.** All 126 app/authored files match the baseline.
-The rear-hour ~45 nm source margin remains unqualified; 101 neighbor pairs still
-lack continuous whole-solid certification; both joint states still need explicit
-maker confirmation. Next: obtain joint/fit and source-precision evidence before
-accepting a phase installation. Local CAD and isolated runtime checks were
-explained before execution; no app build, test suite or browser automation.
-[Provenance](assets/source-manifest/display-phase-review.json) records the inputs
-and limits. No push, PR, merge, deployment or publication.
-
-## Reverse-face mesh diagnosis
-
-Research from clean `ac6e37c` separates original source poses, authored phases
-and actual runtime transforms. [The diagnosis](docs/REVERSE_MESH_DIAGNOSIS.md)
-finds **phase incompatibilities in the current nominal configuration, with no
-runtime transform fault detected**. Pair 183/216 has no authored phase offsets
-and already fails at the source clocking during rotation. Pair 217/187 fails
-more severely at the source phase; the current +0.25° world hour-wheel phase
-clears its static pose but leaves running penetration.
-
-Isolated phase experiments clear reviewed source polygons and selected original
-solids without editing teeth or axes. Pair 183/216 has about 2.8 µm sampled solid
-clearance; pair 217/187 has only about **45 nm**. Positive continuous bounds apply
-to planar polygons only. The latter margin is not tolerance-qualified, and no
-all-phase neighbor, hand-fit or complete-train acceptance is claimed.
-
-The review records 107,526 baseline/experimental section configurations, a finer
-adaptive hour-pair bound, 35 selected original-solid queries and 33 matching
-runtime witnesses. Independent controller point error is below 1.8e−15 mm;
-runtime witness/CAD pose error is below 1.2e−13 mm. All 126 tracked app/authored
-files remain byte-identical to `ac6e37c`. No new packets move; no phase is installed.
-Local CAD and isolated runtime checks were explained before execution. No app
-build, app test suite or browser automation was run. [Provenance](assets/source-manifest/reverse-mesh-diagnosis.json)
-retains hashes and limitations; detailed outputs remain ignored.
-
-Next: assess whether the nominal phase candidates warrant a separate complete
-train/neighbor review, with the rear-hour precision limitation explicit. Maker
-joint-state evidence remains outstanding. No push, PR, deployment or publication.
-
-## Friction connection source follow-up
-
-Research-only follow-up from clean `a62c820`: [the interface report](docs/FRICTION_CONNECTIONS.md)
-compares four independently downloaded maker STEP components with the original
-assembly. All four pairs have zero-volume Boolean differences in both directions
-and valid inputs/results. The center interface has matching 0.375 mm radius
-shaft lands and bore; the cross-face shaft has an analytic taper interfering
-with pinion 217's bore. The standalone models reproduce both fits.
-
-A same-world-direction 1:1 normal-running drive at each interface is supported
-by the fitted geometry and display function, but **no explicit maker constraint
-was found**. Center friction treatment and the cross-face fit's permanent versus
-slipping character remain undocumented in the inspected sources. Missing torque
-data alone does not make the sticking ratio unknown; it limits physical claims.
-No source was found that clears either previously measured reverse mesh conflict;
-the later diagnosis above separately investigates nominal phase alternatives.
-
-The app and authored assets remain byte-identical to `a62c820`; no new packet
-moves. Focused local CAD comparison was explained before execution. No app
-tests, build or browser automation were run for this research-only pass.
-[Provenance](assets/source-manifest/friction-connections.json) records primary
-URLs/hashes, exact occurrences and evidence limits; downloads remain ignored.
-Next: obtain an explicit maker drawing/instruction for each joint's normal and
-setting states, then separately resolve the reverse running meshes. No maker
-message, push, PR, deployment or publication.
-
-## Motion-work extension investigation
-
-Reviewed from clean `073a870` on `codex/escapement-clearance-study` after the balance
-smoothing revert. [The new study](docs/MOTION_WORKS_STUDY.md) confirms all seven
-candidate packets (13 leaves), tooth counts, axes and conditional signed ratios.
-**No additional packets move.** The normal-running center/cannon friction link and
-cross-face shaft fit are not source-confirmed constraints. Both reverse meshes
-(183/216 and 217/187) penetrate during unchanged-phase coupled motion; original
-solids and actual decoded runtime geometry independently corroborate the failures.
-
-Each mesh was swept through its complete material orientation period: 32,261
-source-section and 32,261 runtime-section configurations, plus 77 selected
-whole-solid and runtime-triangle poses. The three front meshes pass conditionally;
-freezing their meshed dependents also causes interference, so there is no verified
-independently driven subset. Full-turn neighbor boxes are recorded; unresolved
-neighbor candidates are not certified after the mesh rejection. Existing source
-fit, invalid-solid and physical/continuous-clearance limits remain.
-
-All nine focused movement tests and all 18 browser lifecycle checks pass on the
-current-source local development server, with no application/shader errors.
-Local CAD and lifecycle checks were explained
-before execution because no push is authorized; app runtime, phases, timing and
-motion assets remain byte-identical to `073a870`. The local evidence is ignored
-under `artifacts/motion-works/`; [provenance](assets/source-manifest/motion-works-study.json)
-records the decision and hashes. No push, PR, merge, deployment or publication.
-The source follow-up above refines this next action: obtain explicit joint-state evidence and resolve both
-reverse running contacts through a separately reviewed proposal before enabling
-any dependent display packet. The existing prescribed movement remains available
-locally for review; this milestone is an investigation, not a completed extension.
-
-## Running movement implementation
-
-Active branch: `codex/escapement-clearance-study`; nominal-speed work starts from
-clean local milestone `bdf8259`. The assembled escapement, attached hairspring and
-entire currently coupled train through barrel-II drum/lid now share the maker's
-**3 Hz / 21,600 beats per hour** nominal speed (1/3 second per complete oscillation),
-replacing the eight-second illustration. The maker's ML-01 specification independently
-confirms the −2° seconds-shaft/cycle ratio derivation. Mean periods: escape 6⅔ s,
-seconds 60 s, third 562.5 s, center 1 h, transfer 2 h 10 min, barrel II 6 h 40 min.
-
-The [runtime record](docs/RUNNING_MOVEMENT.md) and
-[nominal-speed provenance](assets/source-manifest/nominal-operating-speed.json)
-record source evidence, timing, sampling and validation. Balance amplitude,
-geometry, display phases, recoil, accumulated shaft ratios and pause/resume
-policies remain intact. Hidden tabs and disassembly exclude time; reassembly
-resumes the retained clock. Mainsprings, arbors, ratchets, barrel I, motion works
-and hands remain static. This is prescribed kinematics, not self-sustaining motion.
-
-All **8 focused movement tests**, typecheck, lint, production build and **18 browser
-checks** pass locally. Checks cover varied frame rates, delayed frames, hidden
-lifecycle, reassembly, Workshop completion/Undo, Bench flip and cleanup. A 25-second
-Chrome interval delivers 1,501 frames, p95 16.7 ms, movement-update p95 0.8 ms,
-and stable geometry/texture counts. At 60 FPS there are only 20 samples/cycle;
-fast spokes and brief releases can strobe. This single desktop run and synthetic
-visibility fixture do not qualify all devices or OS lifecycle behavior.
-
-The 8,557 normalized runtime poses agree with the earlier verified path to less
-than 3.2×10⁻¹³ degrees; the GPU spring export is identical. Existing CAD clearance
-evidence remains historical and applicable to unchanged geometry; no CAD sweep
-was rerun. Local validation was essential because no push is authorized and
-higher-speed rendering required inspection. Evidence remains ignored under
-`artifacts/nominal-movement/`; the original `artifacts/running-movement/` is preserved.
-
-No push, PR, merge, deployment or publication. The motion-work investigation above
-supersedes the next action; nominal-speed sampling limitations still apply.
-The [clearance](docs/ESCAPEMENT_CLEARANCE_STUDY.md),
-[interfaces/hairspring](docs/ESCAPEMENT_INTERFACES_AND_HAIRSPRING.md) and
-[train](docs/TRAIN_COUPLING_STUDY.md) studies retain the supporting mechanical
-evidence. Invalid original solids, continuous contacts, physical-device qualification,
-expert acceptance and CAD redistribution permission remain unresolved. Earlier
-`codex/escapement-foundation` and `codex/running-movement` branches are historical.
-
-## Integration state
-
-`develop` includes the Bench feature in [PR #31](https://github.com/galind/zweigesicht-1/pull/31)
-and the homepage/Bench onboarding in [PR #33](https://github.com/galind/zweigesicht-1/pull/33).
-This review starts at `48ef8b3`. UAT now manually serves PR #34's application
-commit `c127cc8`; Vercel reports deployment `dpl_FaFSZZJQdMex7PcVXAfz7P4ScKah`
-ready and promoted to `zweigesicht-uat.vercel.app`. The PR remains open toward
-`develop`; the separate production project and `main` were not changed.
-Repository visibility is public, confirmed through the connected GitHub app.
-
-## Current application
-
-- Explorer: 426 source instances, six mechanism groups, component inspection,
-  separation, and fitted case/dial/hand configurations.
-- Workshop: 83 Easy placements, or 243 Hard placements and 35 transfers; 16
-  foundation leaves, 259 fitted leaves at completion. Undo and local saves remain.
-  Direct `/workshop` visits choose a difficulty or resume a validated save.
-  Its homepage entry appears only in development and Vercel Preview builds.
-- Bench: one movement and two exchanged original holders, a compact oak desk,
-  green mat, steel case and fitted dial/hand stand. Explicit Start captures the
-  mouse; Esc releases it. WASD, Shift, Space, F and R control exploration.
-  Touch-only devices get a desktop explanation without loading the scene.
-  [Bench reference](docs/BENCH_EXPERIENCE.md) owns dimensions, reproduction and controls;
-  [performance review](docs/BENCH_PERFORMANCE.md) owns measurements and their limits.
-- Original holder files remain outside Git. The three prepared Bench payloads
-  are served as owner-approved optimized GLBs through UAT's verified build asset source.
-
-## Cleanup under review
-
-Branch `codex/staging-code-cleanup` targets `develop`; its Vercel Git deployment
-is disabled. Removed superseded design briefs, unused workshop artwork tooling
-and redundant browser-runner aliases. Current guidance replaces the chronological
-progress log; original records remain recoverable at the revisions linked in the
-review. CAD evidence, source manifests and runtime assets are retained.
-
-Bench loading now names and type-checks settled assets instead of asserting
-numeric result types. Disposal is idempotent and cannot rebind graphics targets
-when shader preparation completes after navigation. Profilers use explicit quality
-modes and the current single station. Interaction checks use the current Detail
-select and handle both reversed-depth and fallback Auto settings.
-
-A deeper pass shares dial-enamel setup across all three routes and records the
-fitted transmission for finish restoration in Workshop. Detached Bench materials
-enter the cleanup tree before finish/pose preparation. All four hashed asset
-loaders share one SHA-256 encoder while retaining their existing integrity gates.
-New CPU regressions cover finish transitions, failure cleanup and corrupt assets.
-[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/40231829429)
-passed on `b29c081`: all 157 CPU tests, Workshop inventory, typecheck, lint and
-production build. No local tests, builds or browser automation were run for this
-follow-up. This preference is recorded in [AGENTS.md](AGENTS.md).
-
-The preceding cleanup milestone verified: 149 CPU tests, Workshop inventory,
-typecheck with unused-code checks, lint, production build, HTTP/SEO checks,
-159 Bench UI checks, 22 entry/device
-journeys, nine lifecycle checks, 32 flip checks and 11 interaction checks in each
-of normal and forced fallback depth modes. The independent geometry audit retains
-219 movement/crown leaves in each rest, source/collision agreement and 16 drops.
-The new disposal regression fails against the previous build and passes here.
-Both npm audits report zero findings; 85 local Markdown links and 47 tracked JSON
-files validate. Runtime assets, source manifests and active layouts are unchanged.
-The Vercel production build also passes and excludes `bench-local`. Both first-use
-High fixtures and all 18 Auto/High/Low profiling scenarios complete; these are
-harness checks, not a new device-performance qualification. Evidence is local in
-`artifacts/staging-cleanup/` and `artifacts/bench/staging-cleanup-first-use.json`.
-
-## Hosted delivery and remaining review
-
-The missing Bench payloads are fixed. UAT serves `movement.glb`, `dial.glb` and
-`environment.glb` from the verified asset source. Original holder STLs stay outside
-Git and public output. Their Blob copies and the previous STL-serving deployment
-have been deleted. [Live delivery CI passed](https://github.com/galind/zweigesicht-1/actions/runs/40237774201):
-entry pages and GLBs return HTTP 200 with matching hashes; the six old holder STL
-URLs across UAT, Blob and the retired deployment return HTTP 404/410.
-[Integration CI on `c127cc8`](https://github.com/galind/zweigesicht-1/actions/runs/40237774186)
-passed all 162 tests, inventory, typecheck, lint and both builds.
-
-[Holder conversion CI](https://github.com/galind/zweigesicht-1/actions/runs/40237774203)
-checks recorded source hashes and exact triangle positions, winding and bounds.
-Combined raw size drops from 2,684,768 to 1,407,336 bytes (47.6%); gzip level-9 drops
-from 1,080,745 to 1,045,456 bytes (3.3%). SNORM16 lighting normals have component
-error below 0.000016. Three.js and an independent decoder pass. Runtime hashes and
-measurements are in `assets/source-manifest/holder-runtime.json`; workflow artifacts
-contain only GLBs and the report. Original source URLs/hashes remain unchanged.
-No local conversion, benchmark, build, test or browser automation was run for this
-follow-up. These are size/geometry checks, not live WebGL or FPS measurements.
-
-Review and merge PR #34 into `develop`; UAT serves its checked application snapshot
-without a merge. Actual browser scene-entry review remains separate.
-Keep current status concise: replace superseded next actions rather than adding
-another chronological entry.
-
-Maker permission for current/historical CAD derivatives, hosted/history remediation,
-physical-device and representative accessibility/usability review, mechanical
-review, and clean-machine CAD reproduction remain outstanding. Source URLs/hashes
-and authored placement evidence remain in their existing manifests. The
-[release gates](docs/RELEASE_GATES.md) contain the decisions and remediation paths;
-the [permission request](docs/ASSET_PERMISSION_REQUEST.md) remains unsent.
-Original code/documentation use MIT; maker design/CAD and derivatives do not.
+[architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
+[PR #35 findings and evidence boundaries](docs/MOVEMENT_PR_REVIEW.md).
+
+## Integration and next action
+
+Fetched `develop` is `8c0a367`, which includes PR #34's staging cleanup and
+optimized hosted Bench holders, following PRs #31 and #33.
+[PR #35](https://github.com/galind/zweigesicht-1/pull/35) targets `develop` from
+`codex/escapement-clearance-study`; review began at clean `0f7d1ea`.
+The owner authorized review fixes and SSH pushes to this existing PR branch.
+Its Vercel Git deployment remains disabled. Do not merge, deploy or publish.
+
+Next: push the reviewed loading/verification fixes, inspect GitHub CI on that
+exact head and address any failures. Baseline
+[CI](https://github.com/galind/zweigesicht-1/actions/runs/41199357937) failed five
+Workshop tests because its movement test double lacked `hands.configure()`;
+Holder-assets CI passed. The new changes have static diff review only so far.
+No local tests, builds, CAD calculations or browser automation were run for this
+review. The new CPU regressions and complete checks are delegated to GitHub CI.
+
+## Review changes
+
+- Bench settles the motion sidecar with its other required assets before moving
+  meshes into scene ownership. Route exit, failure and supersession regressions
+  count disposal of every fixture resource and forbid late controller installation.
+- Repair the Workshop movement fixture without weakening load/retry assertions.
+- Guard two historical diagnostic runners against double-applying already installed
+  display packets; report the historical revisions and current alternative.
+- Add an integrated paused-train/hand-resynchronization regression, including
+  repeated fitting and a wall-clock jump.
+- Correct current documentation and condense this status. No mechanical data,
+  generated geometry, phase, motion law or render scheduler is changed. No
+  speculative performance optimization or new speed claim is made.
+
+## Current illustration and retained limits
+
+Explorer, completed Workshop and assembled Bench share prescribed **3 Hz /
+21,600 beats per hour** escapement/train motion, all seven display packets and
+[current-local-time fitted hands](docs/CURRENT_TIME_HANDS.md) on both displays.
+The 93/137 and 214/217 sticking assumptions, balance amplitude, recoil, existing
+hairspring path, authored phases, fittings and materials are retained.
+
+Explorer separation holds the last train/barrel/hairspring and hand pose relative
+to presentation, resuming only at displayed zero separation. Inventory and
+Workshop Undo restore static endpoints. Hidden time is excluded; hand wall-clock
+resynchronization never advances paused train time. Bench flips the whole parent
+and retains reference internal geometry for visitor collisions.
+
+The [power-source investigation](docs/POWER_SOURCE_STUDY.md) confirms the nominal
+series connection. Barrel I's drum is held; barrel II retains `−E/3600` and its
+24,000-active-second mean period. **Mainspring deformation, faithful attachments
+and intermediate arbor motion remain incomplete.** No equal-unwinding law,
+energy, torque, power reserve, reset or self-sustaining behavior is invented.
+
+Hand/marker, broad-lance, central Lance/ring and source-fit overlaps remain
+explicit, as do invalid/non-solid source exceptions and the approximately 45 nm
+rear-hour margin. Sampled and planar clearance evidence is not continuous
+whole-assembly or manufacturing certification. Source geometry is unchanged.
+
+## Prior runtime and hosted evidence
+
+At application milestone `5b8f26a`, 27 focused tests, typecheck, lint, production
+build and 31 browser checks passed locally. Across 2,663 inspected frames,
+including 595 paused frames, independent point transforms agreed within
+2.85e-14 mm. A 25-second Chrome interval retained 135 geometries / 8 textures;
+frame p95 was 16.7 ms and movement-update p95 0.6 ms. These are **historical**
+results, not a rerun of this review or physical-device qualification.
+
+PR #34's integration CI on `c127cc8` passed 162 tests, inventory, typecheck, lint
+and both builds. Its hosted delivery checks verified the three approved optimized
+Bench GLBs and removal of old public holder STL URLs. This review does not change
+or re-verify UAT. Original holder files, downloads, caches and detailed local
+CAD/browser evidence remain outside Git.
+
+The full preceding progress record, exact run links and milestone measurements
+are preserved at [the review baseline](https://github.com/galind/zweigesicht-1/blob/0f7d1ea7f23d6bec34bf501675a83f38c099f9c3/PROGRESS.md).
+Mechanical reports and provenance remain in `docs/` and `assets/source-manifest/`;
+use their recorded revisions when reproducing historical investigations.
+
+## Outstanding release gates
+
+Maker redistribution permission, mechanical/expert acceptance, representative
+accessibility/usability review, physical-device qualification and clean-machine
+CAD reproduction remain outstanding. Repository visibility is public; that does
+not clear redistribution rights. The [release gates](docs/RELEASE_GATES.md) retain
+history remediation decisions and the [permission request](docs/ASSET_PERMISSION_REQUEST.md)
+remains unsent. Original code/documentation use MIT; maker design/CAD and derivatives do not.

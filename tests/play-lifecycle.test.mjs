@@ -39,7 +39,7 @@ function actual(name, fixture, globals = {}) {
   }
   const module = {exports: {}};
   vm.runInNewContext(ts.transpileModule(code, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText, {
-    module, THREE, performance, document: {hidden: false, addEventListener() {}, removeEventListener() {}}, loadMovementBuffer: async () => new ArrayBuffer(0), RunningMovement: class { restore() {} dispose() {} update() { return false; } clock = { suspend() {} }; }, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, fixedViewDirection, motionEase, MOTION, wheelDisplayMatrix, ...graphics(globals), console: {error() {}}, ...globals,
+    module, THREE, performance, document: {hidden: false, addEventListener() {}, removeEventListener() {}}, loadMovementBuffer: async () => new ArrayBuffer(0), RunningMovement: class { restore() {} dispose() {} update() { return false; } clock = { suspend() {} }; hands = { configure() {} }; }, window: {addEventListener() {}, removeEventListener() {}}, getComputedStyle: () => ({getPropertyValue: () => '0px'}), ...CameraFrame, fixedViewDirection, motionEase, MOTION, wheelDisplayMatrix, ...graphics(globals), console: {error() {}}, ...globals,
   });
   return ts.isPropertyDeclaration(member) ? module.exports.call(fixture) : module.exports.bind(fixture);
 }

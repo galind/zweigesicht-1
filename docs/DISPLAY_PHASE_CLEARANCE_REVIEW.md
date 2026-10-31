@@ -2,8 +2,9 @@
 
 **28 October implementation follow-up:** [both display trains now move](REAR_DISPLAY_ANIMATION.md)
 under documented sticking assumptions at 93/137 and 214/217, with the two reviewed
-rear packet phases installed. Hands remain static. The research below is
-historical; its source-fit, sampled/continuous and physical-acceptance limits remain.
+rear packet phases installed. The later [current-time hand milestone](CURRENT_TIME_HANDS.md)
+adds fitted-hand motion and separately reviews its changed interfaces. The research
+below is historical; its source-fit, sampled/continuous and physical-acceptance limits remain.
 
 
 27 October 2026. Research baseline: `35c7835` on

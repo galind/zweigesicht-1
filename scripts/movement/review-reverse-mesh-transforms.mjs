@@ -10,6 +10,8 @@ import { MeshoptDecoder } from '../../explorer/node_modules/three/examples/jsm/l
 import { MeshBVH } from '../../explorer/node_modules/three-mesh-bvh/build/index.module.js';
 import { MOVEMENT, RunningMovement, movementPose } from '../../explorer/src/viewer/RunningMovement.ts';
 import { wheelDisplayMatrix } from '../../explorer/src/viewer/WheelDisplayPose.ts';
+assert.equal(MOVEMENT.packets.length, 8,
+  'Historical reverse-mesh audit: use revision 00973a9 with its recorded inputs. For installed packets use review-display-phases.mjs --installed; see docs/MOVEMENT_PR_REVIEW.md.');
 const read = p => JSON.parse(fs.readFileSync(p));
 const root = 'artifacts/reverse-mesh-diagnosis';
 const source = read('artifacts/motion-works/source.json');

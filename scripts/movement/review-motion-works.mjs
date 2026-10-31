@@ -13,6 +13,8 @@ import {
   shaftMatrix,
 } from "../../explorer/src/viewer/RunningMovement.ts";
 import { wheelDisplayMatrix } from "../../explorer/src/viewer/WheelDisplayPose.ts";
+assert.equal(MOVEMENT.packets.length, 8,
+  'Historical motion-work audit: use revision a62c820 with its recorded inputs. For installed packets use review-display-phases.mjs --installed; see docs/MOVEMENT_PR_REVIEW.md.');
 const root = "artifacts/motion-works";
 const read = (p) => JSON.parse(fs.readFileSync(p));
 const manifest = read("explorer/public/models/assembly-manifest.json");

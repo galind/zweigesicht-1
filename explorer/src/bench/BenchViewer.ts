@@ -334,6 +334,7 @@ export class BenchViewer {
           .loadAsync(assetRequestUrl(paths.catalog))
           .then((g) => track(g.scene)),
         loadCaseRecovery(),
+        loadMovementBuffer(),
       ]);
       if (this.dead || generation !== this.generation) {
         this.release(loaded);
@@ -349,6 +350,9 @@ export class BenchViewer {
       const environment = loadedValue(results[5]);
       const catalog = loadedValue(results[6]);
       recoverCaseSurfaces(catalog, loadedValue(results[7]));
+      // Settle motion with the other assets, before transferring scene ownership.
+      // A route exit must still release every successful sibling load.
+      const movementBuffer = loadedValue(results[8]);
       const records = new Map(manifest.instances.map((p) => [p.id, p]));
       const crownIds = new Set(
         watchConfiguration.leaves
@@ -412,8 +416,6 @@ export class BenchViewer {
       }
       if (required.some((p) => !accepted.has(p.id)))
         throw Error('Incomplete movement');
-      const movementBuffer = await loadMovementBuffer();
-      if (this.dead || generation !== this.generation) return;
       this.runningMovement = new RunningMovement(
         movementBuffer,
         new Map(

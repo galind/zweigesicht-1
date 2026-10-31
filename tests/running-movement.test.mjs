@@ -203,6 +203,37 @@ test("delayed frames, hidden time and reassembly retain the shared pose, shafts 
   run.dispose();
   reference.dispose();
 });
+test("wall-clock resynchronization and repeated hand fitting cannot advance a paused movement", () => {
+  const hand = read('../assets/authored/hand-display-poses.json').hands[0];
+  const { run, meshes } = fixture([hand.leafId]);
+  const mesh = meshes.get(hand.leafId), reference = mesh.matrix.clone();
+  const member = { id: hand.leafId, mesh, reference };
+  let date = new Date(2026, 9, 31, 3, 15);
+  const updateHands = run.hands.update.bind(run.hands);
+  run.hands.update = (active, seconds, escape) => updateHands(active, seconds, escape, date);
+  run.hands.configure([member], true);
+  run.update(0, true);
+  run.update(123456, true);
+  const seconds = run.clock.seconds;
+  const frozenHand = mesh.matrix.clone();
+  const train = new Map(MOVEMENT.packets.flatMap(p => p.members).map(id => [id, meshes.get(id).matrix.clone()]));
+  date = new Date(2027, 0, 1, 9, 45);
+  for (let i = 0; i < 3; i++) {
+    run.hands.configure([], true);
+    assert.ok(mesh.matrix.equals(reference), 'removed fitting restores its base');
+    run.hands.configure([member], true);
+    run.update(900000 + i, false, true);
+    assert.equal(run.clock.seconds, seconds);
+    mesh.matrix.elements.forEach((v, k) => close(v, frozenHand.elements[k]));
+  }
+  run.update(1000000, true);
+  assert.equal(run.clock.seconds, seconds, 'wall-clock catch-up never enters active train time');
+  assert.ok(!mesh.matrix.equals(frozenHand), 'hands resynchronize on the first eligible frame');
+  for (const [id, matrix] of train)
+    meshes.get(id).matrix.elements.forEach((v, k) => close(v, matrix.elements[k]));
+  run.dispose();
+  assert.ok(mesh.matrix.equals(reference));
+});
 test("actual controller retains display phases, handles reversed axes and restores detached geometry", () => {
   const { meshes, run } = fixture(),
     bases = new Map([...meshes].map(([id, m]) => [id, m.matrix.clone()]));

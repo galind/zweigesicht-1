@@ -1,7 +1,7 @@
 # Prescribed running movement
 
-Implemented locally on `codex/escapement-clearance-study`, from the verified
-research milestone `4785cc2`. Updated 28 October 2026. This is an automatically
+Implemented on `codex/escapement-clearance-study`, from the verified
+research milestone `4785cc2`. Current behavior updated 31 October 2026. This is an automatically
 running **kinematic illustration**, not a physical escapement simulation.
 Publication and mechanical acceptance remain subject to [release gates](RELEASE_GATES.md).
 
@@ -66,6 +66,11 @@ precision limit. No physical slipping is modeled or claimed.
 
 The historical static-hand statements in earlier validation sections below are
 superseded by the [current-time hand milestone](CURRENT_TIME_HANDS.md).
+
+Current code-review findings and CI status are in the [PR #35 review](MOVEMENT_PR_REVIEW.md).
+The dated validation sections below retain their original results; commands that
+reconstruct historical experiments require the documented revision and retained
+inputs. They are not blanket reproduction commands for the latest HEAD.
 
 ## Historical motion-work extension review — 27 October 2026
 
@@ -141,7 +146,8 @@ Navigation to a fresh viewer starts a fresh illustration.
 - Explorer keeps running during focus/reveal, selection, isolation, camera moves,
   fitted watch flips and their transitions. Selection bounds update after the
   animated matrices. Whole-movement disassembly and focused part separation
-  suspend the mechanism and active clock, showing static display poses. Reassembly
+  suspend the mechanism and active clock, holding the last motion pose relative
+  to presentation. Reassembly
   resumes retained time only when displayed separation reaches zero, without
   resetting or catching up.
 - All-parts inventory (`spread` layout) still suspends motion and shows static
