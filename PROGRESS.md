@@ -4,6 +4,17 @@ Updated 31 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
+## Review delivery — 31 October 2026
+
+The owner authorized publishing the current branch for a PR targeting `develop`.
+`codex/escapement-clearance-study` includes the running escapement/train, both
+display trains, current-time hands, inspection/pause behavior and mechanical
+evidence through `5b8f26a`. Its Vercel Git deployment is disabled before the SSH
+push. The local verification below remains the latest runtime evidence; GitHub
+CI will validate the complete PR. Next: CI and code/mechanical review before any
+merge. This review delivery does not clear maker redistribution or physical
+acceptance gates and does not authorize a site deployment.
+
 ## Power-source investigation and held separation poses — current milestone
 
 Investigated from clean `d29820e` on `codex/escapement-clearance-study`.
