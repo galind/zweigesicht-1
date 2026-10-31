@@ -72,6 +72,10 @@ the visitor capsule and per-definition BVH collision queries; `Bench.tsx` owns
 the capture/menu/loading UI. Source transforms remain immutable inside an outer
 presentation group. The two maker fixtures and authored Blender environment
 stay out of Git, with hashes and nominal seating evidence recorded separately.
+Animated internals keep a rest BVH and a reference pose under the moving parent.
+Collision sync derives one forward/inverse transform pair from that pose: bounds,
+floor hits, capsule corrections and contact normals all use the collision frame,
+including between syncs while the visible mesh continues animating.
 Configured Vercel builds fetch them from an approved source and verify their
 hashes before packaging. See [bench reproduction and verification](BENCH_EXPERIENCE.md).
 

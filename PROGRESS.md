@@ -2,43 +2,49 @@
 
 Updated 31 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
-[PR #35 findings and evidence boundaries](docs/MOVEMENT_PR_REVIEW.md).
+[repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
 ## Integration and next action
 
-Fetched `develop` is `8c0a367`, which includes PR #34's staging cleanup and
-optimized hosted Bench holders, following PRs #31 and #33.
-[PR #35](https://github.com/galind/zweigesicht-1/pull/35) targets `develop` from
-`codex/escapement-clearance-study`; review began at clean `0f7d1ea`.
-The owner authorized review fixes and SSH pushes to this existing PR branch.
-Its Vercel Git deployment remains disabled. Do not merge, deploy or publish.
+Fetched `develop` is `e9fe2355afd96c1a49dff7ad2f0a3589f142b3db`, including merged
+[PR #35](https://github.com/galind/zweigesicht-1/pull/35) and all its review fixes.
+Its tree exactly matches PR #35's final head `068cbdabfcc337d2eba6b355f52bb12175027ca8`.
+`main` and the common ancestor are both `1139992a8e64078f2f62de2f7303bf2b118805d7`;
+develop is 14 commits ahead with no main-only commits.
 
-Application/research-tool head `a39baec8c197e5420034f8cf38a4af00cfefb78b` passed
-[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41200069583): all
-**187 CPU tests**, Workshop inventory, typecheck, lint, production build and
-Vercel packaging. [Holder-assets CI](https://github.com/galind/zweigesicht-1/actions/runs/41200069590)
-also passed. The following documentation-only commit records that verified state;
-its exact-head check result will be linked in the PR description after CI.
+PR #35's final head passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41200195761)
+(187 CPU tests, inventory, typecheck, lint and both builds) and
+[holder-assets CI](https://github.com/galind/zweigesicht-1/actions/runs/41200195856).
+This is baseline evidence, not validation of the current cleanup.
 
-Next: human review of PR #35 before any separately authorized merge or release.
-No local tests, builds, CAD calculations or browser automation were run for this
-review. The prior browser/CAD evidence below remains historical. Baseline CI
-failures and their fixes are recorded in the review report.
+Current work is on `codex/codebase-cleanup-2026-10-31`, based on fetched develop;
+its Vercel Git deployment is disabled in configuration. The owner authorized the
+SSH push and [PR #36](https://github.com/galind/zweigesicht-1/pull/36), targeting
+`develop`. Static review and diff checks are complete; current exact-head CI
+results are recorded in that PR. The added CPU regression is part of GitHub CI.
+No local tests, builds, CAD calculations or browser automation were run. Prior
+browser/CAD evidence below remains historical.
+
+Next: human review of PR #36 after passing exact-head CI. Changed browser runners
+remain **unverified at runtime** and need a separate authorized runtime check;
+current CI does not execute them. Do not merge, deploy or publish.
 
 ## Review changes
 
-- Bench settles the motion sidecar with its other required assets before moving
-  meshes into scene ownership. Route exit, failure and supersession regressions
-  count disposal of every fixture resource and forbid late controller installation.
-- Repair the Workshop movement fixture and independently check all 20 current
-  phase overrides from recorded reviews, without weakening load/retry assertions.
-- Guard historical diagnostic runners against duplicate installed packets and
-  mislabeled partial scope; report the historical revisions and current alternative.
-- Add an integrated paused-train/hand-resynchronization regression, including
-  repeated fitting and a wall-clock jump.
-- Correct current documentation and condense this status. No mechanical data,
-  generated geometry, phase, motion law or render scheduler is changed. No
-  speculative performance optimization or new speed claim is made.
+- Bench now uses the retained collision frame in both query directions, repairing
+  floor hits, capsule corrections and contact normals near animated internals.
+  A regression compares moving internals against an independent static fixture
+  through parent turnover and rendered geometry replacement.
+- Update stale diagnostic assumptions: assembled movement keeps rendering;
+  separated movement sleeps with frozen train time; reassembly compares against
+  the current presentation rather than an earlier moving frame.
+- Correct the Workshop chooser to 83 prepared fits / 243 individual parts, remove
+  the unused `HAND_TIME` export and share one raw-selection predicate within
+  Explorer retargeting. No source manifest or authored static pose is removed.
+- Preserve PR #35's loading, cancellation, disposal, phase and pause regressions;
+  its review remains in [MOVEMENT_PR_REVIEW.md](docs/MOVEMENT_PR_REVIEW.md).
+  No mechanical data, generated geometry, phase, motion law or render scheduler
+  is changed. No performance measurement or new speed claim is made.
 
 ## Current illustration and retained limits
 

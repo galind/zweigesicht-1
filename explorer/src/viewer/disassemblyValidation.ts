@@ -53,7 +53,6 @@ export async function runDisassemblyChecks(
     for (const side of ['front', 'back'] as const) {
       v.setSide(side);
       await settle(v);
-      const assembled = matrices();
       await capture?.(`${label}-${side}-assembled`, v);
       for (const progress of [0.05, 0.2, 0.4, 0.7, 1, 0.7, 0.2, 0]) {
         v.scrub({ separation: progress });
@@ -90,7 +89,12 @@ export async function runDisassemblyChecks(
           { minLugOutward },
         );
       }
-      check(`${label}/${side}: exact reassembly`, exact(assembled));
+      // The resumed train and wall-clock hands have advanced since the capture.
+      // Compare against the current motion overlay, not that earlier frame.
+      check(
+        `${label}/${side}: reassembly restores current presentation`,
+        (v.assemblyError('presentation') ?? Infinity) < 1e-8,
+      );
     }
   }
   await v.configureWatch({ caseVisible: true, dialsVisible: true });

@@ -341,8 +341,8 @@ export async function runBrowserChecks(v: MovementViewer) {
   const first = v.renderCount;
   await sleep(500);
   checks.push({
-    name: 'Static assembly renders on demand',
-    pass: v.renderCount - first <= 1,
+    name: 'Assembled movement continues rendering after interaction settles',
+    pass: v.renderCount > first && v.runningMovement?.active === true,
     details: { additionalRenders: v.renderCount - first },
   });
   return {

@@ -435,10 +435,11 @@ export async function runWatchChecks(v: MovementViewer) {
   const stable = v.stats();
   await pause(500);
   check(
-    'Warm configuration changes reuse GPU geometry/textures and stop rendering at idle',
+    'Warm configuration changes reuse GPU geometry/textures while the movement runs',
     v.stats().geometries === warm.geometries &&
       v.stats().textures === warm.textures &&
-      v.renderCount === stable.renderCount,
+      v.renderCount > stable.renderCount &&
+      v.runningMovement?.active === true,
   );
   const extension = v.renderer.getContext().getExtension('WEBGL_lose_context');
   if (extension) {

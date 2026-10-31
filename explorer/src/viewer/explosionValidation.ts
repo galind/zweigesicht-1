@@ -170,12 +170,27 @@ export async function runExplosionChecks(v: MovementViewer) {
   const renders = v.renderCount;
   await wait(350);
   checks.push({
-    name: 'Repeated explosion retains GPU resources and settled view does not redraw',
+    name: 'Repeated explosion retains GPU resources and reassembly resumes movement',
     pass:
       before.geometries === after.geometries &&
       before.textures === after.textures &&
-      v.renderCount === renders,
-    details: { before, after, idleRenders: v.renderCount - renders },
+      v.renderCount > renders &&
+      v.runningMovement?.active === true,
+    details: { before, after, runningRenders: v.renderCount - renders },
   });
+  v.patch({ separation: 1 });
+  await settle(v);
+  const pausedRenders = v.renderCount;
+  const pausedSeconds = v.runningMovement?.clock.seconds;
+  await wait(350);
+  checks.push({
+    name: 'Separated movement sleeps without advancing train time',
+    pass:
+      v.renderCount === pausedRenders &&
+      v.runningMovement?.active === false &&
+      v.runningMovement.clock.seconds === pausedSeconds,
+  });
+  v.reset();
+  await settle(v);
   return { checks, stats: v.stats() };
 }

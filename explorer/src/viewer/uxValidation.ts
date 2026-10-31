@@ -645,9 +645,10 @@ export async function runUxChecks(v: MovementViewer) {
   await sleep(900);
   const after = v.stats();
   checks.push({
-    name: 'Settled UX adds no redraws or resources',
+    name: 'Settled UX keeps the movement running without adding resources',
     pass:
-      before.renderCount === after.renderCount &&
+      after.renderCount > before.renderCount &&
+      v.runningMovement?.active === true &&
       before.geometries === after.geometries &&
       before.textures === after.textures,
   });
