@@ -1,10 +1,55 @@
 # Current project status
 
-Updated 28 October 2026. Setup: [README](README.md). Technical reference:
+Updated 31 October 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Review findings and historical evidence:
 [repository review](docs/REPOSITORY_REVIEW.md).
 
-## Current local-time hands — current milestone
+## Power-source investigation and held separation poses — current milestone
+
+Investigated from clean `d29820e` on `codex/escapement-clearance-study`.
+The maker confirms series-connected barrels; original solids establish the
+nominal crown wheel → barrel I spring → coupled arbors → barrel II spring →
+output path. Barrel I's drum/lid and winding train remain held during normal
+running. Barrel II retains `−E/3600` and its 24,000-active-second mean period.
+
+**The remaining power-source animation is not completed.** The intermediate
+arbor rate is an undetermined degree of freedom; a 62:62 connection does not
+establish equal unwinding. Both spring occurrences and an independently
+downloaded maker spring are the same simplified solid. Its nominal dimensions
+do not match its represented strip, and inner/outer hook connections are not
+closed by the supplied geometry. Springs, coupled arbors/wheels and arbor
+screws remain explicitly unresolved. No spring state, reset, torque, stored
+energy or power reserve is invented. The barrel inspection view explains this.
+
+The requested separation-state check found a baseline mismatch: stopping the
+clock restored gear reference angles. Explorer now holds the last active
+barrel/train/hairspring pose relative to separated presentation poses, resuming
+only at displayed zero separation. Inventory and Workshop Undo keep their
+reference-endpoint policies. All gear laws, phases, geometry, seven display
+packets, current-time hands, 3 Hz frequency, balance amplitude and recoil remain.
+
+**27 focused tests, typecheck, lint, production build and 31 browser checks pass.**
+Across 2,663 inspected frames, including 595 paused frames, independent point
+transforms agree within 2.85×10⁻¹⁴ mm; 77 selection frames match bounds exactly.
+A 25.032-second Chrome interval has 1,502 frames, p95 16.7 ms, movement update
+p95 0.6 ms, and stable 135 geometries / 8 textures. These are desktop/synthetic
+lifecycle checks, not physical-device qualification.
+
+Fresh CAD evidence comprises 24 source-solid interfaces, two spring sections and
+the standalone spring comparison. No new assembled moving/deforming interface
+is introduced. Retained overlaps include arbor/screw fits, crown wheel/click,
+and freshly recorded click/click-spring overlap of 0.000917627 mm³. The existing
+hand/marker, broad-lance, Lance/ring, invalid-solid and ~45 nm rear-hour findings
+remain. Neither prior sampling nor static-spring clearance certifies deformation.
+
+See [study and exact missing evidence](docs/POWER_SOURCE_STUDY.md) and
+[provenance](assets/source-manifest/power-source.json). Next: obtain supported
+spring attachments/configurations and an intermediate-arbor motion law before
+implementing the missing motion, then qualify its finite operating range.
+The rebuilt local app at `http://127.0.0.1:4178/` is left in the revealed twin-barrel
+view. No push, PR, merge, deployment or publication.
+
+## Current local-time hands — preceding milestone
 
 Implemented from clean `79c234f` on `codex/escapement-clearance-study`. Both fitted
 displays now show browser-local time through the existing movement scheduler:

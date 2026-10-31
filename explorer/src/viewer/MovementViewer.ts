@@ -2447,6 +2447,7 @@ export class MovementViewer {
           // Wait for the displayed pieces to finish reassembling as well.
           !this.displayedExplosionState?.separation &&
           !this.displayedExplosionState?.partSpread,
+        this.contentPrepared && this.state.layout === 'assembly',
       ) ?? false;
     const rendered =
       running ||

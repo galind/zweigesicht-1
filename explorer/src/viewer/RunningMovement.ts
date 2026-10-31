@@ -287,6 +287,8 @@ export class RunningMovement {
   readonly spring: RunningSpring;
   readonly fork: THREE.BufferGeometry;
   active = false;
+  private applied = false;
+  private hasRun = false;
   private dead = false;
   private readonly delta = new THREE.Matrix4();
   private readonly entries: {
@@ -329,7 +331,7 @@ export class RunningMovement {
   /** Call before the owning viewer writes presentation poses or reparents pieces. */
   restore() {
     this.hands.restore();
-    if (!this.active) return;
+    if (!this.applied) return;
     for (const entry of this.entries) {
       entry.mesh.matrix.copy(entry.base);
       entry.mesh.matrixWorldNeedsUpdate = true;
@@ -337,13 +339,17 @@ export class RunningMovement {
     this.springMesh.geometry = this.sourceSpring;
     this.forkMesh.geometry = this.sourceFork;
     this.active = false;
+    this.applied = false;
   }
-  update(now: number, eligible: boolean) {
+  update(now: number, eligible: boolean, holdPose = false) {
     if (this.dead) return false;
     this.restore();
     movementPose(this.clock.advance(now, eligible), this.pose);
     this.hands.update(eligible, this.clock.seconds, this.pose.escape);
-    if (!eligible) return false;
+    // Explorer separation holds the last active pose in presentation coordinates.
+    // Inventory and incomplete Workshop retain their original source endpoints.
+    if (!eligible && !(holdPose && this.hasRun)) return false;
+    this.hasRun ||= eligible;
     for (const entry of this.entries) {
       entry.base.copy(entry.mesh.matrix);
       const packet = entry.packet;
@@ -364,14 +370,15 @@ export class RunningMovement {
     this.spring.update(this.pose.balance);
     this.springMesh.geometry = this.spring.geometry;
     this.forkMesh.geometry = this.fork;
-    this.active = true;
-    return true;
+    this.applied = true;
+    this.active = eligible;
+    return eligible;
   }
   /** Expected displayed matrix for diagnostics, including prescribed motion. */
   presentationMatrix(id: string, source: THREE.Matrix4, out: THREE.Matrix4) {
     out.copy(source);
     this.hands.presentationMatrix(id, out);
-    if (!this.active) return out;
+    if (!this.applied) return out;
     const entry = this.entries.find((e) => e.id === id);
     if (!entry) return out;
     const packet = entry.packet;

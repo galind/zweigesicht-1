@@ -139,6 +139,38 @@ test("clock is frame-rate independent and resumes without hidden catch-up", () =
   c.advance(600000, true);
   close(c.seconds, 17);
 });
+test("separation holds the last barrel and train poses relative to presentation without advancing time", () => {
+  const { run, meshes } = fixture();
+  run.update(0, true);
+  run.update(123456789, true); // Multiple output-barrel turns, not a near-zero fixture.
+  const seconds = run.clock.seconds;
+  const matrices = new Map([...meshes].map(([id,m]) => [id,m.matrix.clone()]));
+  const spring = run.spring.geometry.getAttribute('position').array.slice();
+  const bases = new Map(run['entries'].map(e => [e.id,e.base.clone()]));
+  const displacement = new THREE.Matrix4().makeRotationX(.3).setPosition(2,-3,7);
+  run.restore();
+  for (const [id, base] of bases) meshes.get(id).matrix.copy(displacement).multiply(base);
+  for (const now of [123456800, 900000000, 1e12]) {
+    assert.equal(run.update(now, false, true), false, 'does not request continuous rendering');
+    assert.equal(run.active, false);
+    assert.equal(run.clock.seconds, seconds);
+    for (const [id, base] of bases) {
+      const want = displacement.clone().multiply(matrices.get(id));
+      meshes.get(id).matrix.elements.forEach((v,i) => close(v,want.elements[i],1e-8));
+      const diagnostic = run.presentationMatrix(id,displacement.clone().multiply(base),new THREE.Matrix4());
+      diagnostic.elements.forEach((v,i) => close(v,want.elements[i],1e-8));
+    }
+    assert.deepEqual(run.spring.geometry.getAttribute('position').array,spring);
+  }
+  run.restore();
+  for (const [id,base] of bases) meshes.get(id).matrix.copy(base);
+  run.update(1e12 + 1000,true);
+  assert.equal(run.clock.seconds,seconds,'resume does not count separation');
+  for (const [id] of bases) meshes.get(id).matrix.elements.forEach((v,i) => close(v,matrices.get(id).elements[i],1e-8));
+  run.update(1e12 + 2000,false); // Inventory / Workshop Undo endpoint policy.
+  for (const [id,base] of bases) assert.ok(meshes.get(id).matrix.equals(base));
+  run.dispose();
+});
 test("delayed frames, hidden time and reassembly retain the shared pose, shafts and spring", () => {
   const { run, meshes } = fixture();
   const { run: reference, meshes: expectedMeshes } = fixture();

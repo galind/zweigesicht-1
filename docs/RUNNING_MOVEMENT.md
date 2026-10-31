@@ -50,8 +50,11 @@ rotation, conjugated into the leaf's reference coordinates so inspection poses
 carry that shaft with the part, including reversed local axes. The third, seconds and transfer display
 phases remain +16.6°, +2.3° and +6.25° in world coordinates.
 
-Both mainsprings, arbors, ratchets and barrel I remain in their
-existing static representations. [Fitted hands now show current local time](CURRENT_TIME_HANDS.md),
+The [31 October power-source investigation](POWER_SOURCE_STUDY.md) confirms the
+series connection and distinguishes the held barrel-I drum/winding train from
+the unresolved intermediate arbors, wheels, screws and spring deformation.
+Those unresolved parts retain their static source representations; no additional
+power-source packet is enabled. [Fitted hands now show current local time](CURRENT_TIME_HANDS.md),
 with fresh moving-hand clearance findings and illustrative setting offsets. The barrel-II drum/lid rotates around its frozen
 mainspring as the study's explicitly illustrative boundary. The studied source
 fit clears those rotating surfaces, but this does not depict spring attachment,
@@ -182,6 +185,13 @@ is an approximation, with measured length/shape errors below; it is not an elast
 material solution.
 
 ## Disassembly pause revision — 28 October 2026
+
+**31 October correction:** separation now holds the last active train/barrel and
+hairspring poses in presentation coordinates, instead of restoring reference
+angles. The clock stays paused until displayed separation reaches zero. Inventory
+and Workshop Undo still restore reference endpoints. See the
+[power-source milestone](POWER_SOURCE_STUDY.md) for fresh runtime validation;
+the paragraph below describes the earlier restoration behavior.
 
 At the user's revised request, whole and focused disassembly now suspend motion.
 Eligibility checks both requested and displayed separation, so setting the target

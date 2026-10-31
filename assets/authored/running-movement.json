@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "frequencyHz": 3,
   "speedBasis": "Maker-specified ML-01 nominal frequency, independently consistent with the recorded train ratios and 18-degree escape advance per complete oscillation; prescribed motion, not measured dynamics",
-  "statePolicy": "Explorer runs during focus, selection, isolation and flipping; disassembly (whole or focused), inventory and hidden tabs suspend active time. Reassembly resumes when displayed separation reaches zero. Workshop runs only complete seated mechanisms; Bench runs the assembled movement.",
-  "powerSourcePolicy": "Mainsprings, arbors, ratchets, barrel I and all hands remain static; winding and setting are excluded",
+  "statePolicy": "Explorer runs during focus, selection, isolation and flipping; whole/focused disassembly suspends active time and holds the last motion pose relative to presentation. Reassembly resumes when displayed separation reaches zero. Inventory and hidden tabs suspend; Workshop runs only complete seated mechanisms and restores endpoints on Undo; Bench runs the assembled movement.",
+  "powerSourcePolicy": "Barrel II drum/lid retains -E/3600. Barrel I drum/lid and winding train are held during normal running. Both mainsprings retain supplied static shapes; coupled arbors, 62-tooth wheels and arbor screws are unresolved, not established as physically stationary. No unwinding, stored-energy or reserve state is modeled. See docs/POWER_SOURCE_STUDY.md.",
   "evidence": "docs/RUNNING_MOVEMENT.md",
   "displayTrainAssumption": "User-authorized normal-running sticking at center shaft/cannon pinion 93/137, same-world-direction 1:1. Modeling assumption, not maker-confirmed evidence.",
-  "displayTrainBoundary": "All seven display packets share E; the remaining incomplete illustration boundaries are their static hands and the existing power-source boundary. No physical slipping is claimed.",
+  "displayTrainBoundary": "All seven display packets share E. Fitted hands show current local time with the documented illustrative setting offsets. The power-source boundary remains incomplete; no physical slipping is claimed.",
   "displayPackets": [
     {
       "name": "cannon1",

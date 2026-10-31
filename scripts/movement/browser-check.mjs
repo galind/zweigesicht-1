@@ -178,7 +178,7 @@ try {
       for (const entry of r.entries) {
         const part = v.renderParts.get(entry.id), packet = entry.packet;
         const degrees = packet.name === 'balance' ? r.pose.balance : packet.name === 'pallet' ? r.pose.pallet : r.pose.escape * packet.ratio[0] / packet.ratio[1];
-        const a = r.active ? (degrees % 360) * Math.PI / 180 : 0, c = Math.cos(a), s = Math.sin(a);
+        const a = r.applied ? (degrees % 360) * Math.PI / 180 : 0, c = Math.cos(a), s = Math.sin(a);
         for (const point of [[0,0,0],[.31,-.27,.19]]) {
           const local = part.center.clone().fromArray(point);
           const expected = local.clone().applyMatrix4(part.displayMatrix ?? part.assembled);

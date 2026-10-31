@@ -55,7 +55,7 @@ import {
   type Part,
 } from '@/src/experience/catalog';
 import { SPREAD_GROUPS } from '@/src/experience/spread';
-import { factsFor } from '@/src/experience/copy';
+import { factsFor, powerSourceNote, powerSourceDetail } from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
 import {
   Sheet,
@@ -693,6 +693,9 @@ export default function Home() {
               {partIndex.get(selected.id)?.location}
             </p>
           )}
+          {group?.id === 'energy' && (
+            <p className="component-location">{powerSourceNote}</p>
+          )}
         </section>
       )}
       <nav className="action-dock site-glass" aria-label="Movement controls">
@@ -1258,6 +1261,7 @@ export default function Home() {
               group && (
                 <>
                   <p>{group.caption}</p>
+                  {group.id === 'energy' && <p>{powerSourceDetail}</p>}
                   <ul className="detail-facts">
                     {mechanismFacts.map((fact) => (
                       <li key={fact.text}>{fact.text}</li>
