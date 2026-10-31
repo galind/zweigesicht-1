@@ -12,7 +12,7 @@ inline threads or conversation comments at that baseline. PR:
 
 | Severity | Failure condition and location | Resolution |
 | --- | --- | --- |
-| P2 | `BenchViewer.load()` awaited the motion sidecar after transferring movement meshes, before assigning `assets`. Leaving during that wait disposed scene-owned meshes but the early return abandoned the other successful loads. A rejected sidecar also left transferred leaves outside the local `loaded` cleanup roots. | Load motion inside the existing `allSettled` transaction and unwrap it before transferring any mesh. CPU regressions execute the real load/release/dispose methods with delayed, rejected and superseded motion loads, counting disposal for every allocated fixture resource. |
+| P2 | [`explorer/src/bench/BenchViewer.ts`](../explorer/src/bench/BenchViewer.ts) `load()` awaited the motion sidecar after transferring movement meshes, before assigning `assets`. Leaving during that wait disposed scene-owned meshes but the early return abandoned the other successful loads. A rejected sidecar also left transferred leaves outside the local `loaded` cleanup roots. | Load motion inside the existing `allSettled` transaction and unwrap it before transferring any mesh. CPU regressions execute the real load/release/dispose methods with delayed, rejected and superseded motion loads, counting disposal for every allocated fixture resource. |
 | P2 | `tests/play-lifecycle.test.mjs` supplied a movement test double without `hands.configure()`. Every successful load threw inside the fixture; five tests failed and CI skipped inventory, typecheck, lint and both builds. | Complete the test double's contract. The next CI run exposed the stale rear-hour expectation behind that exception; derive all 20 phase expectations from recorded reviews, including the added cannon pair. Keep failure/retry and reload assertions intact. |
 | P2 | `review-motion-works.mjs` and `review-reverse-mesh-transforms.mjs` append candidate packets to `MOVEMENT.packets`. On the current implementation those members already exist, so the diagnostic applies their motion twice and can start replacing historical output before failing. | Reject the incompatible current scope before any evidence read/write. The historical `review-display-phases.mjs --front` mode also rejects seven-packet scope instead of mislabeling it as the old four-packet result. Give historical revisions and the current installed-packet runner in the error; CPU regression covers all three guards. |
 | P3 | Current architecture described idle-only rendering and 18 phase overrides; four research follow-up banners still called hands static. `PROGRESS.md` also retained superseded next actions, including an already merged PR #34. | Correct current summaries and reduce progress to current scope, verification and next action. Keep historical reports, source manifests and a pinned link to the prior progress record. |
@@ -75,7 +75,8 @@ packet cache, geometry rewrite or speculative hot-loop refactor is introduced.
 ## Historical reproduction and evidence boundary
 
 The original motion-work runner belongs to `a62c820`; the reverse-mesh runner
-belongs to `00973a9`; `review-display-phases.mjs --front` belongs to `5fd50f0`. Reproduce those studies with the complete corresponding
+belongs to `00973a9`; `review-display-phases.mjs --front` belongs to `5fd50f0`.
+Reproduce those studies with the complete corresponding
 revision and its hash-checked retained inputs, not a mixture of current code and
 old cached results. Their old phase hypotheses and static-hand scope are material
 to the reported failures. The guards added here do not revise those findings.
@@ -101,12 +102,23 @@ and [release gates](RELEASE_GATES.md).
 ## Validation
 
 Baseline [CI run 41199357937](https://github.com/galind/zweigesicht-1/actions/runs/41199357937)
-failed five Workshop fixture tests. Holder-assets CI passed. The review changes
-are statically inspected with `git diff --check`; complete CPU tests, inventory,
-typecheck, lint and production/Vercel packaging will run in GitHub CI after push.
-No local tests, builds, CAD calculations or browser automation are run for this
-review. Runtime assets and authored mechanical policy remain byte-identical to
-the review baseline. Latest exact-head verification is maintained in
+failed five Workshop fixture tests. The first review-fix head `95bb2d6` passed
+186/187 tests, including all five added regressions; correcting its fixture API
+exposed the outdated rear-hour phase assertion, which was then corrected from
+independent recorded evidence.
+
+At `a39baec8c197e5420034f8cf38a4af00cfefb78b`,
+[CI run 41200069583](https://github.com/galind/zweigesicht-1/actions/runs/41200069583)
+passed all **187 CPU tests**, Workshop inventory, typecheck, lint, production
+build and Vercel packaging. [Holder-assets run 41200069590](https://github.com/galind/zweigesicht-1/actions/runs/41200069590)
+also passed. The three early diagnostic guards are covered by one of those tests.
+`git diff --check` passes. The final documentation-only commit records these
+results; its exact-head CI status is reported in the PR description.
+
+No local tests, builds, CAD calculations or browser automation were run for this
+review. The entire movement controller, runtime assets, authored mechanical
+policy and source manifests remain byte-identical to `0f7d1ea`; no historical
+clearance result is represented as newly rerun. Current status is in
 [PROGRESS.md](../PROGRESS.md).
 
 The branch's Vercel Git deployment exclusion stays enabled. This review authorizes

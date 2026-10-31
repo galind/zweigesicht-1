@@ -13,14 +13,17 @@ optimized hosted Bench holders, following PRs #31 and #33.
 The owner authorized review fixes and SSH pushes to this existing PR branch.
 Its Vercel Git deployment remains disabled. Do not merge, deploy or publish.
 
-Next: inspect GitHub CI after the remaining historical-fixture correction.
-Review-fix head `95bb2d6` passed the new regressions; its CI exposed an older
-rear-hour expectation after the missing hands API was repaired. Baseline
-[CI](https://github.com/galind/zweigesicht-1/actions/runs/41199357937) failed five
-Workshop tests because its movement test double lacked `hands.configure()`;
-Holder-assets CI passed. Full validation remains pending.
+Application/research-tool head `a39baec8c197e5420034f8cf38a4af00cfefb78b` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41200069583): all
+**187 CPU tests**, Workshop inventory, typecheck, lint, production build and
+Vercel packaging. [Holder-assets CI](https://github.com/galind/zweigesicht-1/actions/runs/41200069590)
+also passed. The following documentation-only commit records that verified state;
+its exact-head check result will be linked in the PR description after CI.
+
+Next: human review of PR #35 before any separately authorized merge or release.
 No local tests, builds, CAD calculations or browser automation were run for this
-review. The new CPU regressions and complete checks are delegated to GitHub CI.
+review. The prior browser/CAD evidence below remains historical. Baseline CI
+failures and their fixes are recorded in the review report.
 
 ## Review changes
 
