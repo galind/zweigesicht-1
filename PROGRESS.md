@@ -18,16 +18,16 @@ PR #35's final head passed [GitHub CI](https://github.com/galind/zweigesicht-1/a
 This is baseline evidence, not validation of the current cleanup.
 
 Current work is on `codex/codebase-cleanup-2026-10-31`, based on fetched develop;
-its Vercel Git deployment is disabled in configuration. Static review and diff
-checks are complete. The added CPU regression and changed inspection runners
-have **not been executed**. No local tests, builds, CAD calculations or browser
-automation were run. Prior browser/CAD evidence below remains historical.
+its Vercel Git deployment is disabled in configuration. The owner authorized the
+SSH push and [PR #36](https://github.com/galind/zweigesicht-1/pull/36), targeting
+`develop`. Static review and diff checks are complete; current exact-head CI
+results are recorded in that PR. The added CPU regression is part of GitHub CI.
+No local tests, builds, CAD calculations or browser automation were run. Prior
+browser/CAD evidence below remains historical.
 
-Next: obtain explicit authorization to push this new branch and open a PR to
-`develop`, then inspect GitHub CI on that exact head. Browser runner changes need
-a separate authorized runtime check; current CI does not execute them. Do not
-merge, deploy or publish. Prior authorization to push PR #35 does not apply to
-this new branch.
+Next: human review of PR #36 after passing exact-head CI. Changed browser runners
+remain **unverified at runtime** and need a separate authorized runtime check;
+current CI does not execute them. Do not merge, deploy or publish.
 
 ## Review changes
 

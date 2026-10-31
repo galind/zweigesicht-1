@@ -53,10 +53,10 @@ main/develop diff. Coverage included:
 
 | Severity | Failure condition and location | Resolution |
 | --- | --- | --- |
-| P2 | `explorer/src/bench/physics.ts`: internal meshes animate after their rest BVHs are registered. Queries enter the retained collision frame but floor points, corrected capsules and normals return through the live rendered mesh matrix. A stationary visitor near moving internals can receive an inconsistent floor or displacement, including while the parent turns. | Store the forward collision matrix with its inverse. Derive bounds and every query result from the same retained frame. Added `tests/bench-physics.test.mjs` regression comparing an independent static fixture with rendered rotation, geometry replacement and both parent turnover directions: 18 floor and 18 contact probes, also checking normals, grounded/ceiling flags and overlap queries. Regression execution is pending. |
+| P2 | `explorer/src/bench/physics.ts`: internal meshes animate after their rest BVHs are registered. Queries enter the retained collision frame but floor points, corrected capsules and normals return through the live rendered mesh matrix. A stationary visitor near moving internals can receive an inconsistent floor or displacement, including while the parent turns. | Store the forward collision matrix with its inverse. Derive bounds and every query result from the same retained frame. Added `tests/bench-physics.test.mjs` regression comparing an independent static fixture with rendered rotation, geometry replacement and both parent turnover directions: 18 floor and 18 contact probes, also checking normals, grounded/ceiling flags and overlap queries. The regression is included in PR CI. |
 | P2 | `scripts/bench/interaction-check.mjs` waits for `frame === 0`; five Explorer inspection modules still expect idle rendering to stop or compare reassembly to an old moving pose. PR #35 intentionally runs the assembled movement, so those checks time out or report false failures. | Wait for stationary visitor/input state independently of rendering; require active movement to advance without input samples. Check current presentation on reassembly. Keep GPU-resource checks and add an explicit separated-state render/clock freeze assertion. The production scheduler is unchanged. |
 | P3 | `explorer/components/WorkshopChooser.tsx` advertises 89/249 placements after the accepted inventory became 83/243. | Correct the two labels against the current manifests and architecture; preserve 35 transfers, 16 foundation leaves and 259 final leaves. No inventory or save behavior changes. |
-| P3 | `explorer/src/viewer/MovementViewer.ts` repeats the raw-catalog selection policy three times inside `retarget()`. Pose and material branches could drift independently. | Compute one local predicate per retarget and use it for fitted hand pose, Fine hand finish and enamel. No new stored state or generalized policy layer. Existing fitted/raw configuration coverage remains relevant; exact-head CI is pending. |
+| P3 | `explorer/src/viewer/MovementViewer.ts` repeats the raw-catalog selection policy three times inside `retarget()`. Pose and material branches could drift independently. | Compute one local predicate per retarget and use it for fitted hand pose, Fine hand finish and enamel. No new stored state or generalized policy layer. Existing fitted/raw configuration coverage remains relevant; exact-head CI is tracked in PR #36. |
 | P3 | `explorer/src/viewer/HandDisplayPose.ts` exports `HAND_TIME` without a consumer. Running hands now use wall-clock time; static fitted poses still consume the authored pose data. | Remove only the unused export. Tracked imports, tests, diagnostics and research scripts were searched; retain the JSON's time/provenance and static pose helper. |
 
 ### Deliberately retained and deferred
@@ -96,17 +96,19 @@ Vercel builds. Tree equality makes this useful baseline evidence; it does **not*
 validate the cleanup edits. The connector's workflow query is PR-scoped, so an
 empty result for the squash commit is not evidence that its checks failed.
 
-Current verification is static: consumer tracing, manifest inventory inspection,
-diff review, `git diff --check`, and confirmation that mechanical assets, motion
+Verification before opening the PR was static: consumer tracing, manifest
+inventory inspection, diff review, `git diff --check`, and confirmation that mechanical assets, motion
 laws, phases, scheduler and dependency locks are untouched. No local tests,
 builds, browser automation or CAD calculations were run, following `AGENTS.md`.
-The new CPU regression has not run. The changed browser runners have not run and
-are not part of current CI, so visual/runtime equivalence remains unverified by
+The new CPU regression had not run at that point. The changed browser runners
+have not run and are not part of current CI, so visual/runtime equivalence remains unverified by
 this review. No historic performance or clearance measurements were refreshed.
 
-The cleanup branch disables its own Vercel Git deployment. Push and PR creation
-await explicit authorization for this branch; then run/inspect CI on the exact
-pushed head targeting develop. No merge, deployment or publication is authorized.
+The owner subsequently authorized the SSH push and opening
+[PR #36](https://github.com/galind/zweigesicht-1/pull/36), targeting develop.
+Its description/checks record CI results for the exact pushed head, including
+the added CPU regression. The cleanup branch disables its own Vercel Git
+deployment. No merge, deployment or publication is authorized.
 Current delivery status and next action are in [PROGRESS.md](../PROGRESS.md).
 
 ## Staging cleanup — 25 October 2026
