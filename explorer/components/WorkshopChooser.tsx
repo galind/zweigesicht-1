@@ -55,7 +55,7 @@ export function WorkshopChooser({
           >
             <span>
               <strong>Easy</strong>
-              <small>89 prepared fits · Best for a first build</small>
+              <small>83 prepared fits · Best for a first build</small>
             </span>
             <ChevronRight aria-hidden="true" />
           </button>
@@ -65,7 +65,7 @@ export function WorkshopChooser({
           >
             <span>
               <strong>Hard</strong>
-              <small>249 individual parts · 35 subassemblies</small>
+              <small>243 individual parts · 35 subassemblies</small>
             </span>
             <ChevronRight aria-hidden="true" />
           </button>

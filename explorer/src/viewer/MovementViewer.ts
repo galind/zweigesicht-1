@@ -1810,6 +1810,12 @@ export class MovementViewer {
     }
     const group = GROUPS.find((g) => g.id === this.state.group),
       selection = this.state.part;
+    // Raw catalog inspection suppresses fitted display poses and finishes together.
+    const rawSelection =
+      !!selection &&
+      !belongs(selection, ROOT) &&
+      !this.fitted.has(selection) &&
+      ![...this.fittedCase].some((id) => belongs(id, selection));
     const previous = this.displayedExplosionState;
     const changed =
       previous &&
@@ -1845,13 +1851,7 @@ export class MovementViewer {
         previousRotation = p.targetRotation.clone();
       const id = p.source.id;
       p.displayMatrix =
-        this.fitted.has(id) &&
-        !(
-          selection &&
-          !belongs(selection, ROOT) &&
-          !this.fitted.has(selection) &&
-          ![...(this.fittedCase ?? [])].some((id) => belongs(id, selection))
-        )
+        this.fitted.has(id) && !rawSelection
           ? handDisplayMatrix(id, p.assembled)
           : this.fittedCase.has(id)
             ? caseDisplayMatrix(id, p.assembled, caseTo)
@@ -1886,12 +1886,7 @@ export class MovementViewer {
         DIALS.faces.central.styles
           .find((style) => style.id === this.state.centralStyle)!
           .leafIds.includes(id) &&
-        !(
-          selection &&
-          !belongs(selection, ROOT) &&
-          !this.fitted.has(selection) &&
-          ![...this.fittedCase].some((id) => belongs(id, selection))
-        );
+        !rawSelection;
       p.material.userData.configurationOverride.value = roseHand ? 1 : 0;
       if (roseHand) {
         p.material.color.setHex(0xd9ab94);
@@ -1926,14 +1921,7 @@ export class MovementViewer {
         DIALS.presentationOverrides.some((override) => override.leafId === id)
       ) {
         const enamel = p.material as THREE.MeshPhysicalMaterial;
-        const fitted =
-          this.fitted.has(id) &&
-          !(
-            selection &&
-            !belongs(selection, ROOT) &&
-            !this.fitted.has(selection) &&
-            ![...this.fittedCase].some((id) => belongs(id, selection))
-          );
+        const fitted = this.fitted.has(id) && !rawSelection;
         // Translucent vitreous enamel; the raw catalog presentation stays separate.
         applyDialEnamel(enamel, fitted ? 'fitted' : finish);
       }

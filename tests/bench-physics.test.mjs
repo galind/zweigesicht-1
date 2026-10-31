@@ -375,3 +375,65 @@ test("illustrated internals retain their collision pose through parent turnover"
   assert.ok(world.solids[0].bounds.equals(expected));
   assert.ok(world.solids[0].inverse.equals(parent.matrixWorld.clone().invert()));
 });
+
+test("animated internals return floor hits and capsule corrections in the retained collision frame", () => {
+  const reference = new CollisionWorld(), animated = new CollisionWorld();
+  const parents = [new THREE.Group(), new THREE.Group()];
+  const geometry = new THREE.BoxGeometry(6, 2, 4);
+  const meshes = parents.map(parent => {
+    const mesh = new THREE.Mesh(geometry);
+    mesh.position.set(1, 2, 3);
+    parent.add(mesh);
+    mesh.updateMatrix();
+    return mesh;
+  });
+  reference.add(meshes[0]);
+  animated.add(meshes[1], meshes[1].matrix);
+  // Rendering can borrow another geometry without changing the collision BVH.
+  meshes[1].geometry = new THREE.SphereGeometry(20);
+  let hits = 0, contacts = 0;
+  for (const turn of [0, Math.PI / 2, -Math.PI / 2]) {
+    for (const parent of parents) {
+      parent.rotation.x = turn;
+      parent.position.set(7, 8, 9);
+    }
+    reference.sync();
+    for (const phase of [Math.PI / 3, -Math.PI / 4]) {
+      meshes[1].rotation.z = phase;
+      meshes[1].updateMatrix();
+      animated.sync();
+      // Ordinary motion also changes matrixWorld between collision syncs.
+      meshes[1].rotation.z += 0.2;
+      parents[1].updateMatrixWorld(true);
+      const bounds = reference.solids[0].bounds;
+      const center = bounds.getCenter(new THREE.Vector3());
+      for (const x of [center.x - 1, center.x, center.x + 1]) {
+        const floor = reference.floor(x, center.z);
+        assert.ok(Number.isFinite(floor));
+        assert.ok(Math.abs(animated.floor(x, center.z) - floor) < 1e-10);
+        hits++;
+      }
+      for (const point of [
+        new THREE.Vector3(center.x, bounds.max.y - 0.05, center.z),
+        new THREE.Vector3(center.x, bounds.min.y - WALK.height + 0.05, center.z),
+        new THREE.Vector3(bounds.max.x + WALK.radius - 0.05, center.y, center.z),
+      ]) {
+        const expected = point.clone(), actual = point.clone();
+        const a = reference.resolve(expected), b = animated.resolve(actual);
+        assert.ok(a.contacts.length > 0, "Probe must exercise a collision");
+        assert.ok(actual.distanceTo(expected) < 1e-10);
+        assert.equal(b.grounded, a.grounded);
+        assert.equal(b.ceiling, a.ceiling);
+        assert.equal(b.contacts.length, a.contacts.length);
+        a.contacts.forEach((normal, i) => assert.ok(normal.distanceTo(b.contacts[i]) < 1e-10));
+        assert.equal(animated.overlaps(point), reference.overlaps(point));
+        contacts++;
+      }
+    }
+  }
+  assert.equal(hits, 18);
+  assert.equal(contacts, 18);
+  geometry.dispose();
+  meshes[1].geometry.dispose();
+  meshes.forEach(mesh => mesh.material.dispose());
+});

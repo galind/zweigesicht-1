@@ -17,6 +17,7 @@ export const WALK = Object.freeze({
 type Solid = {
   mesh: THREE.Mesh;
   tree: MeshBVH;
+  matrix: THREE.Matrix4;
   inverse: THREE.Matrix4;
   bounds: THREE.Box3;
   referencePose?: THREE.Matrix4;
@@ -36,6 +37,7 @@ export class CollisionWorld {
     this.solids.push({
       mesh,
       tree,
+      matrix: mesh.matrixWorld.clone(),
       inverse: mesh.matrixWorld.clone().invert(),
       bounds: new THREE.Box3().setFromObject(mesh),
       referencePose: referencePose?.clone(),
@@ -54,16 +56,17 @@ export class CollisionWorld {
         // Prescribed internals are visual only. Keep the existing collision pose
         // in the moving station frame; never pair a deformed mesh with a rest BVH.
         if (s.mesh.parent)
-          s.inverse.copy(s.mesh.parent.matrixWorld).multiply(s.referencePose);
-        else s.inverse.copy(s.referencePose);
-        s.bounds.copy(s.referenceBounds).applyMatrix4(s.inverse);
-        s.inverse.invert();
-        continue;
+          s.matrix.copy(s.mesh.parent.matrixWorld).multiply(s.referencePose);
+        else s.matrix.copy(s.referencePose);
+      } else {
+        s.matrix.copy(s.mesh.matrixWorld);
       }
-      s.inverse.copy(s.mesh.matrixWorld).invert();
+      // Both query directions must use the retained collision frame, even when
+      // the displayed mesh is rotating or borrowing the deforming spring.
+      s.inverse.copy(s.matrix).invert();
       s.bounds
-        .copy(s.mesh.geometry.boundingBox!)
-        .applyMatrix4(s.mesh.matrixWorld);
+        .copy(s.referenceBounds ?? s.mesh.geometry.boundingBox!)
+        .applyMatrix4(s.matrix);
     }
   }
   active(s: Solid) {
@@ -176,7 +179,7 @@ export class CollisionWorld {
             segment.end.add(push);
             const worldNormal = normal
               .clone()
-              .transformDirection(s.mesh.matrixWorld);
+              .transformDirection(s.matrix);
             if (worldNormal.y > 0.55) grounded = true;
             // A closest-point contact on a vertical triangle's internal diagonal
             // can point down. Only a surface with a vertical normal component
@@ -184,7 +187,7 @@ export class CollisionWorld {
             if (worldNormal.y < -0.5) {
               const faceNormal = triangle
                 .getNormal(new THREE.Vector3())
-                .transformDirection(s.mesh.matrixWorld);
+                .transformDirection(s.matrix);
               if (Math.abs(faceNormal.y) > 0.5) ceiling = true;
             }
             contacts.push(worldNormal);
@@ -192,8 +195,8 @@ export class CollisionWorld {
             return false;
           },
         });
-        start.copy(segment.start).applyMatrix4(s.mesh.matrixWorld);
-        end.copy(segment.end).applyMatrix4(s.mesh.matrixWorld);
+        start.copy(segment.start).applyMatrix4(s.matrix);
+        end.copy(segment.end).applyMatrix4(s.matrix);
       }
       if (!moved) break;
     }
@@ -218,7 +221,7 @@ export class CollisionWorld {
       const localRay = ray.clone().applyMatrix4(s.inverse);
       const hit = s.tree.raycastFirst(localRay, THREE.DoubleSide);
       if (hit)
-        height = Math.max(height, hit.point.applyMatrix4(s.mesh.matrixWorld).y);
+        height = Math.max(height, hit.point.applyMatrix4(s.matrix).y);
     }
     return height;
   }

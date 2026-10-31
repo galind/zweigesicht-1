@@ -82,13 +82,17 @@ try {
       renders: window.bench.renderCount,
       samples: window.bench.frameTimes.length,
       input: window.bench.activity.lastInput,
-      frame: window.bench.frame,
+      activeSeconds: window.bench.runningMovement.clock.seconds,
       captured: window.bench.status.captured,
       grounded: window.bench.walker.grounded,
     }));
   let idle, resting;
   for (let attempt = 0; attempt < 3; attempt++) {
-    await page.waitForFunction(() => window.bench.frame === 0, null, {
+    await page.waitForFunction(() =>
+      window.bench.walker.grounded &&
+      window.bench.walker.keys.size === 0 &&
+      window.bench.walker.velocity.lengthSq() <= 1e-8 &&
+      window.bench.activity.previousFrame === null, null, {
       polling: 100,
       timeout: 10000,
     });
@@ -98,9 +102,10 @@ try {
     if (resting.input === idle.input) break; // Native device input is not idle.
   }
   check(
-    'captured stationary view sleeps without accumulating idle samples',
+    'captured stationary movement keeps running without accumulating input samples',
     resting.input === idle.input &&
-      resting.renders === idle.renders &&
+      resting.renders > idle.renders &&
+      resting.activeSeconds > idle.activeSeconds &&
       resting.samples === idle.samples &&
       resting.captured,
     { idle, resting },
@@ -108,7 +113,7 @@ try {
   await page.mouse.move(800, 500);
   await page.waitForTimeout(100);
   check(
-    'first look after idle does not record the sleep as a stall',
+    'first look after input inactivity does not record that gap as a stall',
     await page.evaluate(() => Math.max(...window.bench.frameTimes) < 200),
   );
   await page.keyboard.press('Escape');

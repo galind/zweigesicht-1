@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import poses from '../../../assets/authored/hand-display-poses.json';
 import { DIALS } from '../experience/dials';
 
-export const HAND_TIME = poses.time;
 const hands = new Map(poses.hands.map((hand) => [hand.leafId, hand]));
 
 /** A static fitted-display transform; source occurrence matrices stay immutable. */
