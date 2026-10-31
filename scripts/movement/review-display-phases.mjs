@@ -1,4 +1,4 @@
-/** Offline review. --front checks installed partial scope without injecting packets or phases. */
+/** Offline gear review. --front belongs to the historical four-packet milestone. */
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -12,6 +12,9 @@ import {MOVEMENT,RunningMovement,movementPose} from '../../explorer/src/viewer/R
 import {wheelDisplayMatrix} from '../../explorer/src/viewer/WheelDisplayPose.ts';
 const installed=process.argv.includes('--installed');
 const partial=process.argv.includes('--front');
+assert.ok(!(installed && partial), 'Choose either --installed or the historical --front mode.');
+if(partial)assert.equal(MOVEMENT.packets.length, 12,
+  'Historical front-display audit: use revision 5fd50f0 with its recorded inputs. For installed packets use --installed; see docs/MOVEMENT_PR_REVIEW.md.');
 const actual=partial||installed;
 const out=installed?'artifacts/rear-display':partial?'artifacts/front-display':'artifacts/display-phase-review';fs.mkdirSync(out,{recursive:true});
 const read=p=>JSON.parse(fs.readFileSync(p));

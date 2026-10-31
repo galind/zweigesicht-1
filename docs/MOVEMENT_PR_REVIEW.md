@@ -13,8 +13,8 @@ inline threads or conversation comments at that baseline. PR:
 | Severity | Failure condition and location | Resolution |
 | --- | --- | --- |
 | P2 | `BenchViewer.load()` awaited the motion sidecar after transferring movement meshes, before assigning `assets`. Leaving during that wait disposed scene-owned meshes but the early return abandoned the other successful loads. A rejected sidecar also left transferred leaves outside the local `loaded` cleanup roots. | Load motion inside the existing `allSettled` transaction and unwrap it before transferring any mesh. CPU regressions execute the real load/release/dispose methods with delayed, rejected and superseded motion loads, counting disposal for every allocated fixture resource. |
-| P2 | `tests/play-lifecycle.test.mjs` supplied a movement test double without `hands.configure()`. Every successful load threw inside the fixture; five tests failed and CI skipped inventory, typecheck, lint and both builds. | Complete the test double's contract. Keep failure/retry assertions intact; they still exercise actual Workshop lifecycle methods. |
-| P2 | `review-motion-works.mjs` and `review-reverse-mesh-transforms.mjs` append candidate packets to `MOVEMENT.packets`. On the current implementation those members already exist, so the diagnostic applies their motion twice and can start replacing historical output before failing. | Reject the incompatible current scope before any evidence read/write. Give historical revisions and the current installed-packet runner in the error. A CPU regression checks both early failures without private CAD inputs. |
+| P2 | `tests/play-lifecycle.test.mjs` supplied a movement test double without `hands.configure()`. Every successful load threw inside the fixture; five tests failed and CI skipped inventory, typecheck, lint and both builds. | Complete the test double's contract. The next CI run exposed the stale rear-hour expectation behind that exception; derive all 20 phase expectations from recorded reviews, including the added cannon pair. Keep failure/retry and reload assertions intact. |
+| P2 | `review-motion-works.mjs` and `review-reverse-mesh-transforms.mjs` append candidate packets to `MOVEMENT.packets`. On the current implementation those members already exist, so the diagnostic applies their motion twice and can start replacing historical output before failing. | Reject the incompatible current scope before any evidence read/write. The historical `review-display-phases.mjs --front` mode also rejects seven-packet scope instead of mislabeling it as the old four-packet result. Give historical revisions and the current installed-packet runner in the error; CPU regression covers all three guards. |
 | P3 | Current architecture described idle-only rendering and 18 phase overrides; four research follow-up banners still called hands static. `PROGRESS.md` also retained superseded next actions, including an already merged PR #34. | Correct current summaries and reduce progress to current scope, verification and next action. Keep historical reports, source manifests and a pinned link to the prior progress record. |
 
 No geometry, source transform, gear ratio, authored phase, mechanical connection
@@ -75,7 +75,7 @@ packet cache, geometry rewrite or speculative hot-loop refactor is introduced.
 ## Historical reproduction and evidence boundary
 
 The original motion-work runner belongs to `a62c820`; the reverse-mesh runner
-belongs to `00973a9`. Reproduce those studies with the complete corresponding
+belongs to `00973a9`; `review-display-phases.mjs --front` belongs to `5fd50f0`. Reproduce those studies with the complete corresponding
 revision and its hash-checked retained inputs, not a mixture of current code and
 old cached results. Their old phase hypotheses and static-hand scope are material
 to the reported failures. The guards added here do not revise those findings.

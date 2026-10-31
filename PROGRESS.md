@@ -13,11 +13,12 @@ optimized hosted Bench holders, following PRs #31 and #33.
 The owner authorized review fixes and SSH pushes to this existing PR branch.
 Its Vercel Git deployment remains disabled. Do not merge, deploy or publish.
 
-Next: push the reviewed loading/verification fixes, inspect GitHub CI on that
-exact head and address any failures. Baseline
+Next: inspect GitHub CI after the remaining historical-fixture correction.
+Review-fix head `95bb2d6` passed the new regressions; its CI exposed an older
+rear-hour expectation after the missing hands API was repaired. Baseline
 [CI](https://github.com/galind/zweigesicht-1/actions/runs/41199357937) failed five
 Workshop tests because its movement test double lacked `hands.configure()`;
-Holder-assets CI passed. The new changes have static diff review only so far.
+Holder-assets CI passed. Full validation remains pending.
 No local tests, builds, CAD calculations or browser automation were run for this
 review. The new CPU regressions and complete checks are delegated to GitHub CI.
 
@@ -26,9 +27,10 @@ review. The new CPU regressions and complete checks are delegated to GitHub CI.
 - Bench settles the motion sidecar with its other required assets before moving
   meshes into scene ownership. Route exit, failure and supersession regressions
   count disposal of every fixture resource and forbid late controller installation.
-- Repair the Workshop movement fixture without weakening load/retry assertions.
-- Guard two historical diagnostic runners against double-applying already installed
-  display packets; report the historical revisions and current alternative.
+- Repair the Workshop movement fixture and independently check all 20 current
+  phase overrides from recorded reviews, without weakening load/retry assertions.
+- Guard historical diagnostic runners against duplicate installed packets and
+  mislabeled partial scope; report the historical revisions and current alternative.
 - Add an integrated paused-train/hand-resynchronization regression, including
   repeated fitting and a wall-clock jump.
 - Correct current documentation and condense this status. No mechanical data,

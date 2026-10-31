@@ -98,8 +98,19 @@ test('offscreen thumbnail pixels are encoded for browser display without changin
 
 test('Workshop load and reload apply the reviewed wheel phase once to seat and mesh', async () => {
   const reviewed = JSON.parse(fs.readFileSync(new URL('../assets/source-manifest/remaining-wheel-contact.json', import.meta.url)));
-  for (const [id, angle] of Object.entries(reviewed.expectedLocalPhases)) {
-    const record = JSON.parse(fs.readFileSync(new URL('../explorer/public/models/assembly-manifest.json', import.meta.url))).instances.find(p => p.id === id);
+  const manifest = JSON.parse(fs.readFileSync(new URL('../explorer/public/models/assembly-manifest.json', import.meta.url)));
+  const rear = JSON.parse(fs.readFileSync(new URL('../assets/source-manifest/reverse-mesh-diagnosis.json', import.meta.url))).equivalentSimultaneousDiagnosticPacketPhases;
+  const phases = new Map(Object.entries(reviewed.expectedLocalPhases));
+  // Independent recorded world phases supersede the earlier static rear fixture.
+  // Include both leaves of each packet, including the newly phased cannon pair.
+  for (const [definitions, world] of [[[183,184], rear.cannon2WorldDegrees], [[187,188], rear.hour2WorldDegrees]])
+    for (const n of definitions) {
+      const record = manifest.instances.find(p => p.definitionId === `d_0_1_1_${n}`);
+      phases.set(record.id, world * record.worldTransform[2][2]);
+    }
+  assert.equal(phases.size, 20);
+  for (const [id, angle] of phases) {
+    const record = manifest.instances.find(p => p.id === id);
     const globals = loadGlobals({overview: async () => scene(id).object, catalog: async () => scene('catalog').object, diamond: async () => scene('diamond').object});
     globals.fetch = async path => ({ok: true, json: async () => path.includes('assembly-manifest') ? {instances: [record]} : {overview: 'overview', catalog: 'catalog'}});
     const v = fixture(globals);
