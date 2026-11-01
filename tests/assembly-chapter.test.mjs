@@ -5,7 +5,10 @@ import vm from "node:vm";
 import { createRequire } from "node:module";
 import * as lesson from "../explorer/src/assembly/lesson.ts";
 import source from "../explorer/public/models/assembly-manifest.json" with { type: "json" };
-import legacy from "../assets/authored/play-manifest.json" with { type: "json" };
+import { dragCenter } from "../explorer/src/assembly/drag.ts";
+const sourcePoses = Object.fromEntries(
+  source.instances.map((part) => [part.id, part.worldTransform]),
+);
 import seating from "../assets/authored/atelier-layout.json" with { type: "json" };
 import * as THREE from "../explorer/node_modules/three/build/three.module.js";
 const require = createRequire(import.meta.url);
@@ -106,7 +109,7 @@ test("every chapter leaf exists once, with an exact existing fitted transform; d
   assert.equal(new Set(LEAF_IDS).size, LEAF_IDS.length);
   for (const id of LEAF_IDS) {
     assert.equal(byId.get(id)?.isAssembly, false, id);
-    assert.ok(legacy.targetPoses[id], id);
+    assert.ok(sourcePoses[id], id);
   }
   assert.equal(PARTS.mainplate.length, 11);
   assert.equal(DEFERRED_FOUNDATION.length, 7);
@@ -273,16 +276,13 @@ const { AssemblyViewer } = load("explorer/src/assembly/AssemblyViewer.ts", {
   three: THREE,
   "three/addons/loaders/GLTFLoader.js": {},
   "three/addons/libs/meshopt_decoder.module.js": {},
-  "../../../assets/authored/play-manifest.json": legacy,
   "../../../assets/authored/atelier-layout.json": seating,
   "../../../assets/source-manifest/holder-runtime.json": {},
   "../experience/loading": {},
   "../viewer/GraphicsResources": {},
   "../viewer/SourceSurfaces": {},
   "../viewer/materials": {},
-  "../play/state": {
-    dragCenter: (pointer, grab) => ({ x: pointer.x - grab.x, y: pointer.y - grab.y }),
-  },
+  "./drag": { dragCenter },
   "./lesson": lesson,
 });
 const viewerSource = ts.createSourceFile(
@@ -307,7 +307,7 @@ function field(name, fixture) {
     {
       module,
       THREE,
-      dragCenter: (pointer, grab) => ({ x: pointer.x - grab.x, y: pointer.y - grab.y }),
+      dragCenter,
     },
   );
   return module.exports.call(fixture);
@@ -334,7 +334,7 @@ function rig(cursor) {
   for (const id of LEAF_IDS) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
     mesh.matrixAutoUpdate = false;
-    mesh.matrix.set(...legacy.targetPoses[id].flat());
+    mesh.matrix.set(...sourcePoses[id].flat());
     const bounds = records.get(id).boundsWorldMm;
     viewer.pieces.set(id, {
       mesh,
@@ -366,7 +366,7 @@ test("scene accounting preserves fitted matrices, both assemblies and recorded h
     for (const [id, piece] of viewer.pieces)
       assert.deepEqual(
         piece.mesh.matrix.elements,
-        new THREE.Matrix4().set(...legacy.targetPoses[id].flat()).elements,
+        new THREE.Matrix4().set(...sourcePoses[id].flat()).elements,
       );
     const plan = arrangement(cursor);
     assert.equal(viewer.support.get(plan.side).position.x, plan.movement === "aside" ? -49 : 0);

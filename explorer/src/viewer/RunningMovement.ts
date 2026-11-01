@@ -347,7 +347,7 @@ export class RunningMovement {
     movementPose(this.clock.advance(now, eligible), this.pose);
     this.hands.update(eligible, this.clock.seconds, this.pose.escape);
     // Explorer separation holds the last active pose in presentation coordinates.
-    // Inventory and incomplete Workshop retain their original source endpoints.
+    // Inventory retains its original source endpoints.
     if (!eligible && !(holdPose && this.hasRun)) return false;
     this.hasRun ||= eligible;
     for (const entry of this.entries) {

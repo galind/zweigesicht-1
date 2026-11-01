@@ -30,8 +30,9 @@ the new workspace and selection together.
 
 Retained alternatives: a shared loader/controller base would combine optional
 Explorer catalog ownership, transactional Workshop replacement and textured Bench
-scene ownership. Keep those boundaries. Keep validated save replay/migration and
-legacy visibility aliases: persisted sessions and supported APIs consume them.
+scene ownership. Keep those boundaries. Keep chapter save validation and legacy Explorer visibility aliases. Easy/Hard
+save replay and migration were subsequently retired with those modes; their
+stored data is left untouched.
 Keep source/presentation/animated matrices separate; combining them loses exact
 restoration and held separation poses. No cache, worker, scheduler framework,
 packet change or dependency upgrade is warranted by these fixes. Keep the separate
@@ -93,7 +94,7 @@ automation are avoided at the owner's request, now recorded in `AGENTS.md`.
 | Area | Maintenance boundary |
 | --- | --- |
 | Explorer | `app/page.tsx` → `src/experience/` → `MovementViewer`; shared controls/chooser use Base UI. Focus/layout and synchronous React refs couple UI to controllers. |
-| Workshop | `app/workshop/page.tsx` → `Play.tsx` → graph/save state and `PlayViewer`. Preserve validated save migration and prerequisite replay. |
+| Workshop | `app/workshop/page.tsx` → `Assembly.tsx` → the 15-operation lesson/session and `AssemblyViewer`. Easy/Hard and their graph/migration code are retired. |
 | Bench | `app/bench/page.tsx` → capability check → `Bench.tsx` → `BenchViewer`. `physics.ts` owns capsule/BVH queries, `flip.ts` owns turnover safety, `performance.ts` owns input sampling/quality. Scene resources and listeners belong to the route. |
 | Assets | Authored JSON, generated separation offsets and hashed models/sidecars are distinct authorities. Source matrices, IDs, vertex order and hashes must stay aligned. Source manifests and offline probes are not dead frontend code. |
 | Rendering | Controllers own immutable source matrices, presentation, camera, async generations and GPU lifetime. Shared graphics helpers cover renderer defaults and studio resources; Bench also owns image textures/shadows. |

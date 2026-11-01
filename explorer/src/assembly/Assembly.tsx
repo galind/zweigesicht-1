@@ -211,7 +211,7 @@ export default function Assembly() {
           );
       } else
         setSaveNotice(
-          'This chapter save cannot be read. Start a new chapter to replace it. Your original Workshop save is untouched.',
+          'This chapter save cannot be read. Start a new chapter to replace it.',
         );
     });
     return () => {

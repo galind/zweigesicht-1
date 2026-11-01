@@ -12,18 +12,26 @@ The prior progress document lagged the checkout. Current branch:
 `codex/watchmaker-chapter-one`; Vercel Git deployment is disabled for this branch.
 No merge, deployment or publication is authorized by this work.
 
-Implemented `/workshop/assembly`, entered as **Be a watchmaker: Assembly** in
-Workshop's chooser. The chapter covers exactly Tabelle1 rows 5–19, ending with
+Workshop now opens Marco’s **Be a watchmaker: Assembly** directly at `/workshop`.
+The homepage links directly to it; `/workshop/assembly` redirects there, and old
+difficulty query parameters open the same chapter. Easy/Hard, their chooser,
+renderer, dependency rules, migration code, pose manifest, CSS and obsolete
+tests/browser scripts are removed. Historical evidence and reproduction scripts
+remain tied to their recorded revisions. The 22 fitted matrices now come directly
+from the CAD manifest; they were verified identical to the retired pose manifest.
+
+The chapter covers exactly Tabelle1 rows 5–19, ending with
 the winding bridge's second screw. It uses a separate lesson/session, an empty
 central starting area, original movement geometry/materials/fitted transforms,
 the existing two hash-checked holders, and one surface for the movement and
 separately assembled stem. No first-person controller or running animation is
-loaded by this route. Existing Easy/Hard saves and dependencies are unchanged.
+loaded by this route. Existing Easy/Hard browser saves are left untouched and
+are not read or migrated by the chapter.
 
 Sequence, tool, orientation, support, destination and 5 mm placement validation
 are explicit. Wrong committed attempts cost −2 once; each operation earns +10
 once. Undo keeps the reward ledger. Resume, restart, cancellation, interrupted
-loading/graphics and active-only timing are handled separately from Workshop.
+loading/graphics and active-only timing use the chapter session.
 The review radius can be changed to 10 mm. Keyboard exact-seat placement uses
 the same lesson validator. Completion means chapter completion only.
 
@@ -38,7 +46,8 @@ sliding coupling), independently of the old DAG. Holder orientation uses recorde
 assemblies and insertion paths remain unverified. No geometry is changed to
 conceal uncertainty.
 
-Application head `cea83f3d91a36409a0da8ce3cf942014abc7ff40` passed
+Before the Easy/Hard removal, application head
+`cea83f3d91a36409a0da8ce3cf942014abc7ff40` passed
 [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41334573590):
 210 tests, inventory validation, TypeScript, lint, production and Vercel builds.
 The [runner-hosted Chromium check](https://github.com/galind/zweigesicht-1/actions/runs/41334573659)
@@ -56,7 +65,11 @@ automation ran; only source inspection and formatting ran on the owner's compute
 Human visual/usability, actual-device and Marco's mechanical review remain open.
 
 [Draft PR #38](https://github.com/galind/zweigesicht-1/pull/38) targets `develop`.
-Next: Marco reviews `/workshop/assembly` on this branch, especially tool
+Removal verification: GitHub CI and the updated Chromium chapter walkthrough
+are pending. They now check the direct homepage entry, legacy URL compatibility
+and the active chapter asset inventory. No local test/build/browser run is planned.
+
+Next: Marco reviews `/workshop` on this branch, especially tool
 assignments, screw order, prepared components, partial-assembly holder
 contact/stability and 5 versus 10 mm placement. No merge, deployment or
 publication was performed. The PR records final-head check results; this
@@ -72,15 +85,14 @@ also passed. These are prior-review results, not chapter verification.
 
 ## Current illustration and retained limits
 
-Explorer, completed Workshop and assembled Bench share prescribed **3 Hz /
+Explorer and assembled Bench share prescribed **3 Hz /
 21,600 beats per hour** escapement/train motion, all seven display packets and
 [current-local-time fitted hands](docs/CURRENT_TIME_HANDS.md) on both displays.
 The 93/137 and 214/217 sticking assumptions, balance amplitude, recoil, existing
 hairspring path, authored phases, fittings and materials are retained.
 
 Explorer separation holds the last train/barrel/hairspring and hand pose relative
-to presentation, resuming only at displayed zero separation. Inventory and
-Workshop Undo restore static endpoints. Hidden time is excluded; hand wall-clock
+to presentation, resuming only at displayed zero separation. Inventory restores static endpoints; the assembly chapter is static throughout. Hidden time is excluded; hand wall-clock
 resynchronization never advances paused train time. Bench flips the whole parent
 and retains reference internal geometry for visitor collisions.
 

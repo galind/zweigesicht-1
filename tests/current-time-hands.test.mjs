@@ -133,7 +133,7 @@ test("local time, fractional progress, delayed frames, long sessions and timezon
     else process.env.TZ = old;
   }
 });
-test("pause carries frozen shaft with separation, resume resyncs, inventory and Workshop Undo restore bases", () => {
+test("pause carries frozen shaft with separation, resume resyncs, inventory restores bases", () => {
   const { run, entries } = fixture();
   const e = entries.values().next().value;
   run.update(false, 0, 0);

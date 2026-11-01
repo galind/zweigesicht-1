@@ -1,6 +1,7 @@
 # Be a watchmaker: Assembly — chapter 1
 
-Review route: `/workshop/assembly`, also available in the Workshop chooser.
+Review route: `/workshop`, reached directly from **Be a watchmaker: Assembly**.
+The former `/workshop/assembly` URL redirects here; Easy/Hard have been retired.
 The chapter implements Tabelle1 B5:E19 of Marco's supplied workbook, through
 the winding bridge and its two screws. [Provenance](../assets/source-manifest/assembly-chapter-one.json)
 records the workbook hash and existing asset evidence. No workbook, new CAD,
@@ -12,8 +13,8 @@ In the table, `P` expands exactly to
 `p_0_1_1_1__0_1_1_1_4__0_1_1_83_`. The executable
 [lesson definition](../explorer/src/assembly/lesson.ts) contains full IDs.
 Mappings use source names, parentage and existing fitted transforms from
-`explorer/public/models/assembly-manifest.json` and the existing pose manifest.
-The old Easy/Hard dependencies are not authoritative.
+`explorer/public/models/assembly-manifest.json` and its `worldTransform` matrices. Before deleting the retired Easy/Hard manifest,
+all 22 chapter transforms were verified identical to these source matrices.
 
 | Action / workbook row | Source occurrences or operation |
 | --- | --- |
@@ -48,7 +49,7 @@ The source foundation has more parts than a bare plate. This prototype keeps
 the 11 fixed plate/jewel/pin leaves above as one prepared part. It defers
 `P54__0_1_1_194_11`, `_12` (later cap-plate screws) and all five leaves beneath
 `P54__0_1_1_194_13` (Incabloc). Marco's later row 47 installs Incabloc; the
-existing Workshop preinstalls it. This lesson does not. No deformation or
+retired Easy/Hard Workshop preinstalled it. This chapter does not. No deformation or
 spring-opening animation is implied. Prepared pinned lever/bridge subtrees
 are retained because their pin installation is not a chapter operation.
 Chapter completion accounts for exactly **22 distinct leaves**, not the
@@ -103,7 +104,8 @@ tool assignments. The UI exposes that status. Prototype scores and placement
 radius are configurable; they do not represent watchmaking precision.
 
 The separate key `zweigesicht:watchmaker:chapter-1:v1` preserves existing
-`zweigesicht:play:session:v1` saves. A run ID and revision reject stale releases;
+`zweigesicht:play:session:v1` saves untouched. Those retired saves are not read or
+migrated; old difficulty links now open this chapter. A run ID and revision reject stale releases;
 an attempt ledger rejects duplicate events. Undo preserves the highest awarded
 operation and all penalties, so replay/reload cannot farm points. Resume starts
 paused. Restart explicitly replaces only this chapter. Malformed/incompatible
@@ -118,10 +120,10 @@ Completion stops the clock and displays chapter completion only.
 accounting, all 15 operations, all error dimensions, support changes, separate
 stem ownership, scoring/idempotency/Undo/reload, storage failures, active timing,
 scene transforms and cancellation/repeated releases. Existing GitHub CI also
-runs the full regression suite, inventory validation, TypeScript, lint and both
+runs the full regression suite, chapter-asset validation, TypeScript, lint and both
 production builds. The separate `Assembly chapter` GitHub workflow runs
 `scripts/review/assembly-chapter.mjs` in Chromium on the runner. It reuses the
-existing approved UAT holder GLBs, verifies their hashes, then checks a real
+existing approved UAT holder GLBs, verifies their hashes, then checks direct homepage entry, old difficulty links, the prototype URL redirect, a real
 pointer drag, a cancelled drag, the full keyboard-accessible chapter, wrong-tool
 feedback, Undo, pause/reload/resume, legacy-save isolation and missing-holder
 recovery. It uploads no models or screenshots. See

@@ -5,9 +5,10 @@ built with React, TypeScript and Three.js from the maker's CAD assembly.
 
 Inspect and isolate components, explore six mechanism groups, separate the
 assembly, and choose case, dial and hand appearances. A separate Workshop at
-`/workshop` offers Easy and Hard assembly puzzles with optional placement help,
-Undo and local saves. The assembled movement includes a continuously running prescribed escapement and
-train illustration, including both display trains and
+`/workshop` offers **Be a watchmaker: Assembly**, Marco's first 15-operation
+chapter, with tool selection, scoring, active time, Undo and local saves.
+Explorer and Bench show a continuously running prescribed escapement and
+train illustration for the assembled movement, including both display trains and
 [current-local-time hands](docs/CURRENT_TIME_HANDS.md). The [power-source study](docs/POWER_SOURCE_STUDY.md)
 identifies the series connection; spring unwinding and intermediate arbor motion
 remain explicitly incomplete. Separation holds the last motion pose. Timing, assembly paths
@@ -35,16 +36,16 @@ npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 
 Workshop's homepage entry appears in development and Vercel Preview builds;
 it is hidden in production. Direct `/workshop` access remains available.
-Fresh direct visits choose a difficulty on Workshop; valid saves resume.
-Workshop is excluded from indexing and the sitemap.
+Direct visits open Marco's chapter; saved chapter progress resumes after an explicit
+Resume. `/workshop/assembly` redirects to `/workshop`, and old `?mode=easy` or
+`?mode=hard` links open the same chapter. Easy/Hard are retired; their browser
+save is left untouched and is not imported into the chapter. Workshop is excluded
+from indexing and the sitemap.
 
-**Be a watchmaker: Assembly** at `/workshop/assembly` is a separate first-chapter
-prototype following Marco's 15 operations through the winding bridge and its two
-screws. Select a tool, then drag parts on a single green assembly surface.
-Progress, score and active time use a separate save from Easy/Hard Workshop.
-The existing two verified holder GLBs in `explorer/public/bench-local/` are
-required; no cushion or new holder download is used. See the
-[chapter mapping, controls and review limits](docs/ASSEMBLY_CHAPTER_ONE.md).
+The chapter ends with the winding bridge and its two screws. Select a tool, then
+drag parts on a single green assembly surface. The existing two verified holder
+GLBs in `explorer/public/bench-local/` are required; no cushion or new holder
+download is used. See the [chapter mapping, controls and review limits](docs/ASSEMBLY_CHAPTER_ONE.md).
 
 ## Explore the workbench
 
@@ -64,7 +65,7 @@ requires an approved asset source and the applicable release gates.
 
 ```sh
 node --test tests/*.test.mjs
-node scripts/play/validate-inventory.mjs
+node scripts/review/validate-assembly.mjs
 npm --prefix explorer run typecheck
 npm --prefix explorer run lint
 npm --prefix explorer run build

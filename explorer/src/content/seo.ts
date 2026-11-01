@@ -50,8 +50,8 @@ export const homepageMetadata = pageMetadata(title, description, '/');
 
 export const workshopMetadata: Metadata = {
   ...pageMetadata(
-    'Workshop — Assemble Zweigesicht-1',
-    'Assemble the Zweigesicht-1 movement in Easy or Hard mode using the original ML-01 components.',
+    'Be a watchmaker: Assembly — Zweigesicht-1',
+    'Follow Marco Lang’s first assembly chapter in fifteen operations, through the winding bridge and its two screws.',
     '/workshop',
   ),
   robots: { index: false, follow: false },

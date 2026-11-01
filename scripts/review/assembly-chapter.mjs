@@ -61,8 +61,13 @@ try {
     if (message.type() === "error" && /THREE|WebGL|shader/i.test(message.text()))
       errors.push(message.text());
   });
-  await page.goto(`${base}/workshop/assembly`);
+  await page.goto(base);
+  const entry = page.getByRole("link", { name: "Be a watchmaker: Assembly", exact: true });
+  assert.equal(await entry.getAttribute("href"), "/workshop");
+  await entry.click();
+  await page.waitForURL(`${base}/workshop`);
   await page.getByRole("button", { name: "Start chapter", exact: true }).click();
+  assert.equal(await page.getByRole("button", { name: /^(Easy|Hard)$/ }).count(), 0);
   await page.evaluate(() => localStorage.setItem("zweigesicht:play:session:v1", "legacy sentinel"));
   const key = "zweigesicht:watchmaker:chapter-1:v1";
   const saved = () => page.evaluate((key) => JSON.parse(localStorage.getItem(key)), key);
@@ -197,6 +202,25 @@ try {
   await page.getByRole("button", { name: "Retry", exact: true }).click();
   await page.getByText("The surface could not load", { exact: true }).waitFor({ state: "hidden" });
   console.log("Required-holder failure and Retry preserve chapter completion.");
+  await page.locator(".assembly-overlay").waitFor({ state: "hidden" });
+  // Retired difficulty links and the first prototype URL all open the same chapter/save.
+  for (const path of ["/workshop?mode=easy", "/workshop?mode=hard", "/workshop/assembly"]) {
+    await page.goto(base + path);
+    await page
+      .getByRole("heading", { name: "The winding bridge is installed.", exact: true })
+      .waitFor();
+    assert.equal(new URL(page.url()).pathname, "/workshop");
+    assert.equal((await saved()).cursor, 15);
+    assert.equal(await page.getByRole("button", { name: /^(Easy|Hard)$/ }).count(), 0);
+  }
+  assert.equal(
+    await page.evaluate(() => localStorage.getItem("zweigesicht:play:session:v1")),
+    "legacy sentinel",
+  );
+  assert.deepEqual(errors, []);
+  console.log(
+    "Direct homepage entry, retired difficulty links and chapter URL redirect preserve the single Workshop session.",
+  );
 } catch (error) {
   console.error(log);
   if (page && !page.isClosed()) console.error(await page.locator("body").innerText());

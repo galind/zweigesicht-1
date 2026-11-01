@@ -1,4 +1,4 @@
-/** Marco's Tabelle1 rows 5–19. This sequence is independent of the Workshop DAG. */
+/** The sole Workshop lesson: Marco's Tabelle1 rows 5–19. */
 export type Side = 'movement' | 'dial';
 export type Tool = 'hands' | 'tweezers' | 'screwdriver';
 export type Destination =

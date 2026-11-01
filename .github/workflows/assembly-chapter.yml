@@ -7,6 +7,9 @@ on:
       - .github/workflows/assembly-chapter.yml
       - explorer/src/assembly/**
       - explorer/app/workshop/assembly/**
+      - explorer/app/workshop/page.tsx
+      - explorer/app/page.tsx
+      - explorer/src/content/seo.ts
       - scripts/review/assembly-chapter.mjs
       - tests/assembly-chapter.test.mjs
   workflow_dispatch:

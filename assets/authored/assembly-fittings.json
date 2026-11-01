@@ -3,7 +3,7 @@
   "evidence": [
     "explorer/public/models/assembly-manifest.json",
     "assets/authored/explosion.json",
-    "assets/authored/play-manifest.json"
+    "https://github.com/galind/zweigesicht-1/blob/5544dee24a0245b25b4a873723bfde118b13909c/assets/authored/play-manifest.json"
   ],
   "decision": "Owner-directed assembly configuration: case-mounting clamps and their fastening screws require a case; the two radial central-dial retaining screws and thin brass dial washer require the central dial. Washer visibility requested 2026-10-27. Preserve original source geometry and poses.",
   "caseMounts": [

@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import poses from '../../../assets/authored/play-manifest.json';
 import seating from '../../../assets/authored/atelier-layout.json';
 import holders from '../../../assets/source-manifest/holder-runtime.json';
 import type { Manifest, Part } from '../experience/catalog';
@@ -17,7 +16,7 @@ import {
   loadSourceSurfaces,
 } from '../viewer/SourceSurfaces';
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
-import { dragCenter } from '../play/state';
+import { dragCenter } from './drag';
 import {
   PARTS,
   LEAF_IDS,
@@ -220,10 +219,7 @@ export class AssemblyViewer {
           materials.push(material);
           setFinishEnabled(material, true);
           const mesh = new THREE.Mesh(node.geometry, material);
-          const target = (poses.targetPoses as Record<string, number[][]>)[
-            record.id
-          ];
-          if (!target) throw Error(`No fitted transform for ${record.id}`);
+          const target = record.worldTransform;
           mesh.matrixAutoUpdate = false;
           mesh.matrix.set(
             ...(target.flat() as Parameters<THREE.Matrix4['set']>),

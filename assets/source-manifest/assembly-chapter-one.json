@@ -13,7 +13,7 @@
   "cadSourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
   "lessonDefinition": "explorer/src/assembly/lesson.ts",
   "mappingReview": "docs/ASSEMBLY_CHAPTER_ONE.md",
-  "fittedTransforms": "assets/authored/play-manifest.json:targetPoses (poses only; its dependencies are not used)",
+  "fittedTransforms": "explorer/public/models/assembly-manifest.json:instances[].worldTransform (all 22 chapter poses equal the retired play-manifest.json targetPoses at 5544dee24a0245b25b4a873723bfde118b13909c)",
   "holders": {
     "provenance": "assets/source-manifest/holder.json",
     "runtimeHashes": "assets/source-manifest/holder-runtime.json",
