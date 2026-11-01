@@ -96,7 +96,7 @@ the same surface. The supported movement and separate stem remain visible when
 parked. No separate assembly screen or free camera navigation is introduced.
 
 Select the mainplate or movement and use **Turn over** to preview the opposite
-side. For a movement turn or return, **Change support** asks the player to select
+side. For a movement turn or return, **Support** asks the player to select
 one of the actual red supports, then place the movement in the central area.
 These choices are not inferred from the next lesson answer. Turning is an
 inspection preview until seating is committed; it is not a qualified handling

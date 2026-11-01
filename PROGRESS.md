@@ -25,25 +25,34 @@ The 15-operation lesson, session/save schema, validator, scoring, timing and
 geometry/materials/fitted transforms/supports are unchanged. The renderer change
 is accessible instruction copy only. No choices are inferred from the next answer.
 
-Application head `0711398` passed [CI](https://github.com/galind/zweigesicht-1/actions/runs/41356541977).
-The first browser run inspected the toolbar during the shared panel’s closing
-transition; checks now wait for the panel to close and native tap targets to be
-uncovered. The full keyboard chapter then passed. Native touch caught a CSS
-specificity conflict that allowed browser scrolling on part targets; the part
-selector is corrected and computed touch-action is now checked. Touch then
-reached operation 13 and exposed the movement hit rectangle covering the loose
-bridge target. Loose-part targets now sit above assembly targets; the browser
-check verifies the hit identity before every drag. The full 390 px touch-drag
-chapter then passed; the added 320 px tap chapter exposed support-target overlap
-at the same loose bridge. Loose parts now also take priority over support bounds,
-with supports taking priority during explicit support selection. Final browser
-verification is being rerun. Updated interaction checks retain the
-full desktop pointer, touch-drag and keyboard chapters and add a complete 320 px
-tap-only chapter, contextual controls, help/cancellation/focus checks and working
-space checks. Source inspection and diff checks are the only local verification;
-no local tests, builds or browser automation run. Human visual/accessibility and
-actual-phone review remain pending, separately from runner checks. No mechanical
-or release gate is cleared. No merge, deployment or publication is authorized.
+Part targets retain touch dragging and 44 px minimums. Loose parts take priority
+over larger assembly/support hit rectangles; supports take priority during
+explicit support selection. The action row reserves space so selecting or
+dragging does not move the geometry.
+
+Application/check head `60445c2114a76ae20832099886be26230d6c041f` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41357741301):
+  164 tests, chapter-asset validation, TypeScript, lint, production and Vercel builds.
+- [Runner-hosted Chromium checks](https://github.com/galind/zweigesicht-1/actions/runs/41357741463):
+  all 15 operations through desktop pointer input, keyboard placement, 390 px
+  native emulated touch dragging, and a second complete chapter through native
+  taps and explicit destinations at 320 px. Desktop rejects eight deliberate
+  mistakes. Cancellation, Undo without repeated rewards, active timing,
+  pause/reload/resume, completion, restart, required-holder failure/Retry and
+  legacy URLs/saves passed. Contextual controls, help discovery, placement
+  cancellation/focus restoration, actual drag-start hit identity, touch-action,
+  44 px targets and viewport containment are checked. Mat height was 525 px at
+  390 × 844 and 421 px at 320 × 740, with no scrolling control form.
+- Source inspection and `git diff --check`. No local tests, builds or browser
+  automation ran. Only existing hash-verified approved holder assets were reused
+  on the runner; no models or screenshots were published.
+
+Human visual/accessibility review, first-time-user assessment and actual iOS/
+Android phone play remain pending, separately from the automated evidence.
+Marco’s mechanical review and all release gates remain open. No merge,
+deployment or publication was performed. The following milestone changes review
+documentation only; the tested application/check head is identified above.
 
 ## Assembly surface redesign
 
