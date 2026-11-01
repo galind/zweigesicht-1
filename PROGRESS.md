@@ -38,16 +38,29 @@ sliding coupling), independently of the old DAG. Holder orientation uses recorde
 assemblies and insertion paths remain unverified. No geometry is changed to
 conceal uncertainty.
 
-Verification in progress: regression coverage added for the full sequence,
-error dimensions, component counts, holder/orientation changes, separate stem,
-scoring/Undo/duplicate releases, save/resume, timing and scene ownership.
-Static inspection and `git diff --check` are the local checks. No local tests,
-builds or browser automation have run. GitHub CI will provide executable
-verification; results will be recorded before handoff. Human visual/usability
-and Marco's mechanical review remain required.
+Application head `cea83f3d91a36409a0da8ce3cf942014abc7ff40` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41334573590):
+210 tests, inventory validation, TypeScript, lint, production and Vercel builds.
+The [runner-hosted Chromium check](https://github.com/galind/zweigesicht-1/actions/runs/41334573659)
+also passed: a real support drag and cancelled drag, all 15 operations through
+the keyboard placement path, wrong-tool feedback, Undo without repeated reward,
+pause/reload/resume, chapter completion, legacy-save isolation and required-holder
+failure/Retry handling. The check reuses the existing approved UAT holder GLBs
+with recorded hash verification; no new assets or screenshots were published.
 
-Next: GitHub CI, then Marco's review of the playable chapter, tool assignments,
-screw order, prepared components, holder contact/stability and placement radius.
+The 12 added CPU regressions cover the full sequence, error dimensions,
+component counts, holder/orientation changes, separate stem ownership,
+scoring/Undo/duplicate releases, save/resume, timing and unchanged fitted matrices.
+Static inspection and `git diff --check` pass. No local tests, builds or browser
+automation ran; only source inspection and formatting ran on the owner's computer.
+Human visual/usability, actual-device and Marco's mechanical review remain open.
+
+[Draft PR #38](https://github.com/galind/zweigesicht-1/pull/38) targets `develop`.
+Next: Marco reviews `/workshop/assembly` on this branch, especially tool
+assignments, screw order, prepared components, partial-assembly holder
+contact/stability and 5 versus 10 mm placement. No merge, deployment or
+publication was performed. The PR records final-head check results; this
+verification snapshot identifies the tested application head explicitly.
 
 ## Previous integration evidence
 
