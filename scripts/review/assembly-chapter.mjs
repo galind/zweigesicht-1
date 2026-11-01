@@ -35,7 +35,7 @@ for (const stream of [server.stdout, server.stderr])
   stream.on("data", (chunk) => {
     log = (log + chunk).slice(-15000);
   });
-let browser, page;
+let browser, page, touchClient;
 const key = "zweigesicht:watchmaker:chapter-1:v1";
 const manifest = JSON.parse(
   await fs.readFile(
@@ -129,7 +129,7 @@ async function drag(
   const end = await target(item, destination, side);
   end.x += miss;
   if (touch) {
-    const cdp = await page.context().newCDPSession(page);
+    const cdp = touchClient;
     await cdp.send("Input.dispatchTouchEvent", {
       type: "touchStart",
       touchPoints: [{ ...start, id: 1 }],
@@ -152,7 +152,6 @@ async function drag(
       type: cancel ? "touchCancel" : "touchEnd",
       touchPoints: [],
     });
-    await cdp.detach();
   } else {
     await page.mouse.move(start.x, start.y);
     await page.mouse.down();
@@ -166,8 +165,16 @@ async function activate(locator, mode) {
   if (mode === "keyboard") {
     await locator.focus();
     await page.keyboard.press("Enter");
-  } else if (mode === "touch") await locator.tap();
-  else await locator.click();
+  } else if (mode === "touch") {
+    await locator.waitFor({ state: "visible" });
+    const box = await locator.boundingBox();
+    assert.ok(box, "Visible touch control");
+    await touchClient.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ x: box.x + box.width / 2, y: box.y + box.height / 2, id: 1 }],
+    });
+    await touchClient.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  } else await locator.click();
 }
 async function chooseSupport(side, mode) {
   await activate(button("Change support"), mode);
@@ -258,6 +265,27 @@ try {
       hasTouch: touch,
     });
     page = await context.newPage();
+    touchClient = touch ? await context.newCDPSession(page) : undefined;
+    await page.addInitScript(() => {
+      window.__assemblyInputTrace = [];
+      for (const type of ["pointerdown", "pointerup", "pointercancel", "click"])
+        document.addEventListener(
+          type,
+          (event) => {
+            const button = event.target.closest?.("button");
+            window.__assemblyInputTrace.push({
+              type,
+              target:
+                button?.getAttribute("aria-label") || button?.textContent || event.target.tagName,
+              pointer: event.pointerId,
+              primary: event.isPrimary,
+              detail: event.detail,
+            });
+            if (window.__assemblyInputTrace.length > 40) window.__assemblyInputTrace.shift();
+          },
+          true,
+        );
+    });
     page.setDefaultTimeout(30000);
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
@@ -449,11 +477,16 @@ try {
       await part("mainplate").waitFor();
       await layoutCheck("320 px phone loose parts");
     }
+    await touchClient?.detach();
+    touchClient = undefined;
     await context.close();
   }
 } catch (error) {
   console.error(log);
-  if (page && !page.isClosed()) console.error(await page.locator("body").innerText());
+  if (page && !page.isClosed()) {
+    console.error(await page.locator("body").innerText());
+    console.error(await page.evaluate(() => window.__assemblyInputTrace));
+  }
   throw error;
 } finally {
   await browser?.close();
