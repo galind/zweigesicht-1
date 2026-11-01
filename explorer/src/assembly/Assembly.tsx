@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import Link from 'next/link';
 import { Hand, Pencil, Wrench, RotateCw, ZoomIn, ZoomOut, Pause, Play, Undo2, RotateCcw } from 'lucide-react';
 import { AssemblyViewer, type Drop } from './AssemblyViewer';
 import { OPERATIONS, LABELS, LESSON, availableItems, arrangement, type Item, type Tool, type Side, type Destination } from './lesson';
@@ -85,16 +86,22 @@ export default function Assembly() {
   }
 
   useEffect(() => {
-    const saved = readSession(storage);
-    if (saved.session) {
-      current.current = saved.session; setSession(saved.session); setElapsed(saved.session.elapsedMs);
-      const plan = arrangement(saved.session.cursor);
-      setSide(plan.side); setSupport(plan.side);
-      setFeedback('Your chapter is saved. Resume when you are ready.');
-    } else if (saved.status === 'empty' || saved.status === 'unavailable') {
-      const value = createSession(crypto.randomUUID()); current.current = value; setSession(value);
-      if (saved.status === 'unavailable') setSaveNotice('Saving is unavailable. This attempt will stay in memory.');
-    } else setSaveNotice('This chapter save cannot be read. Start a new chapter to replace it. Your original Workshop save is untouched.');
+    let disposed = false;
+    queueMicrotask(() => {
+      if (disposed) return;
+      const saved = readSession(storage);
+      if (saved.session) {
+        current.current = saved.session; setSession(saved.session); setElapsed(saved.session.elapsedMs);
+        const next = OPERATIONS[saved.session.cursor];
+        const plan = arrangement(saved.session.cursor);
+        setSide(next?.side ?? plan.side); setSupport(next?.support ?? plan.side);
+        setFeedback('Your chapter is saved. Resume when you are ready.');
+      } else if (saved.status === 'empty' || saved.status === 'unavailable') {
+        const value = createSession(crypto.randomUUID()); current.current = value; setSession(value);
+        if (saved.status === 'unavailable') setSaveNotice('Saving is unavailable. This attempt will stay in memory.');
+      } else setSaveNotice('This chapter save cannot be read. Start a new chapter to replace it. Your original Workshop save is untouched.');
+    });
+    return () => { disposed = true; };
   }, []);
 
   useEffect(() => {
@@ -107,7 +114,7 @@ export default function Assembly() {
       controller.onPick = (item, event) => pickRef.current(item, event);
       void controller.load();
     } catch {
-      setError('3D could not start. Enable WebGL, then retry.');
+      queueMicrotask(() => setError('3D could not start. Enable WebGL, then retry.'));
       return;
     }
     return () => { controller.dispose(); viewer.current = null; };
@@ -178,7 +185,7 @@ export default function Assembly() {
 
   return <main className="assembly-page" data-tool={tool ?? 'none'}>
     <header className="assembly-header">
-      <div><a href="/">Zweigesicht-1</a><h1>Be a watchmaker: Assembly</h1><p>Chapter 1 · The winding assembly</p></div>
+      <div><Link href="/">Zweigesicht-1</Link><h1>Be a watchmaker: Assembly</h1><p>Chapter 1 · The winding assembly</p></div>
       <dl className="assembly-stats"><div><dt>Score</dt><dd>{session ? score(session) : 0}</dd></div><div><dt>Active time</dt><dd>{duration(elapsed)}</dd></div><div><dt>Progress</dt><dd>{cursor} / 15</dd></div></dl>
       <div className="assembly-session-controls">
         <button disabled={!session || !ready || complete} onClick={() => setPaused(!paused)}>{paused ? <Play /> : <Pause />}{paused ? 'Resume' : 'Pause'}</button>
@@ -224,8 +231,8 @@ export default function Assembly() {
       <div className="assembly-turn"><label>Placement / turn side<select value={side} onChange={e => { viewer.current?.cancel(); setSide(e.target.value as Side); }}><option value="movement">Movement side upward</option><option value="dial">Dial side upward</option></select></label>
         <button disabled={!active} onClick={() => { gesture.current = null; attempt({ item: 'movement', destination: 'work', distanceMm: 0 }, 'flip'); }}><RotateCw />Turn & exchange support</button></div>
     </section>
-    <div className="assembly-feedback" role="status" aria-live="polite">{feedback}</div>
-    {saveNotice && <p className="assembly-save-notice" role="status">{saveNotice}</p>}
+    <output className="assembly-feedback" aria-live="polite">{feedback}</output>
+    {saveNotice && <output className="assembly-save-notice">{saveNotice}</output>}
     <details className="assembly-review"><summary>Placement controls & prototype notes</summary>
       <p>Tool assignments are provisional. The holder poses follow recorded mainplate seating; fit and stability of these partial assemblies still need Marco’s review. The stem rests in the clear area without claiming a fit in either holder.</p>
       <p>The prepared mainplate includes its existing pins and fixed jewels. The five Incabloc components and two later cap-plate screws are reserved for a future chapter. Bridge screw order is provisional.</p>
