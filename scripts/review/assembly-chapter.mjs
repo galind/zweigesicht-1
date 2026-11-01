@@ -126,6 +126,11 @@ async function drag(
   const box = await part(item).boundingBox();
   assert.ok(box, `Selectable geometry for ${item}`);
   const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  const hitItem = await page.evaluate(
+    ({ x, y }) => document.elementFromPoint(x, y)?.closest("[data-item]")?.dataset.item,
+    start,
+  );
+  assert.equal(hitItem, item, `Drag starts on ${item}, without interception by another target`);
   const end = await target(item, destination, side);
   end.x += miss;
   if (touch) {

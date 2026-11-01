@@ -30,8 +30,11 @@ The first browser run inspected the toolbar during the shared panel’s closing
 transition; checks now wait for the panel to close and native tap targets to be
 uncovered. The full keyboard chapter then passed. Native touch caught a CSS
 specificity conflict that allowed browser scrolling on part targets; the part
-selector is corrected and computed touch-action is now checked. Browser
-verification is being rerun. Updated interaction checks retain the
+selector is corrected and computed touch-action is now checked. Touch then
+reached operation 13 and exposed the movement hit rectangle covering the loose
+bridge target. Loose-part targets now sit above assembly targets; the browser
+check verifies the hit identity before every drag. Browser verification is
+being rerun. Updated interaction checks retain the
 full desktop pointer, touch-drag and keyboard chapters and add a complete 320 px
 tap-only chapter, contextual controls, help/cancellation/focus checks and working
 space checks. Source inspection and diff checks are the only local verification;
