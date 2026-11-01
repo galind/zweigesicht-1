@@ -161,3 +161,18 @@ camera/zoom, pointer and keyboard usability on representative devices. No local
 test, build or browser automation is required for implementation; CI and human
 visual review remain distinct evidence. No remaining chapter, full disassembly,
 running animation, spring deformation or screw-thread simulation is included.
+
+### Human and physical-device review still required
+
+- Assess the composition, part readability at normal zoom, discoverability of
+  turning/support changes, and whether near-action feedback is easy to follow.
+  Automated viewport checks do not establish visual quality.
+- Play the full chapter on actual iOS and Android phones. Check finger occlusion,
+  tap versus drag, page-scroll prevention, zoom/Show all, orientation changes,
+  browser chrome resizing and background/resume. Chromium's 390 px touch
+  emulation and 320 px containment checks do not qualify physical devices.
+- Review screen-reader naming, focus order, modal focus and the complete
+  keyboard/non-drag path with representative users.
+- Marco reviews the tool assignments, screw numbering, prepared-component
+  boundaries and the physical contact/stability and insertion paths of partial
+  assemblies. The visual redesign does not clear any mechanical or release gate.

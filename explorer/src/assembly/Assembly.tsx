@@ -106,6 +106,7 @@ export default function Assembly() {
   const [saveNotice, setSaveNotice] = useState('');
   const [tool, setTool] = useState<Tool | null>(null);
   const toolRef = useRef<Tool | null>(null);
+  const toolTouchUntil = useRef(0);
   const [selected, setSelected] = useState<Item>();
   const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side>('movement');
@@ -144,6 +145,11 @@ export default function Assembly() {
   function cancelGesture() {
     viewer.current?.cancel();
     gesture.current = null;
+  }
+  function chooseTool(value: Tool) {
+    cancelGesture();
+    toolRef.current = value;
+    setTool(value);
   }
   function itemSide(item: Item): Side {
     if (selected === item) return side;
@@ -695,10 +701,28 @@ export default function Assembly() {
             <button
               key={value}
               aria-pressed={tool === value}
-              onClick={() => {
-                cancelGesture();
-                toolRef.current = value;
-                setTool(value);
+              onPointerUp={(event) => {
+                if (event.pointerType !== 'touch' || !event.isPrimary) return;
+                const rect = event.currentTarget.getBoundingClientRect();
+                if (
+                  event.clientX < rect.left ||
+                  event.clientX > rect.right ||
+                  event.clientY < rect.top ||
+                  event.clientY > rect.bottom
+                )
+                  return;
+                // Browsers may suppress the compatibility click immediately after a drag.
+                toolTouchUntil.current = performance.now() + 700;
+                chooseTool(value);
+              }}
+              onClick={(event) => {
+                // Keyboard activation has detail 0; ignore only duplicate pointer clicks.
+                if (
+                  event.detail > 0 &&
+                  performance.now() < toolTouchUntil.current
+                )
+                  return;
+                chooseTool(value);
               }}
             >
               <ToolIcon tool={value} />

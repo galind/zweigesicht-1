@@ -37,7 +37,9 @@ now run as separate GitHub jobs. All builds/checks and the full keyboard walkthr
 The 390 px touch pass also completed all 15 operations; follow-up checks found
 a premature 320 px resize measurement and, under faster input, a stale tool
 snapshot. The resize check now waits for layout; gesture capture reads the
-latest explicit tool choice and renderer callbacks update before paint. Final
+latest explicit tool choice and renderer callbacks update before paint. Native input traces then showed Chromium omitting the compatibility click after
+a drag despite delivering touch press/release. Tool taps now select on native
+release, suppress duplicate clicks and preserve keyboard activation. Final
 pointer/touch reruns are pending. Source inspection and diff checks pass. No local
 tests, builds or browser automation have run. Responsive implementation is not
 physical-phone qualification. Human visual/accessibility review, real devices
