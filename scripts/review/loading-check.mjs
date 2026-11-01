@@ -67,32 +67,31 @@ try {
         initialPositions.every((p) => p.every((v, i) => Math.abs(v - initialPositions[0][i]) < 1)),
       initialPositions,
     );
-    const headerLayout = await page.locator(".topbar").evaluate((header) => {
-      const box = (s) => header.querySelector(s).getBoundingClientRect();
-      const action = box(".assemble-trigger"),
-        brand = box(".identity");
-      const controls = box(
-        innerWidth <= 1100 || document.documentElement.classList.contains("text-enlarged")
-          ? ".mobile-menu-trigger"
-          : ".header-actions",
-      );
+    const entryLayout = await page.locator(".bench-invitation").evaluate((invitation) => {
+      const action = invitation.querySelector('a[href="/workshop"]');
+      const box = action.getBoundingClientRect();
+      const next = action.nextElementSibling?.getBoundingClientRect();
+      const header = document.querySelector(".topbar").getBoundingClientRect();
+      const dock = document.querySelector(".action-dock").getBoundingClientRect();
       const apart = (a, b) =>
         a.right <= b.left + 1 ||
         b.right <= a.left + 1 ||
         a.bottom <= b.top + 1 ||
         b.bottom <= a.top + 1;
       return {
-        centered: Math.abs((action.left + action.right) / 2 - innerWidth / 2) < 1,
-        separated: apart(action, brand) && apart(action, controls),
-        label: header.querySelector(".assemble-trigger").textContent.trim(),
+        contained: box.left >= 0 && box.right <= innerWidth && box.top >= 0,
+        separated: apart(box, header) && apart(box, dock),
+        aboveNext: !next || box.bottom <= next.top,
+        label: action.textContent.trim(),
       };
     });
     check(
-      `${key}: watchmaker action is centered and clear of its neighbors`,
-      headerLayout.centered &&
-        headerLayout.separated &&
-        headerLayout.label === "Be a watchmaker: Assembly",
-      headerLayout,
+      `${key}: watchmaker invitation is above the first-person entry and clear of controls`,
+      entryLayout.contained &&
+        entryLayout.separated &&
+        entryLayout.aboveNext &&
+        entryLayout.label === "Be a watchmaker: Assembly",
+      entryLayout,
     );
     const geometry = await page.evaluate(() => {
       const rect = (selector) => {

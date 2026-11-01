@@ -1984,22 +1984,6 @@ canvas:focus-visible {
   }
 }
 
-/* Deliberate homepage entry to the separately loaded Workshop route. */
-.assemble-trigger {
-  min-height: 44px;
-  margin-left: 0;
-  padding-inline: 14px;
-  border-radius: 10px;
-  background: rgb(38 38 38 / 82%);
-  font-weight: 600;
-  pointer-events: auto;
-}
-@media (hover: hover) {
-  .assemble-trigger:hover {
-    color: #fff;
-    background: rgb(255 255 255 / 8%);
-  }
-}
 /* Phones keep only primary actions on the canvas; secondary actions are on demand. */
 .mobile-menu-trigger,
 .mobile-more-trigger,
@@ -2091,37 +2075,20 @@ canvas:focus-visible {
   }
 }
 
-/* Keep the preview-only Workshop entry between identity and navigation. */
+/* Keep identity and navigation on one row after moving the Workshop invitation. */
 .topbar,
 .text-enlarged .topbar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
   align-items: center;
 }
 .topbar .identity {
-  grid-column: 1;
-  grid-row: 1;
   justify-self: start;
   margin-right: 0;
 }
-.topbar .experience-entries {
-  grid-column: 2;
-  grid-row: 1;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  pointer-events: auto;
-}
-.topbar .experience-entries a {
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
 .topbar .header-actions,
 .topbar .mobile-menu-trigger {
-  grid-column: 3;
-  grid-row: 1;
   justify-self: end;
   width: auto;
 }
@@ -2133,9 +2100,6 @@ canvas:focus-visible {
     display: flex;
     pointer-events: auto;
   }
-  .topbar .experience-entries {
-    flex-direction: column;
-  }
 }
 .text-enlarged .topbar .header-actions {
   display: none;
@@ -2144,30 +2108,7 @@ canvas:focus-visible {
   display: flex;
   pointer-events: auto;
 }
-@media (max-width: 380px) {
-  .topbar .identity {
-    grid-column: 1 / 3;
-  }
-}
-@media (max-width: 600px) {
-  .topbar .experience-entries {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-}
-@media (max-width: 1000px) {
-  .text-enlarged .topbar .identity {
-    grid-column: 1 / 3;
-  }
-}
-.text-enlarged .topbar .experience-entries {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  flex-wrap: wrap;
-}
-/* A separate invitation keeps the workbench distinct from view controls. */
+/* Stack experience invitations above the dock on narrow screens. */
 .bench-invitation {
   position: absolute;
   bottom: max(20px, env(safe-area-inset-bottom));
@@ -2175,6 +2116,11 @@ canvas:focus-visible {
   width: max-content;
   max-width: calc(100% - var(--edge-left) - var(--edge-right));
   z-index: 2;
+}
+.bench-invitation:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .bench-trigger {
   text-decoration: none;
@@ -2191,6 +2137,7 @@ canvas:focus-visible {
 }
 .bench-invitation-heading {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: 16px;

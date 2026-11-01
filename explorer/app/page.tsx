@@ -417,17 +417,6 @@ export default function Home() {
         identityClassName="identity"
         data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
       >
-        <div className="experience-entries">
-          {__WORKSHOP_ENTRY_ENABLED__ && (
-            <Link
-              href="/workshop"
-              prefetch={false}
-              className="text-button assemble-trigger site-glass"
-            >
-              Be a watchmaker: Assembly
-            </Link>
-          )}
-        </div>
         <SiteHeaderActions
           className="header-actions"
           aria-label="Information and settings"
@@ -531,6 +520,17 @@ export default function Home() {
           details,
         )}
       >
+        {__WORKSHOP_ENTRY_ENABLED__ && (
+          <Link
+            href="/workshop"
+            prefetch={false}
+            className="bench-trigger site-glass"
+          >
+            <span className="bench-invitation-heading">
+              Be a watchmaker: Assembly <ArrowRight aria-hidden="true" />
+            </span>
+          </Link>
+        )}
         <BenchInvitation />
       </div>
       <section className="workspace" aria-label="Movement explorer">

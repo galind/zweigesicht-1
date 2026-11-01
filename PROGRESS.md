@@ -13,7 +13,9 @@ The prior progress document lagged the checkout. Current branch:
 No merge, deployment or publication is authorized by this work.
 
 Workshop now opens Marco’s **Be a watchmaker: Assembly** directly at `/workshop`.
-The homepage links directly to it; `/workshop/assembly` redirects there, and old
+The homepage invitation sits directly above “Explore it in first person”, sharing
+its card style and arrow; the old header placement and CSS are removed.
+`/workshop/assembly` redirects there, and old
 difficulty query parameters open the same chapter. Easy/Hard, their chooser,
 renderer, dependency rules, migration code, pose manifest, CSS and obsolete
 tests/browser scripts are removed. Historical evidence and reproduction scripts
@@ -63,6 +65,9 @@ scoring/Undo/duplicate releases, save/resume, timing and unchanged fitted matric
 Static inspection and `git diff --check` pass. No local tests, builds or browser
 automation ran; only source inspection and formatting ran on the owner's computer.
 Human visual/usability, actual-device and Marco's mechanical review remain open.
+Workshop has responsive phone layouts and pointer-based touch dragging; real-phone
+playability is not yet validated. First-person Bench requires keyboard/mouse.
+The homepage invitation relocation has source/diff review; CI validation is pending.
 
 [Draft PR #38](https://github.com/galind/zweigesicht-1/pull/38) targets `develop`.
 Next: Marco reviews `/workshop` on this branch, especially tool
