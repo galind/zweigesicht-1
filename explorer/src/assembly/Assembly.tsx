@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -104,6 +105,7 @@ export default function Assembly() {
   const [error, setError] = useState('');
   const [saveNotice, setSaveNotice] = useState('');
   const [tool, setTool] = useState<Tool | null>(null);
+  const toolRef = useRef<Tool | null>(null);
   const [selected, setSelected] = useState<Item>();
   const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side>('movement');
@@ -183,7 +185,7 @@ export default function Assembly() {
       id: crypto.randomUUID(),
       runId: value.runId,
       revision: value.revision,
-      tool,
+      tool: toolRef.current,
       side: chosenSide,
       support,
     };
@@ -196,7 +198,7 @@ export default function Assembly() {
       id: crypto.randomUUID(),
       runId: value.runId,
       revision: value.revision,
-      tool,
+      tool: toolRef.current,
       side,
       support,
     };
@@ -266,6 +268,7 @@ export default function Assembly() {
     setSide('movement');
     setSupport('movement');
     setSelected(undefined);
+    toolRef.current = null;
     setTool(null);
     setPanel(null);
     setChangingSupport(false);
@@ -335,12 +338,12 @@ export default function Assembly() {
     };
   }, [retry]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     commitRef.current = (drop) => attempt(drop);
     pickRef.current = (item, event) =>
       beginGesture(item, event, viewer.current!.renderer.domElement, true);
   });
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (session)
       viewer.current?.update(session, selected, side, active, hint, radius);
   }, [session, selected, side, active, hint, radius, ready, retry]);
@@ -694,6 +697,7 @@ export default function Assembly() {
               aria-pressed={tool === value}
               onClick={() => {
                 cancelGesture();
+                toolRef.current = value;
                 setTool(value);
               }}
             >

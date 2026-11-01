@@ -33,7 +33,12 @@ wrong orientation, destination and distance through real input. Head `b997e60` p
 builds in [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41348357024).
 The final refinement locks the phone action-strip height, fits the 320 px tool
 strip and batches redraws per frame. Desktop, touch and keyboard walkthroughs
-now run as separate GitHub jobs. Final refinement/browser results are pending. Source inspection and diff checks pass. No local
+now run as separate GitHub jobs. All builds/checks and the full keyboard walkthrough passed at `160c7cc`.
+The 390 px touch pass also completed all 15 operations; follow-up checks found
+a premature 320 px resize measurement and, under faster input, a stale tool
+snapshot. The resize check now waits for layout; gesture capture reads the
+latest explicit tool choice and renderer callbacks update before paint. Final
+pointer/touch reruns are pending. Source inspection and diff checks pass. No local
 tests, builds or browser automation have run. Responsive implementation is not
 physical-phone qualification. Human visual/accessibility review, real devices
 and Marco's mechanical review remain outstanding. No merge, deployment, new CAD

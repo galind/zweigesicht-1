@@ -313,6 +313,13 @@ try {
     for (let index = 0; index < OPERATIONS.length; index++) {
       const op = OPERATIONS[index];
       await activate(button(toolName[op.tool]), mode);
+      await page.waitForFunction(
+        (name) =>
+          [...document.querySelectorAll(".assembly-tool-buttons button")].some(
+            (el) => el.textContent.trim() === name && el.getAttribute("aria-pressed") === "true",
+          ),
+        toolName[op.tool],
+      );
       if (index === 3 || index === 10) {
         await activate(part("movement"), mode);
         // Both side and support must be chosen, with no automatic correct choice.
