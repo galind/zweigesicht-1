@@ -201,7 +201,11 @@ async function layoutCheck(label) {
       scroll: document.documentElement.scrollHeight,
       surface: { width: wrap.width, height: wrap.height },
       parts,
-      controls: [...document.querySelectorAll(".assembly-toolbar button")].map((el) => {
+      controls: [
+        ...document.querySelectorAll(
+          ".assembly-toolbar button, .assembly-header button, .assembly-header a, .assembly-selection:not([inert]) button",
+        ),
+      ].map((el) => {
         const r = el.getBoundingClientRect();
         const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
         return {
@@ -219,7 +223,11 @@ async function layoutCheck(label) {
     result.scroll <= result.height + 1,
     `${label}: no scrolling form ${JSON.stringify(result)}`,
   );
-  assert.ok(result.surface.width >= result.width - 2, `${label}: full-width surface`);
+  assert.ok(result.surface.width >= result.width - 50, `${label}: mat retains working width`);
+  assert.ok(
+    result.surface.height >= result.height * 0.5,
+    `${label}: at least half the viewport remains working space`,
+  );
   for (const control of result.controls)
     assert.ok(
       control.visible && control.hit && control.width >= 43 && control.height >= 43,
@@ -304,6 +312,42 @@ try {
     await layoutCheck(mode);
     assert.equal(await page.locator("select:visible").count(), 0);
     assert.equal(
+      await page.locator(".assembly-surface-wrap button:not(.assembly-part)").count(),
+      0,
+    );
+    assert.equal(await button("Place…").count(), 0, "Actions wait for a selection");
+    assert.equal(await button("Turn over").count(), 0);
+    assert.equal(
+      await page.locator(".assembly-stats:visible").count(),
+      0,
+      "Session metrics stay in the menu",
+    );
+    await activate(button("How to play"), mode);
+    await page.getByText("To play without dragging,", { exact: false }).waitFor();
+    await activate(button("Back to bench"), mode);
+    await page.locator(".assembly-dialog").waitFor({ state: "hidden" });
+    // Discover the tap/keyboard alternative, inspect every destination, then cancel for free.
+    await activate(part("bridge"), mode);
+    assert.equal(
+      await button("Turn over").count(),
+      0,
+      "Loose screws/parts have no turn or support controls",
+    );
+    assert.equal(await button("Change support").count(), 0);
+    await activate(button("Place…"), mode);
+    assert.equal(await page.locator(".assembly-placement .menu-link").count(), 3);
+    if (mode === "keyboard") {
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(() => document.activeElement?.textContent === "Place…");
+    } else
+      await activate(
+        page.locator(".assembly-placement").getByRole("button", { name: "Close", exact: true }),
+        mode,
+      );
+    await activate(button("Cancel selection"), mode);
+    assert.equal((await saved()).mistakes, 0);
+    assert.equal((await saved()).cursor, 0);
+    assert.equal(
       await page
         .locator(".assembly-page > :not(dialog)")
         .filter({ hasText: "provisional" })
@@ -324,6 +368,8 @@ try {
                 : op.destination === "stem"
                   ? "Fit to stem"
                   : "Place in working area";
+        await activate(button("Place…"), mode);
+        assert.equal(await page.locator(".assembly-placement .menu-link").count(), 3);
         await button(label).focus();
         await page.keyboard.press("Enter");
       } else await drag(op.item, op.destination, op.side, { touch });
@@ -356,6 +402,7 @@ try {
           await page.getByRole("status").filter({ hasText: "side must face upward" }).waitFor();
           assert.equal((await saved()).cursor, index);
         }
+        await layoutCheck(`${mode} contextual movement actions at ${index}`);
         await activate(button("Turn over"), mode);
         if (mode === "desktop") {
           const mistakes = (await saved()).mistakes;
@@ -432,7 +479,7 @@ try {
       assert.equal((await saved()).cursor, 15);
       await page.unroute("**/bench-local/dial.glb");
       await button("Retry").click();
-      await page.locator("dialog").waitFor({ state: "hidden" });
+      await page.locator(".assembly-dialog").waitFor({ state: "hidden" });
       for (const path of ["/workshop?mode=easy", "/workshop?mode=hard", "/workshop/assembly"]) {
         await page.goto(base + path);
         await page
@@ -476,6 +523,28 @@ try {
       await waitCursor(0);
       await part("mainplate").waitFor();
       await layoutCheck("320 px phone loose parts");
+      // Complete a second chapter using only native taps and the contextual destination menu.
+      for (const [index, op] of OPERATIONS.entries()) {
+        await activate(button(toolName[op.tool]), mode);
+        await activate(part(op.item), mode);
+        if (index === 3 || index === 10) {
+          await layoutCheck(`320 px tap movement actions at ${index}`);
+          await activate(button("Turn over"), mode);
+          await chooseSupport(op.support, mode);
+        }
+        await activate(button("Place…"), mode);
+        const destinations = page.locator(".assembly-placement .menu-link");
+        assert.equal(await destinations.count(), 3);
+        const targetIndex =
+          op.destination === "movement-rest" ? 0 : op.destination === "stem-rest" ? 2 : 1;
+        await activate(destinations.nth(targetIndex), mode);
+        await waitCursor(index + 1);
+      }
+      assert.equal((await saved()).awarded, 15);
+      assert.equal((await saved()).mistakes, 0);
+      console.log(
+        "320 px: all 15 operations also passed with native taps and explicit destination choices.",
+      );
     }
     await touchClient?.detach();
     touchClient = undefined;

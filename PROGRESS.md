@@ -4,6 +4,35 @@ Updated 1 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
+## Workshop interface simplification
+
+Started clean at `c8559127e9abc6b93dd29873f6165a936af7b3d4`, matching the fetched
+SSH branch `codex/watchmaker-chapter-one` and draft PR #38. Inspected the actual
+homepage/Explorer, shared site chrome, Sheet component and global styles first.
+
+The workshop now reuses the site's typography, neutral colours, glass surfaces,
+text buttons, Lucide icons, menu rows and Sheet behaviour. The green mat is the
+working surface within that frame. One instruction and one feedback area replace
+repeated guidance; score/time are in the menu and progress is a quiet count.
+A selected part has one compact action row with **Place…**, cancellation and,
+for assemblies, turning/support choices. All three destinations remain explicit
+in the contextual panel. Decorative captions, permanent placement rings/buttons,
+floating part labels, the separate zoom strip and superseded CSS are removed.
+Tools and Undo stay in the dock; pause/help/menu stay in the header. Restart,
+zoom and technical review controls remain easy to find in the menu.
+
+The 15-operation lesson, session/save schema, validator, scoring, timing and
+geometry/materials/fitted transforms/supports are unchanged. The renderer change
+is accessible instruction copy only. No choices are inferred from the next answer.
+
+Verification is in progress on GitHub CI. Updated interaction checks retain the
+full desktop pointer, touch-drag and keyboard chapters and add a complete 320 px
+tap-only chapter, contextual controls, help/cancellation/focus checks and working
+space checks. Source inspection and diff checks are the only local verification;
+no local tests, builds or browser automation run. Human visual/accessibility and
+actual-phone review remain pending, separately from runner checks. No mechanical
+or release gate is cleared. No merge, deployment or publication is authorized.
+
 ## Assembly surface redesign
 
 Started clean at `4c1542a` on `codex/watchmaker-chapter-one`, matching the fetched

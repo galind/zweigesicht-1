@@ -19,16 +19,15 @@ import {
   RotateCcw,
   ArrowLeft,
   Maximize,
-  MoreHorizontal,
+  Menu,
   X,
-  MousePointer2,
   HelpCircle,
+  ChevronRight,
 } from 'lucide-react';
 import {
   AssemblyViewer,
   type Drop,
   type SurfaceLayout,
-  type Point,
 } from './AssemblyViewer';
 import {
   OPERATIONS,
@@ -51,6 +50,14 @@ import {
   type Session,
   type Attempt,
 } from './session';
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { SiteHeaderActions } from '@/components/site-chrome';
 import './assembly.css';
 
 const TOOL_LABELS: Record<Tool, string> = {
@@ -111,14 +118,13 @@ export default function Assembly() {
   const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side>('movement');
   const [feedback, setFeedback] = useState('');
-  const [feedbackPoint, setFeedbackPoint] = useState<Point>();
   const [accepted, setAccepted] = useState(false);
   const [layout, setLayout] = useState<SurfaceLayout>({ items: [], zones: [] });
   const [dragging, setDragging] = useState(false);
   const [hovered, setHovered] = useState<Item>();
   const [changingSupport, setChangingSupport] = useState(false);
+  const [placing, setPlacing] = useState(false);
   const [panel, setPanel] = useState<'menu' | 'help' | 'review' | null>(null);
-  const modal = useRef<HTMLDialogElement>(null);
   const lastLayout = useRef('');
   const [hint, setHint] = useState(false);
   const [radius, setRadius] = useState(LESSON.placementRadiusMm);
@@ -161,10 +167,11 @@ export default function Assembly() {
   }
   function choose(item: Item) {
     cancelGesture();
+    setPlacing(false);
     if (changingSupport && item.startsWith('support-')) {
       setSupport(item === 'support-dial' ? 'dial' : 'movement');
       setChangingSupport(false);
-      setFeedback('Support chosen. Seat the movement when ready.');
+      setFeedback('Support chosen.');
       return;
     }
     setSide(itemSide(item));
@@ -182,6 +189,7 @@ export default function Assembly() {
       if (item.startsWith('support-')) choose(item);
       return;
     }
+    setPlacing(false);
     const chosenSide = itemSide(item);
     setSide(chosenSide);
     setSelected(item);
@@ -234,20 +242,6 @@ export default function Assembly() {
     if (result.session === value) return;
     apply(result.session);
     setAccepted(result.accepted);
-    const surface = host.current?.getBoundingClientRect();
-    const point =
-      drop.point ??
-      viewer.current?.project(
-        viewer.current.target(drop.item, drop.destination),
-      );
-    if (surface && point)
-      setFeedbackPoint({
-        x: Math.max(120, Math.min(surface.width - 120, point.x - surface.left)),
-        y: Math.max(
-          20,
-          Math.min(surface.height - 45, point.y - surface.top - 45),
-        ),
-      });
     setFeedback(
       result.accepted
         ? value.cursor < value.awarded
@@ -258,6 +252,7 @@ export default function Assembly() {
             .replace(/^Next: (.*?)\. .*$/, 'First: $1.'),
     );
     setChangingSupport(false);
+    setPlacing(false);
     if (result.accepted) {
       setSelected(undefined);
       setSide(arrangement(result.session.cursor).side);
@@ -277,6 +272,7 @@ export default function Assembly() {
     toolRef.current = null;
     setTool(null);
     setPanel(null);
+    setPlacing(false);
     setChangingSupport(false);
     setFeedback('');
   }
@@ -425,14 +421,6 @@ export default function Assembly() {
   }, []);
 
   const blocked = !ready || (paused && !complete) || restartOpen || !session;
-  useEffect(() => {
-    if (blocked || panel) {
-      if (!modal.current?.open) modal.current?.showModal();
-    } else modal.current?.close();
-  }, [blocked, panel]);
-
-  const focusedItem = hovered ?? selected;
-  const focusAnchor = layout.items.find((entry) => entry.item === focusedItem);
   const canTurn = selected === 'movement' || selected === 'mainplate';
   const targetLabel = (destination: Drop['destination']) =>
     destination === 'movement-rest'
@@ -455,6 +443,7 @@ export default function Assembly() {
     apply(undo(current.current));
     if (complete) setPaused(false);
     setSelected(undefined);
+    setPlacing(false);
     setChangingSupport(false);
     setSide(arrangement(cursor - 1).side);
     setSupport(arrangement(cursor - 1).side);
@@ -467,55 +456,75 @@ export default function Assembly() {
       data-tool={tool ?? 'none'}
       data-dragging={dragging}
     >
-      <header className="assembly-header">
-        <Link href="/" aria-label="Back to Zweigesicht-1">
-          <ArrowLeft />
-        </Link>
-        <div className="assembly-title">
-          <h1>Be a watchmaker!</h1>
-          <span>01 / The winding assembly</span>
-        </div>
-        <dl className="assembly-stats">
-          <div>
-            <dt>Score</dt>
-            <dd>{session ? score(session) : 0}</dd>
-          </div>
-          <div>
-            <dt>Active time</dt>
-            <dd>{duration(elapsed)}</dd>
-          </div>
-          <div>
-            <dt>Progress</dt>
-            <dd>
-              {cursor}
-              <small> / 15</small>
-            </dd>
-          </div>
-        </dl>
-        <button
-          aria-label="Workshop menu"
-          onClick={() => {
-            cancelGesture();
-            setPanel('menu');
-          }}
+      <header className="site-header assembly-header">
+        <Link
+          href="/"
+          className="site-identity site-glass assembly-home"
+          aria-label="Back to Zweigesicht-1"
         >
-          <MoreHorizontal />
-        </button>
+          <ArrowLeft aria-hidden="true" />
+          <span>Zweigesicht-1</span>
+        </Link>
+        <SiteHeaderActions aria-label="Chapter controls">
+          <button
+            className="text-button"
+            aria-label={paused ? 'Resume' : 'Pause'}
+            title={paused ? 'Resume' : 'Pause'}
+            disabled={!session || !ready || complete}
+            onClick={() => {
+              cancelGesture();
+              setPaused(!paused);
+            }}
+          >
+            {paused ? <Play /> : <Pause />}
+          </button>
+          <button
+            className="text-button"
+            aria-label="How to play"
+            title="How to play"
+            onClick={() => {
+              cancelGesture();
+              setPanel('help');
+            }}
+          >
+            <HelpCircle />
+          </button>
+          <button
+            className="text-button"
+            aria-label="Workshop menu"
+            title="Workshop menu"
+            onClick={() => {
+              cancelGesture();
+              setPanel('menu');
+            }}
+          >
+            <Menu />
+          </button>
+        </SiteHeaderActions>
       </header>
 
       <section className="assembly-instruction" aria-label="Current operation">
-        <span className="assembly-step">
-          {complete ? '✓' : String(cursor + 1).padStart(2, '0')}
-        </span>
+        <div className="assembly-heading">
+          <h1>Be a watchmaker!</h1>
+          <span
+            className="assembly-progress"
+            aria-label={`${cursor} of 15 operations complete`}
+          >
+            {cursor} / 15
+          </span>
+        </div>
         <h2>{complete ? 'The winding bridge is installed.' : next.label}</h2>
-        <progress max={15} value={cursor} aria-label="Chapter progress" />
+        <output
+          className="assembly-feedback"
+          data-accepted={accepted}
+          aria-live="polite"
+        >
+          {changingSupport ? 'Choose either red support.' : feedback}
+        </output>
       </section>
 
       <div className="assembly-surface-wrap">
         <div className="assembly-surface" ref={host} />
-        <span className="assembly-surface-caption" aria-hidden="true">
-          ZWEIGESICHT–1 <i>At the watchmaker’s bench</i>
-        </span>
         <div className="assembly-parts" aria-label="Parts on the surface">
           {layout.items.map((entry) => (
             <button
@@ -548,158 +557,137 @@ export default function Assembly() {
                 if (event.isPrimary && event.button === 0)
                   beginGesture(entry.item, event, event.currentTarget, true);
               }}
-            >
-              <span className="assembly-part-dot" aria-hidden="true" />
-            </button>
+            />
           ))}
         </div>
-        {focusAnchor && !dragging && (
-          <span
-            className="assembly-part-name"
-            style={{
-              left: focusAnchor.x,
-              top: focusAnchor.y + focusAnchor.height / 2 + 7,
-            }}
-          >
-            {LABELS[focusAnchor.item]}
-          </span>
-        )}
-        {layout.zones.map((zone) => (
-          <div
-            className="assembly-zone"
-            key={zone.destination}
-            style={{ left: zone.x, top: zone.y }}
-            data-active={!!selected}
-          >
-            <span aria-hidden="true">
-              {zone.destination.endsWith('-rest')
-                ? zone.destination === 'movement-rest'
-                  ? 'Movement'
-                  : 'Stem'
-                : 'Working area'}
+        {dragging &&
+          layout.zones.map((zone) => (
+            <span
+              className="assembly-drop-label"
+              key={zone.destination}
+              style={{ left: zone.x, top: zone.y }}
+              aria-hidden="true"
+            >
+              {zone.destination === 'movement-rest'
+                ? 'Movement rest'
+                : zone.destination === 'stem-rest'
+                  ? 'Stem rest'
+                  : 'Working area'}
             </span>
-            {selected && !changingSupport && !dragging && (
-              <button
-                disabled={!active}
-                onClick={() => place(zone.destination)}
-              >
-                {targetLabel(zone.destination)}
-              </button>
-            )}
-          </div>
-        ))}
-        {feedback && feedbackPoint && (
-          <output
-            key={session?.revision}
-            className="assembly-feedback assembly-action-feedback"
-            data-accepted={accepted}
-            aria-live="polite"
-            style={{ left: feedbackPoint.x, top: feedbackPoint.y }}
-          >
-            {feedback}
-          </output>
-        )}
-        <div className="assembly-view-controls" aria-label="View controls">
-          <button
-            aria-label="Zoom in"
-            onClick={() => viewer.current?.zoom(1.25)}
-          >
-            <ZoomIn />
-          </button>
-          <button
-            aria-label="Zoom out"
-            onClick={() => viewer.current?.zoom(0.8)}
-          >
-            <ZoomOut />
-          </button>
-          <button
-            aria-label="Show all parts"
-            onClick={() => viewer.current?.resetView()}
-          >
-            <Maximize />
-          </button>
-        </div>
+          ))}
       </div>
 
       <div className="assembly-action-space">
-        <output
-          key={session?.revision}
-          className="assembly-feedback"
-          data-accepted={accepted}
-          aria-live="polite"
-        >
-          {(!feedbackPoint && feedback) ||
-            (changingSupport
-              ? 'Choose either red support on the surface.'
-              : '')}
-        </output>
-        {selected && !dragging ? (
+        {selected ? (
           <section
             className="assembly-selection"
             aria-label="Selected part actions"
+            inert={dragging || !active}
           >
             <div className="assembly-selected-name">
               <strong>{LABELS[selected]}</strong>
               {canTurn && (
                 <small>
                   {side === 'movement' ? 'Movement' : 'Dial'} side up ·{' '}
-                  {support}-side support
+                  {support === 'movement' ? 'Movement' : 'Dial'} support
                 </small>
               )}
             </div>
-            {canTurn && (
+            <div className="assembly-context-actions site-glass">
+              {canTurn && (
+                <button
+                  className="text-button"
+                  aria-label="Turn over"
+                  onClick={() => {
+                    cancelGesture();
+                    setSide(side === 'movement' ? 'dial' : 'movement');
+                  }}
+                >
+                  <RotateCw />
+                  <span>Turn over</span>
+                </button>
+              )}
+              {selected === 'movement' && (
+                <button
+                  className="text-button"
+                  aria-label="Change support"
+                  aria-pressed={changingSupport}
+                  onClick={() => {
+                    cancelGesture();
+                    setChangingSupport(!changingSupport);
+                  }}
+                >
+                  Support
+                </button>
+              )}
+              <Sheet
+                modal={false}
+                open={placing && active && !dragging && !changingSupport}
+                onOpenChange={setPlacing}
+              >
+                <SheetTrigger
+                  className="text-button"
+                  disabled={changingSupport}
+                >
+                  Place…
+                </SheetTrigger>
+                <SheetContent
+                  side="bottom"
+                  className="explorer-panel assembly-placement"
+                  showOverlay={false}
+                  scrollContent
+                >
+                  <SheetHeader>
+                    <SheetTitle>
+                      Place {LABELS[selected].toLowerCase()}
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="panel-body explore-menu">
+                    {layout.zones.map((zone) => (
+                      <button
+                        className="menu-link"
+                        key={zone.destination}
+                        onClick={() => place(zone.destination)}
+                      >
+                        {targetLabel(zone.destination)}
+                        <ChevronRight aria-hidden="true" />
+                      </button>
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
               <button
-                aria-label="Turn over"
+                className="text-button"
+                aria-label="Cancel selection"
+                title="Cancel selection"
                 onClick={() => {
                   cancelGesture();
-                  setSide(side === 'movement' ? 'dial' : 'movement');
+                  setSelected(undefined);
+                  setPlacing(false);
+                  setSide(arrangement(cursor).side);
+                  setSupport(arrangement(cursor).side);
+                  setChangingSupport(false);
+                  setFeedback('');
                 }}
               >
-                <RotateCw />
-                <span>Turn over</span>
+                <X />
               </button>
-            )}
-            {selected === 'movement' && (
-              <button
-                aria-pressed={changingSupport}
-                onClick={() => {
-                  cancelGesture();
-                  setChangingSupport(!changingSupport);
-                }}
-              >
-                Change support
-              </button>
-            )}
-            <button
-              aria-label="Cancel selection"
-              onClick={() => {
-                cancelGesture();
-                setSelected(undefined);
-                setSide(arrangement(cursor).side);
-                setSupport(arrangement(cursor).side);
-                setChangingSupport(false);
-                setFeedback('');
-              }}
-            >
-              <X />
-            </button>
+            </div>
           </section>
         ) : (
-          <p className="assembly-guidance">
-            {complete
-              ? 'Chapter complete. Your work is saved.'
-              : dragging
-                ? 'Release to place · Escape to cancel'
-                : 'Choose a tool. Pick up a part. Make it yours.'}
-          </p>
+          hovered && (
+            <span className="assembly-hover-name">{LABELS[hovered]}</span>
+          )
         )}
       </div>
 
-      <footer className="assembly-toolbar">
+      <footer className="assembly-toolbar action-dock site-glass">
         <fieldset className="assembly-tool-buttons" aria-label="Tools">
           {(['hands', 'tweezers', 'screwdriver'] as Tool[]).map((value) => (
             <button
               key={value}
+              className="text-button"
+              disabled={!active}
               aria-pressed={tool === value}
               onPointerUp={(event) => {
                 if (event.pointerType !== 'touch' || !event.isPrimary) return;
@@ -730,192 +718,230 @@ export default function Assembly() {
             </button>
           ))}
         </fieldset>
-        <div className="assembly-session-controls">
-          <button
-            aria-label="Undo"
-            disabled={!session || !cursor || (!active && !complete)}
-            onClick={undoStep}
-          >
-            <Undo2 />
-            <span>Undo</span>
-          </button>
-          <button
-            aria-label={paused ? 'Resume' : 'Pause'}
-            disabled={!session || !ready || complete}
-            onClick={() => {
-              cancelGesture();
-              setPaused(!paused);
-            }}
-          >
-            {paused ? <Play /> : <Pause />}
-            <span>{paused ? 'Resume' : 'Pause'}</span>
-          </button>
-          <button
-            aria-label="How to play"
-            onClick={() => {
-              cancelGesture();
-              setPanel('help');
-            }}
-          >
-            <HelpCircle />
-          </button>
-        </div>
+        <button
+          className="text-button"
+          aria-label="Undo"
+          title="Undo"
+          disabled={!session || !cursor || (!active && !complete)}
+          onClick={undoStep}
+        >
+          <Undo2 />
+        </button>
       </footer>
       {saveNotice && (
         <output className="assembly-save-notice">{saveNotice}</output>
       )}
 
-      <dialog
-        ref={modal}
-        className="assembly-dialog"
-        onCancel={(event) => {
-          event.preventDefault();
+      <Sheet
+        open={blocked || !!panel}
+        onOpenChange={(open) => {
+          if (open) return;
           if (panel) setPanel(null);
           else if (restartOpen) setRestartOpen(false);
         }}
       >
-        {restartOpen ? (
-          <>
-            <h2>Restart this chapter?</h2>
-            <p>This replaces this chapter’s score, time and progress.</p>
-            <button onClick={restart}>Start new chapter</button>
-            <button onClick={() => setRestartOpen(false)}>
-              Keep this attempt
-            </button>
-          </>
-        ) : error ? (
-          <>
-            <h2>The surface could not load</h2>
-            <p>{error}</p>
-            <button
-              onClick={() => {
-                setReady(false);
-                setError('');
-                setRetry(retry + 1);
-              }}
-            >
-              Retry
-            </button>
-          </>
-        ) : !ready ? (
-          <>
-            <span className="assembly-eyebrow">Your watchmaking bench</span>
-            <h2>Preparing your assembly surface</h2>
-            <p>Arranging the parts and supports…</p>
-          </>
-        ) : !session ? (
-          <>
-            <h2>Start a new chapter</h2>
-            <p>{saveNotice}</p>
-            <button onClick={restart}>Start new chapter</button>
-          </>
-        ) : panel === 'menu' ? (
-          <>
-            <h2>Your bench</h2>
-            <button onClick={() => setPanel('help')}>
-              <MousePointer2 /> How to play
-            </button>
-            <button
-              onClick={() => {
-                setPanel(null);
-                setRestartOpen(true);
-              }}
-            >
-              <RotateCcw /> Restart
-            </button>
-            <button onClick={() => setPanel('review')}>
-              Development / review
-            </button>
-            <button onClick={() => setPanel(null)}>Back to bench</button>
-          </>
-        ) : panel === 'help' ? (
-          <>
-            <h2>Take your place at the bench.</h2>
-            <p>
-              Select a tool, then drag a part to the working area. Tap or focus
-              a part to see its name.
-            </p>
-            <p>
-              Prefer not to drag? Select a part, then tap one of the three
-              placement areas. With a keyboard, use Tab and Enter. The same
-              tool, order, side and support rules apply.
-            </p>
-            <p>
-              To turn the movement, select it, choose Turn over, then Change
-              support and pick a red support. Place it back in the working area.
-              Set assemblies aside using the left or right area.
-            </p>
-            <p>
-              Escape cancels a drag for free. +10 per new operation, −2 per
-              mistake. Undo keeps earned points.
-            </p>
-            <button onClick={() => setPanel(null)}>Back to bench</button>
-          </>
-        ) : panel === 'review' ? (
-          <>
-            <h2>Development / review</h2>
-            <p>
-              This interface is a proposed interpretation, not a Marco-approved
-              design. Tool assignments, prepared components and screw numbering
-              remain provisional.
-            </p>
-            <p>
-              Recorded support seating does not establish partial-assembly
-              stability or insertion paths. The separate stem, deferred Incabloc
-              parts and original fitted geometry are retained. See
-              docs/ASSEMBLY_CHAPTER_ONE.md for evidence.
-            </p>
-            <label>
-              Placement radius{' '}
-              <select
-                aria-label="Placement radius"
-                value={radius}
-                onChange={(event) => setRadius(Number(event.target.value))}
-              >
-                <option value={5}>5 mm</option>
-                <option value={10}>10 mm (review)</option>
-              </select>
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={hint}
-                onChange={(event) => setHint(event.target.checked)}
-              />{' '}
-              Show selected part’s seat
-            </label>
-            <button onClick={() => setPanel(null)}>Back to bench</button>
-          </>
-        ) : (
-          <>
-            <span className="assembly-eyebrow">
-              Chapter 01 · The winding assembly
-            </span>
-            <h2>
-              {cursor
-                ? 'Your assembly is waiting'
-                : 'Every movement starts with a single part.'}
-            </h2>
-            <p>
-              Fifteen operations. A clear work area. Choose your tools and bring
-              the winding assembly together.
-            </p>
-            <p className="assembly-dialog-hint">
-              Drag to assemble, or select a part and tap a placement area.
-            </p>
-            <button
-              className="assembly-start"
-              onClick={() => {
-                setPaused(false);
-                setFeedback('');
-              }}
-            >
-              {cursor ? 'Resume chapter' : 'Start chapter'}
-              <Play />
-            </button>
-          </>
-        )}
-      </dialog>
+        <SheetContent
+          side="top"
+          className="explorer-panel assembly-dialog"
+          showCloseButton={!!panel || restartOpen}
+          scrollContent
+        >
+          <SheetHeader>
+            <SheetTitle>
+              {restartOpen
+                ? 'Restart this chapter?'
+                : error
+                  ? 'The surface could not load'
+                  : !ready
+                    ? 'Loading the parts…'
+                    : !session
+                      ? 'Start a new chapter'
+                      : panel === 'menu'
+                        ? 'Workshop'
+                        : panel === 'help'
+                          ? 'How to play'
+                          : panel === 'review'
+                            ? 'Development / review'
+                            : cursor
+                              ? 'Ready to continue?'
+                              : 'Be a watchmaker!'}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="panel-body">
+            {restartOpen ? (
+              <>
+                <p>This replaces this chapter’s score, time and progress.</p>
+                <button className="text-button" onClick={restart}>
+                  Start new chapter
+                </button>
+                <button
+                  className="text-button"
+                  onClick={() => setRestartOpen(false)}
+                >
+                  Keep this attempt
+                </button>
+              </>
+            ) : error ? (
+              <>
+                <p>{error}</p>
+                <button
+                  className="text-button"
+                  onClick={() => {
+                    setReady(false);
+                    setError('');
+                    setRetry(retry + 1);
+                  }}
+                >
+                  Retry
+                </button>
+              </>
+            ) : !ready ? null : !session ? (
+              <>
+                <p>{saveNotice}</p>
+                <button className="text-button" onClick={restart}>
+                  Start new chapter
+                </button>
+              </>
+            ) : panel === 'menu' ? (
+              <>
+                <dl className="assembly-stats">
+                  <div>
+                    <dt>Score</dt>
+                    <dd>{score(session)}</dd>
+                  </div>
+                  <div>
+                    <dt>Active time</dt>
+                    <dd>{duration(elapsed)}</dd>
+                  </div>
+                  <div>
+                    <dt>Progress</dt>
+                    <dd>{cursor} / 15</dd>
+                  </div>
+                </dl>
+                <div
+                  className="assembly-view-controls"
+                  aria-label="View controls"
+                >
+                  <button
+                    className="text-button"
+                    aria-label="Zoom in"
+                    onClick={() => viewer.current?.zoom(1.25)}
+                  >
+                    <ZoomIn />
+                  </button>
+                  <button
+                    className="text-button"
+                    aria-label="Zoom out"
+                    onClick={() => viewer.current?.zoom(0.8)}
+                  >
+                    <ZoomOut />
+                  </button>
+                  <button
+                    className="text-button"
+                    aria-label="Show all parts"
+                    onClick={() => viewer.current?.resetView()}
+                  >
+                    <Maximize />
+                    <span>Show all</span>
+                  </button>
+                </div>
+                <button
+                  className="menu-link"
+                  onClick={() => {
+                    setPanel(null);
+                    setRestartOpen(true);
+                  }}
+                >
+                  <span>Restart</span>
+                  <RotateCcw />
+                </button>
+                <button
+                  className="menu-link"
+                  onClick={() => setPanel('review')}
+                >
+                  Development / review
+                  <ChevronRight />
+                </button>
+                <button className="text-button" onClick={() => setPanel(null)}>
+                  Back to bench
+                </button>
+              </>
+            ) : panel === 'help' ? (
+              <>
+                <p>Choose a tool, then drag a part to its destination.</p>
+                <p>
+                  To play without dragging, tap a part and choose{' '}
+                  <strong>Place…</strong>, then a destination. With a keyboard,
+                  use Tab and Enter.
+                </p>
+                <p>
+                  Select the movement to turn it over, choose a support or move
+                  it aside. Turning is a preview until you place it.
+                </p>
+                <p>
+                  Escape cancels a drag for free. +10 per new operation, −2 per
+                  mistake. Undo keeps earned points.
+                </p>
+                <button className="text-button" onClick={() => setPanel(null)}>
+                  Back to bench
+                </button>
+              </>
+            ) : panel === 'review' ? (
+              <>
+                <p>
+                  This interface is a proposed interpretation, not a
+                  Marco-approved design. Tool assignments, prepared components
+                  and screw numbering remain provisional.
+                </p>
+                <p>
+                  Recorded support seating does not establish partial-assembly
+                  stability or insertion paths. The separate stem, deferred
+                  Incabloc parts and original fitted geometry are retained. See
+                  docs/ASSEMBLY_CHAPTER_ONE.md for evidence.
+                </p>
+                <label>
+                  Placement radius{' '}
+                  <select
+                    aria-label="Placement radius"
+                    value={radius}
+                    onChange={(event) => setRadius(Number(event.target.value))}
+                  >
+                    <option value={5}>5 mm</option>
+                    <option value={10}>10 mm (review)</option>
+                  </select>
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={hint}
+                    onChange={(event) => setHint(event.target.checked)}
+                  />{' '}
+                  Show selected part’s seat
+                </label>
+                <button className="text-button" onClick={() => setPanel(null)}>
+                  Back to bench
+                </button>
+              </>
+            ) : (
+              <>
+                <p>
+                  Choose a tool, then drag a part — or tap it and choose Place…
+                </p>
+                <button
+                  className="separation-action assembly-start"
+                  onClick={() => {
+                    setPaused(false);
+                    setFeedback('');
+                  }}
+                >
+                  {cursor ? 'Resume chapter' : 'Start chapter'}
+                  <Play />
+                </button>
+              </>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </main>
   );
 }

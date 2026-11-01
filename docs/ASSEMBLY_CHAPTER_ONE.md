@@ -112,16 +112,21 @@ review**. Materials and local fitted matrices are unchanged; only rigid parent
 presentation transforms and surface layout change.
 
 The non-drag path is part of normal play: focus/select geometry, then activate
-one of the three spatial placement areas. The central action names the physical
+**Place…**, then one of the three destinations in the shared Explorer panel. The central action names the physical
 receiver (work area, movement or loose stem); the two side areas remain available
 for wrong destinations. It uses the same validator with exact seat distance,
 without automatically choosing a part, tool, side or support. Tool assignments,
 prepared boundaries and screw numbering remain provisional and documented here
 and in the explicit review panel, rather than in normal player instructions.
 
-Zoom and Show all parts preserve a stable orthographic camera. The three tools,
-Undo, pause and help remain reachable at the bottom; restart is in the workshop
-menu. Native dialogs contain focus during pause, help, review and restart.
+Zoom and Show all parts preserve a stable orthographic camera and live in the
+Workshop menu alongside score, time and restart. Tools and Undo share the compact
+Explorer dock; pause, help and menu remain in the site header. The shared Sheet
+component handles focus, dismissal and scrolling for destinations and blocking
+pause/help/restart panels. One instruction stays above the green mat. Part names
+and turning/support actions share one contextual row; there are no permanent
+placement rings, floating part names or surface buttons. Destination names appear
+only while dragging. The working geometry does not move when selection changes.
 
 The separate key `zweigesicht:watchmaker:chapter-1:v1` preserves existing
 `zweigesicht:play:session:v1` saves untouched. Those retired saves are not read or
@@ -151,7 +156,11 @@ projected from recorded CAD bounds and seats; no renderer shortcut performs the
 drag tests. Cancellation, wrong parts/tools/orientations/supports/destinations and
 distance, Undo, pause/reload/resume, restart confirmation/cancellation,
 legacy-save isolation and missing-holder recovery remain covered. Viewport and
-44 px target checks cover desktop and 390/320 px portrait layouts. It uploads no
+44 px target checks cover desktop and 390/320 px portrait layouts, including
+selected-movement controls. The 320 px check also completes all 15 operations
+through native taps and explicit destination choices. Checks cover contextual
+control visibility, help discovery, placement cancellation and keyboard focus
+restoration, and require at least half the viewport for working space. It uploads no
 models or screenshots. These checks are distinct from human visual judgement
 and actual-phone validation. See [PROGRESS](../PROGRESS.md) for exact results.
 
@@ -166,10 +175,10 @@ running animation, spring deformation or screw-thread simulation is included.
 ### Human and physical-device review still required
 
 - Assess the composition, part readability at normal zoom, discoverability of
-  turning/support changes, and whether near-action feedback is easy to follow.
+  turning/support changes, and whether the single instruction/feedback area is easy to follow.
   Automated viewport checks do not establish visual quality.
 - Play the full chapter on actual iOS and Android phones. Check finger occlusion,
-  tap versus drag, page-scroll prevention, zoom/Show all, orientation changes,
+  tap versus drag, contextual Place… discovery, page-scroll prevention, zoom/Show all, orientation changes,
   browser chrome resizing and background/resume. Chromium's 390 px touch
   emulation and 320 px containment checks do not qualify physical devices.
 - Review screen-reader naming, focus order, modal focus and the complete

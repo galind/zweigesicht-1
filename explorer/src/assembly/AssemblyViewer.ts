@@ -139,7 +139,7 @@ export class AssemblyViewer {
       host.appendChild(this.renderer.domElement);
       this.renderer.domElement.setAttribute(
         'aria-label',
-        'Watch assembly surface. Select a part, then drag it or use the three placement areas.',
+        'Watch assembly surface. Select a part, then drag it or choose Place and a destination.',
       );
       this.camera.position.set(0, 150, 58);
       this.camera.lookAt(0, 5, 0);
