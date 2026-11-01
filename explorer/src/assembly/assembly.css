@@ -287,6 +287,7 @@
   border-radius: 10px;
 }
 .assembly-action-space {
+  height: 84px;
   min-height: 84px;
   padding: 0 24px;
   display: flex;
@@ -492,7 +493,8 @@
     flex-direction: column;
   }
   .assembly-action-space {
-    min-height: 89px;
+    height: 104px;
+    min-height: 104px;
     padding: 0 10px;
   }
   .assembly-selection {
@@ -580,6 +582,7 @@
     padding-top: 4px;
   }
   .assembly-action-space {
+    height: 55px;
     min-height: 55px;
   }
   .assembly-toolbar {
@@ -614,4 +617,12 @@
 .assembly-action-feedback[data-accepted='true']:not(:empty) {
   animation: none;
   border: 1px solid #e9d6a55c;
+}
+
+@media (max-width: 360px) {
+  .assembly-tool-buttons button {
+    min-width: 52px;
+    padding: 5px 4px;
+    font-size: 8px;
+  }
 }

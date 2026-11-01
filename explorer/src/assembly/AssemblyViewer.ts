@@ -96,6 +96,7 @@ export class AssemblyViewer {
   ready = false;
   dead = false;
   generation = 0;
+  renderFrame = 0;
   enabled = false;
   drag?: {
     item: Item;
@@ -785,6 +786,13 @@ export class AssemblyViewer {
     this.render();
   };
   render() {
+    if (this.dead || this.renderFrame) return;
+    this.renderFrame = requestAnimationFrame(() => {
+      this.renderFrame = 0;
+      this.draw();
+    });
+  }
+  draw() {
     if (this.dead) return;
     this.renderer.render(this.scene, this.camera);
     if (!this.ready || !this.state || this.drag) return;
@@ -833,6 +841,8 @@ export class AssemblyViewer {
   }
   dispose() {
     this.dead = true;
+    cancelAnimationFrame(this.renderFrame);
+    this.renderFrame = 0;
     ++this.generation;
     this.observer?.disconnect();
     this.clear();

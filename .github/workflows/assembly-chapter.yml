@@ -23,7 +23,11 @@ concurrency:
 
 jobs:
   browser:
-    name: Play chapter in Chromium
+    name: Play chapter (${{ matrix.input }})
+    strategy:
+      fail-fast: false
+      matrix:
+        input: [desktop, touch, keyboard]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -42,5 +46,6 @@ jobs:
           "$RUNNER_TEMP/assembly-browser/node_modules/.bin/playwright" install --with-deps chromium
       - name: Play the chapter with existing verified supports
         env:
+          ASSEMBLY_INPUT_MODE: ${{ matrix.input }}
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/assembly-browser/node_modules/playwright/index.mjs
         run: node scripts/review/assembly-chapter.mjs

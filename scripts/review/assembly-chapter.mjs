@@ -194,13 +194,30 @@ async function layoutCheck(label) {
       scroll: document.documentElement.scrollHeight,
       surface: { width: wrap.width, height: wrap.height },
       parts,
+      controls: [...document.querySelectorAll(".assembly-toolbar button")].map((el) => {
+        const r = el.getBoundingClientRect();
+        const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+        return {
+          name: el.getAttribute("aria-label") || el.textContent,
+          visible: r.x >= 0 && r.right <= innerWidth && r.bottom <= innerHeight + 1,
+          hit: el === hit || el.contains(hit),
+          width: r.width,
+          height: r.height,
+        };
+      }),
     };
   });
+  assert.equal(result.width, page.viewportSize().width, `${label}: CSS device width`);
   assert.ok(
     result.scroll <= result.height + 1,
     `${label}: no scrolling form ${JSON.stringify(result)}`,
   );
   assert.ok(result.surface.width >= result.width - 2, `${label}: full-width surface`);
+  for (const control of result.controls)
+    assert.ok(
+      control.visible && control.hit && control.width >= 43 && control.height >= 43,
+      `${label}: accessible toolbar ${JSON.stringify(control)}`,
+    );
   for (const p of result.parts) {
     assert.ok(p.width >= 43 && p.height >= 43, `${label}: touch target ${p.name}`);
     assert.ok(
@@ -229,7 +246,11 @@ try {
     headless: true,
     args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
   });
-  for (const mode of ["desktop", "touch", "keyboard"]) {
+  const modes = process.env.ASSEMBLY_INPUT_MODE
+    ? [process.env.ASSEMBLY_INPUT_MODE]
+    : ["desktop", "touch", "keyboard"];
+  assert.ok(modes.every((mode) => ["desktop", "touch", "keyboard"].includes(mode)));
+  for (const mode of modes) {
     const touch = mode === "touch";
     const context = await browser.newContext({
       viewport: touch ? { width: 390, height: 844 } : { width: 1440, height: 1000 },

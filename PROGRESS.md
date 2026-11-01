@@ -29,8 +29,11 @@ wrong tool/support, Undo, pause/reload/resume, holder retry and legacy links.
 The first redesign head passed 163 regressions, asset validation and TypeScript
 on GitHub; its tool-strip markup lint issue is corrected in the follow-up. The
 follow-up also adds near-action feedback, separates phone hit targets and tests
-wrong orientation, destination and distance through real input. Final CI/browser
-results are pending. Source inspection and diff checks pass. No local
+wrong orientation, destination and distance through real input. Head `b997e60` passed all 164 tests, asset validation, TypeScript, lint and both
+builds in [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41348357024).
+The final refinement locks the phone action-strip height, fits the 320 px tool
+strip and batches redraws per frame. Desktop, touch and keyboard walkthroughs
+now run as separate GitHub jobs. Final refinement/browser results are pending. Source inspection and diff checks pass. No local
 tests, builds or browser automation have run. Responsive implementation is not
 physical-phone qualification. Human visual/accessibility review, real devices
 and Marco's mechanical review remain outstanding. No merge, deployment, new CAD
