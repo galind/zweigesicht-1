@@ -135,8 +135,8 @@ async function drag(
       touchPoints: [{ ...start, id: 1 }],
     });
     // A short excursion also exercises returning a turned part to its existing location.
-    for (let step = 1; step <= 6; step++) {
-      const t = step / 6;
+    for (let step = 1; step <= 3; step++) {
+      const t = step / 3;
       await cdp.send("Input.dispatchTouchEvent", {
         type: "touchMove",
         touchPoints: [
@@ -157,7 +157,7 @@ async function drag(
     await page.mouse.move(start.x, start.y);
     await page.mouse.down();
     await page.mouse.move(start.x + 10, start.y + 10, { steps: 2 });
-    await page.mouse.move(end.x, end.y, { steps: 6 });
+    await page.mouse.move(end.x, end.y, { steps: 3 });
     if (cancel) await page.keyboard.press("Escape");
     await page.mouse.up();
   }
@@ -427,8 +427,20 @@ try {
     }
     if (touch) {
       await page.setViewportSize({ width: 320, height: 740 });
-      await page.waitForTimeout(100);
-      await layoutCheck("320 px phone");
+      // Software WebGL can finish the resize more than one frame after the viewport changes.
+      await page.waitForFunction(() =>
+        [...document.querySelectorAll(".assembly-part")].every((el) => {
+          const r = el.getBoundingClientRect();
+          return r.left >= -1 && r.right <= innerWidth + 1;
+        }),
+      );
+      await layoutCheck("320 px phone completed assembly");
+      await activate(button("Workshop menu"), mode);
+      await activate(button("Restart"), mode);
+      await activate(button("Start new chapter"), mode);
+      await waitCursor(0);
+      await part("mainplate").waitFor();
+      await layoutCheck("320 px phone loose parts");
     }
     await context.close();
   }
