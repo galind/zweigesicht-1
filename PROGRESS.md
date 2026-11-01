@@ -4,6 +4,34 @@ Updated 1 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
+## Assembly surface redesign — verification in progress
+
+Started from clean `codex/watchmaker-chapter-one` at `4c1542a`, matching the
+fetched SSH remote and draft PR #38. The owner-supplied workbook was read again;
+its SHA-256 still matches the chapter provenance. Tabelle1 rows 5–19 remain the
+unchanged lesson. This visual interpretation is not Marco-approved.
+
+`/workshop` now uses a viewport-filling muted green bench, geometry-attached
+selection targets, grouped loose parts, a compact illustrated tool strip, one
+instruction and discreet session controls. The same renderer/materials/fitted
+matrices and hash-checked supports are retained. The movement and loose stem
+share the surface. Turn over, select a replacement support, then seat/return the
+movement are explicit player actions; neither orientation nor tool is supplied
+from the next operation. Tap/keyboard placement uses the visible spatial areas
+and the existing validator. Review radius/seat hints and mechanical notes are
+behind Workshop menu → Development / review. No save schema change.
+
+The layout rearranges geometry for narrow portrait screens, uses 44 px minimum
+hit targets and pointer capture with touch scrolling disabled on the surface.
+The browser check now covers the complete chapter through desktop pointer drags,
+emulated touch drags and a separate keyboard placement pass, plus cancellation,
+wrong tool/support, Undo, pause/reload/resume, holder retry and legacy links.
+Source inspection and formatting are complete; GitHub CI is pending. No local
+tests, builds or browser automation have run. Responsive implementation is not
+physical-phone qualification. Human visual/accessibility review, real devices
+and Marco's mechanical review remain outstanding. No merge, deployment, new CAD
+download or asset publication is authorized or performed.
+
 ## First playable assembly chapter
 
 Started clean at fetched `develop` / HEAD

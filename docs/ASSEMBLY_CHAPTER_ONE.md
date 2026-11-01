@@ -87,21 +87,41 @@ sequence checks, scoring, Undo, validation and active-time accounting.
 drop measurement and resource cleanup. It imports no first-person navigation,
 collision system or running-movement controller.
 
-Select Hands, Tweezers or Screwdriver, then drag a labelled part or its visible
-geometry. Wrong parts remain selectable. Choose the intended upward side and
-support for the turn/return. Turn & exchange is a separate evaluated operation.
-Inspection, Escape, pointer cancellation, capture loss, blur and releases
-outside the surface do not score. A committed wrong drop deducts 2 once, with
-specific feedback. Successful operations award 10 once. Placement uses the
-dragged group's centre, intersected at the target's height, in X/Z millimetres;
-5 mm is the default and 10 mm is an explicit review option. Accepted placements
-use exact existing fitted matrices, with only rigid parent display transforms.
-Show seat and zoom are free. Keyboard placement uses the same validator, with
-an explicit exact-seat alternative to dragging.
+The redesign is our proposed visual/interaction interpretation, not a
+Marco-approved design. Select Hands, Tweezers or Screwdriver, then drag the
+actual geometry. Transparent, geometry-attached hit targets provide at least
+44 px for small parts, keyboard focus and touch naming without enlarging CAD.
+Loose components are grouped around an empty centre; portrait screens rearrange
+the same surface. The supported movement and separate stem remain visible when
+parked. No separate assembly screen or free camera navigation is introduced.
 
-All tool choices are provisional: Marco's workbook supplies actions, not hand
-tool assignments. The UI exposes that status. Prototype scores and placement
-radius are configurable; they do not represent watchmaking precision.
+Select the mainplate or movement and use **Turn over** to preview the opposite
+side. For a movement turn or return, **Change support** asks the player to select
+one of the actual red supports, then place the movement in the central area.
+These choices are not inferred from the next lesson answer. Turning is an
+inspection preview until seating is committed; it is not a qualified handling
+or insertion animation. The accepted frame uses the recorded exact seat. Dragging
+a supported movement carries a visual copy of its existing support.
+
+Inspection, Escape, pointer cancellation, capture loss, blur and releases
+outside the surface do not score. Wrong committed attempts deduct 2 once;
+successful operations award 10 once. Placement measures the dragged group's
+centre at the target height, in X/Z millimetres. The default is still 5 mm;
+10 mm and seat hints are available only through **Workshop menu → Development /
+review**. Materials and local fitted matrices are unchanged; only rigid parent
+presentation transforms and surface layout change.
+
+The non-drag path is part of normal play: focus/select geometry, then activate
+one of the three spatial placement areas. The central action names the physical
+receiver (work area, movement or loose stem); the two side areas remain available
+for wrong destinations. It uses the same validator with exact seat distance,
+without automatically choosing a part, tool, side or support. Tool assignments,
+prepared boundaries and screw numbering remain provisional and documented here
+and in the explicit review panel, rather than in normal player instructions.
+
+Zoom and Show all parts preserve a stable orthographic camera. The three tools,
+Undo, pause and help remain reachable at the bottom; restart is in the workshop
+menu. Native dialogs contain focus during pause, help, review and restart.
 
 The separate key `zweigesicht:watchmaker:chapter-1:v1` preserves existing
 `zweigesicht:play:session:v1` saves untouched. Those retired saves are not read or
@@ -123,11 +143,16 @@ scene transforms and cancellation/repeated releases. Existing GitHub CI also
 runs the full regression suite, chapter-asset validation, TypeScript, lint and both
 production builds. The separate `Assembly chapter` GitHub workflow runs
 `scripts/review/assembly-chapter.mjs` in Chromium on the runner. It reuses the
-existing approved UAT holder GLBs, verifies their hashes, then checks direct homepage entry, old difficulty links, the prototype URL redirect, a real
-pointer drag, a cancelled drag, the full keyboard-accessible chapter, wrong-tool
-feedback, Undo, pause/reload/resume, legacy-save isolation and missing-holder
-recovery. It uploads no models or screenshots. See
-[PROGRESS](../PROGRESS.md) for exact results.
+existing approved UAT holder GLBs, verifies their hashes, then checks direct
+homepage entry, old difficulty links, the prototype URL redirect, all 15 operations
+with real desktop pointer input, all 15 with Chromium-emulated touch input, and
+all 15 through the keyboard/non-drag path. Drop locations are independently
+projected from recorded CAD bounds and seats; no renderer shortcut performs the
+drag tests. Cancellation, wrong tools/supports, Undo, pause/reload/resume,
+legacy-save isolation and missing-holder recovery remain covered. Viewport and
+44 px target checks cover desktop and 390/320 px portrait layouts. It uploads no
+models or screenshots. These checks are distinct from human visual judgement
+and actual-phone validation. See [PROGRESS](../PROGRESS.md) for exact results.
 
 Next human review: play the chapter with Marco, confirm the screw numbering,
 prepared-component boundary and tool assignments; review partial-assembly

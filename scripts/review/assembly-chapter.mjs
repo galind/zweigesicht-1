@@ -36,6 +36,175 @@ for (const stream of [server.stdout, server.stderr])
     log = (log + chunk).slice(-15000);
   });
 let browser, page;
+const key = "zweigesicht:watchmaker:chapter-1:v1";
+const manifest = JSON.parse(
+  await fs.readFile(
+    new URL("../../explorer/public/models/assembly-manifest.json", import.meta.url),
+  ),
+);
+const { PARTS, OPERATIONS } = await import("../../explorer/src/assembly/lesson.ts");
+const bounds = new Map(manifest.instances.map((part) => [part.id, part.boundsWorldMm]));
+const saved = () => page.evaluate((key) => JSON.parse(localStorage.getItem(key)), key);
+const waitCursor = (cursor) =>
+  page.waitForFunction(
+    ({ key, cursor }) => JSON.parse(localStorage.getItem(key))?.cursor === cursor,
+    { key, cursor },
+    { timeout: 10000 },
+  );
+const part = (item) => page.locator(`.assembly-part[data-item="${item}"]`);
+const button = (name) => page.getByRole("button", { name, exact: true });
+const toolName = { hands: "Hands", tweezers: "Tweezers", screwdriver: "Screwdriver" };
+
+// Independently project the recorded CAD bounds/seats. No renderer handles or exact-seat action.
+async function target(item, destination, side) {
+  const surface = await page.locator(".assembly-surface").boundingBox();
+  const portrait = surface.width < 650;
+  const halfWidth = portrait
+    ? Math.max(70, (102 * surface.width) / surface.height)
+    : Math.max(105, (67 * surface.width) / surface.height);
+  const halfHeight = (halfWidth * surface.height) / surface.width;
+  const camera = new THREE.OrthographicCamera(
+    -halfWidth,
+    halfWidth,
+    halfHeight,
+    -halfHeight,
+    0.1,
+    500,
+  );
+  camera.position.set(0, 150, 58);
+  camera.lookAt(0, 5, 0);
+  camera.updateMatrixWorld(true);
+  const rest = destination.endsWith("-rest");
+  const x = rest ? (destination === "movement-rest" ? -1 : 1) * (portrait ? 34 : 68) : 0;
+  const z = rest ? (portrait ? 65 : 0) : portrait ? 15 : 0;
+  let point = new THREE.Vector3(x, 0, z);
+  if (!item.startsWith("support-")) {
+    const cursor = (await saved()).cursor;
+    const stemIds = [...PARTS.stem, ...PARTS.wheel, ...PARTS.coupling];
+    const ids =
+      item === "movement"
+        ? OPERATIONS.slice(0, cursor)
+            .flatMap((op) => op.adds)
+            .filter((id) => cursor >= 12 || !stemIds.includes(id))
+        : item === "stem-assembly"
+          ? OPERATIONS.slice(6, Math.min(cursor, 9)).flatMap((op) => op.adds)
+          : PARTS[item];
+    const box = new THREE.Box3();
+    for (const id of ids)
+      box.union(
+        new THREE.Box3(
+          new THREE.Vector3(...bounds.get(id)[0]),
+          new THREE.Vector3(...bounds.get(id)[1]),
+        ),
+      );
+    const stem =
+      destination === "stem" ||
+      destination === "stem-rest" ||
+      (destination === "work" && item === "stem");
+    const frame = new THREE.Matrix4().makeRotationX(
+      stem || side === "movement" ? Math.PI / 2 : -Math.PI / 2,
+    );
+    frame.setPosition(
+      stem ? x - 15.5250054869334 : x,
+      stem ? 2.2 : side === "movement" ? 12.2 : 16.3,
+      z,
+    );
+    point = box.getCenter(new THREE.Vector3()).applyMatrix4(frame);
+  }
+  point.project(camera);
+  return {
+    x: surface.x + ((point.x + 1) * surface.width) / 2,
+    y: surface.y + ((1 - point.y) * surface.height) / 2,
+  };
+}
+async function drag(
+  item,
+  destination,
+  side = "movement",
+  { cancel = false, miss = 0, touch = false } = {},
+) {
+  const box = await part(item).boundingBox();
+  assert.ok(box, `Selectable geometry for ${item}`);
+  const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  const end = await target(item, destination, side);
+  end.x += miss;
+  if (touch) {
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ ...start, id: 1 }],
+    });
+    // A short excursion also exercises returning a turned part to its existing location.
+    for (let step = 1; step <= 12; step++) {
+      const t = step / 12;
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [
+          {
+            x: start.x + (end.x - start.x) * t + Math.sin(t * Math.PI) * 10,
+            y: start.y + (end.y - start.y) * t,
+            id: 1,
+          },
+        ],
+      });
+    }
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: cancel ? "touchCancel" : "touchEnd",
+      touchPoints: [],
+    });
+    await cdp.detach();
+  } else {
+    await page.mouse.move(start.x, start.y);
+    await page.mouse.down();
+    await page.mouse.move(start.x + 10, start.y + 10, { steps: 2 });
+    await page.mouse.move(end.x, end.y, { steps: 12 });
+    if (cancel) await page.keyboard.press("Escape");
+    await page.mouse.up();
+  }
+}
+async function chooseSupport(side) {
+  await button("Change support").click();
+  await part(`support-${side}`).click();
+}
+async function layoutCheck(label) {
+  const result = await page.evaluate(() => {
+    const wrap = document.querySelector(".assembly-surface").getBoundingClientRect();
+    const parts = [...document.querySelectorAll(".assembly-part")].map((el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        name: el.dataset.item,
+        x: r.x,
+        y: r.y,
+        right: r.right,
+        bottom: r.bottom,
+        width: r.width,
+        height: r.height,
+      };
+    });
+    return {
+      width: innerWidth,
+      height: innerHeight,
+      scroll: document.documentElement.scrollHeight,
+      surface: { width: wrap.width, height: wrap.height },
+      parts,
+    };
+  });
+  assert.ok(
+    result.scroll <= result.height + 1,
+    `${label}: no scrolling form ${JSON.stringify(result)}`,
+  );
+  assert.ok(result.surface.width >= result.width - 2, `${label}: full-width surface`);
+  for (const p of result.parts) {
+    assert.ok(p.width >= 43 && p.height >= 43, `${label}: touch target ${p.name}`);
+    assert.ok(
+      p.x >= -1 && p.right <= result.width + 1 && p.y >= 0 && p.bottom <= result.height,
+      `${label}: visible ${JSON.stringify(p)}`,
+    );
+  }
+  console.log(
+    `${label}: viewport containment and 44 px geometry targets passed (${result.surface.width} × ${result.surface.height} surface).`,
+  );
+}
 try {
   const base = "http://127.0.0.1:4173";
   let online = false;
@@ -53,174 +222,150 @@ try {
     headless: true,
     args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
   });
-  page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
-  page.setDefaultTimeout(60000);
-  const errors = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("console", (message) => {
-    if (message.type() === "error" && /THREE|WebGL|shader/i.test(message.text()))
-      errors.push(message.text());
-  });
-  await page.goto(base);
-  const entry = page.getByRole("link", { name: "Be a watchmaker!", exact: true });
-  assert.equal(await entry.getAttribute("href"), "/workshop");
-  await entry.click();
-  await page.waitForURL(`${base}/workshop`);
-  await page.getByRole("button", { name: "Start chapter", exact: true }).click();
-  assert.equal(await page.getByRole("button", { name: /^(Easy|Hard)$/ }).count(), 0);
-  await page.evaluate(() => localStorage.setItem("zweigesicht:play:session:v1", "legacy sentinel"));
-  const key = "zweigesicht:watchmaker:chapter-1:v1";
-  const saved = () => page.evaluate((key) => JSON.parse(localStorage.getItem(key)), key);
-  const waitCursor = (cursor) =>
-    page.waitForFunction(
-      ({ key, cursor }) => JSON.parse(localStorage.getItem(key))?.cursor === cursor,
-      { key, cursor },
+  for (const mode of ["desktop", "touch", "keyboard"]) {
+    const touch = mode === "touch";
+    const context = await browser.newContext({
+      viewport: touch ? { width: 390, height: 844 } : { width: 1440, height: 1000 },
+      isMobile: touch,
+      hasTouch: touch,
+    });
+    page = await context.newPage();
+    page.setDefaultTimeout(30000);
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("console", (message) => {
+      if (message.type() === "error" && /THREE|WebGL|shader/i.test(message.text()))
+        errors.push(message.text());
+    });
+    await page.goto(base);
+    const entry = page.getByRole("link", { name: "Be a watchmaker!", exact: true });
+    assert.equal(await entry.getAttribute("href"), "/workshop");
+    await entry.click();
+    await button("Start chapter").click();
+    await page.evaluate(() =>
+      localStorage.setItem("zweigesicht:play:session:v1", "legacy sentinel"),
     );
-  const part = (name) =>
-    page
-      .locator(".assembly-part")
-      .filter({ has: page.locator("span", { hasText: new RegExp(`^${name}$`) }) });
-
-  // First action is a real pointer drag. Cancelled preview is free.
-  await page.getByRole("button", { name: "Hands", exact: true }).click();
-  const support = part("Movement-side support");
-  const box = await support.boundingBox();
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.mouse.down();
-  await page.mouse.move(box.x + 30, box.y - 20, { steps: 5 });
-  await page.keyboard.press("Escape");
-  await page.mouse.up();
-  assert.equal((await saved()).cursor, 0);
-  assert.equal((await saved()).mistakes, 0);
-  const surface = await page.locator(".assembly-surface").boundingBox();
-  const halfWidth = Math.max(78, (54 * surface.width) / surface.height);
-  const halfHeight = (halfWidth * surface.height) / surface.width;
-  const camera = new THREE.OrthographicCamera(
-    -halfWidth,
-    halfWidth,
-    halfHeight,
-    -halfHeight,
-    0.1,
-    500,
-  );
-  camera.position.set(0, 150, 58);
-  camera.lookAt(0, 5, 0);
-  camera.updateMatrixWorld(true);
-  const target = new THREE.Vector3(0, 0, 0).project(camera);
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.mouse.down();
-  await page.mouse.move(
-    surface.x + ((target.x + 1) * surface.width) / 2,
-    surface.y + ((1 - target.y) * surface.height) / 2,
-    { steps: 15 },
-  );
-  await page.mouse.up();
-  await waitCursor(1);
-  console.log("Real support drag, cancelled drag and 5 mm world-space seat passed.");
-
-  await page.locator(".assembly-review summary").click();
-  const place = async (name, tool, destination, side = "movement", support = "movement") => {
-    await part(name).click();
-    await page.getByRole("button", { name: tool, exact: true }).click();
-    await page.getByLabel("Placement / turn side").selectOption(side);
-    await page
-      .locator(`input[name="assembly-support"]`)
-      .nth(support === "movement" ? 0 : 1)
-      .check();
-    await page.getByLabel("Destination", { exact: true }).selectOption(destination);
-    await page.getByRole("button", { name: "Place selected part at seat", exact: true }).click();
-  };
-  await place("Prepared mainplate", "Hands", "work");
-  await waitCursor(2);
-  await place("Setting-lever screw", "Hands", "movement");
-  await page.getByRole("status").filter({ hasText: "Use screwdriver" }).waitFor();
-  assert.equal((await saved()).mistakes, 1);
-  await place("Setting-lever screw", "Screwdriver", "movement");
-  await waitCursor(3);
-  await page.getByRole("button", { name: "Undo", exact: true }).click();
-  await waitCursor(2);
-  await place("Setting-lever screw", "Screwdriver", "movement");
-  await waitCursor(3);
-  assert.equal((await saved()).awarded, 3);
-  await page.getByRole("button", { name: "Hands", exact: true }).click();
-  await page.getByLabel("Placement / turn side").selectOption("dial");
-  await page.locator('input[name="assembly-support"]').nth(1).check();
-  await page.getByRole("button", { name: "Turn & exchange support", exact: true }).click();
-  await waitCursor(4);
-  await place("Pinned setting lever", "Tweezers", "movement", "dial", "dial");
-  await waitCursor(5);
-  await place("Movement assembly", "Hands", "movement-rest", "dial", "dial");
-  await waitCursor(6);
-  await place("Winding stem", "Tweezers", "work");
-  await waitCursor(7);
-  await place("Coupling wheel", "Tweezers", "stem");
-  await waitCursor(8);
-  await place("Sliding coupling", "Tweezers", "stem");
-  await waitCursor(9);
-  await page.getByRole("button", { name: "Pause", exact: true }).click();
-  const beforePause = (await saved()).elapsedMs;
-  await page.waitForTimeout(1250);
-  assert.equal((await saved()).elapsedMs, beforePause);
-  await page.reload();
-  await page.getByRole("button", { name: "Resume chapter", exact: true }).click();
-  await page.locator(".assembly-review summary").click();
-  assert.equal((await saved()).cursor, 9);
-  await place("Stem assembly", "Tweezers", "stem-rest");
-  await waitCursor(10);
-  await place("Movement assembly", "Hands", "work");
-  await waitCursor(11);
-  await place("Stem assembly", "Tweezers", "movement");
-  await waitCursor(12);
-  await place("Pinned winding bridge", "Tweezers", "movement");
-  await waitCursor(13);
-  await place("Winding-bridge screw 1", "Screwdriver", "movement");
-  await waitCursor(14);
-  await place("Winding-bridge screw 2", "Screwdriver", "movement");
-  await waitCursor(15);
-  await page
-    .getByRole("heading", { name: "The winding bridge is installed.", exact: true })
-    .waitFor();
-  const final = await saved();
-  assert.equal(final.awarded * 10 - final.mistakes * 2, 148);
-  assert.equal(
-    await page.evaluate(() => localStorage.getItem("zweigesicht:play:session:v1")),
-    "legacy sentinel",
-  );
-  assert.deepEqual(errors, []);
-  await page.waitForTimeout(1250);
-  assert.equal((await saved()).elapsedMs, final.elapsedMs);
-  console.log(
-    "All 15 operations, wrong-tool feedback, Undo without repeated reward, pause/reload/resume, completion and legacy-save isolation passed.",
-  );
-
-  // Missing holder must fail closed, retain the completed save, and recover on retry.
-  await page.route("**/bench-local/dial.glb", (route) => route.fulfill({ status: 404, body: "" }));
-  await page.reload();
-  await page.getByText("The surface could not load", { exact: true }).waitFor();
-  assert.equal((await saved()).cursor, 15);
-  await page.unroute("**/bench-local/dial.glb");
-  await page.getByRole("button", { name: "Retry", exact: true }).click();
-  await page.getByText("The surface could not load", { exact: true }).waitFor({ state: "hidden" });
-  console.log("Required-holder failure and Retry preserve chapter completion.");
-  await page.locator(".assembly-overlay").waitFor({ state: "hidden" });
-  // Retired difficulty links and the first prototype URL all open the same chapter/save.
-  for (const path of ["/workshop?mode=easy", "/workshop?mode=hard", "/workshop/assembly"]) {
-    await page.goto(base + path);
+    await layoutCheck(mode);
+    assert.equal(await page.locator("select:visible").count(), 0);
+    assert.equal(
+      await page
+        .locator(".assembly-page > :not(dialog)")
+        .filter({ hasText: "provisional" })
+        .count(),
+      0,
+    );
+    const place = async (op) => {
+      if (mode === "keyboard") {
+        await part(op.item).focus();
+        await page.keyboard.press("Enter");
+        const label =
+          op.destination === "movement-rest"
+            ? "Set aside left"
+            : op.destination === "stem-rest"
+              ? "Set aside right"
+              : op.destination === "movement"
+                ? "Fit to movement"
+                : op.destination === "stem"
+                  ? "Fit to stem"
+                  : "Place in working area";
+        await button(label).focus();
+        await page.keyboard.press("Enter");
+      } else await drag(op.item, op.destination, op.side, { touch });
+    };
+    // Native pointer cancellation must never submit a placement.
+    await button("Hands").click();
+    await drag("support-movement", "work", "movement", { cancel: true, touch });
+    assert.equal((await saved()).cursor, 0);
+    assert.equal((await saved()).mistakes, 0);
+    for (let index = 0; index < OPERATIONS.length; index++) {
+      const op = OPERATIONS[index];
+      await button(toolName[op.tool]).click();
+      if (index === 3 || index === 10) {
+        await part("movement").click();
+        // Both side and support must be chosen, with no automatic correct choice.
+        await button("Turn over").click();
+        if (mode === "desktop") {
+          const mistakes = (await saved()).mistakes;
+          await place(op);
+          await page.waitForFunction(
+            ({ key, mistakes }) => JSON.parse(localStorage.getItem(key)).mistakes === mistakes + 1,
+            { key, mistakes },
+          );
+          assert.equal((await saved()).cursor, index);
+          await page.getByRole("status").filter({ hasText: "support" }).waitFor();
+        }
+        await chooseSupport(op.support);
+      }
+      if (index === 2 && mode === "desktop") {
+        await button("Hands").click();
+        await drag(op.item, op.destination);
+        await page.getByRole("status").filter({ hasText: "Use screwdriver" }).waitFor();
+        assert.equal((await saved()).cursor, 2);
+        await button("Screwdriver").click();
+      }
+      await place(op);
+      await waitCursor(index + 1);
+      if (index === 2) {
+        await button("Undo").click();
+        await waitCursor(2);
+        await place(op);
+        await waitCursor(3);
+        assert.equal((await saved()).awarded, 3);
+      }
+      if (index === 8) {
+        await button("Pause").click();
+        const before = (await saved()).elapsedMs;
+        await page.waitForTimeout(1250);
+        assert.equal((await saved()).elapsedMs, before);
+        await page.reload();
+        await button("Resume chapter").click();
+        assert.equal((await saved()).cursor, 9);
+        await layoutCheck(`${mode} separate assemblies`);
+      }
+    }
     await page
       .getByRole("heading", { name: "The winding bridge is installed.", exact: true })
       .waitFor();
-    assert.equal(new URL(page.url()).pathname, "/workshop");
-    assert.equal((await saved()).cursor, 15);
-    assert.equal(await page.getByRole("button", { name: /^(Easy|Hard)$/ }).count(), 0);
+    const final = await saved();
+    assert.equal(final.awarded, 15);
+    assert.equal(final.mistakes, mode === "desktop" ? 3 : 0);
+    await page.waitForTimeout(1250);
+    assert.equal((await saved()).elapsedMs, final.elapsedMs);
+    assert.equal(
+      await page.evaluate(() => localStorage.getItem("zweigesicht:play:session:v1")),
+      "legacy sentinel",
+    );
+    assert.deepEqual(errors, []);
+    console.log(
+      `${mode}: all 15 operations, cancellation, Undo, pause/reload/resume, completion and legacy-save isolation passed.`,
+    );
+    if (mode === "desktop") {
+      await page.route("**/bench-local/dial.glb", (route) =>
+        route.fulfill({ status: 404, body: "" }),
+      );
+      await page.reload();
+      await page.getByText("The surface could not load", { exact: true }).waitFor();
+      assert.equal((await saved()).cursor, 15);
+      await page.unroute("**/bench-local/dial.glb");
+      await button("Retry").click();
+      await page.locator("dialog").waitFor({ state: "hidden" });
+      for (const path of ["/workshop?mode=easy", "/workshop?mode=hard", "/workshop/assembly"]) {
+        await page.goto(base + path);
+        await page
+          .getByRole("heading", { name: "The winding bridge is installed.", exact: true })
+          .waitFor();
+        assert.equal(new URL(page.url()).pathname, "/workshop");
+        assert.equal((await saved()).cursor, 15);
+      }
+      console.log("Required-holder failure/Retry and legacy URLs passed.");
+    }
+    if (touch) {
+      await page.setViewportSize({ width: 320, height: 740 });
+      await page.waitForTimeout(100);
+      await layoutCheck("320 px phone");
+    }
+    await context.close();
   }
-  assert.equal(
-    await page.evaluate(() => localStorage.getItem("zweigesicht:play:session:v1")),
-    "legacy sentinel",
-  );
-  assert.deepEqual(errors, []);
-  console.log(
-    "Direct homepage entry, retired difficulty links and chapter URL redirect preserve the single Workshop session.",
-  );
 } catch (error) {
   console.error(log);
   if (page && !page.isClosed()) console.error(await page.locator("body").innerText());

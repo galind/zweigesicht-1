@@ -315,6 +315,7 @@ function field(name, fixture) {
 function rig(cursor) {
   const viewer = Object.create(AssemblyViewer.prototype);
   Object.assign(viewer, {
+    host: { clientWidth: 1200 },
     state: at(cursor),
     ready: true,
     enabled: true,
@@ -369,13 +370,13 @@ test("scene accounting preserves fitted matrices, both assemblies and recorded h
         new THREE.Matrix4().set(...sourcePoses[id].flat()).elements,
       );
     const plan = arrangement(cursor);
-    assert.equal(viewer.support.get(plan.side).position.x, plan.movement === "aside" ? -49 : 0);
+    assert.equal(viewer.support.get(plan.side).position.x, plan.movement === "aside" ? -68 : 0);
     const movement = viewer.groups.get("movement");
     assert.equal(movement.matrix.elements[13], plan.side === "movement" ? 12.2 : 16.3);
     if (cursor === 9) {
       assert.equal(viewer.groups.get("stem-assembly").children.length, 3);
       assert.equal(movement.children.length, 14);
-      assert.equal(movement.matrix.elements[12], -49);
+      assert.equal(movement.matrix.elements[12], -68);
     }
     if (cursor === 12) assert.equal(viewer.groups.get("stem-assembly").children.length, 0);
   }

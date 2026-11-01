@@ -9,8 +9,6 @@ import {
 import Link from 'next/link';
 import {
   Hand,
-  Pencil,
-  Wrench,
   RotateCw,
   ZoomIn,
   ZoomOut,
@@ -18,18 +16,26 @@ import {
   Play,
   Undo2,
   RotateCcw,
+  ArrowLeft,
+  Maximize,
+  MoreHorizontal,
+  X,
+  MousePointer2,
+  HelpCircle,
 } from 'lucide-react';
-import { AssemblyViewer, type Drop } from './AssemblyViewer';
+import {
+  AssemblyViewer,
+  type Drop,
+  type SurfaceLayout,
+} from './AssemblyViewer';
 import {
   OPERATIONS,
   LABELS,
   LESSON,
-  availableItems,
   arrangement,
   type Item,
   type Tool,
   type Side,
-  type Destination,
 } from './lesson';
 import {
   ActiveClock,
@@ -50,7 +56,28 @@ const TOOL_LABELS: Record<Tool, string> = {
   tweezers: 'Tweezers',
   screwdriver: 'Screwdriver',
 };
-const TOOL_ICONS = { hands: Hand, tweezers: Pencil, screwdriver: Wrench };
+function ToolIcon({ tool }: { tool: Tool }) {
+  if (tool === 'hands') return <Hand aria-hidden="true" />;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {tool === 'tweezers' ? (
+        <path d="M7 3c-2 0-3 2-2 4l6 14M7 3l12 15M7 3l8 16M11 21l1-5m7 2-5-2" />
+      ) : (
+        <>
+          <path d="m14 3 7 7-3 3-7-7zM12 9l-8 8-1 4 4-1 8-8M15 5l4 4" />
+        </>
+      )}
+    </svg>
+  );
+}
 const storage = () => window.localStorage;
 const duration = (ms: number) =>
   `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}`;
@@ -79,17 +106,23 @@ export default function Assembly() {
   const [selected, setSelected] = useState<Item>();
   const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side>('movement');
-  const [feedback, setFeedback] = useState(
-    'Select a tool, then drag a part to the working area.',
-  );
+  const [feedback, setFeedback] = useState('');
+  const [accepted, setAccepted] = useState(false);
+  const [layout, setLayout] = useState<SurfaceLayout>({ items: [], zones: [] });
+  const [dragging, setDragging] = useState(false);
+  const [hovered, setHovered] = useState<Item>();
+  const [changingSupport, setChangingSupport] = useState(false);
+  const [panel, setPanel] = useState<'menu' | 'help' | 'review' | null>(null);
+  const modal = useRef<HTMLDialogElement>(null);
+  const lastLayout = useRef('');
   const [hint, setHint] = useState(false);
   const [radius, setRadius] = useState(LESSON.placementRadiusMm);
   const [restartOpen, setRestartOpen] = useState(false);
-  const [destination, setDestination] = useState<Destination>('work');
   const [retry, setRetry] = useState(0);
   const cursor = session?.cursor ?? 0;
   const complete = cursor === OPERATIONS.length;
-  const active = ready && !paused && !!session && !complete && !restartOpen;
+  const active =
+    ready && !paused && !!session && !complete && !restartOpen && !panel;
   const next = OPERATIONS[cursor];
 
   function persist(value: Session) {
@@ -104,6 +137,30 @@ export default function Assembly() {
     setElapsed(value.elapsedMs);
     persist(value);
   }
+  function cancelGesture() {
+    viewer.current?.cancel();
+    gesture.current = null;
+  }
+  function itemSide(item: Item): Side {
+    if (selected === item) return side;
+    if (
+      ['mainplate', 'stem', 'wheel', 'coupling', 'stem-assembly'].includes(item)
+    )
+      return 'movement';
+    return arrangement(current.current?.cursor ?? 0).side;
+  }
+  function choose(item: Item) {
+    cancelGesture();
+    if (changingSupport && item.startsWith('support-')) {
+      setSupport(item === 'support-dial' ? 'dial' : 'movement');
+      setChangingSupport(false);
+      setFeedback('Support chosen. Seat the movement when ready.');
+      return;
+    }
+    setSide(itemSide(item));
+    setSelected(item);
+    setFeedback('');
+  }
   function beginGesture(
     item: Item,
     event: { pointerId: number; clientX: number; clientY: number },
@@ -111,14 +168,21 @@ export default function Assembly() {
     surface = false,
   ) {
     const value = current.current;
+    if (changingSupport) {
+      if (item.startsWith('support-')) choose(item);
+      return;
+    }
+    const chosenSide = itemSide(item);
+    setSide(chosenSide);
     setSelected(item);
+    setFeedback('');
     if (!active || !value) return;
     gesture.current = {
       id: crypto.randomUUID(),
       runId: value.runId,
       revision: value.revision,
       tool,
-      side,
+      side: chosenSide,
       support,
     };
     viewer.current?.begin(item, event, element, surface);
@@ -141,7 +205,9 @@ export default function Assembly() {
       (drop.destination.endsWith('-rest')
         ? 'aside'
         : drop.item === 'movement'
-          ? 'return'
+          ? arrangement(value.cursor).movement === 'aside'
+            ? 'return'
+            : 'flip'
           : drop.item === 'stem-assembly'
             ? 'insert'
             : 'place');
@@ -157,18 +223,21 @@ export default function Assembly() {
     );
     if (result.session === value) return;
     apply(result.session);
-    setFeedback(result.message);
+    setAccepted(result.accepted);
+    setFeedback(
+      result.accepted
+        ? value.cursor < value.awarded
+          ? 'Placed · already scored'
+          : '+10 · Placed'
+        : result.message
+            .replace(' (prototype tool assignment)', '')
+            .replace(/^Next: (.*?)\. .*$/, 'First: $1.'),
+    );
+    setChangingSupport(false);
     if (result.accepted) {
       setSelected(undefined);
-      const following = OPERATIONS[result.session.cursor];
-      // Preparation for a new assembly resets the placement controls. It never commits an action.
-      if (
-        following &&
-        (result.session.cursor === 6 || result.session.cursor === 10)
-      ) {
-        setSide(following.side);
-        setSupport(following.support ?? 'movement');
-      }
+      setSide(arrangement(result.session.cursor).side);
+      setSupport(arrangement(result.session.cursor).side);
     }
   }
   function restart() {
@@ -182,9 +251,9 @@ export default function Assembly() {
     setSupport('movement');
     setSelected(undefined);
     setTool(null);
-    setFeedback(
-      'Select a tool, then drag the movement-side support into the centre.',
-    );
+    setPanel(null);
+    setChangingSupport(false);
+    setFeedback('');
   }
 
   useEffect(() => {
@@ -196,10 +265,9 @@ export default function Assembly() {
         current.current = saved.session;
         setSession(saved.session);
         setElapsed(saved.session.elapsedMs);
-        const next = OPERATIONS[saved.session.cursor];
         const plan = arrangement(saved.session.cursor);
-        setSide(next?.side ?? plan.side);
-        setSupport(next?.support ?? plan.side);
+        setSide(plan.side);
+        setSupport(plan.side);
         setFeedback('Your chapter is saved. Resume when you are ready.');
       } else if (saved.status === 'empty' || saved.status === 'unavailable') {
         const value = createSession(crypto.randomUUID());
@@ -228,6 +296,14 @@ export default function Assembly() {
         setError(message);
       });
       viewer.current = controller;
+      controller.onLayout = (value) => {
+        const json = JSON.stringify(value);
+        if (lastLayout.current !== json) {
+          lastLayout.current = json;
+          setLayout(value);
+        }
+      };
+      controller.onDrag = setDragging;
       controller.onDrop = (drop) => commitRef.current(drop);
       controller.onPick = (item, event) => pickRef.current(item, event);
       void controller.load();
@@ -311,6 +387,9 @@ export default function Assembly() {
         current.current = saved.session;
         setSession(saved.session);
         setElapsed(saved.session.elapsedMs);
+        setSelected(undefined);
+        setSide(arrangement(saved.session.cursor).side);
+        setSupport(arrangement(saved.session.cursor).side);
         setFeedback(
           'This chapter changed in another tab. Resume the latest saved state.',
         );
@@ -320,37 +399,56 @@ export default function Assembly() {
     return () => window.removeEventListener('storage', changed);
   }, []);
 
-  const inventory = availableItems(cursor);
-  const partButton = (item: Item) => (
-    <button
-      key={item}
-      type="button"
-      className={`assembly-part ${selected === item ? 'selected' : ''}`}
-      aria-pressed={selected === item}
-      disabled={!session || complete}
-      onClick={() => setSelected(item)}
-      onPointerDown={(event: ReactPointerEvent<HTMLButtonElement>) => {
-        if (event.button === 0) beginGesture(item, event, event.currentTarget);
-      }}
-    >
-      <span>{LABELS[item]}</span>
-      <small>
-        {item.startsWith('support-')
-          ? '3D-printed support'
-          : item.includes('assembly') || item === 'movement'
-            ? 'Move on this surface'
-            : 'Inspect or drag'}
-      </small>
-    </button>
-  );
+  const blocked = !ready || (paused && !complete) || restartOpen || !session;
+  useEffect(() => {
+    if (blocked || panel) {
+      if (!modal.current?.open) modal.current?.showModal();
+    } else modal.current?.close();
+  }, [blocked, panel]);
+
+  const focusedItem = hovered ?? selected;
+  const focusAnchor = layout.items.find((entry) => entry.item === focusedItem);
+  const canTurn = selected === 'movement' || selected === 'mainplate';
+  const targetLabel = (destination: Drop['destination']) =>
+    destination === 'movement-rest'
+      ? 'Set aside left'
+      : destination === 'stem-rest'
+        ? 'Set aside right'
+        : destination === 'movement'
+          ? 'Fit to movement'
+          : destination === 'stem'
+            ? 'Fit to stem'
+            : 'Place in working area';
+  function place(destination: Drop['destination']) {
+    if (!selected) return;
+    cancelGesture();
+    attempt({ item: selected, destination, distanceMm: 0 });
+  }
+  function undoStep() {
+    cancelGesture();
+    if (!current.current) return;
+    apply(undo(current.current));
+    if (complete) setPaused(false);
+    setSelected(undefined);
+    setChangingSupport(false);
+    setSide(arrangement(cursor - 1).side);
+    setSupport(arrangement(cursor - 1).side);
+    setFeedback('Undone · earned points are kept');
+  }
 
   return (
-    <main className="assembly-page" data-tool={tool ?? 'none'}>
+    <main
+      className="assembly-page"
+      data-tool={tool ?? 'none'}
+      data-dragging={dragging}
+    >
       <header className="assembly-header">
-        <div>
-          <Link href="/">Zweigesicht-1</Link>
+        <Link href="/" aria-label="Back to Zweigesicht-1">
+          <ArrowLeft />
+        </Link>
+        <div className="assembly-title">
           <h1>Be a watchmaker!</h1>
-          <p>Chapter 1 · The winding assembly</p>
+          <span>01 / The winding assembly</span>
         </div>
         <dl className="assembly-stats">
           <div>
@@ -363,100 +461,109 @@ export default function Assembly() {
           </div>
           <div>
             <dt>Progress</dt>
-            <dd>{cursor} / 15</dd>
+            <dd>
+              {cursor}
+              <small> / 15</small>
+            </dd>
           </div>
         </dl>
-        <div className="assembly-session-controls">
-          <button
-            disabled={!session || !ready || complete}
-            onClick={() => setPaused(!paused)}
-          >
-            {paused ? <Play /> : <Pause />}
-            {paused ? 'Resume' : 'Pause'}
-          </button>
-          <button
-            disabled={!session || !cursor || !active}
-            onClick={() => {
-              if (current.current) {
-                apply(undo(current.current));
-                setSelected(undefined);
-                setSide(arrangement(cursor - 1).side);
-                setSupport(arrangement(cursor - 1).side);
-                setFeedback(
-                  'Undone. Points already earned will not be awarded again.',
-                );
-              }
-            }}
-          >
-            <Undo2 />
-            Undo
-          </button>
-          <button
-            onClick={() => {
-              setRestartOpen(true);
-              viewer.current?.cancel();
-            }}
-          >
-            <RotateCcw />
-            Restart
-          </button>
-        </div>
+        <button
+          aria-label="Workshop menu"
+          onClick={() => {
+            cancelGesture();
+            setPanel('menu');
+          }}
+        >
+          <MoreHorizontal />
+        </button>
       </header>
+
       <section className="assembly-instruction" aria-label="Current operation">
-        <div>
-          <span className="assembly-eyebrow">
-            {complete ? 'Chapter complete' : `Operation ${cursor + 1} of 15`}
-          </span>
-          <h2>{complete ? 'The winding bridge is installed.' : next.label}</h2>
-          <p>
-            {complete
-              ? 'This completes the first chapter. The rest of the movement is still unassembled.'
-              : `${TOOL_LABELS[next.tool]} · ${next.side} side up${next.support ? ` · ${next.support}-side support` : ' · clear central area'}`}
-          </p>
-        </div>
+        <span className="assembly-step">
+          {complete ? '✓' : String(cursor + 1).padStart(2, '0')}
+        </span>
+        <h2>{complete ? 'The winding bridge is installed.' : next.label}</h2>
         <progress max={15} value={cursor} aria-label="Chapter progress" />
       </section>
+
       <div className="assembly-surface-wrap">
-        <aside
-          className="assembly-tray assembly-tray-left"
-          aria-label="Mainplate and setting parts"
-        >
-          <h3>Mainplate & setting</h3>
-          {inventory
-            .filter((item) =>
-              [
-                'mainplate',
-                'setting-screw',
-                'setting-lever',
-                'movement',
-              ].includes(item),
-            )
-            .map(partButton)}
-        </aside>
         <div className="assembly-surface" ref={host} />
-        <div className="assembly-zone assembly-zone-left">Movement aside</div>
-        <div className="assembly-zone assembly-zone-centre">Working area</div>
-        <div className="assembly-zone assembly-zone-right">Stem aside</div>
-        <aside
-          className="assembly-tray assembly-tray-right"
-          aria-label="Winding parts"
-        >
-          <h3>Stem & winding bridge</h3>
-          {inventory
-            .filter((item) =>
-              [
-                'stem',
-                'wheel',
-                'coupling',
-                'bridge',
-                'bridge-screw-1',
-                'bridge-screw-2',
-                'stem-assembly',
-              ].includes(item),
-            )
-            .map(partButton)}
-        </aside>
-        <div className="assembly-view-controls">
+        <span className="assembly-surface-caption" aria-hidden="true">
+          ZWEIGESICHT–1 <i>At the watchmaker’s bench</i>
+        </span>
+        <div className="assembly-parts" aria-label="Parts on the surface">
+          {layout.items.map((entry) => (
+            <button
+              key={entry.item}
+              type="button"
+              className="assembly-part"
+              data-item={entry.item}
+              style={{
+                left: entry.x,
+                top: entry.y,
+                width: entry.width,
+                height: entry.height,
+              }}
+              aria-label={LABELS[entry.item]}
+              aria-pressed={selected === entry.item}
+              disabled={!active}
+              data-support-choice={
+                changingSupport && entry.item.startsWith('support-')
+              }
+              onFocus={() => setHovered(entry.item)}
+              onBlur={() => setHovered(undefined)}
+              onPointerEnter={(event) => {
+                if (event.pointerType !== 'touch') setHovered(entry.item);
+              }}
+              onPointerLeave={() => setHovered(undefined)}
+              onClick={(event) => {
+                if (event.detail === 0) choose(entry.item);
+              }}
+              onPointerDown={(event: ReactPointerEvent<HTMLButtonElement>) => {
+                if (event.button === 0)
+                  beginGesture(entry.item, event, event.currentTarget, true);
+              }}
+            >
+              <span className="assembly-part-dot" aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+        {focusAnchor && !dragging && (
+          <span
+            className="assembly-part-name"
+            style={{
+              left: focusAnchor.x,
+              top: focusAnchor.y + focusAnchor.height / 2 + 7,
+            }}
+          >
+            {LABELS[focusAnchor.item]}
+          </span>
+        )}
+        {layout.zones.map((zone) => (
+          <div
+            className="assembly-zone"
+            key={zone.destination}
+            style={{ left: zone.x, top: zone.y }}
+            data-active={!!selected}
+          >
+            <span aria-hidden="true">
+              {zone.destination.endsWith('-rest')
+                ? zone.destination === 'movement-rest'
+                  ? 'Movement'
+                  : 'Stem'
+                : 'Working area'}
+            </span>
+            {selected && !changingSupport && !dragging && (
+              <button
+                disabled={!active}
+                onClick={() => place(zone.destination)}
+              >
+                {targetLabel(zone.destination)}
+              </button>
+            )}
+          </div>
+        ))}
+        <div className="assembly-view-controls" aria-label="View controls">
           <button
             aria-label="Zoom in"
             onClick={() => viewer.current?.zoom(1.25)}
@@ -469,220 +576,289 @@ export default function Assembly() {
           >
             <ZoomOut />
           </button>
-          <label>
-            <input
-              type="checkbox"
-              checked={hint}
-              onChange={(e) => setHint(e.target.checked)}
-            />
-            Show seat
-          </label>
-        </div>
-        {(!ready || (paused && !complete) || restartOpen || !session) && (
-          <div className="assembly-overlay">
-            {restartOpen ? (
-              <>
-                <h2>Restart this chapter?</h2>
-                <p>This replaces this chapter’s score, time and progress.</p>
-                <button onClick={restart}>Start new chapter</button>
-                <button onClick={() => setRestartOpen(false)}>
-                  Keep this attempt
-                </button>
-              </>
-            ) : error ? (
-              <>
-                <h2>The surface could not load</h2>
-                <p>{error}</p>
-                <p>
-                  The two recorded support models must be available alongside
-                  the movement.
-                </p>
-                <button
-                  onClick={() => {
-                    setReady(false);
-                    setError('');
-                    setRetry(retry + 1);
-                  }}
-                >
-                  Retry
-                </button>
-              </>
-            ) : !ready ? (
-              <>
-                <h2>Preparing your assembly surface</h2>
-                <p>Loading the movement and the two existing supports…</p>
-              </>
-            ) : !session ? (
-              <>
-                <h2>Start a new chapter</h2>
-                <p>{saveNotice}</p>
-                <button onClick={restart}>Start new chapter</button>
-              </>
-            ) : (
-              <>
-                <h2>
-                  {cursor
-                    ? 'Your assembly is waiting'
-                    : 'Begin at an empty work area'}
-                </h2>
-                <p>
-                  Choose a tool, then drag a part. Click to inspect; Escape or a
-                  drop outside the surface cancels for free.
-                </p>
-                <button onClick={() => setPaused(false)}>
-                  {cursor ? 'Resume chapter' : 'Start chapter'}
-                </button>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-      <section className="assembly-tools" aria-label="Tools and supports">
-        <div>
-          <h3>
-            Tools <small>provisional</small>
-          </h3>
-          <div className="assembly-tool-buttons">
-            {(['hands', 'tweezers', 'screwdriver'] as Tool[]).map((value) => {
-              const Icon = TOOL_ICONS[value];
-              return (
-                <button
-                  key={value}
-                  aria-pressed={tool === value}
-                  onClick={() => {
-                    viewer.current?.cancel();
-                    setTool(value);
-                  }}
-                >
-                  <Icon />
-                  {TOOL_LABELS[value]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        <div>
-          <h3>Supports</h3>
-          <div className="assembly-support-buttons">
-            {(['movement', 'dial'] as Side[]).map((value) => (
-              <div key={value}>
-                {partButton(`support-${value}`)}
-                <label>
-                  <input
-                    type="radio"
-                    name="assembly-support"
-                    checked={support === value}
-                    onChange={() => {
-                      viewer.current?.cancel();
-                      setSupport(value);
-                    }}
-                  />
-                  Use for turn / return
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="assembly-turn">
-          <label>
-            Placement / turn side
-            <select
-              aria-label="Placement / turn side"
-              value={side}
-              onChange={(e) => {
-                viewer.current?.cancel();
-                setSide(e.target.value as Side);
-              }}
-            >
-              <option value="movement">Movement side upward</option>
-              <option value="dial">Dial side upward</option>
-            </select>
-          </label>
           <button
-            disabled={!active}
-            onClick={() => {
-              gesture.current = null;
-              attempt(
-                { item: 'movement', destination: 'work', distanceMm: 0 },
-                'flip',
-              );
-            }}
+            aria-label="Show all parts"
+            onClick={() => viewer.current?.resetView()}
           >
-            <RotateCw />
-            Turn & exchange support
+            <Maximize />
           </button>
         </div>
-      </section>
-      <output className="assembly-feedback" aria-live="polite">
-        {feedback}
-      </output>
+      </div>
+
+      <div className="assembly-action-space">
+        <output
+          key={session?.revision}
+          className="assembly-feedback"
+          data-accepted={accepted}
+          aria-live="polite"
+        >
+          {feedback ||
+            (changingSupport
+              ? 'Choose either red support on the surface.'
+              : '')}
+        </output>
+        {selected && !dragging ? (
+          <section
+            className="assembly-selection"
+            aria-label="Selected part actions"
+          >
+            <div className="assembly-selected-name">
+              <strong>{LABELS[selected]}</strong>
+              {canTurn && (
+                <small>
+                  {side === 'movement' ? 'Movement' : 'Dial'} side up ·{' '}
+                  {support}-side support
+                </small>
+              )}
+            </div>
+            {canTurn && (
+              <button
+                aria-label="Turn over"
+                onClick={() => {
+                  cancelGesture();
+                  setSide(side === 'movement' ? 'dial' : 'movement');
+                }}
+              >
+                <RotateCw />
+                <span>Turn over</span>
+              </button>
+            )}
+            {selected === 'movement' && (
+              <button
+                aria-pressed={changingSupport}
+                onClick={() => {
+                  cancelGesture();
+                  setChangingSupport(!changingSupport);
+                }}
+              >
+                Change support
+              </button>
+            )}
+            <button
+              aria-label="Cancel selection"
+              onClick={() => {
+                cancelGesture();
+                setSelected(undefined);
+                setChangingSupport(false);
+                setFeedback('');
+              }}
+            >
+              <X />
+            </button>
+          </section>
+        ) : (
+          <p className="assembly-guidance">
+            {complete
+              ? 'Chapter complete. Your work is saved.'
+              : dragging
+                ? 'Release to place · Escape to cancel'
+                : 'Choose a tool. Pick up a part. Make it yours.'}
+          </p>
+        )}
+      </div>
+
+      <footer className="assembly-toolbar">
+        <div className="assembly-tool-buttons" role="group" aria-label="Tools">
+          {(['hands', 'tweezers', 'screwdriver'] as Tool[]).map((value) => (
+            <button
+              key={value}
+              aria-pressed={tool === value}
+              onClick={() => {
+                cancelGesture();
+                setTool(value);
+              }}
+            >
+              <ToolIcon tool={value} />
+              <span>{TOOL_LABELS[value]}</span>
+            </button>
+          ))}
+        </div>
+        <div className="assembly-session-controls">
+          <button
+            aria-label="Undo"
+            disabled={!session || !cursor || (!active && !complete)}
+            onClick={undoStep}
+          >
+            <Undo2 />
+            <span>Undo</span>
+          </button>
+          <button
+            aria-label={paused ? 'Resume' : 'Pause'}
+            disabled={!session || !ready || complete}
+            onClick={() => {
+              cancelGesture();
+              setPaused(!paused);
+            }}
+          >
+            {paused ? <Play /> : <Pause />}
+            <span>{paused ? 'Resume' : 'Pause'}</span>
+          </button>
+          <button
+            aria-label="How to play"
+            onClick={() => {
+              cancelGesture();
+              setPanel('help');
+            }}
+          >
+            <HelpCircle />
+          </button>
+        </div>
+      </footer>
       {saveNotice && (
         <output className="assembly-save-notice">{saveNotice}</output>
       )}
-      <details className="assembly-review">
-        <summary>Placement controls & prototype notes</summary>
-        <p>
-          Tool assignments are provisional. The holder poses follow recorded
-          mainplate seating; fit and stability of these partial assemblies still
-          need Marco’s review. The stem rests in the clear area without claiming
-          a fit in either holder.
-        </p>
-        <p>
-          The prepared mainplate includes its existing pins and fixed jewels.
-          The five Incabloc components and two later cap-plate screws are
-          reserved for a future chapter. Bridge screw order is provisional.
-        </p>
-        <label>
-          Placement radius{' '}
-          <select
-            aria-label="Placement radius"
-            value={radius}
-            onChange={(e) => {
-              viewer.current?.cancel();
-              setRadius(Number(e.target.value));
-            }}
-          >
-            <option value={5}>5 mm</option>
-            <option value={10}>10 mm (review)</option>
-          </select>
-        </label>
-        <p>
-          Keyboard alternative: select a labelled part and tool, choose a
-          destination, then place it at the exact seat. The same sequence, tool,
-          side and support checks apply.
-        </p>
-        <div className="assembly-keyboard">
-          <label>
-            Destination
-            <select
-              aria-label="Destination"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value as Destination)}
+
+      <dialog
+        ref={modal}
+        className="assembly-dialog"
+        onCancel={(event) => {
+          event.preventDefault();
+          if (panel) setPanel(null);
+          else if (restartOpen) setRestartOpen(false);
+        }}
+      >
+        {restartOpen ? (
+          <>
+            <h2>Restart this chapter?</h2>
+            <p>This replaces this chapter’s score, time and progress.</p>
+            <button onClick={restart}>Start new chapter</button>
+            <button onClick={() => setRestartOpen(false)}>
+              Keep this attempt
+            </button>
+          </>
+        ) : error ? (
+          <>
+            <h2>The surface could not load</h2>
+            <p>{error}</p>
+            <button
+              onClick={() => {
+                setReady(false);
+                setError('');
+                setRetry(retry + 1);
+              }}
             >
-              <option value="work">Working area</option>
-              <option value="movement">Movement seat</option>
-              <option value="stem">Stem seat</option>
-              <option value="movement-rest">Movement aside (left)</option>
-              <option value="stem-rest">Stem aside (right)</option>
-            </select>
-          </label>
-          <button
-            disabled={!active || !selected}
-            onClick={() => {
-              if (selected) {
-                gesture.current = null;
-                attempt({ item: selected, destination, distanceMm: 0 });
-              }
-            }}
-          >
-            Place selected part at seat
-          </button>
-        </div>
-        <p>
-          +10 once per operation · −2 per committed mistake · Undo retains the
-          scoring ledger · No penalty for inspection or cancelled drags.
-        </p>
-      </details>
+              Retry
+            </button>
+          </>
+        ) : !ready ? (
+          <>
+            <span className="assembly-eyebrow">Your watchmaking bench</span>
+            <h2>Preparing your assembly surface</h2>
+            <p>Arranging the parts and supports…</p>
+          </>
+        ) : !session ? (
+          <>
+            <h2>Start a new chapter</h2>
+            <p>{saveNotice}</p>
+            <button onClick={restart}>Start new chapter</button>
+          </>
+        ) : panel === 'menu' ? (
+          <>
+            <h2>Your bench</h2>
+            <button onClick={() => setPanel('help')}>
+              <MousePointer2 /> How to play
+            </button>
+            <button
+              onClick={() => {
+                setPanel(null);
+                setRestartOpen(true);
+              }}
+            >
+              <RotateCcw /> Restart
+            </button>
+            <button onClick={() => setPanel('review')}>
+              Development / review
+            </button>
+            <button onClick={() => setPanel(null)}>Back to bench</button>
+          </>
+        ) : panel === 'help' ? (
+          <>
+            <h2>Take your place at the bench.</h2>
+            <p>
+              Select a tool, then drag a part to the working area. Tap or focus
+              a part to see its name.
+            </p>
+            <p>
+              Prefer not to drag? Select a part, then tap one of the three
+              placement areas. With a keyboard, use Tab and Enter. The same
+              tool, order, side and support rules apply.
+            </p>
+            <p>
+              To turn the movement, select it, choose Turn over, then Change
+              support and pick a red support. Place it back in the working area.
+              Set assemblies aside using the left or right area.
+            </p>
+            <p>
+              Escape cancels a drag for free. +10 per new operation, −2 per
+              mistake. Undo keeps earned points.
+            </p>
+            <button onClick={() => setPanel(null)}>Back to bench</button>
+          </>
+        ) : panel === 'review' ? (
+          <>
+            <h2>Development / review</h2>
+            <p>
+              This interface is a proposed interpretation, not a Marco-approved
+              design. Tool assignments, prepared components and screw numbering
+              remain provisional.
+            </p>
+            <p>
+              Recorded support seating does not establish partial-assembly
+              stability or insertion paths. The separate stem, deferred Incabloc
+              parts and original fitted geometry are retained. See
+              docs/ASSEMBLY_CHAPTER_ONE.md for evidence.
+            </p>
+            <label>
+              Placement radius{' '}
+              <select
+                aria-label="Placement radius"
+                value={radius}
+                onChange={(event) => setRadius(Number(event.target.value))}
+              >
+                <option value={5}>5 mm</option>
+                <option value={10}>10 mm (review)</option>
+              </select>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={hint}
+                onChange={(event) => setHint(event.target.checked)}
+              />{' '}
+              Show selected part’s seat
+            </label>
+            <button onClick={() => setPanel(null)}>Back to bench</button>
+          </>
+        ) : (
+          <>
+            <span className="assembly-eyebrow">
+              Chapter 01 · The winding assembly
+            </span>
+            <h2>
+              {cursor
+                ? 'Your assembly is waiting'
+                : 'Every movement starts with a single part.'}
+            </h2>
+            <p>
+              Fifteen operations. A clear work area. Choose your tools and bring
+              the winding assembly together.
+            </p>
+            <p className="assembly-dialog-hint">
+              Drag to assemble, or select a part and tap a placement area.
+            </p>
+            <button
+              className="assembly-start"
+              onClick={() => {
+                setPaused(false);
+                setFeedback('');
+              }}
+            >
+              {cursor ? 'Resume chapter' : 'Start chapter'}
+              <Play />
+            </button>
+          </>
+        )}
+      </dialog>
     </main>
   );
 }

@@ -30,19 +30,35 @@ import {
 } from './lesson';
 import type { Session } from './session';
 
-type Point = { x: number; y: number };
+export type Point = { x: number; y: number };
 type Piece = { mesh: THREE.Mesh; bounds: THREE.Box3 };
+export type SurfaceItem = Point & { item: Item; width: number; height: number };
+export type SurfaceLayout = {
+  items: SurfaceItem[];
+  zones: { destination: Destination; x: number; y: number }[];
+};
 export type Drop = { item: Item; destination: Destination; distanceMm: number };
-const positions: Record<PartItem, [number, number]> = {
-  mainplate: [-49, -34],
-  'setting-screw': [-49, 22],
-  'setting-lever': [-35, 22],
-  stem: [36, -31],
-  wheel: [48, -31],
-  coupling: [60, -31],
-  bridge: [48, 22],
-  'bridge-screw-1': [37, 34],
-  'bridge-screw-2': [59, 34],
+const desktopPositions: Record<PartItem, [number, number]> = {
+  mainplate: [-70, -37],
+  'setting-screw': [-31, -40],
+  'setting-lever': [-31, -24],
+  stem: [36, -40],
+  wheel: [53, -40],
+  coupling: [70, -40],
+  bridge: [67, -20],
+  'bridge-screw-1': [48, -18],
+  'bridge-screw-2': [48, -4],
+};
+const phonePositions: Record<PartItem, [number, number]> = {
+  mainplate: [-33, -24],
+  'setting-screw': [3, -39],
+  'setting-lever': [22, -39],
+  stem: [8, -20],
+  wheel: [26, -20],
+  coupling: [44, -20],
+  bridge: [33, 1],
+  'bridge-screw-1': [9, -57],
+  'bridge-screw-2': [29, -57],
 };
 
 /** One surface, fixed camera, original fitted matrices. No running movement or navigation system. */
@@ -85,6 +101,26 @@ export class AssemblyViewer {
     point: Point;
     moved: boolean;
   };
+  onLayout?: (layout: SurfaceLayout) => void;
+  onDrag?: (dragging: boolean) => void;
+  get portrait() {
+    return this.host.clientWidth < 650;
+  }
+  get workZ() {
+    return this.portrait ? 15 : 0;
+  }
+  rest(destination: Destination): [number, number] {
+    return [
+      destination === 'movement-rest'
+        ? this.portrait
+          ? -34
+          : -68
+        : this.portrait
+          ? 34
+          : 68,
+      this.portrait ? 65 : 0,
+    ];
+  }
   onPick?: (item: Item, event: PointerEvent) => void;
   onDrop?: (drop: Drop) => void;
   constructor(
@@ -97,7 +133,7 @@ export class AssemblyViewer {
       host.appendChild(this.renderer.domElement);
       this.renderer.domElement.setAttribute(
         'aria-label',
-        'Assembly surface. Use the labelled parts and placement controls to assemble.',
+        'Watch assembly surface. Select a part, then drag it or use the three placement areas.',
       );
       this.camera.position.set(0, 150, 58);
       this.camera.lookAt(0, 5, 0);
@@ -354,10 +390,10 @@ export class AssemblyViewer {
       .makeRotationX(THREE.MathUtils.degToRad(rest.rotationX))
       .setPosition(x, rest.seat, z);
   }
-  stemFrame(x = 0) {
+  stemFrame(x = 0, z = 0) {
     return new THREE.Matrix4()
       .makeRotationX(Math.PI / 2)
-      .setPosition(x - 15.5250054869334, 2.2, 0);
+      .setPosition(x - 15.5250054869334, 2.2, z);
   }
   setFrame(group: THREE.Group, frame: THREE.Matrix4) {
     group.matrixAutoUpdate = false;
@@ -392,7 +428,7 @@ export class AssemblyViewer {
       const center = this.bounds(item)
         .getCenter(new THREE.Vector3())
         .applyMatrix4(new THREE.Matrix4().makeRotationX(Math.PI / 2));
-      const [x, z] = positions[item];
+      const [x, z] = (this.portrait ? phonePositions : desktopPositions)[item];
       this.setFrame(
         ownGroup,
         new THREE.Matrix4()
@@ -402,63 +438,92 @@ export class AssemblyViewer {
     }
     this.setFrame(
       this.groups.get('movement')!,
-      this.frame(plan.side, plan.movement === 'aside' ? -49 : 0),
+      this.frame(
+        this.selected === 'movement' ? this.side : plan.side,
+        ...(plan.movement === 'aside'
+          ? this.rest('movement-rest')
+          : ([0, this.workZ] as [number, number])),
+      ),
     );
     this.setFrame(
       this.groups.get('stem-assembly')!,
-      this.stemFrame(plan.stem === 'aside' ? 49 : 0),
+      this.stemFrame(
+        ...(plan.stem === 'aside'
+          ? this.rest('stem-rest')
+          : ([0, this.workZ] as [number, number])),
+      ),
     );
     for (const [side, group] of this.support) {
       group.visible = true;
       const active = plan.supportPlaced && plan.side === side;
-      group.position.set(
-        active
-          ? plan.movement === 'aside'
-            ? -49
-            : 0
-          : side === 'movement'
-            ? -20
-            : 20,
-        0,
-        active ? 0 : 48,
+      const [x, z] = active
+        ? plan.movement === 'aside'
+          ? this.rest('movement-rest')
+          : [0, this.workZ]
+        : [
+            side === 'movement'
+              ? this.portrait
+                ? -34
+                : -68
+              : this.portrait
+                ? 34
+                : 68,
+            this.portrait ? -78 : 44,
+          ];
+      group.position.set(x, 0, z);
+    }
+    // A controlled turn is only a preview until the player seats the assembly.
+    if (this.selected === 'mainplate') {
+      const group = this.groups.get('mainplate')!;
+      const [x, z] = (this.portrait ? phonePositions : desktopPositions)
+        .mainplate;
+      const rotation = new THREE.Matrix4().makeRotationX(
+        this.side === 'movement' ? Math.PI / 2 : -Math.PI / 2,
+      );
+      const center = this.bounds('mainplate')
+        .getCenter(new THREE.Vector3())
+        .applyMatrix4(rotation);
+      this.setFrame(
+        group,
+        rotation.setPosition(x - center.x, 4 - center.y, z - center.z),
       );
     }
+
     this.updateSeat();
     this.render();
   }
   target(item: Item, destination: Destination) {
-    if (item.startsWith('support-'))
-      return new THREE.Vector3(
-        destination === 'movement-rest'
-          ? -49
-          : destination === 'stem-rest'
-            ? 49
-            : 0,
-        0,
-        0,
-      );
+    const [x, z] = destination.endsWith('-rest')
+      ? this.rest(destination)
+      : [0, this.workZ];
+    if (item.startsWith('support-')) return new THREE.Vector3(x, 0, z);
     const center = this.bounds(item).getCenter(new THREE.Vector3());
     const frame =
       destination === 'stem' ||
       (destination === 'work' && item === 'stem') ||
       destination === 'stem-rest'
-        ? this.stemFrame(destination === 'stem-rest' ? 49 : 0)
-        : this.frame(this.side, destination === 'movement-rest' ? -49 : 0);
+        ? this.stemFrame(x, z)
+        : this.frame(this.side, x, z);
     return center.applyMatrix4(frame);
   }
-  destination(item: Item, point: THREE.Vector3): Destination {
-    if (point.x < -30) return 'movement-rest';
-    if (point.x > 30) return 'stem-rest';
+  centralDestination(item: Item): Destination {
     if (
-      item === 'movement' ||
-      item === 'mainplate' ||
-      item === 'stem' ||
+      ['movement', 'mainplate', 'stem'].includes(item) ||
       item.startsWith('support-')
     )
       return 'work';
     return (this.state?.cursor ?? 0) >= 7 && (this.state?.cursor ?? 0) < 10
       ? 'stem'
       : 'movement';
+  }
+  destination(item: Item, point: THREE.Vector3): Destination {
+    if (this.portrait) {
+      if (point.z > 43) return point.x < 0 ? 'movement-rest' : 'stem-rest';
+    } else {
+      if (point.x < -36) return 'movement-rest';
+      if (point.x > 36) return 'stem-rest';
+    }
+    return this.centralDestination(item);
   }
   updateSeat() {
     this.seat.visible =
@@ -530,6 +595,17 @@ export class AssemblyViewer {
       clone.scale,
     );
     this.ghost.add(clone);
+    if (item === 'movement') {
+      const holder = this.support.get(arrangement(this.state.cursor).side)!;
+      const companion = holder.clone(true);
+      holder.matrixWorld.decompose(
+        companion.position,
+        companion.quaternion,
+        companion.scale,
+      );
+      this.ghost.add(companion);
+      holder.visible = false;
+    }
     original.visible = false;
     this.drag = {
       item,
@@ -547,12 +623,13 @@ export class AssemblyViewer {
       return;
     }
     element.addEventListener('lostpointercapture', this.cancel);
+    this.onDrag?.(true);
     this.updateSeat();
     this.moveGhost(start);
   }
   moveGhost(point: Point) {
     if (!this.drag) return;
-    const bounds = new THREE.Box3().setFromObject(this.ghost),
+    const bounds = new THREE.Box3().setFromObject(this.ghost.children[0]),
       center = bounds.getCenter(new THREE.Vector3());
     const world = this.onPlane(dragCenter(point, this.drag.grab), center.y);
     if (world) this.ghost.position.add(world.sub(center));
@@ -606,7 +683,10 @@ export class AssemblyViewer {
     }
     this.ghost.clear();
     this.ghost.position.set(0, 0, 0);
-    if (drag) this.layout();
+    if (drag) {
+      this.onDrag?.(false);
+      this.layout();
+    }
   };
   pick = (event: PointerEvent) => {
     if (event.button !== 0 || !this.enabled) return;
@@ -634,6 +714,11 @@ export class AssemblyViewer {
       0.8,
       3.2,
     );
+    this.camera.updateProjectionMatrix();
+    this.render();
+  }
+  resetView() {
+    this.camera.zoom = 1;
     this.camera.updateProjectionMatrix();
     this.render();
   }
@@ -678,7 +763,9 @@ export class AssemblyViewer {
     this.cancel();
     const width = Math.max(this.host.clientWidth, 1),
       height = Math.max(this.host.clientHeight, 1);
-    const halfWidth = Math.max(78, (54 * width) / height),
+    const halfWidth = this.portrait
+        ? Math.max(70, (102 * width) / height)
+        : Math.max(105, (67 * width) / height),
       halfHeight = (halfWidth * height) / width;
     Object.assign(this.camera, {
       left: -halfWidth,
@@ -688,10 +775,55 @@ export class AssemblyViewer {
     });
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
+    this.layout();
     this.render();
   };
   render() {
-    if (!this.dead) this.renderer.render(this.scene, this.camera);
+    if (this.dead) return;
+    this.renderer.render(this.scene, this.camera);
+    if (!this.ready || !this.state || this.drag) return;
+    const rect = this.host.getBoundingClientRect();
+    const items: SurfaceItem[] = [];
+    for (const item of availableItems(this.state.cursor)) {
+      const object = item.startsWith('support-')
+        ? this.support.get(item === 'support-dial' ? 'dial' : 'movement')
+        : this.groups.get(item);
+      if (!object?.visible) continue;
+      const box = new THREE.Box3().setFromObject(object);
+      if (box.isEmpty()) continue;
+      const center = box.getCenter(new THREE.Vector3());
+      // Keep the seated support selectable at its exposed rim, clear of the movement.
+      const installedSupport =
+        item === `support-${arrangement(this.state.cursor).side}` &&
+        this.state.cursor >= 2;
+      if (installedSupport) center.x = box.max.x - 3;
+      const point = this.project(center);
+      const corners = [box.min, box.max].map((p) => this.project(p));
+      items.push({
+        item,
+        x: point.x - rect.left,
+        y: point.y - rect.top,
+        width: installedSupport
+          ? 44
+          : Math.max(44, Math.min(150, Math.abs(corners[1].x - corners[0].x))),
+        height: installedSupport
+          ? 44
+          : Math.max(44, Math.min(150, Math.abs(corners[1].y - corners[0].y))),
+      });
+    }
+    const destinations: Destination[] = [
+      'movement-rest',
+      this.selected ? this.centralDestination(this.selected) : 'work',
+      'stem-rest',
+    ];
+    const zones = destinations.map((destination) => {
+      const [x, z] = destination.endsWith('-rest')
+        ? this.rest(destination)
+        : [0, this.workZ];
+      const p = this.project(new THREE.Vector3(x, 0, z));
+      return { destination, x: p.x - rect.left, y: p.y - rect.top };
+    });
+    this.onLayout?.({ items, zones });
   }
   dispose() {
     this.dead = true;
