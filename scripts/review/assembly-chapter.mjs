@@ -167,6 +167,22 @@ async function activate(locator, mode) {
     await page.keyboard.press("Enter");
   } else if (mode === "touch") {
     await locator.waitFor({ state: "visible" });
+    // Shared panels animate out. Wait for a real hit target before sending native touch input.
+    await locator.evaluate(
+      (element) =>
+        new Promise((resolve, reject) => {
+          const deadline = performance.now() + 10000;
+          const check = () => {
+            const r = element.getBoundingClientRect();
+            const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+            if (element === hit || element.contains(hit)) resolve();
+            else if (performance.now() > deadline)
+              reject(new Error("Touch target remains covered"));
+            else requestAnimationFrame(check);
+          };
+          check();
+        }),
+    );
     const box = await locator.boundingBox();
     assert.ok(box, "Visible touch control");
     await touchClient.send("Input.dispatchTouchEvent", {
@@ -181,6 +197,8 @@ async function chooseSupport(side, mode) {
   await activate(part(`support-${side}`), mode);
 }
 async function layoutCheck(label) {
+  await page.locator(".assembly-dialog").waitFor({ state: "hidden" });
+  await page.locator(".assembly-placement").waitFor({ state: "hidden" });
   const result = await page.evaluate(() => {
     const wrap = document.querySelector(".assembly-surface").getBoundingClientRect();
     const parts = [...document.querySelectorAll(".assembly-part")].map((el) => {

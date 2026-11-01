@@ -25,7 +25,10 @@ The 15-operation lesson, session/save schema, validator, scoring, timing and
 geometry/materials/fitted transforms/supports are unchanged. The renderer change
 is accessible instruction copy only. No choices are inferred from the next answer.
 
-Verification is in progress on GitHub CI. Updated interaction checks retain the
+Application head `0711398` passed [CI](https://github.com/galind/zweigesicht-1/actions/runs/41356541977).
+The first browser run inspected the toolbar during the shared panel’s closing
+transition; checks now wait for the panel to close and native tap targets to be
+uncovered. Browser verification is being rerun. Updated interaction checks retain the
 full desktop pointer, touch-drag and keyboard chapters and add a complete 320 px
 tap-only chapter, contextual controls, help/cancellation/focus checks and working
 space checks. Source inspection and diff checks are the only local verification;
