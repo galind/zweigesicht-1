@@ -211,6 +211,7 @@ async function layoutCheck(label) {
         bottom: r.bottom,
         width: r.width,
         height: r.height,
+        touchAction: getComputedStyle(el).touchAction,
       };
     });
     return {
@@ -253,6 +254,7 @@ async function layoutCheck(label) {
     );
   for (const p of result.parts) {
     assert.ok(p.width >= 43 && p.height >= 43, `${label}: touch target ${p.name}`);
+    assert.equal(p.touchAction, "none", `${label}: geometry owns touch dragging for ${p.name}`);
     assert.ok(
       p.x >= -1 && p.right <= result.width + 1 && p.y >= 0 && p.bottom <= result.height,
       `${label}: visible ${JSON.stringify(p)}`,

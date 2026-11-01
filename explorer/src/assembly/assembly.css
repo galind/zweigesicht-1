@@ -104,7 +104,7 @@
 .assembly-parts {
   pointer-events: none;
 }
-.assembly-part {
+.assembly-page .assembly-part {
   position: absolute;
   transform: translate(-50%, -50%);
   min-width: 44px;
