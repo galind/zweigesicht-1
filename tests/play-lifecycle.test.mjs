@@ -856,9 +856,15 @@ test('workbench navigation and renderer retry preserve the original main camera'
   retry.setWorkspace = actual('setWorkspace', retry);
   retry.restoreCamera(saved);
   assert.equal(retry.workspace, 'packet');
-  assert.deepEqual(retry.captureView(), workspace);
+  const assertView = (actual, expected) => {
+    for (const key of ['position', 'target', 'up', 'focus'])
+      assert.ok(actual[key].equals(expected[key]), key);
+    assert.equal(actual.side, expected.side);
+    assert.deepEqual([...actual.zoomLimits], [...expected.zoomLimits]);
+  };
+  assertView(retry.captureView(), workspace);
   assert.equal(retry.setWorkspace(null), true);
-  assert.deepEqual(retry.captureView(), original);
+  assertView(retry.captureView(), original);
   assert.equal(retry.mainView, undefined);
   v.controls.dispose(); retry.controls.dispose();
 });

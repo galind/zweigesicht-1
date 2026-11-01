@@ -20,7 +20,13 @@ rendering and disposal; earlier conclusions are not treated as proof.
 | Eleven Explorer panel booleans and close-all setters encode one active panel. | One panel value; late outgoing-sheet dismissal cannot close its replacement. Handler regression covers panel transitions; browser focus behavior still needs runtime qualification. |
 | Raw catalog subtree selection suppresses fitted poses/finishes, but `retarget()` still registers those hands with the running clock. Visibility also repeats the same selection classification for every part. | Derive selection context once per pass and share it across visibility, finishes, poses and hand registration. Regression runs actual retarget/pose methods and the real hand controller through fitted → raw → fitted. No mechanical law or authored pose changes. |
 | Workshop repeats camera capture/restore for detail, workbench and renderer retry. Its UI changes workspace even when the controller rejects navigation during a drag. | One camera capture/restore pair and an explicit accepted navigation result. Regressions cover retry inside a workbench, returning to the original camera/zoom bounds, and rejected navigation without UI inventory changes. |
+| Redundant spread rebuilds in `allParts()`/`resize()` precede `retarget()`, which already rebuilds for spread layout. Workshop's `missingPrerequisites` and `clearSavedSession` have only test consumers; restart overwrites a validated session. | Delete the two extra rebuild calls, both dead helpers and the unused storage-removal interface. Imports, inspection/browser runners, scripts, CI, save migration and URLs were traced; retained hints/save compatibility is independent. |
 | Bench context loss does not invalidate pending loading/compilation, and pending mouse capture can finish after route disposal. | Use the existing generation at every asynchronous preparation boundary and capture completion. Tests hold assets/compilation, inject loss/rejection and count resource disposal; late capture releases only the old canvas. |
+
+The second pass also moves Workshop selection changes inside accepted navigation:
+opening a project or seating a completed packet can no longer clear/replace the
+held selection before the controller's drag guard. One synchronization applies
+the new workspace and selection together.
 
 Retained alternatives: a shared loader/controller base would combine optional
 Explorer catalog ownership, transactional Workshop replacement and textured Bench
@@ -28,7 +34,13 @@ scene ownership. Keep those boundaries. Keep validated save replay/migration and
 legacy visibility aliases: persisted sessions and supported APIs consume them.
 Keep source/presentation/animated matrices separate; combining them loses exact
 restoration and held separation poses. No cache, worker, scheduler framework,
-packet change or dependency upgrade is warranted by these fixes.
+packet change or dependency upgrade is warranted by these fixes. Keep the separate
+spread packing and displayed rotations: the earlier orientation determines slot
+sizes/centers, while the later rotation determines the accepted upright display;
+merging them would change layout. Keep `targetBounds` and `targetPoints` distinct:
+selection bounds include target rotation, while assembly camera fitting uses
+projected corners. Save validation remains at mutation/storage boundaries because
+malformed/replayed histories must not become valid progress.
 
 No CAD, provenance, generated geometry or motion-law input changes. Source-fit
 interference, the seven display packets, 93/137 and 214/217 assumptions and

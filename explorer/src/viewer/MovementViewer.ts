@@ -1548,7 +1548,6 @@ export class MovementViewer {
     this.save();
     this.restoringCamera = null;
     this.cameraUserOwned = false;
-    this.rebuildSpread();
     this.patch({
       layout: 'spread',
       group: null,
@@ -2265,7 +2264,6 @@ export class MovementViewer {
       this.state.layout === 'spread' &&
       Math.abs(old - this.camera.aspect) > 0.01
     ) {
-      this.rebuildSpread();
       this.retarget();
     }
     if (this.initialFraming && this.contentPrepared) {

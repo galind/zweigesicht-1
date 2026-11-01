@@ -30,11 +30,15 @@ authorized; merge, deployment and publication are not.
 - Focused CPU regressions cover the affected transitions. Mechanical inputs,
   source assets, motion laws and dependency locks are unchanged.
 
-Static review and `git diff --check` pass. Next: push the reviewed milestone,
-inspect GitHub CI, and complete the second implementation review. No local tests,
-builds, CAD calculations or browser automation have run. Exact-head CI results
-will be recorded in the PR; browser focus/graphics behavior remains unverified
-by this review. Prior evidence below is historical.
+The second pass removes duplicate spread rebuilds, two test-only Workshop helpers,
+and selection changes preceding refused workspace navigation. The first GitHub CI
+run passed 197/198 tests; its one failure compared VM object prototypes instead of
+camera values. That assertion now checks vectors, side and zoom bounds directly.
+Static review and `git diff --check` pass. [PR #37](https://github.com/galind/zweigesicht-1/pull/37)
+targets develop. Next: verify the final head in GitHub CI and review the PR.
+No local tests, builds, CAD calculations or browser automation have run. Exact-head
+CI results are recorded in the PR; browser focus/graphics behavior remains
+unverified by this review. Prior evidence below is historical.
 
 ## Current illustration and retained limits
 
