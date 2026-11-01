@@ -10,7 +10,7 @@
 - `asset-paths.json` and `finish-surfaces.json` in the runtime models directory: active content-hashed GLBs and source-face buffer. The diamond STL and case recovery have explicit hashes in their loaders.
 - `assets/source-manifest/`: URLs, hashes and reference provenance. Original sources, conversion caches and analysis evidence are ignored.
 
-`MovementViewer` and `PlayViewer` own geometry, immutable source matrices, presentation transforms, camera state and resource lifetime. React sends discrete intent and receives snapshots on changes and after the final frame; neither controller polls React at rest. Both use one render scheduler with bounded damping and transition tails; an eligible assembled movement keeps that scheduler active. Separation, inventory and incomplete Workshop return to on-demand rendering. Visibility, resize, interaction and recovery wake them.
+`MovementViewer` and `PlayViewer` own geometry, immutable source matrices, presentation transforms, camera state and resource lifetime. React sends discrete intent and receives snapshots for presentation/camera changes; neither controller polls React at rest. Both use one render scheduler with bounded damping and transition tails; an eligible assembled movement keeps that scheduler active. Separation, inventory and incomplete Workshop return to on-demand rendering. Visibility, resize, interaction and recovery wake them. Clock-only frames do not notify Explorer React; inspection and explicit WebMCP snapshots retain diagnostic counters.
 
 `GraphicsResources.ts` shares renderer settings, studio lighting, PMREM allocation and deduplicated disposal. `CameraFrame.ts`, native viewer buttons, Sheet and `useTextScalePreview` share interaction primitives. The controllers keep their own loading and state policies.
 
@@ -18,7 +18,7 @@
 
 `MovementViewer` opens on negative source Z with negative Y up. `mechanisms.json` supplies six groups; `explosion.json` supplies focused host/release paths. Whole-movement disassembly uses the generated complete-separation offsets. Presentation translations compose outside source matrices; zero separation returns to exact endpoints. All parts has independent framing/flip state.
 
-The full-viewport canvas sits behind the identity, reading/acknowledgement/settings panels and bottom controls. Phone Menu and More expose secondary actions. Search defaults to displayed physical components and can include the entire CAD hierarchy. Renderer visibility supplies search status; selection and isolation are separate actions.
+One active-panel value coordinates Explorer sheets and menus. The full-viewport canvas sits behind the identity, reading/acknowledgement/settings panels and bottom controls. Phone Menu and More expose secondary actions. Search defaults to displayed physical components and can include the entire CAD hierarchy. Renderer visibility supplies search status; selection and isolation are separate actions.
 
 Dial visibility is one shared intent, initially false. Both selected dial/hand packets must be complete before either is fitted. Legacy visibility aliases normalize to the same value; conflicting API visibility inputs are rejected. Hand shapes are independent and changing hidden preferences does not enable a dial. Reset preserves side and configuration. WebMCP uses the same validated controller actions and unregisters on unmount.
 

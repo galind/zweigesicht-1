@@ -820,7 +820,7 @@ assert.equal(restoreFixture.contextLost,true);assert.match(restoreFixture.error,
 assert.equal(oldDisposed,1);assert.equal(roomDisposed,2);assert.equal(generatorDisposed,2);assert.equal(notifications,2);
 results.push({check:'failed environment restoration releases temporary resources and preserves the visible Reload 3D recovery path',status:'pass'});
 const snapshotFixture=Object.create(Viewer.prototype),benchmarkResult={fixture:'completed benchmark'};
-Object.assign(snapshotFixture,{state:{...initialState},ready:true,status:'',error:'',detailError:'',parts:[],renderParts:new Map(),history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},canReset(){return false},stats(){return {}}});
+Object.assign(snapshotFixture,{state:{...initialState},fitted:new Set(),fittedCase:new Set(),ready:true,status:'',error:'',detailError:'',parts:[],renderParts:new Map(),history:[],catalogLoaded:true,benchmark:{result:benchmarkResult},canReset(){return false},stats(){return {}}});
 const snapshot=snapshotFixture.snapshot();assert.equal(snapshot.catalogLoaded,true);assert.equal(snapshot.benchmarkResult,benchmarkResult);
 snapshotFixture.benchmark=null;assert.equal(snapshotFixture.snapshot().benchmarkResult,undefined);
 results.push({check:'snapshot exposes catalog/benchmark values without requiring render-time refs',status:'pass'});

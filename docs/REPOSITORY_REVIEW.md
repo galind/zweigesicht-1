@@ -1,115 +1,45 @@
 # Repository review
 
-## Develop integration and codebase review — 31 October 2026
+## Implementation review — 1 November 2026
 
-### Baseline and scope
+Started clean on `develop` at `9f67bdb56218bd947b4ccff3c6a8a2a77032ded3`.
+SSH fetch confirmed the same `origin/develop`; `origin/main` remains
+`1139992a8e64078f2f62de2f7303bf2b118805d7`. The GitHub connector confirms
+[PR #36](https://github.com/galind/zweigesicht-1/pull/36) merged on 31 October.
+Its final head `4bb4b8f` and the squash have identical trees: the collision-frame
+fix, diagnostic updates, chooser counts and previous small cleanup are present.
+The longer prior review remains [at that baseline](https://github.com/galind/zweigesicht-1/blob/9f67bdb/docs/REPOSITORY_REVIEW.md).
 
-The working tree was clean on `develop`. Fetched both integration branches over
-the configured SSH remote, `git@github.com:galind/zweigesicht-1.git`, and created
-`codex/codebase-cleanup-2026-10-31` from fetched develop.
+Current branch: `codex/deep-implementation-review`, with its Vercel Git deployment
+disabled. Review follows React intent through controller updates, asset ownership,
+rendering and disposal; earlier conclusions are not treated as proof.
 
-| Reference | Exact commit |
+| Candidate / consumer evidence | Change and risk / verification |
 | --- | --- |
-| `origin/main` | `1139992a8e64078f2f62de2f7303bf2b118805d7` |
-| Common ancestor | `1139992a8e64078f2f62de2f7303bf2b118805d7` |
-| `origin/develop` / initial HEAD | `e9fe2355afd96c1a49dff7ad2f0a3589f142b3db` |
-| PR #35 final head | `068cbdabfcc337d2eba6b355f52bb12175027ca8` |
+| Explorer's clock marked every frame as UI state, rebuilding snapshots, source/presentation audits and resource statistics for `Home`; only inspection/WebMCP consume statistics. | Separate rendered frames from pending UI changes. Ordinary notifications skip diagnostics; explicit snapshots and inspection retain them. Deterministic scheduler regression checks continuous rendering, quality sampling and camera notifications. No measured speed claim. |
+| Eleven Explorer panel booleans and close-all setters encode one active panel. | One panel value; late outgoing-sheet dismissal cannot close its replacement. Handler regression covers panel transitions; browser focus behavior still needs runtime qualification. |
+| Raw catalog subtree selection suppresses fitted poses/finishes, but `retarget()` still registers those hands with the running clock. Visibility also repeats the same selection classification for every part. | Derive selection context once per pass and share it across visibility, finishes, poses and hand registration. Regression runs actual retarget/pose methods and the real hand controller through fitted → raw → fitted. No mechanical law or authored pose changes. |
+| Workshop repeats camera capture/restore for detail, workbench and renderer retry. Its UI changes workspace even when the controller rejects navigation during a drag. | One camera capture/restore pair and an explicit accepted navigation result. Regressions cover retry inside a workbench, returning to the original camera/zoom bounds, and rejected navigation without UI inventory changes. |
+| Bench context loss does not invalidate pending loading/compilation, and pending mouse capture can finish after route disposal. | Use the existing generation at every asynchronous preparation boundary and capture completion. Tests hold assets/compilation, inject loss/rejection and count resource disposal; late capture releases only the old canvas. |
 
-Develop is 14 commits ahead and zero behind main. The common-ancestor diff and
-the current main/develop tree diff therefore have identical scope: 241 changed
-files, 62,746 added lines and 1,031 removed lines. Much of that volume is tracked
-mechanical evidence and motion data; it is not all application code. Integration
-includes the repository cleanup, Bench experience and entry, optimized hosted
-holders, and running movement/current-time hands.
+Retained alternatives: a shared loader/controller base would combine optional
+Explorer catalog ownership, transactional Workshop replacement and textured Bench
+scene ownership. Keep those boundaries. Keep validated save replay/migration and
+legacy visibility aliases: persisted sessions and supported APIs consume them.
+Keep source/presentation/animated matrices separate; combining them loses exact
+restoration and held separation poses. No cache, worker, scheduler framework,
+packet change or dependency upgrade is warranted by these fixes.
 
-The connected GitHub app confirms [PR #35](https://github.com/galind/zweigesicht-1/pull/35)
-is merged, with merge commit equal to develop. Develop and PR #35's final head
-have the same tree, `a5c5c213bdb69f2e2276abe244a42153712bb9fe`; this verifies the
-review fixes from `95bb2d6`, `a39baec` and `068cbda` survived the squash, even
-though their individual commit ancestry is not retained. PR #35 has no posted
-review comments, review submissions or review threads. PRs #31, #33, #34 and
-#35 descriptions supplied integration and historical validation context.
+No CAD, provenance, generated geometry or motion-law input changes. Source-fit
+interference, the seven display packets, 93/137 and 214/217 assumptions and
+incomplete mainspring/arbor behavior remain as documented. Historical research
+scripts still have revision-specific inputs/contracts; frontend imports alone
+cannot justify deleting them.
 
-The repository-wide static pass inventoried all 363 tracked files and searched
-342 text files, then traced consumers and higher-risk boundaries beyond the
-main/develop diff. Coverage included:
-
-- React routes, chooser/configuration controls, experience state, WebMCP and
-  lazy inspection entry points; Workshop graph, persistence/migration, inventory,
-  workbench transfer, completion and Undo.
-- Explorer, Workshop and Bench controller loading, generations, retries,
-  cancellation, configuration, source/presentation transforms, context recovery,
-  shared materials and resource ownership/disposal.
-- Running movement, current-time hands, all seven display packet inputs,
-  separation/hidden-time scheduling, Bench input sampling, flipping, collision
-  references and adaptive quality.
-- Imports/exports, styles and dynamic consumers, dependencies and locks,
-  asset preparation/packaging/pruning, CI/release workflows, inspection runners,
-  CPU fixtures and historical CAD/research script inputs and outputs.
-- Current architecture/experience documentation, source manifests and evidence
-  boundaries. This was not a new numerical CAD or physical clearance study.
-
-### Actionable findings and resolutions
-
-| Severity | Failure condition and location | Resolution |
-| --- | --- | --- |
-| P2 | `explorer/src/bench/physics.ts`: internal meshes animate after their rest BVHs are registered. Queries enter the retained collision frame but floor points, corrected capsules and normals return through the live rendered mesh matrix. A stationary visitor near moving internals can receive an inconsistent floor or displacement, including while the parent turns. | Store the forward collision matrix with its inverse. Derive bounds and every query result from the same retained frame. Added `tests/bench-physics.test.mjs` regression comparing an independent static fixture with rendered rotation, geometry replacement and both parent turnover directions: 18 floor and 18 contact probes, also checking normals, grounded/ceiling flags and overlap queries. The regression is included in PR CI. |
-| P2 | `scripts/bench/interaction-check.mjs` waits for `frame === 0`; five Explorer inspection modules still expect idle rendering to stop or compare reassembly to an old moving pose. PR #35 intentionally runs the assembled movement, so those checks time out or report false failures. | Wait for stationary visitor/input state independently of rendering; require active movement to advance without input samples. Check current presentation on reassembly. Keep GPU-resource checks and add an explicit separated-state render/clock freeze assertion. The production scheduler is unchanged. |
-| P3 | `explorer/components/WorkshopChooser.tsx` advertises 89/249 placements after the accepted inventory became 83/243. | Correct the two labels against the current manifests and architecture; preserve 35 transfers, 16 foundation leaves and 259 final leaves. No inventory or save behavior changes. |
-| P3 | `explorer/src/viewer/MovementViewer.ts` repeats the raw-catalog selection policy three times inside `retarget()`. Pose and material branches could drift independently. | Compute one local predicate per retarget and use it for fitted hand pose, Fine hand finish and enamel. No new stored state or generalized policy layer. Existing fitted/raw configuration coverage remains relevant; exact-head CI is tracked in PR #36. |
-| P3 | `explorer/src/viewer/HandDisplayPose.ts` exports `HAND_TIME` without a consumer. Running hands now use wall-clock time; static fitted poses still consume the authored pose data. | Remove only the unused export. Tracked imports, tests, diagnostics and research scripts were searched; retain the JSON's time/provenance and static pose helper. |
-
-### Deliberately retained and deferred
-
-- Keep separate controller loading and disposal paths. Explorer/Workshop share
-  catalog geometry and material policy; Bench additionally owns environment
-  textures, shadows, cloned parts and explicit context release. A common base
-  class would obscure these ownership differences. PR #35's settled asset loads,
-  generation checks and fixture disposal regressions remain intact.
-- Keep save migrations and the legacy Hints field, legacy dial visibility aliases,
-  dynamic `?inspect=1` imports, dynamically constructed camera CSS classes and
-  CAD/research tools. Their persisted, diagnostic or historical consumers make
-  them live contracts despite limited ordinary frontend imports. No dependency
-  was removed without an established unused consumer set; no branch was deleted.
-- Retain milestone-specific CAD inputs, revision guards, recorded output hashes
-  and source URLs. Running old generators against current motion data is not a
-  safe cleanup method. No authored/generated asset or source manifest changed.
-- Retain the small digest encoder in the directly imported Node motion module:
-  unifying it with extensionless frontend imports would require module-resolution
-  churn beyond the benefit. Shared frontend asset validation remains centralized.
-- No measured performance optimization is claimed. The local raw-selection
-  consolidation removes repeated work but has no benchmark. Per-frame allocation,
-  bounds and spring work remain bounded by existing behavior. Stats sorting and
-  periodic React reporting during continuous motion are possible future profiling
-  targets; do not add caching or change observability without comparable evidence.
-- Defer broader controller decomposition, bundle/startup policy and dependency
-  upgrades. No concrete defect or measured gain justifies those rewrites here.
-  Existing build warnings, physical-device qualification, source-fit interference,
-  power-source incompleteness and release gates remain as recorded.
-
-### Validation and evidence limits
-
-PR #35's final head passed [CI run 41200195761](https://github.com/galind/zweigesicht-1/actions/runs/41200195761)
-and [holder-assets run 41200195856](https://github.com/galind/zweigesicht-1/actions/runs/41200195856).
-The recorded suite covers 187 CPU tests, inventory, typecheck, lint and production/
-Vercel builds. Tree equality makes this useful baseline evidence; it does **not**
-validate the cleanup edits. The connector's workflow query is PR-scoped, so an
-empty result for the squash commit is not evidence that its checks failed.
-
-Verification before opening the PR was static: consumer tracing, manifest
-inventory inspection, diff review, `git diff --check`, and confirmation that mechanical assets, motion
-laws, phases, scheduler and dependency locks are untouched. No local tests,
-builds, browser automation or CAD calculations were run, following `AGENTS.md`.
-The new CPU regression had not run at that point. The changed browser runners
-have not run and are not part of current CI, so visual/runtime equivalence remains unverified by
-this review. No historic performance or clearance measurements were refreshed.
-
-The owner subsequently authorized the SSH push and opening
-[PR #36](https://github.com/galind/zweigesicht-1/pull/36), targeting develop.
-Its description/checks record CI results for the exact pushed head, including
-the added CPU regression. The cleanup branch disables its own Vercel Git
-deployment. No merge, deployment or publication is authorized.
-Current delivery status and next action are in [PROGRESS.md](../PROGRESS.md).
+Validation uses GitHub CI; exact-head results belong in the task PR. No local
+tests, builds, CAD calculations or browser automation. CPU fixtures do not certify
+WebGL drivers, focus transitions, real OS context loss or physical devices.
+Current delivery state and remaining action: [PROGRESS.md](../PROGRESS.md).
 
 ## Staging cleanup — 25 October 2026
 

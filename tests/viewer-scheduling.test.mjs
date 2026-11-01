@@ -6,6 +6,8 @@ import vm from 'node:vm';
 import {createRequire} from 'node:module';
 import * as THREE from '../explorer/node_modules/three/build/three.module.js';
 import {OrbitControls} from '../explorer/node_modules/three/examples/jsm/controls/OrbitControls.js';
+import {RunningHands} from '../explorer/src/viewer/RunningMovement.ts';
+import {initialState} from '../explorer/src/experience/state.ts';
 import {motionEase, MOTION} from '../explorer/src/experience/motion.ts';
 const require = createRequire(import.meta.url);
 const ts = require('../explorer/node_modules/typescript');
@@ -239,4 +241,80 @@ test('inspection sustains RAF; disassembly, inventory and hidden tabs release it
   f.v.state.layout = 'assembly'; f.v.requestRender(); f.frame();
   assert.equal(f.callbacks.size, 1);
   f.v.controls.dispose();
+});
+
+
+test('clock-only frames render without React polling; camera changes, quality and inspection remain live', () => {
+  const f = fixture();
+  let qualityChecks = 0;
+  f.v.adjustQuality = () => qualityChecks++;
+  f.v.contentPrepared = true;
+  f.v.runningMovement = {restore() {}, update() {return true;}};
+  f.v.requestRender(); f.frame();
+  const initial = f.snapshots();
+  for (let i = 0; i < 100; i++) f.frame();
+  assert.equal(f.draws(), 101);
+  assert.equal(f.snapshots(), initial, 'Train and hand movement alone do not change UI state');
+  assert.ok(qualityChecks >= 4, 'Auto quality still samples continuous rendering');
+  f.v.controls._sphericalDelta.theta = .6;
+  f.v.controls.update();
+  for (let i = 0; i < 100; i++) f.frame();
+  assert.ok(f.snapshots() > initial, 'Camera/Reset availability reaches React');
+  const cameraSnapshots = f.snapshots();
+  f.v.inspect = true;
+  for (let i = 0; i < 100; i++) f.frame();
+  assert.ok(f.snapshots() > cameraSnapshots, 'Explicit inspection still refreshes counters');
+  f.v.controls.dispose();
+});
+
+test('ordinary UI notifications skip diagnostics while explicit snapshots retain the API contract', () => {
+  let audits = 0;
+  const v = {state: {}, renderParts: new Map(), history: [], selectionContext: () => ({}),
+    caseEffective: () => false, canReset: () => false,
+    stats: () => { audits++; return {triangles: 42}; }, notify() {}, inspect: false,
+  };
+  v.snapshot = actual('snapshot', v);
+  v.emit = actual('emit', v);
+  v.emit(); assert.equal(audits, 0);
+  assert.equal(v.snapshot().stats.triangles, 42);
+  assert.equal(audits, 1);
+  v.inspect = true; v.emit(); assert.equal(audits, 2);
+});
+
+
+test('raw catalog assembly inspection keeps source hand poses and returning restores live fitted hands', () => {
+  const poses = JSON.parse(fs.readFileSync(new URL('../assets/authored/hand-display-poses.json', import.meta.url)));
+  const id = poses.hands[0].leafId, parent = id.slice(0, id.lastIndexOf('__'));
+  const geometry = new THREE.BoxGeometry(), material = new THREE.MeshStandardMaterial();
+  material.userData.configurationOverride = {value: 0};
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.matrixAutoUpdate = false;
+  const assembled = new THREE.Matrix4().makeTranslation(1, 2, 3);
+  const display = new THREE.Matrix4().makeTranslation(4, 5, 6);
+  const part = {source: {id, name: 'hand', definitionId: 'hand'}, mesh, material, assembled,
+    center: new THREE.Vector3(), offset: new THREE.Vector3(), target: new THREE.Vector3(),
+    rotation: new THREE.Quaternion(), targetRotation: new THREE.Quaternion()};
+  const hands = new RunningHands();
+  const v = {state: {...initialState, dialsVisible: true, centralVisible: true, smallVisible: true},
+    fitted: new Set(), fittedCase: new Set(), renderParts: new Map([[id, part]]), parts: [],
+    caseTurn: 1, reduced: true, renderableDials: () => new Set([id]), caseEffective: () => false,
+    requestRender() {}, runningMovement: {hands, restore: () => hands.restore()},
+  };
+  const globals = {ROOT: 'movement', PREFIX: 'movement__', GROUPS: [], CASE_LEAVES: new Set(), CASE_CRYSTALS: new Set(),
+    belongs: (id, ancestor) => id === ancestor || id.startsWith(ancestor + '__'),
+    DIALS: {presentationOverrides: []},
+    explosionOffsets: () => new Map(), handDisplayMatrix: () => display.clone(), wheelDisplayMatrix: () => undefined,
+    finishFor: () => ({color: 0xffffff, metalness: 0, roughness: .5}),
+    setFinishEnabled() {}, setEmphasis() {}, focusRole: () => 'normal', focusCover: () => false,
+    displayHostPart: id => id, assemblyFittingPresent: () => true,
+  };
+  for (const name of ['selectionContext', 'partVisible', 'retarget', 'applyPose']) v[name] = actual(name, v, globals);
+  const render = () => {v.retarget(); v.applyPose(0); hands.update(true, 0, 0, new Date(2026, 0, 1, 3, 15));};
+  render(); assert.equal(mesh.visible, true); assert.ok(!mesh.matrix.equals(display));
+  v.state.part = parent; render();
+  assert.equal(mesh.visible, true, 'The selected catalog subtree remains inspectable');
+  assert.ok(mesh.matrix.equals(assembled), 'Raw hands must not be registered with the live clock');
+  v.state.part = null; render();
+  assert.ok(!mesh.matrix.equals(display), 'Returning restores live fitted hands');
+  hands.dispose(); geometry.dispose(); material.dispose();
 });

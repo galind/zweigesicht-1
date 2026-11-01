@@ -227,8 +227,7 @@ export default function Play() {
     sync();
   };
   const enterWorkspace = (id: string | null) => {
-    if (status.busy) return;
-    viewer.current?.setWorkspace(id);
+    if (viewer.current && !viewer.current.setWorkspace(id)) return;
     workspaceRef.current = id;
     setWorkspace(id);
     assistanceRef.current = false;

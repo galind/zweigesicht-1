@@ -79,14 +79,7 @@ export class PlayViewer {
   available = true;
   assistance = false;
   workspace: string | null = null;
-  mainView?: {
-    position: THREE.Vector3;
-    target: THREE.Vector3;
-    up: THREE.Vector3;
-    focus: THREE.Vector3;
-    side: 'front' | 'back';
-    zoomLimits: [number, number];
-  };
+  mainView?: ReturnType<PlayViewer['captureView']>;
   detail: PlayStep | null = null;
   detailView?: PlayViewer['mainView'];
   captureElement?: HTMLElement;
@@ -436,18 +429,35 @@ export class PlayViewer {
     this.updateSeat();
     this.invalidate();
   }
-  captureCamera() {
+  captureView() {
     return {
-      workspace: this.workspace,
-      mainView: this.mainView,
-      detail: this.detail,
-      detailView: this.detailView,
-      zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
       position: this.camera.position.clone(),
       target: this.controls.target.clone(),
       up: this.camera.up.clone(),
       focus: this.frameFocus.clone(),
       side: this.side,
+      zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
+    };
+  }
+  restoreView(saved: ReturnType<PlayViewer['captureView']>) {
+    this.camera.position.copy(saved.position);
+    this.controls.target.copy(saved.target);
+    this.camera.up.copy(saved.up);
+    this.frameFocus.copy(saved.focus);
+    this.side = saved.side;
+    [this.controls.minDistance, this.controls.maxDistance] = saved.zoomLimits;
+    syncOrbitUp(this.camera, this.controls);
+    this.stopOrbitMotion();
+    this.camera.lookAt(this.controls.target);
+    this.camera.updateMatrixWorld();
+  }
+  captureCamera() {
+    return {
+      ...this.captureView(),
+      workspace: this.workspace,
+      mainView: this.mainView,
+      detail: this.detail,
+      detailView: this.detailView,
       hasFramed: this.hasFramed,
     };
   }
@@ -456,17 +466,8 @@ export class PlayViewer {
     this.mainView = saved.mainView;
     this.detail = saved.detail;
     this.detailView = saved.detailView;
-    [this.controls.minDistance, this.controls.maxDistance] = saved.zoomLimits;
-    this.camera.position.copy(saved.position);
-    this.controls.target.copy(saved.target);
-    this.camera.up.copy(saved.up);
-    this.frameFocus.copy(saved.focus);
-    this.side = saved.side;
     this.hasFramed = saved.hasFramed;
-    syncOrbitUp(this.camera, this.controls);
-    this.stopOrbitMotion();
-    this.camera.lookAt(this.controls.target);
-    this.camera.updateMatrixWorld();
+    this.restoreView(saved);
     this.layout();
     this.invalidate();
   }
@@ -481,31 +482,14 @@ export class PlayViewer {
     if (step?.id === this.detail?.id) return;
     this.stopOrbitMotion();
     if (step) {
-      if (!this.detail)
-        this.detailView = {
-          position: this.camera.position.clone(),
-          target: this.controls.target.clone(),
-          up: this.camera.up.clone(),
-          focus: this.frameFocus.clone(),
-          side: this.side,
-          zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
-        };
+      if (!this.detail) this.detailView = this.captureView();
       this.detail = step;
       this.side = step.side;
       this.reframe();
     } else {
       this.detail = null;
       if (this.detailView) {
-        this.camera.position.copy(this.detailView.position);
-        this.controls.target.copy(this.detailView.target);
-        this.camera.up.copy(this.detailView.up);
-        this.frameFocus.copy(this.detailView.focus);
-        this.side = this.detailView.side;
-        [this.controls.minDistance, this.controls.maxDistance] =
-          this.detailView.zoomLimits;
-        syncOrbitUp(this.camera, this.controls);
-        this.camera.lookAt(this.controls.target);
-        this.camera.updateMatrixWorld();
+        this.restoreView(this.detailView);
         this.detailView = undefined;
       }
       this.updateSeat();
@@ -514,17 +498,10 @@ export class PlayViewer {
     this.emit();
   }
   setWorkspace(workspace: string | null) {
-    if (workspace === this.workspace || this.busy || this.drag) return;
+    if (workspace === this.workspace) return true;
+    if (this.busy || this.drag) return false;
     if (this.detail) this.setDetail(null);
-    if (!this.workspace)
-      this.mainView = {
-        position: this.camera.position.clone(),
-        target: this.controls.target.clone(),
-        up: this.camera.up.clone(),
-        focus: this.frameFocus.clone(),
-        side: this.side,
-        zoomLimits: [this.controls.minDistance, this.controls.maxDistance],
-      };
+    if (!this.workspace) this.mainView = this.captureView();
     this.workspace = workspace;
     this.current = null;
     this.staged.clear();
@@ -532,16 +509,7 @@ export class PlayViewer {
     this.cameraMotion = undefined;
     this.stopOrbitMotion();
     if (!workspace && this.mainView) {
-      this.camera.position.copy(this.mainView.position);
-      this.controls.target.copy(this.mainView.target);
-      this.camera.up.copy(this.mainView.up);
-      this.frameFocus.copy(this.mainView.focus);
-      this.side = this.mainView.side;
-      [this.controls.minDistance, this.controls.maxDistance] =
-        this.mainView.zoomLimits;
-      syncOrbitUp(this.camera, this.controls);
-      this.camera.lookAt(this.controls.target);
-      this.camera.updateMatrixWorld();
+      this.restoreView(this.mainView);
       this.updateProjection();
       this.mainView = undefined;
     } else {
@@ -551,6 +519,7 @@ export class PlayViewer {
     }
     this.invalidate();
     this.emit();
+    return true;
   }
   boundsFor(ids: Iterable<string>) {
     const b = new THREE.Box3();
