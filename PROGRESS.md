@@ -1,50 +1,46 @@
 # Current project status
 
-Updated 31 October 2026. Setup: [README](README.md). Technical reference:
+Updated 1 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
 ## Integration and next action
 
-Fetched `develop` is `e9fe2355afd96c1a49dff7ad2f0a3589f142b3db`, including merged
-[PR #35](https://github.com/galind/zweigesicht-1/pull/35) and all its review fixes.
-Its tree exactly matches PR #35's final head `068cbdabfcc337d2eba6b355f52bb12175027ca8`.
-`main` and the common ancestor are both `1139992a8e64078f2f62de2f7303bf2b118805d7`;
-develop is 14 commits ahead with no main-only commits.
+Started clean at fetched `develop` / HEAD `9f67bdb56218bd947b4ccff3c6a8a2a77032ded3`.
+[PR #36](https://github.com/galind/zweigesicht-1/pull/36) is merged; its final head
+`4bb4b8f` has the same tree. `main` remains `1139992a8e64078f2f62de2f7303bf2b118805d7`.
+The previous collision, diagnostics and chooser fixes are present.
 
-PR #35's final head passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41200195761)
-(187 CPU tests, inventory, typecheck, lint and both builds) and
-[holder-assets CI](https://github.com/galind/zweigesicht-1/actions/runs/41200195856).
-This is baseline evidence, not validation of the current cleanup.
+Current work is on `codex/deep-implementation-review`, based on that develop.
+Its Vercel Git deployment is disabled. Push and a PR targeting develop are
+authorized; merge, deployment and publication are not.
 
-Current work is on `codex/codebase-cleanup-2026-10-31`, based on fetched develop;
-its Vercel Git deployment is disabled in configuration. The owner authorized the
-SSH push and [PR #36](https://github.com/galind/zweigesicht-1/pull/36), targeting
-`develop`. Static review and diff checks are complete; current exact-head CI
-results are recorded in that PR. The added CPU regression is part of GitHub CI.
-No local tests, builds, CAD calculations or browser automation were run. Prior
-browser/CAD evidence below remains historical.
+## Review changes and next action
 
-Next: human review of PR #36 after passing exact-head CI. Changed browser runners
-remain **unverified at runtime** and need a separate authorized runtime check;
-current CI does not execute them. Do not merge, deploy or publish.
+- Explorer uses one active-panel value, one selection classification per pass,
+  and a shared policy for raw poses, finishes, visibility and hand registration.
+  Raw catalog subtree hands no longer animate as if they were fitted.
+- Clock-only rendering no longer rebuilds React snapshots or diagnostic audits.
+  Camera/presentation updates, explicit inspection/WebMCP and automatic quality
+  remain live. No wall-clock performance gain has been measured.
+- Workshop shares camera capture/restore across detail, workbench and Retry;
+  UI inventory changes only after the controller accepts workspace navigation.
+- Bench context loss invalidates unfinished loading/compilation, and late pointer
+  capture after route exit releases the old canvas without touching another view.
+- Focused CPU regressions cover the affected transitions. Mechanical inputs,
+  source assets, motion laws and dependency locks are unchanged.
 
-## Review changes
-
-- Bench now uses the retained collision frame in both query directions, repairing
-  floor hits, capsule corrections and contact normals near animated internals.
-  A regression compares moving internals against an independent static fixture
-  through parent turnover and rendered geometry replacement.
-- Update stale diagnostic assumptions: assembled movement keeps rendering;
-  separated movement sleeps with frozen train time; reassembly compares against
-  the current presentation rather than an earlier moving frame.
-- Correct the Workshop chooser to 83 prepared fits / 243 individual parts, remove
-  the unused `HAND_TIME` export and share one raw-selection predicate within
-  Explorer retargeting. No source manifest or authored static pose is removed.
-- Preserve PR #35's loading, cancellation, disposal, phase and pause regressions;
-  its review remains in [MOVEMENT_PR_REVIEW.md](docs/MOVEMENT_PR_REVIEW.md).
-  No mechanical data, generated geometry, phase, motion law or render scheduler
-  is changed. No performance measurement or new speed claim is made.
+The second pass removed duplicate spread rebuilds, two test-only Workshop helpers,
+and selection changes preceding refused workspace navigation. Application head
+`602574a` passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41326731178):
+198 tests, inventory validation, typecheck, lint, production and Vercel builds;
+[holder-assets validation](https://github.com/galind/zweigesicht-1/actions/runs/41326731213)
+also passed. Static review and `git diff --check` pass.
+[PR #37](https://github.com/galind/zweigesicht-1/pull/37) targets develop.
+Next: human review of the PR; exact final-head CI is recorded there.
+No local tests, builds, CAD calculations or browser automation have run. Exact-head
+CI results are recorded in the PR; browser focus/graphics behavior remains
+unverified by this review. Prior evidence below is historical.
 
 ## Current illustration and retained limits
 

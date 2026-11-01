@@ -73,6 +73,10 @@ import {
 } from '@/components/ui/select';
 const InspectionPanel = lazy(() => import('@/components/InspectionPanel'));
 
+type Panel =
+  | 'menu' | 'more' | 'catalog' | 'about' | 'acknowledgements'
+  | 'explore' | 'separate' | 'dials' | 'options' | 'details' | 'assemble';
+
 const empty: ViewerSnapshot = {
   ...initialState,
   ready: false,
@@ -166,19 +170,20 @@ export default function Home() {
   }, []);
   const host = useRef<HTMLDivElement>(null),
     viewer = useRef<MovementViewer | null>(null);
-  const [s, set] = useState<ViewerSnapshot>(empty),
-    [menu, setMenu] = useState(false),
-    [more, setMore] = useState(false),
-    [catalog, setCatalog] = useState(false),
-    [about, setAbout] = useState(false),
-    [acknowledgements, setAcknowledgements] = useState(false),
-    [explore, setExplore] = useState(false),
-    [separate, setSeparate] = useState(false),
-    [dials, setDials] = useState(false),
-    [options, setOptions] = useState(false),
-    [details, setDetails] = useState(false),
-    [assemble, setAssemble] = useState(false),
-    [inspect, setInspect] = useState(false);
+  const [s, set] = useState<ViewerSnapshot>(empty);
+  const [inspect, setInspect] = useState(false);
+  const [panel, setPanel] = useState<Panel | null>(null);
+  const menu = panel === 'menu',
+    more = panel === 'more',
+    catalog = panel === 'catalog',
+    about = panel === 'about',
+    acknowledgements = panel === 'acknowledgements',
+    explore = panel === 'explore',
+    separate = panel === 'separate',
+    dials = panel === 'dials',
+    options = panel === 'options',
+    details = panel === 'details',
+    assemble = panel === 'assemble';
   useEffect(() => {
     if (!__WORKSHOP_ENTRY_ENABLED__) return;
     const url = new URL(location.href);
@@ -189,13 +194,14 @@ export default function Home() {
       '',
       `${url.pathname}${url.search}${url.hash}`,
     );
-    queueMicrotask(() => setAssemble(true));
+    queueMicrotask(() => setPanel('assemble'));
   }, []);
   useEffect(() => {
     const breakpoint = window.matchMedia('(max-width: 600px)');
     const dismissNavigation = () => {
-      setMenu(false);
-      setMore(false);
+      setPanel((current) =>
+        current === 'menu' || current === 'more' ? null : current,
+      );
     };
     breakpoint.addEventListener('change', dismissNavigation);
     return () => breakpoint.removeEventListener('change', dismissNavigation);
@@ -321,24 +327,16 @@ export default function Home() {
     });
   }, [group, selected, s.layout, topBounds.header]);
   useEffect(() => {
-    queueMicrotask(() => setDetails(false));
+    queueMicrotask(() =>
+      setPanel((current) => current === 'details' ? null : current),
+    );
   }, [s.part, s.group]);
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (
         event.key !== 'Escape' ||
         event.defaultPrevented ||
-        menu ||
-        more ||
-        catalog ||
-        about ||
-        acknowledgements ||
-        explore ||
-        separate ||
-        dials ||
-        options ||
-        details ||
-        assemble
+        panel !== null
       )
         return;
       event.preventDefault();
@@ -347,30 +345,19 @@ export default function Home() {
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [
-    menu,
-    more,
-    catalog,
-    about,
-    acknowledgements,
-    explore,
-    separate,
-    dials,
-    options,
-    details,
-    assemble,
-  ]);
+  }, [panel]);
   const selectPart = (id: string) => {
     selectionFocus.current = true;
-    setCatalog(false);
-    setOptions(false);
-    setAcknowledgements(false);
-    setDetails(false);
+    setPanel((current) =>
+      current && ['catalog', 'options', 'acknowledgements', 'details'].includes(current)
+        ? null : current,
+    );
     void viewer.current?.select(id);
   };
   const chooseGroup = (id: string | null) => {
-    setExplore(false);
-    setDetails(false);
+    setPanel((current) =>
+      current === 'explore' || current === 'details' ? null : current,
+    );
     if (viewer.current) viewer.current.group(id);
     else
       set((prev) => ({
@@ -382,32 +369,20 @@ export default function Home() {
   };
   const chooseSpreadGroup = (name?: string) => {
     viewer.current?.frameSpread(name);
-    setExplore(false);
+    setPanel((current) => current === 'explore' ? null : current);
   };
-  const closePanels = () => {
-    setMenu(false);
-    setMore(false);
-    setExplore(false);
-    setSeparate(false);
-    setDials(false);
-    setOptions(false);
-    setAcknowledgements(false);
-    setDetails(false);
-    setCatalog(false);
-    setAbout(false);
-    setAssemble(false);
-  };
-  const openPanel = (update: (open: boolean) => void, open: boolean) => {
+  const closePanels = () => setPanel(null);
+  const openPanel = (next: Panel, open: boolean) => {
     if (open) {
       selectionFocus.current = false;
       const selector =
-        update === setExplore
+        next === 'explore'
           ? '.explore-button'
-          : update === setDials
+          : next === 'dials'
             ? '.dial-trigger'
-            : update === setSeparate
+            : next === 'separate'
               ? '.separate-trigger'
-              : update === setOptions
+              : next === 'options'
                 ? '.settings-trigger'
                 : '.action-dock';
       panelAnchor.current = visibleTrigger(selector, moreButton.current);
@@ -417,9 +392,9 @@ export default function Home() {
         .querySelector('.action-dock')
         ?.getBoundingClientRect();
       if (dockRect) setPanelBottom(window.innerHeight - dockRect.top + 12);
-      closePanels();
     }
-    update(open);
+    // A closing sheet may report after another opened; dismiss only its own panel.
+    setPanel((current) => open ? next : current === next ? null : current);
   };
   const toggleAllParts = () => {
     closePanels();
@@ -450,7 +425,7 @@ export default function Home() {
           {__WORKSHOP_ENTRY_ENABLED__ && (
             <WorkshopChooser
               open={assemble}
-              onOpenChange={(open) => openPanel(setAssemble, open)}
+              onOpenChange={(open) => openPanel('assemble', open)}
               style={panelStyle}
               finalFocus={assembleButton}
             >
@@ -472,16 +447,13 @@ export default function Home() {
             open={about}
             restoreFocus={!options && !acknowledgements}
             focusFallback={menuButton}
-            onOpenChange={(open) => {
-              if (open) closePanels();
-              setAbout(open);
-            }}
+            onOpenChange={(open) => openPanel('about', open)}
           />
           <button
             className="text-button acknowledgements-trigger"
             aria-expanded={acknowledgements}
             aria-controls="acknowledgements"
-            onClick={() => openPanel(setAcknowledgements, !acknowledgements)}
+            onClick={() => openPanel('acknowledgements', !acknowledgements)}
           >
             Acknowledgements
           </button>
@@ -489,7 +461,7 @@ export default function Home() {
             className="text-button settings-trigger"
             aria-expanded={options}
             aria-controls="viewer-settings"
-            onClick={() => openPanel(setOptions, !options)}
+            onClick={() => openPanel('options', !options)}
           >
             Settings
           </button>
@@ -497,7 +469,7 @@ export default function Home() {
         <Sheet
           modal={false}
           open={menu}
-          onOpenChange={(open) => openPanel(setMenu, open)}
+          onOpenChange={(open) => openPanel('menu', open)}
         >
           <SheetTrigger
             ref={menuButton}
@@ -528,21 +500,21 @@ export default function Home() {
               </a>
               <button
                 className="menu-link"
-                onClick={() => openPanel(setAbout, true)}
+                onClick={() => openPanel('about', true)}
               >
                 Learn about the watch
                 <ChevronRight aria-hidden="true" />
               </button>
               <button
                 className="menu-link"
-                onClick={() => openPanel(setAcknowledgements, true)}
+                onClick={() => openPanel('acknowledgements', true)}
               >
                 Acknowledgements
                 <ChevronRight aria-hidden="true" />
               </button>
               <button
                 className="menu-link"
-                onClick={() => openPanel(setOptions, true)}
+                onClick={() => openPanel('options', true)}
               >
                 Settings
                 <ChevronRight aria-hidden="true" />
@@ -659,7 +631,7 @@ export default function Home() {
                   onClick={() => {
                     setIncludeAllCad(false);
                     setCatalogQuery('');
-                    openPanel(setCatalog, true);
+                    openPanel('catalog', true);
                   }}
                 >
                   Find a component
@@ -669,7 +641,7 @@ export default function Home() {
                 <button
                   ref={detailButton}
                   className="text-button"
-                  onClick={() => openPanel(setDetails, !details)}
+                  onClick={() => openPanel('details', !details)}
                   aria-expanded={details}
                   aria-controls="component-details"
                 >
@@ -702,7 +674,7 @@ export default function Home() {
         <Sheet
           modal={false}
           open={separate}
-          onOpenChange={(open) => openPanel(setSeparate, open)}
+          onOpenChange={(open) => openPanel('separate', open)}
         >
           <SheetTrigger
             className="text-button separate-trigger"
@@ -738,7 +710,7 @@ export default function Home() {
                   className="separation-action"
                   onClick={() => {
                     chooseGroup(null);
-                    setSeparate(false);
+                    openPanel('separate', false);
                   }}
                 >
                   <Layers aria-hidden="true" />
@@ -755,7 +727,7 @@ export default function Home() {
                       viewer.current?.patch(
                         group ? { partSpread: value } : { separation: value },
                       );
-                      setSeparate(false);
+                      openPanel('separate', false);
                     }}
                   >
                     <Layers aria-hidden="true" />
@@ -819,7 +791,7 @@ export default function Home() {
         <Sheet
           modal={false}
           open={explore}
-          onOpenChange={(open) => openPanel(setExplore, open)}
+          onOpenChange={(open) => openPanel('explore', open)}
         >
           <SheetTrigger
             ref={exploreButton}
@@ -910,7 +882,7 @@ export default function Home() {
         <Sheet
           modal={false}
           open={dials}
-          onOpenChange={(open) => openPanel(setDials, open)}
+          onOpenChange={(open) => openPanel('dials', open)}
         >
           <SheetTrigger
             className="text-button dial-trigger"
@@ -963,7 +935,7 @@ export default function Home() {
         <Sheet
           modal={false}
           open={more}
-          onOpenChange={(open) => openPanel(setMore, open)}
+          onOpenChange={(open) => openPanel('more', open)}
         >
           <SheetTrigger
             ref={moreButton}
@@ -989,7 +961,7 @@ export default function Home() {
                 aria-pressed={
                   s.layout === 'spread' ? !!s.spreadFocus : !!s.group
                 }
-                onClick={() => openPanel(setExplore, true)}
+                onClick={() => openPanel('explore', true)}
               >
                 Focus
                 <ChevronRight aria-hidden="true" />
@@ -1009,7 +981,7 @@ export default function Home() {
       <Sheet
         modal={false}
         open={acknowledgements}
-        onOpenChange={(open) => openPanel(setAcknowledgements, open)}
+        onOpenChange={(open) => openPanel('acknowledgements', open)}
       >
         <SheetContent
           side="top"
@@ -1063,10 +1035,7 @@ export default function Home() {
       <Sheet
         modal={false}
         open={options}
-        onOpenChange={(open) => {
-          if (open) selectionFocus.current = false;
-          openPanel(setOptions, open);
-        }}
+        onOpenChange={(open) => openPanel('options', open)}
       >
         <SheetContent
           side="top"
@@ -1215,7 +1184,11 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <Sheet modal={false} open={details} onOpenChange={setDetails}>
+      <Sheet
+        modal={false}
+        open={details}
+        onOpenChange={(open) => openPanel('details', open)}
+      >
         <SheetContent
           side="top"
           style={panelStyle}
@@ -1308,7 +1281,11 @@ export default function Home() {
           </div>
         </SheetContent>
       </Sheet>
-      <Sheet modal={false} open={catalog} onOpenChange={setCatalog}>
+      <Sheet
+        modal={false}
+        open={catalog}
+        onOpenChange={(open) => openPanel('catalog', open)}
+      >
         <SheetContent
           side="bottom"
           style={panelStyle}

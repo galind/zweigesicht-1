@@ -158,6 +158,7 @@ export class MovementViewer {
     this.inspectionCallback = callback;
     if (callback) this.scheduleFrame();
   }
+  inspect = new URLSearchParams(location.search).has('inspect');
   benchmark: Benchmark | null = null;
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
@@ -333,7 +334,8 @@ export class MovementViewer {
       throw error;
     }
   }
-  snapshot(): ViewerSnapshot {
+  snapshot(diagnostics = true): ViewerSnapshot {
+    const context = this.selectionContext();
     return {
       ...this.state,
       ready: this.ready,
@@ -352,18 +354,18 @@ export class MovementViewer {
       detailError: this.detailError,
       parts: this.parts,
       visiblePartIds: [...this.renderParts.values()]
-        .filter((p) => this.partVisible(p))
+        .filter((p) => this.partVisible(p, context))
         .map((p) => p.source.id),
       canBack: !!this.history.length,
       canReset: this.canReset(),
       catalogLoaded: this.catalogLoaded,
       benchmarkResult: this.benchmark?.result,
-      stats: this.stats(),
+      stats: diagnostics ? this.stats() : {},
     };
   }
   emit() {
     this.snapshotPending = false;
-    if (!this.dead) this.notify(this.snapshot());
+    if (!this.dead) this.notify(this.snapshot(this.inspect));
   }
   stats() {
     const a = [...this.frameIntervals].sort((a, b) => a - b);
@@ -1546,7 +1548,6 @@ export class MovementViewer {
     this.save();
     this.restoringCamera = null;
     this.cameraUserOwned = false;
-    this.rebuildSpread();
     this.patch({
       layout: 'spread',
       group: null,
@@ -1808,14 +1809,8 @@ export class MovementViewer {
         ? THREE.TOUCH.DOLLY_PAN
         : THREE.TOUCH.DOLLY_ROTATE;
     }
-    const group = GROUPS.find((g) => g.id === this.state.group),
-      selection = this.state.part;
-    // Raw catalog inspection suppresses fitted display poses and finishes together.
-    const rawSelection =
-      !!selection &&
-      !belongs(selection, ROOT) &&
-      !this.fitted.has(selection) &&
-      ![...this.fittedCase].some((id) => belongs(id, selection));
+    const context = this.selectionContext();
+    const { group, selection, rawSelection } = context;
     const previous = this.displayedExplosionState;
     const changed =
       previous &&
@@ -1869,7 +1864,7 @@ export class MovementViewer {
           p.targetRotation.copy(placement.rotation);
         }
       }
-      p.mesh.visible = this.partVisible(p);
+      p.mesh.visible = this.partVisible(p, context);
       const finish = finishFor(
         p.source.name,
         p.source.definitionId,
@@ -1983,7 +1978,7 @@ export class MovementViewer {
       }
     }
     this.runningMovement?.hands.configure(
-      this.state.layout === 'assembly'
+      this.state.layout === 'assembly' && !rawSelection
         ? [...this.renderParts.values()]
             .filter((p) => this.fitted.has(p.source.id))
             .map((p) => ({
@@ -2269,7 +2264,6 @@ export class MovementViewer {
       this.state.layout === 'spread' &&
       Math.abs(old - this.camera.aspect) > 0.01
     ) {
-      this.rebuildSpread();
       this.retarget();
     }
     if (this.initialFraming && this.contentPrepared) {
@@ -2469,7 +2463,12 @@ export class MovementViewer {
         return;
       }
       this.renderCount++;
-      this.snapshotPending = true;
+      // Clock-only frames change no React-facing state. Keep selection bounds
+      // and rendering live, but notify only for presentation/camera changes.
+      this.snapshotPending ||= !!(
+        this.inspect || this.needsRender || moving || poseWasMoving ||
+        cameraWasMoving || controlsChanged
+      );
       if (interval > 0) {
         this.frameIntervals.push(interval);
         if (this.frameIntervals.length > 20000) this.frameIntervals.shift();
@@ -2511,32 +2510,38 @@ export class MovementViewer {
       this.presentationMoving ||
       !!this.inspectionFrame ||
       !!(this.benchmark && !this.benchmark.done);
-    if (this.snapshotPending && (!continuing || now - this.lastNotify > 400)) {
+    if (!continuing || now - this.lastNotify > 400) {
       this.lastNotify = now;
+      // Automatic quality still samples continuous motion without UI polling.
       this.adjustQuality(now);
-      this.emit();
+      if (this.snapshotPending) this.emit();
     }
     if (continuing || this.needsRender) this.scheduleFrame();
     if (!this.frame) this.lastFrame = 0;
   };
-  partVisible(p: RenderPart) {
-    const id = p.source.id,
-      selection = this.state.part;
-    const fittedCaseSelection =
-      !!selection &&
-      [...(this.fittedCase ?? [])].some((leaf) => belongs(leaf, selection));
-    const selected =
-      !!selection &&
-      belongs(id, selection) &&
+  selectionContext() {
+    const selection = this.state.part;
+    const fittedCaseSelection = !!selection &&
+      [...this.fittedCase].some((leaf) => belongs(leaf, selection));
+    return {
+      selection,
+      group: GROUPS.find((g) => g.id === this.state.group),
+      fittedCaseSelection,
+      // Raw inspection uses source poses, finishes and static hands together.
+      rawSelection: !!selection && !belongs(selection, ROOT) &&
+        !this.fitted.has(selection) && !fittedCaseSelection,
+    };
+  }
+  partVisible(
+    p: RenderPart,
+    context: ReturnType<MovementViewer['selectionContext']>,
+  ) {
+    const id = p.source.id;
+    const { selection, group, fittedCaseSelection, rawSelection: raw } = context;
+    const selected = !!selection && belongs(id, selection) &&
       (!fittedCaseSelection || this.fittedCase.has(id));
     if (this.state.layout === 'spread')
       return this.spread.has(id) && (!this.state.isolated || selected);
-    // A raw external selection replaces fitted display overlays until Back.
-    const raw =
-      !!selection &&
-      !belongs(selection, ROOT) &&
-      !this.fitted.has(selection) &&
-      ![...(this.fittedCase ?? [])].some((id) => belongs(id, selection));
     // Direct inspection can still show an original catalog fitting on its own.
     // Selecting the whole movement must not bring absent host hardware back.
     if (
@@ -2554,7 +2559,6 @@ export class MovementViewer {
       (!raw && (!!this.fitted?.has(id) || !!this.fittedCase?.has(id)));
     if (id === PREFIX + '66' && !selected) visible = false;
     if (id === PREFIX + '53' && selection === PREFIX + '66') visible = false;
-    const group = GROUPS.find((g) => g.id === this.state.group);
     if (group) {
       // Retained covers retire after travelling clear. Unrelated assemblies
       // use the independent section fade, regardless of the reveal slider.
@@ -2573,8 +2577,9 @@ export class MovementViewer {
     return visible;
   }
   retargetVisibility() {
+    const context = this.selectionContext();
     for (const p of this.renderParts.values()) {
-      const visible = this.partVisible(p);
+      const visible = this.partVisible(p, context);
       if (p.mesh.visible !== visible) {
         p.mesh.visible = visible;
         this.requestRender();

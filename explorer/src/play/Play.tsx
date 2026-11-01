@@ -226,9 +226,10 @@ export default function Play() {
     setNotice('');
     sync();
   };
-  const enterWorkspace = (id: string | null) => {
-    if (status.busy) return;
-    viewer.current?.setWorkspace(id);
+  const enterWorkspace = (id: string | null, selected = selectionRef.current) => {
+    if (viewer.current && !viewer.current.setWorkspace(id)) return;
+    selectionRef.current = selected;
+    setSelection(selected);
     workspaceRef.current = id;
     setWorkspace(id);
     assistanceRef.current = false;
@@ -775,11 +776,7 @@ export default function Play() {
                       key={candidate.id}
                       data-packet-id={candidate.id}
                       disabled={disabled}
-                      onClick={() => {
-                        selectionRef.current = null;
-                        setSelection(null);
-                        enterWorkspace(candidate.id);
-                      }}
+                      onClick={() => enterWorkspace(candidate.id, null)}
                     >
                       {transfer && (
                         <Thumbnail
@@ -975,10 +972,7 @@ export default function Play() {
                   {workspace && packet && packetComplete && (
                     <Control
                       disabled={disabled}
-                      onClick={() => {
-                        enterWorkspace(null);
-                        pick(packet.transferId);
-                      }}
+                      onClick={() => enterWorkspace(null, packet.transferId)}
                     >
                       Seat completed assembly
                     </Control>

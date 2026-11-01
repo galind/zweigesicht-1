@@ -502,7 +502,7 @@ export class BenchViewer {
         MOVEMENT.spring.id,
       ]);
       for (let i = 0; i < solids.length; i++) {
-        if (this.dead) return;
+        if (this.dead || generation !== this.generation) return;
         const mesh = solids[i];
         this.world.add(
           mesh,
@@ -511,7 +511,7 @@ export class BenchViewer {
         if (i % 16 === 0)
           await new Promise((resolve) => setTimeout(resolve, 0));
       }
-      if (this.dead) return;
+      if (this.dead || generation !== this.generation) return;
       this.flip = new BenchFlip(
         this.station.movement,
         this.station.holders,
@@ -530,7 +530,8 @@ export class BenchViewer {
       } finally {
         // Route disposal can finish while compilation is awaiting the driver.
         // Never recreate framebuffer state on an already disposed renderer.
-        if (!this.dead) this.renderer.setRenderTarget(previousTarget);
+        if (!this.dead && generation === this.generation)
+          this.renderer.setRenderTarget(previousTarget);
         target.dispose();
       }
       if (this.dead || generation !== this.generation) return;
@@ -572,16 +573,15 @@ export class BenchViewer {
       this.emit();
       this.wake();
     } catch (error) {
+      this.release(loaded);
+      if (this.dead || generation !== this.generation) return;
       this.runningMovement?.dispose();
       this.runningMovement = undefined;
       console.error('Bench load', error);
-      this.release(loaded);
-      if (!this.dead) {
-        this.status.error =
-          'The bench could not load completely. Check the local bench assets, then retry.';
-        this.status.ready = false;
-        this.emit();
-      }
+      this.status.error =
+        'The bench could not load completely. Check the local bench assets, then retry.';
+      this.status.ready = false;
+      this.emit();
     }
   }
   updateStation() {
@@ -602,11 +602,18 @@ export class BenchViewer {
     return started;
   }
   enter = async () => {
-    if (!this.status.ready) return;
+    if (this.dead || !this.status.ready) return;
+    const generation = this.generation;
     try {
       await this.renderer.domElement.requestPointerLock();
     } catch {
-      this.lockError();
+      if (!this.dead && generation === this.generation) this.lockError();
+    } finally {
+      if (
+        (this.dead || generation !== this.generation) &&
+        document.pointerLockElement === this.renderer.domElement
+      )
+        document.exitPointerLock();
     }
   };
   lockError = () => {
@@ -648,6 +655,11 @@ export class BenchViewer {
     } else this.wake();
   };
   contextLost = (e: Event) => {
+    // Retry creates a new viewer. Invalidate every unfinished preparation stage,
+    // even if the browser restores this context before those awaits complete.
+    this.generation++;
+    cancelAnimationFrame(this.frame);
+    this.frame = 0;
     this.runningMovement?.clock.suspend();
     e.preventDefault();
     this.flip?.finish();

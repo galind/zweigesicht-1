@@ -72,7 +72,7 @@ function fixture(globals = {}) {
     notify(status) { this.notifications.push(status); },
     update() { this.updates++; }, positionStage() {}, updateSeat() {}, updateProjection() {}, available: true, seatVisible: true, seatInView: true, feedback() {},
   };
-  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext']) value[name] = actual(name, value, globals);
+  for (const name of ['emit', 'disposeObject', 'clearPieces', 'load', 'stopOrbitMotion', 'presentContext', 'captureView', 'restoreView', 'captureCamera', 'restoreCamera']) value[name] = actual(name, value, globals);
   return value;
 }
 function loadGlobals({overview, catalog, diamond, surfaces = async () => new Map(), metadataFails = false}) {
@@ -833,4 +833,53 @@ test('seat assistance is explicit and never reveals an unavailable or foreign wo
   assert.equal(v.ghost.visible, false, 'A cleared selection has no seat overlay');
   v.controls.dispose();
   v.ghostMaterial.dispose();
+});
+
+
+test('workbench navigation and renderer retry preserve the original main camera', () => {
+  const v = fixture();
+  Object.assign(v, {workspace: null, detail: null, side: 'back', hasFramed: true,
+    invalidate() {}, layout() {},
+    manifest: {...v.manifest, packets: [{id: 'packet', side: 'front'}]},
+    reframe() {
+      this.camera.position.set(3, 4, 5); this.controls.target.set(1, 2, 3);
+      this.frameFocus.set(7, 8, 9); this.controls.minDistance = 1; this.controls.maxDistance = 8;
+    },
+  });
+  v.setWorkspace = actual('setWorkspace', v);
+  const original = v.captureView();
+  assert.equal(v.setWorkspace('packet'), true);
+  const workspace = v.captureView(), saved = v.captureCamera();
+  // Recreate the controller as Retry does, then return from the retained workbench.
+  const retry = fixture();
+  Object.assign(retry, {invalidate() {}, layout() {}});
+  retry.setWorkspace = actual('setWorkspace', retry);
+  retry.restoreCamera(saved);
+  assert.equal(retry.workspace, 'packet');
+  const assertView = (actual, expected) => {
+    for (const key of ['position', 'target', 'up', 'focus'])
+      assert.ok(actual[key].equals(expected[key]), key);
+    assert.equal(actual.side, expected.side);
+    assert.deepEqual([...actual.zoomLimits], [...expected.zoomLimits]);
+  };
+  assertView(retry.captureView(), workspace);
+  assert.equal(retry.setWorkspace(null), true);
+  assertView(retry.captureView(), original);
+  assert.equal(retry.mainView, undefined);
+  v.controls.dispose(); retry.controls.dispose();
+});
+
+test('workbench navigation rejected during a drag or placement leaves its camera and workspace intact', () => {
+  const v = fixture();
+  v.workspace = null;
+  v.setWorkspace = actual('setWorkspace', v);
+  const camera = v.captureView();
+  for (const field of ['busy', 'drag']) {
+    v[field] = true;
+    assert.equal(v.setWorkspace('packet'), false);
+    assert.equal(v.workspace, null);
+    assert.deepEqual(v.captureView(), camera);
+    v[field] = false;
+  }
+  v.controls.dispose();
 });

@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import manifest from '../assets/authored/play-manifest.json' with {type:'json'};
-import {PLAY_STORAGE_KEY, SNAP_RADIUS_PX, actions, createSession, canPlace, missingPrerequisites, assembledLeafIds, fittedLeafIds, workspaceLeafIds, isComplete, commitPlacement, undoPlacement, validateSession, getSavedSession, saveSession, clearSavedSession, dragCenter, snapDrop} from '../explorer/src/play/state.ts';
-function memoryStorage() {const data=new Map();return {data,getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};}
+import {PLAY_STORAGE_KEY, SNAP_RADIUS_PX, actions, createSession, canPlace, assembledLeafIds, fittedLeafIds, workspaceLeafIds, isComplete, commitPlacement, undoPlacement, validateSession, getSavedSession, saveSession, dragCenter, snapDrop} from '../explorer/src/play/state.ts';
+function memoryStorage() {const data=new Map();return {data,getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)};}
 function complete(level, reverse=false) {
   let session=createSession(manifest,level);const snapshots=[session];
   while (!isComplete(manifest,session)) {
@@ -86,12 +86,11 @@ test('saved hints survive placements and undo; restart starts with hints off',()
   assert.equal(commitPlacement(manifest,s,'movement-1').hints,true);
   assert.equal(undoPlacement(manifest,commitPlacement(manifest,s,'movement-1')).hints,true);
   assert.equal(createSession(manifest,'easy').hints,false);
-  assert.deepEqual(missingPrerequisites(manifest,s,'movement-60').map(s=>s.id),['movement-1','movement-2']);
 });
 test('unavailable storage and corrupt JSON are reported without blocking play',()=>{
   const failure=()=>{throw Error('Storage blocked')},s=createSession(manifest,'easy');
-  for(const storage of [failure,{getItem:failure,setItem:failure,removeItem:failure}]) {
-    assert.equal(getSavedSession(manifest,storage).status,'unavailable');assert.equal(saveSession(manifest,s,storage).status,'unavailable');assert.equal(clearSavedSession(storage),false);
+  for(const storage of [failure,{getItem:failure,setItem:failure}]) {
+    assert.equal(getSavedSession(manifest,storage).status,'unavailable');assert.equal(saveSession(manifest,s,storage).status,'unavailable');
   }
   const storage=memoryStorage();storage.setItem(PLAY_STORAGE_KEY,'{broken');assert.equal(getSavedSession(manifest,storage).status,'corrupt');
   assert.equal(commitPlacement(manifest,s,'movement-1').actionIds.length,1);

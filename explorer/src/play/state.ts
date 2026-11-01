@@ -32,21 +32,6 @@ export function createSession(
   };
 }
 
-export function missingPrerequisites(
-  manifest: PlayManifest,
-  session: PlaySession,
-  id: string,
-): PlayStep[] {
-  const all = actions(manifest, session.level);
-  const step = all.find((s) => s.id === id);
-  const done = new Set(session.actionIds);
-  return step
-    ? all.filter(
-        (s) => step.prerequisiteStepIds.includes(s.id) && !done.has(s.id),
-      )
-    : [];
-}
-
 export function canPlace(
   manifest: PlayManifest,
   session: PlaySession,
@@ -209,7 +194,6 @@ export function validateSession(
 export interface PlayStorage {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
-  removeItem(key: string): void;
 }
 export type StorageSource = PlayStorage | (() => PlayStorage);
 const browserStorage = (): PlayStorage => window.localStorage;
@@ -256,17 +240,6 @@ export function saveSession(
     return { status: 'saved' };
   } catch {
     return { status: 'unavailable' };
-  }
-}
-
-export function clearSavedSession(
-  storage: StorageSource = browserStorage,
-): boolean {
-  try {
-    resolveStorage(storage).removeItem(PLAY_STORAGE_KEY);
-    return true;
-  } catch {
-    return false;
   }
 }
 
