@@ -135,8 +135,8 @@ async function drag(
       touchPoints: [{ ...start, id: 1 }],
     });
     // A short excursion also exercises returning a turned part to its existing location.
-    for (let step = 1; step <= 12; step++) {
-      const t = step / 12;
+    for (let step = 1; step <= 6; step++) {
+      const t = step / 6;
       await cdp.send("Input.dispatchTouchEvent", {
         type: "touchMove",
         touchPoints: [
@@ -157,14 +157,21 @@ async function drag(
     await page.mouse.move(start.x, start.y);
     await page.mouse.down();
     await page.mouse.move(start.x + 10, start.y + 10, { steps: 2 });
-    await page.mouse.move(end.x, end.y, { steps: 12 });
+    await page.mouse.move(end.x, end.y, { steps: 6 });
     if (cancel) await page.keyboard.press("Escape");
     await page.mouse.up();
   }
 }
-async function chooseSupport(side) {
-  await button("Change support").click();
-  await part(`support-${side}`).click();
+async function activate(locator, mode) {
+  if (mode === "keyboard") {
+    await locator.focus();
+    await page.keyboard.press("Enter");
+  } else if (mode === "touch") await locator.tap();
+  else await locator.click();
+}
+async function chooseSupport(side, mode) {
+  await activate(button("Change support"), mode);
+  await activate(part(`support-${side}`), mode);
 }
 async function layoutCheck(label) {
   const result = await page.evaluate(() => {
@@ -241,7 +248,7 @@ try {
     const entry = page.getByRole("link", { name: "Be a watchmaker!", exact: true });
     assert.equal(await entry.getAttribute("href"), "/workshop");
     await entry.click();
-    await button("Start chapter").click();
+    await activate(button("Start chapter"), mode);
     await page.evaluate(() =>
       localStorage.setItem("zweigesicht:play:session:v1", "legacy sentinel"),
     );
@@ -277,13 +284,23 @@ try {
     await drag("support-movement", "work", "movement", { cancel: true, touch });
     assert.equal((await saved()).cursor, 0);
     assert.equal((await saved()).mistakes, 0);
+    if (mode === "desktop") {
+      await drag("bridge", "work");
+      await page.getByRole("status").filter({ hasText: "First:" }).waitFor();
+      assert.equal((await saved()).cursor, 0);
+    }
     for (let index = 0; index < OPERATIONS.length; index++) {
       const op = OPERATIONS[index];
-      await button(toolName[op.tool]).click();
+      await activate(button(toolName[op.tool]), mode);
       if (index === 3 || index === 10) {
-        await part("movement").click();
+        await activate(part("movement"), mode);
         // Both side and support must be chosen, with no automatic correct choice.
-        await button("Turn over").click();
+        if (mode === "desktop") {
+          await place(op);
+          await page.getByRole("status").filter({ hasText: "side must face upward" }).waitFor();
+          assert.equal((await saved()).cursor, index);
+        }
+        await activate(button("Turn over"), mode);
         if (mode === "desktop") {
           const mistakes = (await saved()).mistakes;
           await place(op);
@@ -294,7 +311,7 @@ try {
           assert.equal((await saved()).cursor, index);
           await page.getByRole("status").filter({ hasText: "support" }).waitFor();
         }
-        await chooseSupport(op.support);
+        await chooseSupport(op.support, mode);
       }
       if (index === 2 && mode === "desktop") {
         await button("Hands").click();
@@ -302,23 +319,34 @@ try {
         await page.getByRole("status").filter({ hasText: "Use screwdriver" }).waitFor();
         assert.equal((await saved()).cursor, 2);
         await button("Screwdriver").click();
+        await drag(op.item, op.destination, op.side, { miss: 50 });
+        await page.getByRole("status").filter({ hasText: "within 5 mm" }).waitFor();
+        assert.equal((await saved()).cursor, 2);
+      }
+      if (index === 5 && mode === "desktop") {
+        await drag("movement", "stem-rest", "dial");
+        await page
+          .getByRole("status")
+          .filter({ hasText: "Move this part to movement rest" })
+          .waitFor();
+        assert.equal((await saved()).cursor, 5);
       }
       await place(op);
       await waitCursor(index + 1);
       if (index === 2) {
-        await button("Undo").click();
+        await activate(button("Undo"), mode);
         await waitCursor(2);
         await place(op);
         await waitCursor(3);
         assert.equal((await saved()).awarded, 3);
       }
       if (index === 8) {
-        await button("Pause").click();
+        await activate(button("Pause"), mode);
         const before = (await saved()).elapsedMs;
         await page.waitForTimeout(1250);
         assert.equal((await saved()).elapsedMs, before);
         await page.reload();
-        await button("Resume chapter").click();
+        await activate(button("Resume chapter"), mode);
         assert.equal((await saved()).cursor, 9);
         await layoutCheck(`${mode} separate assemblies`);
       }
@@ -328,7 +356,7 @@ try {
       .waitFor();
     const final = await saved();
     assert.equal(final.awarded, 15);
-    assert.equal(final.mistakes, mode === "desktop" ? 3 : 0);
+    assert.equal(final.mistakes, mode === "desktop" ? 8 : 0);
     await page.waitForTimeout(1250);
     assert.equal((await saved()).elapsedMs, final.elapsedMs);
     assert.equal(
@@ -358,6 +386,23 @@ try {
         assert.equal((await saved()).cursor, 15);
       }
       console.log("Required-holder failure/Retry and legacy URLs passed.");
+    }
+    if (mode === "keyboard") {
+      await activate(button("Workshop menu"), mode);
+      await activate(button("Restart"), mode);
+      await activate(button("Keep this attempt"), mode);
+      assert.equal((await saved()).cursor, 15);
+      await activate(button("Workshop menu"), mode);
+      await activate(button("Restart"), mode);
+      await activate(button("Start new chapter"), mode);
+      await waitCursor(0);
+      assert.equal((await saved()).awarded, 0);
+      assert.equal((await saved()).mistakes, 0);
+      assert.equal(
+        await page.evaluate(() => localStorage.getItem("zweigesicht:play:session:v1")),
+        "legacy sentinel",
+      );
+      console.log("Keyboard restart cancellation and confirmed restart preserve legacy saves.");
     }
     if (touch) {
       await page.setViewportSize({ width: 320, height: 740 });

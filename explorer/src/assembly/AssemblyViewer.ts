@@ -37,7 +37,12 @@ export type SurfaceLayout = {
   items: SurfaceItem[];
   zones: { destination: Destination; x: number; y: number }[];
 };
-export type Drop = { item: Item; destination: Destination; distanceMm: number };
+export type Drop = {
+  item: Item;
+  destination: Destination;
+  distanceMm: number;
+  point?: Point;
+};
 const desktopPositions: Record<PartItem, [number, number]> = {
   mainplate: [-70, -37],
   'setting-screw': [-31, -40],
@@ -51,14 +56,14 @@ const desktopPositions: Record<PartItem, [number, number]> = {
 };
 const phonePositions: Record<PartItem, [number, number]> = {
   mainplate: [-33, -24],
-  'setting-screw': [3, -39],
+  'setting-screw': [0, -39],
   'setting-lever': [22, -39],
-  stem: [8, -20],
-  wheel: [26, -20],
+  stem: [0, -20],
+  wheel: [22, -20],
   coupling: [44, -20],
-  bridge: [33, 1],
-  'bridge-screw-1': [9, -57],
-  'bridge-screw-2': [29, -57],
+  bridge: [22, 2],
+  'bridge-screw-1': [44, -39],
+  'bridge-screw-2': [46, 4],
 };
 
 /** One surface, fixed camera, original fitted matrices. No running movement or navigation system. */
@@ -666,6 +671,7 @@ export class AssemblyViewer {
       const actual = this.onPlane(point, target.y)!;
       drop = {
         item: drag.item,
+        point: { x: event.clientX, y: event.clientY },
         destination,
         distanceMm: Math.hypot(actual.x - target.x, actual.z - target.z),
       };
@@ -689,7 +695,7 @@ export class AssemblyViewer {
     }
   };
   pick = (event: PointerEvent) => {
-    if (event.button !== 0 || !this.enabled) return;
+    if (!event.isPrimary || event.button !== 0 || !this.enabled) return;
     const rect = this.host.getBoundingClientRect();
     const ray = new THREE.Raycaster();
     ray.setFromCamera(

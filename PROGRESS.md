@@ -26,7 +26,11 @@ hit targets and pointer capture with touch scrolling disabled on the surface.
 The browser check now covers the complete chapter through desktop pointer drags,
 emulated touch drags and a separate keyboard placement pass, plus cancellation,
 wrong tool/support, Undo, pause/reload/resume, holder retry and legacy links.
-Source inspection and formatting are complete; GitHub CI is pending. No local
+The first redesign head passed 163 regressions, asset validation and TypeScript
+on GitHub; its tool-strip markup lint issue is corrected in the follow-up. The
+follow-up also adds near-action feedback, separates phone hit targets and tests
+wrong orientation, destination and distance through real input. Final CI/browser
+results are pending. Source inspection and diff checks pass. No local
 tests, builds or browser automation have run. Responsive implementation is not
 physical-phone qualification. Human visual/accessibility review, real devices
 and Marco's mechanical review remain outstanding. No merge, deployment, new CAD

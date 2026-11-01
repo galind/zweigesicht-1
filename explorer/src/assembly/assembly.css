@@ -3,7 +3,7 @@
   --assembly-gold: #ead6a2;
   --assembly-line: #e3e6cc26;
   height: 100dvh;
-  min-height: 440px;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -591,4 +591,27 @@
   .assembly-feedback {
     animation: none !important;
   }
+}
+
+.assembly-tool-buttons {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.assembly-action-feedback {
+  position: absolute;
+  z-index: 5;
+  transform: translateX(-50%);
+  pointer-events: none;
+  width: max-content;
+  max-width: 240px;
+  border-radius: 7px;
+  padding: 8px 12px;
+  background: #273e33ed;
+  box-shadow: 0 4px 18px #20362830;
+}
+.assembly-action-feedback[data-accepted='true']:not(:empty) {
+  animation: none;
+  border: 1px solid #e9d6a55c;
 }

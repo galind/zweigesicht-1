@@ -27,6 +27,7 @@ import {
   AssemblyViewer,
   type Drop,
   type SurfaceLayout,
+  type Point,
 } from './AssemblyViewer';
 import {
   OPERATIONS,
@@ -107,6 +108,7 @@ export default function Assembly() {
   const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side>('movement');
   const [feedback, setFeedback] = useState('');
+  const [feedbackPoint, setFeedbackPoint] = useState<Point>();
   const [accepted, setAccepted] = useState(false);
   const [layout, setLayout] = useState<SurfaceLayout>({ items: [], zones: [] });
   const [dragging, setDragging] = useState(false);
@@ -224,6 +226,20 @@ export default function Assembly() {
     if (result.session === value) return;
     apply(result.session);
     setAccepted(result.accepted);
+    const surface = host.current?.getBoundingClientRect();
+    const point =
+      drop.point ??
+      viewer.current?.project(
+        viewer.current.target(drop.item, drop.destination),
+      );
+    if (surface && point)
+      setFeedbackPoint({
+        x: Math.max(120, Math.min(surface.width - 120, point.x - surface.left)),
+        y: Math.max(
+          20,
+          Math.min(surface.height - 45, point.y - surface.top - 45),
+        ),
+      });
     setFeedback(
       result.accepted
         ? value.cursor < value.awarded
@@ -520,7 +536,7 @@ export default function Assembly() {
                 if (event.detail === 0) choose(entry.item);
               }}
               onPointerDown={(event: ReactPointerEvent<HTMLButtonElement>) => {
-                if (event.button === 0)
+                if (event.isPrimary && event.button === 0)
                   beginGesture(entry.item, event, event.currentTarget, true);
               }}
             >
@@ -563,6 +579,17 @@ export default function Assembly() {
             )}
           </div>
         ))}
+        {feedback && feedbackPoint && (
+          <output
+            key={session?.revision}
+            className="assembly-feedback assembly-action-feedback"
+            data-accepted={accepted}
+            aria-live="polite"
+            style={{ left: feedbackPoint.x, top: feedbackPoint.y }}
+          >
+            {feedback}
+          </output>
+        )}
         <div className="assembly-view-controls" aria-label="View controls">
           <button
             aria-label="Zoom in"
@@ -592,7 +619,7 @@ export default function Assembly() {
           data-accepted={accepted}
           aria-live="polite"
         >
-          {feedback ||
+          {(!feedbackPoint && feedback) ||
             (changingSupport
               ? 'Choose either red support on the surface.'
               : '')}
@@ -639,6 +666,8 @@ export default function Assembly() {
               onClick={() => {
                 cancelGesture();
                 setSelected(undefined);
+                setSide(arrangement(cursor).side);
+                setSupport(arrangement(cursor).side);
                 setChangingSupport(false);
                 setFeedback('');
               }}
@@ -658,7 +687,7 @@ export default function Assembly() {
       </div>
 
       <footer className="assembly-toolbar">
-        <div className="assembly-tool-buttons" role="group" aria-label="Tools">
+        <fieldset className="assembly-tool-buttons" aria-label="Tools">
           {(['hands', 'tweezers', 'screwdriver'] as Tool[]).map((value) => (
             <button
               key={value}
@@ -672,7 +701,7 @@ export default function Assembly() {
               <span>{TOOL_LABELS[value]}</span>
             </button>
           ))}
-        </div>
+        </fieldset>
         <div className="assembly-session-controls">
           <button
             aria-label="Undo"

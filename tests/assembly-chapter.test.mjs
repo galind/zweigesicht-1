@@ -413,3 +413,37 @@ test("cancelled/inspection drags do not submit, a release submits only once, and
   assert.equal(drops, 1);
   assert.equal(viewer.support.get("movement").visible, true);
 });
+
+test("portrait layout and uncommitted turns retain fitted leaves and both parked assemblies", () => {
+  const viewer = rig(10);
+  viewer.host.clientWidth = 390;
+  viewer.layout();
+  const movement = viewer.groups.get("movement");
+  const stem = viewer.groups.get("stem-assembly");
+  assert.equal(movement.matrix.elements[12], -34);
+  assert.equal(movement.matrix.elements[14], 65);
+  assert.equal(stem.matrix.elements[14], 65);
+  assert.equal(viewer.support.get("dial").position.x, -34);
+  assert.equal(viewer.support.get("dial").position.z, 65);
+  assert.equal(stem.children.length, 3);
+  viewer.selected = "movement";
+  viewer.side = "movement";
+  viewer.layout();
+  assert.equal(viewer.state.cursor, 10, "turn preview does not commit or score");
+  assert.equal(movement.matrix.elements[13], 12.2);
+  assert.equal(viewer.target("support-movement", "work").z, 15);
+  assert.equal(viewer.destination("movement", new THREE.Vector3(-34, 5, 65)), "movement-rest");
+  assert.equal(viewer.destination("stem-assembly", new THREE.Vector3(34, 5, 65)), "stem-rest");
+  for (const [id, piece] of viewer.pieces)
+    assert.deepEqual(
+      piece.mesh.matrix.elements,
+      new THREE.Matrix4().set(...sourcePoses[id].flat()).elements,
+    );
+  viewer.selected = undefined;
+  viewer.layout();
+  assert.equal(
+    movement.matrix.elements[13],
+    16.3,
+    "deselection restores the committed orientation",
+  );
+});
