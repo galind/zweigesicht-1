@@ -67,7 +67,11 @@ automation ran; only source inspection and formatting ran on the owner's compute
 Human visual/usability, actual-device and Marco's mechanical review remain open.
 Workshop has responsive phone layouts and pointer-based touch dragging; real-phone
 playability is not yet validated. First-person Bench requires keyboard/mouse.
-The homepage invitation relocation has source/diff review; CI validation is pending.
+Homepage invitation head `90eb1cfcf81ade7e23380317ce5ce9e374e486a5` passed
+[CI](https://github.com/galind/zweigesicht-1/actions/runs/41343703685) and the
+[desktop Chromium chapter walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41343703680).
+The updated multi-viewport loading/layout script was inspected but not rerun;
+phone visual and touch review remains open.
 
 [Draft PR #38](https://github.com/galind/zweigesicht-1/pull/38) targets `develop`.
 Next: Marco reviews `/workshop` on this branch, especially tool
