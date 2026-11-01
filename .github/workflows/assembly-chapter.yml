@@ -1,0 +1,43 @@
+name: Assembly chapter
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - .github/workflows/assembly-chapter.yml
+      - explorer/src/assembly/**
+      - explorer/app/workshop/assembly/**
+      - scripts/review/assembly-chapter.mjs
+      - tests/assembly-chapter.test.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assembly-chapter-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    name: Play chapter in Chromium
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: explorer/package-lock.json
+      - name: Install application and isolated browser tooling
+        run: |
+          npm ci --prefix explorer
+          npm install --prefix "$RUNNER_TEMP/assembly-browser" --no-save --package-lock=false playwright@1.56.1
+          "$RUNNER_TEMP/assembly-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Play the chapter with existing verified supports
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/assembly-browser/node_modules/playwright/index.mjs
+        run: node scripts/review/assembly-chapter.mjs

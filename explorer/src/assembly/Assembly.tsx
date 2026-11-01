@@ -205,7 +205,7 @@ export default function Assembly() {
         <h3>Stem & winding bridge</h3>{inventory.filter(item => ['stem', 'wheel', 'coupling', 'bridge', 'bridge-screw-1', 'bridge-screw-2', 'stem-assembly'].includes(item)).map(partButton)}
       </aside>
       <div className="assembly-view-controls"><button aria-label="Zoom in" onClick={() => viewer.current?.zoom(1.25)}><ZoomIn /></button><button aria-label="Zoom out" onClick={() => viewer.current?.zoom(0.8)}><ZoomOut /></button><label><input type="checkbox" checked={hint} onChange={e => setHint(e.target.checked)} />Show seat</label></div>
-      {(!ready || paused || restartOpen || !session) && !complete && <div className="assembly-overlay">
+      {(!ready || (paused && !complete) || restartOpen || !session) && <div className="assembly-overlay">
         {restartOpen ? <><h2>Restart this chapter?</h2><p>This replaces this chapter’s score, time and progress.</p><button onClick={restart}>Start new chapter</button><button onClick={() => setRestartOpen(false)}>Keep this attempt</button></> :
           error ? <><h2>The surface could not load</h2><p>{error}</p><p>The two recorded support models must be available alongside the movement.</p><button onClick={() => { setReady(false); setError(''); setRetry(retry + 1); }}>Retry</button></> :
           !ready ? <><h2>Preparing your assembly surface</h2><p>Loading the movement and the two existing supports…</p></> :
