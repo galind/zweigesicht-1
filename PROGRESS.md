@@ -12,9 +12,11 @@ The prior progress document lagged the checkout. Current branch:
 `codex/watchmaker-chapter-one`; Vercel Git deployment is disabled for this branch.
 No merge, deployment or publication is authorized by this work.
 
-Workshop now opens Marco’s **Be a watchmaker: Assembly** directly at `/workshop`.
+Workshop now opens Marco’s **Be a watchmaker!** directly at `/workshop`.
 The homepage invitation sits directly above “Explore it in first person”, sharing
 its card style and arrow; the old header placement and CSS are removed.
+The entry, chapter heading and page metadata now use “Be a watchmaker!”.
+This copy-only rename was checked by source inspection and `git diff --check`.
 `/workshop/assembly` redirects there, and old
 difficulty query parameters open the same chapter. Easy/Hard, their chooser,
 renderer, dependency rules, migration code, pose manifest, CSS and obsolete

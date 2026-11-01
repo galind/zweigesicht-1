@@ -132,7 +132,7 @@ for (const userAgent of [
     };
     const workshop = path.startsWith('/workshop');
     const expectedTitle = workshop
-      ? 'Be a watchmaker: Assembly — Zweigesicht-1'
+      ? 'Be a watchmaker! — Zweigesicht-1'
       : title;
     const expectedDescription = workshop
       ? 'Follow Marco Lang’s first assembly chapter in fifteen operations, through the winding bridge and its two screws.'

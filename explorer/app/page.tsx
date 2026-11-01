@@ -527,7 +527,7 @@ export default function Home() {
             className="bench-trigger site-glass"
           >
             <span className="bench-invitation-heading">
-              Be a watchmaker: Assembly <ArrowRight aria-hidden="true" />
+              Be a watchmaker! <ArrowRight aria-hidden="true" />
             </span>
           </Link>
         )}

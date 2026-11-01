@@ -47,7 +47,7 @@ for the clock, geometry ownership, product-state policy and validation.
 
 ## Workshop
 
-`/workshop` renders the sole **Be a watchmaker: Assembly** chapter. There is no
+`/workshop` renders the sole **Be a watchmaker!** chapter. There is no
 mode chooser, Easy/Hard DAG, packet workbench or completed-movement animation.
 Old difficulty query parameters are ignored. The former `/workshop/assembly`
 prototype URL redirects to the canonical route.

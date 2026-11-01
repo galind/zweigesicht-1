@@ -50,7 +50,7 @@ export const homepageMetadata = pageMetadata(title, description, '/');
 
 export const workshopMetadata: Metadata = {
   ...pageMetadata(
-    'Be a watchmaker: Assembly — Zweigesicht-1',
+    'Be a watchmaker! — Zweigesicht-1',
     'Follow Marco Lang’s first assembly chapter in fifteen operations, through the winding bridge and its two screws.',
     '/workshop',
   ),

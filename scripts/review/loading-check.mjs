@@ -90,7 +90,7 @@ try {
       entryLayout.contained &&
         entryLayout.separated &&
         entryLayout.aboveNext &&
-        entryLayout.label === "Be a watchmaker: Assembly",
+        entryLayout.label === "Be a watchmaker!",
       entryLayout,
     );
     const geometry = await page.evaluate(() => {

@@ -349,7 +349,7 @@ export default function Assembly() {
       <header className="assembly-header">
         <div>
           <Link href="/">Zweigesicht-1</Link>
-          <h1>Be a watchmaker: Assembly</h1>
+          <h1>Be a watchmaker!</h1>
           <p>Chapter 1 · The winding assembly</p>
         </div>
         <dl className="assembly-stats">

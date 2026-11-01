@@ -62,7 +62,7 @@ try {
       errors.push(message.text());
   });
   await page.goto(base);
-  const entry = page.getByRole("link", { name: "Be a watchmaker: Assembly", exact: true });
+  const entry = page.getByRole("link", { name: "Be a watchmaker!", exact: true });
   assert.equal(await entry.getAttribute("href"), "/workshop");
   await entry.click();
   await page.waitForURL(`${base}/workshop`);

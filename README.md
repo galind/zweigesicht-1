@@ -5,7 +5,7 @@ built with React, TypeScript and Three.js from the maker's CAD assembly.
 
 Inspect and isolate components, explore six mechanism groups, separate the
 assembly, and choose case, dial and hand appearances. A separate Workshop at
-`/workshop` offers **Be a watchmaker: Assembly**, Marco's first 15-operation
+`/workshop` offers **Be a watchmaker!**, Marco's first 15-operation
 chapter, with tool selection, scoring, active time, Undo and local saves.
 Explorer and Bench show a continuously running prescribed escapement and
 train illustration for the assembled movement, including both display trains and

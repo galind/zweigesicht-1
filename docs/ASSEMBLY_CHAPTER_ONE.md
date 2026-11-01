@@ -1,6 +1,6 @@
-# Be a watchmaker: Assembly — chapter 1
+# Be a watchmaker! — chapter 1
 
-Review route: `/workshop`, reached directly from **Be a watchmaker: Assembly**.
+Review route: `/workshop`, reached directly from **Be a watchmaker!**.
 The former `/workshop/assembly` URL redirects here; Easy/Hard have been retired.
 The chapter implements Tabelle1 B5:E19 of Marco's supplied workbook, through
 the winding bridge and its two screws. [Provenance](../assets/source-manifest/assembly-chapter-one.json)
