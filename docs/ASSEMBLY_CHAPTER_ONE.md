@@ -119,7 +119,13 @@ accounting, all 15 operations, all error dimensions, support changes, separate
 stem ownership, scoring/idempotency/Undo/reload, storage failures, active timing,
 scene transforms and cancellation/repeated releases. Existing GitHub CI also
 runs the full regression suite, inventory validation, TypeScript, lint and both
-production builds. See [PROGRESS](../PROGRESS.md) for exact results.
+production builds. The separate `Assembly chapter` GitHub workflow runs
+`scripts/review/assembly-chapter.mjs` in Chromium on the runner. It reuses the
+existing approved UAT holder GLBs, verifies their hashes, then checks a real
+pointer drag, a cancelled drag, the full keyboard-accessible chapter, wrong-tool
+feedback, Undo, pause/reload/resume, legacy-save isolation and missing-holder
+recovery. It uploads no models or screenshots. See
+[PROGRESS](../PROGRESS.md) for exact results.
 
 Next human review: play the chapter with Marco, confirm the screw numbering,
 prepared-component boundary and tool assignments; review partial-assembly

@@ -587,6 +587,7 @@ export default function Assembly() {
           <label>
             Placement / turn side
             <select
+              aria-label="Placement / turn side"
               value={side}
               onChange={(e) => {
                 viewer.current?.cancel();
@@ -634,6 +635,7 @@ export default function Assembly() {
         <label>
           Placement radius{' '}
           <select
+            aria-label="Placement radius"
             value={radius}
             onChange={(e) => {
               viewer.current?.cancel();
@@ -653,6 +655,7 @@ export default function Assembly() {
           <label>
             Destination
             <select
+              aria-label="Destination"
               value={destination}
               onChange={(e) => setDestination(e.target.value as Destination)}
             >
