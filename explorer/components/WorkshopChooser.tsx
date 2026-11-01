@@ -44,10 +44,20 @@ export function WorkshopChooser({
         <SheetHeader>
           <SheetTitle>Be a watchmaker</SheetTitle>
           <SheetDescription>
-            Choose how much of the movement you want to build.
+            Follow the first assembly chapter or explore the original puzzles.
           </SheetDescription>
         </SheetHeader>
         <div className="panel-body assembly-mode-list">
+          <button
+            type="button"
+            onClick={() => location.assign('/workshop/assembly')}
+          >
+            <span>
+              <strong>Be a watchmaker: Assembly</strong>
+              <small>Chapter 1 · 15 operations · Prototype for review</small>
+            </span>
+            <ChevronRight aria-hidden="true" />
+          </button>
           <button
             ref={easyModeButton}
             type="button"

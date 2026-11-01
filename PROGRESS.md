@@ -4,43 +4,58 @@ Updated 1 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
-## Integration and next action
+## First playable assembly chapter
 
-Started clean at fetched `develop` / HEAD `9f67bdb56218bd947b4ccff3c6a8a2a77032ded3`.
-[PR #36](https://github.com/galind/zweigesicht-1/pull/36) is merged; its final head
-`4bb4b8f` has the same tree. `main` remains `1139992a8e64078f2f62de2f7303bf2b118805d7`.
-The previous collision, diagnostics and chooser fixes are present.
+Started clean at fetched `develop` / HEAD
+`d39213b1efd275d3aaa37259a4f3c826711c136e`; PR #37 was already merged.
+The prior progress document lagged the checkout. Current branch:
+`codex/watchmaker-chapter-one`; Vercel Git deployment is disabled for this branch.
+No merge, deployment or publication is authorized by this work.
 
-Current work is on `codex/deep-implementation-review`, based on that develop.
-Its Vercel Git deployment is disabled. Push and a PR targeting develop are
-authorized; merge, deployment and publication are not.
+Implemented `/workshop/assembly`, entered as **Be a watchmaker: Assembly** in
+Workshop's chooser. The chapter covers exactly Tabelle1 rows 5–19, ending with
+the winding bridge's second screw. It uses a separate lesson/session, an empty
+central starting area, original movement geometry/materials/fitted transforms,
+the existing two hash-checked holders, and one surface for the movement and
+separately assembled stem. No first-person controller or running animation is
+loaded by this route. Existing Easy/Hard saves and dependencies are unchanged.
 
-## Review changes and next action
+Sequence, tool, orientation, support, destination and 5 mm placement validation
+are explicit. Wrong committed attempts cost −2 once; each operation earns +10
+once. Undo keeps the reward ledger. Resume, restart, cancellation, interrupted
+loading/graphics and active-only timing are handled separately from Workshop.
+The review radius can be changed to 10 mm. Keyboard exact-seat placement uses
+the same lesson validator. Completion means chapter completion only.
 
-- Explorer uses one active-panel value, one selection classification per pass,
-  and a shared policy for raw poses, finishes, visibility and hand registration.
-  Raw catalog subtree hands no longer animate as if they were fitted.
-- Clock-only rendering no longer rebuilds React snapshots or diagnostic audits.
-  Camera/presentation updates, explicit inspection/WebMCP and automatic quality
-  remain live. No wall-clock performance gain has been measured.
-- Workshop shares camera capture/restore across detail, workbench and Retry;
-  UI inventory changes only after the controller accepts workspace navigation.
-- Bench context loss invalidates unfinished loading/compilation, and late pointer
-  capture after route exit releases the old canvas without touching another view.
-- Focused CPU regressions cover the affected transitions. Mechanical inputs,
-  source assets, motion laws and dependency locks are unchanged.
+[Chapter notes](docs/ASSEMBLY_CHAPTER_ONE.md) record the exact mappings and
+[reference provenance](assets/source-manifest/assembly-chapter-one.json).
+Prepared plate: 11 fixed plate/pin/jewel leaves; all five Incabloc leaves and two
+later cap-plate screws are deferred. Final chapter: 22 distinct movement leaves.
+Tool assignments, prepared subtree boundaries and bridge-screw numbering
+(P73 then P79) remain provisional. The stem order follows Marco (wheel before
+sliding coupling), independently of the old DAG. Holder orientation uses recorded
+12.2/16.3 mm seats and exchanged intact supports; fit/stability of these partial
+assemblies and insertion paths remain unverified. No geometry is changed to
+conceal uncertainty.
 
-The second pass removed duplicate spread rebuilds, two test-only Workshop helpers,
-and selection changes preceding refused workspace navigation. Application head
-`602574a` passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41326731178):
+Verification in progress: regression coverage added for the full sequence,
+error dimensions, component counts, holder/orientation changes, separate stem,
+scoring/Undo/duplicate releases, save/resume, timing and scene ownership.
+Static inspection and `git diff --check` are the local checks. No local tests,
+builds or browser automation have run. GitHub CI will provide executable
+verification; results will be recorded before handoff. Human visual/usability
+and Marco's mechanical review remain required.
+
+Next: GitHub CI, then Marco's review of the playable chapter, tool assignments,
+screw order, prepared components, holder contact/stability and placement radius.
+
+## Previous integration evidence
+
+PR #37 simplified viewer state and guarded interrupted transitions. Application
+head `602574a` passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41326731178):
 198 tests, inventory validation, typecheck, lint, production and Vercel builds;
 [holder-assets validation](https://github.com/galind/zweigesicht-1/actions/runs/41326731213)
-also passed. Static review and `git diff --check` pass.
-[PR #37](https://github.com/galind/zweigesicht-1/pull/37) targets develop.
-Next: human review of the PR; exact final-head CI is recorded there.
-No local tests, builds, CAD calculations or browser automation have run. Exact-head
-CI results are recorded in the PR; browser focus/graphics behavior remains
-unverified by this review. Prior evidence below is historical.
+also passed. These are prior-review results, not chapter verification.
 
 ## Current illustration and retained limits
 

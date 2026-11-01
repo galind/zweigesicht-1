@@ -38,6 +38,14 @@ it is hidden in production. Direct `/workshop` access remains available.
 Fresh direct visits choose a difficulty on Workshop; valid saves resume.
 Workshop is excluded from indexing and the sitemap.
 
+**Be a watchmaker: Assembly** at `/workshop/assembly` is a separate first-chapter
+prototype following Marco's 15 operations through the winding bridge and its two
+screws. Select a tool, then drag parts on a single green assembly surface.
+Progress, score and active time use a separate save from Easy/Hard Workshop.
+The existing two verified holder GLBs in `explorer/public/bench-local/` are
+required; no cushion or new holder download is used. See the
+[chapter mapping, controls and review limits](docs/ASSEMBLY_CHAPTER_ONE.md).
+
 ## Explore the workbench
 
 The homepage’s **Explore it in first person** invitation introduces `/bench`: a
