@@ -4,47 +4,52 @@ Updated 1 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
-## Assembly surface redesign — verification in progress
+## Assembly surface redesign
 
-Started from clean `codex/watchmaker-chapter-one` at `4c1542a`, matching the
-fetched SSH remote and draft PR #38. The owner-supplied workbook was read again;
-its SHA-256 still matches the chapter provenance. Tabelle1 rows 5–19 remain the
-unchanged lesson. This visual interpretation is not Marco-approved.
+Started clean at `4c1542a` on `codex/watchmaker-chapter-one`, matching the fetched
+SSH remote and draft PR #38. The workbook was read again and matches the
+recorded SHA-256. The design is our interpretation, not Marco-approved.
 
-`/workshop` now uses a viewport-filling muted green bench, geometry-attached
-selection targets, grouped loose parts, a compact illustrated tool strip, one
-instruction and discreet session controls. The same renderer/materials/fitted
-matrices and hash-checked supports are retained. The movement and loose stem
-share the surface. Turn over, select a replacement support, then seat/return the
-movement are explicit player actions; neither orientation nor tool is supplied
-from the next operation. Tap/keyboard placement uses the visible spatial areas
-and the existing validator. Review radius/seat hints and mechanical notes are
-behind Workshop menu → Development / review. No save schema change.
+`/workshop` now presents one muted green bench with grouped, selectable CAD
+geometry, an empty initial centre, a compact illustrated tool strip and one
+instruction. The movement and separately assembled stem stay on the same
+surface. Turn over, pick a support and seat/return are explicit player actions;
+wrong parts, tools, orientations, supports and destinations remain possible.
+Hover/focus/tap names, drag previews, near-action feedback and a visible spatial
+non-drag path replace the inventory buttons and placement form. Pause, Undo,
+restart and zoom remain available. Technical notes, radius and seat hints are
+behind Workshop menu → Development / review.
 
-The layout rearranges geometry for narrow portrait screens, uses 44 px minimum
-hit targets and pointer capture with touch scrolling disabled on the surface.
-The browser check now covers the complete chapter through desktop pointer drags,
-emulated touch drags and a separate keyboard placement pass, plus cancellation,
-wrong tool/support, Undo, pause/reload/resume, holder retry and legacy links.
-The first redesign head passed 163 regressions, asset validation and TypeScript
-on GitHub; its tool-strip markup lint issue is corrected in the follow-up. The
-follow-up also adds near-action feedback, separates phone hit targets and tests
-wrong orientation, destination and distance through real input. Head `b997e60` passed all 164 tests, asset validation, TypeScript, lint and both
-builds in [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41348357024).
-The final refinement locks the phone action-strip height, fits the 320 px tool
-strip and batches redraws per frame. Desktop, touch and keyboard walkthroughs
-now run as separate GitHub jobs. All builds/checks and the full keyboard walkthrough passed at `160c7cc`.
-The 390 px touch pass also completed all 15 operations; follow-up checks found
-a premature 320 px resize measurement and, under faster input, a stale tool
-snapshot. The resize check now waits for layout; gesture capture reads the
-latest explicit tool choice and renderer callbacks update before paint. Native input traces then showed Chromium omitting the compatibility click after
-a drag despite delivering touch press/release. Tool taps now select on native
-release, suppress duplicate clicks and preserve keyboard activation. Final
-pointer/touch reruns are pending. Source inspection and diff checks pass. No local
-tests, builds or browser automation have run. Responsive implementation is not
-physical-phone qualification. Human visual/accessibility review, real devices
-and Marco's mechanical review remain outstanding. No merge, deployment, new CAD
-download or asset publication is authorized or performed.
+The lesson, session/schema, all 15 operations, source geometry/materials/fitted
+matrices, downloaded holders and seating records are unchanged. The prepared
+plate, separate stem and deferred Incabloc boundaries are retained. Existing
+chapter saves remain compatible. The title and homepage entry placement are
+unchanged. No running-movement animation is loaded by the chapter.
+
+Portrait geometry layout, 44 px part/tool targets, fixed action-strip height,
+pointer capture and scrolling prevention support touch. Tool taps select on
+native release because Chromium can suppress the compatibility click after a
+drag; duplicate clicks are ignored and keyboard activation remains available.
+Renderer callbacks update before paint and redraws coalesce to one frame.
+
+Application/check head `966f1906debb65f0352600999633c7bd170e831a` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41350761734):
+164 tests, chapter asset validation, TypeScript, lint, production and Vercel builds.
+The [runner-hosted browser checks](https://github.com/galind/zweigesicht-1/actions/runs/41350761693)
+passed the complete desktop pointer chapter (including eight deliberately wrong
+attempts), keyboard path, native 390 px touch chapter and 320 px completed/loose-part
+layout checks.
+The browser suite uses independently projected CAD bounds and real pointer input
+for all 15 operations, plus wrong-attempt, cancellation, Undo, timing/save,
+restart, missing-holder Retry and legacy-link checks. It publishes no assets or
+screenshots. Source inspection and `git diff --check` pass. No local tests,
+builds or browser automation were invoked for this work.
+
+Responsive implementation and Chromium emulation are verified separately from
+actual-phone qualification, which remains open. Human visual/accessibility
+review and Marco's mechanical review remain outstanding; the detailed review
+checklist is in [chapter notes](docs/ASSEMBLY_CHAPTER_ONE.md). No mechanical or
+release gate is cleared. No merge, deployment or publication was performed.
 
 ## First playable assembly chapter
 

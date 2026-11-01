@@ -148,7 +148,8 @@ homepage entry, old difficulty links, the prototype URL redirect, all 15 operati
 with real desktop pointer input, all 15 with Chromium-emulated touch input, and
 all 15 through the keyboard/non-drag path. Drop locations are independently
 projected from recorded CAD bounds and seats; no renderer shortcut performs the
-drag tests. Cancellation, wrong tools/supports, Undo, pause/reload/resume,
+drag tests. Cancellation, wrong parts/tools/orientations/supports/destinations and
+distance, Undo, pause/reload/resume, restart confirmation/cancellation,
 legacy-save isolation and missing-holder recovery remain covered. Viewport and
 44 px target checks cover desktop and 390/320 px portrait layouts. It uploads no
 models or screenshots. These checks are distinct from human visual judgement
