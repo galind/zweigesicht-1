@@ -6,6 +6,10 @@ establish physically self-sustaining operation, a working setting mechanism or
 collision-free manufacture. [Provenance](../assets/source-manifest/current-time-hands.json)
 records exact occurrences, axes, reference phases, source/evidence hashes and overlaps.
 
+As of 1 November, Workshop contains only Marco’s static first assembly chapter
+and does not load running hands. References to Workshop completion/Undo in the
+28 October validation below describe the retired Easy/Hard implementation.
+
 ## Source membership and dial alignment
 
 The unchanged `hand-display-poses.json` supplies 15 measured bore/tip pairs and
@@ -36,7 +40,7 @@ C25__0_1_1_40_1 (41); small S16__0_1_1_10_2 and S26__0_1_1_20_2 (12),
 S5__0_1_1_6_2 and S20__0_1_1_15_2 (8). Only selected styles are registered:
 five blades and five bushings in each fitted configuration, 22 possible leaves.
 There is no small-dial seconds hand. Loose duplicate blades and excluded rings
-remain excluded. Workshop uses its existing Fine/Lance endpoints; Bench has no
+remain excluded. The chapter contains no hands; Bench has no
 fitted hands on its running movement and retains its previous behavior.
 
 The central arbor is world XY **(0,0)**, viewed outward along +Z with up +Y.
@@ -106,9 +110,8 @@ must reach displayed zero separation before wall time is read again. Hidden tabs
 suspend rendering and immediately resynchronize on the next eligible frame.
 
 All-parts inventory restores the established static presentation. Workshop
-remains static until completion; Undo restores its static endpoints and stops
-motion. Bench remains undialed. Raw/unfitted catalog hands are never registered
-for time animation. Style/visibility changes register the loaded fitted instances
+stays static throughout the chapter. Bench remains undialed. Raw/unfitted catalog
+hands are never registered for time animation. Style/visibility changes register the loaded fitted instances
 without changing geometry or material policy. Selection bounds use actual animated
 meshes; presentation diagnostics include hands. Restore/disposal returns all
 registered matrices and clears references; it allocates no new GPU geometry.

@@ -46,16 +46,16 @@ sliding coupling), independently of the old DAG. Holder orientation uses recorde
 assemblies and insertion paths remain unverified. No geometry is changed to
 conceal uncertainty.
 
-Before the Easy/Hard removal, application head
-`cea83f3d91a36409a0da8ce3cf942014abc7ff40` passed
-[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41334573590):
-210 tests, inventory validation, TypeScript, lint, production and Vercel builds.
-The [runner-hosted Chromium check](https://github.com/galind/zweigesicht-1/actions/runs/41334573659)
-also passed: a real support drag and cancelled drag, all 15 operations through
-the keyboard placement path, wrong-tool feedback, Undo without repeated reward,
-pause/reload/resume, chapter completion, legacy-save isolation and required-holder
-failure/Retry handling. The check reuses the existing approved UAT holder GLBs
-with recorded hash verification; no new assets or screenshots were published.
+Cleanup application head `80cd1d63ffa93272ee151c33457acdb7a0f68b35` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41342184271):
+163 retained tests, chapter asset validation, TypeScript, lint, production and
+Vercel builds. The [runner-hosted Chromium walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41342184268)
+also passed: direct homepage entry, a real support drag and cancelled drag, all
+15 operations through the keyboard placement path, wrong-tool feedback, Undo
+without repeated reward, pause/reload/resume, completion, legacy-save isolation,
+required-holder failure/Retry, old difficulty links and the prototype URL redirect.
+The check reuses the existing approved UAT holder GLBs with recorded hash
+verification; no new assets or screenshots were published.
 
 The 12 added CPU regressions cover the full sequence, error dimensions,
 component counts, holder/orientation changes, separate stem ownership,
@@ -65,10 +65,6 @@ automation ran; only source inspection and formatting ran on the owner's compute
 Human visual/usability, actual-device and Marco's mechanical review remain open.
 
 [Draft PR #38](https://github.com/galind/zweigesicht-1/pull/38) targets `develop`.
-Removal verification: GitHub CI and the updated Chromium chapter walkthrough
-are pending. They now check the direct homepage entry, legacy URL compatibility
-and the active chapter asset inventory. No local test/build/browser run is planned.
-
 Next: Marco reviews `/workshop` on this branch, especially tool
 assignments, screw order, prepared components, partial-assembly holder
 contact/stability and 5 versus 10 mm placement. No merge, deployment or

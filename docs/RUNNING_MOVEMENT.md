@@ -1,13 +1,13 @@
 # Prescribed running movement
 
 Implemented on `codex/escapement-clearance-study`, from the verified
-research milestone `4785cc2`. Current behavior updated 31 October 2026. This is an automatically
+research milestone `4785cc2`. Current behavior updated 1 November 2026. This is an automatically
 running **kinematic illustration**, not a physical escapement simulation.
 Publication and mechanical acceptance remain subject to [release gates](RELEASE_GATES.md).
 
 ## Behavior and scope
 
-The existing Explorer, completed Workshop and assembled Bench movement run without
+The Explorer and assembled Bench movement run without
 another page or playback controls. The shared clock uses the maker-specified
 **3 Hz: one complete balance oscillation every 1/3 second, two beats per
 oscillation, 21,600 beats/hour**. This supersedes the initial eight-second
@@ -168,7 +168,6 @@ Navigation to a fresh viewer starts a fresh illustration.
 - Disposal restores source geometry before the owning scene releases it, then
   releases the two owned generated geometries once. Late network completion is
   generation-checked, and corrupt/missing motion assets fail loading explicitly.
-  Workshop prepares the animation before atomically replacing a complete scene.
 
 `RunningMovement.ts` overlays matrices only after the owner's presentation update
 and restores them before another update. With reference matrix A, current
