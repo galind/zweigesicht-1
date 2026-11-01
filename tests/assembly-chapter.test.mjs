@@ -164,12 +164,24 @@ const { AssemblyViewer } = load('explorer/src/assembly/AssemblyViewer.ts', {
   '../experience/loading': {}, '../viewer/GraphicsResources': {}, '../viewer/SourceSurfaces': {}, '../viewer/materials': {},
   '../play/state': { dragCenter: (pointer, grab) => ({ x: pointer.x - grab.x, y: pointer.y - grab.y }) }, './lesson': lesson,
 });
+const viewerSource = ts.createSourceFile('AssemblyViewer.ts', fs.readFileSync('explorer/src/assembly/AssemblyViewer.ts', 'utf8'), ts.ScriptTarget.Latest, true);
+const viewerClass = viewerSource.statements.find(ts.isClassDeclaration);
+function field(name, fixture) {
+  const declaration = viewerClass.members.find(member => member.name?.getText(viewerSource) === name);
+  const module = { exports: {} };
+  vm.runInNewContext(ts.transpileModule(`module.exports = function() { return ${declaration.initializer.getText(viewerSource)}; };`, {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
+  }).outputText, { module, THREE, dragCenter: (pointer, grab) => ({ x: pointer.x - grab.x, y: pointer.y - grab.y }) });
+  return module.exports.call(fixture);
+}
 function rig(cursor) {
   const viewer = Object.create(AssemblyViewer.prototype);
   Object.assign(viewer, { state: at(cursor), ready: true, enabled: true, side: arrangement(cursor).side,
     groups: new Map(), support: new Map(), pieces: new Map(), scene: new THREE.Scene(), ghost: new THREE.Group(),
     seat: new THREE.Mesh(), radius: 5, render() {},
   });
+  viewer.cancel = field('cancel', viewer);
+  viewer.release = field('release', viewer);
   const records = new Map(source.instances.map(part => [part.id, part]));
   for (const id of LEAF_IDS) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
