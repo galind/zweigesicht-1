@@ -33,8 +33,11 @@ specificity conflict that allowed browser scrolling on part targets; the part
 selector is corrected and computed touch-action is now checked. Touch then
 reached operation 13 and exposed the movement hit rectangle covering the loose
 bridge target. Loose-part targets now sit above assembly targets; the browser
-check verifies the hit identity before every drag. Browser verification is
-being rerun. Updated interaction checks retain the
+check verifies the hit identity before every drag. The full 390 px touch-drag
+chapter then passed; the added 320 px tap chapter exposed support-target overlap
+at the same loose bridge. Loose parts now also take priority over support bounds,
+with supports taking priority during explicit support selection. Final browser
+verification is being rerun. Updated interaction checks retain the
 full desktop pointer, touch-drag and keyboard chapters and add a complete 320 px
 tap-only chapter, contextual controls, help/cancellation/focus checks and working
 space checks. Source inspection and diff checks are the only local verification;

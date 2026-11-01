@@ -106,7 +106,7 @@
 }
 .assembly-page .assembly-part {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   transform: translate(-50%, -50%);
   min-width: 44px;
   min-height: 44px;
@@ -123,6 +123,12 @@
 .assembly-part[data-item='movement'],
 .assembly-part[data-item='stem-assembly'] {
   z-index: 0;
+}
+.assembly-part[data-item^='support-'] {
+  z-index: 1;
+}
+.assembly-part[data-support-choice='true'] {
+  z-index: 3;
 }
 .assembly-part[aria-pressed='true'],
 .assembly-part[data-support-choice='true'] {

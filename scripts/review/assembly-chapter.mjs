@@ -182,7 +182,11 @@ async function activate(locator, mode) {
             const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
             if (element === hit || element.contains(hit)) resolve();
             else if (performance.now() > deadline)
-              reject(new Error("Touch target remains covered"));
+              reject(
+                new Error(
+                  `Touch target ${element.getAttribute("aria-label") || element.textContent} remains covered by ${hit?.closest("[data-item]")?.dataset.item || hit?.className}`,
+                ),
+              );
             else requestAnimationFrame(check);
           };
           check();
