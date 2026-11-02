@@ -8,6 +8,7 @@ on:
       - explorer/app/workshop/prototype/**
       - explorer/src/viewer/StudioFrame.ts
       - scripts/review/assembly-prototype.mjs
+      - tests/assembly-prototype.test.mjs
   workflow_dispatch:
 permissions:
   contents: read

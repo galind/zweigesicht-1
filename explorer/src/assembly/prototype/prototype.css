@@ -29,8 +29,8 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
-.watchmaker-prototype button[aria-pressed="true"],
-.prototype-panel button[aria-pressed="true"] {
+.watchmaker-prototype button[aria-pressed='true'],
+.prototype-panel button[aria-pressed='true'] {
   background: var(--foreground);
   color: var(--background);
 }
@@ -121,7 +121,8 @@
   justify-self: center;
   padding: 10px 20px max(12px, env(safe-area-inset-bottom));
 }
-.prototype-dock > p {
+.prototype-feedback {
+  display: block;
   min-height: 36px;
   text-align: center;
   font-size: 13px;
@@ -268,7 +269,8 @@
   .prototype-dock {
     padding: 6px 8px max(8px, env(safe-area-inset-bottom));
   }
-  .prototype-dock > p {
+  .prototype-feedback {
+    display: block;
     font-size: 12px;
     min-height: 32px;
   }

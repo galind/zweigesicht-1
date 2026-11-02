@@ -7,7 +7,7 @@ const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).h
 const server = spawn('npm', ['--prefix', 'explorer', 'run', 'dev'], { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
 let logs = '';
 for (const stream of [server.stdout, server.stderr]) stream.on('data', (chunk) => { logs = (logs + chunk).slice(-12000); });
-let browser;
+let browser, activePage;
 const saveKey = 'zweigesicht:watchmaker:chapter-1:v1';
 try {
   for (let i = 0; i < 120; i++) {
@@ -18,6 +18,11 @@ try {
   for (const width of [1440, 390, 320]) {
     const context = await browser.newContext({ viewport: { width, height: width === 320 ? 740 : 900 }, hasTouch: width < 600, isMobile: width < 600 });
     const page = await context.newPage();
+    activePage = page;
+    await page.addInitScript(() => {
+      window.__prototypeInput = [];
+      for (const type of ['pointerdown', 'pointerup', 'pointercancel', 'gotpointercapture', 'lostpointercapture']) window.addEventListener(type, (event) => window.__prototypeInput.push({ type, x: event.clientX, y: event.clientY, target: event.target?.closest('[data-item]')?.dataset.item ?? event.target?.className, pointerType: event.pointerType }), true);
+    });
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await page.addInitScript(({ key }) => localStorage.setItem(key, 'chapter-save-must-remain-byte-identical'), { key: saveKey });
@@ -25,7 +30,7 @@ try {
     const button = (name) => page.getByRole('button', { name, exact: true });
     const root = page.locator('.watchmaker-prototype');
     await button('Parts').waitFor();
-    await page.waitForFunction(() => !document.querySelector('.prototype-actions button').disabled, { timeout: 90000 });
+    await page.waitForFunction(() => !document.querySelector('.prototype-actions button').disabled, null, { timeout: 90000 });
     const state = async () => ({ cursor: await root.getAttribute('data-cursor'), mistakes: await root.getAttribute('data-mistakes') });
     assert.deepEqual(await state(), { cursor: '7', mistakes: '0' });
     await button('Separate stem').click(); await button('Movement').click();
@@ -55,6 +60,7 @@ try {
     await button('Cancel placement').click(); await button('Separate stem').click();
     // Native pointer/touch drag, not DOM-dispatched pointer events.
     await button('Parts').click();
+    await page.locator('[data-item="wheel"]').scrollIntoViewIfNeeded();
     const box = await page.locator('[data-item="wheel"]').boundingBox();
     const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
     const cdp = width < 600 ? await context.newCDPSession(page) : null;
@@ -62,7 +68,7 @@ try {
     const move = async (point) => cdp ? cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ ...point, id: 1 }] }) : page.mouse.move(point.x, point.y);
     const up = async () => cdp ? cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }) : page.mouse.up();
     await down();
-    await page.waitForFunction(() => !document.querySelector('.prototype-panel') || document.querySelector('.prototype-panel').hasAttribute('data-ending-style'));
+    await page.locator('.prototype-panel').waitFor({ state: 'hidden' });
     const target = await page.locator('.prototype-seat').boundingBox();
     const end = { x: target.x + target.width / 2, y: target.y + target.height / 2 };
     await move({ x: start.x + 10, y: start.y - 20 }); await move(end); await up();
@@ -82,5 +88,5 @@ try {
     console.log(JSON.stringify({ width, status: 'passed', surfaceHeight: surface.height, saveUnchanged: true }));
     await context.close();
   }
-} catch (error) { console.error(logs); throw error; }
+} catch (error) { console.error(logs); if (activePage && !activePage.isClosed()) { console.error(await activePage.locator('body').innerText()); console.error(await activePage.evaluate(() => window.__prototypeInput)); } throw error; }
 finally { await browser?.close(); try { process.kill(-server.pid, 'SIGTERM'); } catch {} }

@@ -1,21 +1,30 @@
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import type { Manifest, Part } from "../../experience/catalog";
-import { assetRequestUrl } from "../../experience/loading";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import type { Manifest, Part } from '../../experience/catalog';
+import { assetRequestUrl } from '../../experience/loading';
 import {
   configureRenderer,
   addStudioLights,
   createStudioEnvironment,
   disposeObjectResources,
-} from "../../viewer/GraphicsResources";
-import { attachSourceSurface, loadSourceSurfaces } from "../../viewer/SourceSurfaces";
-import { createMaterial, setFinishEnabled } from "../../viewer/materials";
-import { SurfaceOcclusion } from "../../viewer/SurfaceOcclusion";
-import { studioFrame } from "../../viewer/StudioFrame";
-import { PARTS, LEAF_IDS, componentIds, type PartItem, type Side } from "../lesson";
+} from '../../viewer/GraphicsResources';
+import {
+  attachSourceSurface,
+  loadSourceSurfaces,
+} from '../../viewer/SourceSurfaces';
+import { createMaterial, setFinishEnabled } from '../../viewer/materials';
+import { SurfaceOcclusion } from '../../viewer/SurfaceOcclusion';
+import { studioFrame } from '../../viewer/StudioFrame';
+import {
+  PARTS,
+  LEAF_IDS,
+  componentIds,
+  type PartItem,
+  type Side,
+} from '../lesson';
 
-export type AssemblyView = "movement" | "stem";
+export type AssemblyView = 'movement' | 'stem';
 type Point = { x: number; y: number };
 export type Seat = Point & { width: number; height: number };
 const stemIds = new Set([...PARTS.stem, ...PARTS.wheel, ...PARTS.coupling]);
@@ -33,9 +42,9 @@ export class PrototypeViewer {
   assembly = new THREE.Group();
   preview = new THREE.Group();
   cursor = 7;
-  view: AssemblyView = "movement";
+  view: AssemblyView = 'movement';
   selected?: PartItem;
-  side: Side = "movement";
+  side: Side = 'movement';
   ready = false;
   dead = false;
   frame = 0;
@@ -53,13 +62,16 @@ export class PrototypeViewer {
     this.scene.add(this.assembly, this.preview);
     this.occlusion = new SurfaceOcclusion(this.scene, this.camera);
     this.renderer.domElement.setAttribute(
-      "aria-label",
-      "Active assembly in original fitted geometry",
+      'aria-label',
+      'Active assembly in original fitted geometry',
     );
     host.appendChild(this.renderer.domElement);
     this.observer = new ResizeObserver(this.resize);
     this.observer.observe(host);
-    this.renderer.domElement.addEventListener("webglcontextlost", this.contextLost);
+    this.renderer.domElement.addEventListener(
+      'webglcontextlost',
+      this.contextLost,
+    );
     this.resize();
   }
   async load() {
@@ -69,8 +81,11 @@ export class PrototypeViewer {
       return response.json();
     };
     const [manifest, paths] = await Promise.all([
-      json("/models/assembly-manifest.json") as Promise<Manifest>,
-      json("/models/asset-paths.json") as Promise<{ overview: string; catalog: string }>,
+      json('/models/assembly-manifest.json') as Promise<Manifest>,
+      json('/models/asset-paths.json') as Promise<{
+        overview: string;
+        catalog: string;
+      }>,
     ]);
     const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const loaded: THREE.Object3D[] = [];
@@ -82,11 +97,14 @@ export class PrototypeViewer {
         }),
         loadSourceSurfaces(paths.overview),
       ]);
-      for (const result of results) if (result.status === "rejected") throw result.reason;
+      for (const result of results)
+        if (result.status === 'rejected') throw result.reason;
       if (this.dead) return {};
       this.owned = loaded;
       const surfaces = (
-        results[2] as PromiseFulfilledResult<Awaited<ReturnType<typeof loadSourceSurfaces>>>
+        results[2] as PromiseFulfilledResult<
+          Awaited<ReturnType<typeof loadSourceSurfaces>>
+        >
       ).value;
       const byId = new Map(manifest.instances.map((part) => [part.id, part]));
       for (const object of loaded)
@@ -98,7 +116,12 @@ export class PrototypeViewer {
             record = byId.get(ancestor.name);
             ancestor = ancestor.parent;
           }
-          if (!record || !LEAF_IDS.includes(record.id) || this.pieces.has(record.id)) return;
+          if (
+            !record ||
+            !LEAF_IDS.includes(record.id) ||
+            this.pieces.has(record.id)
+          )
+            return;
           attachSourceSurface(node.geometry, surfaces.get(record.definitionId));
           const material = createMaterial(
             record.name,
@@ -109,11 +132,15 @@ export class PrototypeViewer {
           setFinishEnabled(material, true);
           const mesh = new THREE.Mesh(node.geometry, material);
           mesh.matrixAutoUpdate = false;
-          mesh.matrix.set(...(record.worldTransform.flat() as Parameters<THREE.Matrix4["set"]>));
+          mesh.matrix.set(
+            ...(record.worldTransform.flat() as Parameters<
+              THREE.Matrix4['set']
+            >),
+          );
           this.pieces.set(record.id, mesh);
         });
       if (LEAF_IDS.some((id) => !this.pieces.has(id)))
-        throw Error("Required chapter geometry is missing.");
+        throw Error('Required chapter geometry is missing.');
       this.ready = true;
       const thumbnails = this.thumbnails();
       this.layout();
@@ -137,7 +164,12 @@ export class PrototypeViewer {
       front ? 1 : -1,
     ).normalize();
     this.camera.up.set(0, front ? 1 : -1, 0);
-    const { center, distance } = studioFrame(this.camera, bounds, direction, this.camera.up);
+    const { center, distance } = studioFrame(
+      this.camera,
+      bounds,
+      direction,
+      this.camera.up,
+    );
     this.camera.position.copy(center).addScaledVector(direction, distance);
     this.camera.lookAt(center);
     this.camera.updateProjectionMatrix();
@@ -152,13 +184,18 @@ export class PrototypeViewer {
       this.scene.add(group);
       this.fit(new THREE.Box3().setFromObject(group), false, true);
       this.renderer.render(this.scene, this.camera);
-      result[item] = this.renderer.domElement.toDataURL("image/png");
+      result[item] = this.renderer.domElement.toDataURL('image/png');
       group.removeFromParent();
     }
     this.resize();
     return result;
   }
-  update(cursor: number, view: AssemblyView, selected: PartItem | undefined, side: Side) {
+  update(
+    cursor: number,
+    view: AssemblyView,
+    selected: PartItem | undefined,
+    side: Side,
+  ) {
     this.cursor = cursor;
     this.view = view;
     this.selected = selected;
@@ -170,21 +207,25 @@ export class PrototypeViewer {
     this.assembly.clear();
     this.preview.clear();
     const ids = componentIds(this.cursor).filter(
-      (id) => stemIds.has(id) === (this.view === "stem"),
+      (id) => stemIds.has(id) === (this.view === 'stem'),
     );
     this.assembly.add(this.group(ids));
     // Keep each work area stable while adding parts; never frame loose inventory.
-    const envelope = this.group(this.view === "stem" ? [...stemIds] : componentIds(6));
+    const envelope = this.group(
+      this.view === 'stem' ? [...stemIds] : componentIds(6),
+    );
     this.fit(
       new THREE.Box3().setFromObject(envelope),
-      this.view === "movement",
-      this.view === "stem",
+      this.view === 'movement',
+      this.view === 'stem',
     );
     if (this.selected) {
       const group = this.group(PARTS[this.selected]);
       // Only a player-selected orientation is previewed. Installed matrices remain exact.
-      if (this.side === "dial") {
-        const center = new THREE.Box3().setFromObject(group).getCenter(new THREE.Vector3());
+      if (this.side === 'dial') {
+        const center = new THREE.Box3()
+          .setFromObject(group)
+          .getCenter(new THREE.Vector3());
         group.position.copy(center).multiplyScalar(-1);
         const pivot = new THREE.Group();
         pivot.position.copy(center);
@@ -201,10 +242,12 @@ export class PrototypeViewer {
   seatPoint() {
     const ids = this.selected
       ? PARTS[this.selected]
-      : this.view === "stem"
+      : this.view === 'stem'
         ? PARTS.stem
         : PARTS.mainplate;
-    return new THREE.Box3().setFromObject(this.group(ids)).getCenter(new THREE.Vector3());
+    return new THREE.Box3()
+      .setFromObject(this.group(ids))
+      .getCenter(new THREE.Vector3());
   }
   project(point: THREE.Vector3): Point {
     const rect = this.host.getBoundingClientRect(),
@@ -276,21 +319,25 @@ export class PrototypeViewer {
         this.occlusion.render(this.renderer);
       } catch {
         this.ready = false;
-        this.onError("Graphics interrupted. Retry the prototype.");
+        this.onError('Graphics interrupted. Retry the prototype.');
       }
     });
   }
   contextLost = (event: Event) => {
     event.preventDefault();
     this.ready = false;
-    this.onError("Graphics interrupted. Retry the prototype.");
+    this.onError('Graphics interrupted. Retry the prototype.');
   };
   dispose() {
     this.dead = true;
     cancelAnimationFrame(this.frame);
     this.observer.disconnect();
-    this.renderer.domElement.removeEventListener("webglcontextlost", this.contextLost);
-    for (const mesh of this.pieces.values()) (mesh.material as THREE.Material).dispose();
+    this.renderer.domElement.removeEventListener(
+      'webglcontextlost',
+      this.contextLost,
+    );
+    for (const mesh of this.pieces.values())
+      (mesh.material as THREE.Material).dispose();
     this.owned.forEach(disposeObjectResources);
     this.environment.dispose();
     this.occlusion.dispose();

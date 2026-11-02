@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, PackageOpen, X, RotateCcw, Settings2 } from "lucide-react";
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowLeft, PackageOpen, X, RotateCcw, Settings2 } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from "@/components/ui/sheet";
-import { SiteHeaderActions } from "@/components/site-chrome";
-import { matchesPart, normalizeSearch } from "../../experience/catalog";
+} from '@/components/ui/sheet';
+import { matchesPart, normalizeSearch } from '../../experience/catalog';
 import {
   PARTS,
   LABELS,
@@ -20,16 +20,20 @@ import {
   type PartItem,
   type Side,
   type Tool,
-} from "../lesson";
-import { createSession, commitAttempt, type Session } from "../session";
-import { PrototypeViewer, type AssemblyView, type Seat } from "./PrototypeViewer";
-import "./prototype.css";
+} from '../lesson';
+import { createSession, commitAttempt, type Session } from '../session';
+import {
+  PrototypeViewer,
+  type AssemblyView,
+  type Seat,
+} from './PrototypeViewer';
+import './prototype.css';
 
 const ITEMS = Object.keys(PARTS) as PartItem[];
-const stemItems = new Set<PartItem>(["stem", "wheel", "coupling"]);
+const stemItems = new Set<PartItem>(['stem', 'wheel', 'coupling']);
 function checkpoint(): Session {
   // Explicit review fixture, never a lesson transition or a persisted chapter save.
-  return { ...createSession("menu-prototype"), cursor: 7, awarded: 7 };
+  return { ...createSession('menu-prototype'), cursor: 7, awarded: 7 };
 }
 export default function Prototype() {
   const host = useRef<HTMLDivElement>(null),
@@ -37,21 +41,23 @@ export default function Prototype() {
   const partsButton = useRef<HTMLButtonElement>(null),
     cancelButton = useRef<HTMLButtonElement>(null);
   const [session, setSession] = useState(checkpoint);
-  const [view, setView] = useState<AssemblyView>("movement");
+  const [view, setView] = useState<AssemblyView>('movement');
   const [selected, setSelected] = useState<PartItem>();
   const [tool, setTool] = useState<Tool | null>(null);
-  const [side, setSide] = useState<Side>("movement");
+  const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side | null>(null);
-  const [panel, setPanel] = useState<"parts" | "setup" | null>(null);
-  const [query, setQuery] = useState("");
-  const [group, setGroup] = useState("all");
+  const [panel, setPanel] = useState<'parts' | 'setup' | null>(null);
+  const [query, setQuery] = useState('');
+  const [group, setGroup] = useState('all');
   const [ready, setReady] = useState(false),
-    [error, setError] = useState(""),
+    [error, setError] = useState(''),
     [retry, setRetry] = useState(0);
-  const [thumbnails, setThumbnails] = useState<Partial<Record<PartItem, string>>>({});
+  const [thumbnails, setThumbnails] = useState<
+    Partial<Record<PartItem, string>>
+  >({});
   const [seat, setSeat] = useState<Seat>({ x: 0, y: 0, width: 1, height: 1 });
   const [feedback, setFeedback] = useState(
-    "Choose an assembly to inspect. Browse Parts to try fitting the coupling wheel.",
+    'Choose an assembly to inspect. Browse Parts to try fitting the coupling wheel.',
   );
   const [dragPoint, setDragPoint] = useState<{ x: number; y: number }>();
   const gesture = useRef<{
@@ -61,15 +67,16 @@ export default function Prototype() {
     y: number;
     moved: boolean;
   } | null>(null);
-  const commitRef = useRef<(item: PartItem, destination: AssemblyView, distance: number) => void>(
-    () => {},
-  );
+  const commitRef = useRef<
+    (item: PartItem, destination: AssemblyView, distance: number) => void
+  >(() => {});
   const cancelRef = useRef<() => void>(() => {});
   const finished = session.cursor >= 9;
   const installed = new Set(componentIds(session.cursor));
-  const available = (item: PartItem) => !PARTS[item].every((id) => installed.has(id));
+  const available = (item: PartItem) =>
+    !PARTS[item].every((id) => installed.has(id));
 
-  function cancel(message = "Placement cancelled. No attempt counted.") {
+  function cancel(message = 'Placement cancelled. No attempt counted.') {
     gesture.current = null;
     viewer.current?.movePreview();
     setDragPoint(undefined);
@@ -81,9 +88,15 @@ export default function Prototype() {
     if (!ready || finished || !available(item)) return;
     setSelected(item);
     setPanel(null);
-    setFeedback(`${LABELS[item]} selected. Drag to an assembly or choose a destination below.`);
+    setFeedback(
+      `${LABELS[item]} selected. Drag to an assembly or choose a destination below.`,
+    );
   }
-  function attempt(item: PartItem, destination: AssemblyView, distanceMm: number) {
+  function attempt(
+    item: PartItem,
+    destination: AssemblyView,
+    distanceMm: number,
+  ) {
     if (!ready || finished) return;
     const result = commitAttempt(session, {
       id: crypto.randomUUID(),
@@ -92,7 +105,7 @@ export default function Prototype() {
       item,
       destination,
       distanceMm,
-      kind: "place",
+      kind: 'place',
       tool,
       side,
       support,
@@ -100,7 +113,7 @@ export default function Prototype() {
     setSession(result.session);
     setFeedback(
       result.accepted
-        ? `${LABELS[item]} fitted. ${result.session.cursor === 9 ? "Prototype complete — the full chapter has not been migrated." : "Choose the next part from Parts."}`
+        ? `${LABELS[item]} fitted. ${result.session.cursor === 9 ? 'Prototype complete — the full chapter has not been migrated.' : 'Choose the next part from Parts.'}`
         : result.message,
     );
     if (result.accepted) {
@@ -118,8 +131,6 @@ export default function Prototype() {
   useEffect(() => {
     let live = true;
     let instance: PrototypeViewer | undefined;
-    setReady(false);
-    setError("");
     try {
       instance = new PrototypeViewer(host.current!, setSeat, (message) => {
         if (live) {
@@ -140,10 +151,19 @@ export default function Prototype() {
         })
         .catch((reason: unknown) => {
           if (live)
-            setError(reason instanceof Error ? reason.message : "Unable to load prototype.");
+            setError(
+              reason instanceof Error
+                ? reason.message
+                : 'Unable to load prototype.',
+            );
         });
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Graphics unavailable.");
+      queueMicrotask(() => {
+        if (live)
+          setError(
+            reason instanceof Error ? reason.message : 'Graphics unavailable.',
+          );
+      });
     }
     return () => {
       live = false;
@@ -155,7 +175,8 @@ export default function Prototype() {
     const move = (event: PointerEvent) => {
       const drag = gesture.current;
       if (!drag || drag.pointer !== event.pointerId) return;
-      drag.moved ||= Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 6;
+      drag.moved ||=
+        Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 6;
       if (!drag.moved) return;
       const point = { x: event.clientX, y: event.clientY };
       setDragPoint(point);
@@ -184,7 +205,10 @@ export default function Prototype() {
       setDragPoint(undefined);
     };
     const escape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !document.querySelector(".prototype-panel"))
+      if (
+        event.key === 'Escape' &&
+        !document.querySelector('.prototype-panel:not([data-ending-style])')
+      )
         cancelRef.current();
     };
     const abort = () => {
@@ -193,19 +217,19 @@ export default function Prototype() {
     const hidden = () => {
       if (document.hidden) abort();
     };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", release);
-    window.addEventListener("pointercancel", abort);
-    window.addEventListener("blur", abort);
-    window.addEventListener("keydown", escape);
-    document.addEventListener("visibilitychange", hidden);
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', release);
+    window.addEventListener('pointercancel', abort);
+    window.addEventListener('blur', abort);
+    window.addEventListener('keydown', escape);
+    document.addEventListener('visibilitychange', hidden);
     return () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", release);
-      window.removeEventListener("pointercancel", abort);
-      window.removeEventListener("blur", abort);
-      window.removeEventListener("keydown", escape);
-      document.removeEventListener("visibilitychange", hidden);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', release);
+      window.removeEventListener('pointercancel', abort);
+      window.removeEventListener('blur', abort);
+      window.removeEventListener('keydown', escape);
+      document.removeEventListener('visibilitychange', hidden);
     };
   }, []);
 
@@ -223,16 +247,15 @@ export default function Prototype() {
           <h1>Be a watchmaker!</h1>
           <small>Presentation prototype · unsaved review checkpoint</small>
         </div>
-        <SiteHeaderActions />
       </header>
       <section className="prototype-context">
         <p>
           {finished
-            ? "Two placements complete. Review the prototype before migrating the chapter."
+            ? 'Two placements complete. Review the prototype before migrating the chapter.'
             : OPERATIONS[session.cursor].label}
         </p>
         <nav aria-label="Active assembly">
-          {(["movement", "stem"] as const).map((assembly) => (
+          {(['movement', 'stem'] as const).map((assembly) => (
             <button
               key={assembly}
               aria-pressed={view === assembly}
@@ -241,17 +264,17 @@ export default function Prototype() {
                 setView(assembly);
               }}
             >
-              {assembly === "movement" ? "Movement" : "Separate stem"}
+              {assembly === 'movement' ? 'Movement' : 'Separate stem'}
             </button>
           ))}
         </nav>
       </section>
       <section className="prototype-workspace">
-        <div className="prototype-surface" ref={host} />
+        <div className="prototype-surface" ref={host} onLostPointerCapture={() => { if (gesture.current) cancel(); }} />
         <span className="prototype-assembly-label">
-          {view === "movement"
-            ? "Movement · set aside at this checkpoint"
-            : "Separate stem · working assembly"}
+          {view === 'movement'
+            ? 'Movement · set aside at this checkpoint'
+            : 'Separate stem · working assembly'}
         </span>
         {selected && ready && (
           <button
@@ -267,35 +290,66 @@ export default function Prototype() {
           </button>
         )}
         {!ready && (
-          <div className="prototype-loading" role={error ? "alert" : "status"}>
-            {error || "Loading original components…"}
-            {error && <button onClick={() => setRetry((value) => value + 1)}>Retry</button>}
+          <div className="prototype-loading" role={error ? 'alert' : 'status'}>
+            {error || 'Loading original components…'}
+            {error && (
+              <button
+                onClick={() => {
+                  setReady(false);
+                  setError('');
+                  setRetry((value) => value + 1);
+                }}
+              >
+                Retry
+              </button>
+            )}
           </div>
         )}
       </section>
       <footer className="prototype-dock">
-        <p role="status" aria-live="polite">
+        <output className="prototype-feedback" aria-live="polite">
           {feedback}
-        </p>
+        </output>
         <div className="prototype-selection">
           {selected ? (
             <>
-              <img src={thumbnails[selected]} alt="" />
+              <Image
+                src={thumbnails[selected] ?? ''}
+                alt=""
+                width={120}
+                height={100}
+                unoptimized
+              />
               <strong>{LABELS[selected]}</strong>
-              <button ref={cancelButton} aria-label="Cancel placement" onClick={() => cancel()}>
+              <button
+                ref={cancelButton}
+                aria-label="Cancel placement"
+                onClick={() => cancel()}
+              >
                 <X />
               </button>
             </>
           ) : (
-            <span>{finished ? "Review checkpoint complete" : "Pick a part to begin"}</span>
+            <span>
+              {finished ? 'Review checkpoint complete' : 'Pick a part to begin'}
+            </span>
           )}
         </div>
         {selected && (
-          <div className="prototype-destinations" aria-label="Choose placement destination">
-            <button disabled={!ready} onClick={() => attempt(selected, "movement", 0)}>
+          <div
+            className="prototype-destinations"
+            aria-label="Choose placement destination"
+          >
+            <button
+              disabled={!ready}
+              onClick={() => attempt(selected, 'movement', 0)}
+            >
               Place on movement
             </button>
-            <button disabled={!ready} onClick={() => attempt(selected, "stem", 0)}>
+            <button
+              disabled={!ready}
+              onClick={() => attempt(selected, 'stem', 0)}
+            >
               Place on stem
             </button>
           </div>
@@ -304,8 +358,8 @@ export default function Prototype() {
           <button
             ref={partsButton}
             disabled={!ready}
-            aria-expanded={panel === "parts"}
-            onClick={() => setPanel("parts")}
+            aria-expanded={panel === 'parts'}
+            onClick={() => setPanel('parts')}
           >
             <PackageOpen />
             Parts
@@ -313,18 +367,18 @@ export default function Prototype() {
           <button
             disabled={!ready || finished}
             aria-label="Placement setup"
-            onClick={() => setPanel("setup")}
+            onClick={() => setPanel('setup')}
           >
             <Settings2 />
-            {tool ?? "Choose tool"}
+            {tool ?? 'Choose tool'}
           </button>
           <button
             aria-label="Reset prototype checkpoint"
             onClick={() => {
-              cancel("Review checkpoint reset. Chapter saves are untouched.");
+              cancel('Review checkpoint reset. Chapter saves are untouched.');
               setSession(checkpoint());
               setTool(null);
-              setSide("movement");
+              setSide('movement');
               setSupport(null);
             }}
           >
@@ -336,7 +390,10 @@ export default function Prototype() {
         <div
           className="prototype-drag-label"
           style={{
-            left: Math.max(8, Math.min(window.innerWidth - 210, dragPoint.x + 16)),
+            left: Math.max(
+              8,
+              Math.min(window.innerWidth - 210, dragPoint.x + 16),
+            ),
             top: Math.max(8, dragPoint.y - 48),
           }}
         >
@@ -355,44 +412,60 @@ export default function Prototype() {
           className="prototype-panel"
           showOverlay={false}
           finalFocus={() =>
-            gesture.current ? false : selected ? cancelButton.current : partsButton.current
+            gesture.current
+              ? false
+              : selected
+                ? cancelButton.current
+                : partsButton.current
           }
         >
           <SheetHeader>
-            <SheetTitle>{panel === "setup" ? "Placement setup" : "Parts"}</SheetTitle>
+            <SheetTitle>
+              {panel === 'setup' ? 'Placement setup' : 'Parts'}
+            </SheetTitle>
             <SheetDescription>
-              {panel === "setup"
-                ? "Choices are retained until you change them. Tool and support rules are provisional."
-                : "Tap a part to select it, or drag its preview onto the active assembly."}
+              {panel === 'setup'
+                ? 'Choices are retained until you change them. Tool and support rules are provisional.'
+                : 'Tap a part to select it, or drag its preview onto the active assembly.'}
             </SheetDescription>
           </SheetHeader>
-          {panel === "setup" ? (
+          {panel === 'setup' ? (
             <div className="prototype-setup">
               <fieldset>
                 <legend>Tool</legend>
-                {(["hands", "tweezers", "screwdriver"] as const).map((value) => (
-                  <button key={value} aria-pressed={tool === value} onClick={() => setTool(value)}>
-                    {value}
-                  </button>
-                ))}
+                {(['hands', 'tweezers', 'screwdriver'] as const).map(
+                  (value) => (
+                    <button
+                      key={value}
+                      aria-pressed={tool === value}
+                      onClick={() => setTool(value)}
+                    >
+                      {value}
+                    </button>
+                  ),
+                )}
               </fieldset>
               <fieldset>
                 <legend>Part side upward</legend>
-                {(["movement", "dial"] as const).map((value) => (
-                  <button key={value} aria-pressed={side === value} onClick={() => setSide(value)}>
+                {(['movement', 'dial'] as const).map((value) => (
+                  <button
+                    key={value}
+                    aria-pressed={side === value}
+                    onClick={() => setSide(value)}
+                  >
                     {value}
                   </button>
                 ))}
               </fieldset>
               <fieldset>
                 <legend>Support</legend>
-                {([null, "movement", "dial"] as const).map((value) => (
+                {([null, 'movement', 'dial'] as const).map((value) => (
                   <button
-                    key={value ?? "none"}
+                    key={value ?? 'none'}
                     aria-pressed={support === value}
                     onClick={() => setSupport(value)}
                   >
-                    {value ?? "None"}
+                    {value ?? 'None'}
                   </button>
                 ))}
               </fieldset>
@@ -411,13 +484,13 @@ export default function Prototype() {
                   />
                 </label>
                 <nav aria-label="Part groups">
-                  {["all", "movement", "stem"].map((value) => (
+                  {['all', 'movement', 'stem'].map((value) => (
                     <button
                       key={value}
                       aria-pressed={group === value}
                       onClick={() => setGroup(value)}
                     >
-                      {value === "all" ? "All parts" : value}
+                      {value === 'all' ? 'All parts' : value}
                     </button>
                   ))}
                 </nav>
@@ -426,14 +499,16 @@ export default function Prototype() {
                 {ITEMS.filter(
                   (item) =>
                     matchesPart(normalizeSearch(LABELS[item]), query) &&
-                    (group === "all" || stemItems.has(item) === (group === "stem")),
+                    (group === 'all' ||
+                      stemItems.has(item) === (group === 'stem')),
                 ).map((item) => (
                   <div className="prototype-part-row" key={item}>
                     <button
                       data-item={item}
                       disabled={!available(item) || finished}
                       onPointerDown={(event) => {
-                        if (!event.isPrimary || event.button !== 0 || !ready) return;
+                        if (!event.isPrimary || event.button !== 0 || !ready)
+                          return;
                         event.preventDefault();
                         choose(item);
                         gesture.current = {
@@ -451,15 +526,24 @@ export default function Prototype() {
                       }}
                       aria-label={`Pick ${LABELS[item]}`}
                     >
-                      <img src={thumbnails[item]} alt="" />
+                      <Image
+                        src={thumbnails[item] ?? ''}
+                        alt=""
+                        width={120}
+                        height={100}
+                        unoptimized
+                      />
                       <span className="sr-only">Pick up</span>
                     </button>
-                    <button disabled={!available(item) || finished} onClick={() => choose(item)}>
+                    <button
+                      disabled={!available(item) || finished}
+                      onClick={() => choose(item)}
+                    >
                       <span>
                         {LABELS[item]}
                         <small>
-                          {available(item) ? "Available" : "Installed"} ·{" "}
-                          {stemItems.has(item) ? "Stem" : "Movement"}
+                          {available(item) ? 'Available' : 'Installed'} ·{' '}
+                          {stemItems.has(item) ? 'Stem' : 'Movement'}
                         </small>
                       </span>
                     </button>
@@ -468,7 +552,8 @@ export default function Prototype() {
                 {!ITEMS.some(
                   (item) =>
                     matchesPart(normalizeSearch(LABELS[item]), query) &&
-                    (group === "all" || stemItems.has(item) === (group === "stem")),
+                    (group === 'all' ||
+                      stemItems.has(item) === (group === 'stem')),
                 ) && <p>No matching parts.</p>}
               </div>
             </>

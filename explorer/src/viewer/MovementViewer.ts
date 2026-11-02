@@ -1233,14 +1233,9 @@ export class MovementViewer {
     points?: THREE.Vector3[],
   ) {
     return studioFrame(
-      this.camera,
-      bounds,
-      direction,
-      this.defaultUp(),
-      points,
+      this.camera, bounds, direction, this.defaultUp(), points,
     );
   }
-
   frameBounds(
     bounds: THREE.Box3,
     direction: THREE.Vector3,
@@ -2258,10 +2253,7 @@ export class MovementViewer {
       // Layout can settle after assets arrive but before the canvas is revealed.
       // Fit the prepared view immediately instead of exposing a camera correction.
       this.homeCamera(true);
-    } else if (
-      this.restoringCamera &&
-      Math.abs(old - this.camera.aspect) > 0.01
-    ) {
+    } else if (this.restoringCamera && Math.abs(old - this.camera.aspect) > 0.01) {
       const saved = this.restoringCamera;
       const factor =
         Math.min(1, saved.aspect ?? this.camera.aspect) /
@@ -2457,12 +2449,8 @@ export class MovementViewer {
       // Clock-only frames change no React-facing state. Keep selection bounds
       // and rendering live, but notify only for presentation/camera changes.
       this.snapshotPending ||= !!(
-        this.inspect ||
-        this.needsRender ||
-        moving ||
-        poseWasMoving ||
-        cameraWasMoving ||
-        controlsChanged
+        this.inspect || this.needsRender || moving || poseWasMoving ||
+        cameraWasMoving || controlsChanged
       );
       if (interval > 0) {
         this.frameIntervals.push(interval);
@@ -2516,19 +2504,15 @@ export class MovementViewer {
   };
   selectionContext() {
     const selection = this.state.part;
-    const fittedCaseSelection =
-      !!selection &&
+    const fittedCaseSelection = !!selection &&
       [...this.fittedCase].some((leaf) => belongs(leaf, selection));
     return {
       selection,
       group: GROUPS.find((g) => g.id === this.state.group),
       fittedCaseSelection,
       // Raw inspection uses source poses, finishes and static hands together.
-      rawSelection:
-        !!selection &&
-        !belongs(selection, ROOT) &&
-        !this.fitted.has(selection) &&
-        !fittedCaseSelection,
+      rawSelection: !!selection && !belongs(selection, ROOT) &&
+        !this.fitted.has(selection) && !fittedCaseSelection,
     };
   }
   partVisible(
@@ -2536,15 +2520,8 @@ export class MovementViewer {
     context: ReturnType<MovementViewer['selectionContext']>,
   ) {
     const id = p.source.id;
-    const {
-      selection,
-      group,
-      fittedCaseSelection,
-      rawSelection: raw,
-    } = context;
-    const selected =
-      !!selection &&
-      belongs(id, selection) &&
+    const { selection, group, fittedCaseSelection, rawSelection: raw } = context;
+    const selected = !!selection && belongs(id, selection) &&
       (!fittedCaseSelection || this.fittedCase.has(id));
     if (this.state.layout === 'spread')
       return this.spread.has(id) && (!this.state.isolated || selected);
