@@ -27,7 +27,10 @@ the prepared fixture assumptions and historical compatibility boundary.
 Runner coverage now requires all three placements through real mouse/native
 emulated-touch drags, plus interruptions, destination ambiguity, imperfect input,
 alternatives and unchanged saves. Source inspection and `git diff --check` pass;
-CI execution is the next action. No local tests/builds/browser automation, model
+First runner pass at `4f108f7` found a new projection assertion failure and a
+synthetic pointer-cancellation target problem in the browser harness. Correcting
+the harness and collecting projection diagnostics is the next action; these runs
+do not establish completion. No local tests/builds/browser automation, model
 changes/downloads, merge, deployment or publication. Human visual/accessibility,
 physical-phone and Marco review remain pending. No release gate is cleared.
 

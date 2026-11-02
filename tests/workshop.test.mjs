@@ -36,12 +36,10 @@ function rig() {
   Object.assign(viewer, {
     ready: true,
     cursor: 12,
-    side: "movement",
     pieces: new Map(),
     assembly: new THREE.Group(),
     camera: new THREE.PerspectiveCamera(33, 1, 0.05, 2000),
     render() {},
-    publishSeat() {},
   });
   for (const id of lesson.LEAF_IDS) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1));
@@ -115,7 +113,17 @@ test("fixed fixture camera and independently projected screw destinations surviv
   const other = viewer.project(viewer.seatPoint("bridge-screw-2"));
   assert.equal(viewer.placement(other, "bridge-screw-1").distanceMm, Infinity);
   assert.equal(viewer.placement(seat, "bridge-screw-2").distanceMm, Infinity);
-  assert.ok(viewer.placement(seat, "bridge-screw-1").distanceMm < 1e-8);
+  assert.ok(
+    viewer.placement(seat, "bridge-screw-1").distanceMm < 1e-8,
+    JSON.stringify({
+      result: viewer.placement(seat, "bridge-screw-1"),
+      seat,
+      other,
+      worldSeat: viewer.seatPoint("bridge-screw-1").toArray(),
+      hit: viewer.onPlane(seat, viewer.seatPoint("bridge-screw-1").z)?.toArray(),
+      camera: viewer.camera.position.toArray(),
+    }),
+  );
   const middle = { x: (seat.x + other.x) / 2, y: (seat.y + other.y) / 2 };
   assert.equal(viewer.placement(middle, "bridge-screw-1").distanceMm, Infinity);
   assert.equal(viewer.placement(middle, "bridge-screw-2").distanceMm, Infinity);

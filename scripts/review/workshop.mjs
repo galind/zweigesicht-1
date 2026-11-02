@@ -92,7 +92,10 @@ try {
     const page = (activePage = await context.newPage());
     const cdp = width < 600 ? await context.newCDPSession(page) : null;
     const errors = [];
-    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("pageerror", (error) => {
+      errors.push(error.message);
+      console.error("Browser error:", error.message);
+    });
     await page.addInitScript(() => {
       window.__workshopInput = [];
       for (const type of [
@@ -316,8 +319,9 @@ try {
         if (cdp) await end(true);
         else
           await page.evaluate(() =>
-            window.dispatchEvent(
+            document.querySelector(".workshop-surface").dispatchEvent(
               new PointerEvent("pointercancel", {
+                bubbles: true,
                 pointerId: window.__workshopInput.filter((e) => e.type === "pointerdown").at(-1).id,
               }),
             ),
@@ -389,8 +393,13 @@ try {
     await page.evaluate(() => {
       const e = window.__workshopInput.filter((e) => e.type === "pointerup").at(-1);
       for (let i = 0; i < 2; i++)
-        window.dispatchEvent(
-          new PointerEvent("pointerup", { pointerId: e.id, clientX: e.x, clientY: e.y }),
+        document.querySelector(".workshop-surface").dispatchEvent(
+          new PointerEvent("pointerup", {
+            bubbles: true,
+            pointerId: e.id,
+            clientX: e.x,
+            clientY: e.y,
+          }),
         );
     });
     assert.deepEqual(await state(), completed);
