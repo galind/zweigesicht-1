@@ -37,7 +37,9 @@ Revision `93752c1` passes [CI](https://github.com/galind/zweigesicht-1/actions/r
 (166 tests, asset validation, TypeScript, lint, both builds). The browser run reached
 all three successful desktop drags and the cancellation/wrong-hole checks, then
 exposed an ambiguous wrapped-select label in Alternative controls. The destination
-now has an explicit label/control association; full browser verification is next. No local tests/builds/browser automation, model
+now has an explicit label/control association. That revision passes all core CI
+checks; the browser harness is being given bounded condition waits and stage
+diagnostics to identify a stalled interaction. Full browser verification is pending. No local tests/builds/browser automation, model
 changes/downloads, merge, deployment or publication. Human visual/accessibility,
 physical-phone and Marco review remain pending. No release gate is cleared.
 

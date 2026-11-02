@@ -91,6 +91,9 @@ try {
       isMobile: width < 600,
     });
     const page = (activePage = await context.newPage());
+    page.setDefaultTimeout(20000);
+    page.setDefaultNavigationTimeout(90000);
+    console.log(JSON.stringify({ width, phase: "start" }));
     const cdp = width < 600 ? await context.newCDPSession(page) : null;
     const errors = [];
     page.on("pageerror", (error) => {
@@ -203,6 +206,7 @@ try {
     assert.ok(await sheet.isVisible(), "A handle tap never dismisses Parts or places");
     assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
     if (cdp) {
+      console.log(JSON.stringify({ width, phase: "native row scrolling" }));
       const list = page.locator(".workshop-parts");
       await list.evaluate((el) => {
         el.scrollTop = 0;
@@ -336,6 +340,7 @@ try {
       "hidden",
       "resize",
     ]) {
+      console.log(JSON.stringify({ width, phase: "cancel", kind }));
       await begin("bridge");
       await aimAt(target("bridge"));
       if (kind === "escape") await page.keyboard.press("Escape");
@@ -390,6 +395,7 @@ try {
     // An inside-but-far release differs from outside and cancellation.
     await drop("bridge", { x: stable.x + 12, y: stable.y + stable.height - 12 }, false);
     assert.deepEqual(await state(), { cursor: "12", mistakes: "2" });
+    console.log(JSON.stringify({ width, phase: "three actual placements" }));
     // Complete all three using actual pointer motion and native release.
     const bridge = target("bridge");
     await drop("bridge", { x: bridge.x + 4, y: bridge.y - 3 }, true);
@@ -421,6 +427,7 @@ try {
     assert.match(await page.locator(".workshop-feedback").innerText(), /Practice complete/);
     await checkStable();
     assert.deepEqual(await storage(), saved);
+    console.log(JSON.stringify({ width, phase: "alternative controls" }));
     // Explicit opt-in mode is independently exercisable with keyboard or native taps.
     await button("Reset practice").click();
     await button("Alternative controls").focus();
@@ -467,6 +474,7 @@ try {
     }
     await button("Alternative controls").click();
     await button("Reset practice").click();
+    console.log(JSON.stringify({ width, phase: "graphics interruption" }));
     // Graphics interruption consumes an active gesture; Retry creates a new renderer.
     await begin("bridge");
     await aimAt(target("bridge"));
@@ -516,6 +524,12 @@ try {
   console.error(logs);
   if (activePage && !activePage.isClosed()) {
     console.error(await activePage.locator("body").innerText());
+    console.error(
+      await activePage.evaluate(() => ({
+        focus: document.activeElement?.outerHTML,
+        state: document.querySelector(".watchmaker-workshop")?.dataset,
+      })),
+    );
     console.error(await activePage.evaluate(() => window.__workshopInput));
   }
   throw error;
