@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, PackageOpen, X, RotateCcw, Grip } from 'lucide-react';
+import { ArrowLeft, PackageOpen, X, Undo2, Grip } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -20,7 +20,13 @@ import {
   componentIds,
   type PartItem,
 } from './lesson';
-import { createSession, commitAttempt, type Session } from './session';
+import { commitAttempt } from './session';
+import {
+  createCheckpoint,
+  undoCheckpoint,
+  CHECKPOINT_START,
+  CHECKPOINT_PLACEMENTS,
+} from './checkpoint';
 import { WorkshopViewer } from './WorkshopViewer';
 import { aimPoint, DRAG_INTENT_PX, type Point } from './workshopInput';
 import './workshop.css';
@@ -32,10 +38,6 @@ const SEATS = {
   'bridge-screw-1': 'Screw hole 1',
   'bridge-screw-2': 'Screw hole 2',
 };
-function checkpoint(): Session {
-  // Explicit prepared fixture: movement side up and supported. No lesson transition/save.
-  return { ...createSession(crypto.randomUUID()), cursor: 12, awarded: 12 };
-}
 type Gesture = {
   pointer: number;
   item: PartItem;
@@ -62,10 +64,13 @@ export default function Workshop() {
     viewer = useRef<WorkshopViewer | null>(null);
   const partsButton = useRef<HTMLButtonElement>(null),
     alternativeButton = useRef<HTMLButtonElement>(null);
+  const retryButton = useRef<HTMLButtonElement>(null);
   const destinationControl = useRef<HTMLSelectElement>(null);
   const retryItem = useRef<PartItem | undefined>(undefined);
   const gesture = useRef<Gesture | null>(null);
-  const [session, setSession] = useState(checkpoint);
+  const [session, setSession] = useState(() =>
+    createCheckpoint(crypto.randomUUID()),
+  );
   const sessionRef = useRef(session);
   const [selected, setSelected] = useState<PartItem>();
   const selectedRef = useRef<PartItem | undefined>(undefined);
@@ -73,7 +78,11 @@ export default function Workshop() {
   const [alternative, setAlternative] = useState(false);
   const [destination, setDestination] = useState('');
   const [query, setQuery] = useState(''),
-    [group, setGroup] = useState('all');
+    [group, setGroup] = useState('available');
+  const [resetOpen, setResetOpen] = useState(false);
+  const listScroll = useRef(0);
+  const lastPartFocus = useRef<string | undefined>(undefined);
+  const [viewport, setViewport] = useState<{ height: number; top: number }>();
   const [ready, setReady] = useState(false),
     [error, setError] = useState(''),
     [retry, setRetry] = useState(0);
@@ -81,7 +90,7 @@ export default function Workshop() {
     Partial<Record<PartItem, string>>
   >({});
   const [feedback, setFeedback] = useState(
-    'Open Parts. Drag a handle to the movement, or enable Alternative controls.',
+    'Open Parts and drag a handle to the movement.',
   );
   const [held, setHeld] = useState<{
     item: PartItem;
@@ -117,7 +126,17 @@ export default function Workshop() {
     partsButton.current?.focus();
   }
   function identify(item: PartItem) {
-    if (!ready || finished || !available(item) || gesture.current) return;
+    if (!ready || gesture.current) return;
+    if (!available(item)) {
+      selectedRef.current = undefined;
+      setSelected(undefined);
+      setDestination('');
+      setFeedback(
+        `${LABELS[item]} is already fitted. Installed parts cannot be dragged.`,
+      );
+      return;
+    }
+    if (finished) return;
     selectedRef.current = item;
     setSelected(item);
     setDestination('');
@@ -155,7 +174,7 @@ export default function Workshop() {
     setOutcome(result.accepted ? 'accepted' : 'invalid');
     setFeedback(
       result.accepted
-        ? `${LABELS[item]} fitted. ${result.session.cursor === OPERATIONS.length ? 'Practice complete — the winding bridge and screws are fitted.' : 'Choose the next part from Parts.'}`
+        ? `${LABELS[item]} fitted. ${result.session.cursor === OPERATIONS.length ? 'Checkpoint complete — 3/3 placements fitted.' : 'Choose the next part from Parts.'}`
         : `${message || result.message} ${alternative ? 'Choose' : 'Drag'} again from Parts.`,
     );
     if (result.accepted) partsButton.current?.focus();
@@ -171,13 +190,16 @@ export default function Workshop() {
     viewer.current?.update(session.cursor);
   }, [session.cursor, ready]);
   useEffect(() => {
+    if (error) retryButton.current?.focus();
+  }, [error]);
+  useEffect(() => {
     let live = true;
     let instance: WorkshopViewer | undefined;
     try {
       instance = new WorkshopViewer(host.current!, (message) => {
         if (live) {
           handlers.current.cancel(
-            'Graphics interrupted. Placement cancelled; no attempt counted.',
+            'Graphics interrupted. Accepted placements are kept. Retry to continue.',
           );
           setReady(false);
           setError(message);
@@ -188,11 +210,21 @@ export default function Workshop() {
         .load()
         .then((images) => {
           if (live && instance?.ready) {
+            instance.update(sessionRef.current.cursor);
             setThumbnails(images);
             setReady(true);
+            if (retry > 0) {
+              setFeedback(
+                'Movement restored. Accepted placements are unchanged.',
+              );
+              requestAnimationFrame(() => {
+                if (live) partsButton.current?.focus();
+              });
+            }
           }
         })
         .catch((reason: unknown) => {
+          instance?.dispose();
           if (live)
             setError(
               reason instanceof Error
@@ -215,6 +247,22 @@ export default function Workshop() {
       viewer.current = null;
     };
   }, [retry]);
+  useEffect(() => {
+    const update = () =>
+      setViewport({
+        height: window.visualViewport?.height ?? window.innerHeight,
+        top: window.visualViewport?.offsetTop ?? 0,
+      });
+    update();
+    window.addEventListener('resize', update);
+    window.visualViewport?.addEventListener('resize', update);
+    window.visualViewport?.addEventListener('scroll', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('scroll', update);
+    };
+  }, []);
   useEffect(() => {
     const changedCoordinates = () => {
       const drag = gesture.current;
@@ -331,6 +379,13 @@ export default function Workshop() {
     };
   }, []);
 
+  const panelStyle = viewport
+    ? ({
+        '--workshop-visible-height': `${viewport.height}px`,
+        '--workshop-visible-top': `${viewport.top}px`,
+      } as React.CSSProperties)
+    : undefined;
+
   return (
     <main
       className="watchmaker-workshop"
@@ -344,28 +399,41 @@ export default function Workshop() {
         </Link>
         <div>
           <h1>Be a watchmaker!</h1>
-          <small>
-            Prepared movement · three placements · progress resets on reload
-          </small>
+          <p className="workshop-prepared">
+            The setting parts and stem are already fitted; this checkpoint adds
+            the winding bridge and its two screws.
+          </p>
         </div>
       </header>
       <section className="workshop-context">
+        <span
+          className="workshop-progress"
+          aria-label={`${session.cursor - CHECKPOINT_START} of ${CHECKPOINT_PLACEMENTS} checkpoint placements fitted`}
+        >
+          {session.cursor - CHECKPOINT_START}/{CHECKPOINT_PLACEMENTS}
+        </span>
         <p>
-          {finished
-            ? 'Practice complete: winding bridge and two screws fitted.'
-            : OPERATIONS[session.cursor].label}
+          {finished ? 'Checkpoint complete' : OPERATIONS[session.cursor].label}
         </p>
       </section>
       <section className="workshop-workspace" aria-label="Movement workspace">
         <div className="workshop-surface" ref={host} />
-        <span className="workshop-assembly-label">
-          Movement · winding-bridge practice
-        </span>
         {!ready && (
           <div className="workshop-loading" role={error ? 'alert' : 'status'}>
-            {error || 'Loading original components…'}
+            <p>
+              {error
+                ? 'Movement unavailable. Accepted placements are kept in memory; retry to continue.'
+                : 'Loading original components…'}
+            </p>
+            {error && (
+              <details>
+                <summary>Technical details</summary>
+                {error}
+              </details>
+            )}
             {error && (
               <button
+                ref={retryButton}
                 onClick={() => {
                   setReady(false);
                   setError('');
@@ -381,7 +449,7 @@ export default function Workshop() {
       <footer className="workshop-dock">
         <output
           className="workshop-feedback"
-          aria-live="polite"
+          aria-live={panel ? 'off' : 'polite'}
           aria-atomic="true"
         >
           {feedback}
@@ -404,9 +472,7 @@ export default function Workshop() {
               )}
             </>
           ) : (
-            <span>
-              {finished ? 'Practice complete' : 'Use a Drag handle in Parts'}
-            </span>
+            <span>Progress resets on reload</span>
           )}
         </div>
         <div className="workshop-actions">
@@ -439,21 +505,28 @@ export default function Workshop() {
             Alternative controls
           </button>
           <button
-            aria-label="Reset practice"
+            aria-label="Undo placement"
+            disabled={session.cursor <= CHECKPOINT_START || !!held}
             onClick={() => {
-              cancel('Practice reset. Choose a part from Parts.');
-              const fresh = checkpoint();
-              sessionRef.current = fresh;
-              setSession(fresh);
+              const previous = sessionRef.current;
+              const next = undoCheckpoint(previous);
+              if (next === previous) return;
+              cancel(
+                `${LABELS[OPERATIONS[previous.cursor - 1].item]} returned to Parts. ${next.cursor - CHECKPOINT_START}/3 fitted.`,
+              );
+              sessionRef.current = next;
+              setSession(next);
             }}
           >
-            <RotateCcw />
+            <Undo2 />
+            <span className="workshop-undo-label">Undo</span>
           </button>
         </div>
       </footer>
       {alternative && selected && !panel && (
         <section
           className="workshop-alternative"
+          style={panelStyle}
           aria-label="Alternative placement controls"
         >
           <p>{LABELS[selected]} — choose its destination.</p>
@@ -531,28 +604,34 @@ export default function Workshop() {
         <SheetContent
           side="bottom"
           className="workshop-panel"
+          data-compact={viewport && viewport.height < 440}
+          style={panelStyle}
           showOverlay={false}
           initialFocus={() =>
             retryItem.current
               ? document.querySelector<HTMLButtonElement>(
                   `[data-${alternative ? 'identify' : 'drag'}="${retryItem.current}"]`,
                 )
-              : undefined
+              : (lastPartFocus.current &&
+                  document.querySelector<HTMLElement>(lastPartFocus.current)) ||
+                document.querySelector<HTMLElement>('.workshop-panel h2')
           }
           finalFocus={() =>
             gesture.current
               ? false
               : alternative && selected
                 ? destinationControl.current
-                : partsButton.current
+                : resetOpen
+                  ? false
+                  : partsButton.current
           }
         >
           <SheetHeader>
-            <SheetTitle>Parts</SheetTitle>
+            <SheetTitle tabIndex={-1}>Parts</SheetTitle>
             <SheetDescription>
               {alternative
                 ? 'Alternative controls: choose a part, then select and confirm its destination.'
-                : 'Scroll on names or previews. Pull a Drag handle to pick up; release over the movement. The crosshair is your aim point.'}
+                : 'Scroll on names; pull a Drag handle to place. Aim with the crosshair.'}
             </SheetDescription>
           </SheetHeader>
           <div className="component-finder workshop-filters">
@@ -566,7 +645,7 @@ export default function Workshop() {
               />
             </label>
             <nav aria-label="Part groups">
-              {['all', 'available', 'installed'].map((value) => (
+              {['available', 'all', 'installed'].map((value) => (
                 <button
                   key={value}
                   aria-pressed={group === value}
@@ -577,7 +656,24 @@ export default function Workshop() {
               ))}
             </nav>
           </div>
-          <div className="catalog-index workshop-parts">
+          <div
+            className="catalog-index workshop-parts"
+            ref={(node) => {
+              if (node) node.scrollTop = listScroll.current;
+            }}
+            onScroll={(event) => {
+              listScroll.current = event.currentTarget.scrollTop;
+            }}
+            onFocusCapture={(event) => {
+              const button = (
+                event.target as HTMLElement
+              ).closest<HTMLButtonElement>('button');
+              if (button?.dataset.identify)
+                lastPartFocus.current = `[data-identify="${button.dataset.identify}"]`;
+              if (button?.dataset.drag)
+                lastPartFocus.current = `[data-drag="${button.dataset.drag}"]`;
+            }}
+          >
             {ITEMS.filter(
               (item) =>
                 matchesPart(normalizeSearch(LABELS[item]), query) &&
@@ -587,9 +683,9 @@ export default function Workshop() {
               <div className="workshop-part-row" key={item}>
                 <button
                   data-identify={item}
-                  disabled={!available(item) || finished}
+                  disabled={!ready}
                   onClick={() => identify(item)}
-                  aria-label={`${alternative ? 'Choose' : 'Identify'} ${LABELS[item]}`}
+                  aria-label={`${alternative && available(item) ? 'Choose' : 'Identify'} ${LABELS[item]}`}
                 >
                   <Image
                     src={thumbnails[item] ?? ''}
@@ -603,7 +699,7 @@ export default function Workshop() {
                     <small>{available(item) ? 'Available' : 'Installed'}</small>
                   </span>
                 </button>
-                {!alternative && (
+                {!alternative && available(item) && (
                   <button
                     className="workshop-drag-handle"
                     data-drag={item}
@@ -645,8 +741,59 @@ export default function Workshop() {
                 matchesPart(normalizeSearch(LABELS[item]), query) &&
                 (group === 'all' ||
                   available(item) === (group === 'available')),
-            ) && <p>No matching parts.</p>}
+            ) && (
+              <p>
+                {finished && group === 'available' && !query
+                  ? 'All three checkpoint parts are fitted. View Installed to identify them, or Undo a placement.'
+                  : 'No matching parts. Clear search or try All parts.'}
+              </p>
+            )}
           </div>
+          <div className="workshop-panel-footer">
+            <output aria-live="polite">{feedback}</output>
+            <button
+              aria-label="Reset practice"
+              disabled={session.cursor === CHECKPOINT_START}
+              onClick={() => {
+                setPanel(false);
+                setResetOpen(true);
+              }}
+            >
+              Reset checkpoint…
+            </button>
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Sheet open={resetOpen} onOpenChange={setResetOpen}>
+        <SheetContent
+          side="bottom"
+          className="workshop-reset"
+          style={panelStyle}
+          initialFocus={() => document.getElementById('keep-checkpoint')}
+          finalFocus={() => partsButton.current}
+        >
+          <SheetHeader>
+            <SheetTitle>Reset this checkpoint?</SheetTitle>
+            <SheetDescription>
+              Return the {session.cursor - CHECKPOINT_START} fitted checkpoint
+              parts to Parts. The prepared movement and existing saves stay
+              intact.
+            </SheetDescription>
+          </SheetHeader>
+          <button id="keep-checkpoint" onClick={() => setResetOpen(false)}>
+            Keep placements
+          </button>
+          <button
+            onClick={() => {
+              cancel('Checkpoint reset. Open Parts to begin.');
+              const fresh = createCheckpoint(crypto.randomUUID());
+              sessionRef.current = fresh;
+              setSession(fresh);
+              setResetOpen(false);
+            }}
+          >
+            Reset checkpoint
+          </button>
         </SheetContent>
       </Sheet>
     </main>

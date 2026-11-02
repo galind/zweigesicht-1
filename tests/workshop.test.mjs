@@ -8,7 +8,7 @@ import * as lesson from "../explorer/src/assembly/lesson.ts";
 import manifest from "../explorer/public/models/assembly-manifest.json" with { type: "json" };
 const require = createRequire(import.meta.url);
 const ts = require("../explorer/node_modules/typescript");
-function load(path, dependencies) {
+function load(path, dependencies, globals = {}) {
   const module = { exports: {} };
   vm.runInNewContext(
     ts.transpileModule(fs.readFileSync(path, "utf8"), {
@@ -18,7 +18,7 @@ function load(path, dependencies) {
         esModuleInterop: true,
       },
     }).outputText,
-    { exports: module.exports, require: (id) => dependencies[id] ?? {}, console },
+    { exports: module.exports, require: (id) => dependencies[id] ?? {}, console, ...globals },
   );
   return module.exports;
 }
@@ -69,7 +69,7 @@ test("workshop retains exact fitted matrices and contains only the current movem
   }
 });
 test("shared Explorer fit contains real checkpoint bounds and fills the active viewport", () => {
-  for (const aspect of [1440 / 600, 390 / 420, 320 / 300])
+  for (const aspect of [1440 / 600, 390 / 420, 320 / 300, 568 / 240, 836 / 420])
     for (const cursor of [12, 13, 14, 15]) {
       const ids = lesson.componentIds(cursor);
       const bounds = new THREE.Box3();
@@ -146,4 +146,206 @@ test("touch and mouse aim coordinates are deterministic and screw identity ignor
     "bridge-screw-2",
   );
   assert.equal(input.screwDestination({ x: 2.1, y: 0 }, { x: 0, y: 0 }, { x: 4.2, y: 0 }), null);
+});
+
+const sessionLogic = load("explorer/src/assembly/session.ts", { "./lesson": lesson });
+const checkpointLogic = load("explorer/src/assembly/checkpoint.ts", { "./session": sessionLogic });
+test("checkpoint Undo never exposes historical operations and retains attempt/reward accounting", () => {
+  const initial = checkpointLogic.createCheckpoint("checkpoint");
+  assert.equal(initial.cursor, 12);
+  assert.equal(checkpointLogic.undoCheckpoint(initial), initial);
+  let session = initial;
+  for (const cursor of [12, 13, 14]) {
+    session = sessionLogic.commitAttempt(
+      session,
+      {
+        id: String(cursor),
+        runId: session.runId,
+        revision: session.revision,
+        item: lesson.OPERATIONS[cursor].item,
+        kind: "place",
+        destination: "movement",
+        distanceMm: 0,
+        tool: null,
+        side: "movement",
+        support: "movement",
+      },
+      5,
+      { requireTool: false },
+    ).session;
+  }
+  const completed = session;
+  for (const cursor of [14, 13, 12]) {
+    session = checkpointLogic.undoCheckpoint(session);
+    assert.equal(session.cursor, cursor);
+    assert.equal(session.awarded, completed.awarded);
+    assert.deepEqual(session.attempts, completed.attempts);
+  }
+  assert.equal(checkpointLogic.undoCheckpoint(session), session);
+  assert.equal(
+    sessionLogic.undo(initial).cursor,
+    11,
+    "Historical chapter Undo remains independent",
+  );
+  const stale = sessionLogic.commitAttempt(
+    session,
+    {
+      id: "late",
+      runId: session.runId,
+      revision: completed.revision,
+      item: "bridge",
+      kind: "place",
+      destination: "movement",
+      distanceMm: 0,
+    },
+    5,
+    { requireTool: false },
+  );
+  assert.equal(stale.session, session, "Undo invalidates outstanding attempt revisions");
+});
+
+function lifecycleRig(failAt = "", overrides = {}) {
+  const released = [],
+    allocated = [],
+    events = new Set();
+  const allocate = (name) => {
+    allocated.push(name);
+    return () => released.push(name);
+  };
+  const fail = (name) => {
+    if (failAt === name) throw Error(name);
+  };
+  const canvas = {
+    setAttribute() {},
+    remove: allocate("canvas"),
+    addEventListener: (event) => events.add(event),
+    removeEventListener: (event) => events.delete(event),
+  };
+  class Renderer {
+    domElement = canvas;
+    dispose = allocate("renderer");
+    setSize() {
+      fail("resize");
+    }
+  }
+  class Occlusion {
+    constructor() {
+      fail("occlusion");
+      this.dispose = allocate("occlusion");
+    }
+    resize() {}
+  }
+  class Observer {
+    disconnect = allocate("observer");
+    observe() {
+      fail("observe");
+    }
+  }
+  const { WorkshopViewer: Viewer } = load(
+    "explorer/src/assembly/WorkshopViewer.ts",
+    {
+      three: { ...THREE, WebGLRenderer: Renderer },
+      "../viewer/GraphicsResources": {
+        configureRenderer() {
+          fail("configure");
+        },
+        createStudioEnvironment() {
+          fail("environment");
+          return { texture: {}, dispose: allocate("environment") };
+        },
+        addStudioLights() {},
+        disposeObjectResources: (object) => released.push(object.name),
+      },
+      "../viewer/SurfaceOcclusion": { SurfaceOcclusion: Occlusion },
+      "./lesson": lesson,
+      ...overrides.dependencies,
+    },
+    {
+      ResizeObserver: Observer,
+      cancelAnimationFrame() {},
+      ...overrides.globals,
+    },
+  );
+  return {
+    Viewer,
+    released,
+    allocated,
+    events,
+    host: {
+      appendChild() {
+        fail("append");
+      },
+      clientWidth: 320,
+      clientHeight: 400,
+    },
+  };
+}
+test("partial renderer construction releases allocated resources and listeners exactly once", () => {
+  for (const stage of [
+    "configure",
+    "environment",
+    "occlusion",
+    "append",
+    "observe",
+    "resize",
+    "",
+  ]) {
+    const rig = lifecycleRig(stage);
+    if (stage) assert.throws(() => new rig.Viewer(rig.host, () => {}), new RegExp(stage));
+    else {
+      const viewer = new rig.Viewer(rig.host, () => {});
+      viewer.dispose();
+      viewer.dispose();
+    }
+    assert.deepEqual(rig.released.sort(), rig.allocated.sort(), stage);
+    assert.equal(rig.events.size, 0, stage);
+  }
+});
+test("late assets after disposal and partial loading failure release their resources", async () => {
+  for (const reject of [false, true]) {
+    let release;
+    const barrier = new Promise((resolve) => {
+      release = resolve;
+    });
+    class Loader {
+      setMeshoptDecoder() {
+        return this;
+      }
+      async loadAsync(path) {
+        await barrier;
+        if (reject && path === "catalog") throw Error("catalog failed");
+        return { scene: { name: path } };
+      }
+    }
+    const rig = lifecycleRig("", {
+      dependencies: {
+        "three/addons/loaders/GLTFLoader.js": { GLTFLoader: Loader },
+        "../experience/loading": { assetRequestUrl: (value) => value },
+        "../viewer/SourceSurfaces": { loadSourceSurfaces: async () => new Map() },
+      },
+      globals: {
+        fetch: async (path) => ({
+          ok: true,
+          json: async () =>
+            path.includes("manifest")
+              ? { instances: [] }
+              : { overview: "overview", catalog: "catalog" },
+        }),
+      },
+    });
+    const viewer = new rig.Viewer(rig.host, () => {});
+    const pending = viewer.load();
+    // Let manifest parsing start the two outstanding asset requests.
+    for (let i = 0; i < 8; i++) await Promise.resolve();
+    if (!reject) viewer.dispose();
+    release();
+    if (reject) await assert.rejects(pending, /catalog failed/);
+    else await pending;
+    viewer.dispose();
+    assert.equal(viewer.ready, false);
+    assert.deepEqual(
+      rig.released.sort(),
+      [...rig.allocated, "overview", ...(!reject ? ["catalog"] : [])].sort(),
+    );
+  }
 });

@@ -16,11 +16,13 @@ fixture is chapter cursor 12: the prepared movement already includes the stem an
 setting components. This is an explicit starting fixture, not a simulated insertion
 or an automatic lesson operation. The user fits the winding bridge and its two
 screws (workbook rows 17–19). Progress remains in memory and resets on reload.
-The interface says **Practice checkpoint** and completion means those three
+The interface shows **0/3–3/3** and **Checkpoint complete**, meaning those three
 placements only. It does not claim the full lesson or watch is finished.
 
 Parts retains all nine real component groups, names, CAD-rendered previews, search
-and All/Available/Installed filters. Installed stem components remain visible in
+and Available/All/Installed filters, defaulting to Available. Search, filter, list
+position and the last available part focus survive reopening. Installed names and
+previews remain identifiable without drag handles, including after completion. Installed stem components remain visible in
 the movement and browser, preserving their fitted ownership. Available screws
 can be chosen before the bridge; invalid choices still reach the shared validator.
 There are no hands/tweezers/screwdriver controls or prerequisites.
@@ -58,7 +60,10 @@ The aim must be inside the workspace, even if the finger itself is outside.
 The camera fits the prepared cursor-12 fixture throughout all three placements.
 Selection and dragging do not modify the rendered assembly. Reserved feedback and
 selection space prevent movement resizing; Alternative controls overlays the view.
-A successful release fits the original matrices. An invalid inside release counts
+A successful release fits the original matrices. Undo removes only the last of
+these three placements and is bounded at cursor 12; the historical chapter Undo
+is not exposed. Reset is secondary in Parts and requires confirmation, initially
+focusing Keep placements. Dismissing it preserves progress. An invalid inside release counts
 one failed attempt and reopens Parts with the same available handle focused.
 An outside release reopens Parts without an attempt. Escape, Cancel placement,
 pointer cancellation, loss of capture, window blur, hidden document, graphics loss,
@@ -95,6 +100,32 @@ is a CSS surface, without additional green lighting. No movement animation, new 
 holders or cushion models are loaded. Parts uses the existing Sheet; on phones it
 is a bottom sheet. Its dismissal and feedback do not change workspace dimensions.
 
+### Responsive layout and recovery
+
+Portrait uses a flexible-height movement surface; short wide viewports put the
+controls beside it. Essential controls retain 44px targets. Safe-area padding
+protects the page and sheet; the Parts sheet follows visualViewport height and
+pan during search keyboard changes. Filter/search and list state remain local.
+Coordinate changes cancel a held part without submitting it. Feedback/selection
+reserve fixed space, preserving the fixture frame throughout ordinary gestures.
+
+Construction failures release whatever resources have been allocated, including
+an attached canvas and observer. Failed loads release partial assets; late assets
+from a disposed viewer are discarded. Interrupted graphics require explicit Retry.
+Accepted cursor/attempt state remains in React memory across repeated failed or
+successful Retry; the replacement viewer receives that cursor before becoming
+interactive. Retry gets focus on failure; successful recovery returns focus to
+Parts. No legacy storage API is used by the checkpoint adapter. Reload still starts
+at the prepared checkpoint.
+
+Rendering trace against `MovementViewer`: both use `configureRenderer`,
+`createStudioEnvironment`, `addStudioLights`, `createMaterial`, source-surface
+annotations, `SurfaceOcclusion` and `studioFrame` (33° perspective, exposure 1.05,
+environment intensity 0.9). Workshop deliberately has a fixed rear-facing prepared
+fixture, no OrbitControls or motion, a CSS green mat, and oblique thumbnails.
+Those presentation differences are retained; no lighting/material compensation,
+source geometry edits or mechanical inference is part of this refinement.
+
 ## Workbook discrepancies for discussion
 
 Read original workbook on 2 November 2026:
@@ -119,7 +150,7 @@ insertion path or mechanical behaviour is introduced by this checkpoint.
 
 ## Verification and review boundary
 
-Application/check revision `2c936ec874ca2393c0f1bcea56ef8a2b159da488` passed
+The prior core drag milestone at application/check revision `2c936ec874ca2393c0f1bcea56ef8a2b159da488` passed
 [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41525837478)
 (166 tests, asset validation, TypeScript, lint and both builds) and the
 [Workshop runner suite](https://github.com/galind/zweigesicht-1/actions/runs/41525837426).
@@ -143,7 +174,18 @@ Workspace heights remained 592px at 1440 × 900, 616.5px at 390 × 900 and 432.5
 at 320 × 740 across pickup, feedback and placements. No page errors or horizontal
 overflow were reported. Bounds/seat queries explicitly refresh world matrices of
 fitted meshes before projection; original fitted matrices remain unchanged.
-No local tests, builds or browser automation ran for this milestone. See
+The current refinement adds CI cases for 320 × 568 portrait, 1024 × 540 desktop,
+844 × 390 and 667 × 375 landscape touch, plus orientation changes and synthetic
+visualViewport keyboard shrink/pan. It checks visible controls, retained Parts
+state, installed identification, bounded Undo/refitting, Reset dismissal, partial
+construction/load failures and Retry after an accepted placement. Storage checks
+compare all bytes and record calls to ensure no legacy reads/writes. Results for
+the current revision are recorded in PROGRESS; added cases are not a visual pass.
+
+No suitable current rendered visual evidence was found: the prior Workshop run
+has no artifacts, and the only tracked image is an unrelated separated-movement
+photo. No screenshots are generated or published by the runner. No local tests,
+builds or browser automation ran for this refinement. See
 [PROGRESS.md](../PROGRESS.md) for the exact evidence and next review step.
 
 Automated checks do not establish visual quality, accessibility or physical-phone

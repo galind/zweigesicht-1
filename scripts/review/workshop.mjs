@@ -83,18 +83,25 @@ try {
     headless: true,
     args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
   });
-  for (const width of [1440, 390, 320]) {
-    const viewport = { width, height: width === 320 ? 740 : 900 };
+  for (const [width, height, touch] of [
+    [1440, 900, false],
+    [390, 900, true],
+    [320, 568, true],
+    [1024, 540, false],
+    [844, 390, true],
+    [667, 375, true],
+  ]) {
+    const viewport = { width, height };
     const context = await browser.newContext({
       viewport,
-      hasTouch: width < 600,
-      isMobile: width < 600,
+      hasTouch: touch,
+      isMobile: touch,
     });
     const page = (activePage = await context.newPage());
     page.setDefaultTimeout(20000);
     page.setDefaultNavigationTimeout(90000);
     console.log(JSON.stringify({ width, phase: "start" }));
-    const cdp = width < 600 ? await context.newCDPSession(page) : null;
+    const cdp = touch ? await context.newCDPSession(page) : null;
     const errors = [];
     page.on("pageerror", (error) => {
       errors.push(error.message);
@@ -102,6 +109,15 @@ try {
     });
     await page.addInitScript(() => {
       window.__workshopInput = [];
+      window.__storageCalls = [];
+      window.__savedGet = Storage.prototype.getItem;
+      for (const name of ["getItem", "setItem", "removeItem", "clear"]) {
+        const original = Storage.prototype[name];
+        Storage.prototype[name] = function (...args) {
+          if (this === localStorage) window.__storageCalls.push([name, args[0]]);
+          return original.apply(this, args);
+        };
+      }
       for (const type of [
         "pointerdown",
         "pointerup",
@@ -124,19 +140,40 @@ try {
           true,
         );
     });
+    if (width === 1440) {
+      // Fail after canvas attachment, then fail loading on the first Retry.
+      await page.addInitScript(() => {
+        const Original = window.ResizeObserver;
+        let fail = !sessionStorage.getItem("construction-tested");
+        window.ResizeObserver = class extends Original {
+          observe(target, options) {
+            if (fail && target.matches(".workshop-surface") && target.querySelector("canvas")) {
+              fail = false;
+              sessionStorage.setItem("construction-tested", "yes");
+              throw Error("Injected construction failure");
+            }
+            return super.observe(target, options);
+          }
+        };
+      });
+      await page.route("**/models/assembly-manifest.json", (route) =>
+        route.fulfill({ status: 503, body: "Unavailable" }),
+      );
+    }
     await page.goto("http://127.0.0.1:4173/workshop");
     // Seed once, then compare the entire storage map across interactions and reloads.
     await page.evaluate(() => {
       localStorage.setItem("zweigesicht:watchmaker:chapter-1:v1", '{"existing":"chapter bytes"}');
       localStorage.setItem("zweigesicht:play:session:v1", '{"existing":"legacy bytes"}');
       localStorage.setItem("unrelated-setting", "untouched");
+      window.__storageCalls = [];
     });
     const storage = () =>
       page.evaluate(() =>
         Object.fromEntries(
           Object.keys(localStorage)
             .sort()
-            .map((key) => [key, localStorage.getItem(key)]),
+            .map((key) => [key, window.__savedGet.call(localStorage, key)]),
         ),
       );
     const saved = await storage();
@@ -153,6 +190,23 @@ try {
         null,
         { timeout: 90000 },
       );
+    if (width === 1440) {
+      await button("Retry").waitFor();
+      assert.equal(
+        await page.locator(".workshop-surface canvas").count(),
+        0,
+        "Partial constructor canvas removed",
+      );
+      await button("Retry").click();
+      await button("Retry").waitFor();
+      assert.equal(
+        await page.locator(".workshop-surface canvas").count(),
+        0,
+        "Failed load releases renderer",
+      );
+      await page.unroute("**/models/assembly-manifest.json");
+      await button("Retry").click();
+    }
     await waitReady();
     assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
     assert.equal(
@@ -176,18 +230,62 @@ try {
       if (!(await sheet.isVisible())) await button("Parts").click();
       await sheet.waitFor();
     };
+    const reset = async () => {
+      await open();
+      await button("Reset practice").click();
+      await button("Reset checkpoint").click();
+      await page.locator(".workshop-reset").waitFor({ state: "hidden" });
+    };
+    const checkControls = async () => {
+      const boxes = await page
+        .locator(".workshop-actions button, .workshop-header a, .workshop-progress")
+        .evaluateAll((elements) =>
+          elements.map((el) => {
+            const r = el.getBoundingClientRect();
+            return {
+              name: el.textContent,
+              x: r.x,
+              y: r.y,
+              right: r.right,
+              bottom: r.bottom,
+              height: r.height,
+            };
+          }),
+        );
+      const size = page.viewportSize();
+      for (const box of boxes)
+        assert.ok(
+          box.x >= 0 && box.y >= 0 && box.right <= size.width && box.bottom <= size.height,
+          JSON.stringify({ size, box }),
+        );
+      assert.ok(
+        await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth <= innerWidth &&
+            document.documentElement.scrollHeight <= innerHeight,
+        ),
+      );
+    };
+    await checkControls();
+    assert.equal(await button("Undo placement").isDisabled(), true);
+    assert.equal(await page.locator(".workshop-progress").innerText(), "0/3");
     await open();
+    assert.equal(await button("available").getAttribute("aria-pressed"), "true");
     const search = page.getByRole("searchbox", { name: "Search parts" });
     await search.fill("winding-bridge screw");
     assert.equal(await page.locator("[data-drag]").count(), 2);
     await search.fill("");
-    assert.equal(await page.locator("[data-drag]").count(), 9);
+    assert.equal(await page.locator("[data-drag]").count(), 3);
     await button("available").click();
     assert.equal(await page.locator("[data-drag]").count(), 3);
     await button("installed").click();
-    assert.equal(await page.locator("[data-drag]").count(), 6);
+    assert.equal(await page.locator("[data-drag]").count(), 0);
+    assert.equal(await page.locator("[data-identify]").count(), 6);
+    await page.locator('[data-identify="mainplate"]').click();
+    assert.match(await page.locator(".workshop-panel-footer output").innerText(), /already fitted/);
+    assert.ok(await sheet.isVisible());
     await button("All parts").click();
-    assert.equal(await page.locator('[data-drag="mainplate"]').isDisabled(), true);
+    assert.equal(await page.locator('[data-drag="mainplate"]').count(), 0);
     await page.locator('[data-identify="bridge"]').scrollIntoViewIfNeeded();
     assert.ok(
       await page
@@ -228,6 +326,48 @@ try {
       assert.equal(await page.locator(".workshop-held").count(), 0);
       assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
     }
+    console.log(JSON.stringify({ width, height, phase: "Parts reopening and viewport changes" }));
+    await search.fill("winding");
+    await search.focus();
+    // Synthetic visual viewport shrink/pan models keyboard geometry, not a physical keyboard qualification.
+    await page.evaluate(() => {
+      Object.defineProperty(visualViewport, "height", { configurable: true, value: 300 });
+      Object.defineProperty(visualViewport, "offsetTop", { configurable: true, value: 20 });
+      visualViewport.dispatchEvent(new Event("resize"));
+    });
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(".workshop-panel")
+          .style.getPropertyValue("--workshop-visible-height") === "300px",
+    );
+    const keyboardPanel = await sheet.boundingBox();
+    assert.ok(
+      keyboardPanel.y >= 20 && keyboardPanel.y + keyboardPanel.height <= 321,
+      JSON.stringify(keyboardPanel),
+    );
+    assert.equal(await search.inputValue(), "winding");
+    assert.equal(await search.evaluate((el) => el === document.activeElement), true);
+    await page.evaluate(() => {
+      delete visualViewport.height;
+      delete visualViewport.offsetTop;
+      visualViewport.dispatchEvent(new Event("resize"));
+    });
+    await button("Close").click();
+    await sheet.waitFor({ state: "hidden" });
+    await open();
+    assert.equal(await search.inputValue(), "winding");
+    assert.equal(await button("All parts").getAttribute("aria-pressed"), "true");
+    await search.fill("");
+    await button("Close").click();
+    await sheet.waitFor({ state: "hidden" });
+    await page.setViewportSize({ width: height, height: width });
+    await page.waitForTimeout(100);
+    await checkControls();
+    assert.equal((await state()).cursor, "12");
+    await page.setViewportSize(viewport);
+    await page.waitForTimeout(100);
+    await checkStable();
     const move = async (point) =>
       cdp
         ? cdp.send("Input.dispatchTouchEvent", {
@@ -424,12 +564,33 @@ try {
     await drop("bridge-screw-2", second, true);
     assert.deepEqual(await state(), { cursor: "15", mistakes: "5" });
     await duplicateRelease();
-    assert.match(await page.locator(".workshop-feedback").innerText(), /Practice complete/);
+    assert.match(await page.locator(".workshop-feedback").innerText(), /Checkpoint complete/);
     await checkStable();
     assert.deepEqual(await storage(), saved);
+    assert.equal(await page.locator(".workshop-progress").innerText(), "3/3");
+    await open();
+    await button("Reset practice").click();
+    await page.waitForFunction(() => document.activeElement?.id === "keep-checkpoint");
+    await button("Keep placements").click();
+    await page.locator(".workshop-reset").waitFor({ state: "hidden" });
+    assert.equal(
+      (await state()).cursor,
+      "15",
+      "Opening/dismissing Reset keeps completed placements",
+    );
+    for (const cursor of ["14", "13", "12"]) {
+      await button("Undo placement").click();
+      assert.equal((await state()).cursor, cursor);
+      await checkStable();
+    }
+    assert.equal(await button("Undo placement").isDisabled(), true);
+    // Refit the same three parts with real dragging after Undo.
+    for (const item of ["bridge", "bridge-screw-1", "bridge-screw-2"])
+      await drop(item, target(item), true);
+    assert.equal((await state()).cursor, "15");
     console.log(JSON.stringify({ width, phase: "alternative controls" }));
     // Explicit opt-in mode is independently exercisable with keyboard or native taps.
-    await button("Reset practice").click();
+    await reset();
     await button("Alternative controls").focus();
     await page.keyboard.press("Enter");
     assert.equal(await button("Alternative controls").getAttribute("aria-pressed"), "true");
@@ -473,11 +634,12 @@ try {
       await checkStable();
     }
     await button("Alternative controls").click();
-    await button("Reset practice").click();
+    await reset();
     console.log(JSON.stringify({ width, phase: "graphics interruption" }));
     // Graphics interruption consumes an active gesture; Retry creates a new renderer.
-    await begin("bridge");
-    await aimAt(target("bridge"));
+    await drop("bridge", target("bridge"), true);
+    await begin("bridge-screw-1");
+    await aimAt(target("bridge-screw-1"));
     await page
       .locator(".workshop-surface canvas")
       .evaluate((canvas) =>
@@ -485,13 +647,32 @@ try {
       );
     await button("Retry").waitFor();
     await end();
-    assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "0" });
+    await page.route("**/models/assembly-manifest.json", (route) =>
+      route.fulfill({ status: 503, body: "Unavailable" }),
+    );
+    await button("Retry").click();
+    await button("Retry").waitFor();
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "0" });
+    await page.unroute("**/models/assembly-manifest.json");
     await button("Retry").click();
     await waitReady();
     await checkStable();
     assert.deepEqual(await storage(), saved);
-    assert.ok(stable.height >= 240);
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "0" });
+    await page.waitForFunction(() => document.activeElement?.textContent === "Parts");
+    assert.equal(await page.locator(".workshop-surface canvas").count(), 1);
+    await drop("bridge-screw-1", target("bridge-screw-1"), true);
+    await drop("bridge-screw-2", target("bridge-screw-2"), true);
+    assert.equal((await state()).cursor, "15");
+    await checkControls();
+    assert.ok(stable.height >= 200, JSON.stringify(stable));
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    assert.deepEqual(
+      await page.evaluate(() => window.__storageCalls),
+      [],
+      "Checkpoint never reads or writes existing localStorage",
+    );
     for (const path of [
       "/workshop",
       "/workshop/prototype",
@@ -504,6 +685,7 @@ try {
       assert.equal(new URL(page.url()).pathname, "/workshop");
       assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
       assert.deepEqual(await storage(), saved);
+      assert.deepEqual(await page.evaluate(() => window.__storageCalls), []);
     }
     assert.deepEqual(errors, []);
     console.log(

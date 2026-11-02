@@ -25,9 +25,9 @@ export class WorkshopViewer {
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(33, 1, 0.05, 2000);
-  environment: THREE.WebGLRenderTarget;
-  occlusion: SurfaceOcclusion;
-  observer: ResizeObserver;
+  environment?: THREE.WebGLRenderTarget;
+  occlusion?: SurfaceOcclusion;
+  observer?: ResizeObserver;
   pieces = new Map<string, THREE.Mesh>();
   owned: THREE.Object3D[] = [];
   assembly = new THREE.Group();
@@ -40,25 +40,31 @@ export class WorkshopViewer {
     public host: HTMLElement,
     public onError: (message: string) => void,
   ) {
-    configureRenderer(this.renderer);
-    this.environment = createStudioEnvironment(this.renderer);
-    this.scene.environment = this.environment.texture;
-    this.scene.environmentIntensity = 0.9;
-    addStudioLights(this.scene);
-    this.scene.add(this.assembly);
-    this.occlusion = new SurfaceOcclusion(this.scene, this.camera);
-    this.renderer.domElement.setAttribute(
-      'aria-label',
-      'Active assembly in original fitted geometry',
-    );
-    host.appendChild(this.renderer.domElement);
-    this.observer = new ResizeObserver(this.resize);
-    this.observer.observe(host);
-    this.renderer.domElement.addEventListener(
-      'webglcontextlost',
-      this.contextLost,
-    );
-    this.resize();
+    try {
+      configureRenderer(this.renderer);
+      this.environment = createStudioEnvironment(this.renderer);
+      this.scene.environment = this.environment.texture;
+      this.scene.environmentIntensity = 0.9;
+      addStudioLights(this.scene);
+      this.scene.add(this.assembly);
+      this.occlusion = new SurfaceOcclusion(this.scene, this.camera);
+      this.renderer.domElement.setAttribute(
+        'aria-label',
+        'Active assembly in original fitted geometry',
+      );
+      host.appendChild(this.renderer.domElement);
+      this.observer = new ResizeObserver(this.resize);
+      this.observer.observe(host);
+      this.renderer.domElement.addEventListener(
+        'webglcontextlost',
+        this.contextLost,
+      );
+      this.resize();
+    } catch (error) {
+      // Construction may fail after allocation or canvas attachment.
+      this.dispose();
+      throw error;
+    }
   }
   async load() {
     const json = async (path: string) => {
@@ -73,6 +79,7 @@ export class WorkshopViewer {
         catalog: string;
       }>,
     ]);
+    if (this.dead || this.interrupted) return {};
     const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const loaded: THREE.Object3D[] = [];
     try {
@@ -131,6 +138,9 @@ export class WorkshopViewer {
       const thumbnails = this.thumbnails();
       this.layout();
       return thumbnails;
+    } catch (error) {
+      this.dispose();
+      throw error;
     } finally {
       if (!this.owned.length) loaded.forEach(disposeObjectResources);
     }
@@ -172,9 +182,12 @@ export class WorkshopViewer {
       const group = this.group(PARTS[item]);
       this.scene.add(group);
       this.fit(new THREE.Box3().setFromObject(group), false, true);
-      this.renderer.render(this.scene, this.camera);
-      result[item] = this.renderer.domElement.toDataURL('image/png');
-      group.removeFromParent();
+      try {
+        this.renderer.render(this.scene, this.camera);
+        result[item] = this.renderer.domElement.toDataURL('image/png');
+      } finally {
+        group.removeFromParent();
+      }
     }
     this.resize();
     return result;
@@ -250,7 +263,7 @@ export class WorkshopViewer {
       height = Math.max(1, this.host.clientHeight);
     this.camera.aspect = width / height;
     this.renderer.setSize(width, height);
-    this.occlusion.resize(width, height);
+    this.occlusion?.resize(width, height);
     this.layout();
   };
   render() {
@@ -260,23 +273,25 @@ export class WorkshopViewer {
       if (!this.ready || this.dead) return;
       try {
         this.renderer.render(this.scene, this.camera);
-        this.occlusion.render(this.renderer);
+        this.occlusion?.render(this.renderer);
       } catch {
-        this.ready = false;
-        this.onError('Graphics interrupted. Retry the workshop.');
+        this.contextLost(new Event('webglcontextlost'));
       }
     });
   }
   contextLost = (event: Event) => {
     event.preventDefault();
+    if (this.dead || this.interrupted) return;
     this.interrupted = true;
     this.ready = false;
     this.onError('Graphics interrupted. Retry the workshop.');
   };
   dispose() {
+    if (this.dead) return;
     this.dead = true;
+    this.ready = false;
     cancelAnimationFrame(this.frame);
-    this.observer.disconnect();
+    this.observer?.disconnect();
     this.renderer.domElement.removeEventListener(
       'webglcontextlost',
       this.contextLost,
@@ -284,8 +299,8 @@ export class WorkshopViewer {
     for (const mesh of this.pieces.values())
       (mesh.material as THREE.Material).dispose();
     this.owned.forEach(disposeObjectResources);
-    this.environment.dispose();
-    this.occlusion.dispose();
+    this.environment?.dispose();
+    this.occlusion?.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
   }

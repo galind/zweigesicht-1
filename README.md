@@ -40,7 +40,7 @@ Direct visits open the movement practice view. `/workshop/prototype` and
 `/workshop/assembly` redirect here; old difficulty query parameters are ignored.
 Workshop is excluded from indexing and the sitemap.
 
-The prototype is now the workshop. The separate-stem view and previous chapter
+The former prototype is now the workshop. The separate-stem view and previous chapter
 interface are retired. The current practice starts with a prepared movement and
 asks you to fit the winding bridge and its two screws. This is a three-placement
 checkpoint, not the full lesson. Open Parts and pull a labelled Drag handle onto the movement. Names and previews
@@ -49,7 +49,15 @@ identify parts without placing them; scroll on those areas on touch screens.
 for keyboard, assistive technology or non-drag use. No hand-tool, support or
 orientation setup is required at this prepared checkpoint.
 
-Progress is memory-only and resets on reload. Existing chapter and Easy/Hard saves
+Parts opens on Available and retains search, filter and list position when reopened.
+Installed parts can be identified but cannot be dragged. The 0/3–3/3 count covers
+only this checkpoint. Undo returns the last fitted checkpoint part, stopping at the
+prepared movement; Reset is secondary in Parts and asks before removing placements.
+Short desktop and landscape-phone layouts reserve room for controls beside the
+movement. Parts follows the visible viewport during search-keyboard changes.
+
+Progress is memory-only and resets on reload. Graphics interruption and Retry keep
+accepted placements in memory, including when a retry fails. Existing chapter and Easy/Hard saves
 are left untouched and are not imported. Original fitted geometry/materials remain
 unchanged; Workshop no longer requires the holder GLBs. See [workshop scope and
 review limits](docs/WORKSHOP.md). Human visual and physical-phone review remain pending.

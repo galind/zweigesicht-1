@@ -4,6 +4,35 @@ Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
+## Workshop checkpoint refinement — CI pending
+
+Started clean at `b6de27f4ef4b4cf564b7df5537357674eb7ad5cf`, matching the fetched
+SSH branch and draft PR #38 against develop. Read AGENTS, README and Workshop
+scope first. The connected GitHub app confirmed the core application head
+`2c936ec` passed both CI and Workshop; the starting documentation head also has
+passing CI. Its extra Workshop rerun was in progress at inspection. No competing
+interaction was introduced and no unrelated work was present.
+
+Focused edits add flexible portrait/short-wide layouts and safe-area/visible-
+viewport sheet bounds, Available-first Parts with retained browsing state,
+installed identification without handles, prepared-state copy, 0/3–3/3 progress,
+checkpoint-bounded Undo and a secondary confirmed Reset. Renderer construction,
+load failure and Retry cleanup preserve accepted in-memory state. Shared Explorer
+rendering helpers, source geometry/materials/fitted transforms, provisional screw
+identities/order, three placements and historical lesson/session/save logic remain.
+
+Source inspection traced Explorer/Workshop rendering differences before edits.
+Current visual evidence is unavailable (prior Workshop run has no artifacts; the
+tracked separated-movement image does not cover this UI). No visual pass claimed.
+No local tests/builds/browser automation, CAD downloads, merge, deployment or
+publication. Added CPU/browser coverage will run in GitHub CI after this push;
+source inspection and `git diff --check` pass. Validation results pending.
+
+Next: resolve any runner failures, record exact passing heads, and retain separate
+human visual/keyboard/screen-reader and physical iOS/Android review. Marco's review
+of provisional P73/P79 identities/order and prepared fixture assumptions remains
+open. Earlier entries below are historical; current behavior is in docs/WORKSHOP.md.
+
 ## Verified drag-only placement milestone
 
 Started clean at `05cd06423048603b04a811c8d746d6c4b0e499c8`, matching the fetched
