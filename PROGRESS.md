@@ -24,12 +24,33 @@ unchanged. No new CAD, animation, cushion or mechanical behaviour was added.
 leather-bench instructions and later holder introduction from our early support
 exchanges and mandatory-tool interpretations. Migration stops at this prototype.
 
-Verification at this preparation milestone: source inspection and `git diff --check`.
-Runner checks added for desktop/390px/320px menu-to-assembly interactions; CI and
-runner results are pending. No local tests, builds or browser automation ran.
+Application/check head `c31800ecdcfb051595f03e20b13da912991c8768`:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41511482884)
+  passed 166 tests, chapter-asset validation, TypeScript, lint, production and
+  Vercel builds. New geometry regressions check exact fitted matrices, exclusive
+  ownership, absence of loose scene inventory and useful projected framing.
+- [Prototype interactions](https://github.com/galind/zweigesicht-1/actions/runs/41511482921)
+  passed at 1440 × 900, 390 × 900 and 320 × 740: search/inventory,
+  installed status, real previews, non-mutating assembly switching, keyboard
+  selection/cancellation, invalid part/destination, menu-to-assembly mouse/native
+  emulated touch drag and cancellation, keyboard/tap placement, checkpoint
+  completion/reload and byte-identical existing chapter storage. The surface
+  heights after placement were 616, 601.5 and 441.5 px respectively.
+- [Retained chapter walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41511482987):
+  all 15 operations passed through desktop, keyboard and native emulated touch,
+  including invalid attempts, cancellation, Undo, timing, pause/reload/resume,
+  completion, restart, required-holder failure/Retry and legacy compatibility.
+- Source inspection and `git diff --check` passed. No local tests, builds or
+  browser automation ran. The retained chapter implementation and existing asset files are unchanged
+  from the starting revision. No model or screenshot artifacts were published.
+
 Human visual comparison with Explorer, accessibility and physical iOS/Android
-review remain pending and are separate from automated checks. No merge, deployment,
-publication or release-gate clearance. Next: CI, then human prototype review.
+review remain pending, separately from automated evidence. Full migration is
+explicitly deferred until this first milestone has been reviewed visually.
+No merge, deployment, publication or release-gate clearance. The following
+milestone changes review documentation only; the tested application/check revision
+is identified above. Next: human prototype review at `/workshop/prototype`.
 
 ## Workshop interface simplification
 

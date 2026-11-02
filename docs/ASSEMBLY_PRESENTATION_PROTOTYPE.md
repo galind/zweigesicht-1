@@ -70,8 +70,11 @@ insertion path or mechanical behaviour is introduced by this prototype.
 
 Runner interaction checks cover search, installed status, real thumbnails, explicit
 view switching without mutation, keyboard cancellation, wrong part and destination,
-menu-to-assembly mouse/native emulated touch dragging, explicit keyboard/tap placement,
+menu-to-assembly mouse/native emulated touch dragging and cancellation, explicit keyboard/tap placement,
 completion, reload isolation and byte-identical pre-existing chapter save storage.
+Two CPU regressions also verify source-fitted matrices, exclusive assembly ownership,
+absence of loose inventory in the scene, and useful projected framing across three
+aspect ratios. These geometric checks do not judge the rendered finish.
 The retained chapter workflow still checks the original 15 operations independently.
 
 Automated checks cannot establish visual equivalence or actual-phone usability.
