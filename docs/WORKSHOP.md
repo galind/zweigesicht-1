@@ -151,46 +151,49 @@ insertion path or mechanical behaviour is introduced by this checkpoint.
 
 ## Verification and review boundary
 
-The prior core drag milestone at application/check revision `2c936ec874ca2393c0f1bcea56ef8a2b159da488` passed
-[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41525837478)
-(166 tests, asset validation, TypeScript, lint and both builds) and the
-[Workshop runner suite](https://github.com/galind/zweigesicht-1/actions/runs/41525837426).
-The suite uses actual mouse drags at
-1440px and native Chromium emulated-touch drags at 390/320px for **all three**
-placements, with independent projection from fitted geometry. Alternative-control
-placements are checked separately and are never used as proof of ordinary gameplay.
-The suite covers stable workspace bounds, preview/aim coordinates, native row
-scrolling versus handle pickup, wrong part/hole, ambiguous and imperfect drops,
-outside release, cancellation, repeated release delivery, graphics loss/retry,
-legacy routes and byte-identical complete localStorage across resets/reloads.
-Blur, hidden-document, mouse pointercancel and duplicate delivery use supplemental
-injected lifecycle events; touch cancellation, pointer capture loss, resize and
-WebGL context loss use browser input/APIs. This does not emulate an OS suspending a
-physical phone. CPU checks preserve fitted matrices and exclusive component ownership
-and add fixed-camera/screw-identity regressions. Historical chapter validation and
-save compatibility tests remain. Shared viewer, catalog/loading, Sheet/styles,
-model metadata and package/config dependencies trigger the Workshop workflow.
+The pre-existing core drag milestone `2c936ec` was verified through the connected
+GitHub app before refinement. Current application/check revision
+`7bb9fba37ffa54005055221f401773a9a27b447f` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41531151867)
+(169 tests, asset validation, TypeScript, lint and both builds) and all three
+[Workshop browser profiles](https://github.com/galind/zweigesicht-1/actions/runs/41531151947).
 
-Workspace heights remained 592px at 1440 × 900, 616.5px at 390 × 900 and 432.5px
-at 320 × 740 across pickup, feedback and placements. No page errors or horizontal
-overflow were reported. Bounds/seat queries explicitly refresh world matrices of
-fitted meshes before projection; original fitted matrices remain unchanged.
-The current refinement adds CI cases for 320 × 568 portrait, 1024 × 540 desktop,
-844 × 390, 667 × 375 and 568 × 320 landscape touch, plus orientation changes and synthetic
-visualViewport keyboard shrink/pan. It checks visible controls, retained Parts
-state, installed identification, bounded Undo/refitting, Reset dismissal, partial
-construction/load failures and Retry after an accepted placement. Storage checks
-compare all bytes and record calls to ensure no legacy reads/writes. Results for
-the current revision are recorded in PROGRESS; added cases are not a visual pass.
+The runner uses actual mouse drags at 1440 × 900 and 1024 × 540 and native Chromium
+emulated-touch drags at 390 × 900, 320 × 568, 844 × 390, 667 × 375 and 568 × 320
+for **all three** ordinary placements, independently projecting fitted geometry.
+Alternative-control placements are checked separately, never as proof of ordinary
+play. Coverage includes stable workspace bounds, preview/aim, native scrolling,
+retained Parts search/filter/scroll, installed identification, visible controls,
+orientation and synthetic visualViewport keyboard shrink/pan. It also covers wrong
+parts/holes, ambiguous/imperfect drops, outside release, cancellation/duplicate
+input, progression, Undo boundaries/refitting, Reset dismissal, partial constructor
+and load failures, and graphics Retry after an accepted placement and further
+failed load. Legacy routes/difficulty URLs and complete seeded localStorage bytes
+remain unchanged; instrumentation asserts no project-save reads or storage writes/
+clears, separately from the shared analytics SDK's own attribution-key read.
 
-No suitable current rendered visual evidence was found: the prior Workshop run
-has no artifacts, and the only tracked image is an unrelated separated-movement
-photo. No screenshots are generated or published by the runner. No local tests,
-builds or browser automation ran for this refinement. See
-[PROGRESS.md](../PROGRESS.md) for the exact evidence and next review step.
+Workspace heights stayed 620, 476, 625.5, 277, 326, 302 and 230.5px respectively
+through gestures, feedback, Undo and placements. No page errors or page overflow
+were reported. CPU checks retain fitted matrices and exclusive component ownership
+and cover bounded Undo/accounting and resource cleanup after constructor failure,
+partial loading failure and late completion following disposal. Historical chapter
+validation/save regressions remain independent. See [PROGRESS](../PROGRESS.md) for
+the exact evidence and next review step.
 
-Automated checks do not establish visual quality, accessibility or physical-phone
-usability. Human comparison against Explorer and actual iOS/Android review remain
-pending. Promoting the prototype to `/workshop` is a route/interface decision, not
-mechanical approval, completion of the full chapter or clearance of release gates.
-No merge, deployment or site/CAD publication is part of this change.
+Visual review is separate from those automated assertions. Inspected existing
+ignored `artifacts/power-source/browser/fitted-back.png` (Explorer) and
+`artifacts/power-source/browser/workshop-partial.png` (retired Easy interface),
+last modified 31 October 2026. These show source finishes/framing in older
+interfaces, not this prepared three-placement checkpoint. Prior Workshop CI has no
+artifacts; suitable current rendered evidence remains unavailable. No current
+visual pass is claimed. No new screenshots are generated/published by the runner,
+and no local tests, builds or browser automation ran for this refinement.
+
+Blur/hidden-document, duplicate delivery and keyboard-viewport changes include
+supplemental injected events; native Chromium touch, resize and WebGL context-loss
+checks do not emulate physical keyboard behaviour or phone OS suspension. Human
+visual comparison against Explorer, keyboard/screen-reader review and actual iOS/
+Android qualification remain separate activities. Marco's provisional P73/P79
+mapping/order and fixture-assumption review remain open. This does not certify
+mechanical fit, completion of the full chapter or any release gate. No merge,
+deployment or site/CAD publication is part of this work.

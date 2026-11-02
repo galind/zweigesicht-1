@@ -4,50 +4,67 @@ Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
-## Workshop checkpoint refinement — CI pending
+## Verified Workshop checkpoint refinement
 
 Started clean at `b6de27f4ef4b4cf564b7df5537357674eb7ad5cf`, matching the fetched
-SSH branch and draft PR #38 against develop. Read AGENTS, README and Workshop
-scope first. The connected GitHub app confirmed the core application head
-`2c936ec` passed both CI and Workshop; the starting documentation head also has
-passing CI. Its extra Workshop rerun was in progress at inspection. No competing
-interaction was introduced and no unrelated work was present.
+SSH branch and draft [PR #38](https://github.com/galind/zweigesicht-1/pull/38)
+against develop. Read AGENTS, README and Workshop scope first. The connected
+GitHub app confirmed the core drag milestone `2c936ec` passed CI and Workshop;
+no competing interaction was introduced and no unrelated work was present.
 
-Focused edits add flexible portrait/short-wide layouts and safe-area/visible-
-viewport sheet bounds, Available-first Parts with retained browsing state,
-installed identification without handles, prepared-state copy, 0/3–3/3 progress,
-checkpoint-bounded Undo and a secondary confirmed Reset. Renderer construction,
-load failure and Retry cleanup preserve accepted in-memory state. Shared Explorer
-rendering helpers, source geometry/materials/fitted transforms, provisional screw
-identities/order, three placements and historical lesson/session/save logic remain.
+`/workshop` keeps the prepared movement and exactly three placements. Flexible
+portrait/short-wide layouts, safe-area padding and visible-viewport Parts bounds
+keep controls reachable. Parts defaults to Available and retains search/filter/
+scroll state; installed parts can be identified without drag handles. One sentence
+explains the prepared fixture, with 0/3–3/3 checkpoint progression. Undo stops at
+cursor 12; Reset is secondary in Parts and confirms before removing placements.
+Partial renderer construction/load cleanup and explicit Retry preserve accepted
+in-memory state. Recovery focus runs after React re-enables Parts. Sheet fade and
+fixed feedback/selection space keep geometry stable; manual reopening focuses the
+heading without raising the keyboard, while invalid drops focus the same handle.
 
-Source inspection traced Explorer/Workshop rendering differences before edits.
-Current visual evidence is unavailable (prior Workshop run has no artifacts; the
-tracked separated-movement image does not cover this UI). No visual pass claimed.
-No local tests/builds/browser automation, CAD downloads, merge, deployment or
-publication. Added CPU/browser coverage will run in GitHub CI after this push;
-source inspection and `git diff --check` pass. Initial refinement `f2def8d` passed GitHub CI (169 tests, asset validation,
-TypeScript, lint and both builds). Browser CI caught a Retry focus race after
-successfully preserving accepted progress: focus ran before React enabled Parts.
-Focus now restores after the DOM commit. The next desktop run verified recovery
-and exposed an overbroad storage assertion that included the shared analytics SDK's
-own attribution read. The assertion now covers all writes/clears and project-save
-reads, retaining full byte comparisons. Browser profiles run independently in CI;
-ordinary Parts reopening preserves scroll without refocusing an offscreen row.
-CI also exposed transient sheet entrance geometry and touch-momentum sampling in
-the new reopening check. Workshop Parts now fades without a sliding offset and
-uses a stable mount callback for scroll restoration; the runner waits for native
-scroll to settle before taking its snapshot. Added the 568 × 320 landscape case.
-Application head `6f73d61` passed CI and complete browser runs at 1440 × 900,
-390 × 900 and 320 × 568. The short desktop and first landscape cases reached
-Reset/recovery but exposed the runner treating a closing sheet as open. The helper
-now checks the Parts button's expanded state and waits for reset/sheet dismissal.
-Final matrix results pending.
+Source inspection traced Workshop against Explorer before presentation edits.
+Shared lighting/material/finish/framing helpers, original geometry/fitted matrices,
+provisional P73/P79 identities/order and historical lesson/session/save code are
+unchanged. No source/derived CAD, mechanical operations or lesson expansion added.
 
-Next: resolve any runner failures, record exact passing heads, and retain separate
-human visual/keyboard/screen-reader and physical iOS/Android review. Marco's review
-of provisional P73/P79 identities/order and prepared fixture assumptions remains
-open. Earlier entries below are historical; current behavior is in docs/WORKSHOP.md.
+Application/check head `7bb9fba37ffa54005055221f401773a9a27b447f` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41531151867):
+  169 tests, chapter-asset validation, TypeScript, lint and production/Vercel builds.
+  Added CPU coverage checks bounded Undo with retained attempt accounting,
+  partial construction cleanup, failed loading and late assets after disposal.
+- [Workshop browser matrix](https://github.com/galind/zweigesicht-1/actions/runs/41531151947):
+  mouse at 1440 × 900 and 1024 × 540; native Chromium emulated touch at 390 × 900,
+  320 × 568, 844 × 390, 667 × 375 and 568 × 320. All three ordinary placements
+  use actual dragging; Alternative controls are exercised separately. Covers
+  native scrolling, retained search/filter/scroll, installed identification,
+  visible controls, orientation, synthetic keyboard viewport shrink/pan,
+  wrong parts/holes, cancellation/duplicate input, 0/3–3/3, bounded Undo/refitting,
+  Reset dismissal, construction/load failure and accepted-state Retry across a
+  further load failure. All seeded localStorage bytes remain identical; no
+  project-save reads or storage writes/clears occur (the shared analytics SDK's
+  own attribution read is excluded from the read assertion). Retired redirects
+  and old difficulty URLs pass. No browser page errors or page overflow reported.
+- Workspace bounds stayed fixed through pickup, feedback, Undo and placements.
+  Heights in the viewport order above: 620, 476, 625.5, 277, 326, 302 and 230.5px.
+  Source inspection and `git diff --check` pass. No local tests/builds/browser
+  automation ran; no merge, deployment, publication or CAD download occurred.
+
+Inspected existing ignored 31 October Explorer rear-view and retired Easy Workshop
+renders under `artifacts/power-source/browser/`. These are historical rendering
+references, not current checkpoint evidence. Prior Workshop CI has no artifacts;
+current visual evidence remains unavailable and no visual pass is claimed. No new
+screenshots were generated or published. Keyboard-viewport/lifecycle injections
+and Chromium touch emulation do not qualify physical keyboards, phone suspension,
+actual iOS/Android devices or assistive technology.
+
+The following documentation-only commit records the passing head above; application
+and check files remain unchanged. Next: human visual comparison with Explorer,
+keyboard/screen-reader review and physical iOS/Android qualification. Marco still
+needs to confirm provisional screw identities/order and prepared fixture assumptions.
+No mechanical/release gate is cleared. Earlier entries below are historical;
+current behavior is documented in [Workshop](docs/WORKSHOP.md).
 
 ## Verified drag-only placement milestone
 
