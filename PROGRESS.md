@@ -38,7 +38,11 @@ CI also exposed transient sheet entrance geometry and touch-momentum sampling in
 the new reopening check. Workshop Parts now fades without a sliding offset and
 uses a stable mount callback for scroll restoration; the runner waits for native
 scroll to settle before taking its snapshot. Added the 568 × 320 landscape case.
-Rerun results pending.
+Application head `6f73d61` passed CI and complete browser runs at 1440 × 900,
+390 × 900 and 320 × 568. The short desktop and first landscape cases reached
+Reset/recovery but exposed the runner treating a closing sheet as open. The helper
+now checks the Parts button's expanded state and waits for reset/sheet dismissal.
+Final matrix results pending.
 
 Next: resolve any runner failures, record exact passing heads, and retain separate
 human visual/keyboard/screen-reader and physical iOS/Android review. Marco's review

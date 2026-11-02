@@ -236,7 +236,8 @@ try {
         "Pickup, feedback, invalid attempts and placement must not resize/reposition workspace",
       );
     const open = async () => {
-      if (!(await sheet.isVisible())) await button("Parts").click();
+      if ((await button("Parts").getAttribute("aria-expanded")) !== "true")
+        await button("Parts").click();
       await sheet.waitFor();
       await sheet.evaluate((el) =>
         Promise.all(el.getAnimations().map((animation) => animation.finished.catch(() => {}))),
@@ -247,6 +248,7 @@ try {
       await button("Reset practice").click();
       await button("Reset checkpoint").click();
       await page.locator(".workshop-reset").waitFor({ state: "hidden" });
+      await sheet.waitFor({ state: "hidden" });
     };
     const checkControls = async () => {
       const boxes = await page
@@ -746,7 +748,7 @@ try {
         state: document.querySelector(".watchmaker-workshop")?.dataset,
       })),
     );
-    console.error(await activePage.evaluate(() => window.__workshopInput));
+    console.error(await activePage.evaluate(() => window.__workshopInput.slice(-30)));
   }
   throw error;
 } finally {
