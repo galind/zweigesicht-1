@@ -183,6 +183,21 @@ test("wrong part, sequence, tool, side, holder, destination and distance each co
     "Future parts remain available for wrong attempts",
   );
 });
+test("prototype can omit tools without bypassing placement rules or changing chapter defaults", () => {
+  const s = at(7);
+  const event = attempt(s, { tool: null });
+  assert.equal(commitAttempt(s, event).accepted, false, "Chapter still requires its explicit tool");
+  assert.equal(commitAttempt(s, event, 5, { requireTool: false }).accepted, true);
+  for (const change of [
+    { item: "bridge" }, { kind: "flip" }, { side: "dial" },
+    { support: "movement" }, { destination: "movement" }, { distanceMm: 6 },
+  ]) {
+    const result = commitAttempt(s, { ...event, ...change }, 5, { requireTool: false });
+    assert.equal(result.accepted, false);
+    assert.equal(result.session.cursor, s.cursor);
+    assert.equal(result.session.mistakes, s.mistakes + 1);
+  }
+});
 test("5 mm placement radius is in model units and can be reviewed at 10 mm", () => {
   const s = at(2);
   assert.equal(commitAttempt(s, attempt(s, { distanceMm: 5 })).accepted, true);

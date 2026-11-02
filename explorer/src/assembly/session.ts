@@ -50,6 +50,7 @@ export function commitAttempt(
   session: Session,
   attempt: Attempt,
   radius = LESSON.placementRadiusMm,
+  { requireTool = true }: { requireTool?: boolean } = {},
 ) {
   if (
     attempt.runId !== session.runId ||
@@ -62,7 +63,7 @@ export function commitAttempt(
   let message = '';
   if (attempt.item !== next.item || attempt.kind !== next.kind)
     message = `Next: ${next.label}. ${LABELS[attempt.item]} is not ready for that operation.`;
-  else if (attempt.tool !== next.tool)
+  else if (requireTool && attempt.tool !== next.tool)
     message = `Use ${next.tool} for this operation (prototype tool assignment).`;
   else if (attempt.side !== next.side)
     message = `The ${next.side} side must face upward.`;

@@ -16,10 +16,10 @@ import {
   PARTS,
   LABELS,
   OPERATIONS,
+  LESSON,
   componentIds,
   type PartItem,
   type Side,
-  type Tool,
 } from '../lesson';
 import { createSession, commitAttempt, type Session } from '../session';
 import {
@@ -43,7 +43,6 @@ export default function Prototype() {
   const [session, setSession] = useState(checkpoint);
   const [view, setView] = useState<AssemblyView>('movement');
   const [selected, setSelected] = useState<PartItem>();
-  const [tool, setTool] = useState<Tool | null>(null);
   const [side, setSide] = useState<Side>('movement');
   const [support, setSupport] = useState<Side | null>(null);
   const [panel, setPanel] = useState<'parts' | 'setup' | null>(null);
@@ -98,18 +97,23 @@ export default function Prototype() {
     distanceMm: number,
   ) {
     if (!ready || finished) return;
-    const result = commitAttempt(session, {
-      id: crypto.randomUUID(),
-      runId: session.runId,
-      revision: session.revision,
-      item,
-      destination,
-      distanceMm,
-      kind: 'place',
-      tool,
-      side,
-      support,
-    });
+    const result = commitAttempt(
+      session,
+      {
+        id: crypto.randomUUID(),
+        runId: session.runId,
+        revision: session.revision,
+        item,
+        destination,
+        distanceMm,
+        kind: 'place',
+        tool: null,
+        side,
+        support,
+      },
+      LESSON.placementRadiusMm,
+      { requireTool: false },
+    );
     setSession(result.session);
     setFeedback(
       result.accepted
@@ -270,7 +274,13 @@ export default function Prototype() {
         </nav>
       </section>
       <section className="prototype-workspace">
-        <div className="prototype-surface" ref={host} onLostPointerCapture={() => { if (gesture.current) cancel(); }} />
+        <div
+          className="prototype-surface"
+          ref={host}
+          onLostPointerCapture={() => {
+            if (gesture.current) cancel();
+          }}
+        />
         <span className="prototype-assembly-label">
           {view === 'movement'
             ? 'Movement · set aside at this checkpoint'
@@ -370,14 +380,13 @@ export default function Prototype() {
             onClick={() => setPanel('setup')}
           >
             <Settings2 />
-            {tool ?? 'Choose tool'}
+            Placement options
           </button>
           <button
             aria-label="Reset prototype checkpoint"
             onClick={() => {
               cancel('Review checkpoint reset. Chapter saves are untouched.');
               setSession(checkpoint());
-              setTool(null);
               setSide('movement');
               setSupport(null);
             }}
@@ -425,26 +434,12 @@ export default function Prototype() {
             </SheetTitle>
             <SheetDescription>
               {panel === 'setup'
-                ? 'Choices are retained until you change them. Tool and support rules are provisional.'
+                ? 'Orientation and support are retained until you change them.'
                 : 'Tap a part to select it, or drag its preview onto the active assembly.'}
             </SheetDescription>
           </SheetHeader>
           {panel === 'setup' ? (
             <div className="prototype-setup">
-              <fieldset>
-                <legend>Tool</legend>
-                {(['hands', 'tweezers', 'screwdriver'] as const).map(
-                  (value) => (
-                    <button
-                      key={value}
-                      aria-pressed={tool === value}
-                      onClick={() => setTool(value)}
-                    >
-                      {value}
-                    </button>
-                  ),
-                )}
-              </fieldset>
               <fieldset>
                 <legend>Part side upward</legend>
                 {(['movement', 'dial'] as const).map((value) => (

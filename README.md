@@ -50,7 +50,8 @@ download is used. See the [chapter mapping, controls and review limits](docs/ASS
 ## Presentation prototype
 
 `/workshop/prototype` is a separate, unsaved two-placement review checkpoint with
-an assembly-focused view, parts browser and drag/tap/keyboard placement. It does
+an assembly-focused view, parts browser and drag/tap/keyboard placement without
+hand-tool selection. It does
 not replace the 15-operation chapter. See [scope and workbook discrepancies](docs/ASSEMBLY_PRESENTATION_PROTOTYPE.md).
 Human visual and physical-phone review must precede full chapter migration.
 

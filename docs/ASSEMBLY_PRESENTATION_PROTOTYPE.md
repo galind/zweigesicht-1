@@ -4,7 +4,8 @@ Review `/workshop/prototype` before migrating the chapter. `/workshop` remains
 recoverable and unchanged. This is a two-placement presentation checkpoint, not
 a completed chapter. It starts at existing chapter cursor 7: the movement has
 been set aside and the separate winding stem is in the work area. The player
-fits the coupling wheel and sliding coupling, using the unchanged validator.
+fits the coupling wheel and sliding coupling, using the shared placement validator
+with tool requirements explicitly disabled for this prototype.
 State is memory-only; the prototype neither reads nor writes chapter saves.
 Reload/reset returns to the explicitly prepared checkpoint, with zero prototype
 mistakes. Existing reward bookkeeping is internal to the review fixture.
@@ -36,9 +37,11 @@ the sheet collapses immediately, with pointer capture on the persistent surface.
 Tap/keyboard selection offers both explicit destinations and a 44px in-view target.
 The selected name/preview stays in the dock; a name follows a drag. A 44px target
 assists only screen precision for the already chosen part and active destination.
-The unchanged 5mm validator handles other drops. Tool, side and support stay
-player-controlled in Placement setup; defaults are fixed, not derived from the next
-answer. Escape, Cancel, release outside the mat, pointer cancellation and interrupted
+The unchanged 5mm placement tolerance handles other drops. Hands/tweezers/screwdriver
+selection and tool validation were removed from this prototype at the owner's
+request. No tool is chosen automatically. Side and support remain player-controlled
+in Placement options; their defaults are fixed, not derived from the next answer.
+The retained chapter still uses its original tool requirements and save schema. Escape, Cancel, release outside the mat, pointer cancellation and interrupted
 drags do not score. Invalid committed choices retain the selection and explain why.
 
 The prototype contains no legacy inventory layout, scattered loose-part hit targets,
@@ -61,7 +64,8 @@ SHA-256: `725b0035684799c95f4275909d4436fbaf37a6c6201225d97ed5e0349c6cd5a5`.
   rows 5–19. It describes the movement rising, leather bench being set aside,
   holder arriving, and movement descending. None of that is simulated here.
 - The workbook has part/action/target/upward-direction columns, without mandatory
-  hands/tweezers/screwdriver choices. Current tool validation is provisional.
+  hands/tweezers/screwdriver choices. Tool validation remains provisional in the
+  retained chapter; the presentation prototype no longer requires tools.
 
 These are not Marco-approved changes. No lesson rewrite, cushion, support geometry,
 insertion path or mechanical behaviour is introduced by this prototype.

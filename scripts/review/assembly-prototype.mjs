@@ -46,7 +46,8 @@ try {
     await page.locator('[data-item="wheel"]').focus(); await page.keyboard.press('Enter');
     await button('Cancel placement').waitFor(); await page.keyboard.press('Escape');
     assert.deepEqual(await state(), { cursor: '7', mistakes: '0' });
-    await button('Placement setup').click(); await button('tweezers').click(); await button('Done').click();
+    assert.equal(await page.getByRole('button', { name: /hands|tweezers|screwdriver|choose tool/i }).count(), 0);
+    // Complete both placements without opening setup or selecting any tool.
     const select = async (item) => {
       await button('Parts').click();
       await page.locator(`[data-item="${item}"]`).focus(); await page.keyboard.press('Enter');

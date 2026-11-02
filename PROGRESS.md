@@ -4,6 +4,23 @@ Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
+## Prototype: direct placement without hand tools
+
+The presentation prototype at `/workshop/prototype` no longer asks for hands,
+tweezers or a screwdriver. Tool state, controls and the prerequisite are removed;
+a chosen part can be dragged directly from Parts to the assembly. Tap/keyboard
+placement and cancellation remain available. Placement options retain the existing
+orientation/support choices. Tool checking is explicitly disabled only for the
+prototype; no correct tool is silently selected. The full chapter's default
+validation, lesson and compatible saves retain their previous behaviour.
+
+Source inspection and `git diff --check` pass. The runner flow now completes the
+checkpoint without opening setup or choosing tools. A regression covers the
+prototype exception while retaining every other placement check and the chapter's
+default tool requirement. GitHub results are pending for this revision. No local
+tests, builds or browser automation ran. Human visual/physical-phone review remains
+pending; no merge, deployment or publication.
+
 ## Assembly presentation prototype — review checkpoint
 
 Started clean at `eba5243cdf0dc9590429922b6ce696234fcc753f`, matching SSH
