@@ -1,6 +1,12 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, PackageOpen, X, Undo2, Grip } from 'lucide-react';
@@ -81,6 +87,9 @@ export default function Workshop() {
     [group, setGroup] = useState('available');
   const [resetOpen, setResetOpen] = useState(false);
   const listScroll = useRef(0);
+  const restoreList = useCallback((node: HTMLDivElement | null) => {
+    if (node) node.scrollTop = listScroll.current;
+  }, []);
   const [viewport, setViewport] = useState<{ height: number; top: number }>();
   const [ready, setReady] = useState(false),
     [error, setError] = useState(''),
@@ -657,9 +666,7 @@ export default function Workshop() {
           </div>
           <div
             className="catalog-index workshop-parts"
-            ref={(node) => {
-              if (node) node.scrollTop = listScroll.current;
-            }}
+            ref={restoreList}
             onScroll={(event) => {
               listScroll.current = event.currentTarget.scrollTop;
             }}

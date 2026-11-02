@@ -90,8 +90,9 @@ try {
     [1024, 540, false],
     [844, 390, true],
     [667, 375, true],
+    [568, 320, true],
   ]) {
-    const profile = !touch ? "desktop" : width < 600 ? "portrait" : "landscape";
+    const profile = !touch ? "desktop" : width < height ? "portrait" : "landscape";
     if (process.env.WORKSHOP_PROFILE && process.env.WORKSHOP_PROFILE !== profile) continue;
     const viewport = { width, height };
     const context = await browser.newContext({
@@ -237,6 +238,9 @@ try {
     const open = async () => {
       if (!(await sheet.isVisible())) await button("Parts").click();
       await sheet.waitFor();
+      await sheet.evaluate((el) =>
+        Promise.all(el.getAnimations().map((animation) => animation.finished.catch(() => {}))),
+      );
     };
     const reset = async () => {
       await open();
@@ -336,8 +340,17 @@ try {
     }
     console.log(JSON.stringify({ width, height, phase: "Parts reopening and viewport changes" }));
     const list = page.locator(".workshop-parts");
-    await list.evaluate((el) => {
+    await list.evaluate(async (el) => {
+      // Native touch momentum must settle before measuring a reopening snapshot.
+      let previous = el.scrollTop,
+        stableFrames = 0;
+      for (let i = 0; i < 180 && stableFrames < 8; i++) {
+        await new Promise(requestAnimationFrame);
+        stableFrames = el.scrollTop === previous ? stableFrames + 1 : 0;
+        previous = el.scrollTop;
+      }
       el.scrollTop = 80;
+      await new Promise(requestAnimationFrame);
     });
     const scrollBefore = await list.evaluate((el) => el.scrollTop);
     await button("Close").click();

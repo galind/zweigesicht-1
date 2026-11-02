@@ -176,7 +176,7 @@ at 320 × 740 across pickup, feedback and placements. No page errors or horizont
 overflow were reported. Bounds/seat queries explicitly refresh world matrices of
 fitted meshes before projection; original fitted matrices remain unchanged.
 The current refinement adds CI cases for 320 × 568 portrait, 1024 × 540 desktop,
-844 × 390 and 667 × 375 landscape touch, plus orientation changes and synthetic
+844 × 390, 667 × 375 and 568 × 320 landscape touch, plus orientation changes and synthetic
 visualViewport keyboard shrink/pan. It checks visible controls, retained Parts
 state, installed identification, bounded Undo/refitting, Reset dismissal, partial
 construction/load failures and Retry after an accepted placement. Storage checks

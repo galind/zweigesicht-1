@@ -34,6 +34,10 @@ and exposed an overbroad storage assertion that included the shared analytics SD
 own attribution read. The assertion now covers all writes/clears and project-save
 reads, retaining full byte comparisons. Browser profiles run independently in CI;
 ordinary Parts reopening preserves scroll without refocusing an offscreen row.
+CI also exposed transient sheet entrance geometry and touch-momentum sampling in
+the new reopening check. Workshop Parts now fades without a sliding offset and
+uses a stable mount callback for scroll restoration; the runner waits for native
+scroll to settle before taking its snapshot. Added the 568 × 320 landscape case.
 Rerun results pending.
 
 Next: resolve any runner failures, record exact passing heads, and retain separate
