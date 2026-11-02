@@ -141,6 +141,9 @@ export class WorkshopViewer {
       const mesh = this.pieces.get(id);
       if (mesh) group.add(mesh.clone());
     }
+    // Fitted meshes disable automatic local updates. Refresh world matrices before
+    // Box3 queries as well as rendering (Three's bounds walk does not force them).
+    group.updateMatrixWorld(true);
     return group;
   }
   fit(bounds: THREE.Box3, front: boolean, oblique = false) {
@@ -230,8 +233,8 @@ export class WorkshopViewer {
         return {
           distanceMm: Infinity,
           message: destination
-            ? 'That is the other screw hole. Try this part again from Parts.'
-            : 'Between screw holes. Aim clearly at one hole and try again.',
+            ? 'That is the other screw hole.'
+            : 'Between screw holes. Aim clearly at one hole.',
         };
     }
     const seat = this.seatPoint(item);

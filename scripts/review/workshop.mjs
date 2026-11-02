@@ -34,6 +34,7 @@ for (const path of Object.values(read("explorer/public/models/asset-paths.json")
 const bounds = (ids) => {
   const group = new THREE.Group();
   for (const id of ids) group.add(pieces.get(id).clone());
+  group.updateMatrixWorld(true);
   return new THREE.Box3().setFromObject(group);
 };
 const fixture = bounds(componentIds(12));
@@ -195,6 +196,12 @@ try {
     assert.ok(await sheet.isVisible(), "Name/preview only identifies; Parts remains open");
     assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
     await checkStable();
+    const tapHandle = page.locator('[data-drag="bridge"]');
+    await tapHandle.scrollIntoViewIfNeeded();
+    if (cdp) await tapHandle.tap();
+    else await tapHandle.click();
+    assert.ok(await sheet.isVisible(), "A handle tap never dismisses Parts or places");
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
     if (cdp) {
       const list = page.locator(".workshop-parts");
       await list.evaluate((el) => {
@@ -292,10 +299,31 @@ try {
       await checkStable();
     };
     const target = (item) => project(stable, item);
+    const duplicateRelease = async () => {
+      const before = await state();
+      await page.evaluate(() => {
+        const event = window.__workshopInput.filter((e) => e.type === "pointerup").at(-1);
+        for (let i = 0; i < 2; i++)
+          document.querySelector(".workshop-surface").dispatchEvent(
+            new PointerEvent("pointerup", {
+              bubbles: true,
+              pointerId: event.id,
+              clientX: event.x,
+              clientY: event.y,
+            }),
+          );
+      });
+      assert.deepEqual(
+        await state(),
+        before,
+        "Consumed pointer release cannot count another attempt",
+      );
+    };
     // Wrong part is an actual drag and remains available for retry.
     await drop("bridge-screw-1", target("bridge-screw-1"), false);
     assert.deepEqual(await state(), { cursor: "12", mistakes: "1" });
     assert.equal(await root.getAttribute("data-outcome"), "invalid");
+    await duplicateRelease();
     await sheet.waitFor();
     assert.equal(await page.locator('[data-drag="bridge-screw-1"]').isDisabled(), false);
     const beforeCancellation = await state();
@@ -366,6 +394,7 @@ try {
     const bridge = target("bridge");
     await drop("bridge", { x: bridge.x + 4, y: bridge.y - 3 }, true);
     assert.deepEqual(await state(), { cursor: "13", mistakes: "2" });
+    await duplicateRelease();
     const first = target("bridge-screw-1"),
       second = target("bridge-screw-2");
     await drop("bridge-screw-1", second, false);
@@ -388,21 +417,7 @@ try {
     assert.deepEqual(await state(), { cursor: "14", mistakes: "5" });
     await drop("bridge-screw-2", second, true);
     assert.deepEqual(await state(), { cursor: "15", mistakes: "5" });
-    const completed = await state();
-    // Supplemental duplicate delivery: replay the consumed native pointer ID.
-    await page.evaluate(() => {
-      const e = window.__workshopInput.filter((e) => e.type === "pointerup").at(-1);
-      for (let i = 0; i < 2; i++)
-        document.querySelector(".workshop-surface").dispatchEvent(
-          new PointerEvent("pointerup", {
-            bubbles: true,
-            pointerId: e.id,
-            clientX: e.x,
-            clientY: e.y,
-          }),
-        );
-    });
-    assert.deepEqual(await state(), completed);
+    await duplicateRelease();
     assert.match(await page.locator(".workshop-feedback").innerText(), /Practice complete/);
     await checkStable();
     assert.deepEqual(await storage(), saved);
@@ -411,6 +426,20 @@ try {
     await button("Alternative controls").focus();
     await page.keyboard.press("Enter");
     assert.equal(await button("Alternative controls").getAttribute("aria-pressed"), "true");
+    await open();
+    await button("Choose Pinned winding bridge").focus();
+    await page.keyboard.press("Enter");
+    await sheet.waitFor({ state: "hidden" });
+    await page.getByLabel("Destination", { exact: true }).selectOption("bridge-screw-1");
+    // Supplemental repeated activation after a real selection in explicit alternatives mode.
+    await button("Confirm placement").evaluate((button) => {
+      button.click();
+      button.click();
+    });
+    await sheet.waitFor();
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "1" });
+    await page.waitForFunction(() => document.activeElement?.dataset.identify === "bridge");
+
     for (const [item, label, cursor] of [
       ["bridge", "Pinned winding bridge", "13"],
       ["bridge-screw-1", "Winding-bridge screw 1", "14"],

@@ -156,7 +156,7 @@ export default function Workshop() {
     setFeedback(
       result.accepted
         ? `${LABELS[item]} fitted. ${result.session.cursor === OPERATIONS.length ? 'Practice complete — the winding bridge and screws are fitted.' : 'Choose the next part from Parts.'}`
-        : `${message || result.message} Drag again from Parts.`,
+        : `${message || result.message} ${alternative ? 'Choose' : 'Drag'} again from Parts.`,
     );
     if (result.accepted) partsButton.current?.focus();
     else {
@@ -397,9 +397,11 @@ export default function Workshop() {
                 unoptimized
               />
               <strong>{LABELS[selected]}</strong>
-              <button aria-label="Cancel placement" onClick={() => cancel()}>
-                <X />
-              </button>
+              {!alternative && (
+                <button aria-label="Cancel placement" onClick={() => cancel()}>
+                  <X />
+                </button>
+              )}
             </>
           ) : (
             <span>
@@ -505,7 +507,18 @@ export default function Workshop() {
             unoptimized
           />
           <span className="workshop-aim" />
-          <span className="workshop-held-name">{LABELS[held.item]}</span>
+          <span
+            className="workshop-held-name"
+            style={{
+              left:
+                Math.max(
+                  8,
+                  Math.min(window.innerWidth - 158, held.aim.x - 75),
+                ) - held.aim.x,
+            }}
+          >
+            {LABELS[held.item]}
+          </span>
         </div>
       )}
       <Sheet

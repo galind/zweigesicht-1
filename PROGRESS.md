@@ -29,8 +29,11 @@ emulated-touch drags, plus interruptions, destination ambiguity, imperfect input
 alternatives and unchanged saves. Source inspection and `git diff --check` pass;
 First runner pass at `4f108f7` found a new projection assertion failure and a
 synthetic pointer-cancellation target problem in the browser harness. Correcting
-the harness and collecting projection diagnostics is the next action; these runs
-do not establish completion. No local tests/builds/browser automation, model
+the harness exposed a real stale-world-matrix issue: fitted meshes disable local
+automatic updates, and Three’s bounds walk does not force their world matrices.
+Groups now explicitly refresh world matrices before bounds/seat projection, without
+changing source local matrices. The independent runner projection does the same.
+Rechecking this correction is next; the initial failed runs do not establish completion. No local tests/builds/browser automation, model
 changes/downloads, merge, deployment or publication. Human visual/accessibility,
 physical-phone and Marco review remain pending. No release gate is cleared.
 
