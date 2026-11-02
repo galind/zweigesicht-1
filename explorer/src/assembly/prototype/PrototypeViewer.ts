@@ -47,6 +47,7 @@ export class PrototypeViewer {
   side: Side = 'movement';
   ready = false;
   dead = false;
+  interrupted = false;
   frame = 0;
   dragPoint?: Point;
   constructor(
@@ -99,7 +100,7 @@ export class PrototypeViewer {
       ]);
       for (const result of results)
         if (result.status === 'rejected') throw result.reason;
-      if (this.dead) return {};
+      if (this.dead || this.interrupted) return {};
       this.owned = loaded;
       const surfaces = (
         results[2] as PromiseFulfilledResult<
@@ -325,6 +326,7 @@ export class PrototypeViewer {
   }
   contextLost = (event: Event) => {
     event.preventDefault();
+    this.interrupted = true;
     this.ready = false;
     this.onError('Graphics interrupted. Retry the prototype.');
   };

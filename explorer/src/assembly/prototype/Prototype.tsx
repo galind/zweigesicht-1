@@ -144,7 +144,7 @@ export default function Prototype() {
       void instance
         .load()
         .then((images) => {
-          if (live) {
+          if (live && instance?.ready) {
             setThumbnails(images);
             setReady(true);
           }

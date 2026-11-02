@@ -58,21 +58,28 @@ try {
     await select('wheel'); await button('Place on movement').click();
     assert.deepEqual(await state(), { cursor: '7', mistakes: '2' }, 'Wrong explicit destination reaches validator');
     await button('Cancel placement').click(); await button('Separate stem').click();
-    // Native pointer/touch drag, not DOM-dispatched pointer events.
-    await button('Parts').click();
-    await page.locator('[data-item="wheel"]').scrollIntoViewIfNeeded();
-    const box = await page.locator('[data-item="wheel"]').boundingBox();
-    const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    // Native pointer/touch cancellation and placement; never synthetic DOM events.
     const cdp = width < 600 ? await context.newCDPSession(page) : null;
-    const down = async () => cdp ? cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...start, id: 1 }] }) : (await page.mouse.move(start.x, start.y), page.mouse.down());
-    const move = async (point) => cdp ? cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ ...point, id: 1 }] }) : page.mouse.move(point.x, point.y);
-    const up = async () => cdp ? cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }) : page.mouse.up();
-    await down();
-    await page.locator('.prototype-panel').waitFor({ state: 'hidden' });
-    const target = await page.locator('.prototype-seat').boundingBox();
-    const end = { x: target.x + target.width / 2, y: target.y + target.height / 2 };
-    await move({ x: start.x + 10, y: start.y - 20 }); await move(end); await up();
-    await page.waitForFunction(() => document.querySelector('.watchmaker-prototype').dataset.cursor === '8');
+    for (const cancelled of [true, false]) {
+      await button('Parts').click();
+      await page.locator('[data-item="wheel"]').scrollIntoViewIfNeeded();
+      const box = await page.locator('[data-item="wheel"]').boundingBox();
+      const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+      assert.equal(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('[data-item]')?.dataset.item, start), 'wheel', 'The real preview must receive the initial contact');
+      if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...start, id: 1 }] });
+      else { await page.mouse.move(start.x, start.y); await page.mouse.down(); }
+      await page.locator('.prototype-panel').waitFor({ state: 'hidden' });
+      const target = await page.locator('.prototype-seat').boundingBox();
+      const end = { x: target.x + target.width / 2, y: target.y + target.height / 2 };
+      const move = async (point) => cdp ? cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ ...point, id: 1 }] }) : page.mouse.move(point.x, point.y);
+      await move({ x: start.x + 10, y: start.y - 20 }); await move(end);
+      if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: cancelled ? 'touchCancel' : 'touchEnd', touchPoints: [] });
+      else { if (cancelled) await page.keyboard.press('Escape'); await page.mouse.up(); }
+      if (cancelled) {
+        await button('Cancel placement').waitFor({ state: 'hidden' });
+        assert.deepEqual(await state(), { cursor: '7', mistakes: '2' }, 'Cancelled drag never scores');
+      } else await page.waitForFunction(() => document.querySelector('.watchmaker-prototype').dataset.cursor === '8');
+    }
     await select('coupling');
     if (width < 600) await button('Place on stem').tap();
     else { await button('Place on stem').focus(); await page.keyboard.press('Enter'); }
