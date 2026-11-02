@@ -1,13 +1,13 @@
 # Prescribed running movement
 
 Implemented on `codex/escapement-clearance-study`, from the verified
-research milestone `4785cc2`. Current behavior updated 31 October 2026. This is an automatically
+research milestone `4785cc2`. Current behavior updated 1 November 2026. This is an automatically
 running **kinematic illustration**, not a physical escapement simulation.
 Publication and mechanical acceptance remain subject to [release gates](RELEASE_GATES.md).
 
 ## Behavior and scope
 
-The existing Explorer, completed Workshop and assembled Bench movement run without
+The Explorer and assembled Bench movement run without
 another page or playback controls. The shared clock uses the maker-specified
 **3 Hz: one complete balance oscillation every 1/3 second, two beats per
 oscillation, 21,600 beats/hour**. This supersedes the initial eight-second
@@ -157,10 +157,9 @@ Navigation to a fresh viewer starts a fresh illustration.
   disassembly takes precedence over focus, selection, isolation and flipping.
   Existing layouts, geometry and assembled phases remain unchanged; no physical
   running/disassembly or setting sequence is claimed.
-- Workshop remains static until all final leaves are fitted, with no staged step,
-  workspace, drag or placement animation. Completion runs automatically; Undo
-  restores static source poses before pieces are removed. Thumbnail and ghost
-  geometry remain static.
+- Workshop now consists solely of Marco's first assembly chapter. It stays static
+  throughout, including chapter completion, and does not load this controller.
+  Historical Easy/Hard completion and Undo behavior below predates their retirement.
 - Bench animates only the single assembled movement. Detached parts retain their
   source representations. The parent holder flip carries the whole animation.
   Visitor collisions retain the existing static internal reference geometry in
@@ -169,7 +168,6 @@ Navigation to a fresh viewer starts a fresh illustration.
 - Disposal restores source geometry before the owning scene releases it, then
   releases the two owned generated geometries once. Late network completion is
   generation-checked, and corrupt/missing motion assets fail loading explicitly.
-  Workshop prepares the animation before atomically replacing a complete scene.
 
 `RunningMovement.ts` overlays matrices only after the owner's presentation update
 and restores them before another update. With reference matrix A, current
@@ -402,7 +400,7 @@ checks used here (local execution was necessary because no push was authorized):
 
 ```sh
 node --test tests/*.test.mjs
-node scripts/play/validate-inventory.mjs
+node scripts/review/validate-assembly.mjs
 npm --prefix explorer run typecheck
 npm --prefix explorer run lint
 npm --prefix explorer run build
@@ -414,9 +412,9 @@ node scripts/movement/browser-check.mjs http://127.0.0.1:4176
 ```
 
 The browser audit uses test-only controller access for state fixtures and
-measurements; it adds no production debug or playback API. Its Workshop final
-inventory fixture is not evidence of a full manual assembly journey. Existing
-inventory and lifecycle regressions separately protect assembly behavior.
+measurements; it adds no production debug or playback API. It now covers Explorer
+and Bench; the retired Workshop final-inventory fixture was removed. Chapter
+regressions and the runner-hosted chapter workflow separately protect assembly.
 
 Regeneration and source-clearance verification require the retained private,
 hash-checked CAD/cache and study outputs; this is not yet clean-machine CAD

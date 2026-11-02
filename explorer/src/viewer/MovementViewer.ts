@@ -34,6 +34,7 @@ import { handDisplayMatrix } from './HandDisplayPose';
 import { wheelDisplayMatrix } from './WheelDisplayPose';
 import { RunningMovement, loadMovementBuffer } from './RunningMovement';
 import * as THREE from 'three';
+import { studioFrame } from './StudioFrame';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
   KEYBOARD_ORBIT_MOVES,
@@ -1231,27 +1232,9 @@ export class MovementViewer {
     direction: THREE.Vector3,
     points?: THREE.Vector3[],
   ) {
-    const center = bounds.getCenter(new THREE.Vector3());
-    const right = new THREE.Vector3()
-      .crossVectors(this.defaultUp(), direction)
-      .normalize();
-    const up = new THREE.Vector3().crossVectors(direction, right).normalize();
-    const tangent = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
-    let distance = 8;
-    const corners = points ?? this.boundsCorners(bounds);
-    for (const corner of corners) {
-      const point = corner.clone().sub(center);
-      distance = Math.max(
-        distance,
-        point.dot(direction) +
-          1.18 *
-            Math.max(
-              Math.abs(point.dot(right)) / (tangent * this.camera.aspect),
-              Math.abs(point.dot(up)) / tangent,
-            ),
-      );
-    }
-    return { center, distance };
+    return studioFrame(
+      this.camera, bounds, direction, this.defaultUp(), points,
+    );
   }
   frameBounds(
     bounds: THREE.Box3,

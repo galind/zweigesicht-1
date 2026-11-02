@@ -5,9 +5,10 @@ built with React, TypeScript and Three.js from the maker's CAD assembly.
 
 Inspect and isolate components, explore six mechanism groups, separate the
 assembly, and choose case, dial and hand appearances. A separate Workshop at
-`/workshop` offers Easy and Hard assembly puzzles with optional placement help,
-Undo and local saves. The assembled movement includes a continuously running prescribed escapement and
-train illustration, including both display trains and
+`/workshop` offers **Be a watchmaker!**, a movement-focused practice checkpoint
+with a parts browser and direct drag-and-drop placement.
+Explorer and Bench show a continuously running prescribed escapement and
+train illustration for the assembled movement, including both display trains and
 [current-local-time hands](docs/CURRENT_TIME_HANDS.md). The [power-source study](docs/POWER_SOURCE_STUDY.md)
 identifies the series connection; spring unwinding and intermediate arbor motion
 remain explicitly incomplete. Separation holds the last motion pose. Timing, assembly paths
@@ -35,8 +36,31 @@ npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 
 Workshop's homepage entry appears in development and Vercel Preview builds;
 it is hidden in production. Direct `/workshop` access remains available.
-Fresh direct visits choose a difficulty on Workshop; valid saves resume.
+Direct visits open the movement practice view. `/workshop/prototype` and
+`/workshop/assembly` redirect here; old difficulty query parameters are ignored.
 Workshop is excluded from indexing and the sitemap.
+
+The former prototype is now the workshop. The separate-stem view and previous chapter
+interface are retired. The current practice starts with a prepared movement and
+asks you to fit the winding bridge and its two screws. This is a three-placement
+checkpoint, not the full lesson. Open Parts and pull a labelled Drag handle onto the movement. Names and previews
+identify parts without placing them; scroll on those areas on touch screens.
+**Alternative controls** explicitly enables part/destination selection and confirmation
+for keyboard, assistive technology or non-drag use. No hand-tool, support or
+orientation setup is required at this prepared checkpoint.
+
+Parts opens on Available and retains search, filter and list position when reopened.
+Installed parts can be identified but cannot be dragged. The 0/3–3/3 count covers
+only this checkpoint. Undo returns the last fitted checkpoint part, stopping at the
+prepared movement; Reset is secondary in Parts and asks before removing placements.
+Short desktop and landscape-phone layouts reserve room for controls beside the
+movement. Parts follows the visible viewport during search-keyboard changes.
+
+Progress is memory-only and resets on reload. Graphics interruption and Retry keep
+accepted placements in memory, including when a retry fails. Existing chapter and Easy/Hard saves
+are left untouched and are not imported. Original fitted geometry/materials remain
+unchanged; Workshop no longer requires the holder GLBs. See [workshop scope and
+review limits](docs/WORKSHOP.md). Human visual and physical-phone review remain pending.
 
 ## Explore the workbench
 
@@ -56,7 +80,7 @@ requires an approved asset source and the applicable release gates.
 
 ```sh
 node --test tests/*.test.mjs
-node scripts/play/validate-inventory.mjs
+node scripts/review/validate-assembly.mjs
 npm --prefix explorer run typecheck
 npm --prefix explorer run lint
 npm --prefix explorer run build

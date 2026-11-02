@@ -1,16 +1,21 @@
 # Application architecture
 
-`explorer/` uses React/TypeScript, vinext/Vite and Three.js. `app/page.tsx` owns the explorer UI; `app/workshop/page.tsx` supplies Workshop’s separate canonical/noindex metadata. The homepage opens a shared Easy/Hard chooser and loads no Workshop manifest or renderer. The root `vercel.json` owns deployment packaging.
+`explorer/` uses React/TypeScript, vinext/Vite and Three.js. `app/page.tsx` owns the explorer UI; `app/workshop/page.tsx` supplies Workshop’s separate canonical/noindex metadata. The homepage links directly to Marco’s chapter without prefetching its renderer. `/workshop/assembly` redirects to `/workshop`. The root `vercel.json` owns deployment packaging.
 
 ## Authority and assets
 
 - `explorer/public/models/assembly-manifest.json`: runtime source identities and immutable occurrence matrices. Source paths become `p_` IDs; reusable definitions use `d_` IDs. Millimetres and source axes are preserved.
-- `assets/authored/`: reviewed labels, scope, mechanism groups, dial/hand/case configuration, focused separation and Workshop membership/dependencies.
+- `assets/authored/`: reviewed labels, scope, mechanism groups, dial/hand/case configuration, focused separation and component fittings. Workshop’s 15 operations and exact occurrence membership live in `src/assembly/lesson.ts`.
 - `assets/derived/complete-separation.json`: generated whole-movement offsets, separate from authored mounting rules.
 - `asset-paths.json` and `finish-surfaces.json` in the runtime models directory: active content-hashed GLBs and source-face buffer. The diamond STL and case recovery have explicit hashes in their loaders.
 - `assets/source-manifest/`: URLs, hashes and reference provenance. Original sources, conversion caches and analysis evidence are ignored.
 
-`MovementViewer` and `PlayViewer` own geometry, immutable source matrices, presentation transforms, camera state and resource lifetime. React sends discrete intent and receives snapshots for presentation/camera changes; neither controller polls React at rest. Both use one render scheduler with bounded damping and transition tails; an eligible assembled movement keeps that scheduler active. Separation, inventory and incomplete Workshop return to on-demand rendering. Visibility, resize, interaction and recovery wake them. Clock-only frames do not notify Explorer React; inspection and explicit WebMCP snapshots retain diagnostic counters.
+`MovementViewer`, `WorkshopViewer` and `BenchViewer` own their route's geometry,
+immutable source matrices, presentation transforms, camera state and resource
+lifetime. Explorer's eligible assembled movement keeps its scheduler active;
+separation and inventory return to on-demand rendering. Clock-only frames do not
+notify Explorer React. The assembly chapter renders on demand and never loads a
+running-movement controller. Its active-time counter is separate from rendering.
 
 `GraphicsResources.ts` shares renderer settings, studio lighting, PMREM allocation and deduplicated disposal. `CameraFrame.ts`, native viewer buttons, Sheet and `useTextScalePreview` share interaction primitives. The controllers keep their own loading and state policies.
 
@@ -27,9 +32,9 @@ The catalog promise coalesces optional requests, including the hash-checked orig
 The fitted case has 41 leaves. Focus, All parts, raw external inspection and isolation can hide it without clearing its preference. Selecting a fitted case part retains configured context. Crystals permit pointer selection through them while remaining catalog-selectable. Exterior alloy presets and Fine hand overrides are scoped to the reviewed occurrences; raw inspection retains its own finishes.
 
 `WheelDisplayPose.ts` applies the 20 separately reviewed wheel-packet occurrence phases to all
-three experiences. Explorer retains its raw assembled matrix and applies the
-phase as a display matrix, including spread layout. Workshop retains base target
-poses and derives corrected seat bounds at load. Bench builds collision from the
+assembled Explorer and Bench views. Explorer retains its raw assembled matrix
+and applies the phase as a display matrix, including spread layout. The chapter's
+22 leaves use unchanged source fitted poses. Bench builds collision from the
 same corrected mesh. The [earlier contact review](REMAINING_WHEEL_CONTACT_REVIEW.md)
 and [rear-display review](REAR_DISPLAY_ANIMATION.md) record these authored
 placement phases and their evidence limits. `RunningMovement.ts` applies the separate
@@ -42,23 +47,28 @@ for the clock, geometry ownership, product-state policy and validation.
 
 ## Workshop
 
-`Play.tsx` owns selection, Ready now/All parts, grouping/search, explicit workbench navigation, confirmations and storage feedback. `state.ts` owns graph readiness, validated replay, physical accounting and Undo. `play-manifest.json` version `play-5` owns exact leaf sets, endpoints, exclusions, action IDs and prerequisite edges; display order never defines dependencies. Previous `play-4` saves migrate by removing only the six retired case-fitting actions; all other validated progress is preserved.
+`/workshop` renders **Be a watchmaker!**, the movement-only practice promoted
+from the presentation prototype. Former `/workshop/prototype` and
+`/workshop/assembly` links redirect here; old difficulty query parameters are ignored.
+There is no separate-stem screen, hand-tool selection or old chapter interface.
 
-Easy has 83 placements. Hard has 243 single-leaf placements and 35 packet transfers; workbench components are assembled but not counted as fitted until transfer. Both retain the 16-leaf mainplate foundation and complete at exactly 259 fitted leaves. Undo removes the last committed action. Unavailable parts remain inspectable but cannot be dragged. Show seat is the optional aid; the removed Hints preference is retained only in the saved-session schema for compatibility.
+`Workshop.tsx` owns parts browsing, drag/tap/keyboard placement, cancellation,
+feedback and memory-only checkpoint state. The starting fixture is chapter cursor
+12: fit the winding bridge and its two screws onto the prepared movement. It does
+not simulate the preceding operations or claim a completed full lesson.
 
-The storage key remains `zweigesicht:play:session:v1`. Direct visits resume valid
-saves; absent mode/save opens the shared chooser on Workshop without starting
-geometry loads. Changing difficulty also opens that local chooser, independent
-of the homepage entry flag. Changing a progressed mode or replacing
-corrupt/incompatible data requires confirmation. Earlier linear saves are never
-silently reinterpreted. Unavailable storage allows a current-tab build with a
-warning and retained mode query.
+`lesson.ts` retains the historical chapter mapping and exact occurrence IDs.
+`session.ts` supplies placement validation and the retained save schema, but the
+current workshop never reads or writes storage. Both old save keys remain untouched.
+Tool checking is explicitly disabled for practice; part, sequence, orientation,
+support and 5mm placement validation remain. The movement is the sole destination.
 
-`PlayViewer` loads required geometry transactionally; missing recovery or leaves block play/completion. Late metadata after unmount cannot start heavy loads. Thumbnail targets share authored materials and encode linear pixels for browser display, then center their transparent bounds. Dragging starts on gallery cards (selected thumbnails for touch), keeps source scale, and leaves no detached copy between interactions.
-
-Free mouse/one-finger orbit matches the explorer. Flip, Reset and bounded centered zoom remain quick actions. The shock workbench has an angled face pair; radial dial screws have explicit edge presets in `fixedViews.ts`. Selection, placement and Undo preserve the camera; returning from a workbench restores the main view. Camera changes never hide fitted geometry. A drop requires the active workspace, prerequisites and an exposed source-surface sample. This is visual reachability, not physical collision certification.
-
-[Release gates](RELEASE_GATES.md) distinguish automated/browser checks from mechanical, physical-device and representative human review.
+`WorkshopViewer` loads the existing 22 source leaves, retains their matrices and
+finish annotations, and shares Explorer's studio resources, perspective framing and
+contact shading. Only installed movement components and a dragged part enter the
+scene. The Parts Sheet has CAD previews, search and availability filters; its phone
+bottom-sheet handoff preserves pointer capture. No holder downloads or animation
+are required. See [workshop scope and review limits](WORKSHOP.md).
 
 ## Bench
 
@@ -96,35 +106,21 @@ The source/runtime regression suite additionally needs the ignored CAD inputs de
 node scripts/cad/review-runtime.mjs
 ```
 
-The sampled access check uses tracked meshes and does not require original CAD:
+The chapter asset validator uses tracked meshes and source records, without original CAD:
 
 ```sh
-node scripts/play/fixed-access-check.mjs
+node scripts/review/validate-assembly.mjs
 ```
 
-Browser runners use an existing Playwright installation and Chrome. Set `PLAYWRIGHT_MODULE` to its absolute `index.mjs` path and `CHROME_PATH` to the Chrome executable when they are not available through the defaults. No browser dependency is required by the application.
-
-```sh
-node scripts/play/entry-check.mjs http://127.0.0.1:4176 production
-node scripts/play/browser-check.mjs http://127.0.0.1:4176 easy
-node scripts/play/browser-check.mjs http://127.0.0.1:4176 hard
-node scripts/play/drag-check.mjs http://127.0.0.1:4176
-node scripts/play/access-check.mjs http://127.0.0.1:4176
-node scripts/review/explorer-check.mjs http://127.0.0.1:4176
-node explorer/scripts/measure-build.mjs
-```
-
-The `home` and loading suites expect the homepage entry to be visible. The
-`entry-check` runner accepts `production` (default) or `preview` and checks the
-corresponding homepage policy plus direct Workshop entry and save safety.
-The `focused` suite works with either policy. Build
-with `VERCEL_ENV=preview npm --prefix explorer run build`, restart the local server,
-then run `node scripts/play/entry-check.mjs http://127.0.0.1:4176 preview`,
-`node scripts/play/browser-check.mjs http://127.0.0.1:4176 home`, and
-`node scripts/review/loading-check.mjs http://127.0.0.1:4176`. These are local
-checks; do not deploy or promote the compiled Preview artifact to production.
-
-Workshop runner modes are `easy`, `hard`, `focused`, `home` and `all`. `PLAY_ORDER=reverse` and `PLAY_WIDTH=320` exercise alternate legal orders and narrow Hard layouts; `PLAY_QA_OUTPUT` sets the ignored browser-evidence directory. The fixed-access check verifies the retained face/edge guidance presets at three sampled distances, not a restriction on free orbit or proof of physical insertion clearance.
+The `Workshop` GitHub workflow runs `scripts/review/workshop.mjs`
+on a GitHub-hosted Chromium runner. It checks the three movement placements,
+menu dragging/cancellation, tap/keyboard alternatives, save isolation and old-link
+redirects on desktop and emulated phones.
+This script is intentionally guarded against local execution. Existing generic
+Explorer/Bench browser tools remain separate; they require an existing Playwright
+installation (`PLAYWRIGHT_MODULE`) and optionally Chrome (`CHROME_PATH`). The
+Explorer loading suite expects the homepage entry to be visible in a development
+or Preview build. Follow repository safeguards: prefer CI over local execution.
 
 `/?inspect=1` exposes lazy browser regression/benchmark tools and local delivery-failure fixtures. `?no3d=1` exercises fallback and `?text=200` enlarges root text. Browser viewport and synthetic touch checks do not establish physical-device or accessibility certification.
 

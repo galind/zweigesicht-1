@@ -132,10 +132,10 @@ for (const userAgent of [
     };
     const workshop = path.startsWith('/workshop');
     const expectedTitle = workshop
-      ? 'Workshop — Assemble Zweigesicht-1'
+      ? 'Be a watchmaker! — Zweigesicht-1'
       : title;
     const expectedDescription = workshop
-      ? 'Assemble the Zweigesicht-1 movement in Easy or Hard mode using the original ML-01 components.'
+      ? 'Follow Marco Lang’s first assembly chapter in fifteen operations, through the winding bridge and its two screws.'
       : description;
     const url = `${origin}${workshop ? '/workshop' : '/'}`;
     const canonicals = tags.filter((tag) => tag.rel === 'canonical');

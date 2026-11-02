@@ -1,0 +1,759 @@
+/** GitHub-runner-only interactions. No screenshots or CAD publication. */
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { spawn } from "node:child_process";
+import { pathToFileURL } from "node:url";
+import * as THREE from "../../explorer/node_modules/three/build/three.module.js";
+import { GLTFLoader } from "../../explorer/node_modules/three/examples/jsm/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "../../explorer/node_modules/three/examples/jsm/libs/meshopt_decoder.module.js";
+import { PARTS, componentIds } from "../../explorer/src/assembly/lesson.ts";
+assert.equal(process.env.GITHUB_ACTIONS, "true", "Use GitHub CI, not the owner’s computer.");
+const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
+// Independently project original fitted geometry. No app placement/zero-distance helpers.
+const read = (path) => JSON.parse(fs.readFileSync(path, "utf8"));
+const records = new Map(
+  read("explorer/public/models/assembly-manifest.json").instances.map((part) => [part.id, part]),
+);
+const pieces = new Map();
+for (const path of Object.values(read("explorer/public/models/asset-paths.json"))) {
+  const bytes = fs.readFileSync("explorer/public" + path);
+  const gltf = await new GLTFLoader()
+    .setMeshoptDecoder(MeshoptDecoder)
+    .parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), "");
+  gltf.scene.traverse((node) => {
+    if (!node.isMesh) return;
+    let parent = node;
+    while (parent && !records.has(parent.name)) parent = parent.parent;
+    if (!parent || pieces.has(parent.name)) return;
+    const mesh = new THREE.Mesh(node.geometry);
+    mesh.matrixAutoUpdate = false;
+    mesh.matrix.set(...records.get(parent.name).worldTransform.flat());
+    pieces.set(parent.name, mesh);
+  });
+}
+const bounds = (ids) => {
+  const group = new THREE.Group();
+  for (const id of ids) group.add(pieces.get(id).clone());
+  group.updateMatrixWorld(true);
+  return new THREE.Box3().setFromObject(group);
+};
+const fixture = bounds(componentIds(12));
+function project(rect, item) {
+  const camera = new THREE.PerspectiveCamera(33, rect.width / rect.height, 0.05, 2000);
+  const center = fixture.getCenter(new THREE.Vector3());
+  const tangent = Math.tan((33 * Math.PI) / 360);
+  let distance = 8;
+  for (let i = 0; i < 8; i++) {
+    const p = new THREE.Vector3(
+      i & 1 ? fixture.max.x : fixture.min.x,
+      i & 2 ? fixture.max.y : fixture.min.y,
+      i & 4 ? fixture.max.z : fixture.min.z,
+    ).sub(center);
+    distance = Math.max(
+      distance,
+      -p.z + 1.18 * Math.max(Math.abs(p.x) / (tangent * camera.aspect), Math.abs(p.y) / tangent),
+    );
+  }
+  camera.up.set(0, -1, 0);
+  camera.position.copy(center).add(new THREE.Vector3(0, 0, -distance));
+  camera.lookAt(center);
+  camera.updateMatrixWorld(true);
+  const p = bounds(PARTS[item]).getCenter(new THREE.Vector3()).project(camera);
+  return { x: rect.x + ((p.x + 1) * rect.width) / 2, y: rect.y + ((1 - p.y) * rect.height) / 2 };
+}
+const server = spawn("npm", ["--prefix", "explorer", "run", "dev"], {
+  detached: true,
+  stdio: ["ignore", "pipe", "pipe"],
+});
+let logs = "",
+  browser,
+  activePage;
+for (const stream of [server.stdout, server.stderr])
+  stream.on("data", (chunk) => {
+    logs = (logs + chunk).slice(-12000);
+  });
+try {
+  for (let i = 0; i < 120; i++) {
+    try {
+      if ((await fetch("http://127.0.0.1:4173/workshop")).ok) break;
+    } catch {}
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  browser = await chromium.launch({
+    headless: true,
+    args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+  });
+  for (const [width, height, touch] of [
+    [1440, 900, false],
+    [390, 900, true],
+    [320, 568, true],
+    [1024, 540, false],
+    [844, 390, true],
+    [667, 375, true],
+    [568, 320, true],
+  ]) {
+    const profile = !touch ? "desktop" : width < height ? "portrait" : "landscape";
+    if (process.env.WORKSHOP_PROFILE && process.env.WORKSHOP_PROFILE !== profile) continue;
+    const viewport = { width, height };
+    const context = await browser.newContext({
+      viewport,
+      hasTouch: touch,
+      isMobile: touch,
+    });
+    const page = (activePage = await context.newPage());
+    page.setDefaultTimeout(20000);
+    page.setDefaultNavigationTimeout(90000);
+    console.log(JSON.stringify({ width, phase: "start" }));
+    const cdp = touch ? await context.newCDPSession(page) : null;
+    const errors = [];
+    page.on("pageerror", (error) => {
+      errors.push(error.message);
+      console.error("Browser error:", error.message);
+    });
+    await page.addInitScript(() => {
+      window.__workshopInput = [];
+      window.__storageCalls = [];
+      window.__savedGet = Storage.prototype.getItem;
+      for (const name of ["getItem", "setItem", "removeItem", "clear"]) {
+        const original = Storage.prototype[name];
+        Storage.prototype[name] = function (...args) {
+          // The shared Vercel analytics SDK reads its own attribution key.
+          // Assert every write/clear and every project-save read, independent of that SDK.
+          if (
+            this === localStorage &&
+            (name !== "getItem" || String(args[0]).startsWith("zweigesicht:"))
+          )
+            window.__storageCalls.push([name, args[0]]);
+          return original.apply(this, args);
+        };
+      }
+      for (const type of [
+        "pointerdown",
+        "pointerup",
+        "pointercancel",
+        "gotpointercapture",
+        "lostpointercapture",
+      ])
+        window.addEventListener(
+          type,
+          (event) => {
+            window.__workshopInput.push({
+              type,
+              id: event.pointerId,
+              x: event.clientX,
+              y: event.clientY,
+              target: event.target?.closest("[data-drag]")?.dataset.drag ?? event.target?.className,
+              pointerType: event.pointerType,
+            });
+          },
+          true,
+        );
+    });
+    if (width === 1440) {
+      // Fail after canvas attachment, then fail loading on the first Retry.
+      await page.addInitScript(() => {
+        const Original = window.ResizeObserver;
+        let fail = !sessionStorage.getItem("construction-tested");
+        window.ResizeObserver = class extends Original {
+          observe(target, options) {
+            if (fail && target.matches(".workshop-surface") && target.querySelector("canvas")) {
+              fail = false;
+              sessionStorage.setItem("construction-tested", "yes");
+              throw Error("Injected construction failure");
+            }
+            return super.observe(target, options);
+          }
+        };
+      });
+      await page.route("**/models/assembly-manifest.json", (route) =>
+        route.fulfill({ status: 503, body: "Unavailable" }),
+      );
+    }
+    await page.goto("http://127.0.0.1:4173/workshop");
+    // Seed once, then compare the entire storage map across interactions and reloads.
+    await page.evaluate(() => {
+      localStorage.setItem("zweigesicht:watchmaker:chapter-1:v1", '{"existing":"chapter bytes"}');
+      localStorage.setItem("zweigesicht:play:session:v1", '{"existing":"legacy bytes"}');
+      localStorage.setItem("unrelated-setting", "untouched");
+      window.__storageCalls = [];
+    });
+    const storage = () =>
+      page.evaluate(() =>
+        Object.fromEntries(
+          Object.keys(localStorage)
+            .sort()
+            .map((key) => [key, window.__savedGet.call(localStorage, key)]),
+        ),
+      );
+    const saved = await storage();
+    const button = (name) => page.getByRole("button", { name, exact: true });
+    const root = page.locator(".watchmaker-workshop"),
+      sheet = page.locator(".workshop-panel");
+    const state = async () => ({
+      cursor: await root.getAttribute("data-cursor"),
+      mistakes: await root.getAttribute("data-mistakes"),
+    });
+    const waitReady = () =>
+      page.waitForFunction(
+        () => !document.querySelector(".workshop-actions button")?.disabled,
+        null,
+        { timeout: 90000 },
+      );
+    if (width === 1440) {
+      await button("Retry").waitFor();
+      assert.equal(
+        await page.locator(".workshop-surface canvas").count(),
+        0,
+        "Partial constructor canvas removed",
+      );
+      await button("Retry").click();
+      await button("Retry").waitFor();
+      assert.equal(
+        await page.locator(".workshop-surface canvas").count(),
+        0,
+        "Failed load releases renderer",
+      );
+      await page.unroute("**/models/assembly-manifest.json");
+      await button("Retry").click();
+    }
+    await waitReady();
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
+    assert.equal(
+      await page
+        .getByRole("button", {
+          name: /Separate stem|Place on movement|Placement options|hands|tweezers|screwdriver|Resume chapter/,
+        })
+        .count(),
+      0,
+    );
+    assert.equal(await page.locator(".workshop-seat").count(), 0);
+    const surface = () => page.locator(".workshop-surface").boundingBox();
+    const stable = await surface();
+    const checkStable = async () =>
+      assert.deepEqual(
+        await surface(),
+        stable,
+        "Pickup, feedback, invalid attempts and placement must not resize/reposition workspace",
+      );
+    const open = async () => {
+      if ((await button("Parts").getAttribute("aria-expanded")) !== "true")
+        await button("Parts").click();
+      await sheet.waitFor();
+      await sheet.evaluate((el) =>
+        Promise.all(el.getAnimations().map((animation) => animation.finished.catch(() => {}))),
+      );
+    };
+    const reset = async () => {
+      await open();
+      await button("Reset practice").click();
+      await button("Reset checkpoint").click();
+      await page.locator(".workshop-reset").waitFor({ state: "hidden" });
+      await sheet.waitFor({ state: "hidden" });
+    };
+    const checkControls = async () => {
+      const boxes = await page
+        .locator(".workshop-actions button, .workshop-header a, .workshop-progress")
+        .evaluateAll((elements) =>
+          elements.map((el) => {
+            const r = el.getBoundingClientRect();
+            return {
+              name: el.textContent,
+              x: r.x,
+              y: r.y,
+              right: r.right,
+              bottom: r.bottom,
+              height: r.height,
+            };
+          }),
+        );
+      const size = page.viewportSize();
+      for (const box of boxes)
+        assert.ok(
+          box.x >= 0 && box.y >= 0 && box.right <= size.width && box.bottom <= size.height,
+          JSON.stringify({ size, box }),
+        );
+      assert.ok(
+        await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth <= innerWidth &&
+            document.documentElement.scrollHeight <= innerHeight,
+        ),
+      );
+    };
+    await checkControls();
+    assert.equal(await button("Undo placement").isDisabled(), true);
+    assert.equal(await page.locator(".workshop-progress").innerText(), "0/3");
+    await open();
+    assert.equal(await button("available").getAttribute("aria-pressed"), "true");
+    const search = page.getByRole("searchbox", { name: "Search parts" });
+    await search.fill("winding-bridge screw");
+    assert.equal(await page.locator("[data-drag]").count(), 2);
+    await search.fill("");
+    assert.equal(await page.locator("[data-drag]").count(), 3);
+    await button("available").click();
+    assert.equal(await page.locator("[data-drag]").count(), 3);
+    await button("installed").click();
+    assert.equal(await page.locator("[data-drag]").count(), 0);
+    assert.equal(await page.locator("[data-identify]").count(), 6);
+    await page.locator('[data-identify="mainplate"]').click();
+    assert.match(await page.locator(".workshop-panel-footer output").innerText(), /already fitted/);
+    assert.ok(await sheet.isVisible());
+    await button("All parts").click();
+    assert.equal(await page.locator('[data-drag="mainplate"]').count(), 0);
+    await page.locator('[data-identify="bridge"]').scrollIntoViewIfNeeded();
+    assert.ok(
+      await page
+        .locator('[data-identify="bridge"] img')
+        .evaluate((image) => image.src.startsWith("data:image/png") && image.naturalWidth > 0),
+    );
+    if (cdp) await page.locator('[data-identify="bridge"]').tap();
+    else await page.locator('[data-identify="bridge"]').click();
+    assert.ok(await sheet.isVisible(), "Name/preview only identifies; Parts remains open");
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
+    await checkStable();
+    const tapHandle = page.locator('[data-drag="bridge"]');
+    await tapHandle.scrollIntoViewIfNeeded();
+    if (cdp) await tapHandle.tap();
+    else await tapHandle.click();
+    assert.ok(await sheet.isVisible(), "A handle tap never dismisses Parts or places");
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
+    if (cdp) {
+      console.log(JSON.stringify({ width, phase: "native row scrolling" }));
+      const list = page.locator(".workshop-parts");
+      await list.evaluate((el) => {
+        el.scrollTop = 0;
+      });
+      const rect = await list.boundingBox();
+      const start = { x: rect.x + rect.width * 0.4, y: rect.y + rect.height - 25 };
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchStart",
+        touchPoints: [{ ...start, id: 1 }],
+      });
+      for (let i = 1; i <= 8; i++)
+        await cdp.send("Input.dispatchTouchEvent", {
+          type: "touchMove",
+          touchPoints: [{ x: start.x, y: start.y - i * 15, id: 1 }],
+        });
+      await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      await page.waitForFunction(() => document.querySelector(".workshop-parts").scrollTop > 20);
+      assert.ok(await sheet.isVisible(), "Native scrolling on row content does not pick up");
+      assert.equal(await page.locator(".workshop-held").count(), 0);
+      assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
+    }
+    console.log(JSON.stringify({ width, height, phase: "Parts reopening and viewport changes" }));
+    const list = page.locator(".workshop-parts");
+    await list.evaluate(async (el) => {
+      // Native touch momentum must settle before measuring a reopening snapshot.
+      let previous = el.scrollTop,
+        stableFrames = 0;
+      for (let i = 0; i < 180 && stableFrames < 8; i++) {
+        await new Promise(requestAnimationFrame);
+        stableFrames = el.scrollTop === previous ? stableFrames + 1 : 0;
+        previous = el.scrollTop;
+      }
+      el.scrollTop = 80;
+      await new Promise(requestAnimationFrame);
+    });
+    const scrollBefore = await list.evaluate((el) => el.scrollTop);
+    await button("Close").click();
+    await sheet.waitFor({ state: "hidden" });
+    await open();
+    assert.equal(
+      await list.evaluate((el) => el.scrollTop),
+      scrollBefore,
+      "Manual reopening retains list position",
+    );
+    await search.fill("winding");
+    await search.focus();
+    // Synthetic visual viewport shrink/pan models keyboard geometry, not a physical keyboard qualification.
+    await page.evaluate(() => {
+      Object.defineProperty(visualViewport, "height", { configurable: true, value: 300 });
+      Object.defineProperty(visualViewport, "offsetTop", { configurable: true, value: 20 });
+      visualViewport.dispatchEvent(new Event("resize"));
+    });
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(".workshop-panel")
+          .style.getPropertyValue("--workshop-visible-height") === "300px",
+    );
+    const keyboardPanel = await sheet.boundingBox();
+    assert.ok(
+      keyboardPanel.y >= 20 && keyboardPanel.y + keyboardPanel.height <= 321,
+      JSON.stringify(keyboardPanel),
+    );
+    assert.equal(await search.inputValue(), "winding");
+    assert.equal(await search.evaluate((el) => el === document.activeElement), true);
+    await page.evaluate(() => {
+      delete visualViewport.height;
+      delete visualViewport.offsetTop;
+      visualViewport.dispatchEvent(new Event("resize"));
+    });
+    await button("Close").click();
+    await sheet.waitFor({ state: "hidden" });
+    await open();
+    assert.equal(await search.inputValue(), "winding");
+    assert.equal(await button("All parts").getAttribute("aria-pressed"), "true");
+    await search.fill("");
+    await button("Close").click();
+    await sheet.waitFor({ state: "hidden" });
+    await page.setViewportSize({ width: height, height: width });
+    await page.waitForTimeout(100);
+    await checkControls();
+    assert.equal((await state()).cursor, "12");
+    await page.setViewportSize(viewport);
+    await page.waitForTimeout(100);
+    await checkStable();
+    const move = async (point) =>
+      cdp
+        ? cdp.send("Input.dispatchTouchEvent", {
+            type: "touchMove",
+            touchPoints: [{ ...point, id: 1 }],
+          })
+        : page.mouse.move(point.x, point.y);
+    const end = async (cancel = false) =>
+      cdp
+        ? cdp.send("Input.dispatchTouchEvent", {
+            type: cancel ? "touchCancel" : "touchEnd",
+            touchPoints: [],
+          })
+        : page.mouse.up();
+    const begin = async (item) => {
+      await open();
+      const handle = page.locator(`[data-drag="${item}"]`);
+      await handle.scrollIntoViewIfNeeded();
+      const rect = await handle.boundingBox(),
+        start = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+      assert.equal(
+        await page.evaluate(
+          ({ x, y }) => document.elementFromPoint(x, y)?.closest("[data-drag]")?.dataset.drag,
+          start,
+        ),
+        item,
+      );
+      if (cdp)
+        await cdp.send("Input.dispatchTouchEvent", {
+          type: "touchStart",
+          touchPoints: [{ ...start, id: 1 }],
+        });
+      else {
+        await page.mouse.move(start.x, start.y);
+        await page.mouse.down();
+      }
+      assert.ok(await sheet.isVisible(), "Pointer-down alone does not close Parts");
+      await move({ x: start.x + 2, y: start.y - 2 });
+      assert.ok(await sheet.isVisible(), "Sub-threshold movement does not establish drag intent");
+      assert.equal(await page.locator(".workshop-held").count(), 0);
+      await move({ x: start.x - 12, y: start.y - 14 });
+      await sheet.waitFor({ state: "hidden" });
+      await page.locator(".workshop-held img").waitFor();
+      assert.ok(
+        await page.evaluate(() =>
+          window.__workshopInput.some(
+            (event) => event.type === "gotpointercapture" && event.target === "workshop-surface",
+          ),
+        ),
+        "Persistent surface captures actual pointer",
+      );
+      await checkStable();
+      return start;
+    };
+    const aimAt = async (point) => {
+      await move({ x: point.x, y: point.y + (cdp ? 64 : 0) });
+      await page.waitForFunction(({ x, y }) => {
+        const held = document.querySelector(".workshop-held");
+        return (
+          held &&
+          Math.abs(parseFloat(held.style.left) - x) < 0.1 &&
+          Math.abs(parseFloat(held.style.top) - y) < 0.1
+        );
+      }, point);
+      await checkStable();
+    };
+    const drop = async (item, point, valid) => {
+      await begin(item);
+      await aimAt(point);
+      assert.equal(await page.locator(".workshop-held").getAttribute("data-valid"), String(valid));
+      await end();
+      await page.locator(".workshop-held").waitFor({ state: "hidden" });
+      await checkStable();
+    };
+    const target = (item) => project(stable, item);
+    const duplicateRelease = async () => {
+      const before = await state();
+      await page.evaluate(() => {
+        const event = window.__workshopInput.filter((e) => e.type === "pointerup").at(-1);
+        for (let i = 0; i < 2; i++)
+          document.querySelector(".workshop-surface").dispatchEvent(
+            new PointerEvent("pointerup", {
+              bubbles: true,
+              pointerId: event.id,
+              clientX: event.x,
+              clientY: event.y,
+            }),
+          );
+      });
+      assert.deepEqual(
+        await state(),
+        before,
+        "Consumed pointer release cannot count another attempt",
+      );
+    };
+    // Wrong part is an actual drag and remains available for retry.
+    await drop("bridge-screw-1", target("bridge-screw-1"), false);
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "1" });
+    assert.equal(await root.getAttribute("data-outcome"), "invalid");
+    await duplicateRelease();
+    await sheet.waitFor();
+    assert.equal(await page.locator('[data-drag="bridge-screw-1"]').isDisabled(), false);
+    const beforeCancellation = await state();
+    for (const kind of [
+      "escape",
+      "explicit",
+      "pointercancel",
+      "lostcapture",
+      "blur",
+      "hidden",
+      "resize",
+    ]) {
+      console.log(JSON.stringify({ width, phase: "cancel", kind }));
+      await begin("bridge");
+      await aimAt(target("bridge"));
+      if (kind === "escape") await page.keyboard.press("Escape");
+      if (kind === "explicit") {
+        await button("Cancel placement").focus();
+        await page.keyboard.press("Enter");
+      }
+      if (kind === "pointercancel") {
+        if (cdp) await end(true);
+        else
+          await page.evaluate(() =>
+            document.querySelector(".workshop-surface").dispatchEvent(
+              new PointerEvent("pointercancel", {
+                bubbles: true,
+                pointerId: window.__workshopInput.filter((e) => e.type === "pointerdown").at(-1).id,
+              }),
+            ),
+          );
+      }
+      if (kind === "lostcapture")
+        await page.evaluate(() => {
+          const host = document.querySelector(".workshop-surface");
+          host.releasePointerCapture(
+            window.__workshopInput.filter((e) => e.type === "pointerdown").at(-1).id,
+          );
+        });
+      if (kind === "blur") await page.evaluate(() => window.dispatchEvent(new Event("blur")));
+      if (kind === "hidden")
+        await page.evaluate(() => {
+          Object.defineProperty(document, "hidden", { configurable: true, value: true });
+          document.dispatchEvent(new Event("visibilitychange"));
+          delete document.hidden;
+        });
+      if (kind === "resize")
+        await page.setViewportSize({ ...viewport, height: viewport.height - 20 });
+      if (kind === "lostcapture")
+        await move({ x: target("bridge").x + 2, y: target("bridge").y + (cdp ? 64 : 0) });
+      await page.waitForFunction(
+        () => document.querySelector(".watchmaker-workshop").dataset.outcome === "cancelled",
+      );
+      if (!(kind === "pointercancel" && cdp)) await end();
+      if (kind === "resize") {
+        await page.setViewportSize(viewport);
+        await page.waitForTimeout(100);
+      }
+      assert.deepEqual(await state(), beforeCancellation, `${kind} must not submit an attempt`);
+      await checkStable();
+    }
+    await drop("bridge", { x: 2, y: 150 }, false);
+    assert.equal(await root.getAttribute("data-outcome"), "outside");
+    assert.deepEqual(await state(), beforeCancellation);
+    // An inside-but-far release differs from outside and cancellation.
+    await drop("bridge", { x: stable.x + 12, y: stable.y + stable.height - 12 }, false);
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "2" });
+    console.log(JSON.stringify({ width, phase: "three actual placements" }));
+    // Complete all three using actual pointer motion and native release.
+    const bridge = target("bridge");
+    await drop("bridge", { x: bridge.x + 4, y: bridge.y - 3 }, true);
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "2" });
+    await duplicateRelease();
+    const first = target("bridge-screw-1"),
+      second = target("bridge-screw-2");
+    await drop("bridge-screw-1", second, false);
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "3" });
+    assert.match(await page.locator(".workshop-feedback").innerText(), /other screw hole/);
+    await drop(
+      "bridge-screw-1",
+      { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 },
+      false,
+    );
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "4" });
+    // Imperfect placement on the correct side of the destination boundary.
+    await drop(
+      "bridge-screw-1",
+      { x: first.x + (first.x - second.x) * 0.1, y: first.y + (first.y - second.y) * 0.1 },
+      true,
+    );
+    assert.deepEqual(await state(), { cursor: "14", mistakes: "4" });
+    await drop("bridge-screw-2", first, false);
+    assert.deepEqual(await state(), { cursor: "14", mistakes: "5" });
+    await drop("bridge-screw-2", second, true);
+    assert.deepEqual(await state(), { cursor: "15", mistakes: "5" });
+    await duplicateRelease();
+    assert.match(await page.locator(".workshop-feedback").innerText(), /Checkpoint complete/);
+    await checkStable();
+    assert.deepEqual(await storage(), saved);
+    assert.equal(await page.locator(".workshop-progress").innerText(), "3/3");
+    await open();
+    await button("Reset practice").click();
+    await page.waitForFunction(() => document.activeElement?.id === "keep-checkpoint");
+    await button("Keep placements").click();
+    await page.locator(".workshop-reset").waitFor({ state: "hidden" });
+    assert.equal(
+      (await state()).cursor,
+      "15",
+      "Opening/dismissing Reset keeps completed placements",
+    );
+    for (const cursor of ["14", "13", "12"]) {
+      await button("Undo placement").click();
+      assert.equal((await state()).cursor, cursor);
+      await checkStable();
+    }
+    assert.equal(await button("Undo placement").isDisabled(), true);
+    // Refit the same three parts with real dragging after Undo.
+    for (const item of ["bridge", "bridge-screw-1", "bridge-screw-2"])
+      await drop(item, target(item), true);
+    assert.equal((await state()).cursor, "15");
+    console.log(JSON.stringify({ width, phase: "alternative controls" }));
+    // Explicit opt-in mode is independently exercisable with keyboard or native taps.
+    await reset();
+    await button("Alternative controls").focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await button("Alternative controls").getAttribute("aria-pressed"), "true");
+    await open();
+    await button("Choose Pinned winding bridge").focus();
+    await page.keyboard.press("Enter");
+    await sheet.waitFor({ state: "hidden" });
+    await page.getByLabel("Destination", { exact: true }).selectOption("bridge-screw-1");
+    // Supplemental repeated activation after a real selection in explicit alternatives mode.
+    await button("Confirm placement").evaluate((button) => {
+      button.click();
+      button.click();
+    });
+    await sheet.waitFor();
+    assert.deepEqual(await state(), { cursor: "12", mistakes: "1" });
+    await page.waitForFunction(() => document.activeElement?.dataset.identify === "bridge");
+
+    for (const [item, label, cursor] of [
+      ["bridge", "Pinned winding bridge", "13"],
+      ["bridge-screw-1", "Winding-bridge screw 1", "14"],
+      ["bridge-screw-2", "Winding-bridge screw 2", "15"],
+    ]) {
+      await open();
+      assert.equal(await page.locator("[data-drag]").count(), 0);
+      const choose = button("Choose " + label);
+      if (cdp) await choose.tap();
+      else {
+        await choose.focus();
+        await page.keyboard.press("Enter");
+      }
+      await sheet.waitFor({ state: "hidden" });
+      await page.waitForFunction(() => document.activeElement?.tagName === "SELECT");
+      await page.getByLabel("Destination", { exact: true }).selectOption(item);
+      if (cdp) await button("Confirm placement").tap();
+      else {
+        await button("Confirm placement").focus();
+        await page.keyboard.press("Enter");
+      }
+      assert.equal((await state()).cursor, cursor);
+      await page.waitForFunction(() => document.activeElement?.textContent === "Parts");
+      await checkStable();
+    }
+    await button("Alternative controls").click();
+    await reset();
+    console.log(JSON.stringify({ width, phase: "graphics interruption" }));
+    // Graphics interruption consumes an active gesture; Retry creates a new renderer.
+    await drop("bridge", target("bridge"), true);
+    await begin("bridge-screw-1");
+    await aimAt(target("bridge-screw-1"));
+    await page
+      .locator(".workshop-surface canvas")
+      .evaluate((canvas) =>
+        canvas.getContext("webgl2").getExtension("WEBGL_lose_context").loseContext(),
+      );
+    await button("Retry").waitFor();
+    await end();
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "0" });
+    await page.route("**/models/assembly-manifest.json", (route) =>
+      route.fulfill({ status: 503, body: "Unavailable" }),
+    );
+    await button("Retry").click();
+    await button("Retry").waitFor();
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "0" });
+    await page.unroute("**/models/assembly-manifest.json");
+    await button("Retry").click();
+    await waitReady();
+    await checkStable();
+    assert.deepEqual(await storage(), saved);
+    assert.deepEqual(await state(), { cursor: "13", mistakes: "0" });
+    await page.waitForFunction(() => document.activeElement?.textContent === "Parts");
+    assert.equal(await page.locator(".workshop-surface canvas").count(), 1);
+    await drop("bridge-screw-1", target("bridge-screw-1"), true);
+    await drop("bridge-screw-2", target("bridge-screw-2"), true);
+    assert.equal((await state()).cursor, "15");
+    await checkControls();
+    assert.ok(stable.height >= 200, JSON.stringify(stable));
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    assert.deepEqual(
+      await page.evaluate(() => window.__storageCalls),
+      [],
+      "Checkpoint never reads or writes existing localStorage",
+    );
+    for (const path of [
+      "/workshop",
+      "/workshop/prototype",
+      "/workshop/assembly",
+      "/workshop?mode=easy",
+      "/workshop?mode=hard",
+    ]) {
+      await page.goto("http://127.0.0.1:4173" + path);
+      await waitReady();
+      assert.equal(new URL(page.url()).pathname, "/workshop");
+      assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
+      assert.deepEqual(await storage(), saved);
+      assert.deepEqual(await page.evaluate(() => window.__storageCalls), []);
+    }
+    assert.deepEqual(errors, []);
+    console.log(
+      JSON.stringify({
+        width,
+        status: "passed",
+        placements: "three actual drags",
+        input: cdp ? "native emulated touch" : "mouse",
+        cancellations: 8,
+        stationaryWorkspace: stable,
+        unchangedStorage: true,
+        alternativeControls: true,
+      }),
+    );
+    await context.close();
+  }
+} catch (error) {
+  console.error(logs);
+  if (activePage && !activePage.isClosed()) {
+    console.error(await activePage.locator("body").innerText());
+    console.error(
+      await activePage.evaluate(() => ({
+        focus: document.activeElement?.outerHTML,
+        state: document.querySelector(".watchmaker-workshop")?.dataset,
+      })),
+    );
+    console.error(await activePage.evaluate(() => window.__workshopInput.slice(-30)));
+  }
+  throw error;
+} finally {
+  await browser?.close();
+  try {
+    process.kill(-server.pid, "SIGTERM");
+  } catch {}
+}

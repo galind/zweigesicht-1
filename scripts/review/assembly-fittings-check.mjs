@@ -1,16 +1,8 @@
-/** Cross-route configuration and saved-session verification on a local build. */
+/** Explorer and Bench fitting configuration verification on a local build. */
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import rules from "../../assets/authored/assembly-fittings.json" with { type: "json" };
-import manifest from "../../assets/authored/play-manifest.json" with { type: "json" };
-import {
-  actions,
-  createSession,
-  canPlace,
-  commitPlacement,
-  isComplete,
-} from "../../explorer/src/play/state.ts";
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : "playwright"
 );
@@ -134,54 +126,6 @@ try {
     bench.counts.every((n) => n === 218) && !bench.rendered.length && !bench.colliders,
     bench,
   );
-  // Load completed old saves to verify migration through the actual route UI,
-  // plus a fresh session to check dial screws are absent until assembly.
-  for (const level of ["easy", "hard"]) {
-    let complete = createSession(manifest, level);
-    while (!isComplete(manifest, complete))
-      complete = commitPlacement(
-        manifest,
-        complete,
-        actions(manifest, level).find((a) => canPlace(manifest, complete, a.id)).id,
-      );
-    const old = {
-      ...complete,
-      manifestVersion: "play-4",
-      actionIds: [...Object.keys(manifest.previousVersion.retiredActions), ...complete.actionIds],
-    };
-    await page.evaluate(
-      (old) => localStorage.setItem("zweigesicht:play:session:v1", JSON.stringify(old)),
-      old,
-    );
-    await page.goto(base + "/workshop?inspect=1");
-    await page.waitForFunction(() => window.__playInspect?.().ready, null, { timeout: 90000 });
-    const s = await page.evaluate(() => window.__playInspect());
-    check(
-      level + " old complete save migrates without losing useful progress",
-      s.session.manifestVersion === "play-5" &&
-        s.session.actionIds.length === complete.actionIds.length &&
-        s.fitted.length === 259 &&
-        rules.caseMounts.every((id) => !s.visible.includes(id)) &&
-        rules.dialRetainers.every((id) => s.visible.includes(id)),
-      {
-        version: s.session.manifestVersion,
-        actions: s.session.actionIds.length,
-        visible: s.visible.length,
-      },
-    );
-    await page.evaluate(
-      (session) => localStorage.setItem("zweigesicht:play:session:v1", JSON.stringify(session)),
-      createSession(manifest, level),
-    );
-    await page.reload();
-    await page.waitForFunction(() => window.__playInspect?.().ready, null, { timeout: 90000 });
-    const fresh = await page.evaluate(() => window.__playInspect());
-    check(
-      level + " fresh assembly has neither case clamps nor dial retainers",
-      [...rules.caseMounts, ...rules.dialRetainers].every((id) => !fresh.visible.includes(id)),
-      { visible: fresh.visible.length },
-    );
-  }
   check("no browser errors", report.errors.length === 0, report.errors);
   console.log(JSON.stringify(report, null, 2));
 } finally {

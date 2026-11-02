@@ -5,6 +5,7 @@
   "buildCommand": "cd explorer && npm run build:vercel && cd .. && rm -rf .vercel/output && mkdir -p .vercel/output && cp -R explorer/.vercel/output/. .vercel/output/",
   "git": {
     "deploymentEnabled": {
+      "codex/watchmaker-chapter-one": false,
       "codex/deep-implementation-review": false,
       "codex/codebase-cleanup-2026-10-31": false,
       "codex/escapement-clearance-study": false,

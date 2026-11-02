@@ -1,7 +1,7 @@
 'use client';
 
 import { BenchInvitation } from '@/components/BenchInvitation';
-import { WorkshopChooser } from '@/components/WorkshopChooser';
+import Link from 'next/link';
 import { InformationPanel } from '@/components/InformationPanel';
 import { makerUrl } from '@/src/content/about';
 import {
@@ -55,7 +55,11 @@ import {
   type Part,
 } from '@/src/experience/catalog';
 import { SPREAD_GROUPS } from '@/src/experience/spread';
-import { factsFor, powerSourceNote, powerSourceDetail } from '@/src/experience/copy';
+import {
+  factsFor,
+  powerSourceNote,
+  powerSourceDetail,
+} from '@/src/experience/copy';
 import { Slider } from '@/components/ui/slider';
 import {
   Sheet,
@@ -74,8 +78,16 @@ import {
 const InspectionPanel = lazy(() => import('@/components/InspectionPanel'));
 
 type Panel =
-  | 'menu' | 'more' | 'catalog' | 'about' | 'acknowledgements'
-  | 'explore' | 'separate' | 'dials' | 'options' | 'details' | 'assemble';
+  | 'menu'
+  | 'more'
+  | 'catalog'
+  | 'about'
+  | 'acknowledgements'
+  | 'explore'
+  | 'separate'
+  | 'dials'
+  | 'options'
+  | 'details';
 
 const empty: ViewerSnapshot = {
   ...initialState,
@@ -106,7 +118,6 @@ export default function Home() {
   const exploreButton = useRef<HTMLButtonElement>(null),
     detailButton = useRef<HTMLButtonElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
-  const assembleButton = useRef<HTMLButtonElement>(null);
   const moreButton = useRef<HTMLButtonElement>(null);
   const visibleTrigger = (
     selector: string,
@@ -182,20 +193,7 @@ export default function Home() {
     separate = panel === 'separate',
     dials = panel === 'dials',
     options = panel === 'options',
-    details = panel === 'details',
-    assemble = panel === 'assemble';
-  useEffect(() => {
-    if (!__WORKSHOP_ENTRY_ENABLED__) return;
-    const url = new URL(location.href);
-    if (url.searchParams.get('assemble') !== '1') return;
-    url.searchParams.delete('assemble');
-    history.replaceState(
-      history.state,
-      '',
-      `${url.pathname}${url.search}${url.hash}`,
-    );
-    queueMicrotask(() => setPanel('assemble'));
-  }, []);
+    details = panel === 'details';
   useEffect(() => {
     const breakpoint = window.matchMedia('(max-width: 600px)');
     const dismissNavigation = () => {
@@ -328,16 +326,12 @@ export default function Home() {
   }, [group, selected, s.layout, topBounds.header]);
   useEffect(() => {
     queueMicrotask(() =>
-      setPanel((current) => current === 'details' ? null : current),
+      setPanel((current) => (current === 'details' ? null : current)),
     );
   }, [s.part, s.group]);
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key !== 'Escape' ||
-        event.defaultPrevented ||
-        panel !== null
-      )
+      if (event.key !== 'Escape' || event.defaultPrevented || panel !== null)
         return;
       event.preventDefault();
       viewer.current?.deselect();
@@ -349,8 +343,10 @@ export default function Home() {
   const selectPart = (id: string) => {
     selectionFocus.current = true;
     setPanel((current) =>
-      current && ['catalog', 'options', 'acknowledgements', 'details'].includes(current)
-        ? null : current,
+      current &&
+      ['catalog', 'options', 'acknowledgements', 'details'].includes(current)
+        ? null
+        : current,
     );
     void viewer.current?.select(id);
   };
@@ -369,7 +365,7 @@ export default function Home() {
   };
   const chooseSpreadGroup = (name?: string) => {
     viewer.current?.frameSpread(name);
-    setPanel((current) => current === 'explore' ? null : current);
+    setPanel((current) => (current === 'explore' ? null : current));
   };
   const closePanels = () => setPanel(null);
   const openPanel = (next: Panel, open: boolean) => {
@@ -394,7 +390,7 @@ export default function Home() {
       if (dockRect) setPanelBottom(window.innerHeight - dockRect.top + 12);
     }
     // A closing sheet may report after another opened; dismiss only its own panel.
-    setPanel((current) => open ? next : current === next ? null : current);
+    setPanel((current) => (open ? next : current === next ? null : current));
   };
   const toggleAllParts = () => {
     closePanels();
@@ -421,23 +417,6 @@ export default function Home() {
         identityClassName="identity"
         data-workshop-entry={__WORKSHOP_ENTRY_ENABLED__}
       >
-        <div className="experience-entries">
-          {__WORKSHOP_ENTRY_ENABLED__ && (
-            <WorkshopChooser
-              open={assemble}
-              onOpenChange={(open) => openPanel('assemble', open)}
-              style={panelStyle}
-              finalFocus={assembleButton}
-            >
-              <SheetTrigger
-                ref={assembleButton}
-                className="text-button assemble-trigger site-glass"
-              >
-                Be a watchmaker
-              </SheetTrigger>
-            </WorkshopChooser>
-          )}
-        </div>
         <SiteHeaderActions
           className="header-actions"
           aria-label="Information and settings"
@@ -538,10 +517,20 @@ export default function Home() {
           separate ||
           dials ||
           options ||
-          details ||
-          assemble,
+          details,
         )}
       >
+        {__WORKSHOP_ENTRY_ENABLED__ && (
+          <Link
+            href="/workshop"
+            prefetch={false}
+            className="bench-trigger site-glass"
+          >
+            <span className="bench-invitation-heading">
+              Be a watchmaker! <ArrowRight aria-hidden="true" />
+            </span>
+          </Link>
+        )}
         <BenchInvitation />
       </div>
       <section className="workspace" aria-label="Movement explorer">

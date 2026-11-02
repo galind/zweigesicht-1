@@ -50,9 +50,7 @@ test("only the reviewed occurrences receive rigid shaft phases", () => {
   assert.ok(result.clone().invert().multiply(result).equals(new THREE.Matrix4()));
 });
 
-test("Workshop base endpoint and source remain unchanged; repeated presentation does not accumulate phase", () => {
-  const play = read("../assets/authored/play-manifest.json");
-  assert.deepEqual(play.targetPoses[id], part.worldTransform);
+test("source endpoint remains unchanged; repeated presentation does not accumulate phase", () => {
   const source = base(),
     expected = wheelDisplayMatrix(id, source);
   for (let i = 0; i < 100; i++) assert.ok(wheelDisplayMatrix(id, source).equals(expected));
@@ -62,8 +60,7 @@ test("Workshop base endpoint and source remain unchanged; repeated presentation 
   assert.ok(Math.max(...unphase.elements.map((v, i) => Math.abs(v - source.elements[i]))) < 1e-14);
 });
 
-test("all joined packets retain relative mounting poses and immutable Workshop endpoints", () => {
-  const play = read("../assets/authored/play-manifest.json");
+test("all joined packets retain relative mounting poses and immutable source endpoints", () => {
   const packets = new Map();
   for (const entry of override.wheels) {
     const packet = entry.rigidPacket ?? entry.leafId;
@@ -80,10 +77,6 @@ test("all joined packets retain relative mounting poses and immutable Workshop e
       const after = posed[0].clone().invert().multiply(posed[i]);
       assert.ok(
         Math.max(...before.elements.map((v, k) => Math.abs(v - after.elements[k]))) < 1e-12,
-      );
-      assert.deepEqual(
-        play.targetPoses[ids[i]],
-        manifest.instances.find((p) => p.id === ids[i]).worldTransform,
       );
       for (let repeat = 0; repeat < 100; repeat++)
         assert.ok(wheelDisplayMatrix(ids[i], sources[i]).equals(posed[i]));

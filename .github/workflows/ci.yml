@@ -59,8 +59,8 @@ jobs:
       - name: Run automated tests
         run: node --test tests/*.test.mjs
 
-      - name: Validate Workshop inventory
-        run: node scripts/play/validate-inventory.mjs
+      - name: Validate assembly chapter assets
+        run: node scripts/review/validate-assembly.mjs
 
       - name: Type-check
         run: npm --prefix explorer run typecheck

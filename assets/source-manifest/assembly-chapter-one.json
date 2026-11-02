@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-01",
+  "reference": {
+    "filename": "be a watchmaker - assembling of the Zweigesicht-1-1.xlsx",
+    "source": "Owner-supplied local workbook; no public source URL supplied",
+    "sha256": "725b0035684799c95f4275909d4436fbaf37a6c6201225d97ed5e0349c6cd5a5",
+    "sheet": "Tabelle1",
+    "range": "B5:E19",
+    "notes": "Later rows, including B47:E47 (Incabloc), were read only to identify deferred work. No embedded comments were present. The original workbook is not redistributed."
+  },
+  "cadSource": "assets/source-manifest/sources.json",
+  "cadSourceSha256": "f34148903818c273e20deeb0e70d3dc7782e08a413bc0e420f30d8c209aa4a2b",
+  "lessonDefinition": "explorer/src/assembly/lesson.ts",
+  "mappingReview": "docs/ASSEMBLY_CHAPTER_ONE.md",
+  "fittedTransforms": "explorer/public/models/assembly-manifest.json:instances[].worldTransform (all 22 chapter poses equal the retired play-manifest.json targetPoses at 5544dee24a0245b25b4a873723bfde118b13909c)",
+  "holders": {
+    "provenance": "assets/source-manifest/holder.json",
+    "runtimeHashes": "assets/source-manifest/holder-runtime.json",
+    "seating": "assets/source-manifest/holder-seating.json",
+    "crossFit": "assets/source-manifest/holder-crossfit.json",
+    "poses": "assets/authored/atelier-layout.json",
+    "decision": "Movement support for movement side up; dial support for dial side up. Exchange intact supports on turn/return. Park the movement with its support. Build the stem in the clear central area, with no holder-fit claim.",
+    "uncertainty": "Recorded nominal mainplate seating does not certify contact, clamping or stability for the partial chapter assemblies, nor an insertion path. No cushion or altered watch geometry is introduced."
+  },
+  "provisional": [
+    "All hand/tool assignments: Marco supplied drag/flip/set-aside actions but no hand tool assignments.",
+    "Prepared plate retains fixed jewels and pins; all five Incabloc leaves and two later cap-plate screws are deferred.",
+    "Pinned lever and pinned bridge use their complete existing source subtrees.",
+    "Bridge screw 1 is occurrence 73 and screw 2 is occurrence 79. Their numbered order is not distinguished in the workbook.",
+    "Spatial arrangement of trays and set-aside assemblies is illustrative, not a physical seating claim."
+  ]
+}

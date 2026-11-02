@@ -31,23 +31,3 @@ test('switching Explorer panels survives late dismissals from the outgoing sheet
     open(to, false); assert.equal(panel, null);
   }
 });
-
-test('Workshop UI does not switch inventory when its controller rejects navigation during a drag', () => {
-  const updates = [];
-  let accepted = false;
-  const workspaceRef = {current: null}, selectionRef = {current: 'held'};
-  const enter = handler('explorer/src/play/Play.tsx', 'Play', 'enterWorkspace', {
-    viewer: {current: {setWorkspace: () => accepted}}, workspaceRef, selectionRef, assistanceRef: {},
-    setSelection: id => updates.push(['selection', id]),
-    setWorkspace: id => updates.push(id), setAssistance() {}, setNotice() {},
-    setInventoryView() {}, setQuery() {}, sync() {updates.push('sync');},
-  });
-  enter('packet', null); assert.equal(workspaceRef.current, null); assert.deepEqual(updates, []);
-  assert.equal(selectionRef.current, 'held', 'Rejected navigation must preserve the captured part');
-  accepted = true; enter('packet', null);
-  assert.equal(workspaceRef.current, 'packet');
-  assert.deepEqual(updates, [['selection', null], 'packet', 'sync']);
-  updates.length = 0; enter(null, 'transfer');
-  assert.equal(selectionRef.current, 'transfer');
-  assert.deepEqual(updates, [['selection', 'transfer'], null, 'sync']);
-});

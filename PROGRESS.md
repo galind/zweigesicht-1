@@ -1,58 +1,438 @@
 # Current project status
 
-Updated 1 November 2026. Setup: [README](README.md). Technical reference:
+Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
-## Integration and next action
+## Verified Workshop checkpoint refinement
 
-Started clean at fetched `develop` / HEAD `9f67bdb56218bd947b4ccff3c6a8a2a77032ded3`.
-[PR #36](https://github.com/galind/zweigesicht-1/pull/36) is merged; its final head
-`4bb4b8f` has the same tree. `main` remains `1139992a8e64078f2f62de2f7303bf2b118805d7`.
-The previous collision, diagnostics and chooser fixes are present.
+Started clean at `b6de27f4ef4b4cf564b7df5537357674eb7ad5cf`, matching the fetched
+SSH branch and draft [PR #38](https://github.com/galind/zweigesicht-1/pull/38)
+against develop. Read AGENTS, README and Workshop scope first. The connected
+GitHub app confirmed the core drag milestone `2c936ec` passed CI and Workshop;
+no competing interaction was introduced and no unrelated work was present.
 
-Current work is on `codex/deep-implementation-review`, based on that develop.
-Its Vercel Git deployment is disabled. Push and a PR targeting develop are
-authorized; merge, deployment and publication are not.
+`/workshop` keeps the prepared movement and exactly three placements. Flexible
+portrait/short-wide layouts, safe-area padding and visible-viewport Parts bounds
+keep controls reachable. Parts defaults to Available and retains search/filter/
+scroll state; installed parts can be identified without drag handles. One sentence
+explains the prepared fixture, with 0/3–3/3 checkpoint progression. Undo stops at
+cursor 12; Reset is secondary in Parts and confirms before removing placements.
+Partial renderer construction/load cleanup and explicit Retry preserve accepted
+in-memory state. Recovery focus runs after React re-enables Parts. Sheet fade and
+fixed feedback/selection space keep geometry stable; manual reopening focuses the
+heading without raising the keyboard, while invalid drops focus the same handle.
 
-## Review changes and next action
+Source inspection traced Workshop against Explorer before presentation edits.
+Shared lighting/material/finish/framing helpers, original geometry/fitted matrices,
+provisional P73/P79 identities/order and historical lesson/session/save code are
+unchanged. No source/derived CAD, mechanical operations or lesson expansion added.
 
-- Explorer uses one active-panel value, one selection classification per pass,
-  and a shared policy for raw poses, finishes, visibility and hand registration.
-  Raw catalog subtree hands no longer animate as if they were fitted.
-- Clock-only rendering no longer rebuilds React snapshots or diagnostic audits.
-  Camera/presentation updates, explicit inspection/WebMCP and automatic quality
-  remain live. No wall-clock performance gain has been measured.
-- Workshop shares camera capture/restore across detail, workbench and Retry;
-  UI inventory changes only after the controller accepts workspace navigation.
-- Bench context loss invalidates unfinished loading/compilation, and late pointer
-  capture after route exit releases the old canvas without touching another view.
-- Focused CPU regressions cover the affected transitions. Mechanical inputs,
-  source assets, motion laws and dependency locks are unchanged.
+Application/check head `7bb9fba37ffa54005055221f401773a9a27b447f` passed:
 
-The second pass removed duplicate spread rebuilds, two test-only Workshop helpers,
-and selection changes preceding refused workspace navigation. Application head
-`602574a` passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41326731178):
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41531151867):
+  169 tests, chapter-asset validation, TypeScript, lint and production/Vercel builds.
+  Added CPU coverage checks bounded Undo with retained attempt accounting,
+  partial construction cleanup, failed loading and late assets after disposal.
+- [Workshop browser matrix](https://github.com/galind/zweigesicht-1/actions/runs/41531151947):
+  mouse at 1440 × 900 and 1024 × 540; native Chromium emulated touch at 390 × 900,
+  320 × 568, 844 × 390, 667 × 375 and 568 × 320. All three ordinary placements
+  use actual dragging; Alternative controls are exercised separately. Covers
+  native scrolling, retained search/filter/scroll, installed identification,
+  visible controls, orientation, synthetic keyboard viewport shrink/pan,
+  wrong parts/holes, cancellation/duplicate input, 0/3–3/3, bounded Undo/refitting,
+  Reset dismissal, construction/load failure and accepted-state Retry across a
+  further load failure. All seeded localStorage bytes remain identical; no
+  project-save reads or storage writes/clears occur (the shared analytics SDK's
+  own attribution read is excluded from the read assertion). Retired redirects
+  and old difficulty URLs pass. No browser page errors or page overflow reported.
+- Workspace bounds stayed fixed through pickup, feedback, Undo and placements.
+  Heights in the viewport order above: 620, 476, 625.5, 277, 326, 302 and 230.5px.
+  Source inspection and `git diff --check` pass. No local tests/builds/browser
+  automation ran; no merge, deployment, publication or CAD download occurred.
+
+Inspected existing ignored 31 October Explorer rear-view and retired Easy Workshop
+renders under `artifacts/power-source/browser/`. These are historical rendering
+references, not current checkpoint evidence. Prior Workshop CI has no artifacts;
+current visual evidence remains unavailable and no visual pass is claimed. No new
+screenshots were generated or published. Keyboard-viewport/lifecycle injections
+and Chromium touch emulation do not qualify physical keyboards, phone suspension,
+actual iOS/Android devices or assistive technology.
+
+The following documentation-only commit records the passing head above; application
+and check files remain unchanged. Next: human visual comparison with Explorer,
+keyboard/screen-reader review and physical iOS/Android qualification. Marco still
+needs to confirm provisional screw identities/order and prepared fixture assumptions.
+No mechanical/release gate is cleared. Earlier entries below are historical;
+current behavior is documented in [Workshop](docs/WORKSHOP.md).
+
+## Verified drag-only placement milestone
+
+Started clean at `05cd06423048603b04a811c8d746d6c4b0e499c8`, matching the fetched
+SSH branch `codex/watchmaker-chapter-one` and open draft [PR #38](https://github.com/galind/zweigesicht-1/pull/38)
+against `develop`. The connected GitHub app confirmed the starting head's CI and
+Workshop checks passed. Inspected the current implementation and shared Sheet;
+no unrelated working-tree changes were present.
+
+`/workshop` retains exactly the prepared movement, winding bridge and two screws.
+Ordinary placement requires an intentional handle drag from Parts. Names/previews
+identify parts, row content scrolls natively, and an explicitly enabled Alternative
+controls mode supplies part/destination selection and confirmation. Persistent
+capture survives sheet dismissal. A continuous CAD thumbnail/crosshair uses the
+same touch-offset aim for feedback and validation. Reserved feedback space and
+fixed fixture framing keep the target stationary. Invalid releases reopen Parts
+with the same available handle; outside releases/cancellation do not count attempts.
+Screw-hole identity is resolved before positioning assistance, including occupied
+holes and ambiguous boundaries, without changing provisional P73/P79 identities/order.
+
+Everyday support/orientation setup is removed. [Workshop](docs/WORKSHOP.md) records
+the stationary, supported, movement-side-up fixture assumptions and the historical
+chapter boundary. Source geometry, materials, fitted transforms, component ownership,
+lesson/session/save code and existing compatibility tests remain unchanged. Bounds
+queries now explicitly refresh fitted world matrices: the new regression caught
+stale seat projections without changing the source matrices. No mechanical operation
+or lesson expansion was added. Shared rendering, Sheet, styles, loading/catalog,
+model metadata and package/config paths now trigger the browser workflow.
+
+Application/check head `2c936ec874ca2393c0f1bcea56ef8a2b159da488` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41525837478):
+  166 tests, chapter-asset validation, TypeScript, lint and production/Vercel builds.
+  Fitted-matrix, exclusive-ownership and historical chapter/save regressions pass;
+  new checks cover a stationary fixture camera and independent screw identity.
+- [Workshop browser checks](https://github.com/galind/zweigesicht-1/actions/runs/41525837426):
+  all three ordinary placements through actual mouse dragging at 1440 × 900 and
+  native Chromium emulated touch at 390 × 900 and 320 × 740. No placement button
+  or zero-distance helper is used as proof of ordinary gameplay. Native scrolling
+  versus handle pickup, tap/sub-threshold non-placement, persistent capture,
+  continuous preview/aim, wrong part, both wrong-hole directions, ambiguous midpoint,
+  imperfect correct placement, outside/far releases, duplicate deliveries,
+  cancellation, graphics loss/Retry, explicit alternatives and focus handling pass.
+  Workspace bounds remain identical through selection, dragging, feedback and all
+  placements: heights 592, 616.5 and 432.5 px respectively. Reset/reload, retired-route
+  redirects, old difficulty URLs and byte-identical complete seeded localStorage pass.
+  No browser page errors or horizontal overflow were reported.
+- Source inspection and `git diff --check`. No local tests, builds or browser
+  automation ran. No model changes/downloads, screenshots or asset publication.
+
+Blur/hidden-document, mouse pointercancel and duplicate delivery use injected
+lifecycle events; touch cancellation, capture loss, resize and graphics loss use
+browser input/APIs. Automated results do not certify visual quality, accessibility,
+physical iOS/Android usability or OS suspension behaviour. Human visual/keyboard/
+screen-reader and physical-phone review remain pending, as does Marco's review of
+provisional screw identities/order and fixture assumptions. No mechanical/release
+gate is cleared; no merge, deployment or publication occurred.
+
+The following commit updates verification documentation only; the tested
+application/check head is recorded above. Next: review the three-placement
+`/workshop` interaction and Alternative controls on actual devices, then obtain
+Marco's mechanical/mapping review before broadening the checkpoint.
+
+## Canonical movement-only Workshop
+
+The user has promoted the presentation prototype to `/workshop` and retired the
+previous chapter interface. The Separate stem view, switch and destination are
+removed. `/workshop/prototype` and `/workshop/assembly` redirect to the canonical
+route; the homepage entry is unchanged. Old difficulty queries open the same view.
+
+Practice now starts at an explicit prepared-movement checkpoint (cursor 12) and
+covers the winding bridge and its two screws. This replaces the stem-only fixture
+with useful movement placements; it does not simulate insertion or preceding
+operations. Source geometry/materials/fitted matrices remain unchanged. The UI
+labels this as practice, with memory-only progress that resets on reload.
+
+The old chapter UI, renderer, styles, drag helper and browser workflow are removed.
+Lesson/session records and compatibility tests remain; existing saves are untouched.
+The prior implementation is recoverable at verified `d4b5bcf`. The current viewer
+has one active assembly, direct placement without hand tools, Parts search and
+availability filters, and the existing phone-sheet/cancellation/tap/keyboard flow.
+[Current scope and review limits](docs/WORKSHOP.md) supersede earlier entries below.
+
+Application/check head `88397ca1275efdd8c29192d1f0899ea0ef93a8bd` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41516629391):
+  164 retained tests, chapter-asset validation, TypeScript, lint and both builds.
+  Three retired-renderer tests were removed with the old implementation; the
+  current renderer's fitted-matrix, membership and framing regressions passed.
+- [Workshop interactions](https://github.com/galind/zweigesicht-1/actions/runs/41516629487):
+  desktop, 390 px and 320 px; three placements, invalid part, native mouse/touch
+  drag cancellation, keyboard/tap placement, search/availability filters, reset,
+  both retired-path redirects, old difficulty links and byte-identical chapter
+  storage. The Separate stem and old Resume chapter controls are absent.
+- Source inspection and `git diff --check`. No local tests, builds or browser
+  automation ran. No asset or screenshot publication.
+
+Human visual/accessibility and physical-phone review remain pending. No merge,
+deployment or publication. The following commit updates verification documentation
+only; the tested application/check head is recorded above. Next: review `/workshop`.
+
+## Prototype: direct placement without hand tools
+
+The presentation prototype at `/workshop/prototype` no longer asks for hands,
+tweezers or a screwdriver. Tool state, controls and the prerequisite are removed;
+a chosen part can be dragged directly from Parts to the assembly. Tap/keyboard
+placement and cancellation remain available. Placement options retain the existing
+orientation/support choices. Tool checking is explicitly disabled only for the
+prototype; no correct tool is silently selected. The full chapter's default
+validation, lesson and compatible saves retain their previous behaviour.
+
+Application/check head `dcf32acce183fa8209b5a2c8e7ca18f3332d5360` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41514134689):
+167 tests, chapter-asset validation, TypeScript, lint and both builds. The
+[prototype walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41514134667)
+passed desktop, 390 px and 320 px without opening setup or choosing tools,
+including invalid choices, drag cancellation, tap/keyboard placement and save
+isolation. A regression verifies that only the tool prerequisite is omitted;
+all other placement checks and the chapter's default tool requirement remain.
+The [retained chapter regression](https://github.com/galind/zweigesicht-1/actions/runs/41514134742)
+passed all 15 operations with desktop, keyboard and native emulated touch.
+
+Source inspection and `git diff --check` pass. No local tests, builds or browser
+automation ran. Human visual/physical-phone review remains pending; no merge,
+deployment or publication. The following commit updates this verification record
+only; the tested application/check head is identified above.
+
+## Assembly presentation prototype — review checkpoint
+
+Started clean at `eba5243cdf0dc9590429922b6ce696234fcc753f`, matching SSH
+`origin/codex/watchmaker-chapter-one` and open draft PR #38. Read the original
+workbook and inspected homepage, Explorer/component browser, Sheet, rendering and
+chapter implementation before editing. Workbook hash matches recorded provenance.
+
+`/workshop/prototype` now isolates a two-placement, memory-only review checkpoint.
+Large active movement/separate-stem views use Explorer's source-frame materials,
+lighting, perspective bounds-fit and contact shading. Parts is a searchable,
+grouped Sheet with real CAD previews and installed/available states. Preview drag,
+explicit tap/keyboard destinations, cancellation, invalid-choice feedback and
+phone bottom-sheet handoff use the existing validator. View switching preserves
+ownership and progress. The full chapter, lesson/session schema and saves are
+unchanged. No new CAD, animation, cushion or mechanical behaviour was added.
+
+[Prototype notes](docs/ASSEMBLY_PRESENTATION_PROTOTYPE.md) distinguish Marco's
+leather-bench instructions and later holder introduction from our early support
+exchanges and mandatory-tool interpretations. Migration stops at this prototype.
+
+Application/check head `c31800ecdcfb051595f03e20b13da912991c8768`:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41511482884)
+  passed 166 tests, chapter-asset validation, TypeScript, lint, production and
+  Vercel builds. New geometry regressions check exact fitted matrices, exclusive
+  ownership, absence of loose scene inventory and useful projected framing.
+- [Prototype interactions](https://github.com/galind/zweigesicht-1/actions/runs/41511482921)
+  passed at 1440 × 900, 390 × 900 and 320 × 740: search/inventory,
+  installed status, real previews, non-mutating assembly switching, keyboard
+  selection/cancellation, invalid part/destination, menu-to-assembly mouse/native
+  emulated touch drag and cancellation, keyboard/tap placement, checkpoint
+  completion/reload and byte-identical existing chapter storage. The surface
+  heights after placement were 616, 601.5 and 441.5 px respectively.
+- [Retained chapter walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41511482987):
+  all 15 operations passed through desktop, keyboard and native emulated touch,
+  including invalid attempts, cancellation, Undo, timing, pause/reload/resume,
+  completion, restart, required-holder failure/Retry and legacy compatibility.
+- Source inspection and `git diff --check` passed. No local tests, builds or
+  browser automation ran. The retained chapter implementation and existing asset files are unchanged
+  from the starting revision. No model or screenshot artifacts were published.
+
+Human visual comparison with Explorer, accessibility and physical iOS/Android
+review remain pending, separately from automated evidence. Full migration is
+explicitly deferred until this first milestone has been reviewed visually.
+No merge, deployment, publication or release-gate clearance. The following
+milestone changes review documentation only; the tested application/check revision
+is identified above. Next: human prototype review at `/workshop/prototype`.
+
+## Workshop interface simplification
+
+Started clean at `c8559127e9abc6b93dd29873f6165a936af7b3d4`, matching the fetched
+SSH branch `codex/watchmaker-chapter-one` and draft PR #38. Inspected the actual
+homepage/Explorer, shared site chrome, Sheet component and global styles first.
+
+The workshop now reuses the site's typography, neutral colours, glass surfaces,
+text buttons, Lucide icons, menu rows and Sheet behaviour. The green mat is the
+working surface within that frame. One instruction and one feedback area replace
+repeated guidance; score/time are in the menu and progress is a quiet count.
+A selected part has one compact action row with **Place…**, cancellation and,
+for assemblies, turning/support choices. All three destinations remain explicit
+in the contextual panel. Decorative captions, permanent placement rings/buttons,
+floating part labels, the separate zoom strip and superseded CSS are removed.
+Tools and Undo stay in the dock; pause/help/menu stay in the header. Restart,
+zoom and technical review controls remain easy to find in the menu.
+
+The 15-operation lesson, session/save schema, validator, scoring, timing and
+geometry/materials/fitted transforms/supports are unchanged. The renderer change
+is accessible instruction copy only. No choices are inferred from the next answer.
+
+Part targets retain touch dragging and 44 px minimums. Loose parts take priority
+over larger assembly/support hit rectangles; supports take priority during
+explicit support selection. The action row reserves space so selecting or
+dragging does not move the geometry.
+
+Application/check head `60445c2114a76ae20832099886be26230d6c041f` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41357741301):
+  164 tests, chapter-asset validation, TypeScript, lint, production and Vercel builds.
+- [Runner-hosted Chromium checks](https://github.com/galind/zweigesicht-1/actions/runs/41357741463):
+  all 15 operations through desktop pointer input, keyboard placement, 390 px
+  native emulated touch dragging, and a second complete chapter through native
+  taps and explicit destinations at 320 px. Desktop rejects eight deliberate
+  mistakes. Cancellation, Undo without repeated rewards, active timing,
+  pause/reload/resume, completion, restart, required-holder failure/Retry and
+  legacy URLs/saves passed. Contextual controls, help discovery, placement
+  cancellation/focus restoration, actual drag-start hit identity, touch-action,
+  44 px targets and viewport containment are checked. Mat height was 525 px at
+  390 × 844 and 421 px at 320 × 740, with no scrolling control form.
+- Source inspection and `git diff --check`. No local tests, builds or browser
+  automation ran. Only existing hash-verified approved holder assets were reused
+  on the runner; no models or screenshots were published.
+
+Human visual/accessibility review, first-time-user assessment and actual iOS/
+Android phone play remain pending, separately from the automated evidence.
+Marco’s mechanical review and all release gates remain open. No merge,
+deployment or publication was performed. The following milestone changes review
+documentation only; the tested application/check head is identified above.
+
+## Assembly surface redesign
+
+Started clean at `4c1542a` on `codex/watchmaker-chapter-one`, matching the fetched
+SSH remote and draft PR #38. The workbook was read again and matches the
+recorded SHA-256. The design is our interpretation, not Marco-approved.
+
+`/workshop` now presents one muted green bench with grouped, selectable CAD
+geometry, an empty initial centre, a compact illustrated tool strip and one
+instruction. The movement and separately assembled stem stay on the same
+surface. Turn over, pick a support and seat/return are explicit player actions;
+wrong parts, tools, orientations, supports and destinations remain possible.
+Hover/focus/tap names, drag previews, near-action feedback and a visible spatial
+non-drag path replace the inventory buttons and placement form. Pause, Undo,
+restart and zoom remain available. Technical notes, radius and seat hints are
+behind Workshop menu → Development / review.
+
+The lesson, session/schema, all 15 operations, source geometry/materials/fitted
+matrices, downloaded holders and seating records are unchanged. The prepared
+plate, separate stem and deferred Incabloc boundaries are retained. Existing
+chapter saves remain compatible. The title and homepage entry placement are
+unchanged. No running-movement animation is loaded by the chapter.
+
+Portrait geometry layout, 44 px part/tool targets, fixed action-strip height,
+pointer capture and scrolling prevention support touch. Tool taps select on
+native release because Chromium can suppress the compatibility click after a
+drag; duplicate clicks are ignored and keyboard activation remains available.
+Renderer callbacks update before paint and redraws coalesce to one frame.
+
+Application/check head `966f1906debb65f0352600999633c7bd170e831a` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41350761734):
+164 tests, chapter asset validation, TypeScript, lint, production and Vercel builds.
+The [runner-hosted browser checks](https://github.com/galind/zweigesicht-1/actions/runs/41350761693)
+passed the complete desktop pointer chapter (including eight deliberately wrong
+attempts), keyboard path, native 390 px touch chapter and 320 px completed/loose-part
+layout checks.
+The browser suite uses independently projected CAD bounds and real pointer input
+for all 15 operations, plus wrong-attempt, cancellation, Undo, timing/save,
+restart, missing-holder Retry and legacy-link checks. It publishes no assets or
+screenshots. Source inspection and `git diff --check` pass. No local tests,
+builds or browser automation were invoked for this work.
+
+Responsive implementation and Chromium emulation are verified separately from
+actual-phone qualification, which remains open. Human visual/accessibility
+review and Marco's mechanical review remain outstanding; the detailed review
+checklist is in [chapter notes](docs/ASSEMBLY_CHAPTER_ONE.md). No mechanical or
+release gate is cleared. No merge, deployment or publication was performed.
+
+## First playable assembly chapter
+
+Started clean at fetched `develop` / HEAD
+`d39213b1efd275d3aaa37259a4f3c826711c136e`; PR #37 was already merged.
+The prior progress document lagged the checkout. Current branch:
+`codex/watchmaker-chapter-one`; Vercel Git deployment is disabled for this branch.
+No merge, deployment or publication is authorized by this work.
+
+Workshop now opens Marco’s **Be a watchmaker!** directly at `/workshop`.
+The homepage invitation sits directly above “Explore it in first person”, sharing
+its card style and arrow; the old header placement and CSS are removed.
+The entry, chapter heading and page metadata now use “Be a watchmaker!”.
+This copy-only rename was checked by source inspection and `git diff --check`.
+`/workshop/assembly` redirects there, and old
+difficulty query parameters open the same chapter. Easy/Hard, their chooser,
+renderer, dependency rules, migration code, pose manifest, CSS and obsolete
+tests/browser scripts are removed. Historical evidence and reproduction scripts
+remain tied to their recorded revisions. The 22 fitted matrices now come directly
+from the CAD manifest; they were verified identical to the retired pose manifest.
+
+The chapter covers exactly Tabelle1 rows 5–19, ending with
+the winding bridge's second screw. It uses a separate lesson/session, an empty
+central starting area, original movement geometry/materials/fitted transforms,
+the existing two hash-checked holders, and one surface for the movement and
+separately assembled stem. No first-person controller or running animation is
+loaded by this route. Existing Easy/Hard browser saves are left untouched and
+are not read or migrated by the chapter.
+
+Sequence, tool, orientation, support, destination and 5 mm placement validation
+are explicit. Wrong committed attempts cost −2 once; each operation earns +10
+once. Undo keeps the reward ledger. Resume, restart, cancellation, interrupted
+loading/graphics and active-only timing use the chapter session.
+The review radius can be changed to 10 mm. Keyboard exact-seat placement uses
+the same lesson validator. Completion means chapter completion only.
+
+[Chapter notes](docs/ASSEMBLY_CHAPTER_ONE.md) record the exact mappings and
+[reference provenance](assets/source-manifest/assembly-chapter-one.json).
+Prepared plate: 11 fixed plate/pin/jewel leaves; all five Incabloc leaves and two
+later cap-plate screws are deferred. Final chapter: 22 distinct movement leaves.
+Tool assignments, prepared subtree boundaries and bridge-screw numbering
+(P73 then P79) remain provisional. The stem order follows Marco (wheel before
+sliding coupling), independently of the old DAG. Holder orientation uses recorded
+12.2/16.3 mm seats and exchanged intact supports; fit/stability of these partial
+assemblies and insertion paths remain unverified. No geometry is changed to
+conceal uncertainty.
+
+Cleanup application head `80cd1d63ffa93272ee151c33457acdb7a0f68b35` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41342184271):
+163 retained tests, chapter asset validation, TypeScript, lint, production and
+Vercel builds. The [runner-hosted Chromium walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41342184268)
+also passed: direct homepage entry, a real support drag and cancelled drag, all
+15 operations through the keyboard placement path, wrong-tool feedback, Undo
+without repeated reward, pause/reload/resume, completion, legacy-save isolation,
+required-holder failure/Retry, old difficulty links and the prototype URL redirect.
+The check reuses the existing approved UAT holder GLBs with recorded hash
+verification; no new assets or screenshots were published.
+
+The 12 added CPU regressions cover the full sequence, error dimensions,
+component counts, holder/orientation changes, separate stem ownership,
+scoring/Undo/duplicate releases, save/resume, timing and unchanged fitted matrices.
+Static inspection and `git diff --check` pass. No local tests, builds or browser
+automation ran; only source inspection and formatting ran on the owner's computer.
+Human visual/usability, actual-device and Marco's mechanical review remain open.
+Workshop has responsive phone layouts and pointer-based touch dragging; real-phone
+playability is not yet validated. First-person Bench requires keyboard/mouse.
+Homepage invitation head `90eb1cfcf81ade7e23380317ce5ce9e374e486a5` passed
+[CI](https://github.com/galind/zweigesicht-1/actions/runs/41343703685) and the
+[desktop Chromium chapter walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41343703680).
+The updated multi-viewport loading/layout script was inspected but not rerun;
+phone visual and touch review remains open.
+
+[Draft PR #38](https://github.com/galind/zweigesicht-1/pull/38) targets `develop`.
+Next: Marco reviews `/workshop` on this branch, especially tool
+assignments, screw order, prepared components, partial-assembly holder
+contact/stability and 5 versus 10 mm placement. No merge, deployment or
+publication was performed. The PR records final-head check results; this
+verification snapshot identifies the tested application head explicitly.
+
+## Previous integration evidence
+
+PR #37 simplified viewer state and guarded interrupted transitions. Application
+head `602574a` passed [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41326731178):
 198 tests, inventory validation, typecheck, lint, production and Vercel builds;
 [holder-assets validation](https://github.com/galind/zweigesicht-1/actions/runs/41326731213)
-also passed. Static review and `git diff --check` pass.
-[PR #37](https://github.com/galind/zweigesicht-1/pull/37) targets develop.
-Next: human review of the PR; exact final-head CI is recorded there.
-No local tests, builds, CAD calculations or browser automation have run. Exact-head
-CI results are recorded in the PR; browser focus/graphics behavior remains
-unverified by this review. Prior evidence below is historical.
+also passed. These are prior-review results, not chapter verification.
 
 ## Current illustration and retained limits
 
-Explorer, completed Workshop and assembled Bench share prescribed **3 Hz /
+Explorer and assembled Bench share prescribed **3 Hz /
 21,600 beats per hour** escapement/train motion, all seven display packets and
 [current-local-time fitted hands](docs/CURRENT_TIME_HANDS.md) on both displays.
 The 93/137 and 214/217 sticking assumptions, balance amplitude, recoil, existing
 hairspring path, authored phases, fittings and materials are retained.
 
 Explorer separation holds the last train/barrel/hairspring and hand pose relative
-to presentation, resuming only at displayed zero separation. Inventory and
-Workshop Undo restore static endpoints. Hidden time is excluded; hand wall-clock
+to presentation, resuming only at displayed zero separation. Inventory restores static endpoints; the assembly chapter is static throughout. Hidden time is excluded; hand wall-clock
 resynchronization never advances paused train time. Bench flips the whole parent
 and retains reference internal geometry for visitor collisions.
 

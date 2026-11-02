@@ -167,7 +167,7 @@ test("separation holds the last barrel and train poses relative to presentation 
   run.update(1e12 + 1000,true);
   assert.equal(run.clock.seconds,seconds,'resume does not count separation');
   for (const [id] of bases) meshes.get(id).matrix.elements.forEach((v,i) => close(v,matrices.get(id).elements[i],1e-8));
-  run.update(1e12 + 2000,false); // Inventory / Workshop Undo endpoint policy.
+  run.update(1e12 + 2000,false); // Inventory endpoint policy.
   for (const [id,base] of bases) assert.ok(meshes.get(id).matrix.equals(base));
   run.dispose();
 });
@@ -421,7 +421,7 @@ test("rear phases preserve rigid packets and the 214/217 connection remains 1:1"
 });
 
 test("displaced shafts carry motion through inspection, flipped poses and reassembly without drift", () => {
-  // Explorer installs phases after controller creation; Workshop/Bench do so before.
+  // Explorer installs phases after controller creation; Bench does so before.
   for (const phasesAtConstruction of [false, true]) {
     const {meshes, run: initial} = fixture();
     initial.dispose();

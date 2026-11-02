@@ -1,0 +1,56 @@
+name: Workshop
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - .github/workflows/workshop.yml
+      - explorer/src/assembly/**
+      - explorer/app/workshop/**
+      - explorer/src/viewer/**
+      - explorer/src/experience/**
+      - explorer/components/**
+      - explorer/lib/**
+      - explorer/app/globals.css
+      - explorer/app/layout.tsx
+      - explorer/public/models/**
+      - explorer/package.json
+      - explorer/package-lock.json
+      - explorer/tsconfig.json
+      - explorer/vite.config.ts
+      - explorer/next.config.*
+      - scripts/review/workshop.mjs
+      - tests/workshop.test.mjs
+      - explorer/src/content/seo.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: workshop-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [desktop, portrait, landscape]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: explorer/package-lock.json
+      - name: Install application and runner browser
+        run: |
+          npm ci --prefix explorer
+          npm install --prefix "$RUNNER_TEMP/workshop-browser" --no-save --package-lock=false playwright@1.56.1
+          "$RUNNER_TEMP/workshop-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify actual mouse and native emulated-touch dragging
+        env:
+          WORKSHOP_PROFILE: ${{ matrix.profile }}
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/workshop-browser/node_modules/playwright/index.mjs
+        run: node scripts/review/workshop.mjs

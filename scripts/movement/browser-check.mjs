@@ -434,43 +434,6 @@ try {
     explorerCleanup.dead && !explorerCleanup.frame && !explorerCleanup.active && explorerCleanup.stopped,
     explorerCleanup,
   );
-  // Route exit disposes the old animation resources and RAF owner.
-  await page.evaluate(() => {
-    window.oldMovement = window.movementAudit;
-  });
-  await page.goto(base + "/workshop?mode=easy", { waitUntil: "networkidle" });
-  await viewer(page);
-  state = await page.evaluate(() => ({
-    active: window.movementAudit.runningMovement.active,
-    pieces: window.movementAudit.pieces.size,
-  }));
-  check("Incomplete Workshop is static", !state.active, state);
-  await page.screenshot({ path: root + "/workshop-partial.png" });
-  // Fixture the final inventory through the existing controller update entrypoint.
-  const workshop = await page.evaluate(async () => {
-    const v = window.movementAudit;
-    v.update(new Set(v.manifest.finalLeafIds), null, true);
-    await new Promise((r) => setTimeout(r, 300));
-    const r=v.runningMovement, complete = r.active;
-    const d=new Date(),civil=(d.getHours()%12)*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000;
-    return { complete, handEntries:r.hands.entries.length, handApplied:r.hands.applied,
-      accuracy:Math.abs(r.hands.seconds-civil), moved:r.hands.entries.every(e=>!e.mesh.matrix.equals(e.reference)) };
-  });
-  await displayScope(page, "Completed Workshop");
-  check('Completed Workshop shows current time with all five hands and bushings',workshop.handEntries===10 && workshop.handApplied && workshop.moved && workshop.accuracy<.4,workshop);
-  const undone = await page.evaluate(async () => {
-    const v = window.movementAudit;
-    v.update(new Set(v.manifest.initialLeafIds), null, true);
-    await new Promise((r) => setTimeout(r, 100));
-    return {active:v.runningMovement.active, handsApplied:v.runningMovement.hands.applied};
-  });
-  check("Workshop completion runs and Undo stops", workshop.complete && !undone.active && !undone.handsApplied, { ...workshop, undone });
-  const playCleanup = await page.evaluate(() => {
-    const v = window.movementAudit;
-    v.dispose();
-    return { dead: v.dead, frame: v.frame };
-  });
-  check("Workshop cleanup stops RAF", playCleanup.dead && !playCleanup.frame, playCleanup);
   await page.goto(base + "/bench?inspect=1", { waitUntil: "networkidle" });
   await viewer(page);
   await page.waitForTimeout(1000);
