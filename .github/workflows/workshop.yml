@@ -6,7 +6,18 @@ on:
       - .github/workflows/workshop.yml
       - explorer/src/assembly/**
       - explorer/app/workshop/**
-      - explorer/src/viewer/StudioFrame.ts
+      - explorer/src/viewer/**
+      - explorer/src/experience/**
+      - explorer/components/**
+      - explorer/lib/**
+      - explorer/app/globals.css
+      - explorer/app/layout.tsx
+      - explorer/public/models/**
+      - explorer/package.json
+      - explorer/package-lock.json
+      - explorer/tsconfig.json
+      - explorer/vite.config.ts
+      - explorer/next.config.*
       - scripts/review/workshop.mjs
       - tests/workshop.test.mjs
       - explorer/src/content/seo.ts
@@ -34,7 +45,7 @@ jobs:
           npm ci --prefix explorer
           npm install --prefix "$RUNNER_TEMP/workshop-browser" --no-save --package-lock=false playwright@1.56.1
           "$RUNNER_TEMP/workshop-browser/node_modules/.bin/playwright" install --with-deps chromium
-      - name: Verify menu placement on desktop and emulated phones
+      - name: Verify actual mouse and native emulated-touch dragging
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/workshop-browser/node_modules/playwright/index.mjs
         run: node scripts/review/workshop.mjs

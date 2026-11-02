@@ -4,6 +4,33 @@ Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
+## Drag-only placement milestone — CI pending
+
+Started clean at `05cd06423048603b04a811c8d746d6c4b0e499c8`, matching the fetched
+SSH branch `codex/watchmaker-chapter-one` and open draft [PR #38](https://github.com/galind/zweigesicht-1/pull/38)
+against `develop`. Connected GitHub checks at that exact head passed:
+[CI](https://github.com/galind/zweigesicht-1/actions/runs/41517350135) and
+[Workshop](https://github.com/galind/zweigesicht-1/actions/runs/41517350131).
+Inspected the current implementation, shared Sheet and retained validation before
+editing. No unrelated working-tree changes were present.
+
+Ordinary placement now requires an intentional handle drag from Parts. Tap/preview
+identification, native row scrolling and the explicit Alternative controls mode
+are separate. Persistent capture, continuous CAD thumbnail/crosshair, shared touch
+aim offset, reserved feedback space and fixed fixture framing preserve the gesture
+and target. Inside-invalid, outside, accepted and cancelled outcomes are distinct;
+invalid parts return ready for another drag. Screw-hole identity is resolved before
+positioning assistance, without changing provisional P73/P79 identities/order.
+Everyday orientation/support setup is removed; [Workshop](docs/WORKSHOP.md) records
+the prepared fixture assumptions and historical compatibility boundary.
+
+Runner coverage now requires all three placements through real mouse/native
+emulated-touch drags, plus interruptions, destination ambiguity, imperfect input,
+alternatives and unchanged saves. Source inspection and `git diff --check` pass;
+CI execution is the next action. No local tests/builds/browser automation, model
+changes/downloads, merge, deployment or publication. Human visual/accessibility,
+physical-phone and Marco review remain pending. No release gate is cleared.
+
 ## Canonical movement-only Workshop
 
 The user has promoted the presentation prototype to `/workshop` and retired the

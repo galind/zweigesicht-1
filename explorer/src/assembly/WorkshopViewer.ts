@@ -16,16 +16,9 @@ import {
 import { createMaterial, setFinishEnabled } from '../viewer/materials';
 import { SurfaceOcclusion } from '../viewer/SurfaceOcclusion';
 import { studioFrame } from '../viewer/StudioFrame';
-import {
-  PARTS,
-  LEAF_IDS,
-  componentIds,
-  type PartItem,
-  type Side,
-} from './lesson';
+import { PARTS, LEAF_IDS, componentIds, type PartItem } from './lesson';
 
-type Point = { x: number; y: number };
-export type Seat = Point & { width: number; height: number };
+import { screwDestination, type Point } from './workshopInput';
 
 /** Static source-frame presentation. No animation, support transfer or lesson mutation. */
 export class WorkshopViewer {
@@ -38,18 +31,13 @@ export class WorkshopViewer {
   pieces = new Map<string, THREE.Mesh>();
   owned: THREE.Object3D[] = [];
   assembly = new THREE.Group();
-  preview = new THREE.Group();
   cursor = 12;
-  selected?: PartItem;
-  side: Side = 'movement';
   ready = false;
   dead = false;
   interrupted = false;
   frame = 0;
-  dragPoint?: Point;
   constructor(
     public host: HTMLElement,
-    public onSeat: (seat: Seat) => void,
     public onError: (message: string) => void,
   ) {
     configureRenderer(this.renderer);
@@ -57,7 +45,7 @@ export class WorkshopViewer {
     this.scene.environment = this.environment.texture;
     this.scene.environmentIntensity = 0.9;
     addStudioLights(this.scene);
-    this.scene.add(this.assembly, this.preview);
+    this.scene.add(this.assembly);
     this.occlusion = new SurfaceOcclusion(this.scene, this.camera);
     this.renderer.domElement.setAttribute(
       'aria-label',
@@ -188,43 +176,24 @@ export class WorkshopViewer {
     this.resize();
     return result;
   }
-  update(cursor: number, selected: PartItem | undefined, side: Side) {
+  update(cursor: number) {
     this.cursor = cursor;
-    this.selected = selected;
-    this.side = side;
     this.layout();
   }
   layout() {
     if (!this.ready || this.dead) return;
     this.assembly.clear();
-    this.preview.clear();
     this.assembly.add(this.group(componentIds(this.cursor)));
-    // Frame the active movement, never the parts inventory.
-    this.fit(new THREE.Box3().setFromObject(this.assembly), false);
-    if (this.selected) {
-      const group = this.group(PARTS[this.selected]);
-      // Only a player-selected orientation is previewed. Installed matrices remain exact.
-      if (this.side === 'dial') {
-        const center = new THREE.Box3()
-          .setFromObject(group)
-          .getCenter(new THREE.Vector3());
-        group.position.copy(center).multiplyScalar(-1);
-        const pivot = new THREE.Group();
-        pivot.position.copy(center);
-        pivot.rotation.x = Math.PI;
-        pivot.add(group);
-        this.preview.add(pivot);
-      } else this.preview.add(group);
-      this.preview.visible = !!this.dragPoint;
-      if (this.dragPoint) this.movePreview(this.dragPoint);
-    }
-    this.publishSeat();
+    // The prepared fixture defines the camera throughout all three placements.
+    this.fit(
+      new THREE.Box3().setFromObject(this.group(componentIds(12))),
+      false,
+    );
     this.render();
   }
-  seatPoint() {
-    const ids = this.selected ? PARTS[this.selected] : PARTS.mainplate;
+  seatPoint(item: PartItem) {
     return new THREE.Box3()
-      .setFromObject(this.group(ids))
+      .setFromObject(this.group(PARTS[item]))
       .getCenter(new THREE.Vector3());
   }
   project(point: THREE.Vector3): Point {
@@ -234,16 +203,6 @@ export class WorkshopViewer {
       x: rect.left + ((p.x + 1) * rect.width) / 2,
       y: rect.top + ((1 - p.y) * rect.height) / 2,
     };
-  }
-  publishSeat() {
-    const rect = this.host.getBoundingClientRect();
-    const point = this.project(this.seatPoint());
-    this.onSeat({
-      x: point.x - rect.left,
-      y: point.y - rect.top,
-      width: rect.width,
-      height: rect.height,
-    });
   }
   onPlane(point: Point, z: number) {
     const rect = this.host.getBoundingClientRect(),
@@ -260,23 +219,27 @@ export class WorkshopViewer {
       new THREE.Vector3(),
     );
   }
-  movePreview(point?: Point) {
-    this.dragPoint = point;
-    this.preview.visible = !!point && !!this.selected;
-    if (point && this.selected) {
-      const seat = this.seatPoint(),
-        world = this.onPlane(point, seat.z);
-      if (world) this.preview.position.copy(world.sub(seat));
-    } else this.preview.position.set(0, 0, 0);
-    this.render();
-  }
-  distance(point: Point) {
-    const seat = this.seatPoint(),
-      screen = this.project(seat);
-    // Explicit destination target offers 44px precision assistance for the chosen part only.
-    if (Math.hypot(point.x - screen.x, point.y - screen.y) <= 22) return 0;
+  placement(point: Point, item: PartItem) {
+    if (item === 'bridge-screw-1' || item === 'bridge-screw-2') {
+      const destination = screwDestination(
+        point,
+        this.project(this.seatPoint('bridge-screw-1')),
+        this.project(this.seatPoint('bridge-screw-2')),
+      );
+      if (destination !== item)
+        return {
+          distanceMm: Infinity,
+          message: destination
+            ? 'That is the other screw hole. Try this part again from Parts.'
+            : 'Between screw holes. Aim clearly at one hole and try again.',
+        };
+    }
+    const seat = this.seatPoint(item);
     const world = this.onPlane(point, seat.z);
-    return world ? world.distanceTo(seat) : Infinity;
+    return {
+      distanceMm: world ? world.distanceTo(seat) : Infinity,
+      message: '',
+    };
   }
   resize = () => {
     if (this.dead) return;

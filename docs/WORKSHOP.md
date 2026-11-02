@@ -23,26 +23,77 @@ Parts retains all nine real component groups, names, CAD-rendered previews, sear
 and All/Available/Installed filters. Installed stem components remain visible in
 the movement and browser, preserving their fitted ownership. Available screws
 can be chosen before the bridge; invalid choices still reach the shared validator.
-There are no hands/tweezers/screwdriver controls or prerequisites. Orientation and
-support remain explicit in Placement options with fixed movement-side fixture
-defaults. The single movement surface is the explicit destination for both dragging
-and the labelled tap/keyboard action. Cancellation never submits an attempt.
+There are no hands/tweezers/screwdriver controls or prerequisites.
+
+### Prepared fixture assumptions
+
+Cursor 12 has the prepared plate, setting components and assembled stem already in
+their original fitted positions. The fixture is stationary, movement side upward,
+and supported for this checkpoint. Orientation/support are fixed assumptions, not
+player setup operations or evidence of support fit/stability. No holder is rendered
+or loaded. The adapter supplies the historical validator's movement-side support
+and orientation values explicitly; it omits only the tool prerequisite. Historical
+chapter defaults, operations, save schema and tests remain unchanged separately.
+Bridge leaves and screw identities/order remain provisional: P73 then P79, pending
+Marco's review. Nothing here validates insertion, tightening, torque or a mechanical
+fit tolerance. Only these three placement actions are playable.
+
+## Drag input and alternatives
+
+Ordinary mouse/touch gameplay requires pulling a labelled **Drag** handle in Parts
+and releasing over the movement workspace. Names/CAD previews only identify a part.
+There is no ordinary placement button or clickable `+`. Names/previews permit native
+vertical scrolling; only the separated handle has `touch-action: none`. A handle
+tap or movement below 8 CSS pixels never closes Parts or submits a placement.
+Pointer-down captures on the persistent workspace; crossing the intent threshold
+starts the held preview and closes Parts. The same capture survives sheet dismissal.
+
+A continuously visible, labelled CAD thumbnail follows the crosshair, including
+outside the workspace. Its centre is the pickup anchor; it is an identification
+preview at a fixed screen size, not an insertion/rotation simulation. For touch,
+the crosshair and thumbnail centre sit 64 CSS pixels above the finger. Feedback,
+workspace containment and final validation all use that same aim coordinate.
+The aim must be inside the workspace, even if the finger itself is outside.
+
+The camera fits the prepared cursor-12 fixture throughout all three placements.
+Selection and dragging do not modify the rendered assembly. Reserved feedback and
+selection space prevent movement resizing; Alternative controls overlays the view.
+A successful release fits the original matrices. An invalid inside release counts
+one failed attempt and reopens Parts with the same available handle focused.
+An outside release reopens Parts without an attempt. Escape, Cancel placement,
+pointer cancellation, loss of capture, window blur, hidden document, graphics loss,
+and coordinate-changing resize/scroll cancel without an attempt. Consuming the
+pointer before releasing capture and consuming alternative selections before
+submission prevent duplicate releases/activations from counting again.
+
+Screw destination identity is resolved from the nearest of **both** projected hole
+centres, including the already occupied hole; the selected screw does not choose
+the destination. A screen-distance tie within 0.5 CSS pixel is ambiguous and rejected.
+Only after identity matches does the retained 5 mm positioning assistance apply.
+The old 44px selected-seat shortcut is removed. Thus the neighbouring hole (about
+4.2 mm away) cannot be accepted merely because it is within that assistance radius.
+These are input-disambiguation rules, not mechanical tolerances.
+
+**Alternative controls** is always explicitly discoverable in the dock, independent
+of device detection. Enabling it replaces drag handles with Choose controls; the
+user chooses a part, selects Bridge seat / Screw hole 1 / Screw hole 2, and activates
+Confirm placement. It provides exact-seat positioning assistance through the same
+checkpoint validator and rejects wrong part/destination choices. The destination
+select receives focus after Parts closes; success/cancellation returns focus to
+Parts, and invalid attempts return to the available part. Status is announced via
+an atomic polite live region. Turning the mode off restores ordinary drag gameplay.
+These controls are implemented for non-drag access; accessibility qualification
+still requires human keyboard/screen-reader review.
 
 ## Rendering and phones
 
 `WorkshopViewer` retains source geometry, matrices, materials and finish annotations.
 It shares Explorer's 33-degree perspective bounds fit, ACES exposure 1.05, studio
 lighting/environment at intensity 0.9 and contact shading. The camera shows the
-movement side using Explorer's back-face direction/up vector and frames only the
-active assembly. The quiet green mat is a CSS surface, without additional green
-lighting. No movement animation, new CAD, holders or cushion models are loaded.
-
-The parts panel uses the existing Sheet and catalog patterns. On phones it is a
-bottom sheet; picking up a preview closes it while the persistent surface owns
-pointer capture. The selected name and preview remain identifiable, with a drag
-label and explicit cancellation. Tap/keyboard placement is retained. A 44px target
-assists screen precision for the chosen part, with the shared 5mm tolerance for
-other drops. The active movement is never fitted around the loose inventory.
+movement side using Explorer's back-face direction/up vector. The quiet green mat
+is a CSS surface, without additional green lighting. No movement animation, new CAD,
+holders or cushion models are loaded. Parts uses the existing Sheet; on phones it
+is a bottom sheet. Its dismissal and feedback do not change workspace dimensions.
 
 ## Workbook discrepancies for discussion
 
@@ -51,9 +102,9 @@ Read original workbook on 2 November 2026:
 SHA-256: `725b0035684799c95f4275909d4436fbaf37a6c6201225d97ed5e0349c6cd5a5`.
 
 - Row 5 says **tool leather bench**, and row 6 places the mainplate on it.
-  The implementation substitutes a red movement-side support.
+  The historical chapter implementation substitutes a red movement-side support.
 - Row 8 flips the mainplate on the leather bench; it does not request a red
-  support exchange. The implementation requires an exchange.
+  support exchange. The historical chapter requires an exchange.
 - Row 15 returns the movement to the leather bench, Front2 upward. Requiring
   another red-support selection is an implementation interpretation.
 - Row 21 introduces **movement holder 1**, after the first 15 operations in
@@ -64,17 +115,28 @@ SHA-256: `725b0035684799c95f4275909d4436fbaf37a6c6201225d97ed5e0349c6cd5a5`.
   current workshop does not require tools.
 
 These are not Marco-approved changes. No lesson rewrite, cushion, support geometry,
-insertion path or mechanical behaviour is introduced by this prototype.
+insertion path or mechanical behaviour is introduced by this checkpoint.
 
 ## Verification and review boundary
 
-The Workshop GitHub workflow covers desktop and native emulated touch at 390/320px:
-three placements, wrong-part feedback, cancellation, tap/keyboard placement,
-search/availability, restart, canonical/legacy URLs and unchanged chapter storage.
-CPU checks cover source-fitted matrices, installed membership, no loose scene
-inventory and projected camera framing. The old renderer-specific tests were
-removed with that renderer; retained lesson/session tests still protect provenance
-and save compatibility.
+The revised runner suite is pending CI validation. It uses actual mouse drags at
+1440px and native Chromium emulated-touch drags at 390/320px for **all three**
+placements, with independent projection from fitted geometry. Alternative-control
+placements are checked separately and are never used as proof of ordinary gameplay.
+The suite covers stable workspace bounds, preview/aim coordinates, native row
+scrolling versus handle pickup, wrong part/hole, ambiguous and imperfect drops,
+outside release, cancellation, repeated release delivery, graphics loss/retry,
+legacy routes and byte-identical complete localStorage across resets/reloads.
+Blur, hidden-document, mouse pointercancel and duplicate delivery use supplemental
+injected lifecycle events; touch cancellation, pointer capture loss, resize and
+WebGL context loss use browser input/APIs. This does not emulate an OS suspending a
+physical phone. CPU checks preserve fitted matrices and exclusive component ownership
+and add fixed-camera/screw-identity regressions. Historical chapter validation and
+save compatibility tests remain. Shared viewer, catalog/loading, Sheet/styles,
+model metadata and package/config dependencies trigger the Workshop workflow.
+
+No local tests, builds or browser automation are run for this milestone. Exact
+application revision and GitHub run evidence will be recorded in PROGRESS.md.
 
 Automated checks do not establish visual quality, accessibility or physical-phone
 usability. Human comparison against Explorer and actual iOS/Android review remain

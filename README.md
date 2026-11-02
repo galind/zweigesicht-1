@@ -43,8 +43,11 @@ Workshop is excluded from indexing and the sitemap.
 The prototype is now the workshop. The separate-stem view and previous chapter
 interface are retired. The current practice starts with a prepared movement and
 asks you to fit the winding bridge and its two screws. This is a three-placement
-checkpoint, not the full lesson. Browse Parts, then drag onto the movement or use
-the tap/keyboard placement action. No hand-tool choice is required.
+checkpoint, not the full lesson. Open Parts and pull a labelled Drag handle onto the movement. Names and previews
+identify parts without placing them; scroll on those areas on touch screens.
+**Alternative controls** explicitly enables part/destination selection and confirmation
+for keyboard, assistive technology or non-drag use. No hand-tool, support or
+orientation setup is required at this prepared checkpoint.
 
 Progress is memory-only and resets on reload. Existing chapter and Easy/Hard saves
 are left untouched and are not imported. Original fitted geometry/materials remain
