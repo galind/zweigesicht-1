@@ -14,12 +14,21 @@ orientation/support choices. Tool checking is explicitly disabled only for the
 prototype; no correct tool is silently selected. The full chapter's default
 validation, lesson and compatible saves retain their previous behaviour.
 
-Source inspection and `git diff --check` pass. The runner flow now completes the
-checkpoint without opening setup or choosing tools. A regression covers the
-prototype exception while retaining every other placement check and the chapter's
-default tool requirement. GitHub results are pending for this revision. No local
-tests, builds or browser automation ran. Human visual/physical-phone review remains
-pending; no merge, deployment or publication.
+Application/check head `dcf32acce183fa8209b5a2c8e7ca18f3332d5360` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41514134689):
+167 tests, chapter-asset validation, TypeScript, lint and both builds. The
+[prototype walkthrough](https://github.com/galind/zweigesicht-1/actions/runs/41514134667)
+passed desktop, 390 px and 320 px without opening setup or choosing tools,
+including invalid choices, drag cancellation, tap/keyboard placement and save
+isolation. A regression verifies that only the tool prerequisite is omitted;
+all other placement checks and the chapter's default tool requirement remain.
+The [retained chapter regression](https://github.com/galind/zweigesicht-1/actions/runs/41514134742)
+passed all 15 operations with desktop, keyboard and native emulated touch.
+
+Source inspection and `git diff --check` pass. No local tests, builds or browser
+automation ran. Human visual/physical-phone review remains pending; no merge,
+deployment or publication. The following commit updates this verification record
+only; the tested application/check head is identified above.
 
 ## Assembly presentation prototype — review checkpoint
 
