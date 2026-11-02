@@ -24,9 +24,23 @@ has one active assembly, direct placement without hand tools, Parts search and
 availability filters, and the existing phone-sheet/cancellation/tap/keyboard flow.
 [Current scope and review limits](docs/WORKSHOP.md) supersede earlier entries below.
 
-Source inspection and diff checks pass; GitHub verification is pending for this
-revision. No local tests, builds or browser automation ran. Human visual and
-physical-phone review remain pending. No merge, deployment or publication.
+Application/check head `88397ca1275efdd8c29192d1f0899ea0ef93a8bd` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41516629391):
+  164 retained tests, chapter-asset validation, TypeScript, lint and both builds.
+  Three retired-renderer tests were removed with the old implementation; the
+  current renderer's fitted-matrix, membership and framing regressions passed.
+- [Workshop interactions](https://github.com/galind/zweigesicht-1/actions/runs/41516629487):
+  desktop, 390 px and 320 px; three placements, invalid part, native mouse/touch
+  drag cancellation, keyboard/tap placement, search/availability filters, reset,
+  both retired-path redirects, old difficulty links and byte-identical chapter
+  storage. The Separate stem and old Resume chapter controls are absent.
+- Source inspection and `git diff --check`. No local tests, builds or browser
+  automation ran. No asset or screenshot publication.
+
+Human visual/accessibility and physical-phone review remain pending. No merge,
+deployment or publication. The following commit updates verification documentation
+only; the tested application/check head is recorded above. Next: review `/workshop`.
 
 ## Prototype: direct placement without hand tools
 
