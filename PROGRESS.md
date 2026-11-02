@@ -33,7 +33,11 @@ the harness exposed a real stale-world-matrix issue: fitted meshes disable local
 automatic updates, and Three’s bounds walk does not force their world matrices.
 Groups now explicitly refresh world matrices before bounds/seat projection, without
 changing source local matrices. The independent runner projection does the same.
-Rechecking this correction is next; the initial failed runs do not establish completion. No local tests/builds/browser automation, model
+Revision `93752c1` passes [CI](https://github.com/galind/zweigesicht-1/actions/runs/41524666156)
+(166 tests, asset validation, TypeScript, lint, both builds). The browser run reached
+all three successful desktop drags and the cancellation/wrong-hole checks, then
+exposed an ambiguous wrapped-select label in Alternative controls. The destination
+now has an explicit label/control association; full browser verification is next. No local tests/builds/browser automation, model
 changes/downloads, merge, deployment or publication. Human visual/accessibility,
 physical-phone and Marco review remain pending. No release gate is cleared.
 

@@ -457,21 +457,20 @@ export default function Workshop() {
           aria-label="Alternative placement controls"
         >
           <p>{LABELS[selected]} — choose its destination.</p>
-          <label>
-            Destination{' '}
-            <select
-              ref={destinationControl}
-              value={destination}
-              onChange={(event) => setDestination(event.target.value)}
-            >
-              <option value="">Choose a seat…</option>
-              {DESTINATIONS.map((item) => (
-                <option key={item} value={item}>
-                  {SEATS[item]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <label htmlFor="workshop-destination">Destination</label>
+          <select
+            id="workshop-destination"
+            ref={destinationControl}
+            value={destination}
+            onChange={(event) => setDestination(event.target.value)}
+          >
+            <option value="">Choose a seat…</option>
+            {DESTINATIONS.map((item) => (
+              <option key={item} value={item}>
+                {SEATS[item]}
+              </option>
+            ))}
+          </select>
           <button
             disabled={!destination || !ready}
             onClick={() => {
