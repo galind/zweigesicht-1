@@ -4,44 +4,67 @@ Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
-## Drag-only placement milestone — CI pending
+## Verified drag-only placement milestone
 
 Started clean at `05cd06423048603b04a811c8d746d6c4b0e499c8`, matching the fetched
 SSH branch `codex/watchmaker-chapter-one` and open draft [PR #38](https://github.com/galind/zweigesicht-1/pull/38)
-against `develop`. Connected GitHub checks at that exact head passed:
-[CI](https://github.com/galind/zweigesicht-1/actions/runs/41517350135) and
-[Workshop](https://github.com/galind/zweigesicht-1/actions/runs/41517350131).
-Inspected the current implementation, shared Sheet and retained validation before
-editing. No unrelated working-tree changes were present.
+against `develop`. The connected GitHub app confirmed the starting head's CI and
+Workshop checks passed. Inspected the current implementation and shared Sheet;
+no unrelated working-tree changes were present.
 
-Ordinary placement now requires an intentional handle drag from Parts. Tap/preview
-identification, native row scrolling and the explicit Alternative controls mode
-are separate. Persistent capture, continuous CAD thumbnail/crosshair, shared touch
-aim offset, reserved feedback space and fixed fixture framing preserve the gesture
-and target. Inside-invalid, outside, accepted and cancelled outcomes are distinct;
-invalid parts return ready for another drag. Screw-hole identity is resolved before
-positioning assistance, without changing provisional P73/P79 identities/order.
-Everyday orientation/support setup is removed; [Workshop](docs/WORKSHOP.md) records
-the prepared fixture assumptions and historical compatibility boundary.
+`/workshop` retains exactly the prepared movement, winding bridge and two screws.
+Ordinary placement requires an intentional handle drag from Parts. Names/previews
+identify parts, row content scrolls natively, and an explicitly enabled Alternative
+controls mode supplies part/destination selection and confirmation. Persistent
+capture survives sheet dismissal. A continuous CAD thumbnail/crosshair uses the
+same touch-offset aim for feedback and validation. Reserved feedback space and
+fixed fixture framing keep the target stationary. Invalid releases reopen Parts
+with the same available handle; outside releases/cancellation do not count attempts.
+Screw-hole identity is resolved before positioning assistance, including occupied
+holes and ambiguous boundaries, without changing provisional P73/P79 identities/order.
 
-Runner coverage now requires all three placements through real mouse/native
-emulated-touch drags, plus interruptions, destination ambiguity, imperfect input,
-alternatives and unchanged saves. Source inspection and `git diff --check` pass;
-First runner pass at `4f108f7` found a new projection assertion failure and a
-synthetic pointer-cancellation target problem in the browser harness. Correcting
-the harness exposed a real stale-world-matrix issue: fitted meshes disable local
-automatic updates, and Three’s bounds walk does not force their world matrices.
-Groups now explicitly refresh world matrices before bounds/seat projection, without
-changing source local matrices. The independent runner projection does the same.
-Revision `93752c1` passes [CI](https://github.com/galind/zweigesicht-1/actions/runs/41524666156)
-(166 tests, asset validation, TypeScript, lint, both builds). The browser run reached
-all three successful desktop drags and the cancellation/wrong-hole checks, then
-exposed an ambiguous wrapped-select label in Alternative controls. The destination
-now has an explicit label/control association. That revision passes all core CI
-checks; the browser harness is being given bounded condition waits and stage
-diagnostics to identify a stalled interaction. Full browser verification is pending. No local tests/builds/browser automation, model
-changes/downloads, merge, deployment or publication. Human visual/accessibility,
-physical-phone and Marco review remain pending. No release gate is cleared.
+Everyday support/orientation setup is removed. [Workshop](docs/WORKSHOP.md) records
+the stationary, supported, movement-side-up fixture assumptions and the historical
+chapter boundary. Source geometry, materials, fitted transforms, component ownership,
+lesson/session/save code and existing compatibility tests remain unchanged. Bounds
+queries now explicitly refresh fitted world matrices: the new regression caught
+stale seat projections without changing the source matrices. No mechanical operation
+or lesson expansion was added. Shared rendering, Sheet, styles, loading/catalog,
+model metadata and package/config paths now trigger the browser workflow.
+
+Application/check head `2c936ec874ca2393c0f1bcea56ef8a2b159da488` passed:
+
+- [GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41525837478):
+  166 tests, chapter-asset validation, TypeScript, lint and production/Vercel builds.
+  Fitted-matrix, exclusive-ownership and historical chapter/save regressions pass;
+  new checks cover a stationary fixture camera and independent screw identity.
+- [Workshop browser checks](https://github.com/galind/zweigesicht-1/actions/runs/41525837426):
+  all three ordinary placements through actual mouse dragging at 1440 × 900 and
+  native Chromium emulated touch at 390 × 900 and 320 × 740. No placement button
+  or zero-distance helper is used as proof of ordinary gameplay. Native scrolling
+  versus handle pickup, tap/sub-threshold non-placement, persistent capture,
+  continuous preview/aim, wrong part, both wrong-hole directions, ambiguous midpoint,
+  imperfect correct placement, outside/far releases, duplicate deliveries,
+  cancellation, graphics loss/Retry, explicit alternatives and focus handling pass.
+  Workspace bounds remain identical through selection, dragging, feedback and all
+  placements: heights 592, 616.5 and 432.5 px respectively. Reset/reload, retired-route
+  redirects, old difficulty URLs and byte-identical complete seeded localStorage pass.
+  No browser page errors or horizontal overflow were reported.
+- Source inspection and `git diff --check`. No local tests, builds or browser
+  automation ran. No model changes/downloads, screenshots or asset publication.
+
+Blur/hidden-document, mouse pointercancel and duplicate delivery use injected
+lifecycle events; touch cancellation, capture loss, resize and graphics loss use
+browser input/APIs. Automated results do not certify visual quality, accessibility,
+physical iOS/Android usability or OS suspension behaviour. Human visual/keyboard/
+screen-reader and physical-phone review remain pending, as does Marco's review of
+provisional screw identities/order and fixture assumptions. No mechanical/release
+gate is cleared; no merge, deployment or publication occurred.
+
+The following commit updates verification documentation only; the tested
+application/check head is recorded above. Next: review the three-placement
+`/workshop` interaction and Alternative controls on actual devices, then obtain
+Marco's mechanical/mapping review before broadening the checkpoint.
 
 ## Canonical movement-only Workshop
 

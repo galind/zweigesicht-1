@@ -119,7 +119,11 @@ insertion path or mechanical behaviour is introduced by this checkpoint.
 
 ## Verification and review boundary
 
-The revised runner suite is pending CI validation. It uses actual mouse drags at
+Application/check revision `2c936ec874ca2393c0f1bcea56ef8a2b159da488` passed
+[GitHub CI](https://github.com/galind/zweigesicht-1/actions/runs/41525837478)
+(166 tests, asset validation, TypeScript, lint and both builds) and the
+[Workshop runner suite](https://github.com/galind/zweigesicht-1/actions/runs/41525837426).
+The suite uses actual mouse drags at
 1440px and native Chromium emulated-touch drags at 390/320px for **all three**
 placements, with independent projection from fitted geometry. Alternative-control
 placements are checked separately and are never used as proof of ordinary gameplay.
@@ -135,8 +139,12 @@ and add fixed-camera/screw-identity regressions. Historical chapter validation a
 save compatibility tests remain. Shared viewer, catalog/loading, Sheet/styles,
 model metadata and package/config dependencies trigger the Workshop workflow.
 
-No local tests, builds or browser automation are run for this milestone. Exact
-application revision and GitHub run evidence will be recorded in PROGRESS.md.
+Workspace heights remained 592px at 1440 × 900, 616.5px at 390 × 900 and 432.5px
+at 320 × 740 across pickup, feedback and placements. No page errors or horizontal
+overflow were reported. Bounds/seat queries explicitly refresh world matrices of
+fitted meshes before projection; original fitted matrices remain unchanged.
+No local tests, builds or browser automation ran for this milestone. See
+[PROGRESS.md](../PROGRESS.md) for the exact evidence and next review step.
 
 Automated checks do not establish visual quality, accessibility or physical-phone
 usability. Human comparison against Explorer and actual iOS/Android review remain
