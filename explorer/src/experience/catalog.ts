@@ -133,7 +133,7 @@ export function partLabel(p: Part) {
     : label;
 }
 
-const normalizeSearch = (text: string) =>
+export const normalizeSearch = (text: string) =>
   text
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')

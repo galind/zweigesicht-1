@@ -1,0 +1,38 @@
+name: Assembly presentation prototype
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - .github/workflows/assembly-prototype.yml
+      - explorer/src/assembly/prototype/**
+      - explorer/app/workshop/prototype/**
+      - explorer/src/viewer/StudioFrame.ts
+      - scripts/review/assembly-prototype.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: assembly-prototype-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: explorer/package-lock.json
+      - name: Install application and runner browser
+        run: |
+          npm ci --prefix explorer
+          npm install --prefix "$RUNNER_TEMP/prototype-browser" --no-save --package-lock=false playwright@1.56.1
+          "$RUNNER_TEMP/prototype-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify menu placement on desktop and emulated phones
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/prototype-browser/node_modules/playwright/index.mjs
+        run: node scripts/review/assembly-prototype.mjs

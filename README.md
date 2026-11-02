@@ -47,6 +47,13 @@ drag parts on a single green assembly surface. The existing two verified holder
 GLBs in `explorer/public/bench-local/` are required; no cushion or new holder
 download is used. See the [chapter mapping, controls and review limits](docs/ASSEMBLY_CHAPTER_ONE.md).
 
+## Presentation prototype
+
+`/workshop/prototype` is a separate, unsaved two-placement review checkpoint with
+an assembly-focused view, parts browser and drag/tap/keyboard placement. It does
+not replace the 15-operation chapter. See [scope and workbook discrepancies](docs/ASSEMBLY_PRESENTATION_PROTOTYPE.md).
+Human visual and physical-phone review must precede full chapter migration.
+
 ## Explore the workbench
 
 The homepage’s **Explore it in first person** invitation introduces `/bench`: a

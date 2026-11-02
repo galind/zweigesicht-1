@@ -1,8 +1,35 @@
 # Current project status
 
-Updated 1 November 2026. Setup: [README](README.md). Technical reference:
+Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
+
+## Assembly presentation prototype — review checkpoint
+
+Started clean at `eba5243cdf0dc9590429922b6ce696234fcc753f`, matching SSH
+`origin/codex/watchmaker-chapter-one` and open draft PR #38. Read the original
+workbook and inspected homepage, Explorer/component browser, Sheet, rendering and
+chapter implementation before editing. Workbook hash matches recorded provenance.
+
+`/workshop/prototype` now isolates a two-placement, memory-only review checkpoint.
+Large active movement/separate-stem views use Explorer's source-frame materials,
+lighting, perspective bounds-fit and contact shading. Parts is a searchable,
+grouped Sheet with real CAD previews and installed/available states. Preview drag,
+explicit tap/keyboard destinations, cancellation, invalid-choice feedback and
+phone bottom-sheet handoff use the existing validator. View switching preserves
+ownership and progress. The full chapter, lesson/session schema and saves are
+unchanged. No new CAD, animation, cushion or mechanical behaviour was added.
+
+[Prototype notes](docs/ASSEMBLY_PRESENTATION_PROTOTYPE.md) distinguish Marco's
+leather-bench instructions and later holder introduction from our early support
+exchanges and mandatory-tool interpretations. Migration stops at this prototype.
+
+Verification at this preparation milestone: source inspection and `git diff --check`.
+Runner checks added for desktop/390px/320px menu-to-assembly interactions; CI and
+runner results are pending. No local tests, builds or browser automation ran.
+Human visual comparison with Explorer, accessibility and physical iOS/Android
+review remain pending and are separate from automated checks. No merge, deployment,
+publication or release-gate clearance. Next: CI, then human prototype review.
 
 ## Workshop interface simplification
 
