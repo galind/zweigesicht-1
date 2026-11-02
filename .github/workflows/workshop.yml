@@ -31,6 +31,10 @@ jobs:
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [desktop, portrait, landscape]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -47,5 +51,6 @@ jobs:
           "$RUNNER_TEMP/workshop-browser/node_modules/.bin/playwright" install --with-deps chromium
       - name: Verify actual mouse and native emulated-touch dragging
         env:
+          WORKSHOP_PROFILE: ${{ matrix.profile }}
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/workshop-browser/node_modules/playwright/index.mjs
         run: node scripts/review/workshop.mjs

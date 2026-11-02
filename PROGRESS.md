@@ -29,7 +29,12 @@ publication. Added CPU/browser coverage will run in GitHub CI after this push;
 source inspection and `git diff --check` pass. Initial refinement `f2def8d` passed GitHub CI (169 tests, asset validation,
 TypeScript, lint and both builds). Browser CI caught a Retry focus race after
 successfully preserving accepted progress: focus ran before React enabled Parts.
-Focus now restores after the DOM commit; rerun results pending.
+Focus now restores after the DOM commit. The next desktop run verified recovery
+and exposed an overbroad storage assertion that included the shared analytics SDK's
+own attribution read. The assertion now covers all writes/clears and project-save
+reads, retaining full byte comparisons. Browser profiles run independently in CI;
+ordinary Parts reopening preserves scroll without refocusing an offscreen row.
+Rerun results pending.
 
 Next: resolve any runner failures, record exact passing heads, and retain separate
 human visual/keyboard/screen-reader and physical iOS/Android review. Marco's review

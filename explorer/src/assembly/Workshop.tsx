@@ -81,7 +81,6 @@ export default function Workshop() {
     [group, setGroup] = useState('available');
   const [resetOpen, setResetOpen] = useState(false);
   const listScroll = useRef(0);
-  const lastPartFocus = useRef<string | undefined>(undefined);
   const [viewport, setViewport] = useState<{ height: number; top: number }>();
   const [ready, setReady] = useState(false),
     [error, setError] = useState(''),
@@ -614,9 +613,7 @@ export default function Workshop() {
               ? document.querySelector<HTMLButtonElement>(
                   `[data-${alternative ? 'identify' : 'drag'}="${retryItem.current}"]`,
                 )
-              : (lastPartFocus.current &&
-                  document.querySelector<HTMLElement>(lastPartFocus.current)) ||
-                document.querySelector<HTMLElement>('.workshop-panel h2')
+              : document.querySelector<HTMLElement>('.workshop-panel h2')
           }
           finalFocus={() =>
             gesture.current
@@ -665,15 +662,6 @@ export default function Workshop() {
             }}
             onScroll={(event) => {
               listScroll.current = event.currentTarget.scrollTop;
-            }}
-            onFocusCapture={(event) => {
-              const button = (
-                event.target as HTMLElement
-              ).closest<HTMLButtonElement>('button');
-              if (button?.dataset.identify)
-                lastPartFocus.current = `[data-identify="${button.dataset.identify}"]`;
-              if (button?.dataset.drag)
-                lastPartFocus.current = `[data-drag="${button.dataset.drag}"]`;
             }}
           >
             {ITEMS.filter(

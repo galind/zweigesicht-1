@@ -91,6 +91,8 @@ try {
     [844, 390, true],
     [667, 375, true],
   ]) {
+    const profile = !touch ? "desktop" : width < 600 ? "portrait" : "landscape";
+    if (process.env.WORKSHOP_PROFILE && process.env.WORKSHOP_PROFILE !== profile) continue;
     const viewport = { width, height };
     const context = await browser.newContext({
       viewport,
@@ -114,7 +116,13 @@ try {
       for (const name of ["getItem", "setItem", "removeItem", "clear"]) {
         const original = Storage.prototype[name];
         Storage.prototype[name] = function (...args) {
-          if (this === localStorage) window.__storageCalls.push([name, args[0]]);
+          // The shared Vercel analytics SDK reads its own attribution key.
+          // Assert every write/clear and every project-save read, independent of that SDK.
+          if (
+            this === localStorage &&
+            (name !== "getItem" || String(args[0]).startsWith("zweigesicht:"))
+          )
+            window.__storageCalls.push([name, args[0]]);
           return original.apply(this, args);
         };
       }
@@ -327,6 +335,19 @@ try {
       assert.deepEqual(await state(), { cursor: "12", mistakes: "0" });
     }
     console.log(JSON.stringify({ width, height, phase: "Parts reopening and viewport changes" }));
+    const list = page.locator(".workshop-parts");
+    await list.evaluate((el) => {
+      el.scrollTop = 80;
+    });
+    const scrollBefore = await list.evaluate((el) => el.scrollTop);
+    await button("Close").click();
+    await sheet.waitFor({ state: "hidden" });
+    await open();
+    assert.equal(
+      await list.evaluate((el) => el.scrollTop),
+      scrollBefore,
+      "Manual reopening retains list position",
+    );
     await search.fill("winding");
     await search.focus();
     // Synthetic visual viewport shrink/pan models keyboard geometry, not a physical keyboard qualification.

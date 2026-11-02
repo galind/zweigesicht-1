@@ -21,7 +21,8 @@ placements only. It does not claim the full lesson or watch is finished.
 
 Parts retains all nine real component groups, names, CAD-rendered previews, search
 and Available/All/Installed filters, defaulting to Available. Search, filter, list
-position and the last available part focus survive reopening. Installed names and
+position survive reopening; ordinary reopening focuses the Parts heading without
+raising the search keyboard. Invalid releases focus the same available handle. Installed names and
 previews remain identifiable without drag handles, including after completion. Installed stem components remain visible in
 the movement and browser, preserving their fitted ownership. Available screws
 can be chosen before the bridge; invalid choices still reach the shared validator.
