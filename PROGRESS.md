@@ -26,7 +26,10 @@ Current visual evidence is unavailable (prior Workshop run has no artifacts; the
 tracked separated-movement image does not cover this UI). No visual pass claimed.
 No local tests/builds/browser automation, CAD downloads, merge, deployment or
 publication. Added CPU/browser coverage will run in GitHub CI after this push;
-source inspection and `git diff --check` pass. Validation results pending.
+source inspection and `git diff --check` pass. Initial refinement `f2def8d` passed GitHub CI (169 tests, asset validation,
+TypeScript, lint and both builds). Browser CI caught a Retry focus race after
+successfully preserving accepted progress: focus ran before React enabled Parts.
+Focus now restores after the DOM commit; rerun results pending.
 
 Next: resolve any runner failures, record exact passing heads, and retain separate
 human visual/keyboard/screen-reader and physical iOS/Android review. Marco's review

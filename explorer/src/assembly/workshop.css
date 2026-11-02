@@ -96,6 +96,7 @@
   flex-direction: column;
   gap: 20px;
   background: #e8eee8;
+  color: #142a21;
 }
 .workshop-dock {
   width: min(100%, 760px);
@@ -514,4 +515,8 @@
 }
 .workshop-panel[data-compact='true'] .workshop-filters {
   padding-bottom: 0;
+}
+
+.workshop-loading button:hover {
+  color: var(--foreground);
 }

@@ -189,6 +189,9 @@ export default function Workshop() {
   useLayoutEffect(() => {
     viewer.current?.update(session.cursor);
   }, [session.cursor, ready]);
+  useLayoutEffect(() => {
+    if (ready && retry > 0) partsButton.current?.focus();
+  }, [ready, retry]);
   useEffect(() => {
     if (error) retryButton.current?.focus();
   }, [error]);
@@ -217,9 +220,6 @@ export default function Workshop() {
               setFeedback(
                 'Movement restored. Accepted placements are unchanged.',
               );
-              requestAnimationFrame(() => {
-                if (live) partsButton.current?.focus();
-              });
             }
           }
         })
@@ -310,7 +310,9 @@ export default function Workshop() {
           : valid
             ? 'Release to fit here.'
             : hit?.message ||
-              'This placement is not ready. Release to try, or cancel.',
+              (OPERATIONS[sessionRef.current.cursor]?.item !== drag.item
+                ? `Fit ${LABELS[OPERATIONS[sessionRef.current.cursor].item]} first. Cancel to return to Parts.`
+                : 'Aim closer to this part’s seat, or cancel to return to Parts.'),
       );
     };
     const release = (event: PointerEvent) => {
