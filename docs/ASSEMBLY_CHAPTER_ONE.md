@@ -1,5 +1,11 @@
 # Be a watchmaker! — chapter 1
 
+> Deprecated interface. The previous 15-operation workshop was retired on 2 November
+> 2026. `/workshop` now opens the movement practice described in [Workshop](WORKSHOP.md).
+> This document records the previous chapter design, not the current live controls.
+> Recover its verified implementation at `d4b5bcf`; existing saves remain untouched.
+
+
 Review route: `/workshop`, reached directly from **Be a watchmaker!**.
 The former `/workshop/assembly` URL redirects here; Easy/Hard have been retired.
 The chapter implements Tabelle1 B5:E19 of Marco's supplied workbook, through

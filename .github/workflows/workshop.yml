@@ -1,19 +1,20 @@
-name: Assembly presentation prototype
+name: Workshop
 on:
   pull_request:
     branches: [develop]
     paths:
-      - .github/workflows/assembly-prototype.yml
-      - explorer/src/assembly/prototype/**
-      - explorer/app/workshop/prototype/**
+      - .github/workflows/workshop.yml
+      - explorer/src/assembly/**
+      - explorer/app/workshop/**
       - explorer/src/viewer/StudioFrame.ts
-      - scripts/review/assembly-prototype.mjs
-      - tests/assembly-prototype.test.mjs
+      - scripts/review/workshop.mjs
+      - tests/workshop.test.mjs
+      - explorer/src/content/seo.ts
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: assembly-prototype-${{ github.event.pull_request.number || github.ref }}
+  group: workshop-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   browser:
@@ -31,9 +32,9 @@ jobs:
       - name: Install application and runner browser
         run: |
           npm ci --prefix explorer
-          npm install --prefix "$RUNNER_TEMP/prototype-browser" --no-save --package-lock=false playwright@1.56.1
-          "$RUNNER_TEMP/prototype-browser/node_modules/.bin/playwright" install --with-deps chromium
+          npm install --prefix "$RUNNER_TEMP/workshop-browser" --no-save --package-lock=false playwright@1.56.1
+          "$RUNNER_TEMP/workshop-browser/node_modules/.bin/playwright" install --with-deps chromium
       - name: Verify menu placement on desktop and emulated phones
         env:
-          PLAYWRIGHT_MODULE: ${{ runner.temp }}/prototype-browser/node_modules/playwright/index.mjs
-        run: node scripts/review/assembly-prototype.mjs
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/workshop-browser/node_modules/playwright/index.mjs
+        run: node scripts/review/workshop.mjs

@@ -1,36 +1,34 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import type { Manifest, Part } from '../../experience/catalog';
-import { assetRequestUrl } from '../../experience/loading';
+import type { Manifest, Part } from '../experience/catalog';
+import { assetRequestUrl } from '../experience/loading';
 import {
   configureRenderer,
   addStudioLights,
   createStudioEnvironment,
   disposeObjectResources,
-} from '../../viewer/GraphicsResources';
+} from '../viewer/GraphicsResources';
 import {
   attachSourceSurface,
   loadSourceSurfaces,
-} from '../../viewer/SourceSurfaces';
-import { createMaterial, setFinishEnabled } from '../../viewer/materials';
-import { SurfaceOcclusion } from '../../viewer/SurfaceOcclusion';
-import { studioFrame } from '../../viewer/StudioFrame';
+} from '../viewer/SourceSurfaces';
+import { createMaterial, setFinishEnabled } from '../viewer/materials';
+import { SurfaceOcclusion } from '../viewer/SurfaceOcclusion';
+import { studioFrame } from '../viewer/StudioFrame';
 import {
   PARTS,
   LEAF_IDS,
   componentIds,
   type PartItem,
   type Side,
-} from '../lesson';
+} from './lesson';
 
-export type AssemblyView = 'movement' | 'stem';
 type Point = { x: number; y: number };
 export type Seat = Point & { width: number; height: number };
-const stemIds = new Set([...PARTS.stem, ...PARTS.wheel, ...PARTS.coupling]);
 
 /** Static source-frame presentation. No animation, support transfer or lesson mutation. */
-export class PrototypeViewer {
+export class WorkshopViewer {
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(33, 1, 0.05, 2000);
@@ -41,8 +39,7 @@ export class PrototypeViewer {
   owned: THREE.Object3D[] = [];
   assembly = new THREE.Group();
   preview = new THREE.Group();
-  cursor = 7;
-  view: AssemblyView = 'movement';
+  cursor = 12;
   selected?: PartItem;
   side: Side = 'movement';
   ready = false;
@@ -191,14 +188,8 @@ export class PrototypeViewer {
     this.resize();
     return result;
   }
-  update(
-    cursor: number,
-    view: AssemblyView,
-    selected: PartItem | undefined,
-    side: Side,
-  ) {
+  update(cursor: number, selected: PartItem | undefined, side: Side) {
     this.cursor = cursor;
-    this.view = view;
     this.selected = selected;
     this.side = side;
     this.layout();
@@ -207,19 +198,9 @@ export class PrototypeViewer {
     if (!this.ready || this.dead) return;
     this.assembly.clear();
     this.preview.clear();
-    const ids = componentIds(this.cursor).filter(
-      (id) => stemIds.has(id) === (this.view === 'stem'),
-    );
-    this.assembly.add(this.group(ids));
-    // Keep each work area stable while adding parts; never frame loose inventory.
-    const envelope = this.group(
-      this.view === 'stem' ? [...stemIds] : componentIds(6),
-    );
-    this.fit(
-      new THREE.Box3().setFromObject(envelope),
-      this.view === 'movement',
-      this.view === 'stem',
-    );
+    this.assembly.add(this.group(componentIds(this.cursor)));
+    // Frame the active movement, never the parts inventory.
+    this.fit(new THREE.Box3().setFromObject(this.assembly), false);
     if (this.selected) {
       const group = this.group(PARTS[this.selected]);
       // Only a player-selected orientation is previewed. Installed matrices remain exact.
@@ -241,11 +222,7 @@ export class PrototypeViewer {
     this.render();
   }
   seatPoint() {
-    const ids = this.selected
-      ? PARTS[this.selected]
-      : this.view === 'stem'
-        ? PARTS.stem
-        : PARTS.mainplate;
+    const ids = this.selected ? PARTS[this.selected] : PARTS.mainplate;
     return new THREE.Box3()
       .setFromObject(this.group(ids))
       .getCenter(new THREE.Vector3());
@@ -320,7 +297,7 @@ export class PrototypeViewer {
         this.occlusion.render(this.renderer);
       } catch {
         this.ready = false;
-        this.onError('Graphics interrupted. Retry the prototype.');
+        this.onError('Graphics interrupted. Retry the workshop.');
       }
     });
   }
@@ -328,7 +305,7 @@ export class PrototypeViewer {
     event.preventDefault();
     this.interrupted = true;
     this.ready = false;
-    this.onError('Graphics interrupted. Retry the prototype.');
+    this.onError('Graphics interrupted. Retry the workshop.');
   };
   dispose() {
     this.dead = true;

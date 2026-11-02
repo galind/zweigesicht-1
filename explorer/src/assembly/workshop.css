@@ -1,4 +1,4 @@
-.watchmaker-prototype {
+.watchmaker-workshop {
   height: 100dvh;
   min-height: 620px;
   display: grid;
@@ -7,65 +7,64 @@
   color: var(--foreground);
   overflow: hidden;
 }
-.watchmaker-prototype button,
-.prototype-panel button {
+.watchmaker-workshop button,
+.workshop-panel button {
   min-height: 44px;
   min-width: 44px;
   border-radius: 12px;
   padding: 8px 14px;
   cursor: pointer;
 }
-.watchmaker-prototype button:hover,
-.prototype-panel button:hover {
+.watchmaker-workshop button:hover,
+.workshop-panel button:hover {
   background: var(--muted);
 }
-.watchmaker-prototype button:disabled,
-.prototype-panel button:disabled {
+.watchmaker-workshop button:disabled,
+.workshop-panel button:disabled {
   opacity: 0.5;
   cursor: default;
 }
-.watchmaker-prototype button:focus-visible,
-.prototype-panel button:focus-visible {
+.watchmaker-workshop button:focus-visible,
+.workshop-panel button:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
-.watchmaker-prototype button[aria-pressed='true'],
-.prototype-panel button[aria-pressed='true'] {
+.watchmaker-workshop button[aria-pressed='true'],
+.workshop-panel button[aria-pressed='true'] {
   background: var(--foreground);
   color: var(--background);
 }
-.prototype-header {
+.workshop-header {
   display: flex;
   align-items: center;
   gap: 16px;
   padding: 12px 24px;
 }
-.prototype-header > a {
+.workshop-header > a {
   padding: 12px;
 }
-.prototype-header > div:nth-child(2) {
+.workshop-header > div:nth-child(2) {
   flex: 1;
 }
-.prototype-header h1 {
+.workshop-header h1 {
   font-size: 20px;
   font-weight: 500;
 }
-.prototype-header small {
+.workshop-header small {
   color: var(--muted-foreground);
 }
-.prototype-context {
+.workshop-context {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 4px 32px 12px;
   gap: 12px;
 }
-.prototype-context nav,
-.prototype-filters nav {
+.workshop-filters nav {
   display: flex;
   gap: 4px;
 }
-.prototype-workspace {
+.workshop-workspace {
   position: relative;
   margin: 0 24px;
   min-height: 0;
@@ -73,17 +72,17 @@
   overflow: hidden;
   background: #71877c;
 }
-.prototype-surface {
+.workshop-surface {
   position: absolute;
   inset: 0;
   touch-action: none;
 }
-.prototype-surface canvas {
+.workshop-surface canvas {
   display: block;
   width: 100%;
   height: 100%;
 }
-.prototype-assembly-label {
+.workshop-assembly-label {
   position: absolute;
   left: 18px;
   top: 14px;
@@ -91,7 +90,7 @@
   font-size: 12px;
   pointer-events: none;
 }
-.prototype-seat {
+.workshop-seat {
   position: absolute;
   transform: translate(-50%, -50%);
   border: 1px solid #fff9;
@@ -102,11 +101,11 @@
   height: 44px;
   padding: 0 !important;
 }
-.prototype-seat span {
+.workshop-seat span {
   font-size: 24px;
   text-shadow: 0 1px 3px #222;
 }
-.prototype-loading {
+.workshop-loading {
   position: absolute;
   inset: 0;
   display: flex;
@@ -116,19 +115,19 @@
   gap: 20px;
   background: #e8eee8;
 }
-.prototype-dock {
+.workshop-dock {
   width: min(100%, 760px);
   justify-self: center;
   padding: 10px 20px max(12px, env(safe-area-inset-bottom));
 }
-.prototype-feedback {
+.workshop-feedback {
   display: block;
   min-height: 36px;
   text-align: center;
   font-size: 13px;
   color: var(--muted-foreground);
 }
-.prototype-selection {
+.workshop-selection {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -136,36 +135,36 @@
   min-height: 44px;
   font-size: 14px;
 }
-.prototype-selection img {
+.workshop-selection img {
   width: 48px;
   height: 40px;
   object-fit: contain;
 }
-.prototype-selection strong {
+.workshop-selection strong {
   font-weight: 500;
 }
-.prototype-actions,
-.prototype-destinations {
+.workshop-actions,
+.workshop-destinations {
   display: flex;
   justify-content: center;
   gap: 8px;
 }
-.prototype-actions svg {
+.workshop-actions svg {
   display: inline-block;
   width: 18px;
   height: 18px;
   margin-right: 6px;
   vertical-align: middle;
 }
-.prototype-actions > button:first-child {
+.workshop-actions > button:first-child {
   background: var(--foreground);
   color: var(--background);
 }
-.prototype-destinations button {
+.workshop-destinations button {
   font-size: 13px;
   text-decoration: underline;
 }
-.prototype-panel {
+.workshop-panel {
   left: auto !important;
   right: 24px !important;
   top: 112px;
@@ -177,61 +176,61 @@
   background: var(--popover);
   gap: 0;
 }
-.prototype-filters {
+.workshop-filters {
   padding: 0 16px 8px;
 }
-.prototype-filters nav {
+.workshop-filters nav {
   justify-content: space-between;
   font-size: 13px;
 }
-.prototype-parts {
+.workshop-parts {
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 0 12px 16px;
   min-height: 0;
 }
-.prototype-part-row {
+.workshop-part-row {
   display: flex;
   border-bottom: 1px solid var(--border);
 }
-.prototype-part-row > button:first-child {
+.workshop-part-row > button:first-child {
   width: 88px;
   flex: 0 0 88px;
   touch-action: none;
   padding: 4px;
 }
-.prototype-part-row > button:last-child {
+.workshop-part-row > button:last-child {
   flex: 1;
   text-align: left;
   padding: 8px;
 }
-.prototype-part-row img {
+.workshop-part-row img {
   width: 80px;
   height: 64px;
   object-fit: contain;
   pointer-events: none;
 }
-.prototype-part-row small {
+.workshop-part-row small {
   display: block;
   font-size: 12px;
   color: var(--muted-foreground);
 }
-.prototype-setup {
+.workshop-setup {
   padding: 0 16px 16px;
   overflow-y: auto;
 }
-.prototype-setup fieldset {
+.workshop-setup fieldset {
   border: 0;
   padding: 8px 0;
 }
-.prototype-setup legend {
+.workshop-setup legend {
   font-size: 12px;
   color: var(--muted-foreground);
 }
-.prototype-setup button {
+.workshop-setup button {
   font-size: 13px;
 }
-.prototype-drag-label {
+.workshop-drag-label {
   position: fixed;
   pointer-events: none;
   z-index: 60;
@@ -243,38 +242,38 @@
   font-size: 13px;
 }
 @media (max-width: 600px) {
-  .watchmaker-prototype {
+  .watchmaker-workshop {
     min-height: 600px;
   }
-  .prototype-header {
+  .workshop-header {
     padding: 6px 8px;
     gap: 4px;
   }
-  .prototype-header h1 {
+  .workshop-header h1 {
     font-size: 17px;
   }
-  .prototype-header small {
+  .workshop-header small {
     font-size: 10px;
   }
-  .prototype-context {
+  .workshop-context {
     flex-direction: column;
     padding: 4px 12px 8px;
     gap: 4px;
     font-size: 13px;
   }
-  .prototype-workspace {
+  .workshop-workspace {
     margin: 0 8px;
     border-radius: 16px;
   }
-  .prototype-dock {
+  .workshop-dock {
     padding: 6px 8px max(8px, env(safe-area-inset-bottom));
   }
-  .prototype-feedback {
+  .workshop-feedback {
     display: block;
     font-size: 12px;
     min-height: 32px;
   }
-  .prototype-panel {
+  .workshop-panel {
     top: auto;
     left: 0 !important;
     right: 0 !important;
@@ -285,10 +284,10 @@
     border-radius: 22px 22px 0 0;
     padding-bottom: env(safe-area-inset-bottom);
   }
-  .prototype-panel input {
+  .workshop-panel input {
     font-size: 16px;
   }
-  .prototype-assembly-label {
+  .workshop-assembly-label {
     font-size: 10px;
     left: 12px;
   }

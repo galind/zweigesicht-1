@@ -51,7 +51,7 @@ export const homepageMetadata = pageMetadata(title, description, '/');
 export const workshopMetadata: Metadata = {
   ...pageMetadata(
     'Be a watchmaker! — Zweigesicht-1',
-    'Follow Marco Lang’s first assembly chapter in fifteen operations, through the winding bridge and its two screws.',
+    'Practice fitting the winding bridge and its two screws with an assembly-focused parts browser.',
     '/workshop',
   ),
   robots: { index: false, follow: false },

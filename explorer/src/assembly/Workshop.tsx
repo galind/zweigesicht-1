@@ -11,7 +11,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import { matchesPart, normalizeSearch } from '../../experience/catalog';
+import { matchesPart, normalizeSearch } from '../experience/catalog';
 import {
   PARTS,
   LABELS,
@@ -20,31 +20,25 @@ import {
   componentIds,
   type PartItem,
   type Side,
-} from '../lesson';
-import { createSession, commitAttempt, type Session } from '../session';
-import {
-  PrototypeViewer,
-  type AssemblyView,
-  type Seat,
-} from './PrototypeViewer';
-import './prototype.css';
+} from './lesson';
+import { createSession, commitAttempt, type Session } from './session';
+import { WorkshopViewer, type Seat } from './WorkshopViewer';
+import './workshop.css';
 
 const ITEMS = Object.keys(PARTS) as PartItem[];
-const stemItems = new Set<PartItem>(['stem', 'wheel', 'coupling']);
 function checkpoint(): Session {
   // Explicit review fixture, never a lesson transition or a persisted chapter save.
-  return { ...createSession('menu-prototype'), cursor: 7, awarded: 7 };
+  return { ...createSession('movement-practice'), cursor: 12, awarded: 12 };
 }
-export default function Prototype() {
+export default function Workshop() {
   const host = useRef<HTMLDivElement>(null),
-    viewer = useRef<PrototypeViewer | null>(null);
+    viewer = useRef<WorkshopViewer | null>(null);
   const partsButton = useRef<HTMLButtonElement>(null),
     cancelButton = useRef<HTMLButtonElement>(null);
   const [session, setSession] = useState(checkpoint);
-  const [view, setView] = useState<AssemblyView>('movement');
   const [selected, setSelected] = useState<PartItem>();
   const [side, setSide] = useState<Side>('movement');
-  const [support, setSupport] = useState<Side | null>(null);
+  const [support, setSupport] = useState<Side | null>('movement');
   const [panel, setPanel] = useState<'parts' | 'setup' | null>(null);
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
@@ -56,7 +50,7 @@ export default function Prototype() {
   >({});
   const [seat, setSeat] = useState<Seat>({ x: 0, y: 0, width: 1, height: 1 });
   const [feedback, setFeedback] = useState(
-    'Choose an assembly to inspect. Browse Parts to try fitting the coupling wheel.',
+    'Open Parts and choose a component to fit to the movement.',
   );
   const [dragPoint, setDragPoint] = useState<{ x: number; y: number }>();
   const gesture = useRef<{
@@ -66,11 +60,11 @@ export default function Prototype() {
     y: number;
     moved: boolean;
   } | null>(null);
-  const commitRef = useRef<
-    (item: PartItem, destination: AssemblyView, distance: number) => void
-  >(() => {});
+  const commitRef = useRef<(item: PartItem, distance: number) => void>(
+    () => {},
+  );
   const cancelRef = useRef<() => void>(() => {});
-  const finished = session.cursor >= 9;
+  const finished = session.cursor >= OPERATIONS.length;
   const installed = new Set(componentIds(session.cursor));
   const available = (item: PartItem) =>
     !PARTS[item].every((id) => installed.has(id));
@@ -88,14 +82,10 @@ export default function Prototype() {
     setSelected(item);
     setPanel(null);
     setFeedback(
-      `${LABELS[item]} selected. Drag to an assembly or choose a destination below.`,
+      `${LABELS[item]} selected. Drag onto the movement or choose Place on movement.`,
     );
   }
-  function attempt(
-    item: PartItem,
-    destination: AssemblyView,
-    distanceMm: number,
-  ) {
+  function attempt(item: PartItem, distanceMm: number) {
     if (!ready || finished) return;
     const result = commitAttempt(
       session,
@@ -104,7 +94,7 @@ export default function Prototype() {
         runId: session.runId,
         revision: session.revision,
         item,
-        destination,
+        destination: 'movement',
         distanceMm,
         kind: 'place',
         tool: null,
@@ -117,7 +107,7 @@ export default function Prototype() {
     setSession(result.session);
     setFeedback(
       result.accepted
-        ? `${LABELS[item]} fitted. ${result.session.cursor === 9 ? 'Prototype complete — the full chapter has not been migrated.' : 'Choose the next part from Parts.'}`
+        ? `${LABELS[item]} fitted. ${result.session.cursor === OPERATIONS.length ? 'Practice complete — the winding bridge and screws are fitted.' : 'Choose the next part from Parts.'}`
         : result.message,
     );
     if (result.accepted) {
@@ -130,13 +120,13 @@ export default function Prototype() {
     cancelRef.current = () => cancel();
   });
   useLayoutEffect(() => {
-    viewer.current?.update(session.cursor, view, selected, side);
-  }, [session.cursor, view, selected, side, ready]);
+    viewer.current?.update(session.cursor, selected, side);
+  }, [session.cursor, selected, side, ready]);
   useEffect(() => {
     let live = true;
-    let instance: PrototypeViewer | undefined;
+    let instance: WorkshopViewer | undefined;
     try {
-      instance = new PrototypeViewer(host.current!, setSeat, (message) => {
+      instance = new WorkshopViewer(host.current!, setSeat, (message) => {
         if (live) {
           setReady(false);
           setError(message);
@@ -158,7 +148,7 @@ export default function Prototype() {
             setError(
               reason instanceof Error
                 ? reason.message
-                : 'Unable to load prototype.',
+                : 'Unable to load workshop.',
             );
         });
     } catch (reason) {
@@ -200,7 +190,6 @@ export default function Prototype() {
       if (drag.moved && inside && instance)
         commitRef.current(
           drag.item,
-          instance.view,
           instance.distance({ x: event.clientX, y: event.clientY }),
         );
       else if (drag.moved) cancelRef.current();
@@ -211,7 +200,7 @@ export default function Prototype() {
     const escape = (event: KeyboardEvent) => {
       if (
         event.key === 'Escape' &&
-        !document.querySelector('.prototype-panel:not([data-ending-style])')
+        !document.querySelector('.workshop-panel:not([data-ending-style])')
       )
         cancelRef.current();
     };
@@ -239,68 +228,52 @@ export default function Prototype() {
 
   return (
     <main
-      className="watchmaker-prototype"
+      className="watchmaker-workshop"
       data-cursor={session.cursor}
       data-mistakes={session.mistakes}
     >
-      <header className="prototype-header">
-        <Link href="/workshop" aria-label="Back to full chapter">
+      <header className="workshop-header">
+        <Link href="/" aria-label="Back to Explorer">
           <ArrowLeft />
         </Link>
         <div>
           <h1>Be a watchmaker!</h1>
-          <small>Presentation prototype · unsaved review checkpoint</small>
+          <small>Practice checkpoint · progress resets on reload</small>
         </div>
       </header>
-      <section className="prototype-context">
+      <section className="workshop-context">
         <p>
           {finished
-            ? 'Two placements complete. Review the prototype before migrating the chapter.'
+            ? 'Practice complete: winding bridge and two screws fitted.'
             : OPERATIONS[session.cursor].label}
         </p>
-        <nav aria-label="Active assembly">
-          {(['movement', 'stem'] as const).map((assembly) => (
-            <button
-              key={assembly}
-              aria-pressed={view === assembly}
-              onClick={() => {
-                if (gesture.current) cancel();
-                setView(assembly);
-              }}
-            >
-              {assembly === 'movement' ? 'Movement' : 'Separate stem'}
-            </button>
-          ))}
-        </nav>
       </section>
-      <section className="prototype-workspace">
+      <section className="workshop-workspace">
         <div
-          className="prototype-surface"
+          className="workshop-surface"
           ref={host}
           onLostPointerCapture={() => {
             if (gesture.current) cancel();
           }}
         />
-        <span className="prototype-assembly-label">
-          {view === 'movement'
-            ? 'Movement · set aside at this checkpoint'
-            : 'Separate stem · working assembly'}
+        <span className="workshop-assembly-label">
+          Movement · winding-bridge practice
         </span>
         {selected && ready && (
           <button
-            className="prototype-seat"
-            aria-label={`Place ${LABELS[selected]} on ${view}`}
+            className="workshop-seat"
+            aria-label={`Place ${LABELS[selected]} on movement`}
             style={{
               left: Math.max(24, Math.min(seat.width - 24, seat.x)),
               top: Math.max(24, Math.min(seat.height - 24, seat.y)),
             }}
-            onClick={() => attempt(selected, view, 0)}
+            onClick={() => attempt(selected, 0)}
           >
             <span>+</span>
           </button>
         )}
         {!ready && (
-          <div className="prototype-loading" role={error ? 'alert' : 'status'}>
+          <div className="workshop-loading" role={error ? 'alert' : 'status'}>
             {error || 'Loading original components…'}
             {error && (
               <button
@@ -316,11 +289,11 @@ export default function Prototype() {
           </div>
         )}
       </section>
-      <footer className="prototype-dock">
-        <output className="prototype-feedback" aria-live="polite">
+      <footer className="workshop-dock">
+        <output className="workshop-feedback" aria-live="polite">
           {feedback}
         </output>
-        <div className="prototype-selection">
+        <div className="workshop-selection">
           {selected ? (
             <>
               <Image
@@ -341,30 +314,21 @@ export default function Prototype() {
             </>
           ) : (
             <span>
-              {finished ? 'Review checkpoint complete' : 'Pick a part to begin'}
+              {finished ? 'Practice complete' : 'Pick a part to begin'}
             </span>
           )}
         </div>
         {selected && (
           <div
-            className="prototype-destinations"
+            className="workshop-destinations"
             aria-label="Choose placement destination"
           >
-            <button
-              disabled={!ready}
-              onClick={() => attempt(selected, 'movement', 0)}
-            >
+            <button disabled={!ready} onClick={() => attempt(selected, 0)}>
               Place on movement
-            </button>
-            <button
-              disabled={!ready}
-              onClick={() => attempt(selected, 'stem', 0)}
-            >
-              Place on stem
             </button>
           </div>
         )}
-        <div className="prototype-actions">
+        <div className="workshop-actions">
           <button
             ref={partsButton}
             disabled={!ready}
@@ -383,12 +347,12 @@ export default function Prototype() {
             Placement options
           </button>
           <button
-            aria-label="Reset prototype checkpoint"
+            aria-label="Reset practice"
             onClick={() => {
-              cancel('Review checkpoint reset. Chapter saves are untouched.');
+              cancel('Practice reset. Choose a part from Parts.');
               setSession(checkpoint());
               setSide('movement');
-              setSupport(null);
+              setSupport('movement');
             }}
           >
             <RotateCcw />
@@ -397,7 +361,7 @@ export default function Prototype() {
       </footer>
       {dragPoint && selected && (
         <div
-          className="prototype-drag-label"
+          className="workshop-drag-label"
           style={{
             left: Math.max(
               8,
@@ -418,7 +382,7 @@ export default function Prototype() {
       >
         <SheetContent
           side="bottom"
-          className="prototype-panel"
+          className="workshop-panel"
           showOverlay={false}
           finalFocus={() =>
             gesture.current
@@ -439,7 +403,7 @@ export default function Prototype() {
             </SheetDescription>
           </SheetHeader>
           {panel === 'setup' ? (
-            <div className="prototype-setup">
+            <div className="workshop-setup">
               <fieldset>
                 <legend>Part side upward</legend>
                 {(['movement', 'dial'] as const).map((value) => (
@@ -468,7 +432,7 @@ export default function Prototype() {
             </div>
           ) : (
             <>
-              <div className="component-finder prototype-filters">
+              <div className="component-finder workshop-filters">
                 <label className="catalog-search">
                   <span className="sr-only">Search parts</span>
                   <input
@@ -479,7 +443,7 @@ export default function Prototype() {
                   />
                 </label>
                 <nav aria-label="Part groups">
-                  {['all', 'movement', 'stem'].map((value) => (
+                  {['all', 'available', 'installed'].map((value) => (
                     <button
                       key={value}
                       aria-pressed={group === value}
@@ -490,14 +454,14 @@ export default function Prototype() {
                   ))}
                 </nav>
               </div>
-              <div className="catalog-index prototype-parts">
+              <div className="catalog-index workshop-parts">
                 {ITEMS.filter(
                   (item) =>
                     matchesPart(normalizeSearch(LABELS[item]), query) &&
                     (group === 'all' ||
-                      stemItems.has(item) === (group === 'stem')),
+                      available(item) === (group === 'available')),
                 ).map((item) => (
-                  <div className="prototype-part-row" key={item}>
+                  <div className="workshop-part-row" key={item}>
                     <button
                       data-item={item}
                       disabled={!available(item) || finished}
@@ -538,7 +502,7 @@ export default function Prototype() {
                         {LABELS[item]}
                         <small>
                           {available(item) ? 'Available' : 'Installed'} ·{' '}
-                          {stemItems.has(item) ? 'Stem' : 'Movement'}
+                          Movement
                         </small>
                       </span>
                     </button>
@@ -548,7 +512,7 @@ export default function Prototype() {
                   (item) =>
                     matchesPart(normalizeSearch(LABELS[item]), query) &&
                     (group === 'all' ||
-                      stemItems.has(item) === (group === 'stem')),
+                      available(item) === (group === 'available')),
                 ) && <p>No matching parts.</p>}
               </div>
             </>

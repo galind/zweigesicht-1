@@ -1,4 +1,4 @@
-/** The sole Workshop lesson: Marco's Tabelle1 rows 5–19. */
+/** Retained chapter mapping: Marco's Tabelle1 rows 5–19. Workshop uses a practice checkpoint. */
 export type Side = 'movement' | 'dial';
 export type Tool = 'hands' | 'tweezers' | 'screwdriver';
 export type Destination =

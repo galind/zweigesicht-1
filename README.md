@@ -5,8 +5,8 @@ built with React, TypeScript and Three.js from the maker's CAD assembly.
 
 Inspect and isolate components, explore six mechanism groups, separate the
 assembly, and choose case, dial and hand appearances. A separate Workshop at
-`/workshop` offers **Be a watchmaker!**, Marco's first 15-operation
-chapter, with tool selection, scoring, active time, Undo and local saves.
+`/workshop` offers **Be a watchmaker!**, a movement-focused practice checkpoint
+with a parts browser and direct drag-and-drop placement.
 Explorer and Bench show a continuously running prescribed escapement and
 train illustration for the assembled movement, including both display trains and
 [current-local-time hands](docs/CURRENT_TIME_HANDS.md). The [power-source study](docs/POWER_SOURCE_STUDY.md)
@@ -36,24 +36,20 @@ npm --prefix explorer start -- --hostname 127.0.0.1 --port 4176
 
 Workshop's homepage entry appears in development and Vercel Preview builds;
 it is hidden in production. Direct `/workshop` access remains available.
-Direct visits open Marco's chapter; saved chapter progress resumes after an explicit
-Resume. `/workshop/assembly` redirects to `/workshop`, and old `?mode=easy` or
-`?mode=hard` links open the same chapter. Easy/Hard are retired; their browser
-save is left untouched and is not imported into the chapter. Workshop is excluded
-from indexing and the sitemap.
+Direct visits open the movement practice view. `/workshop/prototype` and
+`/workshop/assembly` redirect here; old difficulty query parameters are ignored.
+Workshop is excluded from indexing and the sitemap.
 
-The chapter ends with the winding bridge and its two screws. Select a tool, then
-drag parts on a single green assembly surface. The existing two verified holder
-GLBs in `explorer/public/bench-local/` are required; no cushion or new holder
-download is used. See the [chapter mapping, controls and review limits](docs/ASSEMBLY_CHAPTER_ONE.md).
+The prototype is now the workshop. The separate-stem view and previous chapter
+interface are retired. The current practice starts with a prepared movement and
+asks you to fit the winding bridge and its two screws. This is a three-placement
+checkpoint, not the full lesson. Browse Parts, then drag onto the movement or use
+the tap/keyboard placement action. No hand-tool choice is required.
 
-## Presentation prototype
-
-`/workshop/prototype` is a separate, unsaved two-placement review checkpoint with
-an assembly-focused view, parts browser and drag/tap/keyboard placement without
-hand-tool selection. It does
-not replace the 15-operation chapter. See [scope and workbook discrepancies](docs/ASSEMBLY_PRESENTATION_PROTOTYPE.md).
-Human visual and physical-phone review must precede full chapter migration.
+Progress is memory-only and resets on reload. Existing chapter and Easy/Hard saves
+are left untouched and are not imported. Original fitted geometry/materials remain
+unchanged; Workshop no longer requires the holder GLBs. See [workshop scope and
+review limits](docs/WORKSHOP.md). Human visual and physical-phone review remain pending.
 
 ## Explore the workbench
 

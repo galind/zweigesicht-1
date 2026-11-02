@@ -10,7 +10,7 @@
 - `asset-paths.json` and `finish-surfaces.json` in the runtime models directory: active content-hashed GLBs and source-face buffer. The diamond STL and case recovery have explicit hashes in their loaders.
 - `assets/source-manifest/`: URLs, hashes and reference provenance. Original sources, conversion caches and analysis evidence are ignored.
 
-`MovementViewer`, `AssemblyViewer` and `BenchViewer` own their route's geometry,
+`MovementViewer`, `WorkshopViewer` and `BenchViewer` own their route's geometry,
 immutable source matrices, presentation transforms, camera state and resource
 lifetime. Explorer's eligible assembled movement keeps its scheduler active;
 separation and inventory return to on-demand rendering. Clock-only frames do not
@@ -47,34 +47,28 @@ for the clock, geometry ownership, product-state policy and validation.
 
 ## Workshop
 
-`/workshop` renders the sole **Be a watchmaker!** chapter. There is no
-mode chooser, Easy/Hard DAG, packet workbench or completed-movement animation.
-Old difficulty query parameters are ignored. The former `/workshop/assembly`
-prototype URL redirects to the canonical route.
+`/workshop` renders **Be a watchmaker!**, the movement-only practice promoted
+from the presentation prototype. Former `/workshop/prototype` and
+`/workshop/assembly` links redirect here; old difficulty query parameters are ignored.
+There is no separate-stem screen, hand-tool selection or old chapter interface.
 
-`Assembly.tsx` owns tool/part selection, pause/resume/restart, feedback and storage.
-`lesson.ts` defines Marco's first 15 operations, required tools and exact occurrence
-IDs. `session.ts` validates sequence, tool, side, support, destination and millimetre
-placement radius, and retains an attempt/reward ledger across Undo and reload.
-The chapter key remains `zweigesicht:watchmaker:chapter-1:v1`. The retired
-`zweigesicht:play:session:v1` key is neither read, migrated nor deleted.
+`Workshop.tsx` owns parts browsing, drag/tap/keyboard placement, cancellation,
+feedback and memory-only checkpoint state. The starting fixture is chapter cursor
+12: fit the winding bridge and its two screws onto the prepared movement. It does
+not simulate the preceding operations or claim a completed full lesson.
 
-`AssemblyViewer` loads the required 22 leaves from the existing runtime GLBs and
-uses each source record's `worldTransform` directly. Before retiring the old pose
-manifest, all 22 matrices were compared and found identical. There is no duplicate
-pose manifest. Existing materials, surface annotations, lighting and graphics
-resource helpers are shared with the other views. The two existing holders are
-hash-checked against recorded assets and use recorded side-specific seating.
+`lesson.ts` retains the historical chapter mapping and exact occurrence IDs.
+`session.ts` supplies placement validation and the retained save schema, but the
+current workshop never reads or writes storage. Both old save keys remain untouched.
+Tool checking is explicitly disabled for practice; part, sequence, orientation,
+support and 5mm placement validation remain. The movement is the sole destination.
 
-The initially empty centre, loose parts, supported movement and separate stem
-assembly share one surface. A fixed camera permits zoom and explicit rigid
-turn/support exchange. `drag.ts` retains the pointer's grab offset. Committed
-drops use a 5 mm model-space radius, optionally 10 mm for review; cancelled drags
-and inspection are free. The keyboard exact-seat path uses the same validator.
-
-See [chapter mappings and review limits](ASSEMBLY_CHAPTER_ONE.md). Partial-assembly
-holder stability and physical insertion paths remain unverified. Completion ends
-this chapter, not the entire movement. [Release gates](RELEASE_GATES.md) remain.
+`WorkshopViewer` loads the existing 22 source leaves, retains their matrices and
+finish annotations, and shares Explorer's studio resources, perspective framing and
+contact shading. Only installed movement components and a dragged part enter the
+scene. The Parts Sheet has CAD previews, search and availability filters; its phone
+bottom-sheet handoff preserves pointer capture. No holder downloads or animation
+are required. See [workshop scope and review limits](WORKSHOP.md).
 
 ## Bench
 
@@ -118,9 +112,10 @@ The chapter asset validator uses tracked meshes and source records, without orig
 node scripts/review/validate-assembly.mjs
 ```
 
-The `Assembly chapter` GitHub workflow runs `scripts/review/assembly-chapter.mjs`
-on a GitHub-hosted Chromium runner. It checks direct entry and retired links,
-the full chapter, drag/cancellation, save/resume, scoring and required-asset Retry.
+The `Workshop` GitHub workflow runs `scripts/review/workshop.mjs`
+on a GitHub-hosted Chromium runner. It checks the three movement placements,
+menu dragging/cancellation, tap/keyboard alternatives, save isolation and old-link
+redirects on desktop and emulated phones.
 This script is intentionally guarded against local execution. Existing generic
 Explorer/Bench browser tools remain separate; they require an existing Playwright
 installation (`PLAYWRIGHT_MODULE`) and optionally Chrome (`CHROME_PATH`). The

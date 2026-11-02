@@ -4,6 +4,30 @@ Updated 2 November 2026. Setup: [README](README.md). Technical reference:
 [architecture](docs/LOCAL_ARCHITECTURE.md). Current review:
 [repository review and evidence boundaries](docs/REPOSITORY_REVIEW.md).
 
+## Canonical movement-only Workshop
+
+The user has promoted the presentation prototype to `/workshop` and retired the
+previous chapter interface. The Separate stem view, switch and destination are
+removed. `/workshop/prototype` and `/workshop/assembly` redirect to the canonical
+route; the homepage entry is unchanged. Old difficulty queries open the same view.
+
+Practice now starts at an explicit prepared-movement checkpoint (cursor 12) and
+covers the winding bridge and its two screws. This replaces the stem-only fixture
+with useful movement placements; it does not simulate insertion or preceding
+operations. Source geometry/materials/fitted matrices remain unchanged. The UI
+labels this as practice, with memory-only progress that resets on reload.
+
+The old chapter UI, renderer, styles, drag helper and browser workflow are removed.
+Lesson/session records and compatibility tests remain; existing saves are untouched.
+The prior implementation is recoverable at verified `d4b5bcf`. The current viewer
+has one active assembly, direct placement without hand tools, Parts search and
+availability filters, and the existing phone-sheet/cancellation/tap/keyboard flow.
+[Current scope and review limits](docs/WORKSHOP.md) supersede earlier entries below.
+
+Source inspection and diff checks pass; GitHub verification is pending for this
+revision. No local tests, builds or browser automation ran. Human visual and
+physical-phone review remain pending. No merge, deployment or publication.
+
 ## Prototype: direct placement without hand tools
 
 The presentation prototype at `/workshop/prototype` no longer asks for hands,
